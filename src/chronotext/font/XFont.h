@@ -64,7 +64,7 @@ namespace chronotext
         void init();
         
         void flush(int count);
-        void flushIfRequired();
+        void incrementSequence();
         
     public:
         bool useMipmap;

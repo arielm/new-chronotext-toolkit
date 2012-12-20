@@ -403,8 +403,10 @@ namespace chronotext
         glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, indices);
     }
     
-    void XFont::flushIfRequired()
+    void XFont::incrementSequence()
     {
+        sequenceSize++;
+        
         if (sequenceSize == slotCapacity)
         {
             if (sequence)
@@ -424,8 +426,6 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            flushIfRequired();
-            
             float x1 = x + le[cc] * sizeRatio;
             float x2 = x1 + w[cc] * sizeRatio;
             float y1 = y - te[cc] * sizeRatio;
@@ -451,7 +451,7 @@ namespace chronotext
             *tmp++ = tx2[cc];
             *tmp   = ty2[cc];
             
-            sequenceSize++;
+            incrementSequence();
         }
     }
     
@@ -459,8 +459,6 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            flushIfRequired();
-            
             float x1 = x + le[cc] * sizeRatio;
             float x2 = x1 + w[cc] * sizeRatio;
             float y1 = y - te[cc] * sizeRatio;
@@ -490,14 +488,12 @@ namespace chronotext
             *tmp++ = tx2[cc];
             *tmp   = ty2[cc];
             
-            sequenceSize++;
+            incrementSequence();
         }
     }
     
     void XFont::addTransformedGlyph3D(int cc, float x, float y)
     {
-        flushIfRequired();
-        
         float x1 = x + le[cc] * sizeRatio;
         float x2 = x1 + w[cc] * sizeRatio;
         float y1 = y - te[cc] * sizeRatio;
@@ -515,13 +511,11 @@ namespace chronotext
         *tmp++ = tx2[cc];
         *tmp   = ty2[cc];
         
-        sequenceSize++;
+        incrementSequence();
     }
     
     void XFont::addTransformedGlyph2D(int cc, float x, float y)
     {
-        flushIfRequired();
-        
         float x1 = x + le[cc] * sizeRatio;
         float x2 = x1 + w[cc] * sizeRatio;
         float y1 = y - te[cc] * sizeRatio;
@@ -539,6 +533,6 @@ namespace chronotext
         *tmp++ = tx2[cc];
         *tmp   = ty2[cc];
         
-        sequenceSize++;
+        incrementSequence();
     }
 }
