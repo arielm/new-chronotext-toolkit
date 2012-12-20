@@ -117,9 +117,9 @@ namespace chronotext
             float hh = (float)atlasHeight;
             
             tx1[i] = xx / ww;
-            ty2[i] = yy / hh;
+            ty1[i] = yy / hh;
             tx2[i] = (xx + w[i]) / ww;
-            ty1[i] = (yy + h[i]) / hh;
+            ty2[i] = (yy + h[i]) / hh;
         }
         
         // ---
@@ -443,13 +443,13 @@ namespace chronotext
             
             tmp = coords + sequenceSize * 8;
             *tmp++ = tx1[cc];
-            *tmp++ = ty2[cc];
+            *tmp++ = ty1[cc];
             *tmp++ = tx1[cc];
-            *tmp++ = ty1[cc];
+            *tmp++ = ty2[cc];
             *tmp++ = tx2[cc];
-            *tmp++ = ty1[cc];
+            *tmp++ = ty2[cc];
             *tmp++ = tx2[cc];
-            *tmp   = ty2[cc];
+            *tmp   = ty1[cc];
             
             incrementSequence();
         }
@@ -480,13 +480,13 @@ namespace chronotext
             
             tmp = coords + sequenceSize * 8;
             *tmp++ = tx1[cc];
-            *tmp++ = ty2[cc];
+            *tmp++ = ty1[cc];
             *tmp++ = tx1[cc];
-            *tmp++ = ty1[cc];
+            *tmp++ = ty2[cc];
             *tmp++ = tx2[cc];
-            *tmp++ = ty1[cc];
+            *tmp++ = ty2[cc];
             *tmp++ = tx2[cc];
-            *tmp   = ty2[cc];
+            *tmp   = ty1[cc];
             
             incrementSequence();
         }
@@ -503,13 +503,13 @@ namespace chronotext
         
         GLfloat *tmp = coords + sequenceSize * 8;
         *tmp++ = tx1[cc];
-        *tmp++ = ty2[cc];
+        *tmp++ = ty1[cc];
         *tmp++ = tx1[cc];
-        *tmp++ = ty1[cc];
+        *tmp++ = ty2[cc];
         *tmp++ = tx2[cc];
-        *tmp++ = ty1[cc];
+        *tmp++ = ty2[cc];
         *tmp++ = tx2[cc];
-        *tmp   = ty2[cc];
+        *tmp   = ty1[cc];
         
         incrementSequence();
     }
@@ -525,13 +525,13 @@ namespace chronotext
         
         GLfloat *tmp = coords + sequenceSize * 8;
         *tmp++ = tx1[cc];
-        *tmp++ = ty2[cc];
+        *tmp++ = ty1[cc];
         *tmp++ = tx1[cc];
-        *tmp++ = ty1[cc];
+        *tmp++ = ty2[cc];
         *tmp++ = tx2[cc];
-        *tmp++ = ty1[cc];
+        *tmp++ = ty2[cc];
         *tmp++ = tx2[cc];
-        *tmp   = ty2[cc];
+        *tmp   = ty1[cc];
         
         incrementSequence();
     }
