@@ -104,7 +104,7 @@ namespace chronotext
         
         void addGlyph(int cc, float x, float y);
         void addGlyph(int cc, float x, float y, float z);
-        void addTransformedGlyph(int cc, float x, float y);
+        void addTransformedGlyph3D(int cc, float x, float y);
         void addTransformedGlyph2D(int cc, float x, float y);
     };
 }

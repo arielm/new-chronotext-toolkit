@@ -1,6 +1,8 @@
 #include "chronotext/font/FontMatrix.h"
 
-#include <cmath>
+#include "cinder/CinderMath.h"
+
+using namespace ci;
 
 namespace chronotext
 {
@@ -48,8 +50,8 @@ namespace chronotext
     
     void FontMatrix::rotateX(float a)
     {
-        float c = cos(a);
-        float s = sin(a);
+        float c = math<float>::cos(a);
+        float s = math<float>::sin(a);
         
         float r01 = m01 * c + m02 * s;
         float r02 = m02 * c - m01 * s;
@@ -75,8 +77,8 @@ namespace chronotext
     
     void FontMatrix::rotateY(float a)
     {
-        float c = cos(a);
-        float s = sin(a);
+        float c = math<float>::cos(a);
+        float s = math<float>::sin(a);
         
         float r00 = m00 * c - m02 * s;
         float r02 = m00 * s + m02 * c;
@@ -102,8 +104,8 @@ namespace chronotext
     
     void FontMatrix::rotateZ(float a)
     {
-        float c = cos(a);
-        float s = sin(a);
+        float c = math<float>::cos(a);
+        float s = math<float>::sin(a);
         
         float r00 = m00 * c + m01 * s;
         float r01 = m01 * c - m00 * s;
@@ -129,14 +131,14 @@ namespace chronotext
     
     void FontMatrix::rotateZYX(float ax, float ay, float az)
     {
-        float cx = cos(ax);
-        float sx = sin(ax);
+        float cx = math<float>::cos(ax);
+        float sx = math<float>::sin(ax);
         
-        float cy = cos(ay);
-        float sy = sin(ay);
+        float cy = math<float>::cos(ay);
+        float sy = math<float>::sin(ay);
         
-        float cz = cos(az);
-        float sz = sin(az);
+        float cz = math<float>::cos(az);
+        float sz = math<float>::sin(az);
         
         float a0 = cz * cy;
         float a1 = sz * cy;
@@ -179,7 +181,7 @@ namespace chronotext
         m32 = r32;
     }
     
-    void FontMatrix::transform(float x, float y, float* res)
+    void FontMatrix::transform3D(float x, float y, float* res)
     {
         float x00 = x * m00;
         float x10 = x * m10;
@@ -210,7 +212,7 @@ namespace chronotext
         }
     }
     
-    void FontMatrix::transform(float x1, float y1, float x2, float y2, float* res)
+    void FontMatrix::transform3D(float x1, float y1, float x2, float y2, float* res)
     {
         float x100 = x1 * m00;
         float x110 = x1 * m10;

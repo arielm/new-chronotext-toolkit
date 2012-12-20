@@ -19,8 +19,8 @@ namespace chronotext
         void rotateZ(float a);
         void rotateZYX(float ax, float ay, float az);
         
-        void transform(float x, float y, float* res);
-        void transform(float x1, float y1, float x2, float y2, float* res);
+        void transform3D(float x, float y, float* res);
+        void transform3D(float x1, float y1, float x2, float y2, float* res);
         
         void transform2D(float x, float y, float* res);
         void transform2D(float x1, float y1, float x2, float y2, float* res);

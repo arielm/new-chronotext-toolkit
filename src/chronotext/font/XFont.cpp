@@ -494,7 +494,7 @@ namespace chronotext
         }
     }
     
-    void XFont::addTransformedGlyph(int cc, float x, float y)
+    void XFont::addTransformedGlyph3D(int cc, float x, float y)
     {
         flushIfRequired();
         
@@ -503,7 +503,7 @@ namespace chronotext
         float y1 = y - te[cc] * sizeRatio;
         float y2 = y1 + h[cc] * sizeRatio;
         
-        matrix.transform(x1, y2, x2, y1, vertices + sequenceSize * 12);
+        matrix.transform3D(x1, y2, x2, y1, vertices + sequenceSize * 12);
         
         GLfloat *tmp = coords + sequenceSize * 8;
         *tmp++ = tx1[cc];
