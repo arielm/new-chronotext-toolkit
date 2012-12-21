@@ -13,7 +13,6 @@ namespace chronotext
 {
     class XFont
     {
-    public:
         float nativeFontSize;
         float height;
         float ascent;
