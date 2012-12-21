@@ -57,6 +57,8 @@ namespace chronotext
         
         int sequenceSize;
         int sequenceDimensions;
+        GLfloat *sequenceVertices;
+        GLfloat *sequenceCoords;
         XFontSequence *sequence;
         
         void read(ci::DataSourceRef source);

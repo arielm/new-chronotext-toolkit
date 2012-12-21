@@ -367,8 +367,10 @@ namespace chronotext
     
     void XFont::beginSequence(XFontSequence *sequence, int dimensions)
     {
-        sequenceDimensions = dimensions;
         sequenceSize = 0;
+        sequenceDimensions = dimensions;
+        sequenceVertices = vertices;
+        sequenceCoords = coords;
         
         if (sequence)
         {
@@ -431,25 +433,23 @@ namespace chronotext
             float y1 = y - te[cc] * sizeRatio;
             float y2 = y1 + h[cc] * sizeRatio;
             
-            GLfloat *tmp = vertices + sequenceSize * 8;
-            *tmp++ = x1;
-            *tmp++ = y1;
-            *tmp++ = x1;
-            *tmp++ = y2;
-            *tmp++ = x2;
-            *tmp++ = y2;
-            *tmp++ = x2;
-            *tmp   = y1;
+            *sequenceVertices++ = x1;
+            *sequenceVertices++ = y1;
+            *sequenceVertices++ = x1;
+            *sequenceVertices++ = y2;
+            *sequenceVertices++ = x2;
+            *sequenceVertices++ = y2;
+            *sequenceVertices++ = x2;
+            *sequenceVertices++ = y1;
             
-            tmp = coords + sequenceSize * 8;
-            *tmp++ = tx1[cc];
-            *tmp++ = ty1[cc];
-            *tmp++ = tx1[cc];
-            *tmp++ = ty2[cc];
-            *tmp++ = tx2[cc];
-            *tmp++ = ty2[cc];
-            *tmp++ = tx2[cc];
-            *tmp   = ty1[cc];
+            *sequenceCoords++ = tx1[cc];
+            *sequenceCoords++ = ty1[cc];
+            *sequenceCoords++ = tx1[cc];
+            *sequenceCoords++ = ty2[cc];
+            *sequenceCoords++ = tx2[cc];
+            *sequenceCoords++ = ty2[cc];
+            *sequenceCoords++ = tx2[cc];
+            *sequenceCoords++ = ty1[cc];
             
             incrementSequence();
         }
@@ -464,29 +464,27 @@ namespace chronotext
             float y1 = y - te[cc] * sizeRatio;
             float y2 = y1 + h[cc] * sizeRatio;
             
-            GLfloat *tmp = vertices + sequenceSize * 12;
-            *tmp++ = x1;
-            *tmp++ = y1;
-            *tmp++ = z;
-            *tmp++ = x1;
-            *tmp++ = y2;
-            *tmp++ = z;
-            *tmp++ = x2;
-            *tmp++ = y2;
-            *tmp++ = z;
-            *tmp++ = x2;
-            *tmp++ = y1;
-            *tmp   = z;
+            *sequenceVertices++ = x1;
+            *sequenceVertices++ = y1;
+            *sequenceVertices++ = z;
+            *sequenceVertices++ = x1;
+            *sequenceVertices++ = y2;
+            *sequenceVertices++ = z;
+            *sequenceVertices++ = x2;
+            *sequenceVertices++ = y2;
+            *sequenceVertices++ = z;
+            *sequenceVertices++ = x2;
+            *sequenceVertices++ = y1;
+            *sequenceVertices++ = z;
             
-            tmp = coords + sequenceSize * 8;
-            *tmp++ = tx1[cc];
-            *tmp++ = ty1[cc];
-            *tmp++ = tx1[cc];
-            *tmp++ = ty2[cc];
-            *tmp++ = tx2[cc];
-            *tmp++ = ty2[cc];
-            *tmp++ = tx2[cc];
-            *tmp   = ty1[cc];
+            *sequenceCoords++ = tx1[cc];
+            *sequenceCoords++ = ty1[cc];
+            *sequenceCoords++ = tx1[cc];
+            *sequenceCoords++ = ty2[cc];
+            *sequenceCoords++ = tx2[cc];
+            *sequenceCoords++ = ty2[cc];
+            *sequenceCoords++ = tx2[cc];
+            *sequenceCoords++ = ty1[cc];
             
             incrementSequence();
         }
@@ -499,17 +497,17 @@ namespace chronotext
         float y1 = y - te[cc] * sizeRatio;
         float y2 = y1 + h[cc] * sizeRatio;
         
-        matrix.transform3D(x1, y2, x2, y1, vertices + sequenceSize * 12);
+        matrix.transform3D(x1, y2, x2, y1, sequenceVertices);
+        sequenceVertices += 4 * 3;
         
-        GLfloat *tmp = coords + sequenceSize * 8;
-        *tmp++ = tx1[cc];
-        *tmp++ = ty1[cc];
-        *tmp++ = tx1[cc];
-        *tmp++ = ty2[cc];
-        *tmp++ = tx2[cc];
-        *tmp++ = ty2[cc];
-        *tmp++ = tx2[cc];
-        *tmp   = ty1[cc];
+        *sequenceCoords++ = tx1[cc];
+        *sequenceCoords++ = ty1[cc];
+        *sequenceCoords++ = tx1[cc];
+        *sequenceCoords++ = ty2[cc];
+        *sequenceCoords++ = tx2[cc];
+        *sequenceCoords++ = ty2[cc];
+        *sequenceCoords++ = tx2[cc];
+        *sequenceCoords++ = ty1[cc];
         
         incrementSequence();
     }
@@ -521,17 +519,17 @@ namespace chronotext
         float y1 = y - te[cc] * sizeRatio;
         float y2 = y1 + h[cc] * sizeRatio;
         
-        matrix.transform2D(x1, y2, x2, y1, vertices + sequenceSize * 8);
+        matrix.transform2D(x1, y2, x2, y1, sequenceVertices);
+        sequenceVertices += 4 * 2;
         
-        GLfloat *tmp = coords + sequenceSize * 8;
-        *tmp++ = tx1[cc];
-        *tmp++ = ty1[cc];
-        *tmp++ = tx1[cc];
-        *tmp++ = ty2[cc];
-        *tmp++ = tx2[cc];
-        *tmp++ = ty2[cc];
-        *tmp++ = tx2[cc];
-        *tmp   = ty1[cc];
+        *sequenceCoords++ = tx1[cc];
+        *sequenceCoords++ = ty1[cc];
+        *sequenceCoords++ = tx1[cc];
+        *sequenceCoords++ = ty2[cc];
+        *sequenceCoords++ = tx2[cc];
+        *sequenceCoords++ = ty2[cc];
+        *sequenceCoords++ = tx2[cc];
+        *sequenceCoords++ = ty1[cc];
         
         incrementSequence();
     }
