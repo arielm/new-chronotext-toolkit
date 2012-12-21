@@ -490,15 +490,82 @@ namespace chronotext
         }
     }
     
-    void XFont::addTransformedGlyph3D(int cc, float x, float y)
+    void XFont::addClippedGlyph(int cc, float x, float y, const Rectf &clip)
+    {
+        if (cc >= 0)
+        {
+            float x1 = x + le[cc] * sizeRatio;
+            float x2 = x1 + w[cc] * sizeRatio;
+            float y1 = y - te[cc] * sizeRatio;
+            float y2 = y1 + h[cc] * sizeRatio;
+            
+            if (!((x1 > clip.x2 ) || (x2 < clip.x1) || (y1 > clip.y2) || (y2 < clip.y1)))
+            {
+                float txx1 = tx1[cc];
+                float tyy1 = ty1[cc];
+                float txx2 = tx2[cc];
+                float tyy2 = ty2[cc];
+                
+                if (x1 < clip.x1)
+                {
+                    float dx = (clip.x1 - x1);
+                    x1 += dx;
+                    txx1 += dx / atlasWidth / sizeRatio;;
+                }
+                
+                if (x2 > clip.x2)
+                {
+                    float dx = (clip.x2 - x2);
+                    x2 += dx;
+                    txx2 += dx / atlasWidth / sizeRatio;;
+                }
+                
+                if (y1 < clip.y1)
+                {
+                    float dy = (clip.y1 - y1);
+                    y1 += dy;
+                    tyy1 += dy / atlasHeight / sizeRatio;;
+                }
+                
+                if (y2 > clip.y2)
+                {
+                    float dy = (clip.y2 - y2);
+                    y2 += dy;
+                    tyy2 += dy / atlasHeight / sizeRatio;;
+                }
+                
+                *sequenceVertices++ = x1;
+                *sequenceVertices++ = y1;
+                *sequenceVertices++ = x1;
+                *sequenceVertices++ = y2;
+                *sequenceVertices++ = x2;
+                *sequenceVertices++ = y2;
+                *sequenceVertices++ = x2;
+                *sequenceVertices++ = y1;
+                
+                *sequenceCoords++ = txx1;
+                *sequenceCoords++ = tyy1;
+                *sequenceCoords++ = txx1;
+                *sequenceCoords++ = tyy2;
+                *sequenceCoords++ = txx2;
+                *sequenceCoords++ = tyy2;
+                *sequenceCoords++ = txx2;
+                *sequenceCoords++ = tyy1;
+                
+                incrementSequence();
+            }
+        }
+    }
+    
+    void XFont::addTransformedGlyph2D(int cc, float x, float y)
     {
         float x1 = x + le[cc] * sizeRatio;
         float x2 = x1 + w[cc] * sizeRatio;
         float y1 = y - te[cc] * sizeRatio;
         float y2 = y1 + h[cc] * sizeRatio;
         
-        matrix.transform3D(x1, y2, x2, y1, sequenceVertices);
-        sequenceVertices += 4 * 3;
+        matrix.transform2D(x1, y2, x2, y1, sequenceVertices);
+        sequenceVertices += 4 * 2;
         
         *sequenceCoords++ = tx1[cc];
         *sequenceCoords++ = ty1[cc];
@@ -512,15 +579,15 @@ namespace chronotext
         incrementSequence();
     }
     
-    void XFont::addTransformedGlyph2D(int cc, float x, float y)
+    void XFont::addTransformedGlyph3D(int cc, float x, float y)
     {
         float x1 = x + le[cc] * sizeRatio;
         float x2 = x1 + w[cc] * sizeRatio;
         float y1 = y - te[cc] * sizeRatio;
         float y2 = y1 + h[cc] * sizeRatio;
         
-        matrix.transform2D(x1, y2, x2, y1, sequenceVertices);
-        sequenceVertices += 4 * 2;
+        matrix.transform3D(x1, y2, x2, y1, sequenceVertices);
+        sequenceVertices += 4 * 3;
         
         *sequenceCoords++ = tx1[cc];
         *sequenceCoords++ = ty1[cc];

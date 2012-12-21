@@ -13,6 +13,7 @@ namespace chronotext
 {
     class XFont
     {
+    public:
         float nativeFontSize;
         float height;
         float ascent;
@@ -106,8 +107,9 @@ namespace chronotext
         
         void addGlyph(int cc, float x, float y);
         void addGlyph(int cc, float x, float y, float z);
-        void addTransformedGlyph3D(int cc, float x, float y);
+        void addClippedGlyph(int cc, float x, float y, const ci::Rectf &clip);
         void addTransformedGlyph2D(int cc, float x, float y);
+        void addTransformedGlyph3D(int cc, float x, float y);
     };
 }
 
