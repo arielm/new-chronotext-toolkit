@@ -1,4 +1,5 @@
 #include "chronotext/path/FollowablePath.h"
+#include "chronotext/utils/MathUtils.h"
 
 using namespace ci;
 using namespace std;
@@ -27,12 +28,6 @@ static int search(float *array, float value, int min, int max)
     }
     
     return mid - 1;
-}
-
-static inline float bound(float value, float range)
-{
-    float bound = fmod(value, range);
-    return (bound < 0) ? (bound + range) : bound;
 }
 
 FollowablePath::FollowablePath(int mode, int capacity)
@@ -76,7 +71,7 @@ void FollowablePath::add(float xx, float yy)
     {
         float dx = xx - x[size - 1];
         float dy = yy - y[size - 1];
-        len[size] = len[size - 1] + sqrtf(dx * dx + dy * dy);
+        len[size] = len[size - 1] + math<float>::sqrt(dx * dx + dy * dy);
     }
     else
     {
@@ -183,7 +178,7 @@ float FollowablePath::pos2Angle(float pos)
     float x1 = x[index + 1];
     float y1 = y[index + 1];
     
-    return atan2(y1 - y0, x1 - x0);
+    return math<float>::atan2(y1 - y0, x1 - x0);
 }
 
 float FollowablePath::pos2SampledAngle(float pos, float sampleSize)
@@ -200,7 +195,7 @@ float FollowablePath::pos2SampledAngle(float pos, float sampleSize)
      */
     if ((dx * dx + dy * dy) > 1.0)
     {
-        return atan2(dy, dx);
+        return math<float>::atan2(dy, dx);
     }
     else
     {
@@ -319,7 +314,7 @@ bool FollowablePath::findClosestPoint(float xx, float yy, float min, float *res)
         res[0] = _x;
         res[1] = _y;
         res[2] = _len;
-        res[3] = sqrt(min);
+        res[3] = math<float>::sqrt(min);
         
         return true;
     }
@@ -362,7 +357,7 @@ void FollowablePath::closestPointFromSegment(float xx, float yy, int segmentInde
         *res++ = xp;
         *res++ = yp;
         *res++ = len[i0] + d * u;
-        *res   = sqrt(mag);
+        *res   = math<float>::sqrt(mag);
     }
     else
     {
@@ -379,14 +374,14 @@ void FollowablePath::closestPointFromSegment(float xx, float yy, int segmentInde
             *res++ = x0;
             *res++ = y0;
             *res++ = len[i0];
-            *res   = sqrt(mag0);
+            *res   = math<float>::sqrt(mag0);
         }
         else
         {
             *res++ = x1;
             *res++ = y1;
             *res++ = len[i1];
-            *res   = sqrt(mag1);
+            *res   = math<float>::sqrt(mag1);
         }
     }
 }
