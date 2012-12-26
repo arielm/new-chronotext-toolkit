@@ -67,6 +67,7 @@ namespace chronotext
         
         void flush(int count);
         void incrementSequence();
+        bool computeClip(float *x1, float *y1, float *x2, float *y2, float *tx1, float *ty1, float *tx2, float *ty2, const ci::Rectf &clip);
         
     public:
         bool useMipmap;
@@ -105,10 +106,16 @@ namespace chronotext
         void endSequence();
         
         void addGlyph(int cc, float x, float y);
+        void addGlyph(int cc, float x, float y, const ci::Rectf &clip);
+
         void addGlyph(int cc, float x, float y, float z);
-        void addClippedGlyph(int cc, float x, float y, const ci::Rectf &clip);
+        void addGlyph(int cc, float x, float y, float z, const ci::Rectf &clip);
+        
         void addTransformedGlyph2D(int cc, float x, float y);
+        void addTransformedGlyph2D(int cc, float x, float y, const ci::Rectf &clip);
+        
         void addTransformedGlyph3D(int cc, float x, float y);
+        void addTransformedGlyph3D(int cc, float x, float y, const ci::Rectf &clip);
     };
 }
 
