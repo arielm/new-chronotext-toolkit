@@ -25,11 +25,9 @@ namespace chronotext
     {
         XFont *font;
         int dimensions;
-        GLuint indicesName;
         std::list<Slot*> slots;
         
     public:
-        XFontSequence();
         ~XFontSequence();
         
         void begin(XFont *font, int dimensions);

@@ -43,17 +43,18 @@ namespace chronotext
         
         bool anisotropyAvailable;
         float maxAnisotropy;
-        
-        GLuint name;
-        
+
         float size;
         float sizeRatio;
         int began;
         FontMatrix matrix;
-        
+
+        GLuint textureName;
+        GLuint indicesName;
+
+        GLshort *indices;
         GLfloat *vertices;
         GLfloat *coords;
-        GLshort *indices;
         
         int sequenceSize;
         int sequenceDimensions;
@@ -98,6 +99,7 @@ namespace chronotext
         
         FontMatrix* getMatrix();
         GLshort* getIndices();
+        GLuint getIndicesName();
         
         void begin();
         void end();

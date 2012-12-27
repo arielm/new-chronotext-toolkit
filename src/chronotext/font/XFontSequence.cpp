@@ -5,9 +5,6 @@ using namespace std;
 
 namespace chronotext
 {
-    XFontSequence::XFontSequence() : indicesName(0)
-    {}
-    
     XFontSequence::~XFontSequence()
     {
         clear();
@@ -20,12 +17,7 @@ namespace chronotext
     }
     
     void XFontSequence::end()
-    {
-        glGenBuffers(1, &indicesName);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, font->slotCapacity * 6 * sizeof(GLshort), font->getIndices(), GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
+    {}
     
     void XFontSequence::flush(GLfloat *vertices, GLfloat *coords, int count)
     {
@@ -57,7 +49,7 @@ namespace chronotext
             glBindBuffer(GL_ARRAY_BUFFER, slot->coordsName);
             glTexCoordPointer(2, GL_FLOAT, 0, 0);
             
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, font->getIndicesName());
             glDrawElements(GL_TRIANGLES, slot->count * 6, GL_UNSIGNED_SHORT, 0);
         }
         
@@ -69,17 +61,11 @@ namespace chronotext
     
     void XFontSequence::clear()
     {
-        if (indicesName)
+        for (list<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
         {
-            glDeleteBuffers(1, &indicesName);
-            indicesName = 0;
-            
-            for (list<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
-            {
-                delete *it;
-            }
-            
-            slots.clear();
+            delete *it;
         }
+        
+        slots.clear();
     }
 }

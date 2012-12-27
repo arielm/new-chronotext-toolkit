@@ -28,12 +28,13 @@ namespace chronotext
         delete[] ty1;
         delete[] tx2;
         delete[] ty2;
-        
-        glDeleteTextures(1, &name);
-        
+
+        delete[] indices;
         delete[] vertices;
         delete[] coords;
-        delete[] indices;
+
+        glDeleteTextures(1, &textureName);
+        glDeleteBuffers(1, &indicesName);
     }
     
     void XFont::read(DataSourceRef source)
@@ -133,8 +134,8 @@ namespace chronotext
         
         // ---
         
-        glGenTextures(1, &name);
-        glBindTexture(GL_TEXTURE_2D, name);
+        glGenTextures(1, &textureName);
+        glBindTexture(GL_TEXTURE_2D, textureName);
         
         if (useMipmap)
         {
@@ -185,10 +186,14 @@ namespace chronotext
         sequence = NULL;
         
         // ---
-        
+
+        indices = new GLshort[slotCapacity * 6];
         vertices = new GLfloat[slotCapacity * maxDimensions * 4];
         coords = new GLfloat[slotCapacity * 2 * 4];
-        indices = new GLshort[slotCapacity * 6];
+        
+        /*
+         * FILLING THE INDICES WITH A QUAD PATTERN
+         */
         
         GLshort *tmp = indices;
         int offset = 0;
@@ -203,6 +208,11 @@ namespace chronotext
             *tmp++ = offset;
             offset += 4;
         }
+        
+        glGenBuffers(1, &indicesName);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, slotCapacity * 6 * sizeof(GLshort), indices, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     
     // ---
@@ -324,6 +334,11 @@ namespace chronotext
         return indices;
     }
     
+    GLuint XFont::getIndicesName()
+    {
+        return indicesName;
+    }
+    
     // --- STATE MANAGEMENT ---
     
     void XFont::begin()
@@ -331,7 +346,7 @@ namespace chronotext
         if (began == 0)
         {
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, name);
+            glBindTexture(GL_TEXTURE_2D, textureName);
             
             if (useAnisotropy && anisotropyAvailable)
             {
@@ -397,12 +412,15 @@ namespace chronotext
             end();
         }
     }
-    
+
     void XFont::flush(int count)
     {
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
         glVertexPointer(sequenceDimensions, GL_FLOAT, 0, vertices);
-        glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, indices);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
+        glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     
     void XFont::incrementSequence()
