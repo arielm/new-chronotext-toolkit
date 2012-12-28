@@ -27,7 +27,6 @@ namespace chronotext
         glGenBuffers(1, &slot->verticesName);
         glBindBuffer(GL_ARRAY_BUFFER, slot->verticesName);
         glBufferData(GL_ARRAY_BUFFER, count * dimensions * 4 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
         
         glGenBuffers(1, &slot->coordsName);
         glBindBuffer(GL_ARRAY_BUFFER, slot->coordsName);

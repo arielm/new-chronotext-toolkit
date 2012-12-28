@@ -339,8 +339,6 @@ namespace chronotext
         return indicesName;
     }
     
-    // --- STATE MANAGEMENT ---
-    
     void XFont::begin()
     {
         if (began == 0)
@@ -377,8 +375,6 @@ namespace chronotext
             glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         }
     }
-    
-    // --- BUFFERING ---
     
     void XFont::beginSequence(XFontSequence *sequence, int dimensions)
     {

@@ -4,6 +4,8 @@
 
 namespace chronotext
 {
+    class XFont;
+
     struct Slot
     {
         int count;
@@ -18,8 +20,6 @@ namespace chronotext
             glDeleteBuffers(1, &coordsName);
         }
     };
-    
-    class XFont;
     
     class XFontSequence
     {
