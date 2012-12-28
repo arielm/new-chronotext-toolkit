@@ -129,193 +129,65 @@ namespace chronotext
         m31 = r31;
     }
     
-    void FontMatrix::rotateZYX(float ax, float ay, float az)
-    {
-        float cx = math<float>::cos(ax);
-        float sx = math<float>::sin(ax);
-        
-        float cy = math<float>::cos(ay);
-        float sy = math<float>::sin(ay);
-        
-        float cz = math<float>::cos(az);
-        float sz = math<float>::sin(az);
-        
-        float a0 = cz * cy;
-        float a1 = sz * cy;
-        
-        float b0 = cz * sy * sx - sz * cx;
-        float b1 = cz * cx + sz * sy * sx;
-        float b2 = cy * sx;
-        
-        float c0 = cz * sy * cz + sz * sx;
-        float c1 = sz * sy * cx - cz * sx;
-        float c2 = cy * cx;
-        
-        float r00 = m00 * a0 + m01 * a1 - m02 * sy;
-        float r01 = m00 * b0 + m01 * b1 + m02 * b2;
-        float r02 = m00 * c0 + m01 * c1 + m02 * c2;
-        
-        float r10 = m10 * a0 + m11 * a1 - m12 * sy;
-        float r11 = m10 * b0 + m11 * b1 + m12 * b2;
-        float r12 = m10 * c0 + m11 * c1 + m12 * c2;
-        
-        float r20 = m20 * a0 + m21 * a1 - m22 * sy;
-        float r21 = m20 * b0 + m21 * b1 + m22 * b2;
-        float r22 = m20 * c0 + m21 * c1 + m22 * c2;
-        
-        float r30 = m30 * a0 + m31 * a1 - m32 * sy;
-        float r31 = m30 * b0 + m31 * b1 + m32 * b2;
-        float r32 = m30 * c0 + m31 * c1 + m32 * c2;
-        
-        m00 = r00;
-        m01 = r01;
-        m02 = r02;
-        m10 = r10;
-        m11 = r11;
-        m12 = r12;
-        m20 = r20;
-        m21 = r21;
-        m22 = r22;
-        m30 = r30;
-        m31 = r31;
-        m32 = r32;
-    }
-    
-    void FontMatrix::transform3D(float x, float y, float* res)
+    void FontMatrix::transform3D(float x, float y, float *res)
     {
         float x00 = x * m00;
         float x10 = x * m10;
         float x20 = x * m20;
-        float x30 = x * m30;
         
         float y01 = y * m01;
         float y11 = y * m11;
         float y21 = y * m21;
-        float y31 = y * m31;
         
-        float ax = x00 + y01 + m03;
-        float ay = x10 + y11 + m13;
-        float az = x20 + y21 + m23;
-        float aw = x30 + y31 + m33;
-        
-        if (aw != 0.0f)
-        {
-            *res++ = ax / aw;
-            *res++ = ay / aw;
-            *res   = az / aw;
-        }
-        else
-        {
-            *res++ = ax;
-            *res++ = ay;
-            *res   = az;
-        }
+        *res++ = x00 + y01 + m03;
+        *res++ = x10 + y11 + m13;
+        *res   = x20 + y21 + m23;
     }
     
-    void FontMatrix::transform3D(float x1, float y1, float x2, float y2, float* res)
+    void FontMatrix::transform3D(float x1, float y1, float x2, float y2, float *res)
     {
         float x100 = x1 * m00;
         float x110 = x1 * m10;
         float x120 = x1 * m20;
-        float x130 = x1 * m30;
         
         float y101 = y1 * m01;
         float y111 = y1 * m11;
         float y121 = y1 * m21;
-        float y131 = y1 * m31;
         
         float x200 = x2 * m00;
         float x210 = x2 * m10;
         float x220 = x2 * m20;
-        float x230 = x2 * m30;
         
         float y201 = y2 * m01;
         float y211 = y2 * m11;
         float y221 = y2 * m21;
-        float y231 = y2 * m31;
         
         // --- x1, y2 ---
         
-        float ax = x100 + y201 + m03;
-        float ay = x110 + y211 + m13;
-        float az = x120 + y221 + m23;
-        float aw = x130 + y231 + m33;
-        
-        if (aw != 0.0f)
-        {
-            *res++ = ax / aw;
-            *res++ = ay / aw;
-            *res++ = az / aw;
-        }
-        else
-        {
-            *res++ = ax;
-            *res++ = ay;
-            *res++ = az;
-        }
+        *res++ = x100 + y201 + m03;
+        *res++ = x110 + y211 + m13;
+        *res++ = x120 + y221 + m23;
         
         // --- x1, y1 ---
         
-        ax = x100 + y101 + m03;
-        ay = x110 + y111 + m13;
-        az = x120 + y121 + m23;
-        aw = x130 + y131 + m33;
-        
-        if (aw != 0.0f)
-        {
-            *res++ = ax / aw;
-            *res++ = ay / aw;
-            *res++ = az / aw;
-        }
-        else
-        {
-            *res++ = ax;
-            *res++ = ay;
-            *res++ = az;
-        }
+        *res++ = x100 + y101 + m03;
+        *res++ = x110 + y111 + m13;
+        *res++ = x120 + y121 + m23;
         
         // --- x2, y1 ---
         
-        ax = x200 + y101 + m03;
-        ay = x210 + y111 + m13;
-        az = x220 + y121 + m23;
-        aw = x230 + y131 + m33;
-        
-        if (aw != 0.0f)
-        {
-            *res++ = ax / aw;
-            *res++ = ay / aw;
-            *res++ = az / aw;
-        }
-        else
-        {
-            *res++ = ax;
-            *res++ = ay;
-            *res++ = az;
-        }
+        *res++ = x200 + y101 + m03;
+        *res++ = x210 + y111 + m13;
+        *res++ = x220 + y121 + m23;
         
         // --- x2, y2 ---
         
-        ax = x200 + y201 + m03;
-        ay = x210 + y211 + m13;
-        az = x220 + y221 + m23;
-        aw = x230 + y231 + m33;
-        
-        if (aw != 0.0f)
-        {
-            *res++ = ax / aw;
-            *res++ = ay / aw;
-            *res   = az / aw;
-        }
-        else
-        {
-            *res++ = ax;
-            *res++ = ay;
-            *res   = az;
-        }
+        *res++ = x200 + y201 + m03;
+        *res++ = x210 + y211 + m13;
+        *res   = x220 + y221 + m23;
     }
     
-    void FontMatrix::transform2D(float x, float y, float* res)
+    void FontMatrix::transform2D(float x, float y, float *res)
     {
         float x00 = x * m00;
         float x10 = x * m10;
@@ -327,7 +199,7 @@ namespace chronotext
         *res   = x10 + y11 + m13;
     }
     
-    void FontMatrix::transform2D(float x1, float y1, float x2, float y2, float* res)
+    void FontMatrix::transform2D(float x1, float y1, float x2, float y2, float *res)
     {
         float x100 = x1 * m00;
         float x110 = x1 * m10;
