@@ -187,7 +187,7 @@ namespace chronotext
         
         // ---
 
-        indices = new GLshort[slotCapacity * 6];
+        indices = new GLushort[slotCapacity * 6];
         vertices = new GLfloat[slotCapacity * maxDimensions * 4];
         coords = new GLfloat[slotCapacity * 2 * 4];
         
@@ -195,7 +195,7 @@ namespace chronotext
          * FILLING THE INDICES WITH A QUAD PATTERN
          */
         
-        GLshort *tmp = indices;
+        GLushort *tmp = indices;
         int offset = 0;
         
         for (int i = 0; i < slotCapacity; i++)
@@ -211,7 +211,7 @@ namespace chronotext
         
         glGenBuffers(1, &indicesName);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, slotCapacity * 6 * sizeof(GLshort), indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, slotCapacity * 6 * sizeof(GLushort), indices, GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     
@@ -329,7 +329,7 @@ namespace chronotext
         return &matrix;
     }
     
-    GLshort* XFont::getIndices()
+    GLushort* XFont::getIndices()
     {
         return indices;
     }

@@ -52,7 +52,7 @@ namespace chronotext
         GLuint textureName;
         GLuint indicesName;
 
-        GLshort *indices;
+        GLushort *indices;
         GLfloat *vertices;
         GLfloat *coords;
         
@@ -98,7 +98,7 @@ namespace chronotext
         float getUnderlineOffset();
         
         FontMatrix* getMatrix();
-        GLshort* getIndices();
+        GLushort* getIndices();
         GLuint getIndicesName();
         
         void begin();
