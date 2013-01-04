@@ -2,6 +2,9 @@
 
 #include "cinder/gl/gl.h"
 
+/*
+ * FIXME: THIS IS NOT READY FOR RE-USE (SEE THE PREVIOUS VERSION FROM THE CHRONOTEX TOOLKIT...)
+ */
 namespace chronotext
 {
     class XFont;
