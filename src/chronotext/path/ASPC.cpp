@@ -4,13 +4,14 @@
 
 void ASPC::sample(float t0, float x0, float y0, float t1, float x1, float y1)
 {
-    float t = 0.45f + 0.1f * (float) (rand() / RAND_MAX);
+    float t = 0.45f + 0.1f * (float)(rand() / RAND_MAX);
     float rt = t0 + t * (t1 - t0);
-    float rx = gamma(rt, in_x);
-    float ry = gamma(rt, in_y);
+    float rx = gamma(rt, xx);
+    float ry = gamma(rt, yy);
     
     float cross = (x0 - rx) * (y1 - ry) - (x1 - rx) * (y0 - ry);
-    if ((cross * cross) < tol)
+    
+    if (cross * cross < tol)
     {
         path->add(x0, y0);
     }
@@ -23,16 +24,16 @@ void ASPC::sample(float t0, float x0, float y0, float t1, float x1, float y1)
 
 void ASPC::segment(float *x, float *y)
 {
-    in_x = x;
-    in_y = y;
+    xx = x;
+    yy = y;
     
     float pt = 0;
-    float px = gamma(pt, in_x);
-    float py = gamma(pt, in_y);
+    float px = gamma(pt, x);
+    float py = gamma(pt, y);
     
     float qt = 1;
-    float qx = gamma(qt, in_x);
-    float qy = gamma(qt, in_y);
+    float qx = gamma(qt, x);
+    float qy = gamma(qt, y);
     
     sample(pt, px, py, qt, qx, qy);
 }
