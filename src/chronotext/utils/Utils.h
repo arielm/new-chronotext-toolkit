@@ -53,3 +53,29 @@ static void logToConsole()
 
 std::string wstringToUtf8(const std::wstring &s);
 std::wstring utf8ToWstring(const std::string &s);
+
+// ---
+
+static int search(float *array, float value, int min, int max)
+{
+    int mid = (min + max) >> 1;
+    
+    while (min < mid)
+    {
+        if (array[mid - 1] < value)
+        {
+            min = mid;
+        }
+        else if (array[mid - 1] > value)
+        {
+            max = mid;
+        }
+        else
+        {
+            min = max = mid;
+        }
+        mid = (min + max) >> 1;
+    }
+    
+    return mid - 1;
+}

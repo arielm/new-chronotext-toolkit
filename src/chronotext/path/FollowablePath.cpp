@@ -1,34 +1,10 @@
 #include "chronotext/path/FollowablePath.h"
 #include "chronotext/utils/MathUtils.h"
-
+#include "chronotext/utils/Utils.h"
 using namespace ci;
 using namespace std;
 
 #define CAPACITY_INCREMENT 0 /* 0 MEANS THAT CAPACITY IS MULTIPLIED BY 2 WHEN NECESSARY */
-
-static int search(float *array, float value, int min, int max)
-{
-    int mid = (min + max) >> 1;
-    
-    while (min < mid)
-    {
-        if (array[mid - 1] < value)
-        {
-            min = mid;
-        }
-        else if (array[mid - 1] > value)
-        {
-            max = mid;
-        }
-        else
-        {
-            min = max = mid;
-        }
-        mid = (min + max) >> 1;
-    }
-    
-    return mid - 1;
-}
 
 FollowablePath::FollowablePath(int mode, int capacity)
 :
