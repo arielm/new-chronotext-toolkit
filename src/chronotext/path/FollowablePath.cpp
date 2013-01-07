@@ -36,6 +36,23 @@ void FollowablePath::ensureCapacity(int minCapacity)
     }
 }
 
+void FollowablePath::clear()
+{
+    size = 0;
+}
+
+float FollowablePath::getLength()
+{
+    if (size > 0)
+    {
+        return len[size - 1];
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void FollowablePath::add(float xx, float yy)
 {
     ensureCapacity(size + 1);
@@ -55,23 +72,6 @@ void FollowablePath::add(float xx, float yy)
     }
     
     size++;
-}
-
-float FollowablePath::getLength()
-{
-    if (size > 0)
-    {
-        return len[size - 1];
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-void FollowablePath::clear()
-{
-    size = 0;
 }
 
 void FollowablePath::pos2Point(float pos, float *res)

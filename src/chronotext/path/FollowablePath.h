@@ -27,9 +27,9 @@ public:
     FollowablePath(int mode = MODE_TANGENT, int capacity = 256);
     ~FollowablePath();
     
-    void add(float x, float y);
-    float getLength();
     void clear();
+    float getLength();
+    void add(float x, float y);
     
     void pos2Point(float pos, float *res);
     float pos2Angle(float pos);
