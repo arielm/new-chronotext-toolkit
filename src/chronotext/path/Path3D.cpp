@@ -46,18 +46,16 @@ void Path3D::add(float xx, float yy, float zz, float aax, float aaz)
         float l = math<float>::sqrt(dx * dx + dy * dy + dz * dz);
         len.push_back(len[size - 1] + l);
         
-        ax[size - 1] = aax;
         ay[size - 1] = math<float>::atan2(dz, l);
-        az[size - 1] = aaz;
     }
     else
     {
         len.push_back(0);
     }
     
-    ax.push_back(0);
+    ax.push_back(aax);
     ay.push_back(0);
-    az.push_back(0);
+    az.push_back(aaz);
     
     size++;
 }
@@ -66,9 +64,6 @@ Path3D::Value Path3D::pos2Value(float pos) const
 {
     if (size > 0)
     {
-        float length = len[size - 1];
-        pos = math<float>::clamp(pos, 0, length);
-        
         int index = search((float*)len.data(), pos, 1, size);
         float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
         
