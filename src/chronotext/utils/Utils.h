@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 /*
  * DEBUG LOGGING (FOR COCOA ONLY)
