@@ -2,6 +2,7 @@
 
 #include "cinder/app/App.h"
 #include "cinder/Utilities.h"
+#include "cinder/Camera.h"
 
 #include <string>
 #include <fstream>
@@ -52,11 +53,6 @@ static void logToConsole()
 
 // ---
 
-std::string wstringToUtf8(const std::wstring &s);
-std::wstring utf8ToWstring(const std::string &s);
-
-// ---
-
 static int search(float *array, float value, int min, int max)
 {
     int mid = (min + max) >> 1;
@@ -80,3 +76,8 @@ static int search(float *array, float value, int min, int max)
     
     return mid - 1;
 }
+
+std::string wstringToUtf8(const std::wstring &s);
+std::wstring utf8ToWstring(const std::string &s);
+
+void dumpCamera(const ci::Camera &cam, const std::string &name = "cam");
