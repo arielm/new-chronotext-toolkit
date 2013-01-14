@@ -1,6 +1,10 @@
 #include "CrashGuard.h"
 
+#include "cinder/app/AppBasic.h"
+
 using namespace std;
+using namespace ci;
+using namespace ci::app;
 
 CrashGuard::CrashGuard() : mCount(0)
 {
@@ -9,6 +13,8 @@ CrashGuard::CrashGuard() : mCount(0)
 
 void CrashGuard::run()
 {
+    ThreadSetup threadSetup;
+    
     while (true)
     {
         boost::this_thread::sleep(boost::posix_time::seconds(1));
@@ -19,6 +25,14 @@ void CrashGuard::run()
         }
         else
         {
+            AppBasic *app = AppBasic::get();
+            
+            if (app->isFullScreen())
+            {
+                app->setFullScreen(false);
+                boost::this_thread::sleep(boost::posix_time::seconds(1));
+            }
+            
             exit(-1);
         }
     }
