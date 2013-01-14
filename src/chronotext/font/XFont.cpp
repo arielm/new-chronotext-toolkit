@@ -380,6 +380,7 @@ namespace chronotext
     {
         sequenceSize = 0;
         sequenceDimensions = dimensions;
+        
         sequenceVertices = vertices;
         sequenceCoords = coords;
         
@@ -417,6 +418,9 @@ namespace chronotext
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
         glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        
+        sequenceVertices = vertices;
+        sequenceCoords = coords;
     }
     
     void XFont::incrementSequence()
