@@ -112,5 +112,5 @@ void AudioLoopImplCocoa::stop()
 /*
  * TODO
  */
-void AudioLoop::setVolume(float volume)
+void AudioLoopImplCocoa::setVolume(float volume)
 {}

@@ -15,7 +15,7 @@ class AudioLoopImplCocoa
     
     static OSStatus staticRenderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
     {
-        AudioLoop *instance = (AudioLoop*)inRefCon;
+        AudioLoopImplCocoa *instance = (AudioLoopImplCocoa*)inRefCon;
         if (instance->delegate)
         {
             float *bufferData = (float*)ioData->mBuffers[0].mData;
