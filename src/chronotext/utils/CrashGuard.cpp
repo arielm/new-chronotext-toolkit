@@ -17,7 +17,7 @@ void CrashGuard::run()
     
     while (true)
     {
-        boost::this_thread::sleep(boost::posix_time::seconds(1));
+        boost::this_thread::sleep(boost::posix_time::seconds(2));
         
         if (mCount)
         {
