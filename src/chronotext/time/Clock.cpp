@@ -1,6 +1,10 @@
+/*
+ * INSPIRED BY javax.media.Clock
+ * http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Clock.html
+ */
+
 #include "chronotext/time/Clock.h"
 #include "chronotext/time/MasterClock.h"
-#include "chronotext/utils/Utils.h"
 
 using namespace std;
 
@@ -39,8 +43,6 @@ namespace chronotext
     
     Clock::~Clock()
     {
-        DLOG("Clock DELETED");
-        
         if (timeBaseIsOwned)
         {
             delete timeBase;
@@ -56,12 +58,6 @@ namespace chronotext
     {
         tbst = timeBase->getTime();
         state = STARTED;
-    }
-    
-    void Clock::restart()
-    {
-        mst = 0;
-        start();
     }
     
     void Clock::stop()
@@ -80,7 +76,14 @@ namespace chronotext
     
     void Clock::setTime(int now)
     {
-        mst = now;
+        if (state == STOPPED)
+        {
+            mst = now;
+        }
+        else
+        {
+            throw;
+        }
     }
     
     int Clock::getState()
@@ -90,6 +93,13 @@ namespace chronotext
     
     void Clock::setRate(double factor)
     {
-        rate = factor;
+        if (state == STOPPED)
+        {
+            rate = factor;
+        }
+        else
+        {
+            throw;
+        }
     }
 }

@@ -1,5 +1,6 @@
 /*
  * INSPIRED BY javax.media.Clock
+ * http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Clock.html
  */
 
 #pragma once
@@ -39,7 +40,6 @@ namespace chronotext
         ~Clock();
         
         void start();
-        void restart();
         void stop();
         double getTime();
         void setTime(int now);
