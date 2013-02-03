@@ -31,18 +31,3 @@ wstring utf8ToWstring(const string &s)
     
     return wstring(&tmp[0], tmp.size());
 }
-
-void dumpCamera(const ci::Camera &cam, const string &name)
-{
-    Vec3f worldUp = cam.getWorldUp();
-    Vec3f eyepoint = cam.getEyePoint();
-    Vec3f centerOfInterestPoint = cam.getCenterOfInterestPoint();
-    Quatf orientation = cam.getOrientation();
-    Vec3f axis = orientation.getAxis();
-    
-    cout << name << ".setWorldUp(Vec3f(" << worldUp.x << ", " << worldUp.y << ", " << worldUp.z << "));" << endl;
-    cout << name << ".setEyePoint(Vec3f(" << eyepoint.x << ", " << eyepoint.y << ", " << eyepoint.z << "));" << endl;
-    cout << name << ".setCenterOfInterestPoint(Vec3f(" << centerOfInterestPoint.x << ", " << centerOfInterestPoint.y << ", " << centerOfInterestPoint.z << "));" << endl;
-    cout << name << ".setOrientation(Quatf(Vec3f(" << axis.x << ", " << axis.y << ", " << axis.z << "), " << orientation.getAngle() << "));" << endl;
-    cout << name << ".setPerspective(" << cam.getFov() << ", getWindowAspectRatio(), " << cam.getNearClip() << ", " << cam.getFarClip() << ");" << endl;
-}
