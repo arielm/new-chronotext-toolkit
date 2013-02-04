@@ -33,10 +33,10 @@ class FontManager
 public:
     ~FontManager();
     
-#if defined(CINDER_COCOA)
-    chr::XFont* getFont(const std::string &macPath, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
-#else
+#if defined(CINDER_MSW)
     chr::XFont* getFont(int mswID, const std::string &mswType, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
+#else
+    chr::XFont* getFont(const std::string &macPath, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
 #endif
     
     bool removeFont(chr::XFont *font);
