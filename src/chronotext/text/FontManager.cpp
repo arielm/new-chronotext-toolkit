@@ -18,7 +18,7 @@ FontManager::~FontManager()
         delete it->second;
     }
     
-    DLOG("FONTS DELETED: " << cache.size());
+    DLOG(cache.size() << " FONTS DELETED");
 }
 
 #if defined(CINDER_MSW)
