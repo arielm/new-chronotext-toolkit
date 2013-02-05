@@ -89,6 +89,11 @@ void FontHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstr
     drawText(font, sequence, text, x, y, snap);
 }
 
+void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, const Rectf &rect, bool snap)
+{
+    drawStrikethroughInRect(font, text, rect.x1, rect.y1, rect.x2, rect.y2, snap);
+}
+
 void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
 {
     float w1 = getStringWidth(font, text, snap);

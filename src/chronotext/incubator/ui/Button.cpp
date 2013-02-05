@@ -41,25 +41,21 @@ namespace chronotext
     
     void Button::draw()
     {
-        float x1 = x;
-        float y1 = y;
-        float x2 = x1 + getWidth();
-        float y2 = y1 + getHeight();
-        
+        Rectf bounds = getBounds();
         float inset = 0;
         
         if (style->borderColor[state])
         {
-            inset = 1;
+            inset = -1;
             
             gl::color(*style->borderColor[state]);
-            gl::drawSolidRect(Rectf(x1, y1, x2, y2));
+            gl::drawSolidRect(bounds);
         }
         
         if (style->backgroundColor[state])
         {
             gl::color(*style->backgroundColor[state]);
-            gl::drawSolidRect(Rectf(x1 + inset, y1 + inset, x2 - inset, y2 - inset));
+            gl::drawSolidRect(bounds.inflated(Vec2f(inset, inset)));
         }
         
         // ---
@@ -69,7 +65,7 @@ namespace chronotext
         if (icon)
         {
             glPushMatrix();
-            glTranslatef(x1 + (x2 - x1) * 0.5, y1 + (y2 - y1) * 0.5, 0);
+            gl::translate(bounds.getCenter());
             glScalef(icon->scale, icon->scale, 1);
             
             TextureHelper::beginTexture(icon->texture);
@@ -81,11 +77,11 @@ namespace chronotext
         else
         {
             style->font->setSize(style->fontSize);
-            FontHelper::drawTextInRect(style->font, NULL, text, x1, y1, x2, y2, style->snap);
+            FontHelper::drawTextInRect(style->font, NULL, text, bounds, style->snap);
             
             if (style->strikethrough[state])
             {
-                FontHelper::drawStrikethroughInRect(style->font, text, x1, y1, x2, y2, style->snap);
+                FontHelper::drawStrikethroughInRect(style->font, text, bounds, style->snap);
             }
         }
     }

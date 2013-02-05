@@ -28,7 +28,7 @@ namespace chronotext
                     contentWidth += mergedMargin(previousMargin, shape->marginLeft);
                     contentWidth += shape->getWidth();
                     
-                    contentHeight = fmaxf(contentHeight, shape->marginTop + shape->getHeight() + shape->marginBottom);
+                    contentHeight = max<float>(contentHeight, shape->marginTop + shape->getHeight() + shape->marginBottom);
                     previousMargin = shape->marginRight;
                 }
             }

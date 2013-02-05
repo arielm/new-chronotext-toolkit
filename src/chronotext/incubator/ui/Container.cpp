@@ -103,11 +103,11 @@ namespace chronotext
     {
         if ((previousMargin > 0) && (nextMargin > 0))
         {
-            return fmaxf(previousMargin, nextMargin);
+            return max<float>(previousMargin, nextMargin);
         }
         else if ((previousMargin < 0) && (nextMargin < 0))
         {
-            return fminf(previousMargin, nextMargin);
+            return min<float>(previousMargin, nextMargin);
         }
         
         return previousMargin + nextMargin;
