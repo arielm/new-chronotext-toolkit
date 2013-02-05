@@ -290,8 +290,8 @@ namespace chronotext
                     Vec2f p1 = it2->first;
                     Vec2f p2 = it2->second;
                     
-                    p1.y = rintf(p1.y + offsetBottom);
-                    p2.y = rintf(p2.y + offsetBottom);
+                    p1.y = math<float>::floor(p1.y + offsetBottom);
+                    p2.y = math<float>::floor(p2.y + offsetBottom);
                     
                     gl::drawLine(p1, p2);
                 }

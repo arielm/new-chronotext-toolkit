@@ -28,7 +28,7 @@ XFont* FontManager::getFont(int mswID, const string &mswType, bool useMipmap, bo
     oss << mswID << mswType << useMipmap << useAnisotropy << maxDimensions << slotCapacity;
     
     string key = oss.str();
-    uint64_t id = hash(key);
+    uint64_t id = chr::hash(key);
     
     if (hasFont(id))
     {
@@ -51,7 +51,7 @@ XFont* FontManager::getFont(const string &macPath, bool useMipmap, bool useAniso
     oss << macPath << useMipmap << useAnisotropy << maxDimensions << slotCapacity;
     
     string key = oss.str();
-    uint64_t id = hash(key);
+    uint64_t id = chr::hash(key);
     
     if (hasFont(id))
     {

@@ -33,12 +33,12 @@ namespace chronotext
                         }
                         else
                         {
-                            float availableWidth = fmaxf(0, innerWidth - shape->marginLeft - shape->marginRight);
+                            float availableWidth = max<float>(0, innerWidth - shape->marginLeft - shape->marginRight);
                             shape->setWidth(availableWidth);
                         }
                     }
                     
-                    contentWidth = fmaxf(contentWidth, shape->marginLeft + shape->getWidth() + shape->marginRight);
+                    contentWidth = max<float>(contentWidth, shape->marginLeft + shape->getWidth() + shape->marginRight);
                     
                     top += shape->getHeight();
                     previousMargin = shape->marginBottom;
