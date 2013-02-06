@@ -20,8 +20,8 @@ namespace chronotext
         int textAlignX;
         int textAlignY;
         
-        ci::ColorAf textColor;
-        ci::ColorAf backgroundColor;
+        ci::ColorA textColor;
+        ci::ColorA backgroundColor;
 
         TextBoxStyle()
         :
@@ -33,7 +33,7 @@ namespace chronotext
         lineHeightFactor(1),
         textAlignX(Shape::ALIGN_LEFT),
         textAlignY(Shape::ALIGN_TOP),
-        backgroundColor(ci::ColorAf(0, 0, 0, 0))
+        backgroundColor(ci::ColorA(0, 0, 0, 0))
         {}
     };
 }

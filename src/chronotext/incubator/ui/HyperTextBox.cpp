@@ -256,23 +256,26 @@ namespace chronotext
     {
         if (selectedLinkIndex != -1)
         {
-            gl::color(style->selectedLinkBackgroundColor);
-            
-            float offsetTop = font->getSize() * style->linkPaddingFactor;
-            float offsetBottom = font->getHeight() + offsetTop;
-            
-            vector<LinkSpan>::const_iterator it1 = linkSpans.begin();
-            int index = 0;
-            for (; it1 != linkSpans.end(); ++it1, index++)
+            if (style->selectedLinkBackgroundColor.a > 0)
             {
-                if (index == selectedLinkIndex)
+                gl::color(style->selectedLinkBackgroundColor);
+                
+                float offsetTop = font->getSize() * style->linkPaddingFactor;
+                float offsetBottom = font->getHeight() + offsetTop;
+                
+                vector<LinkSpan>::const_iterator it1 = linkSpans.begin();
+                int index = 0;
+                for (; it1 != linkSpans.end(); ++it1, index++)
                 {
-                    for (vector< pair<Vec2f, Vec2f> >::const_iterator it2 = it1->positions.begin(); it2 != it1->positions.end(); ++it2)
+                    if (index == selectedLinkIndex)
                     {
-                        Vec2f p1 = it2->first;
-                        Vec2f p2 = it2->second;
-                        
-                        gl::drawSolidRect(Rectf(p1.x, p1.y - offsetTop, p2.x, p2.y + offsetBottom));
+                        for (vector< pair<Vec2f, Vec2f> >::const_iterator it2 = it1->positions.begin(); it2 != it1->positions.end(); ++it2)
+                        {
+                            Vec2f p1 = it2->first;
+                            Vec2f p2 = it2->second;
+                            
+                            gl::drawSolidRect(Rectf(p1.x, p1.y - offsetTop, p2.x, p2.y + offsetBottom));
+                        }
                     }
                 }
             }

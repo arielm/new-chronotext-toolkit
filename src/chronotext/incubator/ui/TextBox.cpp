@@ -155,12 +155,12 @@ namespace chronotext
         offsetY = y;
     }
     
-    void TextBox::setTextColor(const ColorAf &color)
+    void TextBox::setTextColor(const ColorA &color)
     {
         textColor = color;
     }
     
-    void TextBox::setBackgroundColor(const ColorAf &color)
+    void TextBox::setBackgroundColor(const ColorA &color)
     {
         backgroundColor = color;
     }

@@ -9,8 +9,8 @@ namespace chronotext
     class HyperTextBoxStyle : public TextBoxStyle
     {
     public:
-        ci::ColorAf selectedLinkTextColor;
-        ci::ColorAf selectedLinkBackgroundColor;
+        ci::ColorA selectedLinkTextColor;
+        ci::ColorA selectedLinkBackgroundColor;
         
         float linkUnderlineFactor;
         float linkPaddingFactor;
@@ -21,7 +21,8 @@ namespace chronotext
         TextBoxStyle(),
         linkUnderlineFactor(0.2),
         linkPaddingFactor(0.1),
-        linkHitExtra(8)
+        linkHitExtra(8),
+        selectedLinkBackgroundColor(ci::ColorA(0, 0, 0, 0))
         {}
     };
 }

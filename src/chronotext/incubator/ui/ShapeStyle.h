@@ -6,7 +6,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<ci::ColorAf> ColorRef;
+    typedef boost::shared_ptr<ci::ColorA> ColorRef;
     typedef boost::shared_ptr<class ShapeStyle> ShapeStyleRef;
     
     class ShapeStyle
