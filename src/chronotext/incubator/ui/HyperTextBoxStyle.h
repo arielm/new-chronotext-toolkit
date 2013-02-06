@@ -21,8 +21,7 @@ namespace chronotext
         TextBoxStyle(),
         linkUnderlineFactor(0.2),
         linkPaddingFactor(0.1),
-        linkHitExtra(8),
-        selectedLinkBackgroundColor(ci::ColorA(0, 0, 0, 0))
+        linkHitExtra(8)
         {}
     };
 }
