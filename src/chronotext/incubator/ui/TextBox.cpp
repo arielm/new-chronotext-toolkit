@@ -16,6 +16,7 @@ namespace chronotext
     offsetX(0),
     offsetY(0),
     textColor(style->textColor),
+    backgroundColor(style->backgroundColor),
     updateWrapRequest(false),
     updateWidthRequest(false),
     updateHeightRequest(false),
@@ -154,9 +155,14 @@ namespace chronotext
         offsetY = y;
     }
     
-    void TextBox::setTextColor(const ColorAf &textColor)
+    void TextBox::setTextColor(const ColorAf &color)
     {
-        this->textColor = textColor;
+        textColor = color;
+    }
+    
+    void TextBox::setBackgroundColor(const ColorAf &color)
+    {
+        backgroundColor = color;
     }
     
     void TextBox::setText(const wstring &text)
@@ -186,6 +192,12 @@ namespace chronotext
     void TextBox::draw()
     {
         layout();
+        
+        if (backgroundColor.a > 0)
+        {
+            gl::color(backgroundColor);
+            gl::drawSolidRect(getBounds());
+        }
         
         /*
          * TODO: BEGIN CLIP

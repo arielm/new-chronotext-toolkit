@@ -121,6 +121,12 @@ namespace chronotext
     {
         layout();
         
+        if (backgroundColor.a > 0)
+        {
+            gl::color(backgroundColor);
+            gl::drawSolidRect(getBounds());
+        }
+        
         /*
          * TODO: BEGIN CLIP
          */

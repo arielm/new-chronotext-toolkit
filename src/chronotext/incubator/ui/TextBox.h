@@ -47,6 +47,7 @@ namespace chronotext
         int textAlignY;
 
         ci::ColorAf textColor;
+        ci::ColorAf backgroundColor;
 
         bool overflowX;
         bool overflowY;
@@ -72,7 +73,8 @@ namespace chronotext
         void setWrap(bool wrap);
         void setOffsetX(float x);
         void setOffsetY(float y);
-        void setTextColor(const ci::ColorAf &textColor);
+        void setTextColor(const ci::ColorAf &color);
+        void setBackgroundColor(const ci::ColorAf &color);
         virtual void setText(const std::wstring &text);
         
         float getWidth();
