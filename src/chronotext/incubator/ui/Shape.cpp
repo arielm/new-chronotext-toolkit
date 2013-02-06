@@ -71,9 +71,7 @@ namespace chronotext
     
     void Shape::setBounds(const Rectf &bounds)
     {
-        x = bounds.x1;
-        y = bounds.y1;
-        
+        setLocation(bounds.x1, bounds.y1);
         setWidth(bounds.getWidth());
         setHeight(bounds.getHeight());
     }

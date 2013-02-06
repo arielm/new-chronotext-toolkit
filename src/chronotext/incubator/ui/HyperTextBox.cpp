@@ -5,6 +5,15 @@ using namespace ci;
 
 namespace chronotext
 {
+    void HyperTextBox::setLocation(float x, float y)
+    {
+        if ((x != this->x) || (y != this->y))
+        {
+            updateLocationRequest = true;
+            Shape::setLocation(x, y);
+        }
+    }
+    
     void HyperTextBox::setText(const wstring &text)
     {
         pair<vector<ExtractedLink>, wstring> extracted = LinkExtractor::extract(text);
@@ -81,7 +90,7 @@ namespace chronotext
     
     void HyperTextBox::layout()
     {
-        bool updateRequired = (updateWrapRequest || updateWidthRequest);
+        bool updateRequired = (updateWrapRequest || updateWidthRequest || updateLocationRequest);
         
         TextBox::layout();
         
@@ -114,6 +123,8 @@ namespace chronotext
                     touchableLinks.push_back(new TouchableLink(this, index, bounds, Touchable::TYPE_CLICKABLE, style->linkHitExtra));
                 }
             }
+            
+            updateLocationRequest = false;
         }
     }
     

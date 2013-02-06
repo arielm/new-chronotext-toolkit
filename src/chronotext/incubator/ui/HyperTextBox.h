@@ -39,6 +39,8 @@ namespace chronotext
     class HyperTextBox : public TextBox
     {
     protected:
+        bool updateLocationRequest;
+
         int selectedLinkIndex;
         std::vector<LinkSpan> linkSpans;
         boost::ptr_vector<Touchable> touchableLinks;
@@ -62,10 +64,12 @@ namespace chronotext
         :
         TextBox(style),
         style(style),
+        updateLocationRequest(false),
         delegate(NULL),
         selectedLinkIndex(-1)
         {}
 
+        void setLocation(float x, float y);
         void setText(const std::wstring &text);
         void selectLink(int linkIndex);
         void deselectLink();
