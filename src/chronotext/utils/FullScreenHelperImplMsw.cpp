@@ -1,5 +1,7 @@
 #include "FullScreenHelperImplMsw.h"
 
+#include "cinder/app/AppBasic.h"
+
 using namespace ci;
 using namespace ci::app;
 
@@ -10,7 +12,9 @@ bool FullScreenHelperImplMsw::isFullScreen()
 
 void FullScreenHelperImplMsw::toggleFullScreen()
 {
-    if (fullScreen)
+    AppBasic *app = AppBasic::get();
+    
+	if (fullScreen)
     {
         setFullScreen(false);
         
