@@ -10,10 +10,10 @@ namespace chronotext
         if (layoutRequest)
         {
             float innerWidth = width - paddingLeft - paddingRight;
-            float left = x + paddingLeft;
-            float top = paddingTop;
-            
+            float innerHeight = height - paddingTop - paddingBottom;
+
             float previousMargin = 0;
+            contentWidth = 0;
             contentHeight = 0;
             
             for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
@@ -22,9 +22,6 @@ namespace chronotext
                 
                 if (shape->visible)
                 {
-                    top += mergedMargin(previousMargin, shape->marginTop);
-                    shape->setLocation(left + shape->marginLeft, y + top);
-                    
                     if (!shape->autoWidth)
                     {
                         if (autoWidth)
@@ -38,15 +35,13 @@ namespace chronotext
                         }
                     }
                     
-                    contentWidth = max<float>(contentWidth, shape->marginLeft + shape->getWidth() + shape->marginRight);
+                    contentHeight += mergedMargin(previousMargin, shape->marginTop);
+                    contentHeight += shape->getHeight();
                     
-                    top += shape->getHeight();
+                    contentWidth = max<float>(contentWidth, shape->marginLeft + shape->getWidth() + shape->marginRight);
                     previousMargin = shape->marginBottom;
                 }
             }
-            
-            top += previousMargin;
-            contentHeight = top - paddingTop;
             
             if (autoWidth)
             {
@@ -55,14 +50,13 @@ namespace chronotext
             
             if (autoHeight)
             {
-                height = top + paddingBottom;
+                height = paddingTop + contentHeight + paddingBottom;
             }
             
             // ---
             
-            float innerHeight = height - paddingTop - paddingBottom;
-            top = paddingTop;
-            
+            float top = paddingTop;
+
             switch (alignY)
             {
                 case ALIGN_MIDDLE:
