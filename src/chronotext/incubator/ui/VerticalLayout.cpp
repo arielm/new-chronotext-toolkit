@@ -9,9 +9,6 @@ namespace chronotext
     {
         if (layoutRequest)
         {
-            float innerWidth = width - paddingLeft - paddingRight;
-            float innerHeight = height - paddingTop - paddingBottom;
-
             float previousMargin = 0;
             contentWidth = 0;
             contentHeight = 0;
@@ -30,7 +27,7 @@ namespace chronotext
                         }
                         else
                         {
-                            float availableWidth = max<float>(0, innerWidth - shape->marginLeft - shape->marginRight);
+                            float availableWidth = max<float>(0, width - paddingLeft - paddingRight - shape->marginLeft - shape->marginRight);
                             shape->setWidth(availableWidth);
                         }
                     }
@@ -55,6 +52,7 @@ namespace chronotext
             
             // ---
             
+            float innerHeight = height - paddingTop - paddingBottom;
             float top = paddingTop;
 
             switch (alignY)
@@ -70,6 +68,7 @@ namespace chronotext
             
             // ---
             
+            float innerWidth = width - paddingLeft - paddingRight;
             previousMargin = 0;
             
             for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
