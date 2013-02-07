@@ -1,5 +1,7 @@
 #include "FullScreenHelperImplMac.h"
 
+#include "cinder/app/AppBasic.h"
+
 #import <Cocoa/Cocoa.h>
 
 using namespace ci;
@@ -12,6 +14,8 @@ bool FullScreenHelperImplMac::isFullScreen()
 
 void FullScreenHelperImplMac::toggleFullScreen()
 {
+    AppBasic *app = AppBasic::get();
+    
     if (fullScreen)
     {
         app->setWindowSize(windowSize.x, windowSize.y);

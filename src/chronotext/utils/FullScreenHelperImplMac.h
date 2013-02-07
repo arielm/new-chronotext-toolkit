@@ -1,17 +1,15 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/Vector.h"
 
 class FullScreenHelperImplMac
 {
-    ci::app::AppBasic *app;
-    
     bool fullScreen;
     ci::Vec2i windowPos;
     ci::Vec2i windowSize;
     
 public:
-    FullScreenHelperImplMac(ci::app::AppBasic *app) : app(app), fullScreen(false) {}
+    FullScreenHelperImplMac() : fullScreen(false) {}
     
     bool isFullScreen();
     void toggleFullScreen();
