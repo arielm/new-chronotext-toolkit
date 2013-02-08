@@ -1,6 +1,7 @@
 #pragma once
 
 #include "chronotext/font/XFont.h"
+#include "chronotext/path/FollowablePath.h"
 
 class FontHelper
 {
@@ -24,4 +25,6 @@ public:
     
     static void drawStrikethroughInRect(chr::XFont *font, const std::wstring &text, const ci::Rectf &rect, bool snap = false);
     static void drawStrikethroughInRect(chr::XFont *font, const std::wstring &text, float x1, float y1, float x2, float y2, bool snap = false);
+    
+    static float drawTextOnPath(chr::XFont *font, chr::XFontSequence *sequence, const std::wstring &text, FollowablePath *path, float offset);
 };

@@ -122,3 +122,39 @@ void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float
     glDrawArrays(GL_LINES, 0, 2);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
+
+float FontHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wstring &text, FollowablePath *path, float offset)
+{
+    float res[3];
+    
+    int len = text.size();
+    float offsetX = offset;
+    float offsetY = font->getDescent();
+    float sampleSize = font->getSize() * 0.5f;
+    
+    FontMatrix *matrix = font->getMatrix();
+    font->beginSequence(sequence, 2);
+    
+    for (int i = 0; i < len; i++)
+    {
+        int cc = font->lookup(text[i]);
+        float half = 0.5f * font->getGlyphWidth(cc);
+        offsetX += half;
+        
+        if (cc > -1)
+        {
+            path->pos2Point(offsetX, res);
+            float theta = path->pos2SampledAngle(offsetX, sampleSize);
+            
+            matrix->setTranslation(res[0], res[1], 0);
+            matrix->rotateZ(theta);
+            font->addTransformedGlyph2D(cc, -half, offsetY);
+        }
+        
+        offsetX += half;
+    }
+    
+    font->endSequence();
+    
+    return offsetX;
+}

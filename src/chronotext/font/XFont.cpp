@@ -12,7 +12,7 @@ namespace chronotext
     maxDimensions(maxDimensions),
     slotCapacity(slotCapacity)
     {
-        read(source);
+        read(source->createStream());
         init();
     }
     
@@ -37,10 +37,8 @@ namespace chronotext
         glDeleteBuffers(1, &indicesName);
     }
     
-    void XFont::read(DataSourceRef source)
+    void XFont::read(IStreamRef in)
     {
-        IStreamRef in = source->createStream();
-        
         string version;
         in->readFixedString(&version, 10);
         

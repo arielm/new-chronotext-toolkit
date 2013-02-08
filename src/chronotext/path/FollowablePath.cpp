@@ -17,6 +17,13 @@ size(0)
     len = new float[capacity];
 }
 
+FollowablePath::FollowablePath(DataSourceRef source, int mode)
+:
+mode(mode)
+{
+    read(source->createStream());
+}
+
 FollowablePath::~FollowablePath()
 {
     delete[] x;
@@ -33,6 +40,29 @@ void FollowablePath::ensureCapacity(int minCapacity)
         x = (float*) realloc(x, capacity * sizeof(float));
         y = (float*) realloc(y, capacity * sizeof(float));
         len = (float*) realloc(len, capacity * sizeof(float));
+    }
+}
+
+/*
+ * ASSERTION: THIS IS CALLED AT CONSTRUCTION TIME
+ */
+void FollowablePath::read(IStreamRef in)
+{
+    in->readLittle(&capacity);
+    
+    size = 0;
+    x = new float[capacity];
+    y = new float[capacity];
+    len = new float[capacity];
+    
+    float xx;
+    float yy;
+    
+    for (int i = 0; i < capacity; i++)
+    {
+        in->readLittle(&xx);
+        in->readLittle(&yy);
+        add(xx, yy);
     }
 }
 

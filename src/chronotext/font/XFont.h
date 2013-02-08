@@ -62,7 +62,7 @@ namespace chronotext
         GLfloat *sequenceCoords;
         XFontSequence *sequence;
         
-        void read(ci::DataSourceRef source);
+        void read(ci::IStreamRef in);
         void addAtlasUnit(char *srcData, char *dstData, int xx, int yy, int ww, int hh);
         void init();
         

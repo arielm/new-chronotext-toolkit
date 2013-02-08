@@ -1,12 +1,14 @@
 #pragma once
 
 #include "cinder/Rect.h"
+#include "cinder/DataSource.h"
 
 typedef boost::shared_ptr<class FollowablePath> FollowablePathRef;
 
 class FollowablePath
 {
     void ensureCapacity(int minCapacity);
+    void read(ci::IStreamRef in);
     
 public:
     enum
@@ -25,6 +27,8 @@ public:
     float *len;
     
     FollowablePath(int mode = MODE_TANGENT, int capacity = 256);
+    FollowablePath(ci::DataSourceRef source, int mode = MODE_TANGENT);
+    
     ~FollowablePath();
     
     void clear();
