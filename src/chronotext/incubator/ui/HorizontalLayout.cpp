@@ -54,7 +54,7 @@ namespace chronotext
             switch (alignX)
             {
                 case ALIGN_MIDDLE:
-                    left += (innerWidth - contentWidth) * 0.5;
+                    left += (innerWidth - contentWidth) * 0.5f;
                     break;
                     
                 case ALIGN_RIGHT:
@@ -82,7 +82,7 @@ namespace chronotext
                             break;
                             
                         case ALIGN_MIDDLE:
-                            top += (innerHeight - shape->getHeight()) * 0.5; // XXX
+                            top += (innerHeight - shape->getHeight()) * 0.5f; // XXX
                             break;
                             
                         case ALIGN_BOTTOM:

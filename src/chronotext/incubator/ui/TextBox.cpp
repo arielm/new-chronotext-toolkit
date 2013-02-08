@@ -11,6 +11,11 @@ namespace chronotext
     TextBox::TextBox(TextBoxStyleRef style)
     :
     Shape(style),
+    font(NULL),
+    fontSize(0),
+    wrap(false),
+    lineHeight(0),
+    lineHeightFactor(0),
     overflowX(false),
     overflowY(false),
     offsetX(0),

@@ -3,7 +3,7 @@
  *
  * TODO:
  * - IMPLEMENT CLIPPING
- * - FILL-COLOR AND BORDER-COLOR
+ * - BORDER-COLOR
  */
 
 #pragma once
