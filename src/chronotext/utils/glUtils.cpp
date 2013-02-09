@@ -11,8 +11,12 @@ void perspective(float fovy, float aspect, float zNear, float zFar)
     
     float xmin = ymin * aspect;
     float xmax = ymax * aspect;
-    
+
+#if defined(CINDER_GLES)
+    glFrustumf(xmin, xmax, ymin, ymax, zNear, zFar);
+#else
     glFrustum(xmin, xmax, ymin, ymax, zNear, zFar);
+#endif
 }
 
 /*
@@ -26,7 +30,11 @@ void perspective(float fovy, float zNear, float zFar, float width, float height,
     float offsetX = -panX * (halfWidth * 2 / width);
     float offsetY = -panY * (halfHeight * 2 / height);
     
+#if defined(CINDER_GLES)
+    glFrustumf(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
+#else
     glFrustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
+#endif
 }
 
 void dumpCamera(const ci::Camera &cam, const string &name)
