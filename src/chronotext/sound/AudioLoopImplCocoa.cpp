@@ -109,11 +109,16 @@ void AudioLoopImplCocoa::stop()
     }
 }
 
+/*
+ * FOR SETTING VOLUME ON iOS, AudioQueue SHOULD BE USED INSTEAD OF AudioUnit
+ */
 void AudioLoopImplCocoa::setVolume(float volume)
 {
+#if !TARGET_OS_IPHONE
     if (initialized)
     {
         OSStatus err = AudioUnitSetParameter(audioUnit, kHALOutputParam_Volume, kAudioUnitScope_Output, 0, volume, 0);
         if (err) printf("AudioUnitSetParameter ERROR: %d\n", (int)err);
     }
+#endif
 }
