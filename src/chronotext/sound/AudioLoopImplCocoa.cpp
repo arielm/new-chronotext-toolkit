@@ -109,8 +109,11 @@ void AudioLoopImplCocoa::stop()
     }
 }
 
-/*
- * TODO
- */
 void AudioLoopImplCocoa::setVolume(float volume)
-{}
+{
+    if (initialized)
+    {
+        OSStatus err = AudioUnitSetParameter(audioUnit, kHALOutputParam_Volume, kAudioUnitScope_Output, 0, volume, 0);
+        if (err) printf("AudioUnitSetParameter ERROR: %d\n", (int)err);
+    }
+}
