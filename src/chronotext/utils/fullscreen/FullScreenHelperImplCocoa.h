@@ -2,14 +2,14 @@
 
 #include "cinder/Vector.h"
 
-class FullScreenHelperImplMsw
+class FullScreenHelperImplCocoa
 {
     bool fullScreen;
     ci::Vec2i windowPos;
     ci::Vec2i windowSize;
     
 public:
-    FullScreenHelperImplMsw() : fullScreen(false) {}
+    FullScreenHelperImplCocoa() : fullScreen(false) {}
     
     bool isFullScreen();
     void toggleFullScreen();
