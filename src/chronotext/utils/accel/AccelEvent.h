@@ -8,17 +8,17 @@ class AccelEvent
     ci::Vec3f mPrevRawData;
     
 public:
-	AccelEvent(const ci::Vec3f &rawData, const ci::Vec3f &prevRawData)
+    AccelEvent(const ci::Vec3f &rawData, const ci::Vec3f &prevRawData)
     :
     mRawData(rawData),
     mPrevRawData(prevRawData)
-	{}
-	
-	ci::Vec3f getRawData() const { return mRawData; }
+    {}
+    
+    ci::Vec3f getRawData() const { return mRawData; }
     ci::Vec3f getPrevRawData() const { return mPrevRawData; }
     
-	bool isShaking(float shakeDelta = 2.2f) const
-	{
+    bool isShaking(float shakeDelta = 2.2f) const
+    {
         return (mRawData - mPrevRawData).lengthSquared() > shakeDelta * shakeDelta;
     }
 };

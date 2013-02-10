@@ -1,3 +1,9 @@
+/*
+ * TRANSITIONAL SOLUTION FOR THE ACCELEROMETER,
+ * UNTIL POPULAR DEVICES WITHOUT GYROSCOPES
+ * (E.G. 3GS AND IPAD-1) ARE GONE...
+ */
+
 #pragma once
 
 #include "cinder/Cinder.h"

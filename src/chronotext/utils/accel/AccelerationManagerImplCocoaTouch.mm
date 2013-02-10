@@ -48,13 +48,13 @@ void AccelerationManagerImplCocoaTouch::enable(AccelerationDelegate *delegate, f
 {
     mDelegate = delegate;
     
-	if (updateFrequency <= 0)
+    if (updateFrequency <= 0)
     {
-		updateFrequency = 30;
+        updateFrequency = 30;
     }
-	
-	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1 / updateFrequency)];
-	[[UIAccelerometer sharedAccelerometer] setDelegate:mProxy];
+    
+    [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1 / updateFrequency)];
+    [[UIAccelerometer sharedAccelerometer] setDelegate:mProxy];
 }
 
 void AccelerationManagerImplCocoaTouch::disable()
