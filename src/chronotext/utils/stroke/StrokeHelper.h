@@ -1,7 +1,7 @@
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
-#include "chronotext/utils/TexturedTriangleStrip.h"
+#include "TexturedTriangleStrip.h"
 
 #include <cmath>
 
