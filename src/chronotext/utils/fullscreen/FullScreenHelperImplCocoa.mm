@@ -31,7 +31,7 @@ void FullScreenHelperImplCocoa::toggleFullScreen()
                                  [NSNumber numberWithUnsignedInteger:presentationOptions], NSFullScreenModeApplicationPresentationOptions,
                                  nil];
         
-		[view enterFullScreenMode:screen withOptions:options];
+        [view enterFullScreenMode:screen withOptions:options];
     }
     
     fullScreen ^= true;
