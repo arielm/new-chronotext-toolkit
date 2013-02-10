@@ -1,3 +1,8 @@
+/*
+ * BASED ON AccelEvent.h FROM CINDER 0.8.4
+ * https://github.com/cinder/Cinder/blob/master/include/cinder/app/AccelEvent.h
+ */
+
 #pragma once
 
 #include "cinder/Vector.h"
