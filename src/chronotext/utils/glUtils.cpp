@@ -12,11 +12,7 @@ void perspective(float fovy, float aspect, float zNear, float zFar)
     float xmin = ymin * aspect;
     float xmax = ymax * aspect;
 
-#if defined(CINDER_GLES)
-    glFrustumf(xmin, xmax, ymin, ymax, zNear, zFar);
-#else
-    glFrustum(xmin, xmax, ymin, ymax, zNear, zFar);
-#endif
+    frustum(xmin, xmax, ymin, ymax, zNear, zFar);
 }
 
 /*
@@ -30,11 +26,30 @@ void perspective(float fovy, float zNear, float zFar, float width, float height,
     float offsetX = -panX * (halfWidth * 2 / width);
     float offsetY = -panY * (halfHeight * 2 / height);
     
-#if defined(CINDER_GLES)
-    glFrustumf(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
-#else
-    glFrustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
-#endif
+    frustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
+}
+
+/*
+ * BASED ON http://www.mesa3d.org
+ */
+void frustum(float left, float right, float bottom, float top, float znear, float zfar)
+{
+    float x = (2 * znear) / (right - left);
+    float y = (2 * znear) / (top - bottom);
+    float a = (right + left) / (right - left);
+    float b = (top + bottom) / (top - bottom);
+    float c = -(zfar + znear) / ( zfar - znear);
+    float d = -(2 * zfar * znear) / (zfar - znear);
+
+    float m[] =
+    {
+        x, 0, 0,  0,
+        0, y, 0,  0,
+        a, b, c, -1,
+        0, 0, d,  0
+    };
+    
+    glLoadMatrixf(m);
 }
 
 void dumpCamera(const ci::Camera &cam, const string &name)
