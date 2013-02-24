@@ -4,21 +4,21 @@
 using namespace std;
 using namespace ci;
 
-void perspective(float fovy, float aspect, float zNear, float zFar)
+const Matrix44f getPerspectiveMatrix(float fovy, float aspect, float zNear, float zFar)
 {
     float ymax = zNear * math<float>::tan(fovy * PI / 360);
     float ymin = -ymax;
     
     float xmin = ymin * aspect;
     float xmax = ymax * aspect;
-
-    frustum(xmin, xmax, ymin, ymax, zNear, zFar);
+    
+    return getFrustumMatrix(xmin, xmax, ymin, ymax, zNear, zFar);
 }
 
 /*
  * SPECIAL VERSION TAKING IN COUNT PAN AND ZOOM
  */
-void perspective(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)
+const Matrix44f getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)
 {
     float halfHeight = zNear * math<float>::tan(fovy * PI / 360) / zoom;
     float halfWidth = halfHeight * width / height;
@@ -26,13 +26,13 @@ void perspective(float fovy, float zNear, float zFar, float width, float height,
     float offsetX = -panX * (halfWidth * 2 / width);
     float offsetY = -panY * (halfHeight * 2 / height);
     
-    frustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
+    return getFrustumMatrix(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
 }
 
 /*
- * BASED ON http://www.mesa3d.org
+ * BASED ON CODE FROM http://www.mesa3d.org
  */
-void frustum(float left, float right, float bottom, float top, float znear, float zfar)
+const Matrix44f getFrustumMatrix(float left, float right, float bottom, float top, float znear, float zfar)
 {
     float x = (2 * znear) / (right - left);
     float y = (2 * znear) / (top - bottom);
@@ -40,7 +40,7 @@ void frustum(float left, float right, float bottom, float top, float znear, floa
     float b = (top + bottom) / (top - bottom);
     float c = -(zfar + znear) / ( zfar - znear);
     float d = -(2 * zfar * znear) / (zfar - znear);
-
+    
     float m[] =
     {
         x, 0, 0,  0,
@@ -49,7 +49,7 @@ void frustum(float left, float right, float bottom, float top, float znear, floa
         0, 0, d,  0
     };
     
-    glLoadMatrixf(m);
+    return Matrix44f(m);
 }
 
 void dumpCamera(const ci::Camera &cam, const string &name)
