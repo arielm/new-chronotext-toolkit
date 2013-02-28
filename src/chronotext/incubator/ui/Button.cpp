@@ -68,9 +68,9 @@ namespace chronotext
             gl::translate(bounds.getCenter());
             glScalef(icon->scale, icon->scale, 1);
             
-            TextureHelper::beginTexture(icon->texture);
-            TextureHelper::drawTextureFromCenter(icon->texture);
-            TextureHelper::endTexture();
+            icon->texture->begin();
+            icon->texture->drawFromCenter();
+            icon->texture->end();
             
             glPopMatrix();
         }

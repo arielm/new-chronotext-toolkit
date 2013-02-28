@@ -4,7 +4,7 @@ using namespace ci;
 
 namespace chronotext
 {
-    Icon::Icon(gl::Texture *texture, float scale, float width, float height)
+    Icon::Icon(Texture *texture, float scale, float width, float height)
     :
     texture(texture),
     scale(scale)

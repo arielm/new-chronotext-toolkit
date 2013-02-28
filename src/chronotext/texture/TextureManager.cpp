@@ -1,77 +1,61 @@
 #include "chronotext/texture/TextureManager.h"
-#include "chronotext/utils/Utils.h"
 
-#include "cinder/DataSource.h"
-#include "cinder/app/App.h"
-
-#include <sstream>
-
-using namespace ci;
-using namespace app;
 using namespace std;
-using namespace chr;
+using namespace ci;
 
 TextureManager::~TextureManager()
 {
-    for (map<uint64_t, gl::Texture*>::const_iterator it = cache.begin(); it != cache.end(); ++it)
+    for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
     {
-        delete it->second;
+        delete *it;
     }
-    
-    DLOG(cache.size() << " TEXTURES DELETED");
 }
 
-#if defined(CINDER_MSW)
-gl::Texture* TextureManager::getTexture(int mswID, const string &mswType, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
+Texture* TextureManager::getFromCache(InputSourceRef inputSource, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
 {
-    stringstream oss;
-    oss << mswID << mswType << useMipmap << filter << wrapS << wrapT;
-    
-    string key = oss.str();
-    uint64_t id = chr::hash(key);
-    
-    if (hasTexture(id))
+    for (list<Texture*>::const_iterator it = cache.begin(); it != cache.end(); ++it)
     {
-        return getTexture(id);
-    }
-    
-    DataSourceRef resource = loadResource(mswID, mswType);
-    
-    gl::Texture *texture = TextureHelper::loadTexture(resource, useMipmap, filter, wrapS, wrapT);
-    putTexture(id, texture);
-    
-    return texture;
-}
-#else
-gl::Texture* TextureManager::getTexture(const string &macPath, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
-{
-    stringstream oss;
-    oss << macPath << useMipmap << filter << wrapS << wrapT;
-    
-    string key = oss.str();
-    uint64_t id = chr::hash(key);
-    
-    if (hasTexture(id))
-    {
-        return getTexture(id);
-    }
-    
-    DataSourceRef resource = loadResource(macPath);
-    
-    gl::Texture *texture = TextureHelper::loadTexture(resource, useMipmap, filter, wrapS, wrapT);
-    putTexture(id, texture);
-    
-    return texture;
-}
-#endif
+        Texture *texture = *it;
 
-bool TextureManager::removeTexture(gl::Texture *texture)
-{
-    for (map<uint64_t, gl::Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
-    {
-        if (texture == it->second)
+        if ((texture->inputSource->getUniqueName() == inputSource->getUniqueName()) && (texture->useMipmap == useMipmap) && (texture->filter == filter) && (texture->wrapS == wrapS) && (texture->wrapT == wrapT))
         {
-            delete it->second;
+            return texture;
+        }
+    }
+    
+    return NULL;
+}
+
+void TextureManager::putInCache(Texture *texture)
+{
+    cache.push_back(texture);
+}
+
+Texture* TextureManager::getTexture(const string &resourceName, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
+{
+    return getTexture(InputSource::getResource(resourceName), useMipmap, filter, wrapS, wrapT);
+}
+
+Texture* TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
+{
+    Texture *texture = getFromCache(inputSource, useMipmap, filter, wrapS, wrapT);
+    
+    if (!texture)
+    {
+        texture = new Texture(inputSource, useMipmap, filter, wrapS, wrapT);
+        putInCache(texture);
+    }
+    
+    return texture;
+}
+
+bool TextureManager::remove(Texture *texture)
+{
+    for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    {
+        if (texture == *it)
+        {
+            delete *it;
             cache.erase(it);
 
             return true;
@@ -79,4 +63,40 @@ bool TextureManager::removeTexture(gl::Texture *texture)
     }
     
     return false;
+}
+
+void TextureManager::clear()
+{
+    for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    {
+        delete *it;
+    }
+
+    cache.clear();
+}
+
+void TextureManager::unload()
+{
+    if (!unloaded)
+    {
+        unloaded = true;
+        
+        for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+        {
+            (*it)->unload();
+        }
+    }
+}
+
+void TextureManager::reload()
+{
+    if (unloaded)
+    {
+        unloaded = false;
+        
+        for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+        {
+            (*it)->reload();
+        }
+    }
 }

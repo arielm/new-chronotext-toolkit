@@ -23,21 +23,6 @@ static inline int bound(int value, int range)
     return (bound < 0) ? (bound + range) : bound;
 }
 
-static inline float ease(float t)
-{
-    return (t * t * (3 - 2 * t));
-}
-
-static inline float easeIn(float t)
-{
-    return (t < 0.5f) ? ease(t) : t;
-}
-
-static inline float easeOut(float t)
-{
-    return (t > 0.5f) ? ease(t) : t;
-}
-
 /*
  * BASED ON QUAKE
  * http://betterexplained.com/articles/understanding-quakes-fast-inverse-square-root/
