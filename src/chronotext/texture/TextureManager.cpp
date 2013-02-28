@@ -5,7 +5,7 @@ using namespace ci;
 
 TextureManager::~TextureManager()
 {
-    for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    for (auto it = cache.begin(); it != cache.end(); ++it)
     {
         delete *it;
     }
@@ -13,7 +13,7 @@ TextureManager::~TextureManager()
 
 Texture* TextureManager::getFromCache(InputSourceRef inputSource, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
 {
-    for (list<Texture*>::const_iterator it = cache.begin(); it != cache.end(); ++it)
+    for (auto it = cache.cbegin(); it != cache.cend(); ++it)
     {
         Texture *texture = *it;
 
@@ -51,7 +51,7 @@ Texture* TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, 
 
 bool TextureManager::remove(Texture *texture)
 {
-    for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    for (auto it = cache.begin(); it != cache.end(); ++it)
     {
         if (texture == *it)
         {
@@ -67,7 +67,7 @@ bool TextureManager::remove(Texture *texture)
 
 void TextureManager::clear()
 {
-    for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    for (auto it = cache.begin(); it != cache.end(); ++it)
     {
         delete *it;
     }
@@ -81,7 +81,7 @@ void TextureManager::unload()
     {
         unloaded = true;
         
-        for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+        for (auto it = cache.begin(); it != cache.end(); ++it)
         {
             (*it)->unload();
         }
@@ -94,7 +94,7 @@ void TextureManager::reload()
     {
         unloaded = false;
         
-        for (list<Texture*>::iterator it = cache.begin(); it != cache.end(); ++it)
+        for (auto it = cache.begin(); it != cache.end(); ++it)
         {
             (*it)->reload();
         }
