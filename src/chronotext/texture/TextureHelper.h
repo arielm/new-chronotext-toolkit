@@ -4,7 +4,7 @@
 
 #include "cinder/gl/Texture.h"
 
-typedef boost::shared_ptr<class ci::gl::Texture> TextureRef;
+typedef std::shared_ptr<class ci::gl::Texture> TextureRef;
 
 class TextureHelper
 {

@@ -62,7 +62,7 @@ gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipm
                 // if the data is not already contiguous, we'll need to create a block of memory that is
                 if ( ( channel.getIncrement() != 1 ) || ( channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t) ) )
                 {
-                    boost::shared_ptr<uint8_t> data( new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>() );
+                    shared_ptr<uint8_t> data( new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>() );
                     uint8_t *dest = data.get();
                     const int8_t inc = channel.getIncrement();
                     const int32_t width = channel.getWidth();
