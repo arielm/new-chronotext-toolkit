@@ -15,7 +15,7 @@ InputSourceRef InputSource::getResource(const std::string &resourceName)
 #if defined(CINDER_MSW)
     source->filePath = fs::path("resources") / resourceName;
 #elif defined(CINDER_COCOA)
-    source->filePath = App::getResourcePath(resourceName);
+    source->filePath = getResourcePath(resourceName);
 #endif
     
 #if defined(CINDER_MSW)
@@ -46,7 +46,7 @@ InputSourceRef InputSource::getResource(const string &resourceName, int mswID, c
     source->mswID = mswID;
     source->mswType = mswType;
 #elif defined(CINDER_COCOA)
-    source->filePath = App::getResourcePath(resourceName);
+    source->filePath = getResourcePath(resourceName);
 #endif
     
     return InputSourceRef(source);
@@ -81,6 +81,8 @@ DataSourceRef InputSource::loadDataSource()
 #elif defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
             CI_LOGI("LOADING ASSET: %s", resourceName.c_str());
             return DataSourceAsset::create(gAssetManager, resourceName);
+#elif defined(CHR_COMPLEX) && defined(CINDER_COCOA)
+            return DataSourcePath::create(getResourcePath(resourceName));
 #else
             return app::loadResource(resourceName);
 #endif
@@ -126,6 +128,32 @@ string InputSource::getUniqueName()
 
     return "";
 }
+
+#if defined(CINDER_COCOA)
+fs::path InputSource::getResourcePath(const string &resourceName)
+{
+#if defined(CHR_COMPLEX)
+    CFBundleRef bundle = CFBundleGetMainBundle();
+    CFURLRef url = CFBundleCopyBundleURL(bundle);
+	CFStringRef tmp = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+    
+    CFIndex length = CFStringGetLength(tmp);
+    CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
+    char *buffer = (char*)malloc(maxSize);
+    CFStringGetCString(tmp, buffer, maxSize, kCFStringEncodingUTF8);
+    
+    fs::path path = fs::path(buffer) / resourceName;
+    
+    CFRelease(url);
+    CFRelease(tmp);
+    free(buffer);
+    
+    return path;
+#else
+    return App::getResourcePath(resourceName);
+#endif
+}
+#endif
 
 #if defined(CINDER_ANDROID)
 void InputSource::setAndroidAssetManager(AAssetManager *assetManager)

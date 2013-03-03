@@ -67,7 +67,11 @@ public:
     
     std::string getFilePathHint();
     std::string getUniqueName();
-    
+
+#if defined(CINDER_COCOA)
+    static ci::fs::path getResourcePath(const std::string &resourceName);
+#endif
+
 #if defined(CINDER_ANDROID)
     static void setAndroidAssetManager(AAssetManager *assetManager);
     static AAssetManager* getAndroidAssetManager();
