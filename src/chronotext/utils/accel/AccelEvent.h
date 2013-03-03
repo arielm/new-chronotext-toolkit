@@ -1,5 +1,5 @@
 /*
- * BASED ON AccelEvent.h FROM CINDER 0.8.4
+ * BASED ON AccelEvent CLASS FROM CINDER 0.8.4
  * https://github.com/cinder/Cinder/blob/master/include/cinder/app/AccelEvent.h
  */
 
@@ -9,17 +9,21 @@
 
 class AccelEvent
 {
-    ci::Vec3f mRawData;
-    ci::Vec3f mPrevRawData;
+    ci::Vec3f mData, mPrevData;
+	ci::Vec3f mRawData, mPrevRawData;
     
 public:
-    AccelEvent(const ci::Vec3f &rawData, const ci::Vec3f &prevRawData)
+    AccelEvent(const ci::Vec3f &data, const ci::Vec3f &rawData, const ci::Vec3f &prevData, const ci::Vec3f &prevRawData)
     :
+    mData(data),
     mRawData(rawData),
+    mPrevData(prevData),
     mPrevRawData(prevRawData)
     {}
-    
+
+    ci::Vec3f getData() const { return mData; }
     ci::Vec3f getRawData() const { return mRawData; }
+    ci::Vec3f getPrevData() const { return mPrevData; }
     ci::Vec3f getPrevRawData() const { return mPrevRawData; }
     
     bool isShaking(float shakeDelta = 2.2f) const
