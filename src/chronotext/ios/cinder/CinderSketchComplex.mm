@@ -54,22 +54,32 @@ void CinderSketchComplex::disableAccelerometer()
 	[[UIAccelerometer sharedAccelerometer] setDelegate:nil];
 }
 
-int CinderSketchComplex::getWindowWidth()
+double CinderSketchComplex::getElapsedSeconds() const
+{
+    return ((CinderDelegate*)context).elapsedSeconds;
+}
+
+uint32_t CinderSketchComplex::getElapsedFrames() const
+{
+    return ((CinderDelegate*)context).elapsedFrames;
+}
+
+int CinderSketchComplex::getWindowWidth() const
 {
     return ((CinderDelegate*)context).width;
 }
 
-int CinderSketchComplex::getWindowHeight()
+int CinderSketchComplex::getWindowHeight() const
 {
     return ((CinderDelegate*)context).height;
 }
 
-Vec2i CinderSketchComplex::getWindowSize()
+Vec2i CinderSketchComplex::getWindowSize() const
 {
     return Vec2i(((CinderDelegate*)context).width, ((CinderDelegate*)context).height);
 }
 
-float CinderSketchComplex::getWindowAspectRatio()
+float CinderSketchComplex::getWindowAspectRatio() const
 {
     return ((CinderDelegate*)context).width / (float)((CinderDelegate*)context).height;
 }
@@ -79,17 +89,7 @@ Area CinderSketchComplex::getWindowBounds() const
     return Area(0, 0, ((CinderDelegate*)context).width, ((CinderDelegate*)context).height);
 }
 
-double CinderSketchComplex::getElapsedSeconds()
-{
-    return ((CinderDelegate*)context).elapsedSeconds;
-}
-
-uint32_t CinderSketchComplex::getElapsedFrames()
-{
-    return ((CinderDelegate*)context).elapsedFrames;
-}
-
-float CinderSketchComplex::getContentScale()
+float CinderSketchComplex::getWindowContentScale() const
 {
     return ((CinderDelegate*)context).contentScale;
 }

@@ -61,15 +61,15 @@ public:
 	void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
 	void disableAccelerometer();
 
-    double getElapsedSeconds();
-	uint32_t getElapsedFrames();
+    double getElapsedSeconds() const;
+	uint32_t getElapsedFrames() const;
 
-	int getWindowWidth();
-	int getWindowHeight();
-    ci::Vec2i getWindowSize();
-    float getWindowAspectRatio();
+	int getWindowWidth() const;
+	int getWindowHeight() const;
+    ci::Vec2i getWindowSize() const;
+    float getWindowAspectRatio() const;
     ci::Area getWindowBounds() const;
-    float getContentScale();
+    float getWindowContentScale() const;
 
 	std::ostream& console() { return std::cout; }
     
