@@ -1,5 +1,13 @@
 #import "GLViewController.h"
 
+NSString* kGLViewControllerPropertyPreferredFramesPerSecond = @"kGLViewControllerPropertyPreferredFramesPerSecond";
+NSString* kGLViewControllerPropertyMultipleTouchEnabled = @"kGLViewControllerPropertyMultipleTouchEnabled";
+NSString* kGLViewControllerPropertyInterfaceOrientation = @"kGLViewControllerPropertyInterfaceOrientation";
+
+NSString* kGLViewControllerPropertyColorFormat = @"kGLViewControllerPropertyColorFormat";
+NSString* kGLViewControllerPropertyDepthFormat = @"kGLViewControllerPropertyDepthFormat";
+NSString* kGLViewControllerPropertyStencilFormat = @"kGLViewControllerPropertyStencilFormat";
+NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMultisample";
 
 @interface GLViewController ()
 
@@ -13,14 +21,49 @@
 @synthesize glView;
 @synthesize cinderDelegate;
 
-- (id) init
+- (id) initWithProperties:(NSDictionary*)props
 {
     if (self = [super init])
     {
-        interfaceOrientation = UIInterfaceOrientationPortrait; // FIXME: SHOULD BE DEFINED EXTERNALLY
+        NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
+                                  [NSNumber numberWithBool:NO], kGLViewControllerPropertyMultipleTouchEnabled,
+                                  [NSNumber numberWithInt:UIInterfaceOrientationPortrait], kGLViewControllerPropertyInterfaceOrientation,
+                                  [NSNumber numberWithInt:GLKViewDrawableColorFormatRGBA8888], kGLViewControllerPropertyColorFormat,
+                                  [NSNumber numberWithInt:GLKViewDrawableDepthFormat24], kGLViewControllerPropertyDepthFormat,
+                                  [NSNumber numberWithInt:GLKViewDrawableStencilFormatNone], kGLViewControllerPropertyStencilFormat,
+                                  [NSNumber numberWithInt:GLKViewDrawableMultisampleNone], kGLViewControllerPropertyMultisample,
+                                  nil];
+        
+        if (props)
+        {
+            properties = [[NSMutableDictionary alloc] initWithDictionary:props];
+        }
+        else
+        {
+            properties = [[NSMutableDictionary alloc] init];
+        }
+        
+        for (id key in defaults)
+        {
+            if (![properties objectForKey:key])
+            {
+                [properties setObject:[defaults objectForKey:key] forKey:key];
+            }
+        }
+        
+        // ---
+        
+        interfaceOrientation = [[properties objectForKey:kGLViewControllerPropertyInterfaceOrientation] intValue];
     }
     
     return self;
+}
+
+- (void) dealloc
+{
+	[properties release];
+	[super dealloc];
 }
 
 - (void) loadView
@@ -30,11 +73,13 @@
     glView = (GLKView*)self.view;
     glView.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1] autorelease];
     
-    /*
-     * FIXME: DEFINE DEPTH-BUFFER, AA, FPS, MULTI-TOUCH EXTERNALLY
-     */
-    self.preferredFramesPerSecond = 60;
-    self.view.multipleTouchEnabled = YES;
+    self.preferredFramesPerSecond = [[properties objectForKey:kGLViewControllerPropertyPreferredFramesPerSecond] intValue];
+    self.view.multipleTouchEnabled = [[properties objectForKey:kGLViewControllerPropertyMultipleTouchEnabled] boolValue];
+    
+    glView.drawableColorFormat = (GLKViewDrawableColorFormat)[[properties objectForKey:kGLViewControllerPropertyColorFormat] intValue];
+    glView.drawableDepthFormat = (GLKViewDrawableDepthFormat)[[properties objectForKey:kGLViewControllerPropertyDepthFormat] intValue];
+    glView.drawableStencilFormat = (GLKViewDrawableStencilFormat)[[properties objectForKey:kGLViewControllerPropertyStencilFormat] intValue];
+    glView.drawableMultisample = (GLKViewDrawableMultisample)[[properties objectForKey:kGLViewControllerPropertyMultisample] intValue];
     
     // ---
     
