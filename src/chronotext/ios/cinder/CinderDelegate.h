@@ -38,7 +38,6 @@ enum
 @property (nonatomic, assign) GLKView *view;
 @property (nonatomic, assign) GLViewController *viewController;
 @property (nonatomic, assign) CinderSketch *sketch;
-
 @property (nonatomic, assign) float accelFilterFactor;
 @property (nonatomic, readonly) int width;
 @property (nonatomic, readonly) int height;

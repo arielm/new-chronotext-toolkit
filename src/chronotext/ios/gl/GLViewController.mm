@@ -62,8 +62,8 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) dealloc
 {
-	[properties release];
-	[super dealloc];
+    [properties release];
+    [super dealloc];
 }
 
 - (void) loadView
@@ -84,14 +84,14 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     // ---
     
     cinderDelegate.view = glView;
-	cinderDelegate.viewController = self;
+    cinderDelegate.viewController = self;
 
     /*
      * NECESSARY BEFORE SETUP
      */
     [EAGLContext setCurrentContext:glView.context];
 
-	[cinderDelegate setup];
+    [cinderDelegate setup];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -100,7 +100,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     
     if (self.view)
     {
-        NSLog(@"EAGLViewController - viewWillAppear");
+        NSLog(@"GLViewController - viewWillAppear");
         [self startWithReason:REASON_VIEW_WILL_APPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -115,7 +115,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     
     if (self.view)
     {
-        NSLog(@"EAGLViewController - viewWillDisappear");
+        NSLog(@"GLViewController - viewWillDisappear");
         [self stopWithReason:REASON_VIEW_WILL_DISAPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -134,9 +134,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
          * THIS *MUST* TAKE PLACE BEFORE DRAWING
          */
         [cinderDelegate startWithReason:reason];
-        
         started = YES;
-        stopped = NO;
     }
 }
 
@@ -147,9 +145,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         NSLog(@"AVERAGE FRAME-RATE: %f FRAMES PER SECOND", ticks / elapsed);
         
         [cinderDelegate stopWithReason:reason];
-        
         started = NO;
-        stopped = YES;
     }
 }
 
@@ -159,9 +155,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     
     if (ticks == 0)
     {
-		t0 = now;
+        t0 = now;
     }
-	
+    
     ticks++;
     elapsed = now - t0;
     
@@ -177,7 +173,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return (toInterfaceOrientation == interfaceOrientation);
+    return (toInterfaceOrientation == interfaceOrientation);
 }
 
 - (NSUInteger) supportedInterfaceOrientations
@@ -194,22 +190,22 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[cinderDelegate touchesBegan:touches withEvent:event];
+    [cinderDelegate touchesBegan:touches withEvent:event];
 }
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[cinderDelegate touchesMoved:touches withEvent:event];
+    [cinderDelegate touchesMoved:touches withEvent:event];
 }
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[cinderDelegate touchesEnded:touches withEvent:event];
+    [cinderDelegate touchesEnded:touches withEvent:event];
 }
 
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-	[cinderDelegate touchesCancelled:touches withEvent:event];
+    [cinderDelegate touchesCancelled:touches withEvent:event];
 }
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------
@@ -218,7 +214,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (self.glView)
     {
-        NSLog(@"EAGLViewController - applicationDidBecomeActive");
+        NSLog(@"GLViewController - applicationDidBecomeActive");
         [self startWithReason:REASON_APPLICATION_DID_BECOME_ACTIVE];
     }
 }
@@ -227,7 +223,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (self.glView)
     {
-        NSLog(@"EAGLViewController - applicationWillResignActive");
+        NSLog(@"GLViewController - applicationWillResignActive");
         [self stopWithReason:REASON_APPLICATION_WILL_RESIGN_ACTIVE];
     }
 }

@@ -21,11 +21,10 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
     CinderDelegate *cinderDelegate;
     
     BOOL started;
-    BOOL stopped;
     
-	int ticks;
-	NSTimeInterval t0;
-	NSTimeInterval elapsed;
+    int ticks;
+    NSTimeInterval t0;
+    NSTimeInterval elapsed;
 }
 
 @property (nonatomic, assign) GLKView *glView;

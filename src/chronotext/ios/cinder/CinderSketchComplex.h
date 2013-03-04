@@ -24,9 +24,9 @@ public:
     
     enum
     {
-    	EVENT_FOREGROUND,
-    	EVENT_BACKGROUND,
-    	EVENT_KEY_BACK
+        EVENT_FOREGROUND,
+        EVENT_BACKGROUND,
+        EVENT_KEY_BACK
     };
 
     CinderSketchComplex(void *context, void *delegate = NULL)
@@ -38,40 +38,40 @@ public:
     
     virtual ~CinderSketchComplex() {};
 
-	virtual void setup(bool renewContext) {}
-	virtual void shutdown() {}
-	virtual void resize() {}
-	virtual void update() {}
-	virtual void draw() {}
-	
-	virtual void start(int flags) {}
-	virtual void stop(int flags) {}
+    virtual void setup(bool renewContext) {}
+    virtual void shutdown() {}
+    virtual void resize() {}
+    virtual void update() {}
+    virtual void draw() {}
+    
+    virtual void start(int flags) {}
+    virtual void stop(int flags) {}
     virtual void event(int id) {}
-	
-	void touchesBegan(ci::app::TouchEvent event);
-	void touchesMoved(ci::app::TouchEvent event);
-	void touchesEnded(ci::app::TouchEvent event);
-	
-	virtual void addTouch(int index, float x, float y) {}
-	virtual void updateTouch(int index, float x, float y) {}
-	virtual void removeTouch(int index, float x, float y) {}
+    
+    void touchesBegan(ci::app::TouchEvent event);
+    void touchesMoved(ci::app::TouchEvent event);
+    void touchesEnded(ci::app::TouchEvent event);
+    
+    virtual void addTouch(int index, float x, float y) {}
+    virtual void updateTouch(int index, float x, float y) {}
+    virtual void removeTouch(int index, float x, float y) {}
 
-	virtual void accelerated(AccelEvent event) {}
+    virtual void accelerated(AccelEvent event) {}
 
-	void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
-	void disableAccelerometer();
+    void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
+    void disableAccelerometer();
 
     double getElapsedSeconds() const;
-	uint32_t getElapsedFrames() const;
+    uint32_t getElapsedFrames() const;
 
-	int getWindowWidth() const;
-	int getWindowHeight() const;
+    int getWindowWidth() const;
+    int getWindowHeight() const;
     ci::Vec2i getWindowSize() const;
     float getWindowAspectRatio() const;
     ci::Area getWindowBounds() const;
     float getWindowContentScale() const;
 
-	std::ostream& console() { return std::cout; }
+    std::ostream& console() { return std::cout; }
     
     void sendMessageToDelegate(int what, const std::string &body = "");
 };

@@ -12,7 +12,6 @@ using namespace std;
 @synthesize view;
 @synthesize viewController;
 @synthesize sketch;
-
 @synthesize accelFilterFactor = mAccelFilterFactor;
 @synthesize width = mWidth;
 @synthesize height = mHeight;
