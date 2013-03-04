@@ -3,10 +3,10 @@
 
 #import "CinderDelegate.h"
 
+OBJC_EXPORT NSString* kGLViewControllerPropertyRenderingAPI;
 OBJC_EXPORT NSString* kGLViewControllerPropertyPreferredFramesPerSecond;
 OBJC_EXPORT NSString* kGLViewControllerPropertyMultipleTouchEnabled;
 OBJC_EXPORT NSString* kGLViewControllerPropertyInterfaceOrientation;
-
 OBJC_EXPORT NSString* kGLViewControllerPropertyColorFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyDepthFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyStencilFormat;

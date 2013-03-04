@@ -62,7 +62,7 @@ using namespace std;
 {
     timer.stop();
 
-    if (reason == REASON_VIEW_WILL_DISAPEAR)
+    if (reason == REASON_VIEW_WILL_DISAPPEAR)
     {
         sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
         active = NO;

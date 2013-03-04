@@ -1,9 +1,9 @@
 #import "GLViewController.h"
 
+NSString* kGLViewControllerPropertyRenderingAPI = @"kGLViewControllerPropertyRenderingAPI";
 NSString* kGLViewControllerPropertyPreferredFramesPerSecond = @"kGLViewControllerPropertyPreferredFramesPerSecond";
 NSString* kGLViewControllerPropertyMultipleTouchEnabled = @"kGLViewControllerPropertyMultipleTouchEnabled";
 NSString* kGLViewControllerPropertyInterfaceOrientation = @"kGLViewControllerPropertyInterfaceOrientation";
-
 NSString* kGLViewControllerPropertyColorFormat = @"kGLViewControllerPropertyColorFormat";
 NSString* kGLViewControllerPropertyDepthFormat = @"kGLViewControllerPropertyDepthFormat";
 NSString* kGLViewControllerPropertyStencilFormat = @"kGLViewControllerPropertyStencilFormat";
@@ -26,6 +26,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     if (self = [super init])
     {
         NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES2], kGLViewControllerPropertyRenderingAPI,
                                   [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
                                   [NSNumber numberWithBool:NO], kGLViewControllerPropertyMultipleTouchEnabled,
                                   [NSNumber numberWithInt:UIInterfaceOrientationPortrait], kGLViewControllerPropertyInterfaceOrientation,
@@ -71,7 +72,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     [super loadView];
 
     glView = (GLKView*)self.view;
-    glView.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1] autorelease];
+    glView.context = [[[EAGLContext alloc] initWithAPI:[[properties objectForKey:kGLViewControllerPropertyRenderingAPI] intValue]] autorelease];
     
     self.preferredFramesPerSecond = [[properties objectForKey:kGLViewControllerPropertyPreferredFramesPerSecond] intValue];
     self.view.multipleTouchEnabled = [[properties objectForKey:kGLViewControllerPropertyMultipleTouchEnabled] boolValue];
@@ -87,7 +88,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     cinderDelegate.viewController = self;
 
     /*
-     * NECESSARY BEFORE SETUP
+     * MUST TAKE PLACE BEFORE SETUP
      */
     [EAGLContext setCurrentContext:glView.context];
 
@@ -116,7 +117,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     if (self.view)
     {
         NSLog(@"GLViewController - viewWillDisappear");
-        [self stopWithReason:REASON_VIEW_WILL_DISAPEAR];
+        [self stopWithReason:REASON_VIEW_WILL_DISAPPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
         [center removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -129,9 +130,14 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     if (!started)
     {
         ticks = 0;
+
+        /*
+         * MUST TAKE PLACE BEFORE START AND DRAW
+         */
+        [EAGLContext setCurrentContext:glView.context];
         
         /*
-         * THIS *MUST* TAKE PLACE BEFORE DRAWING
+         * MUST TAKE PLACE BEFORE DRAW
          */
         [cinderDelegate startWithReason:reason];
         started = YES;
@@ -212,7 +218,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) applicationDidBecomeActive
 {
-    if (self.glView)
+    if (self.view)
     {
         NSLog(@"GLViewController - applicationDidBecomeActive");
         [self startWithReason:REASON_APPLICATION_DID_BECOME_ACTIVE];
@@ -221,7 +227,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) applicationWillResignActive
 {
-    if (self.glView)
+    if (self.view)
     {
         NSLog(@"GLViewController - applicationWillResignActive");
         [self stopWithReason:REASON_APPLICATION_WILL_RESIGN_ACTIVE];
