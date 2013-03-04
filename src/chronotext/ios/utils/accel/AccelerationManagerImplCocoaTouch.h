@@ -16,7 +16,9 @@ public:
 
 class AccelerationManagerImplCocoaTouch
 {
-    ci::Vec3f mLastRawAccel;
+    float mAccelFilterFactor;
+    ci::Vec3f mLastAccel, mLastRawAccel;
+    
     CocoaProxy *mProxy;
     AccelerationDelegate *mDelegate;
     
@@ -24,7 +26,7 @@ public:
     AccelerationManagerImplCocoaTouch();
     ~AccelerationManagerImplCocoaTouch();
 
-    void enable(AccelerationDelegate *delegate, float updateFrequency = 30);
+    void enable(AccelerationDelegate *delegate, float updateFrequency = 30, float filterFactor = 0.1f);
     void disable();
     
     void accelerated(const ci::Vec3f &acceleration);

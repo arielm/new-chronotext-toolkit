@@ -1,5 +1,5 @@
 /*
- * TRANSITIONAL SOLUTION FOR THE ACCELEROMETER,
+ * TRANSITIONAL SOLUTION FOR CINDER 0.8.5,
  * UNTIL POPULAR DEVICES WITHOUT GYROSCOPES
  * (E.G. 3GS AND IPAD-1) ARE GONE...
  */
@@ -26,7 +26,7 @@ public:
 class AccelerationManager
 {
 public:
-    void enable(AccelerationDelegate *delegate, float updateFrequency) {}
+    void enable(AccelerationDelegate *delegate, float updateFrequency = 30, float filterFactor = 0.1f) {}
     void disable() {}
 };
 

@@ -34,7 +34,8 @@ using namespace ci;
 AccelerationManagerImplCocoaTouch::AccelerationManagerImplCocoaTouch()
 :
 mDelegate(NULL),
-mLastRawAccel(ci::Vec3f::zero())
+mLastAccel(Vec3f::zero()),
+mLastRawAccel(Vec3f::zero())
 {
     mProxy = [[CocoaProxy alloc] initWithTarget:this];
 }
@@ -44,9 +45,10 @@ AccelerationManagerImplCocoaTouch::~AccelerationManagerImplCocoaTouch()
     [mProxy release];
 }
 
-void AccelerationManagerImplCocoaTouch::enable(AccelerationDelegate *delegate, float updateFrequency)
+void AccelerationManagerImplCocoaTouch::enable(AccelerationDelegate *delegate, float updateFrequency, float filterFactor)
 {
     mDelegate = delegate;
+    mAccelFilterFactor = filterFactor;
     
     if (updateFrequency <= 0)
     {
@@ -64,10 +66,13 @@ void AccelerationManagerImplCocoaTouch::disable()
 
 void AccelerationManagerImplCocoaTouch::accelerated(const Vec3f &acceleration)
 {
+    Vec3f filtered = mLastAccel * (1 - mAccelFilterFactor) + acceleration * mAccelFilterFactor;
+
     if (mDelegate)
     {
-        mDelegate->accelerated(AccelEvent(acceleration, mLastRawAccel));
+        mDelegate->accelerated(AccelEvent(filtered, acceleration, mLastAccel, mLastRawAccel));
     }
     
+    mLastAccel = filtered;
     mLastRawAccel = acceleration;
 }
