@@ -19,20 +19,20 @@ enum
     GLViewController *viewController;
     CinderSketch *sketch;
     
-    std::map<UITouch*, uint32_t> mTouchIdMap;
+    std::map<UITouch*, uint32_t> touchIdMap;
 
-    float mAccelFilterFactor;
-    ci::Vec3f mLastAccel, mLastRawAccel;
+    float accelFilterFactor;
+    ci::Vec3f lastAccel, lastRawAccel;
     
-    int mWidth;
-    int mHeight;
-    float mContentScale;
+    int width;
+    int height;
+    float contentScale;
     
-    ci::Timer mTimer;
-    uint32_t mFrameCount;
+    ci::Timer timer;
+    uint32_t frameCount;
     
-    BOOL mInitialized;
-    BOOL mActive;
+    BOOL initialized;
+    BOOL active;
 }
 
 @property (nonatomic, assign) GLKView *view;

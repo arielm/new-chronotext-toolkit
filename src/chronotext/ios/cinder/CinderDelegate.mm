@@ -12,18 +12,18 @@ using namespace std;
 @synthesize view;
 @synthesize viewController;
 @synthesize sketch;
-@synthesize accelFilterFactor = mAccelFilterFactor;
-@synthesize width = mWidth;
-@synthesize height = mHeight;
-@synthesize contentScale = mContentScale;
-@synthesize initialized = mInitialized;
-@synthesize active = mActive;
+@synthesize accelFilterFactor;
+@synthesize width;
+@synthesize height;
+@synthesize contentScale;
+@synthesize initialized;
+@synthesize active;
 
 - (id) init
 {
     if (self = [super init])
     {
-        mLastAccel = mLastRawAccel = Vec3f::zero();
+        lastAccel = lastRawAccel = Vec3f::zero();
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -35,7 +35,7 @@ using namespace std;
 - (void) dealloc
 {
     sketch->shutdown();
-	delete sketch;
+    delete sketch;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
@@ -44,13 +44,13 @@ using namespace std;
 
 - (void) startWithReason:(int)reason
 {
-    mFrameCount = 0;
-    mTimer.start();
+    frameCount = 0;
+    timer.start();
     
     if (reason == REASON_VIEW_WILL_APPEAR)
     {
         sketch->start(CinderSketch::FLAG_FOCUS_GAIN);
-        mActive = YES;
+        active = YES;
     }
     else
     {
@@ -60,12 +60,12 @@ using namespace std;
 
 - (void) stopWithReason:(int)reason
 {
-    mTimer.stop();
+    timer.stop();
 
     if (reason == REASON_VIEW_WILL_DISAPEAR)
     {
         sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
-        mActive = NO;
+        active = NO;
     }
     else
     {
@@ -96,21 +96,21 @@ using namespace std;
     int frameWidth = view.frame.size.width;
     int frameHeight = view.frame.size.height;
     
-    mWidth = mx * frameWidth + my * frameHeight;
-    mHeight = mx * frameHeight + my * frameWidth;
+    width = mx * frameWidth + my * frameHeight;
+    height = mx * frameHeight + my * frameWidth;
     
-    mContentScale = view.contentScaleFactor;
+    contentScale = view.contentScaleFactor;
 
     sketch->setup(false);
     sketch->resize();
-    mInitialized = YES;
+    initialized = YES;
 }
 
 - (void) update
 {
     sketch->run(); // NECESSARY FOR THE "MESSAGE-PUMP"
     sketch->update();
-    mFrameCount++;
+    frameCount++;
 }
 
 - (void) draw
@@ -120,12 +120,12 @@ using namespace std;
 
 - (double) elapsedSeconds
 {
-    return mTimer.getSeconds();
+    return timer.getSeconds();
 }
 
 - (uint32_t) elapsedFrames
 {
-    return mFrameCount;
+    return frameCount;
 }
 
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body
@@ -141,13 +141,13 @@ using namespace std;
 - (void) accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
 {
     Vec3f direction(acceleration.x, acceleration.y, acceleration.z);
-    Vec3f filtered = mLastAccel * (1 - mAccelFilterFactor) + direction * mAccelFilterFactor;
+    Vec3f filtered = lastAccel * (1 - accelFilterFactor) + direction * accelFilterFactor;
 
-    AccelEvent event(filtered, direction, mLastAccel, mLastRawAccel);
+    AccelEvent event(filtered, direction, lastAccel, lastRawAccel);
     sketch->accelerated(event);
     
-    mLastAccel = filtered;
-    mLastRawAccel = direction;
+    lastAccel = filtered;
+    lastRawAccel = direction;
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -160,7 +160,7 @@ using namespace std;
     {
         candidateId++;
         found = false;
-        for (map<UITouch*,uint32_t>::const_iterator mapIt = mTouchIdMap.begin(); mapIt != mTouchIdMap.end(); ++mapIt)
+        for (map<UITouch*,uint32_t>::const_iterator mapIt = touchIdMap.begin(); mapIt != touchIdMap.end(); ++mapIt)
         {
             if (mapIt->second == candidateId)
             {
@@ -170,60 +170,53 @@ using namespace std;
         }
     }
     
-    mTouchIdMap.insert(make_pair(touch, candidateId));
+    touchIdMap.insert(make_pair(touch, candidateId));
     return candidateId;
 }
 
 - (void) removeTouchFromMap:(UITouch*)touch
 {
-    map<UITouch*,uint32_t>::iterator found(mTouchIdMap.find(touch));
-    if (found == mTouchIdMap.end())
+    map<UITouch*,uint32_t>::iterator found(touchIdMap.find(touch));
+    if (found != touchIdMap.end())
     {
-        cout << "Couldn' find touch in map?" << endl;
-    }
-    else
-    {
-        mTouchIdMap.erase(found);
+        touchIdMap.erase(found);
     }
 }
 
 - (uint32_t) findTouchInMap:(UITouch*)touch
 {
-    map<UITouch*,uint32_t>::const_iterator found(mTouchIdMap.find(touch));
-    if (found == mTouchIdMap.end())
-    {
-        cout << "Couldn' find touch in map?" << endl;
-        return 0;
-    }
-    else
+    map<UITouch*,uint32_t>::const_iterator found(touchIdMap.find(touch));
+    if (found != touchIdMap.end())
     {
         return found->second;
     }
+    
+    return 0;
 }
 
 - (void) updateActiveTouches
 {
-    static float contentScale = 1;
+    const float scale = 1;
     
     vector<TouchEvent::Touch> activeTouches;
-    for (map<UITouch*,uint32_t>::const_iterator touchIt = mTouchIdMap.begin(); touchIt != mTouchIdMap.end(); ++touchIt)
+    for (map<UITouch*,uint32_t>::const_iterator touchIt = touchIdMap.begin(); touchIt != touchIdMap.end(); ++touchIt)
     {
         CGPoint pt = [touchIt->first locationInView:view];
         CGPoint prevPt = [touchIt->first previousLocationInView:view];
-        activeTouches.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * contentScale, Vec2f(prevPt.x, prevPt.y) * contentScale, touchIt->second, [touchIt->first timestamp], touchIt->first));
+        activeTouches.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, touchIt->second, [touchIt->first timestamp], touchIt->first));
     }
 }
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    static float contentScale = 1;
+    const float scale = 1;
     
     vector<TouchEvent::Touch> touchList;
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * contentScale, Vec2f(prevPt.x, prevPt.y) * contentScale, [self addTouchToMap:touch], [touch timestamp], touch));
+        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch));
     }
     
     [self updateActiveTouches];
@@ -235,14 +228,14 @@ using namespace std;
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    static float contentScale = 1;
+    const float scale = 1;
     
     vector<TouchEvent::Touch> touchList;
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];            
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * contentScale, Vec2f(prevPt.x, prevPt.y) * contentScale, [self findTouchInMap:touch], [touch timestamp], touch));
+        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch));
     }
     
     [self updateActiveTouches];
@@ -254,14 +247,14 @@ using namespace std;
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    static float contentScale = 1;
+    const float scale = 1;
     
     vector<TouchEvent::Touch> touchList;
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * contentScale, Vec2f(prevPt.x, prevPt.y) * contentScale, [self findTouchInMap:touch], [touch timestamp], touch));
+        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch));
         [self removeTouchFromMap:touch];
     }
     
@@ -281,7 +274,7 @@ using namespace std;
 
 - (void) applicationWillResignActive
 {
-    if (mInitialized && !mActive)
+    if (initialized && !active)
     {
         sketch->event(CinderSketch::EVENT_BACKGROUND);
     }
@@ -289,7 +282,7 @@ using namespace std;
 
 - (void) applicationDidBecomeActive
 {
-    if (mInitialized && !mActive)
+    if (initialized && !active)
     {
         sketch->event(CinderSketch::EVENT_FOREGROUND);
     }
