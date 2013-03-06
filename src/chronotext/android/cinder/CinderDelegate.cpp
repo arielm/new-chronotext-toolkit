@@ -1,5 +1,6 @@
 #include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/InputSource.h"
+#include "chronotext/utils/accel/AccelEvent.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -92,7 +93,7 @@ void CinderDelegate::setup(int width, int height, int accelerometerRotation)
     mAccelerometerRotation = accelerometerRotation;
 
     sketch->setup(false);
-    sketch->resize(ResizeEvent(Vec2i(mWidth, mHeight)));
+    sketch->resize();
 }
 
 void CinderDelegate::shutdown()
@@ -122,7 +123,7 @@ void CinderDelegate::event(int id)
     {
         case EVENT_ATTACHED:
         case EVENT_SHOWN:
-	    mFrameCount = 0;
+        mFrameCount = 0;
             mTimer.start();
             sketch->start(CinderSketch::FLAG_FOCUS_GAIN);
             break;
@@ -135,7 +136,7 @@ void CinderDelegate::event(int id)
              * ASSERTION: THE GL CONTEXT HAS JUST BEEN RE-CREATED
              */
             sketch->setup(true);
-            sketch->resize(ResizeEvent(Vec2i(mWidth, mHeight)));
+            sketch->resize();
             
             sketch->start(CinderSketch::FLAG_APP_RESUME);
             break;
@@ -152,12 +153,12 @@ void CinderDelegate::event(int id)
             break;
 
         case EVENT_BACKGROUND:
-        	sketch->event(CinderSketch::EVENT_BACKGROUND);
-        	break;
+            sketch->event(CinderSketch::EVENT_BACKGROUND);
+            break;
 
         case EVENT_FOREGROUND:
-        	sketch->event(CinderSketch::EVENT_FOREGROUND);
-        	break;
+            sketch->event(CinderSketch::EVENT_FOREGROUND);
+            break;
     }
 }
 
@@ -207,22 +208,22 @@ uint32_t CinderDelegate::getElapsedFrames() const
     return mFrameCount;
 }
 
-int CinderDelegate::getWindowWidth()
+int CinderDelegate::getWindowWidth() const
 {
     return mWidth;
 }
 
-int CinderDelegate::getWindowHeight()
+int CinderDelegate::getWindowHeight() const
 {
     return mHeight;
 }
 
-Vec2f CinderDelegate::getWindowSize()
+Vec2i CinderDelegate::getWindowSize() const
 {
-    return Vec2f(mWidth, mHeight);
+    return Vec2i(mWidth, mHeight);
 }
 
-float CinderDelegate::getWindowAspectRatio()
+float CinderDelegate::getWindowAspectRatio() const
 {
     return mWidth / (float)mHeight;
 }
@@ -251,7 +252,7 @@ void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
 void CinderDelegate::sendMessageToSketch(int what, const string &body)
 {
     CI_LOGD("MESSAGE RECEIVED FROM JAVA: %d %s", what, body.c_str());
-    sketch->sendMessage(Message(what, boost::shared_ptr<string>(new string(body))));
+    sketch->sendMessage(Message(what, shared_ptr<string>(new string(body))));
 }
 
 // ---------------------------------------- JNI ----------------------------------------

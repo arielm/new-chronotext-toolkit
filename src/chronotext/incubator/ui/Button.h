@@ -9,7 +9,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class Button> ButtonRef;
+    typedef std::shared_ptr<class Button> ButtonRef;
 
     class ButtonDelegate
     {

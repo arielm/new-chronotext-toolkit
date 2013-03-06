@@ -7,12 +7,12 @@ using namespace std;
 
 void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
 {
-	context->enableAccelerometer(updateFrequency, filterFactor);
+    context->enableAccelerometer(updateFrequency, filterFactor);
 }
 
 void CinderSketchComplex::disableAccelerometer()
 {
-	context->disableAccelerometer();
+    context->disableAccelerometer();
 }
 
 double CinderSketchComplex::getElapsedSeconds() const
@@ -25,22 +25,22 @@ uint32_t CinderSketchComplex::getElapsedFrames() const
     return context->getElapsedFrames();
 }
 
-int CinderSketchComplex::getWindowWidth()
+int CinderSketchComplex::getWindowWidth() const
 {
     return context->getWindowWidth();
 }
 
-int CinderSketchComplex::getWindowHeight()
+int CinderSketchComplex::getWindowHeight() const
 {
     return context->getWindowHeight();
 }
 
-Vec2f CinderSketchComplex::getWindowSize()
+Vec2i CinderSketchComplex::getWindowSize() const
 {
     return context->getWindowSize();
 }
 
-float CinderSketchComplex::getWindowAspectRatio()
+float CinderSketchComplex::getWindowAspectRatio() const
 {
     return context->getWindowAspectRatio();
 }

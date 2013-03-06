@@ -19,22 +19,22 @@ class CinderDelegate
     ci::Timer mTimer;
     uint32_t mFrameCount;
 
-	float mAccelFilterFactor;
-	ci::Vec3f mLastAccel, mLastRawAccel;
+    float mAccelFilterFactor;
+    ci::Vec3f mLastAccel, mLastRawAccel;
 
-	ASensorManager *mSensorManager;
-	const ASensor *mAccelerometerSensor;
-	ASensorEventQueue *mSensorEventQueue;
+    ASensorManager *mSensorManager;
+    const ASensor *mAccelerometerSensor;
+    ASensorEventQueue *mSensorEventQueue;
 
-	static int sensorEventCallback(int fd, int events, void *data)
+    static int sensorEventCallback(int fd, int events, void *data)
     {
-	    CinderDelegate *instance = (CinderDelegate*)data;
-	    instance->processSensorEvents();
+        CinderDelegate *instance = (CinderDelegate*)data;
+        instance->processSensorEvents();
 
-	    return 1;
+        return 1;
     }
 
-	void processSensorEvents();
+    void processSensorEvents();
     void accelerated(float x, float y, float z);
 
     enum
@@ -52,8 +52,8 @@ class CinderDelegate
         EVENT_RESUMED,
         EVENT_SHOWN,
         EVENT_HIDDEN,
-    	EVENT_BACKGROUND,
-    	EVENT_FOREGROUND
+        EVENT_BACKGROUND,
+        EVENT_FOREGROUND
     };
 
 public:
@@ -85,16 +85,16 @@ public:
     void updateTouch(float x, float y);
     void removeTouch(float x, float y);
     
-	void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
-	void disableAccelerometer();
+    void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
+    void disableAccelerometer();
 
     double getElapsedSeconds() const;
     uint32_t getElapsedFrames() const;
     
-    int getWindowWidth();
-    int getWindowHeight();
-    ci::Vec2f getWindowSize();
-    float getWindowAspectRatio();
+    int getWindowWidth() const;
+    int getWindowHeight() const;
+    ci::Vec2i getWindowSize() const;
+    float getWindowAspectRatio() const;
     ci::Area getWindowBounds() const;
     
     std::ostream& console();

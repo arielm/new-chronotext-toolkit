@@ -3,14 +3,15 @@
 #include "cinder/app/AppAndroid.h"
 
 #include "chronotext/os/Handler.h"
+#include "chronotext/utils/accel/AccelEvent.h"
 
 class CinderDelegate;
 
 class CinderSketchComplex : public Handler, public Looper
 {
 protected:
-	CinderDelegate *context;
-	CinderDelegate *delegate;
+    CinderDelegate *context;
+    CinderDelegate *delegate;
 
 public:
     enum
@@ -25,9 +26,9 @@ public:
 
     enum
     {
-    	EVENT_FOREGROUND,
-    	EVENT_BACKGROUND,
-    	EVENT_KEY_BACK
+        EVENT_FOREGROUND,
+        EVENT_BACKGROUND,
+        EVENT_KEY_BACK
     };
 
     CinderSketchComplex(void *context, void *delegate)
@@ -41,7 +42,7 @@ public:
 
     virtual void setup(bool renewContext) {}
     virtual void shutdown() {}
-    virtual void resize(ci::app::ResizeEvent event) {}
+    virtual void resize() {}
     virtual void update() {}
     virtual void draw() {}
 
@@ -53,20 +54,20 @@ public:
     virtual void updateTouch(int index, float x, float y) {}
     virtual void removeTouch(int index, float x, float y) {}
     
-    virtual void accelerated(ci::app::AccelEvent event) {}
+    virtual void accelerated(AccelEvent event) {}
     
     void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
     void disableAccelerometer();
     
     double getElapsedSeconds() const;
     uint32_t getElapsedFrames() const;
-	
-    int getWindowWidth();
-    int getWindowHeight();
-    ci::Vec2f getWindowSize();
-    float getWindowAspectRatio();
+    
+    int getWindowWidth() const;
+    int getWindowHeight() const;
+    ci::Vec2i getWindowSize() const;
+    float getWindowAspectRatio() const;
     ci::Area getWindowBounds() const;
-    float getContentScale() const { return 1; }
+    float getWindowContentScale() const { return 1; }
     
     std::ostream& console();
 

@@ -6,12 +6,14 @@
 
 #include "chronotext/os/Message.h"
 
+#include <boost/thread/mutex.hpp>
+
 #include <queue>
 
 class MessageQueue
 {
     std::queue<Message> queue;
-    std::mutex queueMutex;
+    boost::mutex queueMutex;
     
 public:
     Message nextMessage();

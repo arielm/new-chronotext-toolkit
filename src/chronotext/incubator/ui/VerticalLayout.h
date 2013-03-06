@@ -16,7 +16,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class VerticalLayout> VerticalLayoutRef;
+    typedef std::shared_ptr<class VerticalLayout> VerticalLayoutRef;
     
     class VerticalLayout : public Container
     {
