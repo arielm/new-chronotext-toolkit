@@ -66,6 +66,7 @@ public:
 
     int getWindowWidth() const;
     int getWindowHeight() const;
+    ci::Vec2f getWindowCenter() const;
     ci::Vec2i getWindowSize() const;
     float getWindowAspectRatio() const;
     ci::Area getWindowBounds() const;

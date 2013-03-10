@@ -74,6 +74,11 @@ int CinderSketchComplex::getWindowHeight() const
     return ((CinderDelegate*)context).height;
 }
 
+Vec2f CinderSketchComplex::getWindowCenter() const
+{
+    return Vec2i(((CinderDelegate*)context).width * 0.5f, ((CinderDelegate*)context).height * 0.5f);
+}
+
 Vec2i CinderSketchComplex::getWindowSize() const
 {
     return Vec2i(((CinderDelegate*)context).width, ((CinderDelegate*)context).height);
