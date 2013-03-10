@@ -7,6 +7,9 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
+const float GRID_SIZE = 32;
+const float FRAME_SCALE = 464 / 512.0;
+
 void Sketch::setup(bool renew)
 {
     if (renew)
@@ -16,8 +19,8 @@ void Sketch::setup(bool renew)
     }
     else
     {
-        texture = textureManager.getTexture(RES_CHINA);
-        position = getWindowSize() * 0.5f;
+        frame = textureManager.getTexture(RES_FRAME, true);
+        picture = textureManager.getTexture(RES_PICTURE, true);
     }
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -29,33 +32,44 @@ void Sketch::setup(bool renew)
 
 void Sketch::resize()
 {
+    scale = getWindowHeight() / (float) frame->getHeight();
+    position = getWindowCenter() / scale;
+    
     gl::setMatricesWindow(getWindowSize(), true);
 }
 
 void Sketch::draw()
 {
     gl::clear(Color(0.5f, 0.5f, 0.5f), false);
+
     glLoadIdentity();
+    glScalef(scale, scale, 1);
     
-    // ---
-
     glColor4f(1, 1, 1, 0.25f);
-    drawGrid(getWindowBounds(), 32, position);
+    drawGrid(Rectf(getWindowBounds()) / scale, GRID_SIZE, position);
 
-    gl::translate(position);
     glColor4f(1, 1, 1, 1);
+
+    glPushMatrix();
+    gl::translate(position);
+    glScalef(FRAME_SCALE, FRAME_SCALE, 1);
+    picture->begin();
+    picture->drawFromCenter();
+    picture->end();
+    glPopMatrix();
     
-    texture->begin();
-    texture->drawFromCenter();
-    texture->end();
+    gl::translate(getWindowCenter() / scale);
+    frame->begin();
+    frame->drawFromCenter();
+    frame->end();
 }
 
 void Sketch::addTouch(int index, float x, float y)
 {
-    dragOrigin = Vec2f(x, y) - position;
+    dragOrigin = Vec2f(x, y) / scale - position;
 }
 
 void Sketch::updateTouch(int index, float x, float y)
 {
-    position = Vec2f(x, y) - dragOrigin;
+    position = Vec2f(x, y) / scale - dragOrigin;
 }

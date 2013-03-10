@@ -6,8 +6,11 @@
 class Sketch : public CinderSketch
 {
     TextureManager textureManager;
-    Texture *texture;
     
+    Texture *frame;
+    Texture *picture;
+    
+    float scale;
     ci::Vec2f dragOrigin;
     ci::Vec2f position;
 

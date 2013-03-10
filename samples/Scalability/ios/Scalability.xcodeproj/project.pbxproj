@@ -13,9 +13,10 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		A821DF9116ED362800DB025D /* Louis XIV of France - 1024.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A821DF8F16ED362800DB025D /* Louis XIV of France - 1024.jpg */; };
+		A821DF9216ED362800DB025D /* frame rococo - 1024.png in Resources */ = {isa = PBXBuildFile; fileRef = A821DF9016ED362800DB025D /* frame rococo - 1024.png */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
-		A82C908916DF9A6E00FF519C /* china.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C908816DF9A6E00FF519C /* china.png */; };
 		A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */; };
 		A87CE0E516E75A3700F27EDE /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D616E75A3700F27EDE /* Sprite.cpp */; };
 		A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D816E75A3700F27EDE /* Texture.cpp */; };
@@ -59,9 +60,10 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A821DF8F16ED362800DB025D /* Louis XIV of France - 1024.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Louis XIV of France - 1024.jpg"; path = "../resources/Louis XIV of France - 1024.jpg"; sourceTree = "<group>"; };
+		A821DF9016ED362800DB025D /* frame rococo - 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "frame rococo - 1024.png"; path = "../resources/frame rococo - 1024.png"; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		A82C908816DF9A6E00FF519C /* china.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = china.png; path = ../resources/china.png; sourceTree = "<group>"; };
 		A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A87CE0D516E75A3700F27EDE /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
 		A87CE0D616E75A3700F27EDE /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
@@ -207,7 +209,8 @@
 		00692BD914FF149000D0FFFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A82C908816DF9A6E00FF519C /* china.png */,
+				A821DF8F16ED362800DB025D /* Louis XIV of France - 1024.jpg */,
+				A821DF9016ED362800DB025D /* frame rococo - 1024.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -440,7 +443,8 @@
 			files = (
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */,
-				A82C908916DF9A6E00FF519C /* china.png in Resources */,
+				A821DF9116ED362800DB025D /* Louis XIV of France - 1024.jpg in Resources */,
+				A821DF9216ED362800DB025D /* frame rococo - 1024.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

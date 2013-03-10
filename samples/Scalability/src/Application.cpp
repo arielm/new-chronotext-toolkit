@@ -1,8 +1,3 @@
-/*
- * TODO:
- * MSW AND ANDROID VERSIONS
- */
-
 #include "chronotext/cinder/CinderApp.h"
 
 #include "Sketch.h"
@@ -26,7 +21,10 @@ Application::Application()
 void Application::prepareSettings(Settings *settings)
 {
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
-    settings->setWindowSize(320, 480);
+//  settings->setWindowSize(320, 480); // IPHONE
+    settings->setWindowSize(640, 960); // IPHONE RETINA
+//  settings->setWindowSize(768, 1024); // IPAD-1
+//  settings->setWindowSize(480, 800); // ANDROID WVGA800
 #endif
 }
 
