@@ -8,5 +8,8 @@ else
 
   android update project --path . --name Scalability --target android-10
 
-  echo "Ready to run ndk-build && ant"
+  echo "Ready to run:"
+  echo "ndk-build"
+  echo "ant debug"
+  echo "adb install -r bin/Scalability-debug.apk"
 fi
