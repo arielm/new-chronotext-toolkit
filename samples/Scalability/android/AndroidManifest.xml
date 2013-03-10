@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.chronotext.complexsketch"
+    package="org.chronotext.scalability"
     android:versionCode="1"
     android:versionName="1.0" >
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="15" />
     <application
-        android:label="ComplexSketch"
+        android:label="Scalability"
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity

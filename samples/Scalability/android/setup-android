@@ -1,7 +1,7 @@
 # source this file 
 ANDROID_TOOL=android
 
-${ANDROID_TOOL} update project --path . --name ComplexSketch --target android-10
+${ANDROID_TOOL} update project --path . --name Scalability --target android-10
 
 if [ -z $NDK_MODULE_PATH ]; then
 export NDK_MODULE_PATH=~/Documents/ANDROID2/Cinder/android/prebuilt
