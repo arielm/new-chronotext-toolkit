@@ -1,6 +1,8 @@
 #include "Sketch.h"
 #include "Resources.h"
 
+#include "chronotext/utils/glUtils.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -37,9 +39,12 @@ void Sketch::draw()
     
     // ---
 
-    gl::color(ColorA::white());
-    gl::translate(position);
+    glColor4f(1, 1, 1, 0.25f);
+    drawGrid(getWindowBounds(), 32, position);
 
+    gl::translate(position);
+    glColor4f(1, 1, 1, 1);
+    
     texture->begin();
     texture->drawFromCenter();
     texture->end();
