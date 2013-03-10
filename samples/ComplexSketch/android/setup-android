@@ -1,0 +1,12 @@
+# source this file 
+ANDROID_TOOL=android
+
+${ANDROID_TOOL} update project --path . --name ComplexSketch --target android-10
+
+if [ -z $NDK_MODULE_PATH ]; then
+export NDK_MODULE_PATH=~/Documents/ANDROID2/Cinder/android/prebuilt
+echo "NDK_MODULE_PATH set to $NDK_MODULE_PATH"
+fi
+
+echo
+echo "Ready to run ndk-build && ant"

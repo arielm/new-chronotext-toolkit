@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/com.android.toolchain.gcc.1513670075/NDK_MODULE_PATH/delimiter=\:
+environment/project/com.android.toolchain.gcc.1513670075/NDK_MODULE_PATH/operation=append
+environment/project/com.android.toolchain.gcc.1513670075/NDK_MODULE_PATH/value=~/Documents/ANDROID2/Cinder/android/prebuilt
+environment/project/com.android.toolchain.gcc.1513670075/append=true
+environment/project/com.android.toolchain.gcc.1513670075/appendContributed=true
