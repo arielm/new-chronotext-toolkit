@@ -7,7 +7,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class ButtonStyle> ButtonStyleRef;
+    typedef std::shared_ptr<class ButtonStyle> ButtonStyleRef;
 
     class ButtonStyle : public ShapeStyle
     {

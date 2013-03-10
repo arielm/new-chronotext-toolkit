@@ -4,7 +4,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class HyperTextBoxStyle> HyperTextBoxStyleRef;
+    typedef std::shared_ptr<class HyperTextBoxStyle> HyperTextBoxStyleRef;
     
     class HyperTextBoxStyle : public TextBoxStyle
     {

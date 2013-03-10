@@ -4,7 +4,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class LayoutStyle> LayoutStyleRef;
+    typedef std::shared_ptr<class LayoutStyle> LayoutStyleRef;
 
     class LayoutStyle : public ShapeStyle
     {

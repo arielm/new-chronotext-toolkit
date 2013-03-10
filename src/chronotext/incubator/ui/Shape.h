@@ -8,7 +8,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class Shape> ShapeRef;
+    typedef std::shared_ptr<class Shape> ShapeRef;
 
     class Container;
 

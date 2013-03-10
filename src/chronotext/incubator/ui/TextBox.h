@@ -14,7 +14,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class TextBox> TextBoxRef;
+    typedef std::shared_ptr<class TextBox> TextBoxRef;
 
     class TextBox : public Shape
     {

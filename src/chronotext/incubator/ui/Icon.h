@@ -5,7 +5,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class Icon> IconRef;
+    typedef std::shared_ptr<class Icon> IconRef;
     
     class Icon
     {

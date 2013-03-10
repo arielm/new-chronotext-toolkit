@@ -10,7 +10,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class HorizontalLayout> HorizontalLayoutRef;
+    typedef std::shared_ptr<class HorizontalLayout> HorizontalLayoutRef;
 
     class HorizontalLayout : public Container
     {

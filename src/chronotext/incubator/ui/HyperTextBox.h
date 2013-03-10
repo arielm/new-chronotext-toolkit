@@ -9,7 +9,7 @@
 
 namespace chronotext
 {
-    typedef boost::shared_ptr<class HyperTextBox> HyperTextBoxRef;
+    typedef std::shared_ptr<class HyperTextBox> HyperTextBoxRef;
     
     class HyperTextBoxDelegate
     {
