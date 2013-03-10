@@ -1,5 +1,5 @@
 
-package org.chronotext.complexsketch;
+package org.chronotext.samples;
 
 import android.app.Activity;
 import android.os.Handler;
@@ -9,7 +9,7 @@ public class Bridge extends CinderDelegate
 {
   static
   {
-    System.loadLibrary("ComplexSketch");
+    System.loadLibrary("Scalability");
   }
 
   public Bridge(Activity activity, Handler handler)

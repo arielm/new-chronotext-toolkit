@@ -1,5 +1,5 @@
 
-package org.chronotext.complexsketch;
+package org.chronotext.samples;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -41,7 +41,7 @@ public class MainActivity extends Activity
 
     // ----
 
-    mBridge = new Bridge(this, mHandler); // WILL LOAD THE ComplexSketch LIBRARY
+    mBridge = new Bridge(this, mHandler); // WILL LOAD THE LIBRARY
     setContentView(mBridge.getView());
   }
 

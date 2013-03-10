@@ -2,10 +2,10 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := ComplexSketch
+LOCAL_MODULE := Scalability
 
-CHR_SRC = ../../../../../../Cinder/blocks/chronotext-blocks-base/src
-UTF8_CPP_SRC = ../../../../../../Cinder/include/utf8-cpp
+CHR_SRC = ../../../../../../../Cinder/blocks/chronotext-blocks-base/src
+UTF8_CPP_SRC = ../../../../../../../Cinder/include/utf8-cpp
 
 LOCAL_C_INCLUDES := ../src/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../src
