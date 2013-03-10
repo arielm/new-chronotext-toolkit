@@ -1,73 +1,54 @@
 
 package org.chronotext.samples;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import chronotext.android.cinder.CinderDelegate;
 
-/*
- *
- */
-
-@SuppressLint("HandlerLeak")
 public class MainActivity extends Activity
 {
-  Bridge mBridge;
-  Handler mHandler;
+  static
+  {
+    System.loadLibrary("Scalability");
+  }
+
+  CinderDelegate delegate;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
 
-    // ---
-
     /*
      * DEFINING THIS IN THE MANIFEST IS NOT ALWAYS WORKING... 
      */
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-    mHandler = new Handler()
-    {
-      @Override
-      public void handleMessage(Message msg)
-      {
-        MainActivity.this.handleMessage(msg);
-      }
-    };
-
     // ----
 
-    mBridge = new Bridge(this, mHandler); // WILL LOAD THE LIBRARY
-    setContentView(mBridge.getView());
+    delegate = new CinderDelegate(this, null);
+    setContentView(delegate.getView());
   }
 
   @Override
   protected void onPause()
   {
     super.onPause();
-    mBridge.onPause();
+    delegate.onPause();
   }
 
   @Override
   protected void onResume()
   {
     super.onResume();
-    mBridge.onResume();
+    delegate.onResume();
   }
 
   @Override
   protected void onDestroy()
   {
     super.onDestroy();
-    mBridge.onDestroy();
+    delegate.onDestroy();
   }
-
-  // ---------------------------------------- HANDLER ----------------------------------------
-
-  public void handleMessage(Message msg)
-  {}
 }
