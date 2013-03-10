@@ -16,5 +16,5 @@ extern "C"
      * COMMENT THE FOLLOWING IF THE "CINDER_APP_NATIVE"
      * MACRO IS PRESENT ELSEWHERE IN THE CODE
      */
-    void android_main(struct android_app* state) {}
+    // void android_main(struct android_app* state) {}
 }

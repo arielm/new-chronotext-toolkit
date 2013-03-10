@@ -218,6 +218,11 @@ int CinderDelegate::getWindowHeight() const
     return mHeight;
 }
 
+Vec2f CinderDelegate::getWindowCenter() const
+{
+    return Vec2f(mWidth * 0.5f, mHeight * 0.5f);
+}
+
 Vec2i CinderDelegate::getWindowSize() const
 {
     return Vec2i(mWidth, mHeight);
