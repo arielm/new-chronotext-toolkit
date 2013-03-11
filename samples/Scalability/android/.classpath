@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry excluding="**/*.c|**/*.cpp|**/*.h|**/*.m|**/*.mm" kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
-	<classpathentry excluding="**/*.c|**/*.cpp|**/*.h|**/*.m|**/*.mm" kind="src" path="src-chronotext"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="output" path="bin/classes"/>
-</classpath>
