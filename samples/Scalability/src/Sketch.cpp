@@ -1,5 +1,4 @@
 #include "Sketch.h"
-#include "Resources.h"
 
 #include "chronotext/utils/glUtils.h"
 
@@ -19,8 +18,8 @@ void Sketch::setup(bool renew)
     }
     else
     {
-        frame = textureManager.getTexture(RES_FRAME, true);
-        picture = textureManager.getTexture(RES_PICTURE, true);
+        frame = textureManager.getTexture("frame rococo - 1024.png", true);
+        picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true);
     }
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

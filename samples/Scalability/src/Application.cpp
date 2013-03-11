@@ -1,3 +1,8 @@
+/*
+ * STUB FOR RUNNING A CinderSketch
+ * ON THE DESKTOP (OSX OR WINDOW)
+ */
+
 #include "chronotext/cinder/CinderApp.h"
 
 #include "Sketch.h"
