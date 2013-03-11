@@ -14,6 +14,7 @@ public class GLView extends GLSurfaceView
   {
     super(context);
 
+    // setEGLContextClientVersion(2);
     // setEGLConfigChooser(8, 8, 8, 8, 0, 0);
     // getHolder().setFormat(PixelFormat.RGBA_8888);
   }
