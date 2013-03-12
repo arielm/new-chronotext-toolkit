@@ -34,7 +34,6 @@ namespace chronotext
         delete[] coords;
 
         glDeleteTextures(1, &textureName);
-        glDeleteBuffers(1, &indicesName);
     }
     
     void XFont::read(IStreamRef in)
@@ -206,11 +205,6 @@ namespace chronotext
             *tmp++ = offset;
             offset += 4;
         }
-        
-        glGenBuffers(1, &indicesName);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, slotCapacity * 6 * sizeof(GLushort), indices, GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     
     // ---
@@ -332,11 +326,6 @@ namespace chronotext
         return indices;
     }
     
-    GLuint XFont::getIndicesName()
-    {
-        return indicesName;
-    }
-    
     void XFont::begin()
     {
         if (began == 0)
@@ -376,15 +365,15 @@ namespace chronotext
     
     void XFont::beginSequence(XFontSequence *sequence, int dimensions)
     {
-        sequenceSize = 0;
         sequenceDimensions = dimensions;
-        
+
+        sequenceSize = 0;
         sequenceVertices = vertices;
         sequenceCoords = coords;
         
         if (sequence)
         {
-            sequence->begin(this, dimensions);
+            sequence->begin(this, dimensions, slotCapacity);
             this->sequence = sequence;
         }
         else
@@ -412,13 +401,7 @@ namespace chronotext
     {
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
         glVertexPointer(sequenceDimensions, GL_FLOAT, 0, vertices);
-        
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesName);
-        glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        
-        sequenceVertices = vertices;
-        sequenceCoords = coords;
+        glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, indices);
     }
     
     void XFont::incrementSequence()
@@ -435,8 +418,10 @@ namespace chronotext
             {
                 flush(sequenceSize);
             }
-            
+
             sequenceSize = 0;
+            sequenceVertices = vertices;
+            sequenceCoords = coords;
         }
     }
     

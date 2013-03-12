@@ -50,7 +50,6 @@ namespace chronotext
         FontMatrix matrix;
 
         GLuint textureName;
-        GLuint indicesName;
 
         GLushort *indices;
         GLfloat *vertices;
@@ -99,7 +98,6 @@ namespace chronotext
         
         FontMatrix* getMatrix();
         GLushort* getIndices();
-        GLuint getIndicesName();
         
         void begin();
         void end();
