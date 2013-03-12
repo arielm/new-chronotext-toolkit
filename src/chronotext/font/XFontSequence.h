@@ -2,25 +2,26 @@
 
 #include "cinder/gl/gl.h"
 
-/*
- * FIXME: THIS IS NOT READY FOR RE-USE (SEE THE PREVIOUS VERSION FROM THE CHRONOTEX TOOLKIT...)
- */
 namespace chronotext
 {
     class XFont;
-
+    
     struct Slot
     {
         int count;
-        GLuint verticesName;
-        GLuint coordsName;
+        GLfloat *vertices;
+        GLfloat *coords;
         
-        Slot(int count) : count(count) {}
+        Slot(int dimensions, int slotCapacity)
+        {
+            vertices = new GLfloat[slotCapacity * dimensions * 4];
+            coords = new GLfloat[slotCapacity * 2 * 4];
+        }
         
         ~Slot()
         {
-            glDeleteBuffers(1, &verticesName);
-            glDeleteBuffers(1, &coordsName);
+            delete[] vertices;
+            delete[] coords;
         }
     };
     
@@ -28,12 +29,15 @@ namespace chronotext
     {
         XFont *font;
         int dimensions;
-        std::list<Slot*> slots;
+        int slotCapacity;
+        
+        int slotIndex;
+        std::vector<Slot*> slots;
         
     public:
         ~XFontSequence();
         
-        void begin(XFont *font, int dimensions);
+        void begin(XFont *font, int dimensions, int slotCapacity);
         void end();
         void flush(GLfloat *vertices, GLfloat *coords, int count);
         void replay();

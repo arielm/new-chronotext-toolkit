@@ -10,10 +10,13 @@ namespace chronotext
         clear();
     }
     
-    void XFontSequence::begin(XFont *font, int dimensions)
+    void XFontSequence::begin(XFont *font, int dimensions, int slotCapacity)
     {
         this->font = font;
         this->dimensions = dimensions;
+        this->slotCapacity = slotCapacity;
+        
+        slotIndex = 0;
     }
     
     void XFontSequence::end()
@@ -21,46 +24,44 @@ namespace chronotext
     
     void XFontSequence::flush(GLfloat *vertices, GLfloat *coords, int count)
     {
-        Slot *slot = new Slot(count);
-        slots.push_back(slot);
+        Slot *slot;
         
-        glGenBuffers(1, &slot->verticesName);
-        glBindBuffer(GL_ARRAY_BUFFER, slot->verticesName);
-        glBufferData(GL_ARRAY_BUFFER, count * dimensions * 4 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+        if (slotIndex + 1 > slots.size())
+        {
+            slot = new Slot(dimensions, slotCapacity);
+            slots.push_back(slot);
+        }
+        else
+        {
+            slot = slots[slotIndex];
+        }
         
-        glGenBuffers(1, &slot->coordsName);
-        glBindBuffer(GL_ARRAY_BUFFER, slot->coordsName);
-        glBufferData(GL_ARRAY_BUFFER, count * 2 * 4 * sizeof(GLfloat), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        slot->count = count;
+        memcpy(slot->vertices, vertices, count * dimensions * 4 * sizeof(GLfloat));
+        memcpy(slot->coords, coords, count * 2 * 4 * sizeof(GLfloat));
+        
+        slotIndex++;
     }
-    
+
     void XFontSequence::replay()
     {
         font->begin();
         
-        for (list<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
+        for (vector<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
         {
             Slot *slot = *it;
             
-            glBindBuffer(GL_ARRAY_BUFFER, slot->verticesName);
-            glVertexPointer(dimensions, GL_FLOAT, 0, 0);
-            
-            glBindBuffer(GL_ARRAY_BUFFER, slot->coordsName);
-            glTexCoordPointer(2, GL_FLOAT, 0, 0);
-            
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, font->getIndicesName());
-            glDrawElements(GL_TRIANGLES, slot->count * 6, GL_UNSIGNED_SHORT, 0);
+            glVertexPointer(dimensions, GL_FLOAT, 0, slot->vertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, slot->coords);
+            glDrawElements(GL_TRIANGLES, slot->count * 6, GL_UNSIGNED_SHORT, font->getIndices());
         }
-        
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         
         font->end();
     }
     
     void XFontSequence::clear()
     {
-        for (list<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
+        for (vector<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
         {
             delete *it;
         }
