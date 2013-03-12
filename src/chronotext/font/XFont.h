@@ -1,10 +1,8 @@
 #pragma once
 
+#include "chronotext/InputSource.h"
 #include "chronotext/font/FontMatrix.h"
 #include "chronotext/font/XFontSequence.h"
-
-#include "cinder/gl/gl.h"
-#include "cinder/DataSource.h"
 
 #include <string>
 #include <map>
@@ -61,6 +59,8 @@ namespace chronotext
         GLfloat *sequenceCoords;
         XFontSequence *sequence;
         
+        bool unloaded;
+        
         void read(ci::IStreamRef in);
         void addAtlasUnit(char *srcData, char *dstData, int xx, int yy, int ww, int hh);
         void init();
@@ -70,13 +70,19 @@ namespace chronotext
         bool computeClip(float *x1, float *y1, float *x2, float *y2, float *tx1, float *ty1, float *tx2, float *ty2, const ci::Rectf &clip);
         
     public:
+        InputSourceRef inputSource;
         bool useMipmap;
         bool useAnisotropy;
         int maxDimensions;
         int slotCapacity;
         
-        XFont(ci::DataSourceRef source, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
+        XFont(const std::string &resourceName, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
+        XFont(InputSourceRef inputSource, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
+        
         ~XFont();
+        
+        void unload();
+        void reload();
         
         bool isSpace(wchar_t c);
         bool isValid(wchar_t c);

@@ -1,9 +1,6 @@
 #pragma once
 
 #include "chronotext/font/XFont.h"
-#include "chronotext/utils/Hasher.h"
-
-#include <map>
 
 /*
  * TODO:
@@ -13,31 +10,20 @@
 
 class FontManager
 {
-    std::map<uint64_t, chr::XFont*> cache;
+    std::list<chr::XFont*> cache;
     
-    bool hasFont(uint64_t id)
-    {
-        return (cache.count(id) > 0);
-    }
-    
-    chr::XFont* getFont(uint64_t id)
-    {
-        return cache[id];
-    }
-    
-    void putFont(uint64_t id, chr::XFont *font)
-    {
-        cache[id] = font;
-    }
+    chr::XFont* getFromCache(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity);
+    void putInCache(chr::XFont *font);
 
 public:
     ~FontManager();
     
-#if defined(CINDER_MSW)
-    chr::XFont* getFont(int mswID, const std::string &mswType, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
-#else
-    chr::XFont* getFont(const std::string &macPath, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
-#endif
+    chr::XFont* getFont(const std::string &resourceName, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
+    chr::XFont* getFont(InputSourceRef inputSource, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
     
-    bool removeFont(chr::XFont *font);
+    bool remove(chr::XFont *font);
+    void clear();
+    
+    void unload();
+    void reload();
 };

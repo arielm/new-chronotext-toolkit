@@ -1,81 +1,65 @@
 #include "chronotext/text/FontManager.h"
-#include "chronotext/utils/Utils.h"
-
-#include "cinder/DataSource.h"
-#include "cinder/app/App.h"
 
 #include <sstream>
 
 using namespace ci;
-using namespace app;
 using namespace std;
 using namespace chr;
 
 FontManager::~FontManager()
 {
-    for (map<uint64_t, XFont*>::const_iterator it = cache.begin(); it != cache.end(); ++it)
+    for (list<XFont*>::iterator it = cache.begin(); it != cache.end(); ++it)
     {
-        delete it->second;
+        delete *it;
     }
-    
-    DLOG(cache.size() << " FONTS DELETED");
 }
 
-#if defined(CINDER_MSW)
-XFont* FontManager::getFont(int mswID, const string &mswType, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
-{
-    stringstream oss;
-    oss << mswID << mswType << useMipmap << useAnisotropy << maxDimensions << slotCapacity;
-    
-    string key = oss.str();
-    uint64_t id = chr::hash(key);
-    
-    if (hasFont(id))
-    {
-        return getFont(id);
-    }
-    else
-    {
-        DataSourceRef resource = loadResource(mswID, mswType);
-        
-        XFont *font = new XFont(resource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
-        putFont(id, font);
-        
-        return font;
-    }
-}
-#else
-XFont* FontManager::getFont(const string &macPath, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
-{
-    stringstream oss;
-    oss << macPath << useMipmap << useAnisotropy << maxDimensions << slotCapacity;
-    
-    string key = oss.str();
-    uint64_t id = chr::hash(key);
-    
-    if (hasFont(id))
-    {
-        return getFont(id);
-    }
-    else
-    {
-        DataSourceRef resource = loadResource(macPath);
-        
-        XFont *font = new XFont(resource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
-        putFont(id, font);
-        
-        return font;
-    }
-}
-#endif
 
-bool FontManager::removeFont(XFont *font)
+XFont* FontManager::getFromCache(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
 {
-    for (map<uint64_t, XFont*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    for (list<XFont*>::const_iterator it = cache.begin(); it != cache.end(); ++it)
     {
-        if (font == it->second)
+        XFont *font = *it;
+        
+        if ((font->inputSource->getUniqueName() == inputSource->getUniqueName()) && (font->useMipmap == useMipmap) && (font->useAnisotropy == useAnisotropy) && (font->maxDimensions == maxDimensions) && (font->slotCapacity == slotCapacity))
         {
-            delete it->second;
+            return font;
+        }
+    }
+    
+    return NULL;
+}
+
+void FontManager::putInCache(XFont *font)
+{
+    cache.push_back(font);
+}
+
+XFont* FontManager::getFont(const string &resourceName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+{
+    return getFont(InputSource::getResource(resourceName), useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+}
+
+XFont* FontManager::getFont(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+{
+    XFont *font = getFromCache(inputSource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+    
+    if (!font)
+    {
+        font = new XFont(inputSource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+        putInCache(font);
+    }
+    
+    return font;
+}
+
+bool FontManager::remove(XFont *font)
+{
+    for (list<XFont*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    {
+        if (font == *it)
+        {
+            delete *it;
             cache.erase(it);
             
             return true;
@@ -83,4 +67,30 @@ bool FontManager::removeFont(XFont *font)
     }
     
     return false;
+}
+
+void FontManager::clear()
+{
+    for (list<XFont*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    {
+        delete *it;
+    }
+    
+    cache.clear();
+}
+
+void FontManager::unload()
+{
+    for (list<XFont*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    {
+        (*it)->unload();
+    }
+}
+
+void FontManager::reload()
+{
+    for (list<XFont*>::iterator it = cache.begin(); it != cache.end(); ++it)
+    {
+        (*it)->reload();
+    }
 }

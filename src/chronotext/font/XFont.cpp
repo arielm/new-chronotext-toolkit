@@ -1,39 +1,72 @@
 #include "chronotext/font/XFont.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace ci;
 using namespace std;
 
 namespace chronotext
 {
-    XFont::XFont(ci::DataSourceRef source, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+    XFont::XFont(const string &resourceName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
     :
+    XFont(InputSource::getResource(resourceName), useMipmap, useAnisotropy, maxDimensions, slotCapacity)
+    {}
+    
+    XFont::XFont(InputSourceRef source, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+    :
+    inputSource(source),
     useMipmap(useMipmap),
     useAnisotropy(useAnisotropy),
     maxDimensions(maxDimensions),
-    slotCapacity(slotCapacity)
+    slotCapacity(slotCapacity),
+    unloaded(true)
     {
-        read(source->createStream());
-        init();
+        reload();
+        setSize(1);
     }
     
     XFont::~XFont()
     {
-        delete[] w;
-        delete[] h;
-        delete[] le;
-        delete[] te;
-        delete[] lw;
-        
-        delete[] tx1;
-        delete[] ty1;
-        delete[] tx2;
-        delete[] ty2;
-
-        delete[] indices;
-        delete[] vertices;
-        delete[] coords;
-
-        glDeleteTextures(1, &textureName);
+        unload();
+    }
+    
+    void XFont::unload()
+    {
+        if (!unloaded)
+        {
+            delete[] w;
+            delete[] h;
+            delete[] le;
+            delete[] te;
+            delete[] lw;
+            
+            delete[] tx1;
+            delete[] ty1;
+            delete[] tx2;
+            delete[] ty2;
+            
+            delete[] indices;
+            delete[] vertices;
+            delete[] coords;
+            
+            glDeleteTextures(1, &textureName);
+            
+            // ---
+            
+            unloaded = true;
+            DLOG("FONT DELETED: " << textureName);
+        }
+    }
+    
+    void XFont::reload()
+    {
+        if (unloaded)
+        {
+            read(inputSource->loadDataSource()->createStream());
+            init();
+            
+            unloaded = false;
+            DLOG("FONT LOADED: " << textureName << " (" << atlasWidth << "x" << atlasHeight << ")");
+        }
     }
     
     void XFont::read(IStreamRef in)
@@ -183,7 +216,7 @@ namespace chronotext
         sequence = NULL;
         
         // ---
-
+        
         indices = new GLushort[slotCapacity * 6];
         vertices = new GLfloat[slotCapacity * maxDimensions * 4];
         coords = new GLfloat[slotCapacity * 2 * 4];
@@ -366,7 +399,7 @@ namespace chronotext
     void XFont::beginSequence(XFontSequence *sequence, int dimensions)
     {
         sequenceDimensions = dimensions;
-
+        
         sequenceSize = 0;
         sequenceVertices = vertices;
         sequenceCoords = coords;
@@ -396,7 +429,7 @@ namespace chronotext
             end();
         }
     }
-
+    
     void XFont::flush(int count)
     {
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
@@ -418,7 +451,7 @@ namespace chronotext
             {
                 flush(sequenceSize);
             }
-
+            
             sequenceSize = 0;
             sequenceVertices = vertices;
             sequenceCoords = coords;
