@@ -76,7 +76,7 @@ namespace chronotext
         
         if (version != "XFONT.002")
         {
-            throw;
+            throw runtime_error("XFont: WRONG FORMAT");
         }
         
         in->readLittle(&glyphCount);
@@ -108,7 +108,7 @@ namespace chronotext
         tx2 = new float[glyphCount];
         ty2 = new float[glyphCount];
         
-        char *atlasData = (char*) calloc(atlasWidth * atlasHeight , 1);
+        char *atlasData = (char*) calloc(atlasWidth * atlasHeight , 1); // WE NEED A ZERO-FILLED AREA
         
         for (int i = 0; i < glyphCount; i++)
         {
@@ -210,8 +210,6 @@ namespace chronotext
     void XFont::init()
     {
         matrix.setToIdentity();
-        setSize(1);
-        
         began = 0;
         sequence = NULL;
         
