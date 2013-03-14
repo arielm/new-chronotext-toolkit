@@ -10,7 +10,7 @@
 class ASPC
 {
     float tol;
-    float (*gamma)(float t, float *in);
+    std::function<float (float, float*)> gamma;
     FollowablePath *path;
     
     float *xx;
@@ -19,7 +19,7 @@ class ASPC
     void sample(float t0, float x0, float y0, float t1, float x1, float y1);
 
 public:
-    ASPC(float tol, float (*gamma)(float t, float *in), FollowablePath *path)
+    ASPC(float tol, const std::function<float (float, float*)> &gamma, FollowablePath *path)
     :
     tol(tol),
     gamma(gamma),
