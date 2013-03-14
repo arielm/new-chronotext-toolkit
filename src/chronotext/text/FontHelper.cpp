@@ -125,8 +125,6 @@ void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float
 
 float FontHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wstring &text, FollowablePath *path, float offset)
 {
-    float res[3];
-    
     int len = text.size();
     float offsetX = offset;
     float offsetY = font->getDescent();
@@ -143,11 +141,11 @@ float FontHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wst
         
         if (cc > -1)
         {
-            path->pos2Point(offsetX, res);
-            float theta = path->pos2SampledAngle(offsetX, sampleSize);
+            const Vec2f point = path->pos2Point(offsetX);
+            float angle = path->pos2SampledAngle(offsetX, sampleSize);
             
-            matrix->setTranslation(res[0], res[1], 0);
-            matrix->rotateZ(theta);
+            matrix->setTranslation(point.x, point.y, 0);
+            matrix->rotateZ(angle);
             font->addTransformedGlyph2D(cc, -half, offsetY);
         }
         

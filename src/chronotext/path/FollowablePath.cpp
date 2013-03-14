@@ -1,6 +1,7 @@
 #include "chronotext/path/FollowablePath.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/utils/Utils.h"
+
 using namespace ci;
 using namespace std;
 
@@ -104,8 +105,9 @@ void FollowablePath::add(float xx, float yy)
     size++;
 }
 
-void FollowablePath::pos2Point(float pos, float *res)
+FollowablePath::Value FollowablePath::pos2Value(float pos) const
 {
+    FollowablePath::Value value;
     float length = len[size - 1];
     
     if (mode == MODE_LOOP || mode == MODE_MODULO)
@@ -118,20 +120,14 @@ void FollowablePath::pos2Point(float pos, float *res)
         {
             if (mode == MODE_BOUNDED)
             {
-                *res++ = x[0];
-                *res++ = y[0];
-                *res   = 0;
-                return;
+                pos = 0;
             }
         }
         else if (pos >= length)
         {
             if (mode == MODE_BOUNDED)
             {
-                *res++ = x[size - 1];
-                *res++ = y[size - 1];
-                *res   = length;
-                return;
+                pos = length;
             }
         }
     }
@@ -145,12 +141,53 @@ void FollowablePath::pos2Point(float pos, float *res)
     float y1 = y[index + 1];
     
     float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
-    *res++ = x0 + (x1 - x0) * ratio;
-    *res++ = y0 + (y1 - y0) * ratio;
-    *res   = pos;
+    value.x = x0 + (x1 - x0) * ratio;
+    value.y = y0 + (y1 - y0) * ratio;
+    value.angle = math<float>::atan2(y1 - y0, x1 - x0);
+    value.position = pos;
+    
+    return value;
 }
 
-float FollowablePath::pos2Angle(float pos)
+Vec2f FollowablePath::pos2Point(float pos) const
+{
+    float length = len[size - 1];
+    
+    if (mode == MODE_LOOP || mode == MODE_MODULO)
+    {
+        pos = bound(pos, length);
+    }
+    else
+    {
+        if (pos <= 0)
+        {
+            if (mode == MODE_BOUNDED)
+            {
+                return Vec2f(x[0], y[0]);
+            }
+        }
+        else if (pos >= length)
+        {
+            if (mode == MODE_BOUNDED)
+            {
+                return Vec2f(x[size - 1], y[size - 1]);
+            }
+        }
+    }
+    
+    int index = search(len, pos, 1, size);
+    
+    float x0 = x[index];
+    float y0 = y[index];
+    
+    float x1 = x[index + 1];
+    float y1 = y[index + 1];
+    
+    float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
+    return Vec2f(x0 + (x1 - x0) * ratio, y0 + (y1 - y0) * ratio);
+}
+
+float FollowablePath::pos2Angle(float pos) const
 {
     float length = len[size - 1];
     
@@ -187,21 +224,18 @@ float FollowablePath::pos2Angle(float pos)
     return math<float>::atan2(y1 - y0, x1 - x0);
 }
 
-float FollowablePath::pos2SampledAngle(float pos, float sampleSize)
+float FollowablePath::pos2SampledAngle(float pos, float sampleSize) const
 {
-    float res[2];
-    pos2Gradient(pos, sampleSize, res);
-    float dx = res[0];
-    float dy = res[1];
+    Vec2f gradient = pos2Gradient(pos, sampleSize);
     
     /*
      * WE USE AN EPSILON VALUE TO AVOID
      * DEGENERATED RESULTS IN SOME EXTREME CASES
      * (E.G. CLOSE TO 180 DEGREE DIFF. BETWEEN TWO SEGMENTS)
      */
-    if ((dx * dx + dy * dy) > 1.0)
+    if (gradient.lengthSquared() > 1.0)
     {
-        return math<float>::atan2(dy, dx);
+        return math<float>::atan2(gradient.y, gradient.x);
     }
     else
     {
@@ -209,21 +243,12 @@ float FollowablePath::pos2SampledAngle(float pos, float sampleSize)
     }
 }
 
-void FollowablePath::pos2Gradient(float pos, float sampleSize, float *res)
+Vec2f FollowablePath::pos2Gradient(float pos, float sampleSize) const
 {
-    float halfSampleSize = sampleSize / 2;
-    
-    float pm[3];
-    pos2Point(pos - halfSampleSize, pm);
-    
-    float pp[3];
-    pos2Point(pos + halfSampleSize, pp);
-    
-    float dx = pp[0] - pm[0];
-    float dy = pp[1] - pm[1];
-    
-    *res++ = dx / 2;
-    *res   = dy / 2;
+    Vec2f pm = pos2Point(pos - sampleSize * 0.5f);
+    Vec2f pp = pos2Point(pos + sampleSize * 0.5f);
+
+    return (pp - pm) * 0.5f;
 }
 
 /*

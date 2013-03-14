@@ -11,6 +11,14 @@ class FollowablePath
     void read(ci::IStreamRef in);
     
 public:
+    struct Value
+    {
+        float x;
+        float y;
+        float angle;
+        float position;
+    };
+    
     enum
     {
         MODE_BOUNDED,
@@ -35,10 +43,11 @@ public:
     float getLength();
     void add(float x, float y);
     
-    void pos2Point(float pos, float *res);
-    float pos2Angle(float pos);
-    float pos2SampledAngle(float pos, float sampleSize);
-    void pos2Gradient(float pos, float sampleSize, float *res);
+    Value pos2Value(float pos) const;
+    ci::Vec2f pos2Point(float pos) const;
+    float pos2Angle(float pos) const;
+    float pos2SampledAngle(float pos, float sampleSize) const;
+    ci::Vec2f pos2Gradient(float pos, float sampleSize) const;
     
     bool findClosestPoint(float x, float y, float min, float *res);
     void closestPointFromSegment(float x, float y, int segmentIndex, float *res);
