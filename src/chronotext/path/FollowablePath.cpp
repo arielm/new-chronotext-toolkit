@@ -49,6 +49,9 @@ void FollowablePath::read(IStreamRef in)
 void FollowablePath::clear()
 {
     size = 0;
+    x.clear();
+    y.clear();
+    len.clear();
 }
 
 float FollowablePath::getLength()

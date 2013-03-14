@@ -16,6 +16,8 @@ size(0)
 void SplinePath::clear()
 {
     size = 0;
+    x.clear();
+    y.clear();
 }
 
 void SplinePath::add(float xx, float yy)
