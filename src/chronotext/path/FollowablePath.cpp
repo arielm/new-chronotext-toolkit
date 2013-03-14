@@ -253,18 +253,13 @@ Vec2f FollowablePath::pos2Gradient(float pos, float sampleSize) const
 
 /*
  * RETURNS false IF CLOSEST POINT IS FARTHER THAN min DISTANCE
- *
- * res[0]: CLOSEST-POINT X
- * res[1]: CLOSEST-POINT Y
- * res[2]: POSITION OF CLOSEST-POINT
- * res[3]: DISTANCE TO CLOSEST-POINT
  * 
  * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
  * http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline
  */
-bool FollowablePath::findClosestPoint(float xx, float yy, float min, float *res)
+bool FollowablePath::findClosestPoint(float xx, float yy, float min, FollowablePath::ClosePoint &res) const
 {
-    min *= min; // BECAUSE WE COMPARE "MAGNIFIED DISTANCES" (FASTER...)
+    min *= min; // BECAUSE COMPARING "MAGNIFIED DISTANCES" IS FASTER
     
     int index = -1;
     float _x, _y, _len;
@@ -342,10 +337,10 @@ bool FollowablePath::findClosestPoint(float xx, float yy, float min, float *res)
     
     if (index != -1)
     {
-        res[0] = _x;
-        res[1] = _y;
-        res[2] = _len;
-        res[3] = math<float>::sqrt(min);
+        res.x = _x;
+        res.y = _y;
+        res.position = _len;
+        res.distance = math<float>::sqrt(min);
         
         return true;
     }
@@ -355,17 +350,14 @@ bool FollowablePath::findClosestPoint(float xx, float yy, float min, float *res)
 
 /*
  * segmentIndex MUST BE < size
- *
- * res[0]: CLOSEST-POINT X
- * res[1]: CLOSEST-POINT Y
- * res[2]: POSITION OF CLOSEST-POINT
- * res[3]: DISTANCE TO CLOSEST-POINT
  * 
  * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
  * http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline
  */
-void FollowablePath::closestPointFromSegment(float xx, float yy, int segmentIndex, float *res)
+FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(float xx, float yy, int segmentIndex) const
 {
+    FollowablePath::ClosePoint res;
+    
     int i0 = segmentIndex;
     int i1 = segmentIndex + 1;
     
@@ -385,10 +377,10 @@ void FollowablePath::closestPointFromSegment(float xx, float yy, int segmentInde
         float dy = yp - yy;
         float mag = dx * dx + dy * dy;
         
-        *res++ = xp;
-        *res++ = yp;
-        *res++ = len[i0] + d * u;
-        *res   = math<float>::sqrt(mag);
+        res.x = xp;
+        res.y = yp;
+        res.position = len[i0] + d * u;
+        res.distance = math<float>::sqrt(mag);
     }
     else
     {
@@ -402,19 +394,21 @@ void FollowablePath::closestPointFromSegment(float xx, float yy, int segmentInde
         
         if (mag0 < mag1)
         {
-            *res++ = x0;
-            *res++ = y0;
-            *res++ = len[i0];
-            *res   = math<float>::sqrt(mag0);
+            res.x = x0;
+            res.y = y0;
+            res.position = len[i0];
+            res.distance = math<float>::sqrt(mag0);
         }
         else
         {
-            *res++ = x1;
-            *res++ = y1;
-            *res++ = len[i1];
-            *res   = math<float>::sqrt(mag1);
+            res.x = x1;
+            res.y = y1;
+            res.position = len[i1];
+            res.distance = math<float>::sqrt(mag1);
         }
     }
+    
+    return res;
 }
 
 Rectf FollowablePath::getBounds() const

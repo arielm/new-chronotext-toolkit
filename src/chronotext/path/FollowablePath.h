@@ -19,6 +19,14 @@ public:
         float position;
     };
     
+    struct ClosePoint
+    {
+        float x; // CLOSEST-POINT X
+        float y; // CLOSEST-POINT y
+        float position; // POSITION OF CLOSEST-POINT
+        float distance; // DISTANCE TO CLOSEST-POINT
+    };
+    
     enum
     {
         MODE_BOUNDED,
@@ -49,8 +57,8 @@ public:
     float pos2SampledAngle(float pos, float sampleSize) const;
     ci::Vec2f pos2Gradient(float pos, float sampleSize) const;
     
-    bool findClosestPoint(float x, float y, float min, float *res);
-    void closestPointFromSegment(float x, float y, int segmentIndex, float *res);
+    bool findClosestPoint(float x, float y, float min, ClosePoint &res) const;
+    ClosePoint closestPointFromSegment(float x, float y, int segmentIndex) const;
     
     ci::Rectf getBounds() const;
 };
