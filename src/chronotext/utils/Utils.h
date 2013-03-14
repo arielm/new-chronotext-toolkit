@@ -76,5 +76,10 @@ static int search(float *array, float value, int min, int max)
     return mid - 1;
 }
 
+static inline int search(const std::vector<float> &array, float value, int min, int max)
+{
+    return search((float*)array.data(), value, min, max);
+}
+
 std::string wstringToUtf8(const std::wstring &s);
 std::wstring utf8ToWstring(const std::string &s);

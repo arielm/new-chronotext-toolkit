@@ -13,9 +13,9 @@ mode(mode),
 capacity(capacity),
 size(0)
 {
-    x = new float[capacity];
-    y = new float[capacity];
-    len = new float[capacity];
+    x.reserve(capacity);
+    y.reserve(capacity);
+    len.reserve(capacity);
 }
 
 FollowablePath::FollowablePath(DataSourceRef source, int mode)
@@ -23,25 +23,6 @@ FollowablePath::FollowablePath(DataSourceRef source, int mode)
 mode(mode)
 {
     read(source->createStream());
-}
-
-FollowablePath::~FollowablePath()
-{
-    delete[] x;
-    delete[] y;
-    delete[] len;
-}
-
-void FollowablePath::ensureCapacity(int minCapacity)
-{
-    if (minCapacity > capacity)
-    {
-        capacity = (CAPACITY_INCREMENT > 0) ? (capacity + CAPACITY_INCREMENT) : (capacity * 2);
-        
-        x = (float*) realloc(x, capacity * sizeof(float));
-        y = (float*) realloc(y, capacity * sizeof(float));
-        len = (float*) realloc(len, capacity * sizeof(float));
-    }
 }
 
 /*
@@ -52,9 +33,9 @@ void FollowablePath::read(IStreamRef in)
     in->readLittle(&capacity);
     
     size = 0;
-    x = new float[capacity];
-    y = new float[capacity];
-    len = new float[capacity];
+    x.reserve(capacity);
+    y.reserve(capacity);
+    len.reserve(capacity);
     
     float xx;
     float yy;
@@ -86,20 +67,18 @@ float FollowablePath::getLength()
 
 void FollowablePath::add(float xx, float yy)
 {
-    ensureCapacity(size + 1);
-    
-    x[size] = xx;
-    y[size] = yy;
+    x.push_back(xx);
+    y.push_back(yy);
     
     if (size > 0)
     {
         float dx = xx - x[size - 1];
         float dy = yy - y[size - 1];
-        len[size] = len[size - 1] + math<float>::sqrt(dx * dx + dy * dy);
+        len.push_back(len[size - 1] + math<float>::sqrt(dx * dx + dy * dy));
     }
     else
     {
-        len[0] = 0;
+        len.push_back(0);
     }
     
     size++;

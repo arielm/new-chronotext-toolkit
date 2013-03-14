@@ -7,7 +7,6 @@ typedef boost::shared_ptr<class FollowablePath> FollowablePathRef;
 
 class FollowablePath
 {
-    void ensureCapacity(int minCapacity);
     void read(ci::IStreamRef in);
     
 public:
@@ -38,14 +37,13 @@ public:
     int size;
     int capacity;
     int mode;
-    float *x;
-    float *y;
-    float *len;
+    
+    std::vector<float> x;
+    std::vector<float> y;
+    std::vector<float> len;
     
     FollowablePath(int mode = MODE_TANGENT, int capacity = 256);
     FollowablePath(ci::DataSourceRef source, int mode = MODE_TANGENT);
-    
-    ~FollowablePath();
     
     void clear();
     float getLength();
