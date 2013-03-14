@@ -5,12 +5,9 @@
 using namespace ci;
 using namespace std;
 
-#define CAPACITY_INCREMENT 0 /* 0 MEANS THAT CAPACITY IS MULTIPLIED BY 2 WHEN NECESSARY */
-
 FollowablePath::FollowablePath(int mode, int capacity)
 :
 mode(mode),
-capacity(capacity),
 size(0)
 {
     x.reserve(capacity);
@@ -30,6 +27,7 @@ mode(mode)
  */
 void FollowablePath::read(IStreamRef in)
 {
+    int capacity;
     in->readLittle(&capacity);
     
     size = 0;
@@ -86,7 +84,6 @@ void FollowablePath::add(float xx, float yy)
 
 FollowablePath::Value FollowablePath::pos2Value(float pos) const
 {
-    FollowablePath::Value value;
     float length = len[size - 1];
     
     if (mode == MODE_LOOP || mode == MODE_MODULO)
@@ -120,6 +117,8 @@ FollowablePath::Value FollowablePath::pos2Value(float pos) const
     float y1 = y[index + 1];
     
     float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
+    
+    FollowablePath::Value value;
     value.x = x0 + (x1 - x0) * ratio;
     value.y = y0 + (y1 - y0) * ratio;
     value.angle = math<float>::atan2(y1 - y0, x1 - x0);

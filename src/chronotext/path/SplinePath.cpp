@@ -1,34 +1,14 @@
 #include "chronotext/path/SplinePath.h"
 #include "chronotext/path/ASPC.h"
 
-#define CAPACITY_INCREMENT 0 /* 0 MEANS THAT CAPACITY IS MULTIPLIED BY 2 WHEN NECESSARY */
-
 SplinePath::SplinePath(float (*gamma)(float t, float *in), float tol, int capacity)
 :
 gamma(gamma),
 tol(tol),
-capacity(capacity),
 size(0)
 {
-    x = new float[capacity];
-    y = new float[capacity];
-}
-
-SplinePath::~SplinePath()
-{
-    delete[] x;
-    delete[] y;
-}
-
-void SplinePath::ensureCapacity(int minCapacity)
-{
-    if (minCapacity > capacity)
-    {
-        capacity = (CAPACITY_INCREMENT > 0) ? (capacity + CAPACITY_INCREMENT) : (capacity * 2);
-        
-        x = (float*) realloc(x, capacity * sizeof(float));
-        y = (float*) realloc(y, capacity * sizeof(float));
-    }
+    x.reserve(capacity);
+    y.reserve(capacity);
 }
 
 void SplinePath::clear()
@@ -38,10 +18,9 @@ void SplinePath::clear()
 
 void SplinePath::add(float xx, float yy)
 {
-    ensureCapacity(size + 1);
+    x.push_back(xx);
+    y.push_back(yy);
     
-    x[size] = xx;
-    y[size] = yy;
     size++;
 }
 
@@ -51,7 +30,7 @@ void SplinePath::compute(FollowablePath *path)
     
     for (int i = 0; i < size - 3; i++)
     {
-        aspc.segment(x + i, y + i);
+        aspc.segment(&x[i], &y[i]);
     }
     
     if (path->mode == FollowablePath::MODE_LOOP)

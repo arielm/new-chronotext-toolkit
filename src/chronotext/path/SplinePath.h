@@ -4,18 +4,15 @@
 
 class SplinePath
 {
-    int size;
-    int capacity;
-    float tol;
     float (*gamma)(float t, float *in);
-    float *x;
-    float *y;
-
-    void ensureCapacity(int minCapacity);
+    float tol;
+    int size;
+    
+    std::vector<float> x;
+    std::vector<float> y;
 
 public:
     SplinePath(float (*gamma)(float t, float *in), float tol = 1, int capacity = 256);
-    ~SplinePath();
 
     void clear();
     void add(float x, float y);

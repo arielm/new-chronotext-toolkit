@@ -20,10 +20,10 @@ public:
     
     struct ClosePoint
     {
-        float x; // CLOSEST-POINT X
-        float y; // CLOSEST-POINT y
-        float position; // POSITION OF CLOSEST-POINT
-        float distance; // DISTANCE TO CLOSEST-POINT
+        float x; // CLOSEST-POINT ON PATH
+        float y; // CLOSEST-POINT ON PATH
+        float position; // POSITION OF CLOSEST-POINT ON PATH
+        float distance; // DISTANCE TO CLOSEST-POINT ON PATH
     };
     
     enum
@@ -34,9 +34,8 @@ public:
         MODE_MODULO,
     };
 
-    int size;
-    int capacity;
     int mode;
+    int size;
     
     std::vector<float> x;
     std::vector<float> y;
