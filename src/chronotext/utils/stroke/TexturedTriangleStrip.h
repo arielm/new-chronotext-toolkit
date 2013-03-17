@@ -24,7 +24,7 @@ struct TexturedTriangleStrip
         }
     }
     
-    void draw()
+    void draw() const
     {
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
         glVertexPointer(2, GL_FLOAT, 0, vertices);
