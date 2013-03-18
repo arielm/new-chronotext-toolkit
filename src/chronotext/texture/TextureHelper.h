@@ -26,4 +26,5 @@ public:
     
     static void drawTextureFromCenter(ci::gl::Texture *texture);
     static void drawTexture(ci::gl::Texture *texture, float rx = 0, float ry = 0);
+    static void drawTextureInRect(ci::gl::Texture *texture, const ci::Rectf &rect, float ox = 0, float oy = 0);
 };

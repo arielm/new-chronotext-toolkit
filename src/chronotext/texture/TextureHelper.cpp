@@ -159,3 +159,31 @@ void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
     glVertexPointer(2, GL_FLOAT, 0, vertices);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
+
+void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, float ox, float oy)
+{
+    const GLfloat vertices[] =
+    {
+        rect.x1, rect.y1,
+        rect.x2, rect.y1,
+        rect.x2, rect.y2,
+        rect.x1, rect.y2
+    };
+    
+    float tx1 = (rect.x1 - ox) / texture->getWidth();
+    float ty1 = (rect.y1 - oy) / texture->getHeight();
+    float tx2 = (rect.x2 - ox) / texture->getWidth();
+    float ty2 = (rect.y2 - oy) / texture->getHeight();
+    
+	const GLfloat coords[] =
+	{
+		tx1, ty1,
+		tx2, ty1,
+		tx2, ty2,
+		tx1, ty2
+	};
+    
+    glTexCoordPointer(2, GL_FLOAT, 0, coords);
+    glVertexPointer(2, GL_FLOAT, 0, vertices);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}

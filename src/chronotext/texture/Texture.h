@@ -33,6 +33,7 @@ public:
     
     void drawFromCenter();
     void draw(float rx = 0, float ry = 0);
+    void drawInRect(const ci::Rectf &rect, float ox = 0, float oy = 0);
     
     int getWidth();
     int getHeight();
