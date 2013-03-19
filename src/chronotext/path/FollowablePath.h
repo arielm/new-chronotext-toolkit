@@ -44,8 +44,10 @@ public:
     
     FollowablePath(int mode = MODE_TANGENT, int capacity = 256);
     FollowablePath(ci::DataSourceRef source, int mode = MODE_TANGENT);
+    FollowablePath(const ci::Buffer &buffer, int mode = MODE_TANGENT);
     
     void write(ci::DataTargetRef target);
+    ci::Buffer write();
     
     void clear();
     float getLength();

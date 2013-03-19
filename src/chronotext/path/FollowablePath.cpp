@@ -22,22 +22,31 @@ mode(mode)
     read(source->createStream());
 }
 
+FollowablePath::FollowablePath(const Buffer &buffer, int mode)
+:
+mode(mode)
+{
+    IStreamRef in = IStreamMem::create(buffer.getData(), buffer.getDataSize());
+    read(in);
+}
+
 /*
  * ASSERTION: THIS IS CALLED AT CONSTRUCTION TIME
  */
 void FollowablePath::read(IStreamRef in)
 {
-    int size;
-    in->readLittle(&size);
+    int capacity;
+    in->readLittle(&capacity);
     
-    x.reserve(size);
-    y.reserve(size);
-    len.reserve(size);
+    size = 0;
+    x.reserve(capacity);
+    y.reserve(capacity);
+    len.reserve(capacity);
     
     float xx;
     float yy;
     
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < capacity; i++)
     {
         in->readLittle(&xx);
         in->readLittle(&yy);
@@ -59,6 +68,18 @@ void FollowablePath::write(OStreamRef out)
 void FollowablePath::write(DataTargetRef target)
 {
     write(target->getStream());
+}
+
+Buffer FollowablePath::write()
+{
+    int bufferSize = sizeof(int) + 2 * size * sizeof(float);
+    OStreamMemRef out = OStreamMem::create(bufferSize);
+    
+    write(out);
+    
+    Buffer buffer(bufferSize);
+    buffer.copyFrom(out->getBuffer(), bufferSize);
+    return buffer;
 }
 
 void FollowablePath::clear()
