@@ -27,23 +27,38 @@ mode(mode)
  */
 void FollowablePath::read(IStreamRef in)
 {
-    int capacity;
-    in->readLittle(&capacity);
+    int size;
+    in->readLittle(&size);
     
-    size = 0;
-    x.reserve(capacity);
-    y.reserve(capacity);
-    len.reserve(capacity);
+    x.reserve(size);
+    y.reserve(size);
+    len.reserve(size);
     
     float xx;
     float yy;
     
-    for (int i = 0; i < capacity; i++)
+    for (int i = 0; i < size; i++)
     {
         in->readLittle(&xx);
         in->readLittle(&yy);
         add(xx, yy);
     }
+}
+
+void FollowablePath::write(OStreamRef out)
+{
+    out->writeLittle(size);
+    
+    for (int i = 0; i < size; i++)
+    {
+        out->writeLittle(x[i]);
+        out->writeLittle(y[i]);
+    }
+}
+
+void FollowablePath::write(DataTargetRef target)
+{
+    write(target->getStream());
 }
 
 void FollowablePath::clear()

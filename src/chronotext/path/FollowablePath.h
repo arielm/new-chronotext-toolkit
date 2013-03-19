@@ -8,6 +8,7 @@ typedef boost::shared_ptr<class FollowablePath> FollowablePathRef;
 class FollowablePath
 {
     void read(ci::IStreamRef in);
+    void write(ci::OStreamRef out);
     
 public:
     struct Value
@@ -43,6 +44,8 @@ public:
     
     FollowablePath(int mode = MODE_TANGENT, int capacity = 256);
     FollowablePath(ci::DataSourceRef source, int mode = MODE_TANGENT);
+    
+    void write(ci::DataTargetRef target);
     
     void clear();
     float getLength();
