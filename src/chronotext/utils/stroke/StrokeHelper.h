@@ -10,6 +10,7 @@ class StrokeHelper
 public:
     static void stroke(FollowablePath *path, TexturedTriangleStrip &strip, float width, float ratio = 1)
     {
+        strip.clear();
         int size = path->size;
         
         float *vertices = new float[size * 4];
@@ -57,8 +58,8 @@ public:
 
     static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float ratio = 1)
     {
+        strip.clear();
         int size = points.size();
-        strip.count = 0;
         
         if (size > 1)
         {

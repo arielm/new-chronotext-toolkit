@@ -21,6 +21,10 @@ struct TexturedTriangleStrip
         {
             delete[] vertices;
             delete[] coords;
+            
+            count = 0;
+            vertices = NULL;
+            coords = NULL;
         }
     }
     
