@@ -2,8 +2,9 @@
 
 #include "cinder/Rect.h"
 #include "cinder/DataSource.h"
+#include "cinder/DataTarget.h"
 
-typedef boost::shared_ptr<class FollowablePath> FollowablePathRef;
+typedef std::shared_ptr<class FollowablePath> FollowablePathRef;
 
 class FollowablePath
 {
