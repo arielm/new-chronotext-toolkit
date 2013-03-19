@@ -62,6 +62,11 @@ InputSourceRef InputSource::getFileInDocuments(const std::string &relativePath)
     return InputSource::getFile(getDocumentsDirectory() / relativePath);
 }
 
+DataSourceRef InputSource::loadFileInDocuments(const std::string &relativePath)
+{
+    return DataSourcePath::create(getDocumentsDirectory() / relativePath);
+}
+
 InputSourceRef InputSource::getFile(const fs::path &filePath)
 {
     InputSource *source = new InputSource(TYPE_FILE);
@@ -69,6 +74,11 @@ InputSourceRef InputSource::getFile(const fs::path &filePath)
     source->filePathHint = filePath.string();
     
     return InputSourceRef(source);
+}
+
+DataSourceRef InputSource::loadFile(const fs::path &filePath)
+{
+    return DataSourcePath::create(filePath);
 }
 
 DataSourceRef InputSource::loadDataSource()
