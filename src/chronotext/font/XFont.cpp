@@ -22,6 +22,7 @@ namespace chronotext
     {
         reload();
         setSize(1);
+        setDirection(1);
     }
     
     XFont::~XFont()
@@ -278,10 +279,20 @@ namespace chronotext
         return size;
     }
     
+    float XFont::getDirection()
+    {
+        return direction;
+    }
+    
     void XFont::setSize(float size)
     {
         this->size = size;
         sizeRatio = size / nativeFontSize;
+    }
+    
+    void XFont::setDirection(float direction)
+    {
+        this->direction = direction;
     }
     
     float XFont::getGlyphWidth(int cc)
@@ -456,43 +467,69 @@ namespace chronotext
         }
     }
     
-    bool XFont::computeClip(float *x1, float *y1, float *x2, float *y2, float *tx1, float *ty1, float *tx2, float *ty2, const Rectf &clip)
+    GlyphQuad XFont::getGlyphQuad(int cc, float x, float y) const
     {
-        if (!((*x1 > clip.x2 ) || (*x2 < clip.x1) || (*y1 > clip.y2) || (*y2 < clip.y1)))
+        GlyphQuad quad;
+        
+        if (direction > 0)
         {
-            if (*x1 < clip.x1)
-            {
-                float dx = (clip.x1 - *x1);
-                *x1 += dx;
-                *tx1 += dx / atlasWidth / sizeRatio;;
-            }
-            
-            if (*x2 > clip.x2)
-            {
-                float dx = (clip.x2 - *x2);
-                *x2 += dx;
-                *tx2 += dx / atlasWidth / sizeRatio;;
-            }
-            
-            if (*y1 < clip.y1)
-            {
-                float dy = (clip.y1 - *y1);
-                *y1 += dy;
-                *ty1 += dy / atlasHeight / sizeRatio;;
-            }
-            
-            if (*y2 > clip.y2)
-            {
-                float dy = (clip.y2 - *y2);
-                *y2 += dy;
-                *ty2 += dy / atlasHeight / sizeRatio;;
-            }
-            
-            return true;
+            quad.x1 = x + le[cc] * sizeRatio;
+            quad.x2 = quad.x1 + w[cc] * sizeRatio;
         }
         else
         {
+            quad.x2 = x - le[cc] * sizeRatio;
+            quad.x1 = quad.x2 - w[cc] * sizeRatio;
+        }
+        
+        quad.y1 = y - te[cc] * sizeRatio;
+        quad.y2 = quad.y1 + h[cc] * sizeRatio;
+        
+        quad.tx1 = tx1[cc];
+        quad.tx2 = tx2[cc];
+        quad.ty1 = ty1[cc];
+        quad.ty2 = ty2[cc];
+        
+        return quad;
+    }
+    
+    bool XFont::computeClip(GlyphQuad &quad, const ci::Rectf &clip)
+    {
+        if ((quad.x1 > clip.x2 ) || (quad.x2 < clip.x1) || (quad.y1 > clip.y2) || (quad.y2 < clip.y1))
+        {
             return false;
+        }
+        else
+        {
+            if (quad.x1 < clip.x1)
+            {
+                float dx = clip.x1 - quad.x1;
+                quad.x1 += dx;
+                quad.tx1 += dx / atlasWidth / sizeRatio;;
+            }
+            
+            if (quad.x2 > clip.x2)
+            {
+                float dx = clip.x2 - quad.x2;
+                quad.x2 += dx;
+                quad.tx2 += dx / atlasWidth / sizeRatio;;
+            }
+            
+            if (quad.y1 < clip.y1)
+            {
+                float dy = clip.y1 - quad.y1;
+                quad.y1 += dy;
+                quad.ty1 += dy / atlasHeight / sizeRatio;
+            }
+            
+            if (quad.y2 > clip.y2)
+            {
+                float dy = clip.y2 - quad.y2;
+                quad.y2 += dy;
+                quad.ty2 += dy / atlasHeight / sizeRatio;
+            }
+            
+            return true;
         }
     }
     
@@ -500,28 +537,25 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            float x1 = x + le[cc] * sizeRatio;
-            float x2 = x1 + w[cc] * sizeRatio;
-            float y1 = y - te[cc] * sizeRatio;
-            float y2 = y1 + h[cc] * sizeRatio;
+            const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            *sequenceVertices++ = x1;
-            *sequenceVertices++ = y1;
-            *sequenceVertices++ = x1;
-            *sequenceVertices++ = y2;
-            *sequenceVertices++ = x2;
-            *sequenceVertices++ = y2;
-            *sequenceVertices++ = x2;
-            *sequenceVertices++ = y1;
+            *sequenceVertices++ = quad.x1;
+            *sequenceVertices++ = quad.y1;
+            *sequenceVertices++ = quad.x1;
+            *sequenceVertices++ = quad.y2;
+            *sequenceVertices++ = quad.x2;
+            *sequenceVertices++ = quad.y2;
+            *sequenceVertices++ = quad.x2;
+            *sequenceVertices++ = quad.y1;
             
-            *sequenceCoords++ = tx1[cc];
-            *sequenceCoords++ = ty1[cc];
-            *sequenceCoords++ = tx1[cc];
-            *sequenceCoords++ = ty2[cc];
-            *sequenceCoords++ = tx2[cc];
-            *sequenceCoords++ = ty2[cc];
-            *sequenceCoords++ = tx2[cc];
-            *sequenceCoords++ = ty1[cc];
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty1;
             
             incrementSequence();
         }
@@ -531,35 +565,27 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            float x1 = x + le[cc] * sizeRatio;
-            float x2 = x1 + w[cc] * sizeRatio;
-            float y1 = y - te[cc] * sizeRatio;
-            float y2 = y1 + h[cc] * sizeRatio;
+            GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            float txx1 = tx1[cc];
-            float tyy1 = ty1[cc];
-            float txx2 = tx2[cc];
-            float tyy2 = ty2[cc];
-            
-            if (computeClip(&x1, &y1, &x2, &y2, &txx1, &tyy1, &txx2, &tyy2, clip))
+            if (computeClip(quad, clip))
             {
-                *sequenceVertices++ = x1;
-                *sequenceVertices++ = y1;
-                *sequenceVertices++ = x1;
-                *sequenceVertices++ = y2;
-                *sequenceVertices++ = x2;
-                *sequenceVertices++ = y2;
-                *sequenceVertices++ = x2;
-                *sequenceVertices++ = y1;
+                *sequenceVertices++ = quad.x1;
+                *sequenceVertices++ = quad.y1;
+                *sequenceVertices++ = quad.x1;
+                *sequenceVertices++ = quad.y2;
+                *sequenceVertices++ = quad.x2;
+                *sequenceVertices++ = quad.y2;
+                *sequenceVertices++ = quad.x2;
+                *sequenceVertices++ = quad.y1;
                 
-                *sequenceCoords++ = txx1;
-                *sequenceCoords++ = tyy1;
-                *sequenceCoords++ = txx1;
-                *sequenceCoords++ = tyy2;
-                *sequenceCoords++ = txx2;
-                *sequenceCoords++ = tyy2;
-                *sequenceCoords++ = txx2;
-                *sequenceCoords++ = tyy1;
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty1;
                 
                 incrementSequence();
             }
@@ -570,32 +596,29 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            float x1 = x + le[cc] * sizeRatio;
-            float x2 = x1 + w[cc] * sizeRatio;
-            float y1 = y - te[cc] * sizeRatio;
-            float y2 = y1 + h[cc] * sizeRatio;
+            const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            *sequenceVertices++ = x1;
-            *sequenceVertices++ = y1;
+            *sequenceVertices++ = quad.x1;
+            *sequenceVertices++ = quad.y1;
             *sequenceVertices++ = z;
-            *sequenceVertices++ = x1;
-            *sequenceVertices++ = y2;
+            *sequenceVertices++ = quad.x1;
+            *sequenceVertices++ = quad.y2;
             *sequenceVertices++ = z;
-            *sequenceVertices++ = x2;
-            *sequenceVertices++ = y2;
+            *sequenceVertices++ = quad.x2;
+            *sequenceVertices++ = quad.y2;
             *sequenceVertices++ = z;
-            *sequenceVertices++ = x2;
-            *sequenceVertices++ = y1;
+            *sequenceVertices++ = quad.x2;
+            *sequenceVertices++ = quad.y1;
             *sequenceVertices++ = z;
             
-            *sequenceCoords++ = tx1[cc];
-            *sequenceCoords++ = ty1[cc];
-            *sequenceCoords++ = tx1[cc];
-            *sequenceCoords++ = ty2[cc];
-            *sequenceCoords++ = tx2[cc];
-            *sequenceCoords++ = ty2[cc];
-            *sequenceCoords++ = tx2[cc];
-            *sequenceCoords++ = ty1[cc];
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty1;
             
             incrementSequence();
         }
@@ -605,39 +628,31 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            float x1 = x + le[cc] * sizeRatio;
-            float x2 = x1 + w[cc] * sizeRatio;
-            float y1 = y - te[cc] * sizeRatio;
-            float y2 = y1 + h[cc] * sizeRatio;
+            GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            float txx1 = tx1[cc];
-            float tyy1 = ty1[cc];
-            float txx2 = tx2[cc];
-            float tyy2 = ty2[cc];
-            
-            if (computeClip(&x1, &y1, &x2, &y2, &txx1, &tyy1, &txx2, &tyy2, clip))
+            if (computeClip(quad, clip))
             {
-                *sequenceVertices++ = x1;
-                *sequenceVertices++ = y1;
+                *sequenceVertices++ = quad.x1;
+                *sequenceVertices++ = quad.y1;
                 *sequenceVertices++ = z;
-                *sequenceVertices++ = x1;
-                *sequenceVertices++ = y2;
+                *sequenceVertices++ = quad.x1;
+                *sequenceVertices++ = quad.y2;
                 *sequenceVertices++ = z;
-                *sequenceVertices++ = x2;
-                *sequenceVertices++ = y2;
+                *sequenceVertices++ = quad.x2;
+                *sequenceVertices++ = quad.y2;
                 *sequenceVertices++ = z;
-                *sequenceVertices++ = x2;
-                *sequenceVertices++ = y1;
+                *sequenceVertices++ = quad.x2;
+                *sequenceVertices++ = quad.y1;
                 *sequenceVertices++ = z;
                 
-                *sequenceCoords++ = txx1;
-                *sequenceCoords++ = tyy1;
-                *sequenceCoords++ = txx1;
-                *sequenceCoords++ = tyy2;
-                *sequenceCoords++ = txx2;
-                *sequenceCoords++ = tyy2;
-                *sequenceCoords++ = txx2;
-                *sequenceCoords++ = tyy1;
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty1;
             }
             
             incrementSequence();
@@ -646,51 +661,40 @@ namespace chronotext
     
     void XFont::addTransformedGlyph2D(int cc, float x, float y)
     {
-        float x1 = x + le[cc] * sizeRatio;
-        float x2 = x1 + w[cc] * sizeRatio;
-        float y1 = y - te[cc] * sizeRatio;
-        float y2 = y1 + h[cc] * sizeRatio;
+        const GlyphQuad quad = getGlyphQuad(cc, x, y);
         
-        matrix.transform2D(x1, y2, x2, y1, sequenceVertices);
+        matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
         sequenceVertices += 4 * 2;
         
-        *sequenceCoords++ = tx1[cc];
-        *sequenceCoords++ = ty1[cc];
-        *sequenceCoords++ = tx1[cc];
-        *sequenceCoords++ = ty2[cc];
-        *sequenceCoords++ = tx2[cc];
-        *sequenceCoords++ = ty2[cc];
-        *sequenceCoords++ = tx2[cc];
-        *sequenceCoords++ = ty1[cc];
+        *sequenceCoords++ = quad.tx1;
+        *sequenceCoords++ = quad.ty1;
+        *sequenceCoords++ = quad.tx1;
+        *sequenceCoords++ = quad.ty2;
+        *sequenceCoords++ = quad.tx2;
+        *sequenceCoords++ = quad.ty2;
+        *sequenceCoords++ = quad.tx2;
+        *sequenceCoords++ = quad.ty1;
         
         incrementSequence();
     }
     
     void XFont::addTransformedGlyph2D(int cc, float x, float y, const Rectf &clip)
     {
-        float x1 = x + le[cc] * sizeRatio;
-        float x2 = x1 + w[cc] * sizeRatio;
-        float y1 = y - te[cc] * sizeRatio;
-        float y2 = y1 + h[cc] * sizeRatio;
+        GlyphQuad quad = getGlyphQuad(cc, x, y);
         
-        float txx1 = tx1[cc];
-        float tyy1 = ty1[cc];
-        float txx2 = tx2[cc];
-        float tyy2 = ty2[cc];
-        
-        if (computeClip(&x1, &y1, &x2, &y2, &txx1, &tyy1, &txx2, &tyy2, clip))
+        if (computeClip(quad, clip))
         {
-            matrix.transform2D(x1, y2, x2, y1, sequenceVertices);
+            matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             sequenceVertices += 4 * 2;
             
-            *sequenceCoords++ = txx1;
-            *sequenceCoords++ = tyy1;
-            *sequenceCoords++ = txx1;
-            *sequenceCoords++ = tyy2;
-            *sequenceCoords++ = txx2;
-            *sequenceCoords++ = tyy2;
-            *sequenceCoords++ = txx2;
-            *sequenceCoords++ = tyy1;
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty1;
             
             incrementSequence();
         }
@@ -698,51 +702,40 @@ namespace chronotext
     
     void XFont::addTransformedGlyph3D(int cc, float x, float y)
     {
-        float x1 = x + le[cc] * sizeRatio;
-        float x2 = x1 + w[cc] * sizeRatio;
-        float y1 = y - te[cc] * sizeRatio;
-        float y2 = y1 + h[cc] * sizeRatio;
+        const GlyphQuad quad = getGlyphQuad(cc, x, y);
         
-        matrix.transform3D(x1, y2, x2, y1, sequenceVertices);
+        matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
         sequenceVertices += 4 * 3;
         
-        *sequenceCoords++ = tx1[cc];
-        *sequenceCoords++ = ty1[cc];
-        *sequenceCoords++ = tx1[cc];
-        *sequenceCoords++ = ty2[cc];
-        *sequenceCoords++ = tx2[cc];
-        *sequenceCoords++ = ty2[cc];
-        *sequenceCoords++ = tx2[cc];
-        *sequenceCoords++ = ty1[cc];
+        *sequenceCoords++ = quad.tx1;
+        *sequenceCoords++ = quad.ty1;
+        *sequenceCoords++ = quad.tx1;
+        *sequenceCoords++ = quad.ty2;
+        *sequenceCoords++ = quad.tx2;
+        *sequenceCoords++ = quad.ty2;
+        *sequenceCoords++ = quad.tx2;
+        *sequenceCoords++ = quad.ty1;
         
         incrementSequence();
     }
     
     void XFont::addTransformedGlyph3D(int cc, float x, float y, const Rectf &clip)
     {
-        float x1 = x + le[cc] * sizeRatio;
-        float x2 = x1 + w[cc] * sizeRatio;
-        float y1 = y - te[cc] * sizeRatio;
-        float y2 = y1 + h[cc] * sizeRatio;
+        GlyphQuad quad = getGlyphQuad(cc, x, y);
         
-        float txx1 = tx1[cc];
-        float tyy1 = ty1[cc];
-        float txx2 = tx2[cc];
-        float tyy2 = ty2[cc];
-        
-        if (computeClip(&x1, &y1, &x2, &y2, &txx1, &tyy1, &txx2, &tyy2, clip))
+        if (computeClip(quad, clip))
         {
-            matrix.transform3D(x1, y2, x2, y1, sequenceVertices);
+            matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             sequenceVertices += 4 * 3;
             
-            *sequenceCoords++ = txx1;
-            *sequenceCoords++ = tyy1;
-            *sequenceCoords++ = txx1;
-            *sequenceCoords++ = tyy2;
-            *sequenceCoords++ = txx2;
-            *sequenceCoords++ = tyy2;
-            *sequenceCoords++ = txx2;
-            *sequenceCoords++ = tyy1;
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.tx1;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty2;
+            *sequenceCoords++ = quad.tx2;
+            *sequenceCoords++ = quad.ty1;
             
             incrementSequence();
         }

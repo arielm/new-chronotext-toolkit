@@ -9,6 +9,19 @@
 
 namespace chronotext
 {
+    struct GlyphQuad
+    {
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        
+        float tx1;
+        float ty1;
+        float tx2;
+        float ty2;
+    };
+    
     class XFont
     {
         float nativeFontSize;
@@ -44,6 +57,7 @@ namespace chronotext
 
         float size;
         float sizeRatio;
+        float direction;
         int began;
         FontMatrix matrix;
 
@@ -67,7 +81,9 @@ namespace chronotext
         
         void flush(int count);
         void incrementSequence();
-        bool computeClip(float *x1, float *y1, float *x2, float *y2, float *tx1, float *ty1, float *tx2, float *ty2, const ci::Rectf &clip);
+        
+        GlyphQuad getGlyphQuad(int cc, float x, float y) const;
+        bool computeClip(GlyphQuad &quad, const ci::Rectf &clip);
         
     public:
         InputSourceRef inputSource;
@@ -89,7 +105,10 @@ namespace chronotext
         int lookup(wchar_t c);
         
         float getSize();
+        float getDirection();
+        
         void setSize(float size);
+        void setDirection(float direction);
         
         float getGlyphWidth(int cc);
         float getCharWidth(wchar_t c);
