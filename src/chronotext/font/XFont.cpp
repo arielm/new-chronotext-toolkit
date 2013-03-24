@@ -21,8 +21,10 @@ namespace chronotext
     unloaded(true)
     {
         reload();
+        
         setSize(1);
-        setDirection(1);
+        setDirection(+1);
+        setUpAxis(+1);
     }
     
     XFont::~XFont()
@@ -274,6 +276,22 @@ namespace chronotext
     
     // ---
     
+    void XFont::setSize(float size)
+    {
+        this->size = size;
+        sizeRatio = size / nativeFontSize;
+    }
+    
+    void XFont::setDirection(float direction)
+    {
+        this->direction = direction;
+    }
+    
+    void XFont::setUpAxis(float upAxis)
+    {
+        this->upAxis = upAxis;
+    }
+    
     float XFont::getSize()
     {
         return size;
@@ -284,15 +302,9 @@ namespace chronotext
         return direction;
     }
     
-    void XFont::setSize(float size)
+    float XFont::getUpAxis()
     {
-        this->size = size;
-        sizeRatio = size / nativeFontSize;
-    }
-    
-    void XFont::setDirection(float direction)
-    {
-        this->direction = direction;
+        return upAxis;
     }
     
     float XFont::getGlyphWidth(int cc)
@@ -482,8 +494,16 @@ namespace chronotext
             quad.x1 = quad.x2 - w[cc] * sizeRatio;
         }
         
-        quad.y1 = y - te[cc] * sizeRatio;
-        quad.y2 = quad.y1 + h[cc] * sizeRatio;
+        if (upAxis > 0)
+        {
+            quad.y1 = y - te[cc] * sizeRatio;
+            quad.y2 = quad.y1 + h[cc] * sizeRatio;
+        }
+        else
+        {
+            quad.y1 = y + te[cc] * sizeRatio;
+            quad.y2 = quad.y1 - h[cc] * sizeRatio;
+        }
         
         quad.tx1 = tx1[cc];
         quad.tx2 = tx2[cc];
@@ -495,7 +515,21 @@ namespace chronotext
     
     bool XFont::computeClip(GlyphQuad &quad, const ci::Rectf &clip)
     {
-        if ((quad.x1 > clip.x2 ) || (quad.x2 < clip.x1) || (quad.y1 > clip.y2) || (quad.y2 < clip.y1))
+        float yy1;
+        float yy2;
+        
+        if (upAxis > 0)
+        {
+            yy1 = quad.y1;
+            yy2 = quad.y2;
+        }
+        else
+        {
+            yy1 = quad.y2;
+            yy2 = quad.y1;
+        }
+
+        if ((quad.x1 > clip.x2 ) || (quad.x2 < clip.x1) || (yy1 > clip.y2) || (yy2 < clip.y1))
         {
             return false;
         }
@@ -515,18 +549,37 @@ namespace chronotext
                 quad.tx2 += dx / atlasWidth / sizeRatio;;
             }
             
-            if (quad.y1 < clip.y1)
+            if (yy1 < clip.y1)
             {
-                float dy = clip.y1 - quad.y1;
-                quad.y1 += dy;
-                quad.ty1 += dy / atlasHeight / sizeRatio;
+                float dy = clip.y1 - yy1;
+                
+                if (upAxis > 0)
+                {
+                    quad.y1 += dy;
+                    quad.ty1 += dy / atlasHeight / sizeRatio;
+                }
+                else
+                {
+                    quad.y2 += dy;
+                    quad.ty2 -= dy / atlasHeight / sizeRatio;
+                }
             }
             
-            if (quad.y2 > clip.y2)
+            if (yy2 > clip.y2)
             {
-                float dy = clip.y2 - quad.y2;
-                quad.y2 += dy;
-                quad.ty2 += dy / atlasHeight / sizeRatio;
+                float dy = clip.y2 - yy2;
+                
+                if (upAxis > 0)
+                {
+                    quad.y2 += dy;
+                    quad.ty2 += dy / atlasHeight / sizeRatio;
+                }
+                else
+                {
+                    quad.y1 += dy;
+                    quad.ty1 -= dy / atlasHeight / sizeRatio;
+                    
+                }
             }
             
             return true;

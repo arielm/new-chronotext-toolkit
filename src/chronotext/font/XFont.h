@@ -58,6 +58,8 @@ namespace chronotext
         float size;
         float sizeRatio;
         float direction;
+        float upAxis;
+        
         int began;
         FontMatrix matrix;
 
@@ -104,12 +106,14 @@ namespace chronotext
         bool isValid(wchar_t c);
         int lookup(wchar_t c);
         
-        float getSize();
-        float getDirection();
-        
         void setSize(float size);
         void setDirection(float direction);
-        
+        void setUpAxis(float upAxis);
+
+        float getSize();
+        float getDirection();
+        float getUpAxis();
+
         float getGlyphWidth(int cc);
         float getCharWidth(wchar_t c);
         float getStringWidth(const std::wstring &s);
