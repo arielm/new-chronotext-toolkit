@@ -1,16 +1,28 @@
 #pragma once
 
+#include "cinder/Matrix44.h"
+
 namespace chronotext
 {
     class FontMatrix
     {
-        float m00, m10, m20, m30;
-        float m01, m11, m21, m31;
-        float m02, m12, m22, m32;
-        float m03, m13, m23, m33;
+        union
+        {
+            float m[16];
+            
+            struct
+            {
+                float m00, m10, m20, m30;
+                float m01, m11, m21, m31;
+                float m02, m12, m22, m32;
+                float m03, m13, m23, m33;
+            };
+        };
         
     public:
         void setToIdentity();
+        void load(const ci::Matrix44f &matrix);
+
         void translate(float x, float y, float z);
         void setTranslation(float x, float y, float z);
         void scale(float x, float y, float z);

@@ -1,7 +1,5 @@
 #include "chronotext/font/FontMatrix.h"
 
-#include "cinder/CinderMath.h"
-
 using namespace ci;
 
 namespace chronotext
@@ -10,6 +8,11 @@ namespace chronotext
     {
         m00 = m11 = m22 = m33 = 1.0f;
         m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
+    }
+    
+    void FontMatrix::load(const Matrix44f &matrix)
+    {
+        memcpy(m, matrix.m, 16 * sizeof(float));
     }
     
     void FontMatrix::translate(float x, float y, float z)
