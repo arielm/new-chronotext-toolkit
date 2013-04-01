@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -67,9 +67,9 @@ namespace chronotext
     }
 
     template<typename T>
-    static uint64_t hash(const std::vector<T> &values, int seed = 0)
+    static uint64_t hash(const std::vector<T> &values, unsigned int seed = 0)
     {
-        return MurmurHash64B((void*)&values[0], values.size() * sizeof(T), seed);
+        return MurmurHash64B((void*)value.data(), values.size() * sizeof(T), seed);
     }
 }
 
