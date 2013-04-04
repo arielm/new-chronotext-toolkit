@@ -24,6 +24,7 @@ namespace chronotext
         
         setSize(1);
         setDirection(+1);
+        setMirror(false);
         setUpAxis(+1);
     }
     
@@ -286,6 +287,11 @@ namespace chronotext
     {
         this->direction = direction;
     }
+
+    void XFont::setMirror(bool mirror)
+    {
+        this->mirror = mirror ? - 1 : +1;
+    }
     
     void XFont::setUpAxis(float upAxis)
     {
@@ -299,7 +305,12 @@ namespace chronotext
     
     float XFont::getDirection()
     {
-        return direction;
+        return direction * mirror;
+    }
+
+    bool XFont::getMirror()
+    {
+        return (mirror < 0);
     }
     
     float XFont::getUpAxis()
@@ -483,7 +494,7 @@ namespace chronotext
     {
         GlyphQuad quad;
         
-        if (direction > 0)
+        if (direction * mirror > 0)
         {
             quad.x1 = x + le[cc] * sizeRatio;
             quad.x2 = quad.x1 + w[cc] * sizeRatio;
@@ -511,8 +522,16 @@ namespace chronotext
             quad.ty2 = ty1[cc];
         }
         
-        quad.tx1 = tx1[cc];
-        quad.tx2 = tx2[cc];
+        if (mirror > 0)
+        {
+            quad.tx1 = tx1[cc];
+            quad.tx2 = tx2[cc];
+        }
+        else
+        {
+            quad.tx1 = tx2[cc];
+            quad.tx2 = tx1[cc];
+        }
         
         return quad;
     }
@@ -529,14 +548,14 @@ namespace chronotext
             {
                 float dx = clip.x1 - quad.x1;
                 quad.x1 += dx;
-                quad.tx1 += dx / atlasWidth / sizeRatio;;
+                quad.tx1 += mirror * dx / atlasWidth / sizeRatio;;
             }
             
             if (quad.x2 > clip.x2)
             {
                 float dx = clip.x2 - quad.x2;
                 quad.x2 += dx;
-                quad.tx2 += dx / atlasWidth / sizeRatio;;
+                quad.tx2 += mirror * dx / atlasWidth / sizeRatio;;
             }
             
             if (quad.y1 < clip.y1)
