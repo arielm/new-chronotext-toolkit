@@ -6,6 +6,9 @@ using namespace std;
 
 namespace chronotext
 {
+    /*
+     * XXX: COULD NOT GET C++11'S DELEGATED CONSTRUCTOR TO COMPILE WITH VISUAL STUDIO 2012
+     */
     XFont::XFont(const string &resourceName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
     :
     inputSource(InputSource::getResource(resourceName)),

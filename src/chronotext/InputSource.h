@@ -49,10 +49,6 @@ public:
      *
      * OSX AND IOS: isFile() WILL RETURN true
      * ANDROID AND MSW: isFile() WILL RETURN false
-     *
-     * THE "CHR_RESOURCE" MACRO IS INTENDED TO BE USED HERE (SEE ChronotextResource.h):
-     * - WE CAN'T USE THE "CINDER_RESOURCE" MACRO, OTHERWISE getFilePathHint() WOULD NOT WORK
-     * - getFilePathHint() IS NECESSARY, E.G. IN ORDER TO BE ABLE TO DEFINE A FILE'S EXTENSION
      */
     static InputSourceRef getResource(const std::string &resourceName, int mswID, const std::string &mswType);
     static ci::DataSourceRef loadResource(const std::string &resourceName, int mswID, const std::string &mswType);
