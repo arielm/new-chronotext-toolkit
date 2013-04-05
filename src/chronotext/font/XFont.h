@@ -58,8 +58,7 @@ namespace chronotext
         float size;
         float sizeRatio;
         float direction;
-        float mirror;
-        float upAxis;
+        ci::Vec2f axis;
         
         int began;
         FontMatrix matrix;
@@ -109,13 +108,11 @@ namespace chronotext
         
         void setSize(float size);
         void setDirection(float direction);
-        void setMirror(bool mirror);
-        void setUpAxis(float upAxis);
+        void setAxis(const ci::Vec2f &axis);
 
         float getSize();
         float getDirection();
-        bool getMirror();
-        float getUpAxis();
+        ci::Vec2f getAxis() const;
 
         float getGlyphWidth(int cc);
         float getCharWidth(wchar_t c);
