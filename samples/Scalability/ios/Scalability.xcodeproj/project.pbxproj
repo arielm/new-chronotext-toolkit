@@ -85,7 +85,6 @@
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		A8FA3B9216E3AB8000367F97 /* ChronotextResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChronotextResources.h; sourceTree = "<group>"; };
 		A8FA3B9416E3AB8000367F97 /* CinderApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderApp.cpp; sourceTree = "<group>"; };
 		A8FA3B9516E3AB8000367F97 /* CinderApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderApp.h; sourceTree = "<group>"; };
 		A8FA3B9616E3AB8000367F97 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
@@ -245,7 +244,6 @@
 		A8FA3B9116E3AB8000367F97 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3B9216E3AB8000367F97 /* ChronotextResources.h */,
 				A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */,
 				A8FA3BBE16E3AB8000367F97 /* InputSource.h */,
 				A8FA3B9316E3AB8000367F97 /* cinder */,
