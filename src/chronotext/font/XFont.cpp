@@ -8,8 +8,19 @@ namespace chronotext
 {
     XFont::XFont(const string &resourceName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
     :
-    XFont(InputSource::getResource(resourceName), useMipmap, useAnisotropy, maxDimensions, slotCapacity)
-    {}
+    inputSource(InputSource::getResource(resourceName)),
+    useMipmap(useMipmap),
+    useAnisotropy(useAnisotropy),
+    maxDimensions(maxDimensions),
+    slotCapacity(slotCapacity),
+    unloaded(true)
+    {
+        reload();
+        
+        setSize(1);
+        setDirection(+1);
+        setAxis(Vec2f(+1, +1));
+    }
     
     XFont::XFont(InputSourceRef source, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
     :
