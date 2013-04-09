@@ -9,6 +9,13 @@ class CinderApp : public ci::app::AppNative
 {
     int startCount;
     int updateCount;
+    
+    int ticks;
+    double t0;
+    double elapsed;
+    
+    void start();
+    void stop();
 
 public:
     CinderSketch *sketch;

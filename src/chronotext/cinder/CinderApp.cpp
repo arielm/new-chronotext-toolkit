@@ -5,13 +5,29 @@ using namespace ci;
 using namespace app;
 using namespace std;
 
+void CinderApp::start()
+{
+    ticks = 0;
+}
+
+void CinderApp::stop()
+{
+    console() << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
+}
+
 void CinderApp::setup()
 {
     sketch->setup(false);
+    
+#if defined(CINDER_COCOA_TOUCH)
+    getSignalDidBecomeActive().connect(bind(&CinderApp::start, this));
+    getSignalWillResignActive().connect(bind(&CinderApp::stop, this));
+#endif
 }
 
 void CinderApp::shutdown()
 {
+    stop(); // XXX: CURRENTLY ONLY USED FOR FPS-COUNTER
     sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
     sketch->shutdown();
     delete sketch;
@@ -23,6 +39,7 @@ void CinderApp::resize()
 
     if (startCount == 0)
     {
+        start(); // XXX: CURRENTLY ONLY USED FOR FPS-COUNTER
         sketch->start(CinderSketch::FLAG_FOCUS_GAIN);
         startCount++;
     }
@@ -30,6 +47,18 @@ void CinderApp::resize()
 
 void CinderApp::update()
 {
+    double now = getElapsedSeconds();
+    
+    if (ticks == 0)
+    {
+        t0 = now;
+    }
+    
+    ticks++;
+    elapsed = now - t0;
+    
+    // ---
+    
     sketch->run(); // NECESSARY FOR THE "MESSAGE-PUMP"
     sketch->update();
     updateCount++;
