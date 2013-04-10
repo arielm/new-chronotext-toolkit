@@ -62,7 +62,7 @@ void FontHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wst
     switch (alignY)
     {
         case ALIGN_TOP:
-            y += font->getDescent();
+            y += font->getAscent();
             break;
             
         case ALIGN_MIDDLE:

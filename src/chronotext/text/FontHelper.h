@@ -11,7 +11,7 @@ public:
         ALIGN_LEFT,
         ALIGN_RIGHT,
         ALIGN_TOP,
-        ALIGN_BOTTOM,
+        ALIGN_BASELINE,
         ALIGN_MIDDLE
     };
 
