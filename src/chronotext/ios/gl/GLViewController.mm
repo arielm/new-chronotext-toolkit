@@ -182,14 +182,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     return (toInterfaceOrientation == interfaceOrientation);
 }
 
-- (NSUInteger) supportedInterfaceOrientations
-{
-    return interfaceOrientation;
-}
-
 - (BOOL) shouldAutorotate
 {
-    return NO;
+    return YES;
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
