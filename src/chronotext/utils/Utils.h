@@ -22,20 +22,20 @@ static cinder::android::dostream *CHROUT;
 
 static inline std::ostream& chrout()
 {
-#if defined(CINDER_COCOA)
-	return std::cout;
-#elif defined(CINDER_MSW)
-	if (!CHROUT)
+#if defined(CINDER_MSW)
+    if (!CHROUT)
     {
-		CHROUT = new cinder::msw::dostream;
+        CHROUT = new cinder::msw::dostream;
     }
-	return *CHROUT;
+    return *CHROUT;
 #elif defined(CINDER_ANDROID)
     if (!CHROUT)
     {
-		CHROUT = new cinder::android::dostream;
+        CHROUT = new cinder::android::dostream;
     }
-	return *CHROUT;
+    return *CHROUT;
+#else
+    return std::cout;
 #endif
 }
 
