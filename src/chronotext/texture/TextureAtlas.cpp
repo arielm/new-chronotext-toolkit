@@ -79,10 +79,12 @@ Sprite* TextureAtlas::getSprite(const string &path)
     
     if (it == sprites.end())
     {
-        throw runtime_error("SPRITE NOT FOUND: " + path);
+        return NULL;
     }
-
-    return it->second;
+    else
+    {
+        return it->second;
+    }
 }
 
 vector<Sprite*> TextureAtlas::getAnimationSprites(const string &path) const
