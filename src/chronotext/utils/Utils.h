@@ -8,14 +8,43 @@
 #include <iostream>
 #include <algorithm>
 
-/*
- * DEBUG LOGGING (FOR COCOA ONLY)
- */
+#if defined(CINDER_MSW)
+#include "cinder/msw/OutputDebugStringStream.h"
+#elif defined(CINDER_ANDROID)
+#include "cinder/android/LogStream.h"
+#endif
+
+#if defined(CINDER_MSW)
+static cinder::msw::dostream *CHROUT;
+#elif defined(CINDER_ANDROID)
+static cinder::android::dostream *CHROUT;
+#endif
+
+static inline std::ostream& chrout()
+{
+#if defined(CINDER_COCOA)
+	return std::cout;
+#elif defined(CINDER_MSW)
+	if (!CHROUT)
+    {
+		CHROUT = new cinder::msw::dostream;
+    }
+	return *CHROUT;
+#elif defined(CINDER_ANDROID)
+    if (!CHROUT)
+    {
+		CHROUT = new cinder::android::dostream;
+    }
+	return *CHROUT;
+#endif
+}
+
+#define LOGI chrout()
 
 #if defined(DEBUG) || defined(FORCE_LOG)
-#define DLOG(x) std::cout << x << std::endl
+#define LOGD chrout()
 #else
-#define DLOG(x)
+#define LOGD false && chrout()
 #endif
 
 // ---

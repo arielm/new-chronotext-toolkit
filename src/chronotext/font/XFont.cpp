@@ -70,7 +70,7 @@ namespace chronotext
             // ---
             
             unloaded = true;
-            DLOG("FONT DELETED: " << textureName);
+            LOGD << "FONT DELETED: " << textureName << endl;
         }
     }
     
@@ -82,7 +82,7 @@ namespace chronotext
             init();
             
             unloaded = false;
-            DLOG("FONT LOADED: " << textureName << " (" << atlasWidth << "x" << atlasHeight << ")");
+            LOGD << "FONT LOADED: " << textureName << " (" << atlasWidth << "x" << atlasHeight << ")" << endl;
         }
     }
     

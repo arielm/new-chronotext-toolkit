@@ -93,7 +93,7 @@ gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipm
     
     if (texture)
     {
-        DLOG("TEXTURE LOADED: " << texture->getId() << " (" << texture->getWidth() << "x" << texture->getHeight() << ")");
+        LOGD << "TEXTURE LOADED: " << texture->getId() << " (" << texture->getWidth() << "x" << texture->getHeight() << ")" << endl;
     }
 
     return texture;
@@ -101,7 +101,7 @@ gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipm
 
 void TextureHelper::deleteTexture(ci::gl::Texture *texture)
 {
-    DLOG("TEXTURE DELETED: " << texture->getId());
+    LOGD << "TEXTURE DELETED: " << texture->getId() << endl;
     delete texture;
 }
 

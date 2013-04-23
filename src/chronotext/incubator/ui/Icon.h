@@ -1,7 +1,6 @@
 #pragma once
 
 #include "chronotext/texture/Texture.h"
-#include "chronotext/utils/Utils.h"
 
 namespace chronotext
 {
@@ -17,11 +16,6 @@ namespace chronotext
         float scale;
         
         Icon(Texture *texture, float scale = 1, float width = -1, float height = -1);
-        
-        ~Icon()
-        {
-            DLOG("Icon DELETED");
-        }
         
         float getWidth();
         float getHeight();
