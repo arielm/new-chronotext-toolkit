@@ -90,11 +90,11 @@ namespace chronotext
     public:
         enum
         {
+            ALIGN_MIDDLE,
             ALIGN_LEFT,
             ALIGN_RIGHT,
             ALIGN_TOP,
             ALIGN_BASELINE,
-            ALIGN_MIDDLE
         };
         
         InputSourceRef inputSource;
