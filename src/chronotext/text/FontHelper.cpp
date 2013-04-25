@@ -50,22 +50,22 @@ void FontHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wst
 {
     switch (alignX)
     {
-        case ALIGN_MIDDLE:
+        case XFont::ALIGN_MIDDLE:
             x -= getStringWidth(font, text, snap) * 0.5f;
             break;
             
-        case ALIGN_RIGHT:
+        case XFont::ALIGN_RIGHT:
             x -= getStringWidth(font, text, snap);
             break;
     }
     
     switch (alignY)
     {
-        case ALIGN_TOP:
+        case XFont::ALIGN_TOP:
             y += font->getAscent();
             break;
             
-        case ALIGN_MIDDLE:
+        case XFont::ALIGN_MIDDLE:
             y -= font->getStrikethroughOffset();
             break;
     }

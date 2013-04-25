@@ -88,6 +88,15 @@ namespace chronotext
         bool computeClip(GlyphQuad &quad, const ci::Rectf &clip);
         
     public:
+        enum
+        {
+            ALIGN_LEFT,
+            ALIGN_RIGHT,
+            ALIGN_TOP,
+            ALIGN_BASELINE,
+            ALIGN_MIDDLE
+        };
+        
         InputSourceRef inputSource;
         bool useMipmap;
         bool useAnisotropy;
