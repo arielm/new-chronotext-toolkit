@@ -8,6 +8,7 @@ namespace chronotext
 {
     class MasterClock : public Clock
     {
+    protected:
         std::list<Clock*> slaves;
 
     public:

@@ -29,7 +29,7 @@ namespace chronotext
     state(STOPPED)
     {}
     
-    Clock::Clock(MasterClockRef master)
+    Clock::Clock(shared_ptr<MasterClock> master)
     :
     timeBase(master->timeBase),
     timeBaseIsOwned(false),
