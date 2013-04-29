@@ -8,6 +8,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include <boost/algorithm/string.hpp>
+
 #if defined(CINDER_MSW)
 #include "cinder/msw/OutputDebugStringStream.h"
 #elif defined(CINDER_ANDROID)
