@@ -11,11 +11,10 @@
 
 class TextureAtlas
 {
-    std::map<std::string, Sprite*> sprites;
-    
     void init(InputSourceRef inputSource, bool useMipmap);
 
 public:
+    std::map<std::string, Sprite*> sprites;
     Texture *texture;
 
     TextureAtlas(const std::string &resourceName, bool useMipmap = false);
