@@ -7,6 +7,8 @@ class Texture
     GLuint name;
     int width;
     int height;
+    float maxU;
+    float maxV;
     
     ci::gl::Texture *target;
     
@@ -15,11 +17,11 @@ class Texture
 public:
     InputSourceRef inputSource;
     bool useMipmap;
-    int filter;
+    int flags;
     GLenum wrapS;
     GLenum wrapT;
 
-    Texture(InputSourceRef inputSource, bool useMipmap = false, int filter = TextureHelper::FILTER_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    Texture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureHelper::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
     ~Texture();
     
     void unload();
@@ -35,7 +37,10 @@ public:
     void draw(float rx = 0, float ry = 0);
     void drawInRect(const ci::Rectf &rect, float ox = 0, float oy = 0);
     
-    int getWidth();
-    int getHeight();
+    int getWidth() const;
+    int getHeight() const;
     ci::Vec2i getSize() const;
+    
+    float getMaxU() const;
+    float getMaxV() const;
 };

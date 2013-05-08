@@ -3,15 +3,15 @@
 using namespace std;
 using namespace ci;
 
-Texture::Texture(InputSourceRef inputSource, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
+Texture::Texture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 :
 inputSource(inputSource),
 useMipmap(useMipmap),
-filter(filter),
+flags(flags),
 wrapS(wrapS),
 wrapT(wrapT)
 {
-    init(TextureHelper::loadTexture(inputSource, useMipmap, filter, wrapS, wrapT));
+    init(TextureHelper::loadTexture(inputSource, useMipmap, flags, wrapS, wrapT));
 }
 
 Texture::~Texture()
@@ -29,6 +29,8 @@ void Texture::init(ci::gl::Texture *texture)
     name = texture->getId();
     width = texture->getWidth();
     height = texture->getHeight();
+    maxU = texture->getMaxU();
+    maxV = texture->getMaxV();
 }
 
 void Texture::unload()
@@ -44,7 +46,7 @@ void Texture::reload()
 {
     if (!target)
     {
-        init(TextureHelper::loadTexture(inputSource, useMipmap, filter, wrapS, wrapT));
+        init(TextureHelper::loadTexture(inputSource, useMipmap, flags, wrapS, wrapT));
     }
 }
 
@@ -76,7 +78,7 @@ void Texture::end()
 
 void Texture::drawFromCenter()
 {
-    draw(width * 0.5f, height * 0.5f);
+    draw(width * maxU * 0.5f, height * maxV * 0.5f);
 }
 
 void Texture::draw(float rx, float ry)
@@ -84,8 +86,8 @@ void Texture::draw(float rx, float ry)
     float x1 = -rx;
     float y1 = -ry;
     
-    float x2 = x1 + width;
-    float y2 = y1 + height;
+    float x2 = x1 + width * maxU;
+    float y2 = y1 + height * maxV;
     
     const GLfloat vertices[] =
     {
@@ -98,9 +100,9 @@ void Texture::draw(float rx, float ry)
     const GLfloat coords[] =
     {
         0, 0,
-        1, 0,
-        1, 1,
-        0, 1
+        maxU, 0,
+        maxU, maxV,
+        0, maxV
     };
     
     glTexCoordPointer(2, GL_FLOAT, 0, coords);
@@ -136,12 +138,12 @@ void Texture::drawInRect(const Rectf &rect, float ox, float oy)
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-int Texture::getWidth()
+int Texture::getWidth() const
 {
     return width;
 }
 
-int Texture::getHeight()
+int Texture::getHeight() const
 {
     return height;
 }
@@ -149,4 +151,14 @@ int Texture::getHeight()
 Vec2i Texture::getSize() const
 {
     return Vec2i(width, height);
+}
+
+float Texture::getMaxU() const
+{
+    return maxU;
+}
+
+float Texture::getMaxV() const
+{
+    return maxV;
 }

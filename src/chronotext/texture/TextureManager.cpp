@@ -11,13 +11,13 @@ TextureManager::~TextureManager()
     }
 }
 
-Texture* TextureManager::getFromCache(InputSourceRef inputSource, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
+Texture* TextureManager::getFromCache(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
     for (auto it = cache.cbegin(); it != cache.cend(); ++it)
     {
         Texture *texture = *it;
 
-        if ((texture->inputSource->getUniqueName() == inputSource->getUniqueName()) && (texture->useMipmap == useMipmap) && (texture->filter == filter) && (texture->wrapS == wrapS) && (texture->wrapT == wrapT))
+        if ((texture->inputSource->getUniqueName() == inputSource->getUniqueName()) && (texture->useMipmap == useMipmap) && (texture->flags == flags) && (texture->wrapS == wrapS) && (texture->wrapT == wrapT))
         {
             return texture;
         }
@@ -31,18 +31,18 @@ void TextureManager::putInCache(Texture *texture)
     cache.push_back(texture);
 }
 
-Texture* TextureManager::getTexture(const string &resourceName, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
+Texture* TextureManager::getTexture(const string &resourceName, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
-    return getTexture(InputSource::getResource(resourceName), useMipmap, filter, wrapS, wrapT);
+    return getTexture(InputSource::getResource(resourceName), useMipmap, flags, wrapS, wrapT);
 }
 
-Texture* TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int filter, GLenum wrapS, GLenum wrapT)
+Texture* TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
-    Texture *texture = getFromCache(inputSource, useMipmap, filter, wrapS, wrapT);
+    Texture *texture = getFromCache(inputSource, useMipmap, flags, wrapS, wrapT);
     
     if (!texture)
     {
-        texture = new Texture(inputSource, useMipmap, filter, wrapS, wrapT);
+        texture = new Texture(inputSource, useMipmap, flags, wrapS, wrapT);
         putInCache(texture);
     }
     
