@@ -1,3 +1,7 @@
+/*
+ * TODO: USE ci::gl::TextureRef INSTEAD OF ci::gl::Texture
+ */
+
 #pragma once
 
 #include "chronotext/texture/TextureHelper.h"
