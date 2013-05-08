@@ -3,6 +3,37 @@
 using namespace std;
 using namespace ci;
 
+Sprite::Sprite(Texture *texture)
+:
+texture(texture),
+ox(0),
+oy(0),
+rotated(false),
+tx1(0),
+ty1(0),
+tx2(texture->getMaxU()),
+ty2(texture->getMaxV())
+{
+    w = ow = texture->getWidth() * texture->getMaxU();
+    h = oh = texture->getHeight() * texture->getMaxV();
+}
+
+Sprite::Sprite(Texture *texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float tx1, float ty1, float tx2, float ty2)
+:
+texture(texture),
+w(w),
+h(h),
+ox(ox),
+oy(oy),
+ow(ow),
+oh(oh),
+rotated(rotated),
+tx1(tx1),
+ty1(ty1),
+tx2(tx2),
+ty2(ty2)
+{}
+
 Vec2f Sprite::getSize() const
 {
     return Vec2f(ow - ox, oh - oy);
