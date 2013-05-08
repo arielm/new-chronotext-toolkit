@@ -126,18 +126,27 @@ void TextureHelper::endTexture()
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+/*
+ * XXX: INCLUDES WORKAROUND FOR ci::gl::Texture::getCleanWidth() AND CO. WHICH ARE NOT WORKING ON GL-ES
+ */
 void TextureHelper::drawTextureFromCenter(gl::Texture *texture)
 {
-    drawTexture(texture, texture->getWidth() * 0.5f, texture->getHeight() * 0.5f);
+    drawTexture(texture, texture->getWidth() * texture->getMaxU() * 0.5f, texture->getHeight() * texture->getMaxV() * 0.5f);
 }
 
+/*
+ * XXX: INCLUDES WORKAROUND FOR ci::gl::Texture::getCleanWidth() AND CO. WHICH ARE NOT WORKING ON GL-ES
+ */
 void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
 {
+    float tx = texture->getMaxU();
+    float ty = texture->getMaxV();
+
     float x1 = -rx;
     float y1 = -ry;
     
-    float x2 = x1 + texture->getWidth();
-    float y2 = y1 + texture->getHeight();
+    float x2 = x1 + texture->getWidth() * tx;
+    float y2 = y1 + texture->getHeight() * ty;
     
     const GLfloat vertices[] =
     {
@@ -150,9 +159,9 @@ void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
     const GLfloat coords[] =
     {
         0, 0,
-        1, 0,
-        1, 1,
-        0, 1
+        tx, 0,
+        tx, ty,
+        0, ty
     };
     
     glTexCoordPointer(2, GL_FLOAT, 0, coords);
@@ -160,6 +169,9 @@ void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
+/*
+ * XXX: ONLY WORKS FOR POWER-OF-TWO TEXTURES
+ */
 void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, float ox, float oy)
 {
     const GLfloat vertices[] =
