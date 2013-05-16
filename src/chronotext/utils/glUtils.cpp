@@ -61,7 +61,8 @@ void drawGrid(const Rectf &bounds, float size, const Vec2f &offset)
     int nx = (int) math<float>::ceil(bounds.getWidth() / size) + 1;
     int ny = (int) math<float>::ceil(bounds.getHeight() / size) + 1;
     
-    vector<Vec2f> vertices = vector<Vec2f>((nx + ny) * 4);
+    vector<Vec2f> vertices;
+    vertices.reserve((nx + ny) * 4);
     
     for (int iy = 0; iy < ny; iy++)
     {
