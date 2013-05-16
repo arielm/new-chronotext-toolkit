@@ -1,7 +1,9 @@
 #pragma once
 
 #include "cinder/CinderMath.h"
+#include "cinder/Vector.h"
 
+#include <vector>
 #include <algorithm>
 
 static const float D2R = M_PI / 180.0;
@@ -35,3 +37,5 @@ static inline float FastSqrt(float x)
     r *= (1.5f - 0.5f * x * r * r); // One round of Newton's method
     return r * x;
 }
+
+bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &points);
