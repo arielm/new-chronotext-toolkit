@@ -22,6 +22,7 @@ namespace chronotext
     public:
         void setToIdentity();
         void load(const ci::Matrix44f &matrix);
+        void load(const ci::MatrixAffine2f &matrix);
 
         void translate(float x, float y, float z);
         void setTranslation(float x, float y, float z);
