@@ -1,7 +1,3 @@
-/*
- * PRODUCED BY TextureAtlas
- */
-
 #pragma once
 
 #include "chronotext/texture/Texture.h"
@@ -25,8 +21,8 @@ public:
     float ty2;
     
     Sprite() {}
-    Sprite(Texture *texture);
-    Sprite(Texture *texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float tx1, float ty1, float tx2, float ty2);
+    Sprite(Texture *texture); // IMAGE-BASED
+    Sprite(Texture *texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float tx1, float ty1, float tx2, float ty2); // ATLAS-BASED
     
     ci::Vec2f getSize() const;
     float getWidth() const;

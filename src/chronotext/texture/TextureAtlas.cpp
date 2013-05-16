@@ -36,12 +36,27 @@ void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
         float w = spriteElement->getAttributeValue<float>("w");
         float h = spriteElement->getAttributeValue<float>("h");
         
-        float ox = spriteElement->getAttributeValue<float>("oX", 0);
-        float oy = spriteElement->getAttributeValue<float>("oY", 0);
-        float ow = spriteElement->getAttributeValue<float>("oW", w);
-        float oh = spriteElement->getAttributeValue<float>("oH", h);
-        
         bool rotated = spriteElement->hasAttribute("r");
+        
+        float ox;
+        float oy;
+        float ow;
+        float oh;
+        
+        if (rotated)
+        {
+            oy = spriteElement->getAttributeValue<float>("oX", 0);
+            ox = spriteElement->getAttributeValue<float>("oY", 0);
+            ow = spriteElement->getAttributeValue<float>("oW", h);
+            oh = spriteElement->getAttributeValue<float>("oH", w);
+        }
+        else
+        {
+            ox = spriteElement->getAttributeValue<float>("oX", 0);
+            oy = spriteElement->getAttributeValue<float>("oY", 0);
+            ow = spriteElement->getAttributeValue<float>("oW", w);
+            oh = spriteElement->getAttributeValue<float>("oH", h);
+        }
         
         float tx1 = x / width;
         float ty1 = y / height;

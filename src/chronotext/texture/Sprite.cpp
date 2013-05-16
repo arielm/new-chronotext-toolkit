@@ -36,17 +36,17 @@ ty2(ty2)
 
 Vec2f Sprite::getSize() const
 {
-    return Vec2f(ow - ox, oh - oy);
+    return Vec2f(ow, oh);
 }
 
 float Sprite::getWidth() const
 {
-    return ow - ox;
+    return ow;
 }
 
 float Sprite::getHeight() const
 {
-    return oh - oy;
+    return oh;
 }
 
 void Sprite::beginTexture()
@@ -66,25 +66,14 @@ void Sprite::drawFromCenter()
 
 void Sprite::draw(float rx, float ry)
 {
-    float x1;
-    float y1;
-    
-    if (rotated)
-    {
-        x1 = -ry + oy;
-        y1 = -rx + ox;
-    }
-    else
-    {
-        x1 = -rx + ox;
-        y1 = -ry + oy;
-    }
+    GLfloat vertices[4][2];
+    GLfloat coords[4][2];
+
+    float x1 = -rx + ox;
+    float y1 = -ry + oy;
     
     float x2 = x1 + w;
     float y2 = y1 + h;
-    
-    GLfloat vertices[4][2];
-    GLfloat coords[4][2];
     
     if (rotated)
     {
