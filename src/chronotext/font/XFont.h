@@ -95,6 +95,7 @@ namespace chronotext
             ALIGN_RIGHT,
             ALIGN_TOP,
             ALIGN_BASELINE,
+            ALIGN_BOTTOM
         };
         
         InputSourceRef inputSource;

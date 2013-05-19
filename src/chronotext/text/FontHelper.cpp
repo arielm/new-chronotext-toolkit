@@ -68,6 +68,10 @@ void FontHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wst
         case XFont::ALIGN_MIDDLE:
             y -= font->getStrikethroughOffset();
             break;
+            
+        case XFont::ALIGN_BOTTOM:
+            y -= font->getDescent();
+            break;
     }
     
     drawText(font, sequence, text, x, y, snap);
