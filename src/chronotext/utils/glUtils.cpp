@@ -53,33 +53,38 @@ const Matrix44f getFrustumMatrix(float left, float right, float bottom, float to
     return Matrix44f(m);
 }
 
-void drawGrid(const Rectf &bounds, float size, const Vec2f &offset)
+void drawGrid(const ci::Rectf &bounds, float size, const Vec2f &offset)
 {
-    float x1 = bounds.x1 - bound(bounds.x1 - offset.x, size);
-    float y1 = bounds.y1 - bound(bounds.y1 - offset.y, size);
+    drawGrid(bounds, size, size, offset);
+}
+
+void drawGrid(const Rectf &bounds, float sx, float sy, const Vec2f &offset)
+{
+    float x1 = bounds.x1 - bound(bounds.x1 - offset.x, sx);
+    float y1 = bounds.y1 - bound(bounds.y1 - offset.y, sy);
     
-    int nx = (int) math<float>::ceil(bounds.getWidth() / size) + 1;
-    int ny = (int) math<float>::ceil(bounds.getHeight() / size) + 1;
+    int nx = (int) math<float>::ceil(bounds.getWidth() / sx) + 1;
+    int ny = (int) math<float>::ceil(bounds.getHeight() / sy) + 1;
     
     vector<Vec2f> vertices;
     vertices.reserve((nx + ny) * 4);
     
     for (int iy = 0; iy < ny; iy++)
     {
-        float y = y1 + iy * size;
+        float y = y1 + iy * sy;
         vertices.push_back(Vec2f(bounds.x1, y));
         vertices.push_back(Vec2f(bounds.x2, y));
     }
     
     for (int ix = 0; ix < nx; ix++)
     {
-        float x = x1 + ix * size;
+        float x = x1 + ix * sx;
         vertices.push_back(Vec2f(x, bounds.y1));
         vertices.push_back(Vec2f(x, bounds.y2));
     }
     
     glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, &vertices[0]);
+	glVertexPointer(2, GL_FLOAT, 0, vertices.data());
 	glDrawArrays(GL_LINES, 0, vertices.size());
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
