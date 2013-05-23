@@ -86,17 +86,29 @@ DataSourceRef InputSource::loadDataSource()
     switch (type)
     {
         case TYPE_RESOURCE:
+        {
 #if defined(CINDER_MSW)
             return DataSourcePath::create(filePath);
 #elif defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-            CI_LOGI("LOADING ASSET: %s", resourceName.c_str());
-            return DataSourceAsset::create(gAssetManager, resourceName);
+            AAsset* asset = AAssetManager_open(gAssetManager, resourceName.c_str(), AASSET_MODE_STREAMING);
+            if (asset)
+            {
+                AAsset_close(asset);
+                
+                CI_LOGI("LOADING ASSET: %s", resourceName.c_str());
+                return DataSourceAsset::create(gAssetManager, resourceName);
+            }
+            else
+            {
+                throw ResourceLoadExc(resourceName);
+            }
 #elif defined(CHR_COMPLEX) && defined(CINDER_COCOA)
             return DataSourcePath::create(getResourcePath(resourceName));
 #else
             return app::loadResource(resourceName);
 #endif
-
+        }
+        
         case TYPE_RESOURCE_MSW:
             return app::loadResource(resourceName, mswID, mswType);
             
