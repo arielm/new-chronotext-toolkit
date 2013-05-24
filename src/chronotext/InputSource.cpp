@@ -103,7 +103,14 @@ DataSourceRef InputSource::loadDataSource()
                 throw ResourceLoadExc(resourceName);
             }
 #elif defined(CHR_COMPLEX) && defined(CINDER_COCOA)
-            return DataSourcePath::create(getResourcePath(resourceName));
+            if (fs::exists(filePath))
+            {
+                return DataSourcePath::create(filePath);
+            }
+            else
+            {
+                throw ResourceLoadExc(resourceName);
+            }
 #else
             return app::loadResource(resourceName);
 #endif
