@@ -76,7 +76,7 @@ gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipm
     
     if (texture)
     {
-        LOGD << "TEXTURE LOADED: " << texture->getId() << " (" << texture->getWidth() << "x" << texture->getHeight() << ")" << endl;
+        LOGD << "TEXTURE LOADED: " << inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
     }
 
     return texture;
