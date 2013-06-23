@@ -18,11 +18,7 @@ InputSourceRef InputSource::getResource(const std::string &resourceName)
     source->filePath = getResourcePath(resourceName);
 #endif
     
-#if defined(CINDER_MSW)
-    source->filePathHint = source->filePath.string();
-#else
     source->filePathHint = resourceName;
-#endif
     
     return InputSourceRef(source);
 }
@@ -59,7 +55,7 @@ DataSourceRef InputSource::loadResource(const string &resourceName, int mswID, c
 
 InputSourceRef InputSource::getFileInDocuments(const std::string &relativePath)
 {
-    return InputSource::getFile(getDocumentsDirectory() / relativePath);
+    return InputSource::getFile(getDocumentsDirectory() / relativePath, relativePath);
 }
 
 DataSourceRef InputSource::loadFileInDocuments(const std::string &relativePath)
@@ -67,11 +63,11 @@ DataSourceRef InputSource::loadFileInDocuments(const std::string &relativePath)
     return DataSourcePath::create(getDocumentsDirectory() / relativePath);
 }
 
-InputSourceRef InputSource::getFile(const fs::path &filePath)
+InputSourceRef InputSource::getFile(const fs::path &filePath, const string &filePathHint)
 {
     InputSource *source = new InputSource(TYPE_FILE);
     source->filePath = filePath;
-    source->filePathHint = filePath.string();
+    source->filePathHint = filePathHint.empty() ? filePath.string() : filePathHint;
     
     return InputSourceRef(source);
 }
