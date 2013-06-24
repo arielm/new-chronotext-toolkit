@@ -142,13 +142,13 @@ string InputSource::getUniqueName() const
     switch (type)
     {
         case TYPE_RESOURCE:
-            return "RESOURCE:" + resourceName;
+            return "res://" + resourceName;
 
         case TYPE_RESOURCE_MSW:
-            return "RESOURCE_MSW:" + boost::lexical_cast<string>(mswID) + ":" + mswType;
+            return "res_msw://" + boost::lexical_cast<string>(mswID) + "/" + mswType;
             
         case TYPE_FILE:
-            return "FILE:" + filePath.string();
+            return "file://" + fs::canonical(filePath).string();
     }
 
     return "";
