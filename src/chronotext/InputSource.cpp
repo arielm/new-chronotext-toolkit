@@ -55,7 +55,7 @@ DataSourceRef InputSource::loadResource(const string &resourceName, int mswID, c
 
 InputSourceRef InputSource::getFileInDocuments(const std::string &relativePath)
 {
-    return InputSource::getFile(getDocumentsDirectory() / relativePath, relativePath);
+    return InputSource::getFile(getDocumentsDirectory() / relativePath);
 }
 
 DataSourceRef InputSource::loadFileInDocuments(const std::string &relativePath)
@@ -122,22 +122,22 @@ DataSourceRef InputSource::loadDataSource()
     return DataSourceRef();
 }
 
-bool InputSource::isFile()
+bool InputSource::isFile() const
 {
     return !filePath.empty();
 }
 
-fs::path InputSource::getFilePath()
+fs::path InputSource::getFilePath() const
 {
     return filePath;
 }
 
-string InputSource::getFilePathHint()
+string InputSource::getFilePathHint() const
 {
     return filePathHint;
 }
 
-string InputSource::getUniqueName()
+string InputSource::getUniqueName() const
 {
     switch (type)
     {
@@ -152,6 +152,11 @@ string InputSource::getUniqueName()
     }
 
     return "";
+}
+
+void InputSource::setFilePathHint(const string &hint)
+{
+    filePathHint = hint;
 }
 
 #if defined(CINDER_COCOA)

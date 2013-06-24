@@ -61,11 +61,13 @@ public:
     
     ci::DataSourceRef loadDataSource();
     
-    bool isFile();
-    ci::fs::path getFilePath();
+    bool isFile() const;
+    ci::fs::path getFilePath() const;
     
-    std::string getFilePathHint();
-    std::string getUniqueName();
+    std::string getFilePathHint() const;
+    std::string getUniqueName() const;
+    
+    void setFilePathHint(const std::string &hint);
 
 #if defined(CINDER_COCOA)
     static ci::fs::path getResourcePath(const std::string &resourceName);
