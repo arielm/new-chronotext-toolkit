@@ -91,6 +91,13 @@ void drawGrid(const Rectf &bounds, float sx, float sy, const Vec2f &offset)
 
 void drawFullScreenQuad()
 {
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    
     const GLfloat vertices[] =
     {
         -1, -1,
@@ -103,6 +110,10 @@ void drawFullScreenQuad()
     glVertexPointer(2, GL_FLOAT, 0, vertices);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
+    
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
 }
 
 void dumpCamera(const ci::Camera &cam, const string &name)
