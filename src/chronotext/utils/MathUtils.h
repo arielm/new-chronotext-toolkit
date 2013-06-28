@@ -26,6 +26,14 @@ static inline int bound(int value, int range)
 }
 
 /*
+ * S-SHAPED CROSS-FADE CURVE: 3 * (t ^ 2) - 2 * (t ^ 3)
+ */
+static inline float ease(float t)
+{
+	return (t * t * (3 - 2 * t));
+}
+
+/*
  * BASED ON QUAKE
  * http://betterexplained.com/articles/understanding-quakes-fast-inverse-square-root/
  */
