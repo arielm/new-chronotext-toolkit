@@ -9,5 +9,6 @@ const ci::Matrix44f getFrustumMatrix(float left, float right, float bottom, floa
 
 void drawGrid(const ci::Rectf &bounds, float size, const ci::Vec2f &offset = ci::Vec2f::zero());
 void drawGrid(const ci::Rectf &bounds, float sx, float sy, const ci::Vec2f &offset = ci::Vec2f::zero());
+void drawFullScreenQuad();
 
 void dumpCamera(const ci::Camera &cam, const std::string &name = "cam");

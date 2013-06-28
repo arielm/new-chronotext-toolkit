@@ -89,6 +89,22 @@ void drawGrid(const Rectf &bounds, float sx, float sy, const Vec2f &offset)
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+void drawFullScreenQuad()
+{
+    const GLfloat vertices[] =
+    {
+        -1, -1,
+        +1, -1,
+        +1, +1,
+        -1, +1
+    };
+    
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, vertices);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 void dumpCamera(const ci::Camera &cam, const string &name)
 {
     Vec3f worldUp = cam.getWorldUp();
