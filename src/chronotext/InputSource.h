@@ -70,7 +70,7 @@ public:
     void setFilePathHint(const std::string &hint);
 
 #if defined(CINDER_COCOA)
-    static ci::fs::path getAppPath();
+    static ci::fs::path getResourcePath();
     static ci::fs::path getResourcePath(const std::string &resourceName);
 #endif
 

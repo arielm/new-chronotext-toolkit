@@ -167,7 +167,7 @@ void InputSource::setFilePathHint(const string &hint)
 }
 
 #if defined(CINDER_COCOA)
-fs::path InputSource::getAppPath()
+fs::path InputSource::getResourcePath()
 {
 #if defined(CHR_COMPLEX)
     CFBundleRef bundle = CFBundleGetMainBundle();
@@ -187,7 +187,7 @@ fs::path InputSource::getAppPath()
     
     return path;
 #else
-    return App::getAppPath();
+    return App::getResourcePath();
 #endif
 }
 #endif
@@ -196,7 +196,7 @@ fs::path InputSource::getAppPath()
 fs::path InputSource::getResourcePath(const string &resourceName)
 {
 #if defined(CHR_COMPLEX)
-    return getAppPath() / resourceName;
+    return getResourcePath() / resourceName;
 #else
     return App::getResourcePath(resourceName);
 #endif
