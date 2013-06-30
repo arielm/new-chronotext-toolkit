@@ -167,7 +167,7 @@ void InputSource::setFilePathHint(const string &hint)
 }
 
 #if defined(CINDER_COCOA)
-fs::path InputSource::getResourcePath(const string &resourceName)
+fs::path InputSource::getAppPath()
 {
 #if defined(CHR_COMPLEX)
     CFBundleRef bundle = CFBundleGetMainBundle();
@@ -179,13 +179,24 @@ fs::path InputSource::getResourcePath(const string &resourceName)
     char *buffer = (char*)malloc(maxSize);
     CFStringGetCString(tmp, buffer, maxSize, kCFStringEncodingUTF8);
     
-    fs::path path = fs::path(buffer) / resourceName;
+    fs::path path(buffer);
     
     CFRelease(url);
     CFRelease(tmp);
     free(buffer);
     
     return path;
+#else
+    return App::getAppPath();
+#endif
+}
+#endif
+
+#if defined(CINDER_COCOA)
+fs::path InputSource::getResourcePath(const string &resourceName)
+{
+#if defined(CHR_COMPLEX)
+    return getAppPath() / resourceName;
 #else
     return App::getResourcePath(resourceName);
 #endif
