@@ -24,7 +24,7 @@ looping(looping)
     
     if (sprites.size() == 0)
     {
-        throw std::runtime_error("INVALID ANIMATION");
+        throw runtime_error("INVALID ANIMATION");
     }
 }
 
@@ -38,7 +38,7 @@ looping(looping)
     
     if (((firstFrameIndex < 0) || (firstFrameIndex >= tmp.size()) || ((lastFrameIndex < 0) || (lastFrameIndex >= tmp.size()))))
     {
-        throw std::runtime_error("OUT-OF-RANGE ANIMATION FRAMES");
+        throw runtime_error("OUT-OF-RANGE ANIMATION FRAMES");
     }
     
     if (firstFrameIndex < lastFrameIndex)
@@ -58,7 +58,7 @@ looping(looping)
     
     if (sprites.size() == 0)
     {
-        throw std::runtime_error("INVALID ANIMATION");
+        throw runtime_error("INVALID ANIMATION");
     }
 }
 
