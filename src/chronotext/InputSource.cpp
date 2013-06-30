@@ -148,7 +148,14 @@ string InputSource::getUniqueName() const
             return "res_msw://" + boost::lexical_cast<string>(mswID) + "/" + mswType;
             
         case TYPE_FILE:
-            return "file://" + fs::canonical(filePath).string();
+            if (fs::exists(filePath))
+            {
+                return "file://" + fs::canonical(filePath).string();
+            }
+            else
+            {
+                return "file:://undefined";
+            }
     }
 
     return "";
