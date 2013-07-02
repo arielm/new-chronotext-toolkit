@@ -28,20 +28,10 @@ DataSourceRef InputSource::loadResource(const std::string &resourceName)
 
 InputSourceRef InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
 {
-#if defined(CINDER_MSW)
     InputSource *source = new InputSource(TYPE_RESOURCE_MSW);
-#else
-    InputSource *source = new InputSource(TYPE_RESOURCE);
-#endif
-
-    source->resourceName = source->filePathHint = resourceName;
-    
-#if defined(CINDER_MSW)
     source->mswID = mswID;
     source->mswType = mswType;
-#elif defined(CINDER_COCOA)
-    source->filePath = getResourcePath(resourceName);
-#endif
+    source->resourceName = source->filePathHint = resourceName;
     
     return InputSourceRef(source);
 }

@@ -45,10 +45,8 @@ public:
     static ci::DataSourceRef loadResource(const std::string &resourceName);
     
     /*
-     * FOR "STATIC" RESOURCES (I.E. EMBEDDED INSIDE THE EXECUTABLE ON MSW)
-     *
-     * OSX AND IOS: isFile() WILL RETURN true
-     * ANDROID AND MSW: isFile() WILL RETURN false
+     * FOR "STATIC" RESOURCES EMBEDDED INSIDE THE EXECUTABLE ON MSW
+     * isFile() WILL RETURN false
      */
     static InputSourceRef getResource(const std::string &resourceName, int mswID, const std::string &mswType);
     static ci::DataSourceRef loadResource(const std::string &resourceName, int mswID, const std::string &mswType);
