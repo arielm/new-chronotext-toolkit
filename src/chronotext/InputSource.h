@@ -56,7 +56,7 @@ public:
     static InputSourceRef getFileInDocuments(const std::string &relativePath);
     static ci::DataSourceRef loadFileInDocuments(const std::string &relativePath);
     
-    static InputSourceRef getFile(const ci::fs::path &filePath, const std::string &filePathHint = "");
+    static InputSourceRef getFile(const ci::fs::path &filePath);
     ci::DataSourceRef loadFile(const ci::fs::path &filePath);
     
     ci::DataSourceRef loadDataSource();
