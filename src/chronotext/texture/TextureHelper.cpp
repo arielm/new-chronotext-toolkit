@@ -98,6 +98,7 @@ gl::Texture* TextureHelper::uploadTextureData(const TextureData &textureData)
                 break;
                 
             case TextureData::TYPE_DATA:
+                format.setInternalFormat(textureData.glInternalFormat);
                 texture = new gl::Texture(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
                 break;
         }
