@@ -53,7 +53,7 @@ struct TextureData
     type(TYPE_IMAGE_SOURCE),
     inputSource(inputSource),
     format(format),
-    surface(surface)
+    imageSource(imageSource)
     {}
     
     TextureData(InputSourceRef inputSource, const ci::gl::Texture::Format &format, const ci::Buffer &buffer)
