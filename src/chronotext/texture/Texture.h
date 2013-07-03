@@ -16,20 +16,22 @@ class Texture
     
     ci::gl::Texture *target;
     
-    void init(ci::gl::Texture *texture);
+    void setTarget(ci::gl::Texture *texture);
 
 public:
-    InputSourceRef inputSource;
-    bool useMipmap;
-    int flags;
-    GLenum wrapS;
-    GLenum wrapT;
+    TextureRequest request;
 
-    Texture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureHelper::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    Texture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    Texture(const TextureRequest &textureRequest);
+    Texture(const TextureData &textureData);
+    
     ~Texture();
     
     void unload();
     void reload();
+    
+    TextureData fetchTextureData();
+    void uploadTextureData(const TextureData &textureData);
 
     int getId();
     void bind();

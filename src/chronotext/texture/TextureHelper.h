@@ -8,22 +8,16 @@
 
 class TextureHelper
 {
-    static TextureData getTranslucentTextureData(InputSourceRef inputSource, ci::gl::Texture::Format &format);
-    static TextureData getPowerOfTwoTextureData(InputSourceRef inputSource, ci::gl::Texture::Format &format);
+    static TextureData fetchTranslucentTextureData(const TextureRequest &textureRequest);
+    static TextureData fetchPowerOfTwoTextureData(const TextureRequest &textureRequest);
 
 public:
-    enum
-    {
-        FLAGS_NONE = 0,
-        FLAGS_TRANSLUCENT = 1,
-        FLAGS_POT = 2
-    };
-    
-    static ci::gl::Texture* loadTexture(const std::string &resourceName, bool useMipmap = false, int flags = FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
-    static ci::gl::Texture* loadTexture(InputSourceRef inputSource, bool useMipmap = false, int flags = FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    static ci::gl::Texture* loadTexture(const std::string &resourceName, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    static ci::gl::Texture* loadTexture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    static ci::gl::Texture* loadTexture(const TextureRequest &textureRequest);
 
-    static TextureData getTextureData(InputSourceRef inputSource, bool useMipmap = false, int flags = FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
-    static ci::gl::Texture* uploadTexture(const TextureData &textureData);
+    static TextureData fetchTextureData(const TextureRequest &textureRequest);
+    static ci::gl::Texture* uploadTextureData(const TextureData &textureData);
     
     static void unloadTexture(ci::gl::Texture *texture);
     static void bindTexture(ci::gl::Texture *texture);

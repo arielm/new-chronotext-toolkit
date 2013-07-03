@@ -11,13 +11,13 @@ TextureManager::~TextureManager()
     }
 }
 
-Texture* TextureManager::getFromCache(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
+Texture* TextureManager::getFromCache(const TextureRequest &textureRequest)
 {
     for (auto it = cache.cbegin(); it != cache.cend(); ++it)
     {
         Texture *texture = *it;
 
-        if ((texture->inputSource->getUniqueName() == inputSource->getUniqueName()) && (texture->useMipmap == useMipmap) && (texture->flags == flags) && (texture->wrapS == wrapS) && (texture->wrapT == wrapT))
+        if (textureRequest == texture->request)
         {
             return texture;
         }
@@ -38,11 +38,16 @@ Texture* TextureManager::getTexture(const string &resourceName, bool useMipmap, 
 
 Texture* TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
-    Texture *texture = getFromCache(inputSource, useMipmap, flags, wrapS, wrapT);
+    return getTexture(TextureRequest(inputSource, useMipmap, flags, wrapS, wrapT));
+}
+
+Texture* TextureManager::getTexture(const TextureRequest &textureRequest)
+{
+    Texture *texture = getFromCache(textureRequest);
     
     if (!texture)
     {
-        texture = new Texture(inputSource, useMipmap, flags, wrapS, wrapT);
+        texture = new Texture(textureRequest);
         putInCache(texture);
     }
     

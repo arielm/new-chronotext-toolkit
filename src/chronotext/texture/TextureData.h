@@ -1,8 +1,9 @@
 #pragma once
 
 #include "chronotext/InputSource.h"
+#include "chronotext/texture/TextureRequest.h"
 
-#include "cinder/gl/Texture.h"
+#include "cinder/Surface.h"
 
 struct TextureData
 {
@@ -16,8 +17,7 @@ struct TextureData
     
     bool defined;
     int type;
-    InputSourceRef inputSource;
-    ci::gl::Texture::Format format;
+    TextureRequest request;
     
     ci::Surface surface;
     ci::ImageSourceRef imageSource;
@@ -26,8 +26,9 @@ struct TextureData
     
     float maxU;
     float maxV;
-    
-    GLenum dataFormat;
+
+    GLenum glInternalFormat;
+    GLenum glFormat;
     int width;
     int height;
     
@@ -36,43 +37,40 @@ struct TextureData
     defined(false)
     {}
     
-    TextureData(InputSourceRef inputSource, const ci::gl::Texture::Format &format, const ci::Surface &surface, float maxU = 1, float maxV = 1)
+    TextureData(const TextureRequest &request, const ci::Surface &surface, float maxU = 1, float maxV = 1)
     :
     defined(true),
     type(TYPE_SURFACE),
-    inputSource(inputSource),
-    format(format),
+    request(request),
     surface(surface),
     maxU(maxU),
     maxV(maxV)
     {}
-
-    TextureData(InputSourceRef inputSource, const ci::gl::Texture::Format &format, ci::ImageSourceRef imageSource)
+    
+    TextureData(const TextureRequest &request, ci::ImageSourceRef imageSource)
     :
     defined(true),
     type(TYPE_IMAGE_SOURCE),
-    inputSource(inputSource),
-    format(format),
+    request(request),
     imageSource(imageSource)
     {}
     
-    TextureData(InputSourceRef inputSource, const ci::gl::Texture::Format &format, const ci::Buffer &buffer)
+    TextureData(const TextureRequest &request, const ci::Buffer &buffer)
     :
     defined(true),
     type(TYPE_PVR),
-    inputSource(inputSource),
-    format(format),
+    request(request),
     buffer(buffer)
     {}
     
-    TextureData(InputSourceRef inputSource, const ci::gl::Texture::Format &format, std::shared_ptr<uint8_t> data, GLenum dataFormat, int width, int height)
+    TextureData(const TextureRequest &request, std::shared_ptr<uint8_t> data, GLenum glInternalFormat, GLenum glFormat, int width, int height)
     :
     defined(true),
     type(TYPE_DATA),
-    inputSource(inputSource),
-    format(format),
+    request(request),
     data(data),
-    dataFormat(dataFormat),
+    glInternalFormat(glInternalFormat),
+    glFormat(glFormat),
     width(width),
     height(height)
     {}

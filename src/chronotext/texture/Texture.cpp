@@ -5,13 +5,23 @@ using namespace ci;
 
 Texture::Texture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 :
-inputSource(inputSource),
-useMipmap(useMipmap),
-flags(flags),
-wrapS(wrapS),
-wrapT(wrapT)
+request(TextureRequest(inputSource, useMipmap, flags, wrapS, wrapT))
 {
-    init(TextureHelper::loadTexture(inputSource, useMipmap, flags, wrapS, wrapT));
+    setTarget(TextureHelper::loadTexture(request));
+}
+
+Texture::Texture(const TextureRequest &textureRequest)
+:
+request(textureRequest)
+{
+    setTarget(TextureHelper::loadTexture(request));
+}
+
+Texture::Texture(const TextureData &textureData)
+:
+request(textureData.request)
+{
+    setTarget(TextureHelper::uploadTextureData(textureData));
 }
 
 Texture::~Texture()
@@ -20,9 +30,9 @@ Texture::~Texture()
 }
 
 /*
- * ASSERTION: texture IS NULL
+ * ASSERTION: target IS NULL
  */
-void Texture::init(ci::gl::Texture *texture)
+void Texture::setTarget(ci::gl::Texture *texture)
 {
     target = texture;
 
@@ -46,8 +56,19 @@ void Texture::reload()
 {
     if (!target)
     {
-        init(TextureHelper::loadTexture(inputSource, useMipmap, flags, wrapS, wrapT));
+        setTarget(TextureHelper::loadTexture(request));
     }
+}
+
+TextureData Texture::fetchTextureData()
+{
+    return TextureHelper::fetchTextureData(request);
+}
+
+void Texture::uploadTextureData(const TextureData &textureData)
+{
+    request = textureData.request;
+    setTarget(TextureHelper::uploadTextureData(textureData));
 }
 
 int Texture::getId()
@@ -125,13 +146,13 @@ void Texture::drawInRect(const Rectf &rect, float ox, float oy)
     float tx2 = (rect.x2 - ox) / width;
     float ty2 = (rect.y2 - oy) / height;
     
-	const GLfloat coords[] =
-	{
-		tx1, ty1,
-		tx2, ty1,
-		tx2, ty2,
-		tx1, ty2
-	};
+    const GLfloat coords[] =
+    {
+        tx1, ty1,
+        tx2, ty1,
+        tx2, ty2,
+        tx1, ty2
+    };
     
     glTexCoordPointer(2, GL_FLOAT, 0, coords);
     glVertexPointer(2, GL_FLOAT, 0, vertices);

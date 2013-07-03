@@ -41,26 +41,26 @@ enum
     kPVRTexturePixelTypeI_8,
     kPVRTexturePixelTypeAI_88,
     kPVRTexturePixelTypePVRTC_2,
-    kPVRTexturePixelTypePVRTC_4,	
+    kPVRTexturePixelTypePVRTC_4,    
     kPVRTexturePixelTypeBGRA_8888,
     kPVRTexturePixelTypeA_8
 };
 
 struct CCZHeader
 {
-    uint8_t		sig[4];			// signature: should be 'CCZ!'
-    uint16_t		compression_type;	// should be CCZ_COMPRESSION_ZLIB
-    uint16_t		version;		// should be 2 (although 1 is also supported)
-    uint32_t		reserved;		// reserved for users
-    uint32_t		len;			// size of the uncompressed file
+    uint8_t sig[4];            // signature: should be 'CCZ!'
+    uint16_t compression_type; // should be CCZ_COMPRESSION_ZLIB
+    uint16_t version;          // should be 2 (although 1 is also supported)
+    uint32_t reserved;         // reserved for users
+    uint32_t len;              // size of the uncompressed file
 };
 
 enum
 {
-    CCZ_COMPRESSION_ZLIB,	// zlib format.
-    CCZ_COMPRESSION_BZIP2,	// bzip2 format (not supported yet)
-    CCZ_COMPRESSION_GZIP,	// gzip format (not supported yet)
-    CCZ_COMPRESSION_NONE,	// plain (not supported yet)
+    CCZ_COMPRESSION_ZLIB,  // zlib format.
+    CCZ_COMPRESSION_BZIP2, // bzip2 format (not supported yet)
+    CCZ_COMPRESSION_GZIP,  // gzip format (not supported yet)
+    CCZ_COMPRESSION_NONE,  // plain (not supported yet)
 };
 
 static bool isPOT(int n)
@@ -123,8 +123,8 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     CCZHeader *header = (CCZHeader*)tmp.getData();
     if ((header->sig[0] != 'C') || (header->sig[1] != 'C') || (header->sig[2] != 'Z') || (header->sig[3] != '!'))
     {
-		throw runtime_error("PVR.CCZ: FORMAT ERROR");
-	}
+        throw runtime_error("PVR.CCZ: FORMAT ERROR");
+    }
 
     uint16_t compression_type;
     uint16_t version;
@@ -159,11 +159,11 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     }
     
     uLongf destlen = len;
-	uLongf source = (uLongf)tmp.getData() + sizeof(*header);
-	int ret = uncompress((Bytef*)out, &destlen, (Bytef*)source, tmp.getDataSize() - sizeof(*header));
+    uLongf source = (uLongf)tmp.getData() + sizeof(*header);
+    int ret = uncompress((Bytef*)out, &destlen, (Bytef*)source, tmp.getDataSize() - sizeof(*header));
     
     if (ret != Z_OK)
-	{
+    {
         throw runtime_error("PVR.CCZ: DECOMPRESSION ERROR");
     }
     
@@ -230,7 +230,7 @@ gl::Texture* PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GLen
     glBindTexture(GL_TEXTURE_2D, name);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);    
     
     if (useMipmap)
     {
@@ -239,7 +239,7 @@ gl::Texture* PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GLen
     }
     else
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);    
     }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

@@ -25,95 +25,89 @@ gl::Texture* TextureHelper::loadTexture(const string &resourceName, bool useMipm
 
 gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
-    gl::Texture *texture = uploadTexture(getTextureData(inputSource, useMipmap, flags, wrapS, wrapT));
-    
-    if (texture)
-    {
-        LOGD << "TEXTURE LOADED: " << inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
-    }
-    
-    return texture;
+    return loadTexture(TextureRequest(inputSource, useMipmap, flags, wrapS, wrapT));
 }
 
-TextureData TextureHelper::getTextureData(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
+gl::Texture* TextureHelper::loadTexture(const TextureRequest &textureRequest)
+{
+    return uploadTextureData(fetchTextureData(textureRequest));
+}
+
+TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest)
 {
     TextureData textureData;
-
-    gl::Texture::Format format;
-    format.setWrap(wrapS, wrapT);
     
-    if (useMipmap)
+    if (textureRequest.inputSource->getFilePathHint().rfind(".pvr.gz") != string::npos)
     {
-        format.enableMipmapping(true);
-        format.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
-    }
-    
-    if (inputSource->getFilePathHint().rfind(".pvr.gz") != string::npos)
-    {
-        if (inputSource->isFile())
+        if (textureRequest.inputSource->isFile())
         {
-            textureData = TextureData(inputSource, format, PVRHelper::decompressPVRGZ(inputSource->getFilePath()));
+            textureData = TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath()));
         }
         else
         {
             throw runtime_error("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
         }
     }
-    else if (inputSource->getFilePathHint().rfind(".pvr.ccz") != string::npos)
+    else if (textureRequest.inputSource->getFilePathHint().rfind(".pvr.ccz") != string::npos)
     {
-        textureData = TextureData(inputSource, format, PVRHelper::decompressPVRCCZ(inputSource->loadDataSource()));
+        textureData = TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
     }
-    else if (inputSource->getFilePathHint().rfind(".pvr") != string::npos)
+    else if (textureRequest.inputSource->getFilePathHint().rfind(".pvr") != string::npos)
     {
-        textureData = TextureData(inputSource, format, inputSource->loadDataSource()->getBuffer());
+        textureData = TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
     }
     else
     {
-        if (flags & FLAGS_TRANSLUCENT)
+        if (textureRequest.flags & TextureRequest::FLAGS_TRANSLUCENT)
         {
-            textureData = TextureData(getTranslucentTextureData(inputSource, format));
+            textureData = TextureData(fetchTranslucentTextureData(textureRequest));
         }
-        else if (flags & FLAGS_POT)
+        else if (textureRequest.flags & TextureRequest::FLAGS_POT)
         {
-            textureData = TextureData(getPowerOfTwoTextureData(inputSource, format));
+            textureData = TextureData(fetchPowerOfTwoTextureData(textureRequest));
         }
         else
         {
-            textureData = TextureData(inputSource, format, loadImage(inputSource->loadDataSource()));
+            textureData = TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
         }
     }
 
     return textureData;
 }
 
-gl::Texture* TextureHelper::uploadTexture(const TextureData &textureData)
+gl::Texture* TextureHelper::uploadTextureData(const TextureData &textureData)
 {
     if (!textureData.undefined())
     {
+        gl::Texture *texture = NULL;
+        gl::Texture::Format format = textureData.request.getFormat();
+        
         switch (textureData.type)
         {
             case TextureData::TYPE_SURFACE:
-            {
-                gl::Texture *texture = new gl::Texture(textureData.surface, textureData.format);
+                texture = new gl::Texture(textureData.surface, format);
                 texture->setCleanTexCoords(textureData.maxU, textureData.maxV);
-                return texture;
-            }
+                break;
                 
             case TextureData::TYPE_IMAGE_SOURCE:
-            {
-                return new gl::Texture(textureData.imageSource, textureData.format);
-            }
+                texture = new gl::Texture(textureData.imageSource, format);
+                break;
                 
             case TextureData::TYPE_PVR:
-            {
-                return PVRHelper::getPVRTexture(textureData.buffer, textureData.format.hasMipmapping(), textureData.format.getWrapS(), textureData.format.getWrapT());
-            }
+                texture = PVRHelper::getPVRTexture(textureData.buffer, format.hasMipmapping(), format.getWrapS(), format.getWrapT());
+                break;
                 
             case TextureData::TYPE_DATA:
-            {
-                return new gl::Texture(textureData.data.get(), textureData.dataFormat, textureData.width, textureData.height, textureData.format);
-            }
+                texture = new gl::Texture(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
+                break;
         }
+        
+        if (texture)
+        {
+            LOGD << "TEXTURE UPLOADED: " << textureData.request.inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
+        }
+        
+        return texture;
     }
     
     return NULL;
@@ -207,13 +201,13 @@ void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, f
     float tx2 = (rect.x2 - ox) / texture->getWidth();
     float ty2 = (rect.y2 - oy) / texture->getHeight();
     
-	const GLfloat coords[] =
-	{
-		tx1, ty1,
-		tx2, ty1,
-		tx2, ty2,
-		tx1, ty2
-	};
+    const GLfloat coords[] =
+    {
+        tx1, ty1,
+        tx2, ty1,
+        tx2, ty2,
+        tx1, ty2
+    };
     
     glTexCoordPointer(2, GL_FLOAT, 0, coords);
     glVertexPointer(2, GL_FLOAT, 0, vertices);
@@ -223,15 +217,15 @@ void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, f
 /*
  * BASED ON CODE FROM cinder/gl/Texture.cpp
  */
-TextureData TextureHelper::getTranslucentTextureData(InputSourceRef inputSource, gl::Texture::Format &format)
+TextureData TextureHelper::fetchTranslucentTextureData(const TextureRequest &textureRequest)
 {
-    Surface surface(loadImage(inputSource->loadDataSource()));
+    Surface surface(loadImage(textureRequest.inputSource->loadDataSource()));
     
     Channel8u channel = surface.getChannel(0);
     shared_ptr<uint8_t> data;
     
-    GLenum dataFormat = GL_ALPHA;
-    format.setInternalFormat(GL_ALPHA);
+    GLenum glInternalFormat = GL_ALPHA;
+    GLenum glFormat = GL_ALPHA;
     
     // if the data is not already contiguous, we'll need to create a block of memory that is
     if ((channel.getIncrement() != 1 ) || (channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t)))
@@ -256,12 +250,12 @@ TextureData TextureHelper::getTranslucentTextureData(InputSourceRef inputSource,
         data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
     }
     
-    return TextureData(inputSource, format, data, dataFormat, channel.getWidth(), channel.getHeight());
+    return TextureData(textureRequest, data, glInternalFormat, glFormat, channel.getWidth(), channel.getHeight());
 }
 
-TextureData TextureHelper::getPowerOfTwoTextureData(InputSourceRef inputSource, gl::Texture::Format &format)
+TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &textureRequest)
 {
-    Surface src(loadImage(inputSource->loadDataSource()));
+    Surface src(loadImage(textureRequest.inputSource->loadDataSource()));
     
     int srcWidth = src.getWidth();
     int srcHeight = src.getHeight();
@@ -276,10 +270,10 @@ TextureData TextureHelper::getPowerOfTwoTextureData(InputSourceRef inputSource, 
         ip::fill(&dst, ColorA::zero());
         dst.copyFrom(src, Area(0, 0, srcWidth, srcHeight), Vec2i::zero());
         
-        return TextureData(inputSource, format, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
+        return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
     }
     else
     {
-        return TextureData(inputSource, format, src);
+        return TextureData(textureRequest, src);
     }
 }
