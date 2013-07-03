@@ -37,7 +37,7 @@ void Texture::unload()
 {
     if (target)
     {
-        TextureHelper::deleteTexture(target);
+        TextureHelper::unloadTexture(target);
         target = NULL;
     }
 }

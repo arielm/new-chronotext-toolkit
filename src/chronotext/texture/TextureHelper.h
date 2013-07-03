@@ -22,9 +22,10 @@ public:
     static ci::gl::Texture* loadTexture(const std::string &resourceName, bool useMipmap = false, int flags = FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
     static ci::gl::Texture* loadTexture(InputSourceRef inputSource, bool useMipmap = false, int flags = FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
 
+    static TextureData getTextureData(InputSourceRef inputSource, bool useMipmap = false, int flags = FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
     static ci::gl::Texture* uploadTexture(const TextureData &textureData);
     
-    static void deleteTexture(ci::gl::Texture *texture);
+    static void unloadTexture(ci::gl::Texture *texture);
     static void bindTexture(ci::gl::Texture *texture);
     
     static void beginTexture(ci::gl::Texture *texture);

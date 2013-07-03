@@ -25,6 +25,20 @@ gl::Texture* TextureHelper::loadTexture(const string &resourceName, bool useMipm
 
 gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
+    gl::Texture *texture = uploadTexture(getTextureData(inputSource, useMipmap, flags, wrapS, wrapT));
+    
+    if (texture)
+    {
+        LOGD << "TEXTURE LOADED: " << inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
+    }
+    
+    return texture;
+}
+
+TextureData TextureHelper::getTextureData(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
+{
+    TextureData textureData;
+
     gl::Texture::Format format;
     format.setWrap(wrapS, wrapT);
     
@@ -33,8 +47,6 @@ gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipm
         format.enableMipmapping(true);
         format.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
     }
-    
-    TextureData textureData;
     
     if (inputSource->getFilePathHint().rfind(".pvr.gz") != string::npos)
     {
@@ -70,15 +82,8 @@ gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipm
             textureData = TextureData(inputSource, format, loadImage(inputSource->loadDataSource()));
         }
     }
-    
-    gl::Texture *texture = uploadTexture(textureData);
-    
-    if (texture)
-    {
-        LOGD << "TEXTURE LOADED: " << inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
-    }
-    
-    return texture;
+
+    return textureData;
 }
 
 gl::Texture* TextureHelper::uploadTexture(const TextureData &textureData)
@@ -114,9 +119,9 @@ gl::Texture* TextureHelper::uploadTexture(const TextureData &textureData)
     return NULL;
 }
 
-void TextureHelper::deleteTexture(ci::gl::Texture *texture)
+void TextureHelper::unloadTexture(ci::gl::Texture *texture)
 {
-    LOGD << "TEXTURE DELETED: " << texture->getId() << endl;
+    LOGD << "TEXTURE UNLOADED: " << texture->getId() << endl;
     delete texture;
 }
 
