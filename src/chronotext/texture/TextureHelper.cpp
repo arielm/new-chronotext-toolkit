@@ -25,14 +25,22 @@ gl::Texture* TextureHelper::loadTexture(const string &resourceName, bool useMipm
 
 gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
-    gl::Texture *texture = NULL;
+    gl::Texture::Format format;
+    format.setWrap(wrapS, wrapT);
+    
+    if (useMipmap)
+    {
+        format.enableMipmapping(true);
+        format.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+    }
+    
+    TextureData textureData;
     
     if (inputSource->getFilePathHint().rfind(".pvr.gz") != string::npos)
     {
         if (inputSource->isFile())
         {
-            Buffer buffer = PVRHelper::decompressPVRGZ(inputSource->getFilePath());
-            texture = PVRHelper::getPVRTexture(buffer, useMipmap, wrapS, wrapT);
+            textureData = TextureData(inputSource, format, PVRHelper::decompressPVRGZ(inputSource->getFilePath()));
         }
         else
         {
@@ -41,45 +49,69 @@ gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipm
     }
     else if (inputSource->getFilePathHint().rfind(".pvr.ccz") != string::npos)
     {
-        Buffer buffer = PVRHelper::decompressPVRCCZ(inputSource->loadDataSource());
-        texture = PVRHelper::getPVRTexture(buffer, useMipmap, wrapS, wrapT);
+        textureData = TextureData(inputSource, format, PVRHelper::decompressPVRCCZ(inputSource->loadDataSource()));
     }
     else if (inputSource->getFilePathHint().rfind(".pvr") != string::npos)
     {
-        Buffer buffer = inputSource->loadDataSource()->getBuffer();
-        texture = PVRHelper::getPVRTexture(buffer, useMipmap, wrapS, wrapT);
+        textureData = TextureData(inputSource, format, inputSource->loadDataSource()->getBuffer());
     }
     else
     {
-        gl::Texture::Format format;
-        format.setWrap(wrapS, wrapT);
-        
-        if (useMipmap)
-        {
-            format.enableMipmapping(true);
-            format.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
-        }
-        
         if (flags & FLAGS_TRANSLUCENT)
         {
-            texture = getTranslucentTexture(inputSource->loadDataSource(), format);
+            textureData = TextureData(getTranslucentTextureData(inputSource, format));
         }
         else if (flags & FLAGS_POT)
         {
-            texture = getPowerOfTwoTexture(inputSource->loadDataSource(), format);
+            textureData = TextureData(getPowerOfTwoTextureData(inputSource, format));
         }
         else
         {
-            texture = new gl::Texture(loadImage(inputSource->loadDataSource()), format);
+            textureData = TextureData(inputSource, format, loadImage(inputSource->loadDataSource()));
         }
     }
+    
+    gl::Texture *texture = uploadTexture(textureData);
     
     if (texture)
     {
         LOGD << "TEXTURE LOADED: " << inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
     }
-
+    
     return texture;
+}
+
+gl::Texture* TextureHelper::uploadTexture(const TextureData &textureData)
+{
+    if (!textureData.undefined())
+    {
+        switch (textureData.type)
+        {
+            case TextureData::TYPE_SURFACE:
+            {
+                gl::Texture *texture = new gl::Texture(textureData.surface, textureData.format);
+                texture->setCleanTexCoords(textureData.maxU, textureData.maxV);
+                return texture;
+            }
+                
+            case TextureData::TYPE_IMAGE_SOURCE:
+            {
+                return new gl::Texture(textureData.imageSource, textureData.format);
+            }
+                
+            case TextureData::TYPE_PVR:
+            {
+                return PVRHelper::getPVRTexture(textureData.buffer, textureData.format.hasMipmapping(), textureData.format.getWrapS(), textureData.format.getWrapT());
+            }
+                
+            case TextureData::TYPE_DATA:
+            {
+                return new gl::Texture(textureData.data.get(), textureData.dataFormat, textureData.width, textureData.height, textureData.format);
+            }
+        }
+    }
+    
+    return NULL;
 }
 
 void TextureHelper::deleteTexture(ci::gl::Texture *texture)
@@ -124,7 +156,7 @@ void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
 {
     float tx = texture->getMaxU();
     float ty = texture->getMaxV();
-
+    
     float x1 = -rx;
     float y1 = -ry;
     
@@ -186,42 +218,45 @@ void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, f
 /*
  * BASED ON CODE FROM cinder/gl/Texture.cpp
  */
-gl::Texture* TextureHelper::getTranslucentTexture(DataSourceRef source, gl::Texture::Format &format)
+TextureData TextureHelper::getTranslucentTextureData(InputSourceRef inputSource, gl::Texture::Format &format)
 {
-    Surface surface(loadImage(source));
+    Surface surface(loadImage(inputSource->loadDataSource()));
+    
     Channel8u channel = surface.getChannel(0);
+    shared_ptr<uint8_t> data;
     
     GLenum dataFormat = GL_ALPHA;
     format.setInternalFormat(GL_ALPHA);
     
     // if the data is not already contiguous, we'll need to create a block of memory that is
-    if ( ( channel.getIncrement() != 1 ) || ( channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t) ) )
+    if ((channel.getIncrement() != 1 ) || (channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t)))
     {
-        shared_ptr<uint8_t> data( new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>() );
+        data = shared_ptr<uint8_t>(new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>());
         uint8_t *dest = data.get();
         const int8_t inc = channel.getIncrement();
         const int32_t width = channel.getWidth();
-        for ( int y = 0; y < channel.getHeight(); ++y )
+        
+        for (int y = 0; y < channel.getHeight(); ++y)
         {
-            const uint8_t *src = channel.getData( 0, y );
-            for ( int x = 0; x < width; ++x )
+            const uint8_t *src = channel.getData(0, y);
+            for (int x = 0; x < width; ++x)
             {
                 *dest++ = *src;
                 src += inc;
             }
         }
-        
-        return new gl::Texture(data.get(), dataFormat, channel.getWidth(), channel.getHeight(), format);
     }
     else
     {
-        return  new gl::Texture(channel.getData(), dataFormat, channel.getWidth(), channel.getHeight(), format);
+        data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
     }
+    
+    return TextureData(inputSource, format, data, dataFormat, channel.getWidth(), channel.getHeight());
 }
 
-gl::Texture* TextureHelper::getPowerOfTwoTexture(DataSourceRef source, gl::Texture::Format &format)
+TextureData TextureHelper::getPowerOfTwoTextureData(InputSourceRef inputSource, gl::Texture::Format &format)
 {
-    Surface src(loadImage(source));
+    Surface src(loadImage(inputSource->loadDataSource()));
     
     int srcWidth = src.getWidth();
     int srcHeight = src.getHeight();
@@ -236,13 +271,10 @@ gl::Texture* TextureHelper::getPowerOfTwoTexture(DataSourceRef source, gl::Textu
         ip::fill(&dst, ColorA::zero());
         dst.copyFrom(src, Area(0, 0, srcWidth, srcHeight), Vec2i::zero());
         
-        gl::Texture *texture = new gl::Texture(dst, format);
-        texture->setCleanTexCoords(srcWidth / (float)dstWidth, srcHeight / (float)dstHeight);
-        
-        return texture;
+        return TextureData(inputSource, format, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
     }
     else
     {
-        return new gl::Texture(loadImage(source), format);
+        return TextureData(inputSource, format, src);
     }
 }
