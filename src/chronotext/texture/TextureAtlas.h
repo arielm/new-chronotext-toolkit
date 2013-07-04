@@ -15,7 +15,7 @@ class TextureAtlas
 
 public:
     std::map<std::string, Sprite*> sprites;
-    Texture *texture;
+    TextureRef texture;
 
     TextureAtlas(const std::string &resourceName, bool useMipmap = false);
     TextureAtlas(InputSourceRef inputSource, bool useMipmap = false);

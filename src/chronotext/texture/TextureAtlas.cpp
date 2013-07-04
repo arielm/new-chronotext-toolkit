@@ -20,7 +20,7 @@ void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
     XmlTree doc(inputSource->loadDataSource());
     
     string resourceName = doc.getChild("TextureAtlas").getAttributeValue<string>("imagePath");
-    texture = new Texture(InputSource::getResource(resourceName), useMipmap);
+    texture = make_shared<Texture>(InputSource::getResource(resourceName), useMipmap); // FIXME: WE SHOULD NOT ASSERT THAT inputSource IS OF "RESOURCE" TYPE
     
     float width = texture->getWidth();
     float height = texture->getHeight();
@@ -70,8 +70,6 @@ void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
 
 TextureAtlas::~TextureAtlas()
 {
-    delete texture;
-    
     for (map<string, Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
     {
         delete it->second;

@@ -3,7 +3,7 @@
 using namespace std;
 using namespace ci;
 
-Sprite::Sprite(Texture *texture)
+Sprite::Sprite(TextureRef texture)
 :
 texture(texture),
 ox(0),
@@ -18,7 +18,7 @@ ty2(texture->getMaxV())
     h = oh = texture->getHeight() * texture->getMaxV();
 }
 
-Sprite::Sprite(Texture *texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float tx1, float ty1, float tx2, float ty2)
+Sprite::Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float tx1, float ty1, float tx2, float ty2)
 :
 texture(texture),
 w(w),
