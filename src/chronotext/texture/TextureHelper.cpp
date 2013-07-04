@@ -37,7 +37,7 @@ TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest
 {
     TextureData textureData;
     
-    if (textureRequest.inputSource->getFilePathHint().rfind(".pvr.gz") != string::npos)
+    if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.gz"))
     {
         if (textureRequest.inputSource->isFile())
         {
@@ -48,11 +48,11 @@ TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest
             throw runtime_error("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
         }
     }
-    else if (textureRequest.inputSource->getFilePathHint().rfind(".pvr.ccz") != string::npos)
+    else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
     {
         textureData = TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
     }
-    else if (textureRequest.inputSource->getFilePathHint().rfind(".pvr") != string::npos)
+    else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr"))
     {
         textureData = TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
     }
