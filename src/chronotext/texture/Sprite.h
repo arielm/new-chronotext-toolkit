@@ -2,6 +2,8 @@
 
 #include "chronotext/texture/Texture.h"
 
+typedef std::shared_ptr<class Sprite> SpriteRef;
+
 class Sprite
 {
 public:
