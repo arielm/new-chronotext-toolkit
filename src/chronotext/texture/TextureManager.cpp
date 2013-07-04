@@ -5,19 +5,17 @@ using namespace ci;
 
 TextureRef TextureManager::getFromCache(const TextureRequest &textureRequest)
 {
-    TextureRef texture;
-    
     for (auto it = cache.cbegin(); it != cache.cend(); ++it)
     {
-        texture = *it;
+        TextureRef texture = *it;
 
         if (textureRequest == texture->request)
         {
-            break;
+            return texture;
         }
     }
     
-    return texture;
+    return TextureRef();
 }
 
 void TextureManager::putInCache(TextureRef texture)
