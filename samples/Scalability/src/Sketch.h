@@ -13,8 +13,8 @@ class Sketch : public CinderSketch
 {
     TextureManager textureManager;
     
-    Texture *frame;
-    Texture *picture;
+    TextureRef frame;
+    TextureRef picture;
     
     float scale;
     ci::Vec2f dragOrigin;

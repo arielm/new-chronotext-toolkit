@@ -12,10 +12,10 @@ namespace chronotext
         float height;
         
     public:
-        Texture *texture;
+        TextureRef texture;
         float scale;
         
-        Icon(Texture *texture, float scale = 1, float width = -1, float height = -1);
+        Icon(TextureRef texture, float scale = 1, float width = -1, float height = -1);
         
         float getWidth();
         float getHeight();
