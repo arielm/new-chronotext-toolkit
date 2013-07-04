@@ -1,5 +1,5 @@
 #include "chronotext/texture/Texture.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/texture/TextureHelper.h"
 
 using namespace std;
 using namespace ci;
@@ -25,14 +25,6 @@ request(textureData.request)
     setTarget(TextureHelper::uploadTextureData(textureData));
 }
 
-Texture::~Texture()
-{
-    unload();
-}
-
-/*
- * TODO: CHECK WHAT HAPPENS TO target IN CASE IT'S NOT NULL
- */
 void Texture::setTarget(ci::gl::TextureRef texture)
 {
     target = texture;
@@ -48,7 +40,6 @@ void Texture::unload()
 {
     if (target)
     {
-        LOGD << "TEXTURE UNLOADED: " << request.inputSource->getFilePathHint() << " | " << name << endl; // FIXME
         target.reset();
     }
 }
@@ -72,7 +63,7 @@ void Texture::uploadTextureData(const TextureData &textureData)
     setTarget(TextureHelper::uploadTextureData(textureData));
 }
 
-int Texture::getId()
+int Texture::getId() const
 {
     return name;
 }

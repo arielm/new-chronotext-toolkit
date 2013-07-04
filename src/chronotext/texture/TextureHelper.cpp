@@ -106,6 +106,7 @@ gl::TextureRef TextureHelper::uploadTextureData(const TextureData &textureData)
         
         if (texture)
         {
+            texture->setDeallocator(&TextureHelper::textureDeallocator, texture.get());
             LOGD << "TEXTURE UPLOADED: " << textureData.request.inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
         }
     }
@@ -208,6 +209,12 @@ void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, f
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
+void TextureHelper::textureDeallocator(void *refcon)
+{
+    gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
+    LOGD << "TEXTURE UNLOADED: " << texture->getId() << endl;
+}
+
 /*
  * BASED ON CODE FROM cinder/gl/Texture.cpp
  */
@@ -217,9 +224,6 @@ TextureData TextureHelper::fetchTranslucentTextureData(const TextureRequest &tex
     
     Channel8u channel = surface.getChannel(0);
     shared_ptr<uint8_t> data;
-    
-    GLenum glInternalFormat = GL_ALPHA;
-    GLenum glFormat = GL_ALPHA;
     
     // if the data is not already contiguous, we'll need to create a block of memory that is
     if ((channel.getIncrement() != 1 ) || (channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t)))
@@ -244,7 +248,7 @@ TextureData TextureHelper::fetchTranslucentTextureData(const TextureRequest &tex
         data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
     }
     
-    return TextureData(textureRequest, data, glInternalFormat, glFormat, channel.getWidth(), channel.getHeight());
+    return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight());
 }
 
 TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &textureRequest)

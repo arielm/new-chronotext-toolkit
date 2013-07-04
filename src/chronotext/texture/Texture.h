@@ -1,16 +1,18 @@
 #pragma once
 
-#include "chronotext/texture/TextureHelper.h"
+#include "chronotext/texture/TextureData.h"
+
+typedef std::shared_ptr<class Texture> TextureRef;
 
 class Texture
 {
+    ci::gl::TextureRef target;
+
     GLuint name;
     int width;
     int height;
     float maxU;
     float maxV;
-    
-    ci::gl::TextureRef target;
     
     void setTarget(ci::gl::TextureRef texture);
 
@@ -21,15 +23,13 @@ public:
     Texture(const TextureRequest &textureRequest);
     Texture(const TextureData &textureData);
     
-    ~Texture();
-    
     void unload();
     void reload();
     
     TextureData fetchTextureData();
     void uploadTextureData(const TextureData &textureData);
 
-    int getId();
+    int getId() const;
     void bind();
     
     void begin();
