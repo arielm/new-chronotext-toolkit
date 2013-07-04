@@ -82,7 +82,13 @@ gl::TextureRef TextureHelper::uploadTextureData(const TextureData &textureData)
     if (!textureData.undefined())
     {
         gl::Texture::Format format = textureData.request.getFormat();
-        
+
+        /*
+         * NECESSARY IN ORDER TO CLEANUP EVENTUAL ERRORS
+         */
+        while(glGetError() != GL_NO_ERROR)
+        {}
+
         switch (textureData.type)
         {
             case TextureData::TYPE_SURFACE:
@@ -104,10 +110,20 @@ gl::TextureRef TextureHelper::uploadTextureData(const TextureData &textureData)
                 break;
         }
         
-        if (texture)
+        if (glGetError() == GL_OUT_OF_MEMORY)
+        {
+            throw ci::Exception();
+        }
+        else if (texture)
         {
             texture->setDeallocator(&TextureHelper::textureDeallocator, texture.get());
-            LOGD << "TEXTURE UPLOADED: " << textureData.request.inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
+            
+            LOGD <<
+            "TEXTURE UPLOADED: " <<
+            textureData.request.inputSource->getFilePathHint() << " | " <<
+            texture->getId() << " | " <<
+            texture->getWidth() << "x" << texture->getHeight() <<
+            endl;
         }
     }
     
@@ -212,7 +228,11 @@ void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, f
 void TextureHelper::textureDeallocator(void *refcon)
 {
     gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
-    LOGD << "TEXTURE UNLOADED: " << texture->getId() << endl;
+    
+    LOGD <<
+    "TEXTURE UNLOADED: " <<
+    texture->getId() <<
+    endl;
 }
 
 /*
