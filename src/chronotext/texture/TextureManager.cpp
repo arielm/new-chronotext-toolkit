@@ -3,66 +3,58 @@
 using namespace std;
 using namespace ci;
 
-TextureManager::~TextureManager()
+TextureRef TextureManager::getFromCache(const TextureRequest &textureRequest)
 {
-    for (auto it = cache.begin(); it != cache.end(); ++it)
-    {
-        delete *it;
-    }
-}
-
-Texture* TextureManager::getFromCache(const TextureRequest &textureRequest)
-{
+    TextureRef texture;
+    
     for (auto it = cache.cbegin(); it != cache.cend(); ++it)
     {
-        Texture *texture = *it;
+        texture = *it;
 
         if (textureRequest == texture->request)
         {
-            return texture;
+            break;
         }
     }
     
-    return NULL;
+    return texture;
 }
 
-void TextureManager::putInCache(Texture *texture)
+void TextureManager::putInCache(TextureRef texture)
 {
     cache.push_back(texture);
 }
 
-Texture* TextureManager::getTexture(const string &resourceName, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
+TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
     return getTexture(InputSource::getResource(resourceName), useMipmap, flags, wrapS, wrapT);
 }
 
-Texture* TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
+TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
     return getTexture(TextureRequest(inputSource, useMipmap, flags, wrapS, wrapT));
 }
 
-Texture* TextureManager::getTexture(const TextureRequest &textureRequest)
+TextureRef TextureManager::getTexture(const TextureRequest &textureRequest)
 {
-    Texture *texture = getFromCache(textureRequest);
+    TextureRef texture = getFromCache(textureRequest);
     
     if (!texture)
     {
-        texture = new Texture(textureRequest);
+        texture = make_shared<Texture>(textureRequest);
         putInCache(texture);
     }
     
     return texture;
 }
 
-bool TextureManager::remove(Texture *texture)
+bool TextureManager::remove(TextureRef texture)
 {
     for (auto it = cache.begin(); it != cache.end(); ++it)
     {
         if (texture == *it)
         {
-            delete *it;
             cache.erase(it);
-
             return true;
         }
     }
@@ -72,11 +64,6 @@ bool TextureManager::remove(Texture *texture)
 
 void TextureManager::clear()
 {
-    for (auto it = cache.begin(); it != cache.end(); ++it)
-    {
-        delete *it;
-    }
-
     cache.clear();
 }
 
