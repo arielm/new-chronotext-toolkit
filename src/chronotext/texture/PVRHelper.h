@@ -17,8 +17,6 @@
  * - CONS: BIG APPLICATION SIZES ON OSX AND WINDOWS (BECAUSE THE DATA IN THE APPLICATION-PACKAGE IS NOT ZIPPED)
  * - CONS: BIG "UNPACKAGED APPLICATION-SIZE" ON IOS (THE SIZE TAKEN ONCE THE APPLICATION-PACKAGE IS UNZIPPED)
  * - RECAP: SEEMS TO BE THE IDEAL FORMAT FOR ANDROID, AND EVENTUALLY FOR IOS (IF LOADING-TIME IS MORE IMPORTANT THAN "UNPACKAGED APPLICATION-SIZE")
- *
- * TODO: USE ci::gl::TextureRef INSTEAD OF ci::gl::Texture
  */
 
 #pragma once
@@ -33,5 +31,5 @@ public:
     static ci::Buffer decompressPVRGZ(const ci::fs::path &filePath);
     static ci::Buffer decompressPVRCCZ(ci::DataSourceRef dataSource);
 
-    static ci::gl::Texture* getPVRTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    static ci::gl::TextureRef getPVRTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
 };

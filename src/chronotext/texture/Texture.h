@@ -1,7 +1,3 @@
-/*
- * TODO: USE ci::gl::TextureRef INSTEAD OF ci::gl::Texture
- */
-
 #pragma once
 
 #include "chronotext/texture/TextureHelper.h"
@@ -14,9 +10,9 @@ class Texture
     float maxU;
     float maxV;
     
-    ci::gl::Texture *target;
+    ci::gl::TextureRef target;
     
-    void setTarget(ci::gl::Texture *texture);
+    void setTarget(ci::gl::TextureRef texture);
 
 public:
     TextureRequest request;

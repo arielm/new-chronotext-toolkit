@@ -170,7 +170,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     return buffer;
 }
 
-gl::Texture* PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GLenum wrapS, GLenum wrapT)
+gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GLenum wrapS, GLenum wrapT)
 {
     PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
     
@@ -250,5 +250,5 @@ gl::Texture* PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GLen
         glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
     }
     
-    return new gl::Texture(GL_TEXTURE_2D, name, width, height, false);
+    return gl::Texture::create(GL_TEXTURE_2D, name, width, height, false);
 }

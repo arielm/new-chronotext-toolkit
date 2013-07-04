@@ -18,17 +18,17 @@ static int nextPOT(int val)
     return ret;
 }
 
-gl::Texture* TextureHelper::loadTexture(const string &resourceName, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
+gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
     return loadTexture(InputSource::getResource(resourceName), useMipmap, flags, wrapS, wrapT);
 }
 
-gl::Texture* TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
+gl::TextureRef TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
 {
     return loadTexture(TextureRequest(inputSource, useMipmap, flags, wrapS, wrapT));
 }
 
-gl::Texture* TextureHelper::loadTexture(const TextureRequest &textureRequest)
+gl::TextureRef TextureHelper::loadTexture(const TextureRequest &textureRequest)
 {
     return uploadTextureData(fetchTextureData(textureRequest));
 }
@@ -75,22 +75,23 @@ TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest
     return textureData;
 }
 
-gl::Texture* TextureHelper::uploadTextureData(const TextureData &textureData)
+gl::TextureRef TextureHelper::uploadTextureData(const TextureData &textureData)
 {
+    gl::TextureRef texture;
+
     if (!textureData.undefined())
     {
-        gl::Texture *texture = NULL;
         gl::Texture::Format format = textureData.request.getFormat();
         
         switch (textureData.type)
         {
             case TextureData::TYPE_SURFACE:
-                texture = new gl::Texture(textureData.surface, format);
+                texture = gl::Texture::create(textureData.surface, format);
                 texture->setCleanTexCoords(textureData.maxU, textureData.maxV);
                 break;
                 
             case TextureData::TYPE_IMAGE_SOURCE:
-                texture = new gl::Texture(textureData.imageSource, format);
+                texture = gl::Texture::create(textureData.imageSource, format);
                 break;
                 
             case TextureData::TYPE_PVR:
@@ -99,7 +100,7 @@ gl::Texture* TextureHelper::uploadTextureData(const TextureData &textureData)
                 
             case TextureData::TYPE_DATA:
                 format.setInternalFormat(textureData.glInternalFormat);
-                texture = new gl::Texture(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
+                texture = gl::Texture::create(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
                 break;
         }
         
@@ -107,17 +108,9 @@ gl::Texture* TextureHelper::uploadTextureData(const TextureData &textureData)
         {
             LOGD << "TEXTURE UPLOADED: " << textureData.request.inputSource->getFilePathHint() << " | " << texture->getId() << " | " << texture->getWidth() << "x" << texture->getHeight() << endl;
         }
-        
-        return texture;
     }
     
-    return NULL;
-}
-
-void TextureHelper::unloadTexture(ci::gl::Texture *texture)
-{
-    LOGD << "TEXTURE UNLOADED: " << texture->getId() << endl;
-    delete texture;
+    return texture;
 }
 
 void TextureHelper::bindTexture(gl::Texture *texture)
