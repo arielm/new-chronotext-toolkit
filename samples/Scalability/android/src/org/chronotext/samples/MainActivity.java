@@ -20,13 +20,6 @@ public class MainActivity extends Activity
   {
     super.onCreate(savedInstanceState);
 
-    /*
-     * DEFINING THIS IN THE MANIFEST IS NOT ALWAYS WORKING... 
-     */
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-    // ----
-
     delegate = new CinderDelegate(this, null);
     setContentView(delegate.getView());
   }

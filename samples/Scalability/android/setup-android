@@ -1,15 +1,22 @@
-if [ -z $CINDER_PATH ]; then
-  echo "CINDER_PATH must be defined!"
-else
-  if [ -z $NDK_MODULE_PATH ]; then
-    export NDK_MODULE_PATH=$CINDER_PATH/android/prebuilt
-    echo "NDK_MODULE_PATH set to $NDK_MODULE_PATH"
-  fi
-
+setup()
+{
   android update project --path . --name Scalability --target android-10
 
-  echo "Ready to run:"
-  echo "ndk-build"
+  echo "READY TO RUN:"
+  echo "ndk-build -j 4"
   echo "ant debug"
   echo "adb install -r bin/Scalability-debug.apk"
+}
+
+if [ -z $NDK_MODULE_PATH ]
+  then if [ -z $CINDER_PATH ]
+    then echo "CINDER_PATH MUST BE DEFINED!"
+  else
+    export NDK_MODULE_PATH=$CINDER_PATH/android/prebuilt
+    echo "NDK_MODULE_PATH SET TO $NDK_MODULE_PATH"
+
+    setup
+  fi
+else
+  setup
 fi
