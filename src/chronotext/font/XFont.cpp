@@ -70,7 +70,11 @@ namespace chronotext
             // ---
             
             unloaded = true;
-            LOGD << "FONT DELETED: " << textureName << endl;
+            
+            LOGD <<
+            "FONT UNLOADED: " <<
+            textureName <<
+            endl;
         }
     }
     
@@ -82,7 +86,13 @@ namespace chronotext
             init();
             
             unloaded = false;
-            LOGD << "FONT LOADED: " << textureName << " (" << atlasWidth << "x" << atlasHeight << ")" << endl;
+            
+            LOGD <<
+            "FONT UPLOADED: " <<
+            inputSource->getFilePathHint() << " | " <<
+            textureName << " | " <<
+            atlasWidth << "x" << atlasHeight  <<
+            endl;
         }
     }
     
