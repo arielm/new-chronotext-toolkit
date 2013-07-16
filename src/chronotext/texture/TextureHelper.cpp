@@ -285,9 +285,16 @@ TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &text
     {
         Surface dst(dstWidth, dstHeight, src.hasAlpha(), src.getChannelOrder());
         
-        ip::fill(&dst, ColorA::zero());
         dst.copyFrom(src, Area(0, 0, srcWidth, srcHeight), Vec2i::zero());
         
+        /*
+         * DUPLICATING THE RIGHT AND BOTTOM EDGES:
+         * NECESSARY TO AVOID BORDER ARTIFACTS WHEN THE
+         * TEXTURE IS NOT DRAWN AT ITS ORIGINAL SCALE
+         */
+        dst.copyFrom(src, Area(srcWidth - 1, 0, srcWidth, srcHeight), Vec2i(1, 0));
+        dst.copyFrom(src, Area(0, srcHeight - 1, srcWidth, srcHeight), Vec2i(0, 1));
+
         return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
     }
     else
