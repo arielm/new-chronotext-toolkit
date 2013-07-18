@@ -284,6 +284,13 @@ TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &text
     if ((srcWidth != dstWidth) || (srcHeight != dstHeight))
     {
         Surface dst(dstWidth, dstHeight, src.hasAlpha(), src.getChannelOrder());
+
+        /*
+         * NO NEED TO CLEAR THE WHOLE SURFACE
+         */
+        ip::fill(&dst, ColorA::zero(), Area(srcWidth + 1, 0, dstWidth, srcHeight));
+        ip::fill(&dst, ColorA::zero(), Area(0, srcHeight + 1, srcWidth, dstHeight));
+        ip::fill(&dst, ColorA::zero(), Area(srcWidth + 1, srcHeight + 1, dstWidth, dstHeight));
         
         dst.copyFrom(src, Area(0, 0, srcWidth, srcHeight), Vec2i::zero());
         
