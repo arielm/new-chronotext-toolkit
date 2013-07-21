@@ -46,4 +46,5 @@ static inline float FastSqrt(float x)
     return r * x;
 }
 
-bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &points);
+bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &path);
+bool isPointInside(const ci::Vec2f &point, const std::vector<std::vector<ci::Vec2f>> &polygon);
