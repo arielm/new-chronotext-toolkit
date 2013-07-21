@@ -30,7 +30,7 @@ static inline int bound(int value, int range)
  */
 static inline float ease(float t)
 {
-	return (t * t * (3 - 2 * t));
+    return (t * t * (3 - 2 * t));
 }
 
 /*

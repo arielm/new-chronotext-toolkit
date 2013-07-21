@@ -19,18 +19,18 @@ using namespace ci;
 
 static float linearYatX(const Vec2f p[2], float x)
 {
-	if (p[0].x == p[1].x) return p[0].y;
-	return p[0].y + (p[1].y - p[0].y) * (x - p[0].x) / (p[1].x - p[0].x);
+    if (p[0].x == p[1].x) return p[0].y;
+    return p[0].y + (p[1].y - p[0].y) * (x - p[0].x) / (p[1].x - p[0].x);
 }
 
 static size_t linearCrossings(const Vec2f p[2], const Vec2f &pt)
 {
-	if ((p[0].x < pt.x && pt.x <= p[1].x) || (p[1].x < pt.x && pt.x <= p[0].x ))
+    if ((p[0].x < pt.x && pt.x <= p[1].x) || (p[1].x < pt.x && pt.x <= p[0].x ))
     {
-		if (pt.y > linearYatX(p, pt.x)) return 1;
-	}
+        if (pt.y > linearYatX(p, pt.x)) return 1;
+    }
     
-	return 0;
+    return 0;
 }
 
 /*
@@ -42,7 +42,7 @@ bool isPointInside(const Vec2f &point, const vector<Vec2f> &path)
     
     if (size <= 2)
     {
-		return false;
+        return false;
     }
     else
     {
@@ -69,13 +69,13 @@ bool isPointInside(const Vec2f &point, const vector<vector<Vec2f>> &polygon)
 {
     int numPathsInside = 0;
     
-	for (auto path : polygon)
+    for (auto path : polygon)
     {
-		if (isPointInside(point, path))
+        if (isPointInside(point, path))
         {
-			numPathsInside++;
+            numPathsInside++;
         }
-	}
+    }
     
-	return (numPathsInside % 2) == 1;
+    return (numPathsInside % 2) == 1;
 }
