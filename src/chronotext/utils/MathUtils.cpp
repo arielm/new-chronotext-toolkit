@@ -11,7 +11,10 @@ using namespace ci;
  * https://github.com/cinder/Cinder/blob/ae580c2cb0fc44d0a99b233dbefdf736f7093209/src/cinder/Shape2d.cpp#L135-144
  *
  * ASSERTION: THE IMPLIED WINDING IS "ODD" (AKA "EVEN-ODD FILL-RULE")
- * TODO: CHECK WHAT'S NECESSARY TO HANDLE "NON-ZERO" WINDING)
+ *
+ * TODO:
+ * CHECK WHAT'S NECESSARY IN ORDER TO HANDLE "NON-ZERO" WINDING (WHICH SEEMS TO BE THE DEFAULT FILL-RULE IN HTML CANVAS)
+ * REFERENCE: http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
  */
 
 static float linearYatX(const Vec2f p[2], float x)
