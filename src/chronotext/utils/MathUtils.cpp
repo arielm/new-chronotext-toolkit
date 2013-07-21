@@ -4,16 +4,14 @@ using namespace std;
 using namespace ci;
 
 /*
- * THE FOLLOWING FUNCTIONS ARE BASED ON CODE FROM Cinder:
+ * THE FOLLOWING 4 FUNCTIONS ARE BASED ON CODE FROM Cinder:
  *
  * https://github.com/cinder/Cinder/blob/ae580c2cb0fc44d0a99b233dbefdf736f7093209/src/cinder/Path2d.cpp#L754-768
  * https://github.com/cinder/Cinder/blob/ae580c2cb0fc44d0a99b233dbefdf736f7093209/src/cinder/Path2d.cpp#L824-857
  * https://github.com/cinder/Cinder/blob/ae580c2cb0fc44d0a99b233dbefdf736f7093209/src/cinder/Shape2d.cpp#L135-144
  *
- * NOTES:
- * - A PATH I MADE OF N POINTS
- * - A POLYGON IS MADE OF N PATHS
- * - THE IMPLIED WINDING IS "ODD" (AKA "EVEN-ODD FILL-RULE")
+ * ASSERTION: THE IMPLIED WINDING IS "ODD" (AKA "EVEN-ODD FILL-RULE")
+ * TODO: CHECK WHAT'S NECESSARY TO HANDLE "NON-ZERO" WINDING)
  */
 
 static float linearYatX(const Vec2f p[2], float x)
@@ -32,6 +30,9 @@ static size_t linearCrossings(const Vec2f p[2], const Vec2f &pt)
 	return 0;
 }
 
+/*
+ * A PATH IS MADE OF N POINTS
+ */
 bool isPointInside(const Vec2f &point, const vector<Vec2f> &path)
 {
     const size_t size = path.size();
@@ -58,6 +59,9 @@ bool isPointInside(const Vec2f &point, const vector<Vec2f> &path)
     }
 }
 
+/*
+ * A POLYGON IS MADE OF N PATHS
+ */
 bool isPointInside(const Vec2f &point, const vector<vector<Vec2f>> &polygon)
 {
     int numPathsInside = 0;
