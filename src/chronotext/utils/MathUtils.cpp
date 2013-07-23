@@ -3,6 +3,28 @@
 using namespace std;
 using namespace ci;
 
+Rectf getPathBounds(const vector<Vec2f> &path)
+{
+    float minX = numeric_limits<float>::max();
+    float minY = numeric_limits<float>::max();
+    float maxX = numeric_limits<float>::min();
+    float maxY = numeric_limits<float>::min();
+    
+    for (auto point : path)
+    {
+        const float x = point.x;
+        const float y = point.y;
+        
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+    }
+    
+    return Rectf(minX, minY, maxX, maxY);
+}
+
 /*
  * THE FOLLOWING 4 FUNCTIONS ARE BASED ON CODE FROM Cinder:
  *

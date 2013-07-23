@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cinder/CinderMath.h"
-#include "cinder/Vector.h"
+#include "cinder/Rect.h"
 
 #include <vector>
 #include <algorithm>
@@ -45,6 +45,8 @@ static inline float FastSqrt(float x)
     r *= (1.5f - 0.5f * x * r * r); // One round of Newton's method
     return r * x;
 }
+
+ci::Rectf getPathBounds(const std::vector<ci::Vec2f> &path);
 
 bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &path);
 bool isPointInside(const ci::Vec2f &point, const std::vector<std::vector<ci::Vec2f>> &polygon);
