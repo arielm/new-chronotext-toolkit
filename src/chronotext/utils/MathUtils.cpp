@@ -3,14 +3,14 @@
 using namespace std;
 using namespace ci;
 
-Rectf getPathBounds(const vector<Vec2f> &path)
+Rectf getBoundingBox(const vector<Vec2f> &polygon)
 {
     float minX = numeric_limits<float>::max();
     float minY = numeric_limits<float>::max();
     float maxX = numeric_limits<float>::min();
     float maxY = numeric_limits<float>::min();
     
-    for (auto point : path)
+    for (auto point : polygon)
     {
         const float x = point.x;
         const float y = point.y;
@@ -55,12 +55,9 @@ static size_t linearCrossings(const Vec2f p[2], const Vec2f &pt)
     return 0;
 }
 
-/*
- * A PATH IS MADE OF N POINTS
- */
-bool isPointInside(const Vec2f &point, const vector<Vec2f> &path)
+bool isPointInside(const Vec2f &point, const vector<Vec2f> &polygon)
 {
-    const size_t size = path.size();
+    const size_t size = polygon.size();
     
     if (size <= 2)
     {
@@ -72,28 +69,25 @@ bool isPointInside(const Vec2f &point, const vector<Vec2f> &path)
         
         for (size_t s = 0; s < size - 1; ++s)
         {
-            crossings += linearCrossings(&(path[s]), point);
+            crossings += linearCrossings(&(polygon[s]), point);
         }
         
         Vec2f temp[2];
-        temp[0] = path[size - 1];
-        temp[1] = path[0];
+        temp[0] = polygon[size - 1];
+        temp[1] = polygon[0];
         crossings += linearCrossings(&(temp[0]), point);
         
         return (crossings & 1) == 1;
     }
 }
 
-/*
- * A POLYGON IS MADE OF N PATHS
- */
-bool isPointInside(const Vec2f &point, const vector<vector<Vec2f>> &polygon)
+bool isPointInside(const Vec2f &point, const vector<vector<Vec2f>> &polygons)
 {
     int numPathsInside = 0;
     
-    for (auto path : polygon)
+    for (auto polygon : polygons)
     {
-        if (isPointInside(point, path))
+        if (isPointInside(point, polygon))
         {
             numPathsInside++;
         }
