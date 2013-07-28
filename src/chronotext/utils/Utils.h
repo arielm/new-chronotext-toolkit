@@ -14,12 +14,16 @@
 #include "cinder/msw/OutputDebugStringStream.h"
 #elif defined(CINDER_ANDROID)
 #include "cinder/android/LogStream.h"
+#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
+#include "chronotext/utils/SyslogStringStream.h"
 #endif
 
 #if defined(CINDER_MSW)
 static cinder::msw::dostream *CHROUT;
 #elif defined(CINDER_ANDROID)
 static cinder::android::dostream *CHROUT;
+#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
+static chr::mac::dostream *CHROUT;
 #endif
 
 static inline std::ostream& chrout()
@@ -34,6 +38,12 @@ static inline std::ostream& chrout()
     if (!CHROUT)
     {
         CHROUT = new cinder::android::dostream;
+    }
+    return *CHROUT;
+#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
+    if (!CHROUT)
+    {
+        CHROUT = new chr::mac::dostream;
     }
     return *CHROUT;
 #else

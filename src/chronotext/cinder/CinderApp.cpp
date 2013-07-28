@@ -12,7 +12,7 @@ void CinderApp::start()
 
 void CinderApp::stop()
 {
-    console() << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
+    LOGI << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
 }
 
 void CinderApp::setup()
