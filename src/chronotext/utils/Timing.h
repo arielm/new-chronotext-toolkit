@@ -7,4 +7,4 @@ ci::Timer ___timer___;
 double ___tmp___;
 
 #define TIMING_START ___timer___.start();
-#define TIMING_STOP(MSG) ___tmp___ = ___timer___.getSeconds(); LOGI << MSG << ": " << ___tmp___ << std::endl;
+#define TIMING_STOP(MSG) ___tmp___ = ___timer___.getSeconds(); LOGI << MSG << ": " << std::setprecision(15) << ___tmp___ << std::endl;
