@@ -5,7 +5,7 @@
 class AudioLoopDelegate
 {
 public:
-    virtual void renderCallback(int bufferSize, float *bufferData, double timeStamp) {}
+    virtual void renderCallback(int bufferSize, float *bufferData, double timeStamp) = 0;
 };
 
 class AudioLoopImplCocoa
