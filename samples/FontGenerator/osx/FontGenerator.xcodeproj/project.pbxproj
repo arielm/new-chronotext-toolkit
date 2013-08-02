@@ -1,0 +1,466 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
+		00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
+		00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
+		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
+		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
+		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
+		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		A809523B16F360660011FAA3 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A809523A16F360660011FAA3 /* icon.icns */; };
+		A80952D616F3613E0011FAA3 /* FontMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809525316F3613E0011FAA3 /* FontMatrix.cpp */; };
+		A80952D716F3613E0011FAA3 /* XFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809525516F3613E0011FAA3 /* XFont.cpp */; };
+		A80952D816F3613E0011FAA3 /* XFontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809525716F3613E0011FAA3 /* XFontSequence.cpp */; };
+		A80952E416F3613E0011FAA3 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809527616F3613E0011FAA3 /* InputSource.cpp */; };
+		A80952F316F3613E0011FAA3 /* FontHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952A116F3613E0011FAA3 /* FontHelper.cpp */; };
+		A80952F416F3613E0011FAA3 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952A316F3613E0011FAA3 /* FontManager.cpp */; };
+		A80952F516F3613E0011FAA3 /* WordWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952A616F3613E0011FAA3 /* WordWrapper.cpp */; };
+		A809530016F3613E0011FAA3 /* glUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C416F3613E0011FAA3 /* glUtils.cpp */; };
+		A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C716F3613E0011FAA3 /* MathUtils.cpp */; };
+		A809530216F3613E0011FAA3 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952CC16F3613E0011FAA3 /* Utils.cpp */; };
+		A809530916F361E20011FAA3 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809530316F361E20011FAA3 /* Application.cpp */; };
+		A809530D16F37F120011FAA3 /* frank.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A809530C16F37F120011FAA3 /* frank.ttf */; };
+		A8EB33F117AAB05600798D19 /* BinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33EA17AAB05600798D19 /* BinPack.cpp */; };
+		A8EB33F217AAB05600798D19 /* FreetypeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33ED17AAB05600798D19 /* FreetypeHelper.cpp */; };
+		A8EB33F317AAB05600798D19 /* XFontCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33EF17AAB05600798D19 /* XFontCreator.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0091D8F80E81B9330029341E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		00B784AF0FF439BC000DE1D7 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		434A86CFEA544FFA9D66F749 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		530D8ED2F6EB414F805B7B9E /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Prefix.pch; sourceTree = "<group>"; };
+		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		8D1107320486CEB800E47090 /* FontGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FontGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A809523A16F360660011FAA3 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		A809525316F3613E0011FAA3 /* FontMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontMatrix.cpp; sourceTree = "<group>"; };
+		A809525416F3613E0011FAA3 /* FontMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontMatrix.h; sourceTree = "<group>"; };
+		A809525516F3613E0011FAA3 /* XFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XFont.cpp; sourceTree = "<group>"; };
+		A809525616F3613E0011FAA3 /* XFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFont.h; sourceTree = "<group>"; };
+		A809525716F3613E0011FAA3 /* XFontSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XFontSequence.cpp; sourceTree = "<group>"; };
+		A809525816F3613E0011FAA3 /* XFontSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFontSequence.h; sourceTree = "<group>"; };
+		A809527616F3613E0011FAA3 /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
+		A809527716F3613E0011FAA3 /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
+		A80952A116F3613E0011FAA3 /* FontHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontHelper.cpp; sourceTree = "<group>"; };
+		A80952A216F3613E0011FAA3 /* FontHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontHelper.h; sourceTree = "<group>"; };
+		A80952A316F3613E0011FAA3 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
+		A80952A416F3613E0011FAA3 /* FontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontManager.h; sourceTree = "<group>"; };
+		A80952A516F3613E0011FAA3 /* LinkExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkExtractor.h; sourceTree = "<group>"; };
+		A80952A616F3613E0011FAA3 /* WordWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WordWrapper.cpp; sourceTree = "<group>"; };
+		A80952A716F3613E0011FAA3 /* WordWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordWrapper.h; sourceTree = "<group>"; };
+		A80952C416F3613E0011FAA3 /* glUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glUtils.cpp; sourceTree = "<group>"; };
+		A80952C516F3613E0011FAA3 /* glUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glUtils.h; sourceTree = "<group>"; };
+		A80952C616F3613E0011FAA3 /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
+		A80952C716F3613E0011FAA3 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
+		A80952C816F3613E0011FAA3 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
+		A80952CC16F3613E0011FAA3 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
+		A80952CD16F3613E0011FAA3 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		A809530316F361E20011FAA3 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../src/Application.cpp; sourceTree = "<group>"; };
+		A809530C16F37F120011FAA3 /* frank.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = frank.ttf; path = ../resources/frank.ttf; sourceTree = "<group>"; };
+		A8EB33EA17AAB05600798D19 /* BinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinPack.cpp; sourceTree = "<group>"; };
+		A8EB33EB17AAB05600798D19 /* BinPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinPack.h; sourceTree = "<group>"; };
+		A8EB33EC17AAB05600798D19 /* Characters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Characters.h; sourceTree = "<group>"; };
+		A8EB33ED17AAB05600798D19 /* FreetypeHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FreetypeHelper.cpp; sourceTree = "<group>"; };
+		A8EB33EE17AAB05600798D19 /* FreetypeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreetypeHelper.h; sourceTree = "<group>"; };
+		A8EB33EF17AAB05600798D19 /* XFontCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XFontCreator.cpp; sourceTree = "<group>"; };
+		A8EB33F017AAB05600798D19 /* XFontCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFontCreator.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
+				5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */,
+				5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */,
+				00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */,
+				00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */,
+				00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */,
+				00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				A809530316F361E20011FAA3 /* Application.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				00B784AF0FF439BC000DE1D7 /* Accelerate.framework */,
+				00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */,
+				00B784B10FF439BC000DE1D7 /* AudioUnit.framework */,
+				00B784B20FF439BC000DE1D7 /* CoreAudio.framework */,
+				5323E6B50EAFCA7E003A9687 /* QTKit.framework */,
+				5323E6B10EAFCA74003A9687 /* CoreVideo.framework */,
+				0091D8F80E81B9330029341E /* OpenGL.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* FontGenerator.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* FontGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				A809523E16F3613E0011FAA3 /* chronotext */,
+				080E96DDFE201D6D7F000001 /* Source */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				A809523816F35FD10011FAA3 /* OSX */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = FontGenerator;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A809530C16F37F120011FAA3 /* frank.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A809523816F35FD10011FAA3 /* OSX */ = {
+			isa = PBXGroup;
+			children = (
+				A809523916F360660011FAA3 /* Resources */,
+				530D8ED2F6EB414F805B7B9E /* Prefix.pch */,
+				434A86CFEA544FFA9D66F749 /* Info.plist */,
+			);
+			name = OSX;
+			sourceTree = "<group>";
+		};
+		A809523916F360660011FAA3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A809523A16F360660011FAA3 /* icon.icns */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A809523E16F3613E0011FAA3 /* chronotext */ = {
+			isa = PBXGroup;
+			children = (
+				A809525216F3613E0011FAA3 /* font */,
+				A809527616F3613E0011FAA3 /* InputSource.cpp */,
+				A809527716F3613E0011FAA3 /* InputSource.h */,
+				A80952A016F3613E0011FAA3 /* text */,
+				A8EB33E817AAB05600798D19 /* tools */,
+				A80952C016F3613E0011FAA3 /* utils */,
+			);
+			name = chronotext;
+			path = ../../../src/chronotext;
+			sourceTree = "<group>";
+		};
+		A809525216F3613E0011FAA3 /* font */ = {
+			isa = PBXGroup;
+			children = (
+				A809525316F3613E0011FAA3 /* FontMatrix.cpp */,
+				A809525416F3613E0011FAA3 /* FontMatrix.h */,
+				A809525516F3613E0011FAA3 /* XFont.cpp */,
+				A809525616F3613E0011FAA3 /* XFont.h */,
+				A809525716F3613E0011FAA3 /* XFontSequence.cpp */,
+				A809525816F3613E0011FAA3 /* XFontSequence.h */,
+			);
+			path = font;
+			sourceTree = "<group>";
+		};
+		A80952A016F3613E0011FAA3 /* text */ = {
+			isa = PBXGroup;
+			children = (
+				A80952A116F3613E0011FAA3 /* FontHelper.cpp */,
+				A80952A216F3613E0011FAA3 /* FontHelper.h */,
+				A80952A316F3613E0011FAA3 /* FontManager.cpp */,
+				A80952A416F3613E0011FAA3 /* FontManager.h */,
+				A80952A516F3613E0011FAA3 /* LinkExtractor.h */,
+				A80952A616F3613E0011FAA3 /* WordWrapper.cpp */,
+				A80952A716F3613E0011FAA3 /* WordWrapper.h */,
+			);
+			path = text;
+			sourceTree = "<group>";
+		};
+		A80952C016F3613E0011FAA3 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A80952C416F3613E0011FAA3 /* glUtils.cpp */,
+				A80952C516F3613E0011FAA3 /* glUtils.h */,
+				A80952C616F3613E0011FAA3 /* Hasher.h */,
+				A80952C716F3613E0011FAA3 /* MathUtils.cpp */,
+				A80952C816F3613E0011FAA3 /* MathUtils.h */,
+				A80952CC16F3613E0011FAA3 /* Utils.cpp */,
+				A80952CD16F3613E0011FAA3 /* Utils.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		A8EB33E817AAB05600798D19 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				A8EB33E917AAB05600798D19 /* font */,
+			);
+			path = tools;
+			sourceTree = "<group>";
+		};
+		A8EB33E917AAB05600798D19 /* font */ = {
+			isa = PBXGroup;
+			children = (
+				A8EB33F017AAB05600798D19 /* XFontCreator.h */,
+				A8EB33EF17AAB05600798D19 /* XFontCreator.cpp */,
+				A8EB33EB17AAB05600798D19 /* BinPack.h */,
+				A8EB33EA17AAB05600798D19 /* BinPack.cpp */,
+				A8EB33EE17AAB05600798D19 /* FreetypeHelper.h */,
+				A8EB33ED17AAB05600798D19 /* FreetypeHelper.cpp */,
+				A8EB33EC17AAB05600798D19 /* Characters.h */,
+			);
+			path = font;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* FontGenerator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "FontGenerator" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FontGenerator;
+			productInstallPath = "$(HOME)/Applications";
+			productName = FontGenerator;
+			productReference = 8D1107320486CEB800E47090 /* FontGenerator.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FontGenerator" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* FontGenerator */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* FontGenerator */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A809523B16F360660011FAA3 /* icon.icns in Resources */,
+				A809530D16F37F120011FAA3 /* frank.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A80952D616F3613E0011FAA3 /* FontMatrix.cpp in Sources */,
+				A80952D716F3613E0011FAA3 /* XFont.cpp in Sources */,
+				A80952D816F3613E0011FAA3 /* XFontSequence.cpp in Sources */,
+				A80952E416F3613E0011FAA3 /* InputSource.cpp in Sources */,
+				A80952F316F3613E0011FAA3 /* FontHelper.cpp in Sources */,
+				A80952F416F3613E0011FAA3 /* FontManager.cpp in Sources */,
+				A80952F516F3613E0011FAA3 /* WordWrapper.cpp in Sources */,
+				A809530016F3613E0011FAA3 /* glUtils.cpp in Sources */,
+				A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */,
+				A809530216F3613E0011FAA3 /* Utils.cpp in Sources */,
+				A809530916F361E20011FAA3 /* Application.cpp in Sources */,
+				A8EB33F117AAB05600798D19 /* BinPack.cpp in Sources */,
+				A8EB33F217AAB05600798D19 /* FreetypeHelper.cpp in Sources */,
+				A8EB33F317AAB05600798D19 /* XFontCreator.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
+					"\"$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a\"",
+				);
+				PRODUCT_NAME = FontGenerator;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_FAST_MATH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder.a\"",
+					"\"$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a\"",
+				);
+				PRODUCT_NAME = FontGenerator;
+				STRIP_INSTALLED_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = i386;
+				CINDER_PATH = ../../../../../../Cinder;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/blocks/Freetype/include",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(CINDER_PATH)/blocks/chronotext-blocks-base/src\"";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = i386;
+				CINDER_PATH = ../../../../../../Cinder;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/blocks/Freetype/include",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(CINDER_PATH)/blocks/chronotext-blocks-base/src\"";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "FontGenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FontGenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
