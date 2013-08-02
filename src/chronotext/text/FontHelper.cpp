@@ -39,7 +39,7 @@ void FontHelper::drawText(XFont *font, XFontSequence *sequence, const wstring &t
         int cc = font->lookup(*it);
         font->addGlyph(cc, x, y);
         
-        float w = font->getGlyphWidth(cc);
+        float w = font->getGlyphWidth(cc) * font->getDirection();
         x += snap ? math<float>::floor(w) : w;
     }
     
