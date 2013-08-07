@@ -86,7 +86,7 @@ void drawGrid(const Rectf &bounds, float sx, float sy, const Vec2f &offset)
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, vertices.data());
     glDrawArrays(GL_LINES, 0, vertices.size());
-    glDisableClient/Users/arielm/Documents/DEV2/chronotext-private/Sketches/JS/Water1/osx/Water1.xcodeprojState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void drawFullScreenQuad()
