@@ -160,7 +160,7 @@ fs::path InputSource::getResourcePath()
 #if defined(CHR_COMPLEX)
     CFBundleRef bundle = CFBundleGetMainBundle();
     CFURLRef url = CFBundleCopyBundleURL(bundle);
-	CFStringRef tmp = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+    CFStringRef tmp = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
     
     CFIndex length = CFStringGetLength(tmp);
     CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);

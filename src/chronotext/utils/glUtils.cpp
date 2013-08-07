@@ -84,9 +84,9 @@ void drawGrid(const Rectf &bounds, float sx, float sy, const Vec2f &offset)
     }
     
     glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, vertices.data());
-	glDrawArrays(GL_LINES, 0, vertices.size());
-	glDisableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, vertices.data());
+    glDrawArrays(GL_LINES, 0, vertices.size());
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void drawFullScreenQuad()
