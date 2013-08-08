@@ -71,40 +71,48 @@ DataSourceRef InputSource::loadDataSource()
     {
         case TYPE_RESOURCE:
         {
-#if defined(CINDER_MSW)
-            return DataSourcePath::create(filePath);
-#elif defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
             AAsset* asset = AAssetManager_open(gAssetManager, resourceName.c_str(), AASSET_MODE_STREAMING);
+            
             if (asset)
             {
                 AAsset_close(asset);
-                
-                CI_LOGI("LOADING ASSET: %s", resourceName.c_str());
                 return DataSourceAsset::create(gAssetManager, resourceName);
             }
             else
             {
-                throw ResourceLoadExc(resourceName);
+                throw ResourceLoadExc(filePathHint);
             }
-#elif defined(CHR_COMPLEX) && defined(CINDER_COCOA)
+#elif defined(CINDER_ANDROID)
+            return app::loadResource(resourceName);
+#else
             if (fs::exists(filePath))
             {
                 return DataSourcePath::create(filePath);
             }
             else
             {
-                throw ResourceLoadExc(resourceName);
+                throw ResourceLoadExc(filePathHint);
             }
-#else
-            return app::loadResource(resourceName);
 #endif
         }
         
         case TYPE_RESOURCE_MSW:
+        {
             return app::loadResource(resourceName, mswID, mswType);
+        }
             
         case TYPE_FILE:
-            return DataSourcePath::create(filePath);
+        {
+            if (fs::exists(filePath))
+            {
+                return DataSourcePath::create(filePath);
+            }
+            else
+            {
+                throw ResourceLoadExc(filePathHint);
+            }
+        }
     }
     
     return DataSourceRef();
@@ -191,7 +199,7 @@ fs::path InputSource::getResourcePath(const string &resourceName)
 }
 #endif
 
-#if defined(CINDER_ANDROID)
+#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
 void InputSource::setAndroidAssetManager(AAssetManager *assetManager)
 {
     gAssetManager = assetManager;

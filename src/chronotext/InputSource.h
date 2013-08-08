@@ -2,7 +2,7 @@
 
 #include "cinder/DataSource.h"
 
-#if defined(CINDER_ANDROID)
+#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
 static AAssetManager *gAssetManager;
 #endif
@@ -72,7 +72,7 @@ public:
     static ci::fs::path getResourcePath(const std::string &resourceName);
 #endif
 
-#if defined(CINDER_ANDROID)
+#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
     static void setAndroidAssetManager(AAssetManager *assetManager);
     static AAssetManager* getAndroidAssetManager();
 #endif
