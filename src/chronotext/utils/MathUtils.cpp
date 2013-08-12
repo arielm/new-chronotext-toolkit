@@ -3,6 +3,16 @@
 using namespace std;
 using namespace ci;
 
+bool isRectNull(const Rectf &rect)
+{
+    return (rect.x1 == 0) && (rect.y1 == 0) && (rect.x2 == 0) && (rect.y2 == 0);
+}
+
+bool compareRects(const Rectf &r1, const Rectf &r2)
+{
+    return (r1.x1 == r2.x1) && (r1.y1 == r2.y1) && (r1.x2 == r2.x2) && (r1.y2 == r2.y2);
+}
+
 Rectf getBoundingBox(const vector<Vec2f> &polygon)
 {
     float minX = numeric_limits<float>::max();

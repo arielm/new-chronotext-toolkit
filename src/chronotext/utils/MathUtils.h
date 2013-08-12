@@ -46,6 +46,9 @@ static inline float FastSqrt(float x)
     return r * x;
 }
 
+bool isRectNull(const ci::Rectf &rect);
+bool compareRects(const ci::Rectf &r1, const ci::Rectf &r2);
+
 ci::Rectf getBoundingBox(const std::vector<ci::Vec2f> &polygon);
 
 bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon);
