@@ -46,17 +46,17 @@ static inline float FastSqrt(float x)
     return r * x;
 }
 
-bool isRectNull(const ci::Rectf &rect);
-bool compareRects(const ci::Rectf &r1, const ci::Rectf &r2);
-
-ci::Rectf getBoundingBox(const std::vector<ci::Vec2f> &polygon);
-float getShortestDistance(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon, float threshold);
-
-bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon);
-bool isPointInside(const ci::Vec2f &point, const std::vector<std::vector<ci::Vec2f>> &polygons);
-
 class MathUtils
 {
 public:
+    static bool isRectNull(const ci::Rectf &rect);
+    static bool compareRects(const ci::Rectf &r1, const ci::Rectf &r2);
+    
     static void transformVertices(const std::vector<ci::Vec2f> &source, std::vector<ci::Vec2f> &target, const ci::MatrixAffine2f &matrix);
+    
+    static ci::Rectf getBoundingBox(const std::vector<ci::Vec2f> &polygon);
+    static float getShortestDistance(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon, float threshold);
+    
+    static bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon);
+    static bool isPointInside(const ci::Vec2f &point, const std::vector<std::vector<ci::Vec2f>> &polygons);
 };

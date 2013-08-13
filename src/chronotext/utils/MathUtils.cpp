@@ -3,6 +3,16 @@
 using namespace std;
 using namespace ci;
 
+bool MathUtils::isRectNull(const Rectf &rect)
+{
+    return (rect.x1 == 0) && (rect.y1 == 0) && (rect.x2 == 0) && (rect.y2 == 0);
+}
+
+bool MathUtils::compareRects(const Rectf &r1, const Rectf &r2)
+{
+    return (r1.x1 == r2.x1) && (r1.y1 == r2.y1) && (r1.x2 == r2.x2) && (r1.y2 == r2.y2);
+}
+
 void MathUtils::transformVertices(const vector<Vec2f> &source, vector<Vec2f> &target, const MatrixAffine2f &matrix)
 {
     target.clear();
@@ -14,17 +24,7 @@ void MathUtils::transformVertices(const vector<Vec2f> &source, vector<Vec2f> &ta
     }
 }
 
-bool isRectNull(const Rectf &rect)
-{
-    return (rect.x1 == 0) && (rect.y1 == 0) && (rect.x2 == 0) && (rect.y2 == 0);
-}
-
-bool compareRects(const Rectf &r1, const Rectf &r2)
-{
-    return (r1.x1 == r2.x1) && (r1.y1 == r2.y1) && (r1.x2 == r2.x2) && (r1.y2 == r2.y2);
-}
-
-Rectf getBoundingBox(const vector<Vec2f> &polygon)
+Rectf MathUtils::getBoundingBox(const vector<Vec2f> &polygon)
 {
     float minX = numeric_limits<float>::max();
     float minY = numeric_limits<float>::max();
@@ -52,7 +52,7 @@ Rectf getBoundingBox(const vector<Vec2f> &polygon)
  * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
  * http://paulbourke.net/geometry/pointlineplane/
  */
-float getShortestDistance(const Vec2f &point, const vector<Vec2f> &polygon, float threshold)
+float MathUtils::getShortestDistance(const Vec2f &point, const vector<Vec2f> &polygon, float threshold)
 {
     float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
     bool found = false;
@@ -145,7 +145,7 @@ static size_t linearCrossings(const Vec2f p[2], const Vec2f &pt)
     return 0;
 }
 
-bool isPointInside(const Vec2f &point, const vector<Vec2f> &polygon)
+bool MathUtils::isPointInside(const Vec2f &point, const vector<Vec2f> &polygon)
 {
     const size_t size = polygon.size();
     
@@ -171,7 +171,7 @@ bool isPointInside(const Vec2f &point, const vector<Vec2f> &polygon)
     }
 }
 
-bool isPointInside(const Vec2f &point, const vector<vector<Vec2f>> &polygons)
+bool MathUtils::isPointInside(const Vec2f &point, const vector<vector<Vec2f>> &polygons)
 {
     int numPathsInside = 0;
     
