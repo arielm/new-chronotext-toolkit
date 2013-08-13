@@ -50,6 +50,7 @@ bool isRectNull(const ci::Rectf &rect);
 bool compareRects(const ci::Rectf &r1, const ci::Rectf &r2);
 
 ci::Rectf getBoundingBox(const std::vector<ci::Vec2f> &polygon);
+float getShortestDistance(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon, float threshold);
 
 bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon);
 bool isPointInside(const ci::Vec2f &point, const std::vector<std::vector<ci::Vec2f>> &polygons);

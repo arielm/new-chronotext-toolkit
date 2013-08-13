@@ -272,7 +272,7 @@ Vec2f FollowablePath::pos2Gradient(float pos, float sampleSize) const
  * RETURNS false IF CLOSEST POINT IS FARTHER THAN min DISTANCE
  * 
  * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
- * http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline
+ * http://paulbourke.net/geometry/pointlineplane/
  */
 bool FollowablePath::findClosestPoint(float xx, float yy, float min, FollowablePath::ClosePoint &res) const
 {
@@ -369,7 +369,7 @@ bool FollowablePath::findClosestPoint(float xx, float yy, float min, FollowableP
  * segmentIndex MUST BE < size
  * 
  * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
- * http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline
+ * http://paulbourke.net/geometry/pointlineplane/
  */
 FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(float xx, float yy, int segmentIndex) const
 {

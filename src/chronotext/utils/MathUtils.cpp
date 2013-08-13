@@ -36,6 +36,75 @@ Rectf getBoundingBox(const vector<Vec2f> &polygon)
 }
 
 /*
+ * RETURNS numeric_limits<float>::max() IF CLOSEST POINT IS FARTHER THAN threshold DISTANCE
+ *
+ * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
+ * http://paulbourke.net/geometry/pointlineplane/
+ */
+float getShortestDistance(const Vec2f &point, const vector<Vec2f> &polygon, float threshold)
+{
+    float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
+    bool found = false;
+    
+    int size = polygon.size();
+    
+    for (int i = 0; i < size; i++)
+    {
+        int i0, i1;
+        
+        if (i == size - 1)
+        {
+            i0 = i - 1;
+            i1 = i;
+        }
+        else
+        {
+            i0 = i;
+            i1 = i + 1;
+        }
+        
+        Vec2f p0 = polygon[i0];
+        Vec2f p1 = polygon[i1];
+        
+        Vec2f delta = p1 - p0;
+        float u = delta.dot(point - p0) / delta.lengthSquared();
+        
+        if (u >= 0 && u <= 1)
+        {
+            Vec2f d = p0 + u * delta - point;
+            float mag = d.lengthSquared();
+            
+            if (mag < min)
+            {
+                min = mag;
+                found = true;
+            }
+        }
+        else
+        {
+            Vec2f d0 = p0 - point;
+            float mag0 = d0.lengthSquared();
+            
+            Vec2f d1 = p1 - point;
+            float mag1 = d1.lengthSquared();
+            
+            if ((mag0 < min) && (mag0 < mag1))
+            {
+                min = mag0;
+                found = true;
+            }
+            else if ((mag1 < min) && (mag1 < mag0))
+            {
+                min = mag1;
+                found = true;
+            }
+        }
+    }
+    
+    return found ? math<float>::sqrt(min) : numeric_limits<float>::max();
+}
+
+/*
  * THE FOLLOWING 4 FUNCTIONS ARE BASED ON CODE FROM Cinder:
  *
  * https://github.com/cinder/Cinder/blob/ae580c2cb0fc44d0a99b233dbefdf736f7093209/src/cinder/Path2d.cpp#L754-768
