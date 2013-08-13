@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/CinderMath.h"
+#include "cinder/MatrixAffine2.h"
 #include "cinder/Rect.h"
 
 #include <vector>
@@ -54,3 +54,9 @@ float getShortestDistance(const ci::Vec2f &point, const std::vector<ci::Vec2f> &
 
 bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon);
 bool isPointInside(const ci::Vec2f &point, const std::vector<std::vector<ci::Vec2f>> &polygons);
+
+class MathUtils
+{
+public:
+    static void transformVertices(const std::vector<ci::Vec2f> &source, std::vector<ci::Vec2f> &target, const ci::MatrixAffine2f &matrix);
+};

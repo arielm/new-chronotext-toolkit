@@ -3,6 +3,17 @@
 using namespace std;
 using namespace ci;
 
+void MathUtils::transformVertices(const vector<Vec2f> &source, vector<Vec2f> &target, const MatrixAffine2f &matrix)
+{
+    target.clear();
+    target.reserve(source.size());
+    
+    for (auto vertex : source)
+    {
+        target.push_back(matrix.transformPoint(vertex));
+    }
+}
+
 bool isRectNull(const Rectf &rect)
 {
     return (rect.x1 == 0) && (rect.y1 == 0) && (rect.x2 == 0) && (rect.y2 == 0);
