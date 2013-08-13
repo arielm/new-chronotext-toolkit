@@ -52,7 +52,7 @@ Rectf MathUtils::getBoundingBox(const vector<Vec2f> &polygon)
  * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
  * http://paulbourke.net/geometry/pointlineplane/
  */
-float MathUtils::getShortestDistance(const Vec2f &point, const vector<Vec2f> &polygon, float threshold)
+float MathUtils::getShortestDistance(const Vec2f &point, const vector<Vec2f> &polygon, bool close, float threshold)
 {
     float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
     bool found = false;
@@ -65,8 +65,15 @@ float MathUtils::getShortestDistance(const Vec2f &point, const vector<Vec2f> &po
         
         if (i == size - 1)
         {
-            i0 = i - 1;
-            i1 = i;
+            if (close)
+            {
+                i0 = i;
+                i1 = 0;
+            }
+            else
+            {
+                break;
+            }
         }
         else
         {

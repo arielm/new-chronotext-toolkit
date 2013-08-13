@@ -55,7 +55,7 @@ public:
     static void transformVertices(const std::vector<ci::Vec2f> &source, std::vector<ci::Vec2f> &target, const ci::MatrixAffine2f &matrix);
     
     static ci::Rectf getBoundingBox(const std::vector<ci::Vec2f> &polygon);
-    static float getShortestDistance(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon, float threshold);
+    static float getShortestDistance(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon, bool close = false, float threshold = std::numeric_limits<float>::max());
     
     static bool isPointInside(const ci::Vec2f &point, const std::vector<ci::Vec2f> &polygon);
     static bool isPointInside(const ci::Vec2f &point, const std::vector<std::vector<ci::Vec2f>> &polygons);
