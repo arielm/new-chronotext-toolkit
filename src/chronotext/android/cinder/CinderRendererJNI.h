@@ -23,9 +23,9 @@ extern "C"
 	void Java_chronotext_android_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id);
 	void Java_chronotext_android_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
     
-	void Java_chronotext_android_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jfloat x, jfloat y);
-	void Java_chronotext_android_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jfloat x, jfloat y);
-	void Java_chronotext_android_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jfloat x, jfloat y);
+	void Java_chronotext_android_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+	void Java_chronotext_android_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+	void Java_chronotext_android_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
     
 	void Java_chronotext_android_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body);
 }
@@ -84,19 +84,19 @@ void Java_chronotext_android_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj
 	gDelegate->draw();
 }
 
-void Java_chronotext_android_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jfloat x, jfloat y)
+void Java_chronotext_android_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-	gDelegate->addTouch(x, y);
+	gDelegate->addTouch(index, x, y);
 }
 
-void Java_chronotext_android_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jfloat x, jfloat y)
+void Java_chronotext_android_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-	gDelegate->updateTouch(x, y);
+	gDelegate->updateTouch(index, x, y);
 }
 
-void Java_chronotext_android_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jfloat x, jfloat y)
+void Java_chronotext_android_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-	gDelegate->removeTouch(x, y);
+	gDelegate->removeTouch(index, x, y);
 }
 
 void Java_chronotext_android_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)

@@ -81,9 +81,9 @@ public:
     void draw();
     void event(int id);
 
-    void addTouch(float x, float y);
-    void updateTouch(float x, float y);
-    void removeTouch(float x, float y);
+    void addTouch(int index, float x, float y);
+    void updateTouch(int index, float x, float y);
+    void removeTouch(int index, float x, float y);
     
     void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
     void disableAccelerometer();

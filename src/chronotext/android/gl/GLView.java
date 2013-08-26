@@ -109,43 +109,91 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
-  public boolean onTouchEvent(MotionEvent e)
+  public boolean onTouchEvent(MotionEvent event)
   {
-    final float x = e.getX();
-    final float y = e.getY();
-
-    switch (e.getAction())
+    switch (event.getAction() & MotionEvent.ACTION_MASK)
     {
       case MotionEvent.ACTION_DOWN :
-        queueEvent(new Runnable()
-        {
-          public void run()
-          {
-            renderer.addTouch(x, y);
-          }
-        });
-        break;
+      {
+        final float x = event.getX(0);
+        final float y = event.getY(0);
 
-      case MotionEvent.ACTION_MOVE :
         queueEvent(new Runnable()
         {
           public void run()
           {
-            renderer.updateTouch(x, y);
+            renderer.addTouch(0, x, y);
           }
         });
         break;
+      }
+
+      case MotionEvent.ACTION_POINTER_DOWN :
+      {
+        final int index = event.getActionIndex();
+        final float x = event.getX(index);
+        final float y = event.getY(index);
+
+        queueEvent(new Runnable()
+        {
+          public void run()
+          {
+            renderer.addTouch(index, x, y);
+          }
+        });
+        break;
+      }
 
       case MotionEvent.ACTION_UP :
-      case MotionEvent.ACTION_CANCEL :
+      {
+        final float x = event.getX(0);
+        final float y = event.getY(0);
+
         queueEvent(new Runnable()
         {
           public void run()
           {
-            renderer.removeTouch(x, y);
+            renderer.removeTouch(0, x, y);
           }
         });
         break;
+      }
+
+      case MotionEvent.ACTION_POINTER_UP :
+      {
+        final int index = event.getActionIndex();
+        final float x = event.getX(index);
+        final float y = event.getY(index);
+
+        queueEvent(new Runnable()
+        {
+          public void run()
+          {
+            renderer.removeTouch(index, x, y);
+          }
+        });
+        break;
+      }
+
+
+      case MotionEvent.ACTION_MOVE :
+      {
+        for (int i = 0; i < event.getPointerCount(); i++)
+        {
+          final int index = i;
+          final float x = event.getX(index);
+          final float y = event.getY(index);
+
+          queueEvent(new Runnable()
+          {
+            public void run()
+            {
+              renderer.updateTouch(index, x, y);
+            }
+          });
+        }
+        break;
+      }
     }
 
     return true;

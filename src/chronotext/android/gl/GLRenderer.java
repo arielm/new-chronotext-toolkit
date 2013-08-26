@@ -194,11 +194,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public abstract void hidden();
 
-  public abstract void addTouch(float x, float y);
+  public abstract void addTouch(int index, float x, float y);
 
-  public abstract void updateTouch(float x, float y);
+  public abstract void updateTouch(int index, float x, float y);
 
-  public abstract void removeTouch(float x, float y);
+  public abstract void removeTouch(int index, float x, float y);
 
   public abstract void sendMessage(int what, String body);
 }

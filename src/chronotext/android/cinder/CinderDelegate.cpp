@@ -162,19 +162,19 @@ void CinderDelegate::event(int id)
     }
 }
 
-void CinderDelegate::addTouch(float x, float y)
+void CinderDelegate::addTouch(int index, float x, float y)
 {
-    sketch->addTouch(0, x, y);
+    sketch->addTouch(index, x, y);
 }
 
-void CinderDelegate::updateTouch(float x, float y)
+void CinderDelegate::updateTouch(int index, float x, float y)
 {
-    sketch->updateTouch(0, x, y);
+    sketch->updateTouch(index, x, y);
 }
 
-void CinderDelegate::removeTouch(float x, float y)
+void CinderDelegate::removeTouch(int index, float x, float y)
 {
-    sketch->removeTouch(0, x, y);
+    sketch->removeTouch(index, x, y);
 }
 
 void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
