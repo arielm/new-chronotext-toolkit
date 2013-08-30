@@ -127,7 +127,7 @@ FollowablePath::Value FollowablePath::pos2Value(float pos) const
     
     if (mode == MODE_LOOP || mode == MODE_MODULO)
     {
-        pos = bound(pos, length);
+        pos = boundf(pos, length);
     }
     else
     {
@@ -172,7 +172,7 @@ Vec2f FollowablePath::pos2Point(float pos) const
     
     if (mode == MODE_LOOP || mode == MODE_MODULO)
     {
-        pos = bound(pos, length);
+        pos = boundf(pos, length);
     }
     else
     {
@@ -210,7 +210,7 @@ float FollowablePath::pos2Angle(float pos) const
     
     if (mode == MODE_LOOP || mode == MODE_MODULO)
     {
-        pos = bound(pos, length);
+        pos = boundf(pos, length);
     }
     else
     {

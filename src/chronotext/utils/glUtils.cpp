@@ -60,8 +60,8 @@ void drawGrid(const ci::Rectf &bounds, float size, const Vec2f &offset)
 
 void drawGrid(const Rectf &bounds, float sx, float sy, const Vec2f &offset)
 {
-    float x1 = bounds.x1 - bound(bounds.x1 - offset.x, sx);
-    float y1 = bounds.y1 - bound(bounds.y1 - offset.y, sy);
+    float x1 = bounds.x1 - boundf(bounds.x1 - offset.x, sx);
+    float y1 = bounds.y1 - boundf(bounds.y1 - offset.y, sy);
     
     int nx = (int) math<float>::ceil(bounds.getWidth() / sx) + 1;
     int ny = (int) math<float>::ceil(bounds.getHeight() / sy) + 1;

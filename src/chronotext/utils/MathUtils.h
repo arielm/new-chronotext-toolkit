@@ -13,7 +13,7 @@ static const float PI = M_PI;
 static const float TWO_PI = M_PI * 2.0;
 static const float HALF_PI = M_PI * 0.5;
 
-static inline float bound(float value, float range)
+static inline float boundf(float value, float range)
 {
     float bound = fmodf(value, range);
     return (bound < 0) ? (bound + range) : bound;
