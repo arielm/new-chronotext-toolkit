@@ -147,11 +147,11 @@ public class CinderRenderer extends GLRenderer
 
   public native void event(int id);
 
-  public native void addTouch(float x, float y);
+  public native void addTouch(int index, float x, float y);
 
-  public native void updateTouch(float x, float y);
+  public native void updateTouch(int index, float x, float y);
 
-  public native void removeTouch(float x, float y);
+  public native void removeTouch(int index, float x, float y);
 
   public native void sendMessage(int what, String body);
 }
