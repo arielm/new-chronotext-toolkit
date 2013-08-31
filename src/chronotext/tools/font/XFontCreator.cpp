@@ -50,9 +50,9 @@ params(params)
     
     height = face->size->metrics.height / 64.0f / hres;
     ascent = face->size->metrics.ascender / 64.0f / hres;
-    descent = face->size->metrics.descender / 64.0f / hres;
+    descent = -face->size->metrics.descender / 64.0f / hres;
 
-    underlineOffset = face->underline_position / 64.0f;
+    underlineOffset = -face->underline_position / 64.0f;
     underlineThickness = face->underline_thickness / 64.0f;
 
     // ---
