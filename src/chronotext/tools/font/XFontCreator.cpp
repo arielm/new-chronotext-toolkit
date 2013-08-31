@@ -38,10 +38,10 @@ params(params)
     
     FT_Matrix matrix =
     {
-        (int)((1.0 / hres) * 0x10000L),
-        (int)((0.0) * 0x10000L),
-        (int)((0.0) * 0x10000L),
-        (int)((1.0 / hres) * 0x10000L)
+        int((1.0 / hres) * 0x10000L),
+        int((0.0) * 0x10000L),
+        int((0.0) * 0x10000L),
+        int((1.0 / hres) * 0x10000L)
     };
     
     FT_Set_Transform(face, &matrix, NULL);
@@ -50,17 +50,26 @@ params(params)
     
     height = face->size->metrics.height / 64.0f / hres;
     ascent = face->size->metrics.ascender / 64.0f / hres;
-    descent = -face->size->metrics.descender / 64.0f / hres;
+    descent = face->size->metrics.descender / 64.0f / hres;
 
-    underlineOffset = -face->underline_position / 64.0f;
-    strikethroughOffset = (descent - ascent) * 0.5f; // FIXME: I COULD NOT FIND A WAY TO GRASP THE REAL-VALUE FROM FREETYPE
-    
+    underlineOffset = face->underline_position / 64.0f;
+    underlineThickness = face->underline_thickness / 64.0f;
+
     // ---
     
-    FT_UInt glyphIndex = FT_Get_Char_Index(face, L' ');
-    FT_Load_Glyph(face, glyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
+    FT_UInt spaceGlyphIndex = FT_Get_Char_Index(face, L' ');
+    FT_Load_Glyph(face, spaceGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
     spaceWidth = face->glyph->advance.x / 64.0f;
     
+    // ----
+
+    FT_UInt minusGlyphIndex = FT_Get_Char_Index(face, L'-');
+    FT_Load_Glyph(face, minusGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
+    float minusHeight = face->glyph->metrics.height / 64.0f / hres;
+    float minusBearingY = face->glyph->metrics.horiBearingY / 64.0f / hres;
+    float strikethroughOffset = minusBearingY - minusHeight * 0.5f;
+    strikethroughFactor = strikethroughOffset / (ascent - descent);
+
     // ---
     
     for (wstring::const_iterator it = characters.begin(); it != characters.end(); ++it)
@@ -113,7 +122,7 @@ void XFontCreator::write(DataTargetRef target)
 {
     OStreamRef out = target->getStream();
     
-    string version = "XFONT.002";
+    string version = "XFONT.003";
     out->write(version);
     
     int glyphCount = glyphs.size();
@@ -124,8 +133,9 @@ void XFontCreator::write(DataTargetRef target)
     out->writeLittle(ascent);
     out->writeLittle(descent);
     out->writeLittle(spaceWidth);
-    out->writeLittle(strikethroughOffset);
+    out->writeLittle(strikethroughFactor);
     out->writeLittle(underlineOffset);
+    out->writeLittle(underlineThickness);
     
     out->writeLittle(atlasWidth);
     out->writeLittle(atlasHeight);

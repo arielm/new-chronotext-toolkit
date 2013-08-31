@@ -101,7 +101,7 @@ namespace chronotext
         string version;
         in->readFixedString(&version, 10);
         
-        if (version != "XFONT.002")
+        if (version != "XFONT.003")
         {
             throw runtime_error("XFont: WRONG FORMAT");
         }
@@ -113,8 +113,9 @@ namespace chronotext
         in->readLittle(&ascent);
         in->readLittle(&descent);
         in->readLittle(&spaceWidth);
-        in->readLittle(&strikethroughOffset);
+        in->readLittle(&strikethroughFactor);
         in->readLittle(&underlineOffset);
+        in->readLittle(&underlineThickness);
         
         in->readLittle(&atlasWidth);
         in->readLittle(&atlasHeight);
@@ -316,6 +317,11 @@ namespace chronotext
         this->axis = axis;
     }
     
+    void XFont::setStrikethroughFactor(float factor)
+    {
+        strikethroughFactor = factor;
+    }
+    
     float XFont::getSize()
     {
         return size;
@@ -386,12 +392,17 @@ namespace chronotext
     
     float XFont::getStrikethroughOffset()
     {
-        return strikethroughOffset * sizeRatio;
+        return strikethroughFactor * (ascent - descent) * sizeRatio;
     }
     
     float XFont::getUnderlineOffset()
     {
         return underlineOffset * sizeRatio;
+    }
+    
+    float XFont::getUnderlineThickness()
+    {
+        return underlineThickness * sizeRatio;
     }
     
     FontMatrix* XFont::getMatrix()

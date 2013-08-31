@@ -66,7 +66,7 @@ void FontHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wst
             break;
             
         case XFont::ALIGN_MIDDLE:
-            y -= font->getStrikethroughOffset();
+            y += font->getStrikethroughOffset();
             break;
             
         case XFont::ALIGN_BOTTOM:
@@ -88,7 +88,7 @@ void FontHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstr
     float x = x1 + (w - getStringWidth(font, text, snap)) * 0.5f;
     
     float h = y2 - y1;
-    float y = y1 + h * 0.5f - font->getStrikethroughOffset();
+    float y = y1 + h * 0.5f + font->getStrikethroughOffset();
     
     drawText(font, sequence, text, x, y, snap);
 }
@@ -131,7 +131,7 @@ float FontHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wst
 {
     int len = text.size();
     float offsetX = offset;
-    float offsetY = font->getDescent();
+    float offsetY = font->getStrikethroughOffset();
     float sampleSize = font->getSize() * 0.5f;
     
     FontMatrix *matrix = font->getMatrix();

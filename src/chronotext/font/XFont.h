@@ -29,8 +29,9 @@ namespace chronotext
         float ascent;
         float descent;
         float spaceWidth;
-        float strikethroughOffset;
+        float strikethroughFactor;
         float underlineOffset;
+        float underlineThickness;
         
         int atlasWidth;
         int atlasHeight;
@@ -119,6 +120,7 @@ namespace chronotext
         void setSize(float size);
         void setDirection(float direction);
         void setAxis(const ci::Vec2f &axis);
+        void setStrikethroughFactor(float factor);
 
         float getSize();
         float getDirection();
@@ -134,6 +136,7 @@ namespace chronotext
         float getDescent();
         float getStrikethroughOffset();
         float getUnderlineOffset();
+        float getUnderlineThickness();
         
         FontMatrix* getMatrix();
         GLushort* getIndices();

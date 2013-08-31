@@ -90,8 +90,9 @@ public:
     float ascent;
     float descent;
     float spaceWidth;
-    float strikethroughOffset;
+    float strikethroughFactor;
     float underlineOffset;
+    float underlineThickness;
     
     float size;
     XParams params;
