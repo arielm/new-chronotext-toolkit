@@ -31,14 +31,14 @@ void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaLis
 
     // ---
 
-    // jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
-    // jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
-    // jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
-    // jobject pathObject = env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
+    jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
+    jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
+    jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
+    jobject pathObject = env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
 
-    // const char *internalDataPath = env->GetStringUTFChars((jstring)pathObject, NULL);
-    // InputSource::setAndroidInternalDataPath(/*string(internalDataPath)*/"xxx");
-    // env->ReleaseStringUTFChars((jstring)pathObject, internalDataPath);
+    const char *internalDataPath = env->GetStringUTFChars((jstring)pathObject, NULL);
+    InputSource::setAndroidInternalDataPath(internalDataPath);
+    env->ReleaseStringUTFChars((jstring)pathObject, internalDataPath);
 
     // ---
 

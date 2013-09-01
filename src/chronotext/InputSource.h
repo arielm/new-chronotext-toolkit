@@ -5,6 +5,7 @@
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
 static AAssetManager *gAssetManager;
+static ci::fs::path gInternalDataPath;
 #endif
 
 typedef std::shared_ptr<class InputSource> InputSourceRef;
@@ -75,5 +76,8 @@ public:
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
     static void setAndroidAssetManager(AAssetManager *assetManager);
     static AAssetManager* getAndroidAssetManager();
+    
+    static void setAndroidInternalDataPath(const std::string &internalDataPath);
+    static ci::fs::path getAndroidInternalDataPath();
 #endif
 };

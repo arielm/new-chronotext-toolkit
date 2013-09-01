@@ -209,4 +209,14 @@ AAssetManager* InputSource::getAndroidAssetManager()
 {
     return gAssetManager;
 }
+
+void InputSource::setAndroidInternalDataPath(const string &internalDataPath)
+{
+    gInternalDataPath = fs::path(internalDataPath);
+}
+
+fs::path InputSource::getAndroidInternalDataPath()
+{
+    return gInternalDataPath;
+}
 #endif
