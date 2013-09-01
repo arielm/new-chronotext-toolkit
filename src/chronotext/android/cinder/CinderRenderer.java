@@ -4,7 +4,6 @@ package chronotext.android.cinder;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.view.Display;
 import android.view.Surface;
@@ -71,7 +70,7 @@ public class CinderRenderer extends GLRenderer
   
   public void launch()
   {
-    launch(mContext.getAssets(), mListener);
+    launch(mContext, mListener);
   }
 
   public void setup(GL10 gl, int width, int height)
@@ -137,7 +136,7 @@ public class CinderRenderer extends GLRenderer
 
   public native void prelaunch();
   
-  public native void launch(AssetManager assets, Object listener);
+  public native void launch(Context context, Object listener);
 
   public native void setup(int width, int height, int accelerometerRotation);
   

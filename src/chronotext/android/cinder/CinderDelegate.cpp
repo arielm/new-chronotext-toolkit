@@ -2,6 +2,9 @@
 #include "chronotext/InputSource.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -11,14 +14,31 @@ using namespace std;
 /*
  * CALLED ON THE RENDERER'S THREAD FROM chronotext.android.gl.GLRenderer.onSurfaceCreated()
  */
-void CinderDelegate::launch(AAssetManager *assetManager, JavaVM *javaVM, jobject javaListener)
+void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener)
 {
     mJavaVM = javaVM;
     mJavaListener = javaListener;
 
+    JNIEnv *env;
+    mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+
     // ---
 
+    jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getAssets", "()Landroid/content/res/AssetManager;");
+    AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(javaContext, getAssetsMethod));
+
     InputSource::setAndroidAssetManager(assetManager);
+
+    // ---
+
+    // jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
+    // jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
+    // jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
+    // jobject pathObject = env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
+
+    // const char *internalDataPath = env->GetStringUTFChars((jstring)pathObject, NULL);
+    // InputSource::setAndroidInternalDataPath(/*string(internalDataPath)*/"xxx");
+    // env->ReleaseStringUTFChars((jstring)pathObject, internalDataPath);
 
     // ---
 

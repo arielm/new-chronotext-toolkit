@@ -1,7 +1,6 @@
 #pragma once
 
 #include <jni.h>
-#include <android/asset_manager.h>
 #include <android/sensor.h>
 
 #include "chronotext/cinder/CinderSketch.h"
@@ -58,6 +57,7 @@ class CinderDelegate
 
 public:
     JavaVM *mJavaVM;
+    jobject mJavaContext;
     jobject mJavaListener;
 
     CinderSketch *sketch;
@@ -73,7 +73,7 @@ public:
         CI_LOGD("CinderDelegate DELETED");
     }
 
-    void launch(AAssetManager *assetManager, JavaVM *javaVM, jobject javaListener);
+    void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
 
     void setup(int width, int height, int accelerometerRotation);
     void shutdown();
