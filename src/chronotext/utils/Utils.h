@@ -93,6 +93,18 @@ static void logToConsole()
 
 // ---
 
+static void hexDump(const char *s, int size)
+{
+    LOGI << std::hex;
+
+    for (int i = 0; i < size; i++)
+    {
+        LOGI << std::setfill('0') << std::setw(2) << (*s++ & 0xff) << " ";
+    }
+    
+    LOGI << std::dec;
+}
+
 static int search(float *array, float value, int min, int max)
 {
     int mid = (min + max) >> 1;
