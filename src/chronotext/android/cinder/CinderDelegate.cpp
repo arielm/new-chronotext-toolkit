@@ -34,11 +34,11 @@ void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaLis
     jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
     jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
     jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
-    jobject pathObject = env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
+    jstring pathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
 
-    const char *internalDataPath = env->GetStringUTFChars((jstring)pathObject, NULL);
+    const char *internalDataPath = env->GetStringUTFChars(pathString, NULL);
     InputSource::setAndroidInternalDataPath(internalDataPath);
-    env->ReleaseStringUTFChars((jstring)pathObject, internalDataPath);
+    env->ReleaseStringUTFChars(pathString, internalDataPath);
 
     // ---
 
