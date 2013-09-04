@@ -62,48 +62,50 @@ static inline std::ostream& chrout()
 // ---
 
 /*
- * cout REDIRECTION (FOR COCOA ONLY)
- * AS DESCRIBED IN http://www.cplusplus.com/reference/iostream/ios/rdbuf/
+ * cout REDIRECTION, AS DESCRIBED IN http://www.cplusplus.com/reference/iostream/ios/rdbuf/
  */
 
-static std::streambuf *gCoutBackup = NULL;
-static std::ofstream gCoutFilestr;
+static std::streambuf *gLogBackup = NULL;
+static std::ofstream gLogFileStream;
 
 static void logToFile(const ci::fs::path &filePath)
 {
-    if (!gCoutBackup)
+    if (!gLogBackup)
     {
-        gCoutFilestr.open(filePath.c_str());
-        gCoutBackup = std::cout.rdbuf();
+        gLogFileStream.open(filePath.string().c_str());
+        gLogBackup = chrout().rdbuf();
         
-        std::streambuf *psbuf = gCoutFilestr.rdbuf();
-        std::cout.rdbuf(psbuf);
+        std::streambuf *psbuf = gLogFileStream.rdbuf();
+        chrout().rdbuf(psbuf);
     }
 }
 
 static void logToConsole()
 {
-    if (gCoutBackup)
+    if (gLogBackup)
     {
-        std::cout.rdbuf(gCoutBackup);
-        gCoutFilestr.close();
-        gCoutBackup = NULL;
+        chrout().rdbuf(gLogBackup);
+        gLogFileStream.close();
+        gLogBackup = NULL;
     }
 }
 
 // ---
 
-static void hexDump(const char *s, int size)
+static std::string hexDump(const char *data, int size)
 {
-    LOGI << std::hex;
+    std::stringstream s;
+    s << std::hex;
 
     for (int i = 0; i < size; i++)
     {
-        LOGI << std::setfill('0') << std::setw(2) << (*s++ & 0xff) << " ";
+        s << std::setfill('0') << std::setw(2) << (*data++ & 0xff) << " ";
     }
     
-    LOGI << std::dec;
+    return s.str();
 }
+
+// ---
 
 static int search(float *array, float value, int min, int max)
 {
@@ -133,6 +135,8 @@ static inline int search(const std::vector<float> &array, float value, int min, 
 {
     return search((float*)array.data(), value, min, max);
 }
+
+// ---
 
 std::string wstringToUtf8(const std::wstring &s);
 std::wstring utf8ToWstring(const std::string &s);
