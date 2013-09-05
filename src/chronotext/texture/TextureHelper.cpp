@@ -173,7 +173,7 @@ void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
     float x2 = x1 + texture->getWidth() * tx;
     float y2 = y1 + texture->getHeight() * ty;
     
-    const GLfloat vertices[] =
+    const float vertices[] =
     {
         x1, y1,
         x2, y1,
@@ -181,7 +181,7 @@ void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
         x1, y2
     };
     
-    const GLfloat coords[] =
+    const float coords[] =
     {
         0, 0,
         tx, 0,
@@ -199,7 +199,7 @@ void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
  */
 void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, float ox, float oy)
 {
-    const GLfloat vertices[] =
+    const float vertices[] =
     {
         rect.x1, rect.y1,
         rect.x2, rect.y1,
@@ -212,7 +212,7 @@ void TextureHelper::drawTextureInRect(gl::Texture *texture, const Rectf &rect, f
     float tx2 = (rect.x2 - ox) / texture->getWidth();
     float ty2 = (rect.y2 - oy) / texture->getHeight();
     
-    const GLfloat coords[] =
+    const float coords[] =
     {
         tx1, ty1,
         tx2, ty1,

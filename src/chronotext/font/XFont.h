@@ -4,7 +4,8 @@
 #include "chronotext/font/FontMatrix.h"
 #include "chronotext/font/XFontSequence.h"
 
-#include <string>
+#include "cinder/gl/gl.h"
+
 #include <map>
 
 namespace chronotext
@@ -67,13 +68,13 @@ namespace chronotext
         GLuint textureName;
 
         GLushort *indices;
-        GLfloat *vertices;
-        GLfloat *coords;
+        float *vertices;
+        float *coords;
         
         int sequenceSize;
         int sequenceDimensions;
-        GLfloat *sequenceVertices;
-        GLfloat *sequenceCoords;
+        float *sequenceVertices;
+        float *sequenceCoords;
         XFontSequence *sequence;
         
         bool unloaded;

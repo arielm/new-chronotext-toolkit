@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/gl/gl.h"
+#include <vector>
 
 namespace chronotext
 {
@@ -9,13 +9,13 @@ namespace chronotext
     struct Slot
     {
         int count;
-        GLfloat *vertices;
-        GLfloat *coords;
+        float *vertices;
+        float *coords;
         
         Slot(int dimensions, int slotCapacity)
         {
-            vertices = new GLfloat[slotCapacity * dimensions * 4];
-            coords = new GLfloat[slotCapacity * 2 * 4];
+            vertices = new float[slotCapacity * dimensions * 4];
+            coords = new float[slotCapacity * 2 * 4];
         }
         
         ~Slot()
@@ -39,7 +39,7 @@ namespace chronotext
         
         void begin(XFont *font, int dimensions, int slotCapacity);
         void end();
-        void flush(GLfloat *vertices, GLfloat *coords, int count);
+        void flush(float *vertices, float *coords, int count);
         void replay();
         void clear();
     };

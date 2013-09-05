@@ -102,7 +102,7 @@ void Texture::draw(float rx, float ry)
     float x2 = x1 + width * maxU;
     float y2 = y1 + height * maxV;
     
-    const GLfloat vertices[] =
+    const float vertices[] =
     {
         x1, y1,
         x2, y1,
@@ -110,7 +110,7 @@ void Texture::draw(float rx, float ry)
         x1, y2
     };
     
-    const GLfloat coords[] =
+    const float coords[] =
     {
         0, 0,
         maxU, 0,
@@ -125,7 +125,7 @@ void Texture::draw(float rx, float ry)
 
 void Texture::drawInRect(const Rectf &rect, float ox, float oy)
 {
-    const GLfloat vertices[] =
+    const float vertices[] =
     {
         rect.x1, rect.y1,
         rect.x2, rect.y1,
@@ -138,7 +138,7 @@ void Texture::drawInRect(const Rectf &rect, float ox, float oy)
     float tx2 = (rect.x2 - ox) / width;
     float ty2 = (rect.y2 - oy) / height;
     
-    const GLfloat coords[] =
+    const float coords[] =
     {
         tx1, ty1,
         tx2, ty1,

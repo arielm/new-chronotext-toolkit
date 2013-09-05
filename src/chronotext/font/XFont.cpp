@@ -244,8 +244,8 @@ namespace chronotext
         // ---
         
         indices = new GLushort[slotCapacity * 6];
-        vertices = new GLfloat[slotCapacity * maxDimensions * 4];
-        coords = new GLfloat[slotCapacity * 2 * 4];
+        vertices = new float[slotCapacity * maxDimensions * 4];
+        coords = new float[slotCapacity * 2 * 4];
         
         /*
          * FILLING THE INDICES WITH A QUAD PATTERN

@@ -115,7 +115,7 @@ void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float
         y3 = math<float>::floor(y3);
     }
     
-    const GLfloat vertices[] =
+    const float vertices[] =
     {
         x3, y3,
         x4, y3

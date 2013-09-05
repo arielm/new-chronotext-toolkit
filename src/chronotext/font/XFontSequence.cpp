@@ -1,6 +1,8 @@
 #include "chronotext/font/XFontSequence.h"
 #include "chronotext/font/XFont.h"
 
+#include "cinder/gl/gl.h"
+
 using namespace std;
 
 namespace chronotext
@@ -22,7 +24,7 @@ namespace chronotext
     void XFontSequence::end()
     {}
     
-    void XFontSequence::flush(GLfloat *vertices, GLfloat *coords, int count)
+    void XFontSequence::flush(float *vertices, float *coords, int count)
     {
         Slot *slot;
         
@@ -37,8 +39,8 @@ namespace chronotext
         }
         
         slot->count = count;
-        memcpy(slot->vertices, vertices, count * dimensions * 4 * sizeof(GLfloat));
-        memcpy(slot->coords, coords, count * 2 * 4 * sizeof(GLfloat));
+        memcpy(slot->vertices, vertices, count * dimensions * 4 * sizeof(float));
+        memcpy(slot->coords, coords, count * 2 * 4 * sizeof(float));
         
         slotIndex++;
     }

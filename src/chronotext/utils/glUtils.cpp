@@ -98,7 +98,7 @@ void drawFullScreenQuad()
     glPushMatrix();
     glLoadIdentity();
     
-    const GLfloat vertices[] =
+    const float vertices[] =
     {
         -1, -1,
         +1, -1,

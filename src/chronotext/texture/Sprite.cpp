@@ -66,8 +66,8 @@ void Sprite::drawFromCenter()
 
 void Sprite::draw(float rx, float ry)
 {
-    GLfloat vertices[4][2];
-    GLfloat coords[4][2];
+    float vertices[4][2];
+    float coords[4][2];
 
     float x1 = -rx + ox;
     float y1 = -ry + oy;
