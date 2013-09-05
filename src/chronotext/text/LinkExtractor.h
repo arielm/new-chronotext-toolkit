@@ -2,8 +2,6 @@
 
 #include "chronotext/utils/Utils.h"
 
-#include <string>
-
 struct ExtractedLink
 {
     int offset;

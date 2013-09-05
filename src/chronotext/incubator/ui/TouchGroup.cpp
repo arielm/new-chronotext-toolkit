@@ -93,9 +93,9 @@ namespace chronotext
         touchable->performAction(Touchable::ACTION_CLICKED);
     }
 
-    bool TouchGroup::addTouch(int index, float x, float y)
+    bool TouchGroup::addTouch(int index, const Vec2f &point)
     {
-        Touchable* closestTouchable = getClosestTouchable(Vec2f(x, y));
+        Touchable* closestTouchable = getClosestTouchable(point);
         
         if (closestTouchable)
         {
@@ -128,13 +128,13 @@ namespace chronotext
         return false;
     }
     
-    bool TouchGroup::updateTouch(int index, float x, float y)
+    bool TouchGroup::updateTouch(int index, const Vec2f &point)
     {
         Touchable *armedTouchable = getArmedTouchableByIndex(index);
         
         if (armedTouchable)
         {
-            if (armedTouchable == getClosestTouchable(Vec2f(x, y)))
+            if (armedTouchable == getClosestTouchable(point))
             {
                 armedTouchable->changeState(Touchable::STATE_PRESSED);
                 return true;
@@ -149,7 +149,7 @@ namespace chronotext
         return toggledOrDisabledIsArmed;
     }
 
-    bool TouchGroup::removeTouch(int index, float x, float y)
+    bool TouchGroup::removeTouch(int index, const Vec2f &point)
     {
         Touchable *armedTouchable = getArmedTouchableByIndex(index);
         

@@ -30,9 +30,9 @@ namespace chronotext
         void toggleTouchable(Touchable *touchable);
         void clickTouchable(Touchable *touchable);
         
-        bool addTouch(int index, float x, float y);
-        bool updateTouch(int index, float x, float y);
-        bool removeTouch(int index, float x, float y);
+        bool addTouch(int index, const ci::Vec2f &point);
+        bool updateTouch(int index, const ci::Vec2f &point);
+        bool removeTouch(int index, const ci::Vec2f &point);
     };
 }
 

@@ -16,7 +16,7 @@ string wstringToUtf8(const wstring &s)
     unchecked::utf32to8(s.data(), s.data() + s.size(), back_inserter(tmp));
 #endif
     
-    return string(&tmp[0], tmp.size());
+    return string(tmp.data(), tmp.size());
 }
 
 wstring utf8ToWstring(const string &s)
@@ -29,5 +29,5 @@ wstring utf8ToWstring(const string &s)
     unchecked::utf8to32(s.data(), s.data() + s.size(), back_inserter(tmp));
 #endif
     
-    return wstring(&tmp[0], tmp.size());
+    return wstring(tmp.data(), tmp.size());
 }
