@@ -53,7 +53,7 @@ const Matrix44f getFrustumMatrix(float left, float right, float bottom, float to
     return Matrix44f(m);
 }
 
-void drawGrid(const ci::Rectf &bounds, float size, const Vec2f &offset)
+void drawGrid(const Rectf &bounds, float size, const Vec2f &offset)
 {
     drawGrid(bounds, size, size, offset);
 }
@@ -63,8 +63,8 @@ void drawGrid(const Rectf &bounds, float sx, float sy, const Vec2f &offset)
     float x1 = bounds.x1 - boundf(bounds.x1 - offset.x, sx);
     float y1 = bounds.y1 - boundf(bounds.y1 - offset.y, sy);
     
-    int nx = (int) math<float>::ceil(bounds.getWidth() / sx) + 1;
-    int ny = (int) math<float>::ceil(bounds.getHeight() / sy) + 1;
+    int nx = (int)math<float>::ceil(bounds.getWidth() / sx) + 1;
+    int ny = (int)math<float>::ceil(bounds.getHeight() / sy) + 1;
     
     vector<Vec2f> vertices;
     vertices.reserve((nx + ny) * 4);
@@ -116,7 +116,7 @@ void drawFullScreenQuad()
     glPopMatrix();
 }
 
-void dumpCamera(const ci::Camera &cam, const string &name)
+void dumpCamera(const Camera &cam, const string &name)
 {
     Vec3f worldUp = cam.getWorldUp();
     Vec3f eyepoint = cam.getEyePoint();
