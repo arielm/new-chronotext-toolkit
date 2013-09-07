@@ -34,11 +34,11 @@ class Application : public AppNative
     XFont *font3;
     
 public:
-	void setup();
+    void setup();
     void shutdown();
     void prepareSettings(Settings *settings);
     
-	void draw();
+    void draw();
 };
 
 void Application::setup()
@@ -94,18 +94,18 @@ void Application::prepareSettings(AppBasic::Settings *settings)
 
 void Application::draw()
 {
-	gl::clear(Color(0.5f, 0.5f, 0.5f), false);
+    gl::clear(Color(0.5f, 0.5f, 0.5f), false);
     glColor4f(1, 1, 1, 1);
     
     font1->setSize(16); // THIS FONT IS NOT INTENDED TO BE RENDERED AT ANOTHER SIZE
-    FontHelper::drawText(font1, NULL, ASCII, 10, getWindowHeight() / 4.0f, true); // USING SNAP
+    FontHelper::drawText(font1, NULL, font1->getCharacters(), 10, getWindowHeight() / 4.0f, true); // USING SNAP
     
     font2->setSize(32); // ANY SIZE CAN BE USED
-    FontHelper::drawText(font2, NULL, ISO_8859_15, 10, getWindowHeight() * 2 / 4.0f);
+    FontHelper::drawText(font2, NULL, font2->getCharacters(), 10, getWindowHeight() * 2 / 4.0f);
     
     font3->setSize(64); // ANY SIZE CAN BE USED
     font3->setDirection(-1);
-    FontHelper::drawText(font3, NULL, HEBREW_BIBLICAL, getWindowWidth() - 10, getWindowHeight() * 3 / 4.0f);
+    FontHelper::drawText(font3, NULL, font3->getCharacters(), getWindowWidth() - 10, getWindowHeight() * 3 / 4.0f);
 }
 
-CINDER_APP_NATIVE(Application, RendererGl(0))
+CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

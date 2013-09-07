@@ -117,6 +117,7 @@ namespace chronotext
         bool isSpace(wchar_t c);
         bool isValid(wchar_t c);
         int lookup(wchar_t c);
+        std::wstring getCharacters() const;
         
         void setSize(float size);
         void setDirection(float direction);

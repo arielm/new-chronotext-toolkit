@@ -299,6 +299,19 @@ namespace chronotext
         }
     }
     
+    wstring XFont::getCharacters() const
+    {
+        wstring characters;
+        characters.reserve(glyphs.size());
+        
+        for (auto entry : glyphs)
+        {
+            characters.push_back(entry.first);
+        }
+        
+        return characters;
+    }
+    
     // ---
     
     void XFont::setSize(float size)
