@@ -92,7 +92,7 @@ DataSourceRef InputSource::loadDataSource()
             }
             else
             {
-                throw ResourceLoadExc(filePathHint);
+                throw AssetLoadExc(filePathHint);
             }
 #endif
         }
@@ -110,7 +110,7 @@ DataSourceRef InputSource::loadDataSource()
             }
             else
             {
-                throw ResourceLoadExc(filePathHint);
+                throw AssetLoadExc(filePathHint);
             }
         }
     }
