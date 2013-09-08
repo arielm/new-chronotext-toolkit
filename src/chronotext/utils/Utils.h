@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 #include <boost/algorithm/string.hpp>
 
@@ -102,6 +103,36 @@ static std::string hexDump(const char *data, int size)
         s << std::setfill('0') << std::setw(2) << (*data++ & 0xff) << " ";
     }
     
+    return s.str();
+}
+
+// ---
+
+/*
+ * REFERENCE: http://stackoverflow.com/a/10096779/50335
+ */
+
+static std::string prettyBytes(uint64_t numBytes, int precision = 2)
+{
+    const char *abbrevs[] = { "TB", "GB", "MB", "KB" };
+    const size_t numAbbrevs = sizeof(abbrevs) / sizeof(abbrevs[0]);
+
+    uint64_t maximum = pow(1024, numAbbrevs);
+    
+    for (size_t i = 0; i < numAbbrevs; ++i)
+    {
+        if (numBytes > maximum)
+        {
+            std::stringstream s;
+            s << std::fixed << std::setprecision(precision) << numBytes / (double)maximum << " " << abbrevs[i];
+            return s.str();
+        }
+        
+        maximum /= 1024;
+    }
+    
+    std::stringstream s;
+    s << numBytes << " Bytes";
     return s.str();
 }
 
