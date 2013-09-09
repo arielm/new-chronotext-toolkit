@@ -277,7 +277,7 @@ void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
 void CinderDelegate::sendMessageToSketch(int what, const string &body)
 {
     CI_LOGD("MESSAGE RECEIVED FROM JAVA: %d %s", what, body.c_str());
-    sketch->sendMessage(Message(what, shared_ptr<string>(new string(body))));
+    sketch->sendMessage(Message(what, make_shared<string>(body)));
 }
 
 // ---------------------------------------- JNI ----------------------------------------
