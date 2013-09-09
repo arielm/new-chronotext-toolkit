@@ -14,7 +14,7 @@ class MessageQueue
 {
     std::queue<Message> queue;
     boost::mutex mutex;
-    
+
 public:
     Message nextMessage();
     bool enqueueMessage(const Message &message);

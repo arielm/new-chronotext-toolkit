@@ -8,8 +8,10 @@
 
 class Looper
 {
-public:
     MessageQueue messageQueue;
 
+public:
     void run();
+    
+    friend class Handler;
 };
