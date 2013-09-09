@@ -14,21 +14,21 @@ public:
     Handler *target;
     
     int what;
-    int arg;
+    int64_t arg;
     std::shared_ptr<void> object;
     
     Message():
     target(NULL)
     {}
     
-    Message(int what, int arg = 0)
+    Message(int what, int64_t arg = 0)
     :
     what(what),
     arg(arg),
     target(NULL)
     {}
     
-    Message(int what, std::shared_ptr<void> object, int arg = 0)
+    Message(int what, std::shared_ptr<void> object, int64_t arg = 0)
     :
     what(what),
     object(object),
