@@ -1,5 +1,5 @@
 /*
- * INSPIRED BY android.os.Looper
+ * INSPIRED BY http://developer.android.com/reference/android/os/Looper.html
  */
 
 #pragma once

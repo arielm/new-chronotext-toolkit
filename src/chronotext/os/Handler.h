@@ -1,5 +1,5 @@
 /*
- * INSPIRED BY android.os.Handler
+ * INSPIRED BY http://developer.android.com/reference/android/os/Handler.html
  */
 
 #pragma once

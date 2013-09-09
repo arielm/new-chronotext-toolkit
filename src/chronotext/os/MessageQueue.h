@@ -1,5 +1,5 @@
 /*
- * INSPIRED BY android.os.MessageQueue
+ * INSPIRED BY http://developer.android.com/reference/android/os/MessageQueue.html
  */
 
 #pragma once

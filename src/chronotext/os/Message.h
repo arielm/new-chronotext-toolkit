@@ -1,5 +1,5 @@
 /*
- * INSPIRED BY android.os.Message
+ * INSPIRED BY http://developer.android.com/reference/android/os/Message.html
  */
 
 #pragma once
