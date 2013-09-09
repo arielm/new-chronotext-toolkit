@@ -12,10 +12,27 @@ class Message
 {
 public:
     Handler *target;
+    
     int what;
+    int arg;
     std::shared_ptr<void> object;
     
-    Message() : target(NULL) {}
-    Message(int what) : target(NULL), what(what) {}
-    Message(int what, std::shared_ptr<void> object) : target(NULL), what(what), object(object) {}
+    Message():
+    target(NULL)
+    {}
+    
+    Message(int what, int arg = 0)
+    :
+    what(what),
+    arg(arg),
+    target(NULL)
+    {}
+    
+    Message(int what, std::shared_ptr<void> object, int arg = 0)
+    :
+    what(what),
+    object(object),
+    arg(arg),
+    target(NULL)
+    {}
 };
