@@ -1,6 +1,4 @@
 #include "chronotext/os/MessageQueue.h"
-#include "chronotext/os/Message.h"
-#include "chronotext/os/Handler.h"
 
 Message MessageQueue::nextMessage()
 {

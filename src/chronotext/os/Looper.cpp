@@ -1,5 +1,4 @@
 #include "chronotext/os/Looper.h"
-#include "chronotext/os/Message.h"
 #include "chronotext/os/Handler.h"
 
 void Looper::run()
