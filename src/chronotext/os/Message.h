@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
+#include <memory>
 
 class Handler;
 
