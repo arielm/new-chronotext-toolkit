@@ -7,7 +7,7 @@ Message MessageQueue::nextMessage()
     Message message;
     
 #ifndef MESSAGE_QUEUE_LOCK_FREE
-    queueMutex.lock();
+    boost::mutex::scoped_lock lock(mutex);
 #endif
     
     if (!queue.empty())
@@ -15,10 +15,6 @@ Message MessageQueue::nextMessage()
         message = queue.front();
         queue.pop();
     }
-    
-#ifndef MESSAGE_QUEUE_LOCK_FREE
-    queueMutex.unlock();
-#endif
 
     return message;
 }
@@ -26,14 +22,9 @@ Message MessageQueue::nextMessage()
 bool MessageQueue::enqueueMessage(const Message &message)
 {
 #ifndef MESSAGE_QUEUE_LOCK_FREE
-    queueMutex.lock();
+    boost::mutex::scoped_lock lock(mutex);
 #endif
     
     queue.push(message);
-    
-#ifndef MESSAGE_QUEUE_LOCK_FREE
-    queueMutex.unlock();
-#endif
-    
     return true;
 }
