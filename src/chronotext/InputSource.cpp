@@ -219,4 +219,15 @@ fs::path InputSource::getAndroidInternalDataPath()
 {
     return gInternalDataPath;
 }
+
+void InputSource::setAndroidApkPath(const string &apkPath)
+{
+    gApkPath = fs::path(apkPath);
+}
+
+fs::path InputSource::getAndroidApkPath()
+{
+    return gApkPath;
+}
+
 #endif

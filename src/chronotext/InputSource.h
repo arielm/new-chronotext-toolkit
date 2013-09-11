@@ -4,8 +4,10 @@
 
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
+
 static AAssetManager *gAssetManager;
 static ci::fs::path gInternalDataPath;
+static ci::fs::path gApkPath;
 #endif
 
 typedef std::shared_ptr<class InputSource> InputSourceRef;
@@ -79,5 +81,8 @@ public:
     
     static void setAndroidInternalDataPath(const std::string &internalDataPath);
     static ci::fs::path getAndroidInternalDataPath();
+    
+    static void setAndroidApkPath(const std::string &apkPath);
+    static ci::fs::path getAndroidApkPath();
 #endif
 };
