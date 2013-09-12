@@ -20,7 +20,7 @@ void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaLis
     mJavaListener = javaListener;
 
     JNIEnv *env;
-    mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+    javaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
 
     // ---
 
@@ -34,11 +34,20 @@ void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaLis
     jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
     jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
     jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
-    jstring pathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
+    jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
 
-    const char *internalDataPath = env->GetStringUTFChars(pathString, NULL);
+    const char *internalDataPath = env->GetStringUTFChars(absolutePathString, NULL);
     InputSource::setAndroidInternalDataPath(internalDataPath);
-    env->ReleaseStringUTFChars(pathString, internalDataPath);
+    env->ReleaseStringUTFChars(absolutePathString, internalDataPath);
+
+    // ---
+
+    jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getPackageCodePath", "()Ljava/lang/String;");
+    jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext, getPackageCodePathMethod);
+
+    const char *apkPath = env->GetStringUTFChars(packageCodePathString, NULL);
+    InputSource::setAndroidApkPath(apkPath);
+    env->ReleaseStringUTFChars(packageCodePathString, apkPath);
 
     // ---
 
