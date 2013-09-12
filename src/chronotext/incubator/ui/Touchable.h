@@ -37,6 +37,8 @@ namespace chronotext
         int armedIndex;
         float hitExtra;
         
+        Touchable() {}
+        
         Touchable(Shape *shape, int type, int hitExtra)
         :
         shape(shape),

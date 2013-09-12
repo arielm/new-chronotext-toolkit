@@ -31,6 +31,7 @@ namespace chronotext
         
         ButtonDelegate *delegate;
         
+        Button() : Shape() {}
         Button(ButtonStyleRef style);
         
         float getWidth();
