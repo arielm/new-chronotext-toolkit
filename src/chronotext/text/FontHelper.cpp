@@ -143,7 +143,7 @@ float FontHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wst
         float half = 0.5f * font->getGlyphWidth(cc);
         offsetX += half;
         
-        if (cc > -1)
+        if (cc >= 0)
         {
             const Vec2f point = path->pos2Point(offsetX);
             float angle = path->pos2SampledAngle(offsetX, sampleSize);
