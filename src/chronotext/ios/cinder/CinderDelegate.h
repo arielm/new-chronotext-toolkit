@@ -65,8 +65,9 @@ enum
 - (void) updateActiveTouches;
 
 - (NSDictionary*) parseJSON:(NSString*)string;
-- (void) sendJSONToSketch:(int)what json:(NSDictionary*)json;
+- (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
+- (void) sendMessageToSketch:(int)what json:(NSDictionary*)json;
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 
 @end
