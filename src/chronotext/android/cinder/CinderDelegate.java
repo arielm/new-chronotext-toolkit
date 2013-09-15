@@ -82,6 +82,9 @@ public class CinderDelegate
    */
   public void receiveMessageFromSketch(int what, String body)
   {
-    mHandler.sendMessage(Message.obtain(mHandler, what, body));
+    if (mHandler != null)
+    {
+      mHandler.sendMessage(Message.obtain(mHandler, what, body));
+    }
   }
 }
