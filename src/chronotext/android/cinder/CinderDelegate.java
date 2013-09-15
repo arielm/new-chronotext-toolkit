@@ -75,6 +75,11 @@ public class CinderDelegate extends Handler
 
   // ---------------------------------------- MESSAGING SYSTEM ----------------------------------------
 
+  public void sendMessageToSketch(int what)
+  {
+    sendMessageToSketch(what, null);
+  }
+
   /*
    * THIS WILL BE SENT ON THE RENDERER'S THREAD
    */
