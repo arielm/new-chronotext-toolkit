@@ -324,7 +324,7 @@ namespace chronotext
     {
         this->direction = direction;
     }
-
+    
     void XFont::setAxis(const Vec2f &axis)
     {
         this->axis = axis;
@@ -344,7 +344,7 @@ namespace chronotext
     {
         return direction * axis.x;
     }
-
+    
     Vec2f XFont::getAxis() const
     {
         return axis;
@@ -541,7 +541,7 @@ namespace chronotext
             quad.x2 = x - le[cc] * sizeRatio;
             quad.x1 = quad.x2 - w[cc] * sizeRatio;
         }
-
+        
         if (axis.x > 0)
         {
             quad.tx1 = tx1[cc];
@@ -741,29 +741,10 @@ namespace chronotext
     
     void XFont::addTransformedGlyph2D(int cc, float x, float y)
     {
-        const GlyphQuad quad = getGlyphQuad(cc, x, y);
-        
-        matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-        sequenceVertices += 4 * 2;
-        
-        *sequenceCoords++ = quad.tx1;
-        *sequenceCoords++ = quad.ty1;
-        *sequenceCoords++ = quad.tx1;
-        *sequenceCoords++ = quad.ty2;
-        *sequenceCoords++ = quad.tx2;
-        *sequenceCoords++ = quad.ty2;
-        *sequenceCoords++ = quad.tx2;
-        *sequenceCoords++ = quad.ty1;
-        
-        incrementSequence();
-    }
-    
-    void XFont::addTransformedGlyph2D(int cc, float x, float y, const Rectf &clip)
-    {
-        GlyphQuad quad = getGlyphQuad(cc, x, y);
-        
-        if (computeClip(quad, clip))
+        if (cc >= 0)
         {
+            const GlyphQuad quad = getGlyphQuad(cc, x, y);
+            
             matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             sequenceVertices += 4 * 2;
             
@@ -780,31 +761,37 @@ namespace chronotext
         }
     }
     
-    void XFont::addTransformedGlyph3D(int cc, float x, float y)
+    void XFont::addTransformedGlyph2D(int cc, float x, float y, const Rectf &clip)
     {
-        const GlyphQuad quad = getGlyphQuad(cc, x, y);
-        
-        matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-        sequenceVertices += 4 * 3;
-        
-        *sequenceCoords++ = quad.tx1;
-        *sequenceCoords++ = quad.ty1;
-        *sequenceCoords++ = quad.tx1;
-        *sequenceCoords++ = quad.ty2;
-        *sequenceCoords++ = quad.tx2;
-        *sequenceCoords++ = quad.ty2;
-        *sequenceCoords++ = quad.tx2;
-        *sequenceCoords++ = quad.ty1;
-        
-        incrementSequence();
+        if (cc >= 0)
+        {
+            GlyphQuad quad = getGlyphQuad(cc, x, y);
+            
+            if (computeClip(quad, clip))
+            {
+                matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
+                sequenceVertices += 4 * 2;
+                
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty1;
+                
+                incrementSequence();
+            }
+        }
     }
     
-    void XFont::addTransformedGlyph3D(int cc, float x, float y, const Rectf &clip)
+    void XFont::addTransformedGlyph3D(int cc, float x, float y)
     {
-        GlyphQuad quad = getGlyphQuad(cc, x, y);
-        
-        if (computeClip(quad, clip))
+        if (cc >= 0)
         {
+            const GlyphQuad quad = getGlyphQuad(cc, x, y);
+            
             matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             sequenceVertices += 4 * 3;
             
@@ -818,6 +805,31 @@ namespace chronotext
             *sequenceCoords++ = quad.ty1;
             
             incrementSequence();
+        }
+    }
+    
+    void XFont::addTransformedGlyph3D(int cc, float x, float y, const Rectf &clip)
+    {
+        if (cc >= 0)
+        {
+            GlyphQuad quad = getGlyphQuad(cc, x, y);
+            
+            if (computeClip(quad, clip))
+            {
+                matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
+                sequenceVertices += 4 * 3;
+                
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.tx1;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty2;
+                *sequenceCoords++ = quad.tx2;
+                *sequenceCoords++ = quad.ty1;
+                
+                incrementSequence();
+            }
         }
     }
 }
