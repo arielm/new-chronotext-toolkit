@@ -13,20 +13,26 @@ import chronotext.android.gl.GLView;
  * BECAUSE THE CURRENT SYSTEM IS NOT HANDLING AUTO-ROTATION
  */
 
-public class CinderDelegate
+public class CinderDelegate extends Handler
 {
   protected Activity mActivity;
   protected Handler mHandler;
 
   protected GLView mView;
 
-  public CinderDelegate(Activity activity, Handler handler)
+  public CinderDelegate(Activity activity)
   {
     mActivity = activity;
-    mHandler = handler;
+    mHandler = this;
 
     mView = new GLView(activity);
     mView.setRenderer(new CinderRenderer(activity, this)); // WILL START THE RENDERER'S THREAD
+  }
+
+  public CinderDelegate(Activity activity, Handler handler)
+  {
+    this(activity);
+    mHandler = handler;
   }
 
   public GLView getView()
