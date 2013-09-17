@@ -60,13 +60,13 @@ namespace chronotext
         
         // ---
         
-        gl::color(*style->color[state]);
-        
         if (icon)
         {
+            gl::color(*style->color[state]);
+
             glPushMatrix();
             gl::translate(bounds.getCenter());
-            glScalef(icon->scale, icon->scale, 1);
+            gl::scale(icon->scale, icon->scale);
             
             icon->texture->begin();
             icon->texture->drawFromCenter();
@@ -74,8 +74,10 @@ namespace chronotext
             
             glPopMatrix();
         }
-        else
+        else if (style->font)
         {
+            gl::color(*style->color[state]);
+            
             style->font->setSize(style->fontSize);
             FontHelper::drawTextInRect(style->font, NULL, text, bounds, style->snap);
             
@@ -92,10 +94,14 @@ namespace chronotext
         {
             return icon->getWidth();
         }
-        else
+        else if (style->font)
         {
             style->font->setSize(style->fontSize);
             return FontHelper::getStringWidth(style->font, text, style->snap);
+        }
+        else
+        {
+            return 0;
         }
     }
     
@@ -105,10 +111,14 @@ namespace chronotext
         {
             return icon->getHeight();
         }
-        else
+        else if (style->font)
         {
             style->font->setSize(style->fontSize);
             return style->font->getHeight();
+        }
+        else
+        {
+            return 0;
         }
     }
     
