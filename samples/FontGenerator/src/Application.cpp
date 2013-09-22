@@ -32,6 +32,7 @@ class Application : public AppNative
     XFont *font1;
     XFont *font2;
     XFont *font3;
+    XFont *font4;
     
 public:
     void setup();
@@ -61,8 +62,14 @@ void Application::setup()
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT
      */
+    XFontCreator(ftHelper.getLib(), FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15, XParams(3, 2)).writeToFolder(getDocumentsDirectory());
+
+    /*
+     * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
+     * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT
+     */
     XFontCreator(ftHelper.getLib(), FontDescriptor(getResourcePath("frank.ttf")), 64, HEBREW_BIBLICAL, XParams(3, 2)).writeToFolder(getDocumentsDirectory());
-    
+
     // ---
     
     /*
@@ -71,7 +78,8 @@ void Application::setup()
     
     font1 = new XFont(InputSource::getFileInDocuments("Helvetica_Regular_16.fnt"));
     font2 = new XFont(InputSource::getFileInDocuments("Georgia_Regular_64.fnt"), true); // USING MIPMAP
-    font3 = new XFont(InputSource::getFileInDocuments("FrankRuehl_Regular_64.fnt"), true); // USING MIPMAP
+    font3 = new XFont(InputSource::getFileInDocuments("Roboto_Regular_64.fnt"), true); // USING MIPMAP
+    font4 = new XFont(InputSource::getFileInDocuments("FrankRuehl_Regular_64.fnt"), true); // USING MIPMAP
     
     // ---
     
@@ -84,6 +92,7 @@ void Application::shutdown()
     delete font1;
     delete font2;
     delete font3;
+    delete font4;
 }
 
 void Application::prepareSettings(AppBasic::Settings *settings)
@@ -98,14 +107,17 @@ void Application::draw()
     glColor4f(1, 1, 1, 1);
     
     font1->setSize(16); // THIS FONT IS NOT INTENDED TO BE RENDERED AT ANOTHER SIZE
-    FontHelper::drawText(font1, NULL, font1->getCharacters(), 10, getWindowHeight() / 4.0f, true); // USING SNAP
+    FontHelper::drawText(font1, NULL, font1->getCharacters(), 10, getWindowHeight() / 5.0f, true); // USING SNAP
     
     font2->setSize(32); // ANY SIZE CAN BE USED
-    FontHelper::drawText(font2, NULL, font2->getCharacters(), 10, getWindowHeight() * 2 / 4.0f);
+    FontHelper::drawText(font2, NULL, font2->getCharacters(), 10, getWindowHeight() * 2 / 5.0f);
     
-    font3->setSize(64); // ANY SIZE CAN BE USED
-    font3->setDirection(-1);
-    FontHelper::drawText(font3, NULL, font3->getCharacters(), getWindowWidth() - 10, getWindowHeight() * 3 / 4.0f);
+    font3->setSize(32); // ANY SIZE CAN BE USED
+    FontHelper::drawText(font3, NULL, font3->getCharacters(), 10, getWindowHeight() * 3 / 5.0f);
+    
+    font4->setSize(64); // ANY SIZE CAN BE USED
+    font4->setDirection(-1);
+    FontHelper::drawText(font4, NULL, font4->getCharacters(), getWindowWidth() - 10, getWindowHeight() * 4 / 5.0f);
 }
 
 CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))
