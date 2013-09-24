@@ -35,6 +35,16 @@ public class CinderDelegate extends Handler
     mHandler = handler;
   }
 
+  public Activity getActivity()
+  {
+    return mActivity;
+  }
+
+  public Handler getHandler()
+  {
+    return mHandler;
+  }
+
   public GLView getView()
   {
     return mView;
