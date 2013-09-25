@@ -12,9 +12,7 @@ InputSourceRef InputSource::getResource(const std::string &resourceName)
     InputSource *source = new InputSource(TYPE_RESOURCE);
     source->resourceName = source->filePathHint = resourceName;
 
-#if defined(CINDER_MSW)
-    source->filePath = fs::path("resources") / resourceName;
-#elif defined(CINDER_COCOA)
+#if defined(CINDER_COCOA)
     source->filePath = getResourcePath(resourceName);
 #endif
     
