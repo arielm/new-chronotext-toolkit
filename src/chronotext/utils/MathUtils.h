@@ -46,6 +46,31 @@ static inline float FastSqrt(float x)
     return r * x;
 }
 
+/*
+ * REFERENCE FOR THE 4 FOLLOWING 4 FUNCTIONS:
+ * http://stackoverflow.com/a/253874/50335
+ */
+ 
+static bool approximatelyEqual(float a, float b, float epsilon)
+{
+    return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+static bool essentiallyEqual(float a, float b, float epsilon)
+{
+    return fabs(a - b) <= ((fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+static bool definitelyGreaterThan(float a, float b, float epsilon)
+{
+    return (a - b) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+static bool definitelyLessThan(float a, float b, float epsilon)
+{
+    return (b - a) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
 class MathUtils
 {
 public:
