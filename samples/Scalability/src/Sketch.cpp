@@ -7,13 +7,13 @@ using namespace ci::app;
 using namespace std;
 
 const float GRID_SIZE = 32;
-const float FRAME_SCALE = 464 / 512.0;
+const float FRAME_SCALE = 464 / 512.0f;
 
 void Sketch::setup(bool renew)
 {
     if (renew)
     {
-        textureManager.unload(); // KIND OF NO-OP IN THE CASE OF TextureManager, BUT NECESSARY TO BE CALLED BEFORE reload()
+        textureManager.unload();
         textureManager.reload();
     }
     else
@@ -31,20 +31,17 @@ void Sketch::setup(bool renew)
 
 void Sketch::resize()
 {
-    scale = getWindowHeight() / (float) frame->getHeight();
+    scale = getWindowHeight() / (float)frame->getHeight();
     position = getWindowCenter() / scale;
-    
-    gl::setMatricesWindow(getWindowSize(), true);
 }
 
 void Sketch::draw()
 {
     gl::clear(Color(0.5f, 0.5f, 0.5f), false);
-
-    glLoadIdentity();
-    glScalef(scale, scale, 1);
+    gl::setMatricesWindow(getWindowSize(), true);
     
     glColor4f(1, 1, 1, 0.25f);
+    glScalef(scale, scale, 1);
     drawGrid(Rectf(getWindowBounds()) / scale, GRID_SIZE, position);
 
     glColor4f(1, 1, 1, 1);
