@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := Scalability
 
-CHR_SRC = ../../../../../../../Cinder/blocks/chronotext-blocks-base/src
+CHR_SRC = ../../../../../../../Cinder/blocks/new-chronotext-toolkit/src
 UTF8_CPP_SRC = ../../../../../../../Cinder/include/utf8-cpp
 
 LOCAL_C_INCLUDES := ../src/
