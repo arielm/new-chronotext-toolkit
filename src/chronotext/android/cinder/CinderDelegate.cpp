@@ -154,7 +154,7 @@ void CinderDelegate::event(int id)
         case EVENT_SHOWN:
         mFrameCount = 0;
             mTimer.start();
-            sketch->start(CinderSketch::FLAG_FOCUS_GAIN);
+            sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
             break;
             
         case EVENT_RESUMED:

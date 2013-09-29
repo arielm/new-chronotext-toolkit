@@ -49,7 +49,7 @@ using namespace std;
     
     if (reason == REASON_VIEW_WILL_APPEAR)
     {
-        sketch->start(CinderSketch::FLAG_FOCUS_GAIN);
+        sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
         active = YES;
     }
     else

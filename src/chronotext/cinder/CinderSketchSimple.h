@@ -16,7 +16,7 @@ protected:
 public:
     enum
     {
-        FLAG_FOCUS_GAIN,
+        FLAG_FOCUS_GAINED,
         FLAG_FOCUS_LOST,
         FLAG_APP_RESUME,
         FLAG_APP_PAUSE,

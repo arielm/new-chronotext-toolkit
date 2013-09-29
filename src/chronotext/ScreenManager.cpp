@@ -54,11 +54,11 @@ void ScreenManager::start(int flags)
     {
         switch(flags)
         {
-            case CinderSketch::FLAG_FOCUS_GAIN:
+            case CinderSketch::FLAG_FOCUS_GAINED:
                 if (!focused[currentScreen])
                 {
                     focused[currentScreen] = true;
-                    currentScreen->start(CinderSketch::FLAG_FOCUS_GAIN);
+                    currentScreen->start(CinderSketch::FLAG_FOCUS_GAINED);
                 }
                 break;
                 

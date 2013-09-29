@@ -40,7 +40,7 @@ void CinderApp::resize()
     if (startCount == 0)
     {
         start(); // XXX: CURRENTLY ONLY USED FOR FPS-COUNTER
-        sketch->start(CinderSketch::FLAG_FOCUS_GAIN);
+        sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
         startCount++;
     }
 }
