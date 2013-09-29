@@ -148,7 +148,7 @@ using namespace std;
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
 {
-    sketch->sendMessage(Message(what, make_shared<string>([body UTF8String])));
+    sketch->sendMessage(Message(what, [body UTF8String]));
 }
 
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body

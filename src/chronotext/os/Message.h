@@ -5,18 +5,19 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 class Handler;
 
 class Message
 {
 public:
-    Handler *target;
-    
     int what;
-    int64_t arg;
     std::shared_ptr<void> object;
-    
+    int64_t arg;
+
+    Handler *target;
+
     Message():
     target(NULL)
     {}
@@ -35,4 +36,17 @@ public:
     arg(arg),
     target(NULL)
     {}
+    
+    Message(int what, const std::string &object, int64_t arg = 0)
+    :
+    what(what),
+    object(std::make_shared<std::string>(object)),
+    arg(arg),
+    target(NULL)
+    {}
+    
+    std::string& string() const
+    {
+        return *std::static_pointer_cast<std::string>(object);
+    }
 };

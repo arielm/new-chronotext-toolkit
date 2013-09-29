@@ -137,5 +137,5 @@ void CinderApp::pause()
 
 void CinderApp::sendMessageToSketch(int what, const string &body)
 {
-    sketch->sendMessage(Message(what, make_shared<string>(body)));
+    sketch->sendMessage(Message(what, body));
 }
