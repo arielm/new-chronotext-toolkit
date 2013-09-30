@@ -152,7 +152,7 @@ void CinderDelegate::event(int id)
     {
         case EVENT_ATTACHED:
         case EVENT_SHOWN:
-        mFrameCount = 0;
+            mFrameCount = 0;
             mTimer.start();
             sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
             break;
@@ -279,14 +279,20 @@ ostream& CinderDelegate::console()
 
 void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
 {
+#ifdef DEBUG_MESSAGES
     CI_LOGD("MESSAGE SENT TO JAVA: %d %s", what, body.c_str());
+#endif
+    
     callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
 }
 
 void CinderDelegate::sendMessageToSketch(int what, const string &body)
 {
+#ifdef DEBUG_MESSAGES
     CI_LOGD("MESSAGE RECEIVED FROM JAVA: %d %s", what, body.c_str());
-    sketch->sendMessage(Message(what, make_shared<string>(body)));
+#endif
+    
+    sketch->sendMessage(Message(what, body));
 }
 
 // ---------------------------------------- JNI ----------------------------------------
@@ -295,7 +301,7 @@ JNIEnv* CinderDelegate::getJNIEnv()
 {
     JNIEnv *env = NULL;
 
-    int err = mJavaVM->GetEnv((void**) &env, JNI_VERSION_1_4);
+    int err = mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
 
     if (err == JNI_EDETACHED)
     {
