@@ -1,6 +1,8 @@
 
 package chronotext.android.cinder;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
@@ -87,7 +89,12 @@ public class CinderDelegate extends Handler
 
   public void sendMessageToSketch(int what)
   {
-    sendMessageToSketch(what, null);
+    sendMessageToSketch(what, (String) null);
+  }
+
+  public void sendMessageToSketch(int what, JSONObject json)
+  {
+    sendMessageToSketch(what, json.toString());
   }
 
   /*
