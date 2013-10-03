@@ -1,5 +1,5 @@
 
-package chronotext.android.cinder;
+package org.chronotext.cinder;
 
 import javax.microedition.khronos.opengles.GL10;
 

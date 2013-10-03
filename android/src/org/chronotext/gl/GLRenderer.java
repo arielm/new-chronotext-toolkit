@@ -1,5 +1,5 @@
 
-package chronotext.android.gl;
+package org.chronotext.gl;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;

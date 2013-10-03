@@ -1,5 +1,5 @@
 
-package chronotext.android.gl;
+package org.chronotext.gl;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

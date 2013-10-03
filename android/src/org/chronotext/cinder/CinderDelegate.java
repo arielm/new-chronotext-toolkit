@@ -1,5 +1,5 @@
 
-package chronotext.android.cinder;
+package org.chronotext.cinder;
 
 import android.app.Activity;
 import android.os.Handler;
