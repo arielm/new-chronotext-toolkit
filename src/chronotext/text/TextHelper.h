@@ -3,7 +3,7 @@
 #include "chronotext/font/XFont.h"
 #include "chronotext/path/FollowablePath.h"
 
-class FontHelper
+class TextHelper
 {
 public:
     static float getStringWidth(chr::XFont *font, const std::wstring &text, bool snap = false);

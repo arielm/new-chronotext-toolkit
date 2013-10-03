@@ -1,10 +1,10 @@
-#include "chronotext/text/FontHelper.h"
+#include "chronotext/text/TextHelper.h"
 
 using namespace std;
 using namespace ci;
 using namespace chr;
 
-float FontHelper::getStringWidth(XFont *font, const wstring &text, bool snap)
+float TextHelper::getStringWidth(XFont *font, const wstring &text, bool snap)
 {
     if (snap)
     {
@@ -24,7 +24,7 @@ float FontHelper::getStringWidth(XFont *font, const wstring &text, bool snap)
     }
 }
 
-void FontHelper::drawText(XFont *font, XFontSequence *sequence, const wstring &text, float x, float y, bool snap)
+void TextHelper::drawText(XFont *font, XFontSequence *sequence, const wstring &text, float x, float y, bool snap)
 {
     if (snap)
     {
@@ -46,7 +46,7 @@ void FontHelper::drawText(XFont *font, XFontSequence *sequence, const wstring &t
     font->endSequence();
 }
 
-void FontHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wstring &text, float x, float y, int alignX, int alignY, bool snap)
+void TextHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wstring &text, float x, float y, int alignX, int alignY, bool snap)
 {
     switch (alignX)
     {
@@ -77,12 +77,12 @@ void FontHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wst
     drawText(font, sequence, text, x, y, snap);
 }
 
-void FontHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstring &text, const Rectf &rect, bool snap)
+void TextHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstring &text, const Rectf &rect, bool snap)
 {
     drawTextInRect(font, sequence, text, rect.x1, rect.y1, rect.x2, rect.y2, snap);
 }
 
-void FontHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
+void TextHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
 {
     float w = x2 - x1;
     float x = x1 + (w - getStringWidth(font, text, snap)) * 0.5f;
@@ -93,12 +93,12 @@ void FontHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstr
     drawText(font, sequence, text, x, y, snap);
 }
 
-void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, const Rectf &rect, bool snap)
+void TextHelper::drawStrikethroughInRect(XFont *font, const wstring &text, const Rectf &rect, bool snap)
 {
     drawStrikethroughInRect(font, text, rect.x1, rect.y1, rect.x2, rect.y2, snap);
 }
 
-void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
+void TextHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
 {
     float w1 = getStringWidth(font, text, snap);
     float w2 = x2 - x1;
@@ -127,7 +127,7 @@ void FontHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-float FontHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wstring &text, FollowablePath *path, float offset)
+float TextHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wstring &text, FollowablePath *path, float offset)
 {
     int len = text.size();
     float offsetX = offset;

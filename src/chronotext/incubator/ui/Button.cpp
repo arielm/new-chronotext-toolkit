@@ -1,5 +1,5 @@
 #include "chronotext/incubator/ui/Button.h"
-#include "chronotext/text/FontHelper.h"
+#include "chronotext/text/TextHelper.h"
 #include "chronotext/utils/Utils.h"
 
 using namespace ci;
@@ -79,11 +79,11 @@ namespace chronotext
             gl::color(*style->color[state]);
             
             style->font->setSize(style->fontSize);
-            FontHelper::drawTextInRect(style->font, NULL, text, bounds, style->snap);
+            TextHelper::drawTextInRect(style->font, NULL, text, bounds, style->snap);
             
             if (style->strikethrough[state])
             {
-                FontHelper::drawStrikethroughInRect(style->font, text, bounds, style->snap);
+                TextHelper::drawStrikethroughInRect(style->font, text, bounds, style->snap);
             }
         }
     }
@@ -97,7 +97,7 @@ namespace chronotext
         else if (style->font)
         {
             style->font->setSize(style->fontSize);
-            return FontHelper::getStringWidth(style->font, text, style->snap);
+            return TextHelper::getStringWidth(style->font, text, style->snap);
         }
         else
         {
