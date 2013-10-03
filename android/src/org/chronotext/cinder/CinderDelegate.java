@@ -1,17 +1,12 @@
 
 package org.chronotext.cinder;
 
+import org.chronotext.gl.GLView;
+
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import chronotext.android.gl.GLView;
-
-/*
- * WARNING: BE SURE TO DEFINE android:screenOrientation IN THE MANIFEST
- * OR TO CALL setRequestedOrientation() INSIDE Activity.onCreate()
- * BECAUSE THE CURRENT SYSTEM IS NOT HANDLING AUTO-ROTATION
- */
 
 public class CinderDelegate extends Handler
 {

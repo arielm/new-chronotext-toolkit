@@ -1,10 +1,11 @@
 
 package org.chronotext.samples;
 
+import org.chronotext.cinder.CinderDelegate;
+
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import chronotext.android.cinder.CinderDelegate;
 
 public class MainActivity extends Activity
 {

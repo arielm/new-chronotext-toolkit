@@ -3,12 +3,13 @@ package org.chronotext.cinder;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import org.chronotext.gl.GLRenderer;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
-import chronotext.android.gl.GLRenderer;
 
 /*
  * WARNING: BE SURE TO DEFINE android:screenOrientation IN THE MANIFEST
@@ -38,7 +39,7 @@ public class CinderRenderer extends GLRenderer
   {
     mContext = context;
     mListener = listener;
-    
+
     prelaunch();
   }
 
@@ -67,7 +68,7 @@ public class CinderRenderer extends GLRenderer
   }
 
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
-  
+
   public void launch()
   {
     launch(mContext, mListener);
@@ -135,11 +136,11 @@ public class CinderRenderer extends GLRenderer
   // ---------------------------------------- JNI ----------------------------------------
 
   public native void prelaunch();
-  
+
   public native void launch(Context context, Object listener);
 
   public native void setup(int width, int height, int accelerometerRotation);
-  
+
   public native void shutdown();
 
   public native void draw();
