@@ -13,10 +13,9 @@
 
 - (id) initWithCinderApp:(CinderApp*)cinderApp;
 
-- (NSDictionary*) parseJSON:(NSString*)string;
 - (void) sendMessageToSketch:(int)what;
+- (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
-- (void) sendMessageToSketch:(int)what json:(NSDictionary*)json;
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 
 @end

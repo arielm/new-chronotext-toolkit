@@ -2,6 +2,8 @@
 
 #include <map>
 
+#import "chronotext/cocoa/utils/NSString+JSON.h"
+
 @class GLKView;
 @class GLViewController;
 
@@ -64,10 +66,9 @@ enum
 - (uint32_t) findTouchInMap:(UITouch*)touch;
 - (void) updateActiveTouches;
 
-- (NSDictionary*) parseJSON:(NSString*)string;
 - (void) sendMessageToSketch:(int)what;
+- (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
-- (void) sendMessageToSketch:(int)what json:(NSDictionary*)json;
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 
 @end

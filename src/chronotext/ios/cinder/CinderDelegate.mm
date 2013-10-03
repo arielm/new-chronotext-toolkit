@@ -128,22 +128,17 @@ using namespace std;
     return frameCount;
 }
 
-- (NSDictionary*) parseJSON:(NSString*)string
+- (void) sendMessageToSketch:(int)what
 {
-    return [NSJSONSerialization JSONObjectWithData:[string dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    sketch->sendMessage(Message(what));
 }
 
-- (void) sendMessageToSketch:(int)what json:(NSDictionary*)json
+- (void) sendMessageToSketch:(int)what json:(id)json
 {
     NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
     NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     
     [self sendMessageToSketch:what body:string];
-}
-
-- (void) sendMessageToSketch:(int)what
-{
-    sketch->sendMessage(Message(what));
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
