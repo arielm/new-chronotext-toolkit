@@ -34,10 +34,10 @@ using namespace std;
 
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     sketch->shutdown();
     delete sketch;
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
 }

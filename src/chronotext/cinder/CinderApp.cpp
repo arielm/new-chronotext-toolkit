@@ -5,16 +5,6 @@ using namespace ci;
 using namespace app;
 using namespace std;
 
-void CinderApp::start()
-{
-    ticks = 0;
-}
-
-void CinderApp::stop()
-{
-    LOGI << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
-}
-
 void CinderApp::setup()
 {
     sketch->setup(false);
@@ -118,6 +108,11 @@ void CinderApp::accelerated(AccelEvent event)
     sketch->accelerated(event);
 }
 
+void CinderApp::sendMessageToSketch(int what, const string &body)
+{
+    sketch->sendMessage(Message(what, body));
+}
+
 #if defined(CINDER_ANDROID)
 void CinderApp::resume(bool renewContext)
 {
@@ -135,7 +130,12 @@ void CinderApp::pause()
 }
 #endif
 
-void CinderApp::sendMessageToSketch(int what, const string &body)
+void CinderApp::start()
 {
-    sketch->sendMessage(Message(what, body));
+    ticks = 0;
+}
+
+void CinderApp::stop()
+{
+    LOGI << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
 }

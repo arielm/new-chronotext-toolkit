@@ -7,16 +7,6 @@
 
 class CinderApp : public ci::app::AppNative
 {
-    int startCount;
-    int updateCount;
-    
-    int ticks;
-    double t0;
-    double elapsed;
-    
-    void start();
-    void stop();
-
 public:
     CinderSketch *sketch;
     
@@ -42,12 +32,23 @@ public:
     void touchesEnded(ci::app::TouchEvent event);
     
     void accelerated(AccelEvent event);
+
+    virtual void receiveMessageFromSketch(int what, const std::string &body) {}
+    void sendMessageToSketch(int what, const std::string &body);
     
 #if defined(CINDER_ANDROID)
     void pause();
     void resume(bool renewContext);
 #endif
     
-    virtual void receiveMessageFromSketch(int what, const std::string &body) {}
-    void sendMessageToSketch(int what, const std::string &body);
+protected:
+    int startCount;
+    int updateCount;
+    
+    int ticks;
+    double t0;
+    double elapsed;
+    
+    void start();
+    void stop();
 };
