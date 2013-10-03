@@ -7,10 +7,10 @@
         android:targetSdkVersion="15" />
     <application
         android:label="Scalability"
-        android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
-            android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
