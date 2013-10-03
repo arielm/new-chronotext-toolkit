@@ -162,10 +162,9 @@ void CinderDelegate::event(int id)
             mTimer.start();
             
             /*
-             * ASSERTION: THE GL CONTEXT HAS JUST BEEN RE-CREATED
+             * ASSERTIONS: THE GL CONTEXT HAS JUST BEEN RE-CREATED, WITH THE SAME DIMENSIONS AS BEFORE
              */
             sketch->setup(true);
-            sketch->resize();
             
             sketch->start(CinderSketch::FLAG_APP_RESUME);
             break;
