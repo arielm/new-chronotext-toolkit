@@ -3,90 +3,93 @@
 using namespace std;
 using namespace ci;
 
-TextureRef TextureManager::getFromCache(const TextureRequest &textureRequest)
+namespace chronotext
 {
-    for (auto it = cache.cbegin(); it != cache.cend(); ++it)
+    TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
     {
-        TextureRef texture = *it;
-
-        if (textureRequest == texture->request)
-        {
-            return texture;
-        }
+        return getTexture(InputSource::getResource(resourceName), useMipmap, flags, wrapS, wrapT);
     }
     
-    return TextureRef();
-}
-
-void TextureManager::putInCache(TextureRef texture)
-{
-    cache.push_back(texture);
-}
-
-TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
-{
-    return getTexture(InputSource::getResource(resourceName), useMipmap, flags, wrapS, wrapT);
-}
-
-TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
-{
-    return getTexture(TextureRequest(inputSource, useMipmap, flags, wrapS, wrapT));
-}
-
-TextureRef TextureManager::getTexture(const TextureRequest &textureRequest)
-{
-    TextureRef texture = getFromCache(textureRequest);
-    
-    if (!texture)
+    TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags, GLenum wrapS, GLenum wrapT)
     {
-        texture = make_shared<Texture>(textureRequest);
-        putInCache(texture);
+        return getTexture(TextureRequest(inputSource, useMipmap, flags, wrapS, wrapT));
     }
     
-    return texture;
-}
-
-bool TextureManager::remove(TextureRef texture)
-{
-    for (auto it = cache.begin(); it != cache.end(); ++it)
+    TextureRef TextureManager::getTexture(const TextureRequest &textureRequest)
     {
-        if (texture == *it)
-        {
-            cache.erase(it);
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-void TextureManager::clear()
-{
-    cache.clear();
-}
-
-void TextureManager::unload()
-{
-    if (!unloaded)
-    {
-        unloaded = true;
+        TextureRef texture = getFromCache(textureRequest);
         
+        if (!texture)
+        {
+            texture = make_shared<Texture>(textureRequest);
+            putInCache(texture);
+        }
+        
+        return texture;
+    }
+    
+    bool TextureManager::remove(TextureRef texture)
+    {
         for (auto it = cache.begin(); it != cache.end(); ++it)
         {
-            (*it)->unload();
+            if (texture == *it)
+            {
+                cache.erase(it);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    void TextureManager::clear()
+    {
+        cache.clear();
+    }
+    
+    void TextureManager::unload()
+    {
+        if (!unloaded)
+        {
+            unloaded = true;
+            
+            for (auto it = cache.begin(); it != cache.end(); ++it)
+            {
+                (*it)->unload();
+            }
         }
     }
-}
-
-void TextureManager::reload()
-{
-    if (unloaded)
+    
+    void TextureManager::reload()
     {
-        unloaded = false;
-        
-        for (auto it = cache.begin(); it != cache.end(); ++it)
+        if (unloaded)
         {
-            (*it)->reload();
+            unloaded = false;
+            
+            for (auto it = cache.begin(); it != cache.end(); ++it)
+            {
+                (*it)->reload();
+            }
         }
+    }
+    
+    TextureRef TextureManager::getFromCache(const TextureRequest &textureRequest)
+    {
+        for (auto it = cache.cbegin(); it != cache.cend(); ++it)
+        {
+            TextureRef texture = *it;
+            
+            if (textureRequest == texture->request)
+            {
+                return texture;
+            }
+        }
+        
+        return TextureRef();
+    }
+    
+    void TextureManager::putInCache(TextureRef texture)
+    {
+        cache.push_back(texture);
     }
 }

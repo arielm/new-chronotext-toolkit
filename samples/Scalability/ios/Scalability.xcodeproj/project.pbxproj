@@ -20,9 +20,6 @@
 		A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */; };
 		A87CE0E516E75A3700F27EDE /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D616E75A3700F27EDE /* Sprite.cpp */; };
 		A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D816E75A3700F27EDE /* Texture.cpp */; };
-		A87CE0E716E75A3700F27EDE /* TextureAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0DA16E75A3700F27EDE /* TextureAtlas.cpp */; };
-		A87CE0E816E75A3700F27EDE /* TextureAtlasAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0DC16E75A3700F27EDE /* TextureAtlasAnimation.cpp */; };
-		A87CE0E916E75A3700F27EDE /* TextureAtlasManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0DE16E75A3700F27EDE /* TextureAtlasManager.cpp */; };
 		A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E016E75A3700F27EDE /* TextureHelper.cpp */; };
 		A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E216E75A3700F27EDE /* TextureManager.cpp */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
@@ -70,12 +67,6 @@
 		A87CE0D716E75A3700F27EDE /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		A87CE0D816E75A3700F27EDE /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		A87CE0D916E75A3700F27EDE /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
-		A87CE0DA16E75A3700F27EDE /* TextureAtlas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureAtlas.cpp; sourceTree = "<group>"; };
-		A87CE0DB16E75A3700F27EDE /* TextureAtlas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureAtlas.h; sourceTree = "<group>"; };
-		A87CE0DC16E75A3700F27EDE /* TextureAtlasAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureAtlasAnimation.cpp; sourceTree = "<group>"; };
-		A87CE0DD16E75A3700F27EDE /* TextureAtlasAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureAtlasAnimation.h; sourceTree = "<group>"; };
-		A87CE0DE16E75A3700F27EDE /* TextureAtlasManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureAtlasManager.cpp; sourceTree = "<group>"; };
-		A87CE0DF16E75A3700F27EDE /* TextureAtlasManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureAtlasManager.h; sourceTree = "<group>"; };
 		A87CE0E016E75A3700F27EDE /* TextureHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureHelper.cpp; sourceTree = "<group>"; };
 		A87CE0E116E75A3700F27EDE /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureHelper.h; sourceTree = "<group>"; };
 		A87CE0E216E75A3700F27EDE /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
@@ -329,12 +320,6 @@
 				A87CE0D716E75A3700F27EDE /* Sprite.h */,
 				A87CE0D816E75A3700F27EDE /* Texture.cpp */,
 				A87CE0D916E75A3700F27EDE /* Texture.h */,
-				A87CE0DA16E75A3700F27EDE /* TextureAtlas.cpp */,
-				A87CE0DB16E75A3700F27EDE /* TextureAtlas.h */,
-				A87CE0DC16E75A3700F27EDE /* TextureAtlasAnimation.cpp */,
-				A87CE0DD16E75A3700F27EDE /* TextureAtlasAnimation.h */,
-				A87CE0DE16E75A3700F27EDE /* TextureAtlasManager.cpp */,
-				A87CE0DF16E75A3700F27EDE /* TextureAtlasManager.h */,
 				A87CE0E016E75A3700F27EDE /* TextureHelper.cpp */,
 				A87CE0E116E75A3700F27EDE /* TextureHelper.h */,
 				A87CE0E216E75A3700F27EDE /* TextureManager.cpp */,
@@ -470,9 +455,6 @@
 				A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */,
 				A87CE0E516E75A3700F27EDE /* Sprite.cpp in Sources */,
 				A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */,
-				A87CE0E716E75A3700F27EDE /* TextureAtlas.cpp in Sources */,
-				A87CE0E816E75A3700F27EDE /* TextureAtlasAnimation.cpp in Sources */,
-				A87CE0E916E75A3700F27EDE /* TextureAtlasManager.cpp in Sources */,
 				A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */,
 				A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */,
 			);

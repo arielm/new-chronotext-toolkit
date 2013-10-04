@@ -11,10 +11,10 @@
 
 class Sketch : public CinderSketch
 {
-    TextureManager textureManager;
+    chr::TextureManager textureManager;
     
-    TextureRef frame;
-    TextureRef picture;
+    chr::TextureRef frame;
+    chr::TextureRef picture;
     
     float scale;
     ci::Vec2f dragOrigin;
