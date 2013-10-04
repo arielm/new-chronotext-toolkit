@@ -36,7 +36,7 @@
 		A8FA3C1E16E3AB8000367F97 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BD216E3AB8000367F97 /* MessageQueue.cpp */; };
 		A8FA3C2B16E3AB8000367F97 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BF316E3AB8000367F97 /* Clock.cpp */; };
 		A8FA3C2C16E3AB8000367F97 /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BF616E3AB8000367F97 /* MasterClock.cpp */; };
-		A8FA3C2D16E3AB8000367F97 /* glUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* glUtils.cpp */; };
+		A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */; };
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -104,8 +104,8 @@
 		A8FA3BF816E3AB8000367F97 /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A8FA3BFB16E3AB8000367F97 /* AccelerationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationManager.h; sourceTree = "<group>"; };
 		A8FA3BFC16E3AB8000367F97 /* AccelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelEvent.h; sourceTree = "<group>"; };
-		A8FA3BFD16E3AB8000367F97 /* glUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glUtils.cpp; sourceTree = "<group>"; };
-		A8FA3BFE16E3AB8000367F97 /* glUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glUtils.h; sourceTree = "<group>"; };
+		A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
+		A8FA3BFE16E3AB8000367F97 /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
 		A8FA3BFF16E3AB8000367F97 /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
 		A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		A8FA3C0116E3AB8000367F97 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
@@ -345,8 +345,8 @@
 			isa = PBXGroup;
 			children = (
 				A8FA3BFA16E3AB8000367F97 /* accel */,
-				A8FA3BFD16E3AB8000367F97 /* glUtils.cpp */,
-				A8FA3BFE16E3AB8000367F97 /* glUtils.h */,
+				A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */,
+				A8FA3BFE16E3AB8000367F97 /* GLUtils.h */,
 				A8FA3BFF16E3AB8000367F97 /* Hasher.h */,
 				A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */,
 				A8FA3C0116E3AB8000367F97 /* MathUtils.h */,
@@ -449,7 +449,7 @@
 				A8FA3C1E16E3AB8000367F97 /* MessageQueue.cpp in Sources */,
 				A8FA3C2B16E3AB8000367F97 /* Clock.cpp in Sources */,
 				A8FA3C2C16E3AB8000367F97 /* MasterClock.cpp in Sources */,
-				A8FA3C2D16E3AB8000367F97 /* glUtils.cpp in Sources */,
+				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
 				A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */,

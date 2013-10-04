@@ -1,4 +1,4 @@
-#include "chronotext/utils/glUtils.h"
+#include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
 

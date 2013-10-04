@@ -29,7 +29,7 @@
 		A82C90E516E00AAD00FF519C /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C90E116E00AAD00FF519C /* MessageQueue.cpp */; };
 		A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C90E716E00B0500FF519C /* CinderApp.cpp */; };
 		A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */; };
-		A82C910516E00B3B00FF519C /* glUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C90FA16E00B3B00FF519C /* glUtils.cpp */; };
+		A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C90FA16E00B3B00FF519C /* GLUtils.cpp */; };
 		A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C90FD16E00B3B00FF519C /* MathUtils.cpp */; };
 		A82C910716E00B3B00FF519C /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910216E00B3B00FF519C /* Utils.cpp */; };
 		A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910816E02DAA00FF519C /* Sketch.cpp */; };
@@ -77,8 +77,8 @@
 		A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketchSimple.cpp; sourceTree = "<group>"; };
 		A82C90EB16E00B0500FF519C /* CinderSketchSimple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketchSimple.h; sourceTree = "<group>"; };
 		A82C90F916E00B3B00FF519C /* AccelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelEvent.h; sourceTree = "<group>"; };
-		A82C90FA16E00B3B00FF519C /* glUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glUtils.cpp; sourceTree = "<group>"; };
-		A82C90FB16E00B3B00FF519C /* glUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glUtils.h; sourceTree = "<group>"; };
+		A82C90FA16E00B3B00FF519C /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
+		A82C90FB16E00B3B00FF519C /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
 		A82C90FC16E00B3B00FF519C /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
 		A82C90FD16E00B3B00FF519C /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		A82C90FE16E00B3B00FF519C /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
@@ -224,8 +224,8 @@
 			isa = PBXGroup;
 			children = (
 				A82C90F516E00B3B00FF519C /* accel */,
-				A82C90FA16E00B3B00FF519C /* glUtils.cpp */,
-				A82C90FB16E00B3B00FF519C /* glUtils.h */,
+				A82C90FA16E00B3B00FF519C /* GLUtils.cpp */,
+				A82C90FB16E00B3B00FF519C /* GLUtils.h */,
 				A82C90FC16E00B3B00FF519C /* Hasher.h */,
 				A82C90FD16E00B3B00FF519C /* MathUtils.cpp */,
 				A82C90FE16E00B3B00FF519C /* MathUtils.h */,
@@ -369,7 +369,7 @@
 				A82C90E516E00AAD00FF519C /* MessageQueue.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */,
-				A82C910516E00B3B00FF519C /* glUtils.cpp in Sources */,
+				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,

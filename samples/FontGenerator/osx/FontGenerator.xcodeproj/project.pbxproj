@@ -21,7 +21,7 @@
 		A80952D816F3613E0011FAA3 /* XFontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809525716F3613E0011FAA3 /* XFontSequence.cpp */; };
 		A80952E416F3613E0011FAA3 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809527616F3613E0011FAA3 /* InputSource.cpp */; };
 		A80952F516F3613E0011FAA3 /* WordWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952A616F3613E0011FAA3 /* WordWrapper.cpp */; };
-		A809530016F3613E0011FAA3 /* glUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C416F3613E0011FAA3 /* glUtils.cpp */; };
+		A809530016F3613E0011FAA3 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C416F3613E0011FAA3 /* GLUtils.cpp */; };
 		A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C716F3613E0011FAA3 /* MathUtils.cpp */; };
 		A809530216F3613E0011FAA3 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952CC16F3613E0011FAA3 /* Utils.cpp */; };
 		A809530916F361E20011FAA3 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809530316F361E20011FAA3 /* Application.cpp */; };
@@ -60,8 +60,8 @@
 		A80952A516F3613E0011FAA3 /* LinkExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkExtractor.h; sourceTree = "<group>"; };
 		A80952A616F3613E0011FAA3 /* WordWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WordWrapper.cpp; sourceTree = "<group>"; };
 		A80952A716F3613E0011FAA3 /* WordWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordWrapper.h; sourceTree = "<group>"; };
-		A80952C416F3613E0011FAA3 /* glUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glUtils.cpp; sourceTree = "<group>"; };
-		A80952C516F3613E0011FAA3 /* glUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glUtils.h; sourceTree = "<group>"; };
+		A80952C416F3613E0011FAA3 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
+		A80952C516F3613E0011FAA3 /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
 		A80952C616F3613E0011FAA3 /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
 		A80952C716F3613E0011FAA3 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		A80952C816F3613E0011FAA3 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
@@ -235,8 +235,8 @@
 		A80952C016F3613E0011FAA3 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				A80952C416F3613E0011FAA3 /* glUtils.cpp */,
-				A80952C516F3613E0011FAA3 /* glUtils.h */,
+				A80952C416F3613E0011FAA3 /* GLUtils.cpp */,
+				A80952C516F3613E0011FAA3 /* GLUtils.h */,
 				A80952C616F3613E0011FAA3 /* Hasher.h */,
 				A80952C716F3613E0011FAA3 /* MathUtils.cpp */,
 				A80952C816F3613E0011FAA3 /* MathUtils.h */,
@@ -336,7 +336,7 @@
 				A80952D816F3613E0011FAA3 /* XFontSequence.cpp in Sources */,
 				A80952E416F3613E0011FAA3 /* InputSource.cpp in Sources */,
 				A80952F516F3613E0011FAA3 /* WordWrapper.cpp in Sources */,
-				A809530016F3613E0011FAA3 /* glUtils.cpp in Sources */,
+				A809530016F3613E0011FAA3 /* GLUtils.cpp in Sources */,
 				A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */,
 				A809530216F3613E0011FAA3 /* Utils.cpp in Sources */,
 				A809530916F361E20011FAA3 /* Application.cpp in Sources */,

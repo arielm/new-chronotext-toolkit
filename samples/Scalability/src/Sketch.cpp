@@ -1,6 +1,6 @@
 #include "Sketch.h"
 
-#include "chronotext/utils/glUtils.h"
+#include "chronotext/utils/GLUtils.h"
 
 using namespace ci;
 using namespace ci::app;
