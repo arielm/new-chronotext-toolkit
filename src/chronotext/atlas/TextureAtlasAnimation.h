@@ -7,7 +7,7 @@
 class TextureAtlasAnimation
 {
     TextureAtlas *atlas;
-    std::vector<Sprite*> sprites;
+    std::vector<chr::Sprite*> sprites;
 
 public:
     float fps;

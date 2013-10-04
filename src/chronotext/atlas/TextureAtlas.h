@@ -14,8 +14,8 @@ class TextureAtlas
     void init(InputSourceRef inputSource, bool useMipmap);
 
 public:
-    std::map<std::string, Sprite*> sprites;
-    TextureRef texture;
+    std::map<std::string, chr::Sprite*> sprites;
+    chr::TextureRef texture;
 
     TextureAtlas(const std::string &resourceName, bool useMipmap = false);
     TextureAtlas(InputSourceRef inputSource, bool useMipmap = false);
@@ -25,8 +25,8 @@ public:
     void unload();
     void reload();
 
-    Sprite* getSprite(const std::string &path);
-    std::vector<Sprite*> getAnimationSprites(const std::string &path) const;
+    chr::Sprite* getSprite(const std::string &path);
+    std::vector<chr::Sprite*> getAnimationSprites(const std::string &path) const;
 
     void beginTexture();
     void endTexture();

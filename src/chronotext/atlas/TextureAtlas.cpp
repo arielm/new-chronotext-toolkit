@@ -4,6 +4,7 @@
 
 using namespace ci;
 using namespace std;
+using namespace chr;
 
 TextureAtlas::TextureAtlas(const string &resourceName, bool useMipmap)
 {

@@ -33,9 +33,9 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/MathUtils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/Utils.cpp
 
 ifdef CHR_USE_TEXTURE_ATLAS
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/TextureAtlas.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/TextureAtlasAnimation.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/TextureAtlasManager.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlas.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasAnimation.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasManager.cpp
 endif
 
 ifdef CHR_USE_INCUBATOR_UI

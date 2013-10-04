@@ -1,6 +1,7 @@
 #include "chronotext/texture/TextureAtlasAnimation.h"
 
 using namespace std;
+using namespace chr;
 
 TextureAtlasAnimation::TextureAtlasAnimation(TextureAtlas *atlas, const string &path, float fps, bool looping, bool reverse)
 :
