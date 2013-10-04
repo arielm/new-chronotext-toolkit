@@ -53,9 +53,9 @@ namespace chronotext
         {
             unloaded = true;
             
-            for (auto it = cache.begin(); it != cache.end(); ++it)
+            for (auto texture : cache)
             {
-                (*it)->unload();
+                texture->unload();
             }
         }
     }
@@ -66,19 +66,17 @@ namespace chronotext
         {
             unloaded = false;
             
-            for (auto it = cache.begin(); it != cache.end(); ++it)
+            for (auto texture : cache)
             {
-                (*it)->reload();
+                texture->reload();
             }
         }
     }
     
     TextureRef TextureManager::getFromCache(const TextureRequest &textureRequest)
     {
-        for (auto it = cache.cbegin(); it != cache.cend(); ++it)
+        for (auto texture : cache)
         {
-            TextureRef texture = *it;
-            
             if (textureRequest == texture->request)
             {
                 return texture;

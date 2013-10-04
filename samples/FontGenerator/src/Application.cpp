@@ -15,7 +15,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Utilities.h"
 
-#include "chronotext/font/XFont.h"
+#include "chronotext/font/FontManager.h"
 #include "chronotext/text/TextHelper.h"
 #include "chronotext/tools/font/XFontCreator.h"
 #include "chronotext/tools/font/Characters.h"
@@ -29,6 +29,8 @@ static std::wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d
 
 class Application : public AppNative
 {
+    FontManager fontManager;
+    
     XFont *font1;
     XFont *font2;
     XFont *font3;
@@ -36,7 +38,6 @@ class Application : public AppNative
     
 public:
     void setup();
-    void shutdown();
     void prepareSettings(Settings *settings);
     
     void draw();
@@ -76,23 +77,15 @@ void Application::setup()
      * LOADING OUR GENERATED FONTS
      */
     
-    font1 = new XFont(InputSource::getFileInDocuments("Helvetica_Regular_16.fnt"));
-    font2 = new XFont(InputSource::getFileInDocuments("Georgia_Regular_64.fnt"), true); // USING MIPMAP
-    font3 = new XFont(InputSource::getFileInDocuments("Roboto_Regular_64.fnt"), true); // USING MIPMAP
-    font4 = new XFont(InputSource::getFileInDocuments("FrankRuehl_Regular_64.fnt"), true); // USING MIPMAP
+    font1 = fontManager.getFont(InputSource::getFileInDocuments("Helvetica_Regular_16.fnt"));
+    font2 = fontManager.getFont(InputSource::getFileInDocuments("Georgia_Regular_64.fnt"), true); // USING MIPMAP
+    font3 = fontManager.getFont(InputSource::getFileInDocuments("Roboto_Regular_64.fnt"), true); // USING MIPMAP
+    font4 = fontManager.getFont(InputSource::getFileInDocuments("FrankRuehl_Regular_64.fnt"), true); // USING MIPMAP
     
     // ---
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-}
-
-void Application::shutdown()
-{
-    delete font1;
-    delete font2;
-    delete font3;
-    delete font4;
 }
 
 void Application::prepareSettings(AppBasic::Settings *settings)
