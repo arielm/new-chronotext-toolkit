@@ -1,6 +1,6 @@
 #pragma once
 
-#include "chronotext/texture/TextureAtlas.h"
+#include "chronotext/atlas/TextureAtlas.h"
 
 #include <vector>
 

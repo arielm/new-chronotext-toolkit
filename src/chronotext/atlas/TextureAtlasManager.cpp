@@ -1,4 +1,4 @@
-#include "chronotext/texture/TextureAtlasManager.h"
+#include "chronotext/atlas/TextureAtlasManager.h"
 #include "chronotext/texture/TextureHelper.h"
 
 using namespace ci;

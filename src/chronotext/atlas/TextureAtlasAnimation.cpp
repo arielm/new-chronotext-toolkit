@@ -1,4 +1,4 @@
-#include "chronotext/texture/TextureAtlasAnimation.h"
+#include "chronotext/atlas/TextureAtlasAnimation.h"
 
 using namespace std;
 using namespace chr;

@@ -1,4 +1,4 @@
-#include "chronotext/texture/TextureAtlas.h"
+#include "chronotext/atlas/TextureAtlas.h"
 
 #include "cinder/Xml.h"
 
