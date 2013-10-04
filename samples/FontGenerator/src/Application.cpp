@@ -16,7 +16,7 @@
 #include "cinder/Utilities.h"
 
 #include "chronotext/font/XFont.h"
-#include "chronotext/text/FontHelper.h"
+#include "chronotext/text/TextHelper.h"
 #include "chronotext/tools/font/XFontCreator.h"
 #include "chronotext/tools/font/Characters.h"
 
@@ -107,17 +107,17 @@ void Application::draw()
     glColor4f(1, 1, 1, 1);
     
     font1->setSize(16); // THIS FONT IS NOT INTENDED TO BE RENDERED AT ANOTHER SIZE
-    FontHelper::drawText(font1, NULL, font1->getCharacters(), 10, getWindowHeight() / 5.0f, true); // USING SNAP
+    TextHelper::drawText(font1, NULL, font1->getCharacters(), 10, getWindowHeight() / 5.0f, true); // USING SNAP
     
     font2->setSize(32); // ANY SIZE CAN BE USED
-    FontHelper::drawText(font2, NULL, font2->getCharacters(), 10, getWindowHeight() * 2 / 5.0f);
+    TextHelper::drawText(font2, NULL, font2->getCharacters(), 10, getWindowHeight() * 2 / 5.0f);
     
     font3->setSize(32); // ANY SIZE CAN BE USED
-    FontHelper::drawText(font3, NULL, font3->getCharacters(), 10, getWindowHeight() * 3 / 5.0f);
+    TextHelper::drawText(font3, NULL, font3->getCharacters(), 10, getWindowHeight() * 3 / 5.0f);
     
     font4->setSize(64); // ANY SIZE CAN BE USED
     font4->setDirection(-1);
-    FontHelper::drawText(font4, NULL, font4->getCharacters(), getWindowWidth() - 10, getWindowHeight() * 4 / 5.0f);
+    TextHelper::drawText(font4, NULL, font4->getCharacters(), getWindowWidth() - 10, getWindowHeight() * 4 / 5.0f);
 }
 
 CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

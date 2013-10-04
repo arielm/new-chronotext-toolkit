@@ -20,14 +20,14 @@
 		A80952D716F3613E0011FAA3 /* XFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809525516F3613E0011FAA3 /* XFont.cpp */; };
 		A80952D816F3613E0011FAA3 /* XFontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809525716F3613E0011FAA3 /* XFontSequence.cpp */; };
 		A80952E416F3613E0011FAA3 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809527616F3613E0011FAA3 /* InputSource.cpp */; };
-		A80952F316F3613E0011FAA3 /* FontHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952A116F3613E0011FAA3 /* FontHelper.cpp */; };
-		A80952F416F3613E0011FAA3 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952A316F3613E0011FAA3 /* FontManager.cpp */; };
 		A80952F516F3613E0011FAA3 /* WordWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952A616F3613E0011FAA3 /* WordWrapper.cpp */; };
 		A809530016F3613E0011FAA3 /* glUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C416F3613E0011FAA3 /* glUtils.cpp */; };
 		A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C716F3613E0011FAA3 /* MathUtils.cpp */; };
 		A809530216F3613E0011FAA3 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952CC16F3613E0011FAA3 /* Utils.cpp */; };
 		A809530916F361E20011FAA3 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809530316F361E20011FAA3 /* Application.cpp */; };
 		A809530D16F37F120011FAA3 /* frank.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A809530C16F37F120011FAA3 /* frank.ttf */; };
+		A848D0D417FED0A9009C7AC2 /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A848D0D217FED0A9009C7AC2 /* TextHelper.cpp */; };
+		A848D0D717FED0E8009C7AC2 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A848D0D517FED0E8009C7AC2 /* FontManager.cpp */; };
 		A8D0D28117EF4868001F6030 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8D0D28017EF4868001F6030 /* Roboto-Regular.ttf */; };
 		A8EB33F117AAB05600798D19 /* BinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33EA17AAB05600798D19 /* BinPack.cpp */; };
 		A8EB33F217AAB05600798D19 /* FreetypeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33ED17AAB05600798D19 /* FreetypeHelper.cpp */; };
@@ -57,10 +57,6 @@
 		A809525816F3613E0011FAA3 /* XFontSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFontSequence.h; sourceTree = "<group>"; };
 		A809527616F3613E0011FAA3 /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
 		A809527716F3613E0011FAA3 /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
-		A80952A116F3613E0011FAA3 /* FontHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontHelper.cpp; sourceTree = "<group>"; };
-		A80952A216F3613E0011FAA3 /* FontHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontHelper.h; sourceTree = "<group>"; };
-		A80952A316F3613E0011FAA3 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
-		A80952A416F3613E0011FAA3 /* FontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontManager.h; sourceTree = "<group>"; };
 		A80952A516F3613E0011FAA3 /* LinkExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkExtractor.h; sourceTree = "<group>"; };
 		A80952A616F3613E0011FAA3 /* WordWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WordWrapper.cpp; sourceTree = "<group>"; };
 		A80952A716F3613E0011FAA3 /* WordWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordWrapper.h; sourceTree = "<group>"; };
@@ -73,6 +69,10 @@
 		A80952CD16F3613E0011FAA3 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A809530316F361E20011FAA3 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../src/Application.cpp; sourceTree = "<group>"; };
 		A809530C16F37F120011FAA3 /* frank.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = frank.ttf; path = ../resources/frank.ttf; sourceTree = "<group>"; };
+		A848D0D217FED0A9009C7AC2 /* TextHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextHelper.cpp; sourceTree = "<group>"; };
+		A848D0D317FED0A9009C7AC2 /* TextHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextHelper.h; sourceTree = "<group>"; };
+		A848D0D517FED0E8009C7AC2 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
+		A848D0D617FED0E8009C7AC2 /* FontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontManager.h; sourceTree = "<group>"; };
 		A8D0D28017EF4868001F6030 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../resources/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		A8EB33EA17AAB05600798D19 /* BinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinPack.cpp; sourceTree = "<group>"; };
 		A8EB33EB17AAB05600798D19 /* BinPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinPack.h; sourceTree = "<group>"; };
@@ -194,9 +194,9 @@
 		A809523E16F3613E0011FAA3 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
-				A809525216F3613E0011FAA3 /* font */,
 				A809527616F3613E0011FAA3 /* InputSource.cpp */,
 				A809527716F3613E0011FAA3 /* InputSource.h */,
+				A809525216F3613E0011FAA3 /* font */,
 				A80952A016F3613E0011FAA3 /* text */,
 				A8EB33E817AAB05600798D19 /* tools */,
 				A80952C016F3613E0011FAA3 /* utils */,
@@ -208,6 +208,8 @@
 		A809525216F3613E0011FAA3 /* font */ = {
 			isa = PBXGroup;
 			children = (
+				A848D0D517FED0E8009C7AC2 /* FontManager.cpp */,
+				A848D0D617FED0E8009C7AC2 /* FontManager.h */,
 				A809525316F3613E0011FAA3 /* FontMatrix.cpp */,
 				A809525416F3613E0011FAA3 /* FontMatrix.h */,
 				A809525516F3613E0011FAA3 /* XFont.cpp */,
@@ -221,11 +223,9 @@
 		A80952A016F3613E0011FAA3 /* text */ = {
 			isa = PBXGroup;
 			children = (
-				A80952A116F3613E0011FAA3 /* FontHelper.cpp */,
-				A80952A216F3613E0011FAA3 /* FontHelper.h */,
-				A80952A316F3613E0011FAA3 /* FontManager.cpp */,
-				A80952A416F3613E0011FAA3 /* FontManager.h */,
 				A80952A516F3613E0011FAA3 /* LinkExtractor.h */,
+				A848D0D217FED0A9009C7AC2 /* TextHelper.cpp */,
+				A848D0D317FED0A9009C7AC2 /* TextHelper.h */,
 				A80952A616F3613E0011FAA3 /* WordWrapper.cpp */,
 				A80952A716F3613E0011FAA3 /* WordWrapper.h */,
 			);
@@ -335,8 +335,6 @@
 				A80952D716F3613E0011FAA3 /* XFont.cpp in Sources */,
 				A80952D816F3613E0011FAA3 /* XFontSequence.cpp in Sources */,
 				A80952E416F3613E0011FAA3 /* InputSource.cpp in Sources */,
-				A80952F316F3613E0011FAA3 /* FontHelper.cpp in Sources */,
-				A80952F416F3613E0011FAA3 /* FontManager.cpp in Sources */,
 				A80952F516F3613E0011FAA3 /* WordWrapper.cpp in Sources */,
 				A809530016F3613E0011FAA3 /* glUtils.cpp in Sources */,
 				A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */,
@@ -345,6 +343,8 @@
 				A8EB33F117AAB05600798D19 /* BinPack.cpp in Sources */,
 				A8EB33F217AAB05600798D19 /* FreetypeHelper.cpp in Sources */,
 				A8EB33F317AAB05600798D19 /* XFontCreator.cpp in Sources */,
+				A848D0D417FED0A9009C7AC2 /* TextHelper.cpp in Sources */,
+				A848D0D717FED0E8009C7AC2 /* FontManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
