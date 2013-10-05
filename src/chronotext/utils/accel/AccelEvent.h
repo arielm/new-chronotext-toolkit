@@ -1,6 +1,14 @@
 /*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
  * BASED ON AccelEvent CLASS FROM CINDER 0.8.4
- * https://github.com/cinder/Cinder/blob/master/include/cinder/app/AccelEvent.h
+ * https://github.com/cinder/Cinder/blob/ed921470e92117d1e5b06d97bc070ec12462c3b5/include/cinder/app/AccelEvent.h
  */
 
 #pragma once

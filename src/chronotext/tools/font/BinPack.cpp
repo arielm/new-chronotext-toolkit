@@ -1,6 +1,6 @@
 /*
  * FROM SAFETYDANK'S FORK OF CINDER:
- * https://github.com/safetydank/Cinder/blob/android-dev/include/cinder/BinPack.h
+ * https://github.com/safetydank/Cinder/blob/fdad2a623be2caf2e371884cba1a2ef92616220b/src/cinder/BinPack.cpp
  */
 
 #include "BinPack.h"

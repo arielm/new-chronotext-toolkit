@@ -1,6 +1,14 @@
 /*
- * BASED ON "Adaptive Sampling of Parametric Curves"
- * BY Luiz Henrique de Figueiredo
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
+ * BASED ON "Adaptive Sampling of Parametric Curves" BY Luiz Henrique de Figueiredo
+ * http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
  */
 
 #pragma once
