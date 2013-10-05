@@ -6,6 +6,11 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * "TOUCH MAPPING" CODE FROM CINDER:
+ * https://github.com/cinder/Cinder/blob/c894b2a81eb4d859070b177f989f60b470e92b8c/src/cinder/app/CinderViewCocoaTouch.mm
+ */
+
 #import "CinderDelegate.h"
 #import "GLViewController.h"
 
