@@ -11,7 +11,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace app;
 
 void CinderSketchSimple::sendMessageToDelegate(int what, const string &body)
 {
