@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "chronotext/cocoa/utils/NSString+JSON.h"
+
 #include "chronotext/cinder/CinderApp.h"
 
 @interface CinderDelegate : NSObject

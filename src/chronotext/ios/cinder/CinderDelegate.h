@@ -13,9 +13,9 @@
 
 #include "chronotext/cinder/CinderSketch.h"
 
-#include <map>
-
 #import "chronotext/cocoa/utils/NSString+JSON.h"
+
+#include <map>
 
 @class GLKView;
 @class GLViewController;
