@@ -8,6 +8,8 @@
 
 #import "OverlayWindow.h"
 
+#import "chronotext/osx/cinder/OverlayView.h"
+
 @implementation OverlayWindow
 
 /*
@@ -21,9 +23,11 @@
 {
     if (self = [super initWithContentRect:[window convertRectToScreen:[window.contentView bounds]] styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO])
     {
+        [self setContentView:[[OverlayView new] autorelease]]; // IT'S NECESSARY TO REPLACE THE DEFAULT NSView, IN ORDER TO FLIP VERTICAL COORDINATES
+
         self.backgroundColor = [NSColor clearColor];
-        [self setOpaque:NO];
-        [self setAutorecalculatesKeyViewLoop:YES];
+        self.opaque = NO;
+        self.autorecalculatesKeyViewLoop = YES;;
         
         [window addChildWindow:self ordered:NSWindowAbove];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:window];
@@ -39,7 +43,7 @@
 
 - (BOOL) canBecomeKeyWindow
 {
-    [self.parentWindow becomeKeyWindow];
+    [self.parentWindow becomeKeyWindow]; // TRICK TO AVOID THE CinderWindow TO APPEAR UNFOCUSED WHEN INTERACTING WITH CONTROLS ON THE OverlayWindow
     return YES;
 }
 
