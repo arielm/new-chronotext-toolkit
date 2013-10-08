@@ -71,7 +71,14 @@ public:
     double getElapsedSeconds() const { return context->getElapsedSeconds(); }
     uint32_t getElapsedFrames() const { return context->getElapsedFrames(); }
 
-    float getContentScale() const { return 1; }
+    int getWindowWidth() const { return context->getWindowWidth(); }
+    int getWindowHeight() const { return context->getWindowHeight(); }
+    ci::Vec2f getWindowCenter() const { return context->getWindowCenter(); }
+    ci::Vec2i getWindowSize() const { return context->getWindowSize(); }
+    float getWindowAspectRatio() const { return context->getWindowAspectRatio(); }
+    ci::Area getWindowBounds() const { return context->getWindowBounds(); }
+    float getWindowContentScale() const { return context->getWindowContentScale(); }
+    
     std::ostream& console() { return context->console(); }
     
     void sendMessageToDelegate(int what, const std::string &body = "");
