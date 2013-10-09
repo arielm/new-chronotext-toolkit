@@ -6,6 +6,10 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO: CHECK IF pause() AND resume() ARE STILL WORKING ON ANDROID
+ */
+
 #pragma once
 
 #include "cinder/app/AppNative.h"

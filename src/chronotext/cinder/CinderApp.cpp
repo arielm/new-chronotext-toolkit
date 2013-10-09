@@ -9,9 +9,9 @@
 #include "chronotext/cinder/CinderApp.h"
 #include "chronotext/utils/Utils.h"
 
+using namespace std;
 using namespace ci;
 using namespace app;
-using namespace std;
 
 void CinderApp::setup()
 {
@@ -122,6 +122,7 @@ void CinderApp::sendMessageToSketch(int what, const string &body)
 }
 
 #if defined(CINDER_ANDROID)
+
 void CinderApp::resume(bool renewContext)
 {
     if (renewContext)
@@ -136,6 +137,7 @@ void CinderApp::pause()
 {
     sketch->stop(CinderSketch::FLAG_APP_PAUSE);
 }
+
 #endif
 
 void CinderApp::start()
