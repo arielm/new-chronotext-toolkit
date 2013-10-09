@@ -10,12 +10,12 @@
 
 #include "cinder/app/AppNative.h"
 
-#include "chronotext/os/Handler.h"
+#include "chronotext/os/SuperHandler.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
 class CinderApp;
 
-class CinderSketchSimple : public Handler, public Looper
+class CinderSketchSimple : public SuperHandler, public Looper
 {
 protected:
     ci::app::AppNative *context;
@@ -41,7 +41,7 @@ public:
 
     CinderSketchSimple(void *context, void *delegate = NULL)
     :
-    Handler(this),
+    SuperHandler(this),
     context(static_cast<ci::app::AppNative*>(context)),
     delegate(static_cast<CinderApp*>(delegate))
     {}

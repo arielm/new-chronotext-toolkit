@@ -15,6 +15,7 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/XFontSequence.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Handler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Looper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/MessageQueue.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/SuperHandler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/ASPC.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/FollowablePath.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/SplinePath.cpp

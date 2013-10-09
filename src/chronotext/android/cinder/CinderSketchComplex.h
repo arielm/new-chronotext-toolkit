@@ -10,12 +10,12 @@
 
 #include "cinder/app/AppAndroid.h"
 
-#include "chronotext/os/Handler.h"
+#include "chronotext/os/SuperHandler.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
 class CinderDelegate;
 
-class CinderSketchComplex : public Handler, public Looper
+class CinderSketchComplex : public SuperHandler, public Looper
 {
 protected:
     CinderDelegate *context;
@@ -41,7 +41,7 @@ public:
 
     CinderSketchComplex(void *context, void *delegate)
     :
-    Handler(this),
+    SuperHandler(this),
     context(static_cast<CinderDelegate*>(context)),
     delegate(static_cast<CinderDelegate*>(delegate))
     {}

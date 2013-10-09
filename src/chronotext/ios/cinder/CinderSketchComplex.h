@@ -10,10 +10,10 @@
 
 #include "cinder/app/AppCocoaTouch.h"
 
-#include "chronotext/os/Handler.h"
+#include "chronotext/os/SuperHandler.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
-class CinderSketchComplex : public Handler, public Looper
+class CinderSketchComplex : public SuperHandler, public Looper
 {
 protected:
     void *context;
@@ -39,7 +39,7 @@ public:
 
     CinderSketchComplex(void *context, void *delegate = NULL)
     :
-    Handler(this),
+    SuperHandler(this),
     context(context),
     delegate(delegate)
     {}

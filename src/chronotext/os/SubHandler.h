@@ -6,25 +6,12 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * INSPIRED BY http://developer.android.com/reference/android/os/MessageQueue.html
- */
-
 #pragma once
 
 #include "chronotext/os/Message.h"
 
-#include <boost/thread/mutex.hpp>
-
-#include <queue>
-
-class MessageQueue
+class SubHandler
 {
 public:
-    Message nextMessage();
-    bool enqueueMessage(const Message &message);
-
-protected:
-    std::queue<Message> queue;
-    boost::mutex mutex;
+    virtual bool handleSubMessage(const Message &message) = 0;
 };

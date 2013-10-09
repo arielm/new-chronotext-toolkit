@@ -16,10 +16,11 @@
 
 class Looper
 {
-    MessageQueue messageQueue;
-
 public:
     void run();
     
     friend class Handler;
+
+protected:
+    MessageQueue messageQueue;
 };
