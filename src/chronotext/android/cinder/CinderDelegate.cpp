@@ -13,9 +13,9 @@
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 
-using namespace ci;
-using namespace ci::app;
 using namespace std;
+using namespace ci;
+using namespace app;
 
 #define GRAVITY_EARTH 9.80665f
 
@@ -174,7 +174,7 @@ void CinderDelegate::event(int id)
              */
             sketch->setup(true);
             
-            sketch->start(CinderSketch::FLAG_APP_RESUME);
+            sketch->start(CinderSketch::FLAG_APP_RESUMED);
             break;
             
         case EVENT_DETACHED:
@@ -185,7 +185,7 @@ void CinderDelegate::event(int id)
             
         case EVENT_PAUSED:
             mTimer.stop();
-            sketch->stop(CinderSketch::FLAG_APP_PAUSE);
+            sketch->stop(CinderSketch::FLAG_APP_PAUSED);
             break;
 
         case EVENT_BACKGROUND:

@@ -8,9 +8,9 @@ using namespace std;
 const float GRID_SIZE = 32;
 const float FRAME_SCALE = 464 / 512.0f;
 
-void Sketch::setup(bool renew)
+void Sketch::setup(bool renewContext)
 {
-    if (renew)
+    if (renewContext)
     {
         textureManager.unload();
         textureManager.reload();

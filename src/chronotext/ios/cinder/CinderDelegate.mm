@@ -16,9 +16,9 @@
 
 #include "chronotext/utils/accel/AccelEvent.h"
 
+using namespace std;
 using namespace ci;
 using namespace app;
-using namespace std;
 
 @implementation CinderDelegate
 
@@ -67,7 +67,7 @@ using namespace std;
     }
     else
     {
-        sketch->start(CinderSketch::FLAG_APP_RESUME);
+        sketch->start(CinderSketch::FLAG_APP_RESUMED);
     }
 }
 
@@ -82,7 +82,7 @@ using namespace std;
     }
     else
     {
-        sketch->stop(CinderSketch::FLAG_APP_PAUSE);
+        sketch->stop(CinderSketch::FLAG_APP_PAUSED);
     }
 }
 

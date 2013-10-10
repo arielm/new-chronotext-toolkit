@@ -26,17 +26,16 @@ public:
     {
         FLAG_FOCUS_GAINED,
         FLAG_FOCUS_LOST,
-        FLAG_APP_RESUME,
-        FLAG_APP_PAUSE,
-        FLAG_SCREEN_ENTER,
-        FLAG_SCREEN_LEAVE
+        FLAG_APP_RESUMED,
+        FLAG_APP_PAUSED,
+        FLAG_SCREEN_ENTERED,
+        FLAG_SCREEN_LEFT
     };
     
     enum
     {
         EVENT_FOREGROUND,
-        EVENT_BACKGROUND,
-        EVENT_KEY_BACK
+        EVENT_BACKGROUND
     };
 
     CinderSketchSimple(void *context, void *delegate = NULL)

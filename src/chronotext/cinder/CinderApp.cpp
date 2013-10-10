@@ -130,12 +130,12 @@ void CinderApp::resume(bool renewContext)
         sketch->setup(true);
     }
     
-    sketch->start(CinderSketch::FLAG_APP_RESUME);
+    sketch->start(CinderSketch::FLAG_APP_RESUMED);
 }
 
 void CinderApp::pause()
 {
-    sketch->stop(CinderSketch::FLAG_APP_PAUSE);
+    sketch->stop(CinderSketch::FLAG_APP_PAUSED);
 }
 
 #endif

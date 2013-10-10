@@ -23,7 +23,7 @@ class Sketch : public CinderSketch
 public:
     Sketch(void *context, void *delegate = NULL) : CinderSketch(context, delegate) {}
 
-    void setup(bool renew);
+    void setup(bool renewContext);
     void resize();
     void draw();
     
