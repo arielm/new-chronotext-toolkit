@@ -94,6 +94,7 @@
 		A87207F618081C460055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
 		A87207F718081C460055F0BA /* SuperHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SuperHandler.cpp; sourceTree = "<group>"; };
 		A87207F818081C460055F0BA /* SuperHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperHandler.h; sourceTree = "<group>"; };
+		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8EC39CC178584A000837298 /* TextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureData.h; sourceTree = "<group>"; };
 		A8EC39CD178584A000837298 /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -218,11 +219,12 @@
 		A82C90E616E00B0400FF519C /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A82C90E716E00B0500FF519C /* CinderApp.cpp */,
 				A82C90E816E00B0500FF519C /* CinderApp.h */,
+				A82C90E716E00B0500FF519C /* CinderApp.cpp */,
+				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A82C90E916E00B0500FF519C /* CinderSketch.h */,
-				A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */,
 				A82C90EB16E00B0500FF519C /* CinderSketchSimple.h */,
+				A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */,
 			);
 			path = cinder;
 			sourceTree = "<group>";

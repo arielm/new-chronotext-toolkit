@@ -15,7 +15,6 @@
 #include "cinder/app/AppNative.h"
 
 #include "chronotext/cinder/CinderSketch.h"
-#include "chronotext/utils/accel/AccelEvent.h"
 
 class CinderApp : public ci::app::AppNative
 {

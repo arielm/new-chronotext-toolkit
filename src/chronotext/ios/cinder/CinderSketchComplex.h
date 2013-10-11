@@ -10,63 +10,21 @@
 
 #include "cinder/app/AppCocoaTouch.h"
 
-#include "chronotext/os/SuperHandler.h"
-#include "chronotext/utils/accel/AccelEvent.h"
+#include "chronotext/cinder/CinderSketchBase.h"
 
-class CinderSketchComplex : public SuperHandler, public Looper
+class CinderSketchComplex : public CinderSketchBase
 {
-protected:
-    void *context;
-    void *delegate;
-
 public:
-    enum
-    {
-        FLAG_FOCUS_GAINED,
-        FLAG_FOCUS_LOST,
-        FLAG_APP_RESUMED,
-        FLAG_APP_PAUSED,
-        FLAG_SCREEN_ENTERED,
-        FLAG_SCREEN_LEFT
-    };
-    
-    enum
-    {
-        EVENT_FOREGROUND,
-        EVENT_BACKGROUND
-    };
-
-    CinderSketchComplex(void *context, void *delegate = NULL)
-    :
-    SuperHandler(this),
-    context(context),
-    delegate(delegate)
-    {}
-    
-    virtual ~CinderSketchComplex() {};
-
-    virtual void setup(bool renewContext) {}
-    virtual void shutdown() {}
-    virtual void resize() {}
-    virtual void update() {}
-    virtual void draw() {}
-    
-    virtual void start(int flags) {}
-    virtual void stop(int flags) {}
-    virtual void event(int id) {}
+    CinderSketchComplex(void *context, void *delegate = NULL);
     
     void touchesBegan(ci::app::TouchEvent event);
     void touchesMoved(ci::app::TouchEvent event);
     void touchesEnded(ci::app::TouchEvent event);
     
-    virtual void addTouch(int index, float x, float y) {}
-    virtual void updateTouch(int index, float x, float y) {}
-    virtual void removeTouch(int index, float x, float y) {}
-
-    virtual void accelerated(AccelEvent event) {}
-
     void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
     void disableAccelerometer();
+
+    std::ostream& console() { return std::cout; }
 
     double getElapsedSeconds() const;
     uint32_t getElapsedFrames() const;
@@ -78,8 +36,10 @@ public:
     float getWindowAspectRatio() const;
     ci::Area getWindowBounds() const;
     float getWindowContentScale() const;
-
-    std::ostream& console() { return std::cout; }
     
     void sendMessageToDelegate(int what, const std::string &body = "");
+
+protected:
+    void *context;
+    void *delegate;
 };

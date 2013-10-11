@@ -9,9 +9,16 @@
 #include "chronotext/android/cinder/CinderSketchComplex.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
 
-using namespace ci;
-using namespace ci::app;
 using namespace std;
+using namespace ci;
+using namespace app;
+
+CinderSketchComplex::CinderSketchComplex(void *context, void *delegate)
+:
+CinderSketchBase(),
+context(static_cast<CinderDelegate*>(context)),
+delegate(static_cast<CinderDelegate*>(delegate))
+{}
 
 void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
 {

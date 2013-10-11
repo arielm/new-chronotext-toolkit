@@ -10,9 +10,16 @@
 
 #import "CinderDelegate.h"
 
+using namespace std;
 using namespace ci;
 using namespace app;
-using namespace std;
+
+CinderSketchComplex::CinderSketchComplex(void *context, void *delegate)
+:
+CinderSketchBase(),
+context(context),
+delegate(delegate)
+{}
 
 void CinderSketchComplex::touchesBegan(TouchEvent event)
 {
@@ -113,11 +120,11 @@ void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
     {
         if (body.size() > 0)
         {
-            [(CinderDelegate*)context receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
+            [(CinderDelegate*)delegate receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
         }
         else
         {
-            [(CinderDelegate*)context receiveMessageFromSketch:what body:nil];
+            [(CinderDelegate*)delegate receiveMessageFromSketch:what body:nil];
         }
     }
 }
