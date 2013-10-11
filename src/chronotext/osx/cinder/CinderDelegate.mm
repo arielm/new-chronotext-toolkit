@@ -10,6 +10,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace chr;
 
 @implementation CinderDelegate
 

@@ -15,13 +15,13 @@
 @interface CinderDelegate : NSObject
 {
     NSView *view;
-    CinderSketch *sketch;
+    chr::CinderSketch *sketch;
 }
 
 @property (nonatomic, readonly) NSView *view;
-@property (nonatomic, readonly) CinderSketch *sketch;
+@property (nonatomic, readonly) chr::CinderSketch *sketch;
 
-- (id) initWithCinderApp:(CinderApp*)cinderApp;
+- (id) initWithCinderApp:(chr::CinderApp*)cinderApp;
 
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;
