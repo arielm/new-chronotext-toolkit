@@ -202,16 +202,16 @@
 		A82C90DB16E00AAD00FF519C /* os */ = {
 			isa = PBXGroup;
 			children = (
-				A87207F618081C460055F0BA /* SubHandler.h */,
-				A87207F718081C460055F0BA /* SuperHandler.cpp */,
-				A87207F818081C460055F0BA /* SuperHandler.h */,
-				A82C90DC16E00AAD00FF519C /* Handler.cpp */,
 				A82C90DD16E00AAD00FF519C /* Handler.h */,
-				A82C90DE16E00AAD00FF519C /* Looper.cpp */,
+				A82C90DC16E00AAD00FF519C /* Handler.cpp */,
 				A82C90DF16E00AAD00FF519C /* Looper.h */,
+				A82C90DE16E00AAD00FF519C /* Looper.cpp */,
 				A82C90E016E00AAD00FF519C /* Message.h */,
-				A82C90E116E00AAD00FF519C /* MessageQueue.cpp */,
 				A82C90E216E00AAD00FF519C /* MessageQueue.h */,
+				A82C90E116E00AAD00FF519C /* MessageQueue.cpp */,
+				A87207F618081C460055F0BA /* SubHandler.h */,
+				A87207F818081C460055F0BA /* SuperHandler.h */,
+				A87207F718081C460055F0BA /* SuperHandler.cpp */,
 			);
 			path = os;
 			sourceTree = "<group>";

@@ -13,16 +13,21 @@
 
 #pragma once
 
-class SuperHandler : public Handler
+namespace chronotext
 {
-public:
-    SuperHandler(Looper *looper) : Handler(looper) {}
-    
-    void addSubHandler(SubHandler *handler);
-    void removeSubHandler(SubHandler *handler);
-    
-    void handleMessage(const Message &message);
+    class SuperHandler : public Handler
+    {
+    public:
+        SuperHandler(Looper *looper) : Handler(looper) {}
+        
+        void addSubHandler(SubHandler *handler);
+        void removeSubHandler(SubHandler *handler);
+        
+        void handleMessage(const Message &message);
+        
+    protected:
+        std::list<SubHandler*> handlers;
+    };
+}
 
-protected:
-    std::list<SubHandler*> handlers;
-};
+namespace chr = chronotext;

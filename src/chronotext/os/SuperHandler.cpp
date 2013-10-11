@@ -8,23 +8,26 @@
 
 #include "SuperHandler.h"
 
-void SuperHandler::addSubHandler(SubHandler *handler)
+namespace chronotext
 {
-    handlers.push_back(handler);
-}
-
-void SuperHandler::removeSubHandler(SubHandler *handler)
-{
-    handlers.remove(handler);
-}
-
-void SuperHandler::handleMessage(const Message &message)
-{
-    for (auto handler : handlers)
+    void SuperHandler::addSubHandler(SubHandler *handler)
     {
-        if (handler->handleSubMessage(message))
+        handlers.push_back(handler);
+    }
+    
+    void SuperHandler::removeSubHandler(SubHandler *handler)
+    {
+        handlers.remove(handler);
+    }
+    
+    void SuperHandler::handleMessage(const Message &message)
+    {
+        for (auto handler : handlers)
         {
-            break;
+            if (handler->handleSubMessage(message))
+            {
+                break;
+            }
         }
     }
 }

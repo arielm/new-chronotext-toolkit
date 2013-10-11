@@ -14,15 +14,20 @@
 
 #include "chronotext/os/Looper.h"
 
-class Handler
+namespace chronotext
 {
-public:
-    Handler(Looper *looper) : looper(looper) {}
-    virtual ~Handler() {}
-    
-    bool sendMessage(const Message &message);
-    virtual void handleMessage(const Message &message) {}
+    class Handler
+    {
+    public:
+        Handler(Looper *looper) : looper(looper) {}
+        virtual ~Handler() {}
+        
+        bool sendMessage(const Message &message);
+        virtual void handleMessage(const Message &message) {}
+        
+    protected:
+        Looper *looper;
+    };
+}
 
-protected:
-    Looper *looper;
-};
+namespace chr = chronotext;

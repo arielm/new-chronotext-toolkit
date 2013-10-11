@@ -14,13 +14,18 @@
 
 #include "chronotext/os/MessageQueue.h"
 
-class Looper
+namespace chronotext
 {
-public:
-    void run();
-    
-    friend class Handler;
+    class Looper
+    {
+    public:
+        void run();
+        
+        friend class Handler;
+        
+    protected:
+        MessageQueue messageQueue;
+    };
+}
 
-protected:
-    MessageQueue messageQueue;
-};
+namespace chr = chronotext;

@@ -8,29 +8,32 @@
 
 #include "chronotext/os/MessageQueue.h"
 
-Message MessageQueue::nextMessage()
+namespace chronotext
 {
-    Message message;
-    
-#ifndef MESSAGE_QUEUE_LOCK_FREE
-    boost::mutex::scoped_lock lock(mutex);
-#endif
-    
-    if (!queue.empty())
+    Message MessageQueue::nextMessage()
     {
-        message = queue.front();
-        queue.pop();
-    }
-
-    return message;
-}
-
-bool MessageQueue::enqueueMessage(const Message &message)
-{
+        Message message;
+        
 #ifndef MESSAGE_QUEUE_LOCK_FREE
-    boost::mutex::scoped_lock lock(mutex);
+        boost::mutex::scoped_lock lock(mutex);
 #endif
+        
+        if (!queue.empty())
+        {
+            message = queue.front();
+            queue.pop();
+        }
+        
+        return message;
+    }
     
-    queue.push(message);
-    return true;
+    bool MessageQueue::enqueueMessage(const Message &message)
+    {
+#ifndef MESSAGE_QUEUE_LOCK_FREE
+        boost::mutex::scoped_lock lock(mutex);
+#endif
+        
+        queue.push(message);
+        return true;
+    }
 }

@@ -8,15 +8,18 @@
 
 #include "chronotext/os/Handler.h"
 
-bool Handler::sendMessage(const Message &message)
+namespace chronotext
 {
-    if (looper)
+    bool Handler::sendMessage(const Message &message)
     {
-        Message tmp = message;
-        tmp.target = this;
-
-        return looper->messageQueue.enqueueMessage(tmp);
+        if (looper)
+        {
+            Message tmp = message;
+            tmp.target = this;
+            
+            return looper->messageQueue.enqueueMessage(tmp);
+        }
+        
+        return false;
     }
-    
-    return false;
 }

@@ -10,8 +10,13 @@
 
 #include "chronotext/os/Message.h"
 
-class SubHandler
+namespace chronotext
 {
-public:
-    virtual bool handleSubMessage(const Message &message) = 0;
-};
+    class SubHandler
+    {
+    public:
+        virtual bool handleSubMessage(const Message &message) = 0;
+    };
+}
+
+namespace chr = chronotext;

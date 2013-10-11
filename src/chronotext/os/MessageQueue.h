@@ -18,13 +18,18 @@
 
 #include <queue>
 
-class MessageQueue
+namespace chronotext
 {
-public:
-    Message nextMessage();
-    bool enqueueMessage(const Message &message);
+    class MessageQueue
+    {
+    public:
+        Message nextMessage();
+        bool enqueueMessage(const Message &message);
+        
+    protected:
+        std::queue<Message> queue;
+        boost::mutex mutex;
+    };
+}
 
-protected:
-    std::queue<Message> queue;
-    boost::mutex mutex;
-};
+namespace chr = chronotext;

@@ -9,19 +9,22 @@
 #include "chronotext/os/Looper.h"
 #include "chronotext/os/Handler.h"
 
-void Looper::run()
+namespace chronotext
 {
-    while (true)
+    void Looper::run()
     {
-        Message message = messageQueue.nextMessage();
-        
-        if (message.target)
+        while (true)
         {
-            message.target->handleMessage(message);
-        }
-        else
-        {
-            break;
+            Message message = messageQueue.nextMessage();
+            
+            if (message.target)
+            {
+                message.target->handleMessage(message);
+            }
+            else
+            {
+                break;
+            }
         }
     }
 }

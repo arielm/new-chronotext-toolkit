@@ -15,46 +15,51 @@
 #include <memory>
 #include <string>
 
-class Handler;
-
-class Message
+namespace chronotext
 {
-public:
-    int what;
-    std::shared_ptr<void> object;
-    int64_t arg;
+    class Handler;
 
-    Handler *target;
-
-    Message():
-    target(NULL)
-    {}
-    
-    Message(int what, int64_t arg = 0)
-    :
-    what(what),
-    arg(arg),
-    target(NULL)
-    {}
-    
-    Message(int what, std::shared_ptr<void> object, int64_t arg = 0)
-    :
-    what(what),
-    object(object),
-    arg(arg),
-    target(NULL)
-    {}
-    
-    Message(int what, const std::string &object, int64_t arg = 0)
-    :
-    what(what),
-    object(std::make_shared<std::string>(object)),
-    arg(arg),
-    target(NULL)
-    {}
-    
-    std::string& string() const
+    class Message
     {
-        return *std::static_pointer_cast<std::string>(object);
-    }
-};
+    public:
+        int what;
+        std::shared_ptr<void> object;
+        int64_t arg;
+        
+        Handler *target;
+        
+        Message():
+        target(NULL)
+        {}
+        
+        Message(int what, int64_t arg = 0)
+        :
+        what(what),
+        arg(arg),
+        target(NULL)
+        {}
+        
+        Message(int what, std::shared_ptr<void> object, int64_t arg = 0)
+        :
+        what(what),
+        object(object),
+        arg(arg),
+        target(NULL)
+        {}
+        
+        Message(int what, const std::string &object, int64_t arg = 0)
+        :
+        what(what),
+        object(std::make_shared<std::string>(object)),
+        arg(arg),
+        target(NULL)
+        {}
+        
+        std::string& string() const
+        {
+            return *std::static_pointer_cast<std::string>(object);
+        }
+    };
+}
+
+namespace chr = chronotext;
