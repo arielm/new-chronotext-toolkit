@@ -221,8 +221,8 @@
 			children = (
 				A82C90E816E00B0500FF519C /* CinderApp.h */,
 				A82C90E716E00B0500FF519C /* CinderApp.cpp */,
-				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A82C90E916E00B0500FF519C /* CinderSketch.h */,
+				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A82C90EB16E00B0500FF519C /* CinderSketchSimple.h */,
 				A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */,
 			);
@@ -233,14 +233,14 @@
 			isa = PBXGroup;
 			children = (
 				A82C90F516E00B3B00FF519C /* accel */,
-				A82C90FA16E00B3B00FF519C /* GLUtils.cpp */,
 				A82C90FB16E00B3B00FF519C /* GLUtils.h */,
+				A82C90FA16E00B3B00FF519C /* GLUtils.cpp */,
 				A82C90FC16E00B3B00FF519C /* Hasher.h */,
-				A82C90FD16E00B3B00FF519C /* MathUtils.cpp */,
 				A82C90FE16E00B3B00FF519C /* MathUtils.h */,
+				A82C90FD16E00B3B00FF519C /* MathUtils.cpp */,
 				A82C90FF16E00B3B00FF519C /* stroke */,
-				A82C910216E00B3B00FF519C /* Utils.cpp */,
 				A82C910316E00B3B00FF519C /* Utils.h */,
+				A82C910216E00B3B00FF519C /* Utils.cpp */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -275,8 +275,8 @@
 		A8985B3C16DA4EB300448A41 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
-				A82C909716DFA58900FF519C /* InputSource.cpp */,
 				A82C909816DFA58900FF519C /* InputSource.h */,
+				A82C909716DFA58900FF519C /* InputSource.cpp */,
 				A82C90E616E00B0400FF519C /* cinder */,
 				A82C90DB16E00AAD00FF519C /* os */,
 				A8985B7616DA4EB300448A41 /* texture */,
@@ -291,15 +291,15 @@
 			children = (
 				A848D0D817FED47F009C7AC2 /* Sprite.cpp */,
 				A848D0D917FED47F009C7AC2 /* Sprite.h */,
-				A82C908A16DFA3B100FF519C /* PVRHelper.cpp */,
 				A82C908B16DFA3B100FF519C /* PVRHelper.h */,
-				A82C908C16DFA3B100FF519C /* Texture.cpp */,
+				A82C908A16DFA3B100FF519C /* PVRHelper.cpp */,
 				A82C908D16DFA3B100FF519C /* Texture.h */,
-				A82C908E16DFA3B100FF519C /* TextureHelper.cpp */,
-				A82C908F16DFA3B100FF519C /* TextureHelper.h */,
-				A82C909016DFA3B100FF519C /* TextureManager.cpp */,
-				A82C909116DFA3B100FF519C /* TextureManager.h */,
+				A82C908C16DFA3B100FF519C /* Texture.cpp */,
 				A8EC39CC178584A000837298 /* TextureData.h */,
+				A82C908F16DFA3B100FF519C /* TextureHelper.h */,
+				A82C908E16DFA3B100FF519C /* TextureHelper.cpp */,
+				A82C909116DFA3B100FF519C /* TextureManager.h */,
+				A82C909016DFA3B100FF519C /* TextureManager.cpp */,
 				A8EC39CD178584A000837298 /* TextureRequest.h */,
 			);
 			path = texture;
