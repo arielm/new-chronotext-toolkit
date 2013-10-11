@@ -11,59 +11,64 @@
 #include "chronotext/os/SuperHandler.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
-class CinderSketchBase : public SuperHandler, public Looper
+namespace chronotext
 {
-public:
-    enum
+    class CinderSketchBase : public SuperHandler, public Looper
     {
-        FLAG_FOCUS_GAINED,
-        FLAG_FOCUS_LOST,
-        FLAG_APP_RESUMED,
-        FLAG_APP_PAUSED,
-        FLAG_SCREEN_ENTERED,
-        FLAG_SCREEN_LEFT
+    public:
+        enum
+        {
+            FLAG_FOCUS_GAINED,
+            FLAG_FOCUS_LOST,
+            FLAG_APP_RESUMED,
+            FLAG_APP_PAUSED,
+            FLAG_SCREEN_ENTERED,
+            FLAG_SCREEN_LEFT
+        };
+        
+        enum
+        {
+            EVENT_FOREGROUND,
+            EVENT_BACKGROUND
+        };
+        
+        CinderSketchBase() : SuperHandler(this) {}
+        virtual ~CinderSketchBase() {}
+        
+        virtual void setup(bool renewContext) {}
+        virtual void shutdown() {}
+        virtual void resize() {}
+        
+        virtual void update() {}
+        virtual void draw() {}
+        
+        virtual void start(int flags) {}
+        virtual void stop(int flags) {}
+        virtual void event(int id) {}
+        
+        virtual void addTouch(int index, float x, float y) {}
+        virtual void updateTouch(int index, float x, float y) {}
+        virtual void removeTouch(int index, float x, float y) {}
+        
+        virtual void accelerated(AccelEvent event) {}
+        virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
+        virtual void disableAccelerometer() {}
+        
+        virtual std::ostream& console() = 0;
+        
+        virtual double getElapsedSeconds() const = 0;
+        virtual uint32_t getElapsedFrames() const = 0;
+        
+        virtual int getWindowWidth() const = 0;
+        virtual int getWindowHeight() const = 0;
+        virtual ci::Vec2f getWindowCenter() const = 0;
+        virtual ci::Vec2i getWindowSize() const = 0;
+        virtual float getWindowAspectRatio() const = 0;
+        virtual ci::Area getWindowBounds() const = 0;
+        virtual float getWindowContentScale() const = 0;
+        
+        virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
     };
-    
-    enum
-    {
-        EVENT_FOREGROUND,
-        EVENT_BACKGROUND
-    };
-    
-    CinderSketchBase() : SuperHandler(this) {}
-    virtual ~CinderSketchBase() {}
-    
-    virtual void setup(bool renewContext) {}
-    virtual void shutdown() {}
-    virtual void resize() {}
-    
-    virtual void update() {}
-    virtual void draw() {}
-    
-    virtual void start(int flags) {}
-    virtual void stop(int flags) {}
-    virtual void event(int id) {}
-    
-    virtual void addTouch(int index, float x, float y) {}
-    virtual void updateTouch(int index, float x, float y) {}
-    virtual void removeTouch(int index, float x, float y) {}
-    
-    virtual void accelerated(AccelEvent event) {}
-    virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
-    virtual void disableAccelerometer() {}
+}
 
-    virtual std::ostream& console() = 0;
-
-    virtual double getElapsedSeconds() const = 0;
-    virtual uint32_t getElapsedFrames() const = 0;
-    
-    virtual int getWindowWidth() const = 0;
-    virtual int getWindowHeight() const = 0;
-    virtual ci::Vec2f getWindowCenter() const = 0;
-    virtual ci::Vec2i getWindowSize() const = 0;
-    virtual float getWindowAspectRatio() const = 0;
-    virtual ci::Area getWindowBounds() const = 0;
-    virtual float getWindowContentScale() const = 0;
-    
-    virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
-};
+namespace chr = chronotext;

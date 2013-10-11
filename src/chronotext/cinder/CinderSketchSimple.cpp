@@ -13,17 +13,20 @@ using namespace std;
 using namespace ci;
 using namespace app;
 
-CinderSketchSimple::CinderSketchSimple(void *context, void *delegate)
-:
-CinderSketchBase(),
-context(static_cast<AppNative*>(context)),
-delegate(static_cast<CinderApp*>(delegate))
-{}
-
-void CinderSketchSimple::sendMessageToDelegate(int what, const string &body)
+namespace chronotext
 {
-    if (delegate)
+    CinderSketchSimple::CinderSketchSimple(void *context, void *delegate)
+    :
+    CinderSketchBase(),
+    context(static_cast<AppNative*>(context)),
+    delegate(static_cast<CinderApp*>(delegate))
+    {}
+    
+    void CinderSketchSimple::sendMessageToDelegate(int what, const string &body)
     {
-        delegate->receiveMessageFromSketch(what, body);
+        if (delegate)
+        {
+            delegate->receiveMessageFromSketch(what, body);
+        }
     }
 }

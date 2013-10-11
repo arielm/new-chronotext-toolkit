@@ -7,9 +7,10 @@
 
 #include "Sketch.h"
 
-using namespace ci;
-using namespace ci::app;
 using namespace std;
+using namespace ci;
+using namespace app;
+using namespace chr;
 
 class Application : public CinderApp
 {
@@ -33,4 +34,4 @@ void Application::prepareSettings(Settings *settings)
 #endif
 }
 
-CINDER_APP_NATIVE(Application, RendererGl(0))
+CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

@@ -12,29 +12,34 @@
 
 #include "chronotext/cinder/CinderSketchBase.h"
 
-class CinderApp;
-
-class CinderSketchSimple : public CinderSketchBase
+namespace chronotext
 {
-public:
-    CinderSketchSimple(void *context, void *delegate = NULL);
-
-    std::ostream& console() { return context->console(); }
-
-    double getElapsedSeconds() const { return context->getElapsedSeconds(); }
-    uint32_t getElapsedFrames() const { return context->getElapsedFrames(); }
-
-    int getWindowWidth() const { return context->getWindowWidth(); }
-    int getWindowHeight() const { return context->getWindowHeight(); }
-    ci::Vec2f getWindowCenter() const { return context->getWindowCenter(); }
-    ci::Vec2i getWindowSize() const { return context->getWindowSize(); }
-    float getWindowAspectRatio() const { return context->getWindowAspectRatio(); }
-    ci::Area getWindowBounds() const { return context->getWindowBounds(); }
-    float getWindowContentScale() const { return context->getWindowContentScale(); }
+    class CinderApp;
     
-    void sendMessageToDelegate(int what, const std::string &body = "");
+    class CinderSketchSimple : public CinderSketchBase
+    {
+    public:
+        CinderSketchSimple(void *context, void *delegate = NULL);
+        
+        std::ostream& console() { return context->console(); }
+        
+        double getElapsedSeconds() const { return context->getElapsedSeconds(); }
+        uint32_t getElapsedFrames() const { return context->getElapsedFrames(); }
+        
+        int getWindowWidth() const { return context->getWindowWidth(); }
+        int getWindowHeight() const { return context->getWindowHeight(); }
+        ci::Vec2f getWindowCenter() const { return context->getWindowCenter(); }
+        ci::Vec2i getWindowSize() const { return context->getWindowSize(); }
+        float getWindowAspectRatio() const { return context->getWindowAspectRatio(); }
+        ci::Area getWindowBounds() const { return context->getWindowBounds(); }
+        float getWindowContentScale() const { return context->getWindowContentScale(); }
+        
+        void sendMessageToDelegate(int what, const std::string &body = "");
+        
+    protected:
+        ci::app::AppNative *context;
+        CinderApp *delegate;
+    };
+}
 
-protected:
-    ci::app::AppNative *context;
-    CinderApp *delegate;
-};
+namespace chr = chronotext;

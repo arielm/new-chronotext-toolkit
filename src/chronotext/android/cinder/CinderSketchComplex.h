@@ -12,32 +12,37 @@
 
 #include "chronotext/cinder/CinderSketchBase.h"
 
-class CinderDelegate;
-
-class CinderSketchComplex : public CinderSketchBase
+namespace chronotext
 {
-public:
-    CinderSketchComplex(void *context, void *delegate = NULL);
-
-    void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
-    void disableAccelerometer();
-
-    std::ostream& console();
-
-    double getElapsedSeconds() const;
-    uint32_t getElapsedFrames() const;
+    class CinderDelegate;
     
-    int getWindowWidth() const;
-    int getWindowHeight() const;
-    ci::Vec2f getWindowCenter() const;
-    ci::Vec2i getWindowSize() const;
-    float getWindowAspectRatio() const;
-    ci::Area getWindowBounds() const;
-    float getWindowContentScale() const { return 1; }
+    class CinderSketchComplex : public CinderSketchBase
+    {
+    public:
+        CinderSketchComplex(void *context, void *delegate = NULL);
+        
+        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
+        void disableAccelerometer();
+        
+        std::ostream& console();
+        
+        double getElapsedSeconds() const;
+        uint32_t getElapsedFrames() const;
+        
+        int getWindowWidth() const;
+        int getWindowHeight() const;
+        ci::Vec2f getWindowCenter() const;
+        ci::Vec2i getWindowSize() const;
+        float getWindowAspectRatio() const;
+        ci::Area getWindowBounds() const;
+        float getWindowContentScale() const { return 1; }
+        
+        void sendMessageToDelegate(int what, const std::string &body = "");
+        
+    protected:
+        CinderDelegate *context;
+        CinderDelegate *delegate;
+    };
+}
 
-    void sendMessageToDelegate(int what, const std::string &body = "");
-
-protected:
-    CinderDelegate *context;
-    CinderDelegate *delegate;
-};
+namespace chr = chronotext;

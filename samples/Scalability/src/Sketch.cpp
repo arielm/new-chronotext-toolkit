@@ -2,8 +2,8 @@
 
 #include "chronotext/utils/GLUtils.h"
 
-using namespace ci;
 using namespace std;
+using namespace ci;
 using namespace chr;
 
 const float GRID_SIZE = 32;

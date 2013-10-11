@@ -2,9 +2,9 @@
 
 #include "Sketch.h"
 
-CinderDelegate* createDelegate()
+chr::CinderDelegate* createDelegate()
 {
-    CinderDelegate *delegate = new CinderDelegate();
+    chr::CinderDelegate *delegate = new chr::CinderDelegate();
     delegate->sketch = new Sketch(delegate, delegate);
 
     return delegate;

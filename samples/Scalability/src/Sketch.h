@@ -9,7 +9,7 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
 
-class Sketch : public CinderSketch
+class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
     
@@ -21,7 +21,7 @@ class Sketch : public CinderSketch
     ci::Vec2f position;
 
 public:
-    Sketch(void *context, void *delegate = NULL) : CinderSketch(context, delegate) {}
+    Sketch(void *context, void *delegate = NULL) : chr::CinderSketch(context, delegate) {}
 
     void setup(bool renewContext);
     void resize();

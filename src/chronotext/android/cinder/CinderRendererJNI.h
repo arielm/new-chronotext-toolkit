@@ -20,7 +20,7 @@ extern "C"
      * IT SHOULD RETURN CinderDelegate WITH A
      * PROPERLY DEFINED CinderSketch
      */
-    CinderDelegate* createDelegate();
+    chr::CinderDelegate* createDelegate();
 
     void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener);
@@ -39,7 +39,7 @@ extern "C"
 }
 
 JavaVM *gJavaVM;
-CinderDelegate *gDelegate;
+chr::CinderDelegate *gDelegate;
 
 /*
  * WARNING: THIS IS *NOT* CALLED EACH TIME THE APPLICATION STARTS

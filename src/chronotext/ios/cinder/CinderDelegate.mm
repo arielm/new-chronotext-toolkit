@@ -19,6 +19,7 @@
 using namespace std;
 using namespace ci;
 using namespace app;
+using namespace chr;
 
 @implementation CinderDelegate
 

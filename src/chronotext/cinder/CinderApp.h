@@ -16,50 +16,55 @@
 
 #include "chronotext/cinder/CinderSketch.h"
 
-class CinderApp : public ci::app::AppNative
+namespace chronotext
 {
-public:
-    CinderSketch *sketch;
-    
-    CinderApp()
-    :
-    startCount(0),
-    updateCount(0)
-    {}
-
-    void setup();
-    void shutdown();
-    void resize();
-
-    void update();
-    void draw();
-    
-    void mouseDown(ci::app::MouseEvent event);
-    void mouseUp(ci::app::MouseEvent event);
-    void mouseDrag(ci::app::MouseEvent event);
-    
-    void touchesBegan(ci::app::TouchEvent event);
-    void touchesMoved(ci::app::TouchEvent event);
-    void touchesEnded(ci::app::TouchEvent event);
-    
-    void accelerated(AccelEvent event);
-
-    virtual void receiveMessageFromSketch(int what, const std::string &body) {}
-    void sendMessageToSketch(int what, const std::string &body);
-    
+    class CinderApp : public ci::app::AppNative
+    {
+    public:
+        CinderSketch *sketch;
+        
+        CinderApp()
+        :
+        startCount(0),
+        updateCount(0)
+        {}
+        
+        void setup();
+        void shutdown();
+        void resize();
+        
+        void update();
+        void draw();
+        
+        void mouseDown(ci::app::MouseEvent event);
+        void mouseUp(ci::app::MouseEvent event);
+        void mouseDrag(ci::app::MouseEvent event);
+        
+        void touchesBegan(ci::app::TouchEvent event);
+        void touchesMoved(ci::app::TouchEvent event);
+        void touchesEnded(ci::app::TouchEvent event);
+        
+        void accelerated(AccelEvent event);
+        
+        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
+        void sendMessageToSketch(int what, const std::string &body);
+        
 #if defined(CINDER_ANDROID)
-    void pause();
-    void resume(bool renewContext);
+        void pause();
+        void resume(bool renewContext);
 #endif
-    
-protected:
-    int startCount;
-    int updateCount;
-    
-    int ticks;
-    double t0;
-    double elapsed;
-    
-    void start();
-    void stop();
-};
+        
+    protected:
+        int startCount;
+        int updateCount;
+        
+        int ticks;
+        double t0;
+        double elapsed;
+        
+        void start();
+        void stop();
+    };
+}
+
+namespace chr = chronotext;
