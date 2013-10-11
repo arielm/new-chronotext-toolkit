@@ -11,8 +11,9 @@
 
 #include "chronotext/utils/Utils.h"
 
-using namespace ci;
 using namespace std;
+using namespace ci;
+using namespace chr;
 
 XFontCreator::XFontCreator(const FT_Library &library, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
 :
