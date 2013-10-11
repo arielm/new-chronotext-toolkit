@@ -11,6 +11,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace chr;
 
 SoundEngine::SoundEngine()
 :

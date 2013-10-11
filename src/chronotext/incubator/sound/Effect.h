@@ -19,10 +19,10 @@ typedef std::shared_ptr<class Effect> EffectRef;
 class Effect
 {
 public:
-    InputSourceRef inputSource;
+    chr::InputSourceRef inputSource;
     FMOD::Sound *sound;
     
-    Effect(InputSourceRef inputSource, FMOD::Sound *sound);
+    Effect(chr::InputSourceRef inputSource, FMOD::Sound *sound);
     ~Effect();
     
     double getDuration();

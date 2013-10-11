@@ -60,7 +60,7 @@ public:
                     return "INTERRUPTED";
                     
                 case EVENT_COMPLETED:
-                    return  "COMPLETED";
+                    return "COMPLETED";
                     
                 default:
                     return "";
@@ -96,7 +96,7 @@ public:
     void resume();
     void update();
     
-    EffectRef preloadEffect(InputSourceRef inputSource);
+    EffectRef preloadEffect(chr::InputSourceRef inputSource);
     void unloadEffect(EffectRef effect);
     
     int playEffect(EffectRef effect, int loopCount = 0, float volume = 1);
@@ -117,7 +117,7 @@ protected:
     int playCount;
     Listener *listener;
     
-    EffectRef loadEffect(InputSourceRef inputSource);
+    EffectRef loadEffect(chr::InputSourceRef inputSource);
     int nextPlayingId(EffectRef effect);
     bool interruptChannel(int channelId);
     void processEvent(const Event &event);

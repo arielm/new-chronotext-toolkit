@@ -11,6 +11,7 @@
 #include "chronotext/utils/Utils.h"
 
 using namespace std;
+using namespace chr;
 
 Effect::Effect(InputSourceRef inputSource, FMOD::Sound *sound)
 :
