@@ -7,8 +7,9 @@
  */
 
 /*
- * BASED ON MurmurHash BY Austin Appleby: https://sites.google.com/site/murmurhash/
- */ 
+ * BASED ON MurmurHash2_64 BY Austin Appleby: https://sites.google.com/site/murmurhash/
+ * THE MurmurHash64B VARIANT USED HERE IS PRODUCING A 64-BIT HASH FOR 32-BIT PLATFORMS
+ */
 
 #pragma once
 

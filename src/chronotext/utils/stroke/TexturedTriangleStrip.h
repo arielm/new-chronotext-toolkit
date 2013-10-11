@@ -10,36 +10,44 @@
 
 #include "cinder/gl/gl.h"
 
-struct TexturedTriangleStrip
+namespace chronotext
 {
-    int count;
-    float *vertices;
-    float *coords;
-    
-    TexturedTriangleStrip() : count(0), vertices(NULL), coords(NULL) {}
-    
-    ~TexturedTriangleStrip()
+    struct TexturedTriangleStrip
     {
-        clear();
-    }
-    
-    void clear()
-    {
-        if (vertices)
+        int count;
+        float *vertices;
+        float *coords;
+        
+        TexturedTriangleStrip()
+        :
+        count(0),
+        vertices(NULL),
+        coords(NULL)
+        {}
+        
+        ~TexturedTriangleStrip()
         {
-            delete[] vertices;
-            delete[] coords;
-            
-            count = 0;
-            vertices = NULL;
-            coords = NULL;
+            clear();
         }
-    }
-    
-    void draw() const
-    {
-        glTexCoordPointer(2, GL_FLOAT, 0, coords);
-        glVertexPointer(2, GL_FLOAT, 0, vertices);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
-    }
-};
+        
+        void clear()
+        {
+            if (vertices)
+            {
+                delete[] vertices;
+                delete[] coords;
+                
+                count = 0;
+                vertices = NULL;
+                coords = NULL;
+            }
+        }
+        
+        void draw() const
+        {
+            glTexCoordPointer(2, GL_FLOAT, 0, coords);
+            glVertexPointer(2, GL_FLOAT, 0, vertices);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
+        }
+    };
+}

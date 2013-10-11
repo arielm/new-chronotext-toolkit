@@ -11,19 +11,24 @@
 #include "chronotext/font/XFont.h"
 #include "chronotext/path/FollowablePath.h"
 
-class TextHelper
+namespace chronotext
 {
-public:
-    static float getStringWidth(chr::XFont *font, const std::wstring &text, bool snap = false);
+    class TextHelper
+    {
+    public:
+        static float getStringWidth(XFont *font, const std::wstring &text, bool snap = false);
+        
+        static void drawText(XFont *font, XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, bool snap = false);
+        static void drawAlignedText(XFont *font, XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, int alignX = XFont::ALIGN_MIDDLE, int alignY = XFont::ALIGN_MIDDLE, bool snap = false);
+        
+        static void drawTextInRect(XFont *font, XFontSequence *sequence, const std::wstring &text, const ci::Rectf &rect, bool snap = false);
+        static void drawTextInRect(XFont *font, XFontSequence *sequence, const std::wstring &text, float x1, float y1, float x2, float y2, bool snap = false);
+        
+        static void drawStrikethroughInRect(XFont *font, const std::wstring &text, const ci::Rectf &rect, bool snap = false);
+        static void drawStrikethroughInRect(XFont *font, const std::wstring &text, float x1, float y1, float x2, float y2, bool snap = false);
+        
+        static float drawTextOnPath(XFont *font, XFontSequence *sequence, const std::wstring &text, FollowablePath *path, float offset);
+    };
+}
 
-    static void drawText(chr::XFont *font, chr::XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, bool snap = false);
-    static void drawAlignedText(chr::XFont *font, chr::XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, int alignX = chr::XFont::ALIGN_MIDDLE, int alignY = chr::XFont::ALIGN_MIDDLE, bool snap = false);
-    
-    static void drawTextInRect(chr::XFont *font, chr::XFontSequence *sequence, const std::wstring &text, const ci::Rectf &rect, bool snap = false);
-    static void drawTextInRect(chr::XFont *font, chr::XFontSequence *sequence, const std::wstring &text, float x1, float y1, float x2, float y2, bool snap = false);
-    
-    static void drawStrikethroughInRect(chr::XFont *font, const std::wstring &text, const ci::Rectf &rect, bool snap = false);
-    static void drawStrikethroughInRect(chr::XFont *font, const std::wstring &text, float x1, float y1, float x2, float y2, bool snap = false);
-    
-    static float drawTextOnPath(chr::XFont *font, chr::XFontSequence *sequence, const std::wstring &text, FollowablePath *path, float offset);
-};
+namespace chr = chronotext;

@@ -4,6 +4,7 @@
 
 using namespace ci;
 using namespace std;
+using namespace chr;
 
 const float GRID_SIZE = 32;
 const float FRAME_SCALE = 464 / 512.0f;

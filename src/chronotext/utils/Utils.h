@@ -11,11 +11,8 @@
 #include "cinder/app/App.h"
 #include "cinder/Utilities.h"
 
-#include <string>
 #include <fstream>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
+//#include <iostream>
 
 #include <boost/algorithm/string.hpp>
 
@@ -146,7 +143,8 @@ static std::string prettyBytes(uint64_t numBytes, int precision = 2)
 
 // ---
 
-static int search(float *array, float value, int min, int max)
+template<typename T>
+static int search(T *array, T value, int min, int max)
 {
     int mid = (min + max) >> 1;
     
@@ -170,9 +168,10 @@ static int search(float *array, float value, int min, int max)
     return mid - 1;
 }
 
-static inline int search(const std::vector<float> &array, float value, int min, int max)
+template<typename T>
+static inline int search(const std::vector<T> &array, float value, int min, int max)
 {
-    return search((float*)array.data(), value, min, max);
+    return search((T*)array.data(), value, min, max);
 }
 
 // ---
