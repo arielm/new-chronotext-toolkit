@@ -118,14 +118,14 @@ namespace chronotext
 #elif defined(CINDER_ANDROID)
                 try
                 {
-                    return app::loadResource(resourceName);
+                    return app::loadResource(resourceName); // TODO: TEST IF IT REALLY THROWS UPON ERROR
                 }
                 catch (exception &e)
                 {
                     throw Exception("RESOURCE NOT FOUND: " + resourceName);
                 }
 #else
-                if (fs::exists(filePath))
+                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF THE FILE DOESN'T EXIST
                 {
                     return DataSourcePath::create(filePath);
                 }
@@ -140,7 +140,7 @@ namespace chronotext
             {
                 try
                 {
-                    return app::loadResource(resourceName, mswID, mswType);
+                    return app::loadResource(resourceName, mswID, mswType); // TODO: TEST IF IT REALLY THROWS UPON ERROR
                 }
                 catch (exception &e)
                 {
@@ -150,13 +150,13 @@ namespace chronotext
                 
             case TYPE_FILE:
             {
-                if (fs::exists(filePath))
+                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF THE FILE DOESN'T EXIST
                 {
                     return DataSourcePath::create(filePath);
                 }
                 else
                 {
-                    throw Exception("FILE NOT FOUND: " + filePathHint);
+                    throw Exception("FILE NOT FOUND: " + filePath.string());
                 }
             }
         }
@@ -190,14 +190,7 @@ namespace chronotext
                 return "res_msw://" + boost::lexical_cast<string>(mswID) + "/" + mswType;
                 
             case TYPE_FILE:
-                if (fs::exists(filePath))
-                {
-                    return "file://" + fs::canonical(filePath).string();
-                }
-                else
-                {
-                    return "undefined://" + filePathHint;
-                }
+                return "file://" + filePath.string();
         }
         
         return "";
