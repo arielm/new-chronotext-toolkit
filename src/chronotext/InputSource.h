@@ -53,11 +53,12 @@ namespace chronotext
             TYPE_FILE
         };
         
-        
         static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
 
         /*
-         * FOR "DYNAMIC" RESOURCES:
+         * TO USE WITH THE "CINDER_RESOURCE" MACRO OR WITH A RESOURCE-NAME,
+         * FOR FILES LOCATED IN THE BUNDLE ON OSX OR IOS,
+         * OR DATA EMBEDDED INSIDE THE APK ON ANDROID
          *
          * OSX, IOS: isFile() WILL RETURN true
          * ANDROID: isFile() WILL RETURN false
@@ -66,7 +67,9 @@ namespace chronotext
         static ci::DataSourceRef loadResource(const std::string &resourceName);
         
         /*
-         * FOR "STATIC" RESOURCES EMBEDDED INSIDE THE EXECUTABLE ON MSW:
+         * TO USE WITH THE "CINDER_RESOURCE" MACRO,
+         * FOR DATA EMBEDDED INSIDE THE EXECUTABLE ON MSW
+         *
          * isFile() WILL RETURN false
          */
         static InputSourceRef getResource(const std::string &resourceName, int mswID, const std::string &mswType);

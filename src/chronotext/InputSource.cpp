@@ -113,7 +113,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
                 }
 #elif defined(CINDER_ANDROID)
                 try
@@ -122,7 +122,7 @@ namespace chronotext
                 }
                 catch (exception &e)
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
                 }
 #else
                 if (fs::exists(filePath))
@@ -131,7 +131,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
                 }
 #endif
             }
@@ -144,7 +144,7 @@ namespace chronotext
                 }
                 catch (exception &e)
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
                 }
             }
                 

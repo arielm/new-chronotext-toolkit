@@ -8,11 +8,56 @@
 
 #pragma once
 
-#include "cinder/Timer.h"
 #include "chronotext/utils/Utils.h"
 
-ci::Timer ___timer___;
-double ___tmp___;
+#include "cinder/Timer.h"
 
-#define TIMING_START ___timer___.start();
-#define TIMING_STOP(MSG) ___tmp___ = ___timer___.getSeconds(); LOGI << MSG << ": " << std::setprecision(15) << ___tmp___ << std::endl;
+namespace chronotext
+{
+    class Timing
+    {
+        std::string msg;
+        bool started;
+        ci::Timer timer;
+        
+    public:
+        Timing(const std::string &msg = "")
+        :
+        started(false)
+        {
+            start(msg);
+        }
+        
+        ~Timing()
+        {
+            stop();
+        }
+        
+        void start(const std::string &msg = "")
+        {
+            if (!started)
+            {
+                this->msg = msg;
+                
+                started = true;
+                timer.start();
+            }
+        }
+        
+        void stop()
+        {
+            if (started)
+            {
+                started = false;
+                double tmp = timer.getSeconds();
+                
+                if (!msg.empty())
+                {
+                    LOGI << msg << ": ";
+                }
+                
+                LOGI << std::setprecision(15) << tmp << std::endl;
+            }
+        }
+    };
+}
