@@ -53,6 +53,9 @@ namespace chronotext
             TYPE_FILE
         };
         
+        
+        static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
+
         /*
          * FOR "DYNAMIC" RESOURCES:
          *

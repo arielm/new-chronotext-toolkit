@@ -17,6 +17,30 @@ using namespace app;
 
 namespace chronotext
 {
+    /*
+     * PATH NORMALIZATION WITHOUT THE NEED FOR FILES TO EXIST
+     * REFERENCE: http://stackoverflow.com/a/12797413/50335
+     */
+    fs::path InputSource::normalizePath(const fs::path &absolutePath)
+    {
+        fs::path::iterator it = absolutePath.begin();
+        fs::path result = *it++;
+        
+        for (; it != absolutePath.end(); ++it)
+        {
+            if (*it == "..")
+            {
+                result = result.parent_path();
+            }
+            else if (*it != ".")
+            {
+                result /= *it;
+            }
+        }
+        
+        return result;
+    }
+    
     InputSourceRef InputSource::getResource(const std::string &resourceName)
     {
         InputSource *source = new InputSource(TYPE_RESOURCE);
