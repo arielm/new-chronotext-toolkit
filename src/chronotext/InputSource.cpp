@@ -125,7 +125,7 @@ namespace chronotext
                     throw Exception("RESOURCE NOT FOUND: " + resourceName);
                 }
 #else
-                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF THE FILE DOESN'T EXIST
+                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
                 {
                     return DataSourcePath::create(filePath);
                 }
@@ -150,7 +150,7 @@ namespace chronotext
                 
             case TYPE_FILE:
             {
-                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF THE FILE DOESN'T EXIST
+                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
                 {
                     return DataSourcePath::create(filePath);
                 }

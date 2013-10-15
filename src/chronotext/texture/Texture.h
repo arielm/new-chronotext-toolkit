@@ -32,10 +32,8 @@ namespace chronotext
             std::string message;
             
         public:
-            Exception(const std::string &what) throw()
-            :
-            message(what)
-            {}
+            Exception(const std::string &what) throw() : message(what) {}
+            ~Exception() throw() {}
             
             const char* what() const throw()
             {
