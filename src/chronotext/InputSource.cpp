@@ -73,12 +73,32 @@ namespace chronotext
         return InputSource::getResource(resourceName, mswID, mswType)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFileInDocuments(const std::string &relativePath)
+    InputSourceRef InputSource::getAsset(const fs::path &relativePath)
+    {
+        InputSourceRef source = make_shared<InputSource>(TYPE_ASSET);
+        source->relativePath = relativePath;
+        source->filePathHint = relativePath.string();
+
+#if defined(CINDER_MAC) || defined(CINDER_MSW)
+        source->filePath = app::getAssetPath(relativePath);
+#elif defined(CINDER_COCOA_TOUCH)
+        source->filePath = InputSource::getResourcePath() / "assets" / relativePath;
+#endif
+        
+        return source;
+    }
+    
+    DataSourceRef InputSource::loadAsset(const fs::path &relativePath)
+    {
+        return InputSource::getAsset(relativePath)->loadDataSource();
+    }
+    
+    InputSourceRef InputSource::getFileInDocuments(const fs::path &relativePath)
     {
         return InputSource::getFile(getDocumentsDirectory() / relativePath);
     }
     
-    DataSourceRef InputSource::loadFileInDocuments(const std::string &relativePath)
+    DataSourceRef InputSource::loadFileInDocuments(const fs::path &relativePath)
     {
         return DataSourcePath::create(getDocumentsDirectory() / relativePath);
     }
@@ -159,6 +179,42 @@ namespace chronotext
                     throw Exception("FILE NOT FOUND: " + filePath.string());
                 }
             }
+                
+            case TYPE_ASSET:
+            {
+#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+                string resourcePath = ("assets" / relativePath).string();
+                AAsset* asset = AAssetManager_open(gAssetManager, resourcePath.c_str(), AASSET_MODE_STREAMING);
+                
+                if (asset)
+                {
+                    AAsset_close(asset);
+                    return DataSourceAsset::create(gAssetManager, resourcePath);
+                }
+                else
+                {
+                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
+                }
+#elif defined(CINDER_ANDROID)
+                try
+                {
+                    return app::loadResource(("assets" / relativePath).string()); // TODO: TEST IF IT REALLY THROWS UPON ERROR
+                }
+                catch (exception &e)
+                {
+                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
+                }
+#else
+                if (!filePath.empty() && fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                {
+                    return DataSourcePath::create(filePath);
+                }
+                else
+                {
+                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
+                }
+#endif
+            }
         }
         
         return DataSourceRef();
@@ -174,11 +230,6 @@ namespace chronotext
         return filePath;
     }
     
-    string InputSource::getFilePathHint() const
-    {
-        return filePathHint;
-    }
-    
     string InputSource::getUniqueName() const
     {
         switch (type)
@@ -191,9 +242,17 @@ namespace chronotext
                 
             case TYPE_FILE:
                 return "file://" + filePath.string();
+                
+            case TYPE_ASSET:
+                return "assets://" + relativePath.string();
         }
         
         return "";
+    }
+    
+    string InputSource::getFilePathHint() const
+    {
+        return filePathHint;
     }
     
     void InputSource::setFilePathHint(const string &hint)

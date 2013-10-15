@@ -48,7 +48,8 @@ namespace chronotext
         {
             TYPE_RESOURCE,
             TYPE_RESOURCE_MSW,
-            TYPE_FILE
+            TYPE_FILE,
+            TYPE_ASSET
         };
         
         static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
@@ -73,20 +74,38 @@ namespace chronotext
         static InputSourceRef getResource(const std::string &resourceName, int mswID, const std::string &mswType);
         static ci::DataSourceRef loadResource(const std::string &resourceName, int mswID, const std::string &mswType);
         
-        static InputSourceRef getFileInDocuments(const std::string &relativePath);
-        static ci::DataSourceRef loadFileInDocuments(const std::string &relativePath);
+        /*
+         * MSW AND OSX:
+         * - TO USE WITH REGULAR "CINDER ASSETS"
+         * - isFile() WILL RETURN true
+         *
+         * IOS:
+         * - TO USE WITH CINDER'S "IOS ASSET FOLDER"
+         * - isFile() WILL RETURN true
+         *
+         * ANDROID:
+         * - CREATE A SHORTCUT TO THE "assets" FOLDER IN "resources"
+         * - THE ASSETS WILL BE PACKAGED INSIDE THE APK
+         * - isFile() WILL RETURN false
+         */
+        static InputSourceRef getAsset(const ci::fs::path &relativePath);
+        static ci::DataSourceRef loadAsset(const ci::fs::path &relativePath);
+        
+        static InputSourceRef getFileInDocuments(const ci::fs::path &relativePath);
+        static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath);
         
         static InputSourceRef getFile(const ci::fs::path &filePath);
-        ci::DataSourceRef loadFile(const ci::fs::path &filePath);
+        static ci::DataSourceRef loadFile(const ci::fs::path &filePath);
         
+        InputSource(int type) : type(type) {}
+
         ci::DataSourceRef loadDataSource();
         
         bool isFile() const;
         ci::fs::path getFilePath() const;
-        
-        std::string getFilePathHint() const;
         std::string getUniqueName() const;
         
+        std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
         
 #if defined(CINDER_COCOA)
@@ -112,9 +131,8 @@ namespace chronotext
         int mswID;
         std::string mswType;
         ci::fs::path filePath;
+        ci::fs::path relativePath;
         std::string filePathHint;
-        
-        InputSource(int type) : type(type) {}
     };
 }
 
