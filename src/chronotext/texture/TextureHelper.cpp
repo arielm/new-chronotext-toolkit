@@ -47,13 +47,13 @@ namespace chronotext
         {
             throw Texture::Exception("TEXTURE IS UNDEFINED");
         }
-        else
+        else if ((textureRequest.maxSize.x > 0) && (textureRequest.maxSize.y > 0))
         {
             const Vec2i size = textureData.getSize();
             
             if ((size.x > textureRequest.maxSize.x) || (size.y > textureRequest.maxSize.y))
             {
-                throw Texture::Exception("TEXTURE IS OVER-SIZED");
+                throw Texture::Exception("TEXTURE IS OVER-SIZED (" + toString(size.x) + "x" + toString(size.y) + ")");
             }
         }
 
@@ -139,7 +139,7 @@ namespace chronotext
             
             if (glGetError() == GL_OUT_OF_MEMORY)
             {
-                throw Texture::Exception("OUT OF MEMORY");
+                throw Texture::Exception("GL: OUT OF MEMORY");
             }
             else if (texture)
             {

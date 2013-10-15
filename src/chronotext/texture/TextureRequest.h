@@ -40,7 +40,7 @@ namespace chronotext
         flags(flags),
         wrapS(GL_CLAMP_TO_EDGE),
         wrapT(GL_CLAMP_TO_EDGE),
-        maxSize(2048, 2048)
+        maxSize(0, 0)
         {}
         
         ci::gl::Texture::Format getFormat() const
