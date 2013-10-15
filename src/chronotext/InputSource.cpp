@@ -172,7 +172,7 @@ namespace chronotext
                 }
                 else
                 {
-                    return "file:://undefined";
+                    return "undefined://" + filePathHint;
                 }
         }
         
