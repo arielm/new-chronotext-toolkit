@@ -27,6 +27,22 @@ namespace chronotext
         void setTarget(ci::gl::TextureRef texture);
         
     public:
+        class Exception : public std::exception
+        {
+            std::string message;
+            
+        public:
+            Exception(const std::string &what) throw()
+            :
+            message(what)
+            {}
+            
+            const char* what() const throw()
+            {
+                return message.c_str();
+            }
+        };
+        
         TextureRequest request;
         
         Texture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE);

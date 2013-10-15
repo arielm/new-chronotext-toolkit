@@ -10,6 +10,8 @@
 
 #include "cinder/DataSource.h"
 
+#include <exception>
+
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
 
@@ -28,6 +30,22 @@ namespace chronotext
     class InputSource
     {
     public:
+        class Exception : public std::exception
+        {
+            std::string message;
+            
+        public:
+            Exception(const std::string &what) throw()
+            :
+            message(what)
+            {}
+            
+            const char* what() const throw()
+            {
+                return message.c_str();
+            }
+        };
+        
         enum
         {
             TYPE_RESOURCE,

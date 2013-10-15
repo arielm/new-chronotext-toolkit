@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/texture/PVRHelper.h"
-#include "chronotext/texture/TextureException.h"
+#include "chronotext/texture/Texture.h"
 
 #include "cinder/Utilities.h"
 
@@ -15,6 +15,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace chr;
 
 #define PVR_TEXTURE_FLAG_TYPE_MASK 0xff
 
@@ -84,20 +85,20 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     gzFile file = gzopen(filePath.string().c_str(), "rb"); // THE CONVERSION TO string IS NECESSARY ON WINDOWS
     if (!file)
     {
-        throw TextureException("PVR.GZ: CAN'T OPEN FILE");
+        throw Texture::Exception("PVR.GZ: CAN'T OPEN FILE");
     }
     
     PVRTexHeader header;
     if (gzread(file, &header, sizeof(header)) != sizeof(header)) // BYTE-ORDER IS OK FOR INTEL AND ARM
     {
         gzclose(file);
-        throw TextureException("PVR.GZ: HEADER ERROR");
+        throw Texture::Exception("PVR.GZ: HEADER ERROR");
     }
     
     if (header.pvrTag != 559044176)
     {
         gzclose(file);
-        throw TextureException("PVR.GZ: FORMAT ERROR");
+        throw Texture::Exception("PVR.GZ: FORMAT ERROR");
     }
     
     Buffer buffer(sizeof(header) + header.dataLength);
@@ -106,7 +107,7 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     if (!data)
     {
         gzclose(file);
-        throw TextureException("PVR.GZ: OUT-OF-MEMORY");
+        throw Texture::Exception("PVR.GZ: OUT-OF-MEMORY");
     }
     
     memcpy(data, &header, sizeof(header));
@@ -114,7 +115,7 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     if (gzread(file, data + sizeof(header), header.dataLength) != header.dataLength)
     {
         gzclose(file);
-        throw TextureException("PVR.GZ: DECOMPRESSION ERROR");
+        throw Texture::Exception("PVR.GZ: DECOMPRESSION ERROR");
     }
     
     gzclose(file);
@@ -131,7 +132,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     CCZHeader *header = (CCZHeader*)tmp.getData();
     if ((header->sig[0] != 'C') || (header->sig[1] != 'C') || (header->sig[2] != 'Z') || (header->sig[3] != '!'))
     {
-        throw TextureException("PVR.CCZ: FORMAT ERROR");
+        throw Texture::Exception("PVR.CCZ: FORMAT ERROR");
     }
 
     uint16_t compression_type;
@@ -150,12 +151,12 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     
     if (compression_type != CCZ_COMPRESSION_ZLIB)
     {
-        throw TextureException("PVR.CCZ: UNSUPPORTED COMPRESSION FORMAT");
+        throw Texture::Exception("PVR.CCZ: UNSUPPORTED COMPRESSION FORMAT");
     }
 
     if (version > 2)
     {
-        throw TextureException("PVR.CCZ: UNSUPPORTED VERSION");
+        throw Texture::Exception("PVR.CCZ: UNSUPPORTED VERSION");
     }
 
     Buffer buffer(len);
@@ -163,7 +164,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     void *out = buffer.getData();
     if (!out)
     {
-        throw TextureException("PVR.CCZ: OUT-OF-MEMORY");
+        throw Texture::Exception("PVR.CCZ: OUT-OF-MEMORY");
     }
     
     uLongf destlen = len;
@@ -172,7 +173,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     
     if (ret != Z_OK)
     {
-        throw TextureException("PVR.CCZ: DECOMPRESSION ERROR");
+        throw Texture::Exception("PVR.CCZ: DECOMPRESSION ERROR");
     }
     
     return buffer;
@@ -187,7 +188,7 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
     
     if (!isPOT(width) || !isPOT(height))
     {
-        throw TextureException("PVR TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
+        throw Texture::Exception("PVR TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
     }
 
     GLenum internalFormat;
@@ -227,7 +228,7 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
             break;
             
         default:
-            throw TextureException("PVR TEXTURE: UNSUPPORTED PIXEL-TYPE");
+            throw Texture::Exception("PVR TEXTURE: UNSUPPORTED PIXEL-TYPE");
     }
     
     char *data = (char*)buffer.getData() + header->headerLength;

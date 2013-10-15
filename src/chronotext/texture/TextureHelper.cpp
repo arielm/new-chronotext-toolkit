@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/texture/TextureHelper.h"
-#include "chronotext/texture/TextureException.h"
+#include "chronotext/texture/Texture.h"
 #include "chronotext/texture/PVRHelper.h"
 #include "chronotext/utils/Utils.h"
 
@@ -45,7 +45,7 @@ namespace chronotext
         
         if (textureData.undefined())
         {
-            throw TextureException("TEXTURE IS UNDEFINED");
+            throw Texture::Exception("TEXTURE IS UNDEFINED");
         }
         else
         {
@@ -53,7 +53,7 @@ namespace chronotext
             
             if ((size.x > textureRequest.maxSize.x) || (size.y > textureRequest.maxSize.y))
             {
-                throw TextureException("TEXTURE IS OVER-SIZED");
+                throw Texture::Exception("TEXTURE IS OVER-SIZED");
             }
         }
 
@@ -72,7 +72,7 @@ namespace chronotext
             }
             else
             {
-                throw TextureException("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
+                throw Texture::Exception("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
             }
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))

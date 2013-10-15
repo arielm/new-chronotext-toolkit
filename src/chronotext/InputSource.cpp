@@ -89,10 +89,17 @@ namespace chronotext
                 }
                 else
                 {
-                    throw ResourceLoadExc(filePathHint);
+                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
                 }
 #elif defined(CINDER_ANDROID)
-                return app::loadResource(resourceName);
+                try
+                {
+                    return app::loadResource(resourceName);
+                }
+                catch (exception &e)
+                {
+                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                }
 #else
                 if (fs::exists(filePath))
                 {
@@ -100,14 +107,21 @@ namespace chronotext
                 }
                 else
                 {
-                    throw AssetLoadExc(filePathHint);
+                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
                 }
 #endif
             }
                 
             case TYPE_RESOURCE_MSW:
             {
-                return app::loadResource(resourceName, mswID, mswType);
+                try
+                {
+                    return app::loadResource(resourceName, mswID, mswType);
+                }
+                catch (exception &e)
+                {
+                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                }
             }
                 
             case TYPE_FILE:
@@ -118,7 +132,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw AssetLoadExc(filePathHint);
+                    throw Exception("FILE NOT FOUND: " + filePathHint);
                 }
             }
         }
