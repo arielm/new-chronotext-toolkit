@@ -40,4 +40,5 @@ public:
     static ci::Buffer decompressPVRCCZ(ci::DataSourceRef dataSource);
 
     static ci::gl::TextureRef getPVRTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    static ci::Vec2i getPVRTextureSize(const ci::Buffer &buffer);
 };

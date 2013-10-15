@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/texture/TextureHelper.h"
+#include "chronotext/texture/TextureException.h"
 #include "chronotext/texture/PVRHelper.h"
 #include "chronotext/utils/Utils.h"
 
@@ -40,7 +41,23 @@ namespace chronotext
     
     gl::TextureRef TextureHelper::loadTexture(const TextureRequest &textureRequest)
     {
-        return uploadTextureData(fetchTextureData(textureRequest));
+        TextureData textureData = fetchTextureData(textureRequest);
+        
+        if (textureData.undefined())
+        {
+            throw TextureException("TEXTURE IS UNDEFINED");
+        }
+        else
+        {
+            const Vec2i size = textureData.getSize();
+            
+            if ((size.x > textureRequest.maxSize.x) || (size.y > textureRequest.maxSize.y))
+            {
+                throw TextureException("TEXTURE IS OVER-SIZED");
+            }
+        }
+
+        return uploadTextureData(textureData);
     }
     
     TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest)
@@ -55,7 +72,7 @@ namespace chronotext
             }
             else
             {
-                throw runtime_error("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
+                throw TextureException("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
             }
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
@@ -246,7 +263,7 @@ namespace chronotext
     }
     
     /*
-     * BASED ON CODE FROM cinder/gl/Texture.cpp
+     * BASED ON https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/gl/Texture.cpp#L478-490
      */
     TextureData TextureHelper::fetchTranslucentTextureData(const TextureRequest &textureRequest)
     {
@@ -255,7 +272,6 @@ namespace chronotext
         Channel8u channel = surface.getChannel(0);
         shared_ptr<uint8_t> data;
         
-        // if the data is not already contiguous, we'll need to create a block of memory that is
         if ((channel.getIncrement() != 1 ) || (channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t)))
         {
             data = shared_ptr<uint8_t>(new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>());
@@ -266,6 +282,7 @@ namespace chronotext
             for (int y = 0; y < channel.getHeight(); ++y)
             {
                 const uint8_t *src = channel.getData(0, y);
+                
                 for (int x = 0; x < width; ++x)
                 {
                     *dest++ = *src;

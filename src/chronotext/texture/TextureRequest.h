@@ -28,6 +28,7 @@ namespace chronotext
         int flags;
         GLenum wrapS;
         GLenum wrapT;
+        ci::Vec2i maxSize;
         
         TextureRequest()
         {}
@@ -38,7 +39,8 @@ namespace chronotext
         useMipmap(useMipmap),
         flags(flags),
         wrapS(GL_CLAMP_TO_EDGE),
-        wrapT(GL_CLAMP_TO_EDGE)
+        wrapT(GL_CLAMP_TO_EDGE),
+        maxSize(2048, 2048)
         {}
         
         ci::gl::Texture::Format getFormat() const

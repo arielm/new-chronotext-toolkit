@@ -7,11 +7,11 @@
  */
 
 #include "chronotext/texture/PVRHelper.h"
+#include "chronotext/texture/TextureException.h"
 
 #include "cinder/Utilities.h"
 
 #include <zlib.h>
-#include <stdexcept>
 
 using namespace std;
 using namespace ci;
@@ -84,20 +84,20 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     gzFile file = gzopen(filePath.string().c_str(), "rb"); // THE CONVERSION TO string IS NECESSARY ON WINDOWS
     if (!file)
     {
-        throw runtime_error("PVR.GZ: CAN'T OPEN FILE");
+        throw TextureException("PVR.GZ: CAN'T OPEN FILE");
     }
     
     PVRTexHeader header;
     if (gzread(file, &header, sizeof(header)) != sizeof(header)) // BYTE-ORDER IS OK FOR INTEL AND ARM
     {
         gzclose(file);
-        throw runtime_error("PVR.GZ: HEADER ERROR");
+        throw TextureException("PVR.GZ: HEADER ERROR");
     }
     
     if (header.pvrTag != 559044176)
     {
         gzclose(file);
-        throw runtime_error("PVR.GZ: FORMAT ERROR");
+        throw TextureException("PVR.GZ: FORMAT ERROR");
     }
     
     Buffer buffer(sizeof(header) + header.dataLength);
@@ -106,7 +106,7 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     if (!data)
     {
         gzclose(file);
-        throw runtime_error("PVR.GZ: OUT-OF-MEMORY");
+        throw TextureException("PVR.GZ: OUT-OF-MEMORY");
     }
     
     memcpy(data, &header, sizeof(header));
@@ -114,7 +114,7 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     if (gzread(file, data + sizeof(header), header.dataLength) != header.dataLength)
     {
         gzclose(file);
-        throw runtime_error("PVR.GZ: DECOMPRESSION ERROR");
+        throw TextureException("PVR.GZ: DECOMPRESSION ERROR");
     }
     
     gzclose(file);
@@ -131,7 +131,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     CCZHeader *header = (CCZHeader*)tmp.getData();
     if ((header->sig[0] != 'C') || (header->sig[1] != 'C') || (header->sig[2] != 'Z') || (header->sig[3] != '!'))
     {
-        throw runtime_error("PVR.CCZ: FORMAT ERROR");
+        throw TextureException("PVR.CCZ: FORMAT ERROR");
     }
 
     uint16_t compression_type;
@@ -150,12 +150,12 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     
     if (compression_type != CCZ_COMPRESSION_ZLIB)
     {
-        throw runtime_error("PVR.CCZ: UNSUPPORTED COMPRESSION FORMAT");
+        throw TextureException("PVR.CCZ: UNSUPPORTED COMPRESSION FORMAT");
     }
 
     if (version > 2)
     {
-        throw runtime_error("PVR.CCZ: UNSUPPORTED VERSION");
+        throw TextureException("PVR.CCZ: UNSUPPORTED VERSION");
     }
 
     Buffer buffer(len);
@@ -163,7 +163,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     void *out = buffer.getData();
     if (!out)
     {
-        throw runtime_error("PVR.CCZ: OUT-OF-MEMORY");
+        throw TextureException("PVR.CCZ: OUT-OF-MEMORY");
     }
     
     uLongf destlen = len;
@@ -172,7 +172,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     
     if (ret != Z_OK)
     {
-        throw runtime_error("PVR.CCZ: DECOMPRESSION ERROR");
+        throw TextureException("PVR.CCZ: DECOMPRESSION ERROR");
     }
     
     return buffer;
@@ -187,7 +187,7 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
     
     if (!isPOT(width) || !isPOT(height))
     {
-        throw runtime_error("PVR TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
+        throw TextureException("PVR TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
     }
 
     GLenum internalFormat;
@@ -227,7 +227,7 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
             break;
             
         default:
-            throw runtime_error("PVR TEXTURE: UNSUPPORTED PIXEL-TYPE");
+            throw TextureException("PVR TEXTURE: UNSUPPORTED PIXEL-TYPE");
     }
     
     char *data = (char*)buffer.getData() + header->headerLength;
@@ -259,4 +259,10 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
     }
     
     return gl::Texture::create(GL_TEXTURE_2D, name, width, height, false);
+}
+
+Vec2i PVRHelper::getPVRTextureSize(const Buffer &buffer)
+{
+    PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
+    return Vec2i(header->width, header->height);
 }
