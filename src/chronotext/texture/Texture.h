@@ -29,7 +29,7 @@ namespace chronotext
     public:
         TextureRequest request;
         
-        Texture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+        Texture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE);
         Texture(const TextureRequest &textureRequest);
         Texture(const TextureData &textureData);
         

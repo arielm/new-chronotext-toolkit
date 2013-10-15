@@ -19,8 +19,8 @@ namespace chronotext
         static TextureData fetchPowerOfTwoTextureData(const TextureRequest &textureRequest);
         
     public:
-        static ci::gl::TextureRef loadTexture(const std::string &resourceName, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
-        static ci::gl::TextureRef loadTexture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+        static ci::gl::TextureRef loadTexture(const std::string &resourceName, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE);
+        static ci::gl::TextureRef loadTexture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE);
         static ci::gl::TextureRef loadTexture(const TextureRequest &textureRequest);
         
         static TextureData fetchTextureData(const TextureRequest &textureRequest);

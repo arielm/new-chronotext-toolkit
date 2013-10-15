@@ -32,13 +32,13 @@ namespace chronotext
         TextureRequest()
         {}
         
-        TextureRequest(InputSourceRef inputSource, bool useMipmap = false, int flags = FLAGS_NONE, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE)
+        TextureRequest(InputSourceRef inputSource, bool useMipmap = false, int flags = FLAGS_NONE)
         :
         inputSource(inputSource),
         useMipmap(useMipmap),
         flags(flags),
-        wrapS(wrapS),
-        wrapT(wrapT)
+        wrapS(GL_CLAMP_TO_EDGE),
+        wrapT(GL_CLAMP_TO_EDGE)
         {}
         
         ci::gl::Texture::Format getFormat() const
