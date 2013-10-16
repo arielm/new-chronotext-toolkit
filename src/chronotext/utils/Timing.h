@@ -39,8 +39,8 @@ namespace chronotext
             {
                 this->msg = msg;
                 
-                started = true;
                 timer.start();
+                started = true;
             }
         }
         
@@ -48,8 +48,8 @@ namespace chronotext
         {
             if (started)
             {
-                started = false;
                 double tmp = timer.getSeconds();
+                started = false;
                 
                 if (!msg.empty())
                 {

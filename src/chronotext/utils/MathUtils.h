@@ -63,22 +63,22 @@ namespace chronotext
     
     static bool approximatelyEqual(float a, float b, float epsilon)
     {
-        return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+        return fabsf(a - b) <= ((fabsf(a) < fabsf(b) ? fabsf(b) : fabsf(a)) * epsilon);
     }
     
     static bool essentiallyEqual(float a, float b, float epsilon)
     {
-        return fabs(a - b) <= ((fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+        return fabsf(a - b) <= ((fabsf(a) > fabsf(b) ? fabsf(b) : fabsf(a)) * epsilon);
     }
     
     static bool definitelyGreaterThan(float a, float b, float epsilon)
     {
-        return (a - b) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+        return (a - b) > ((fabsf(a) < fabsf(b) ? fabsf(b) : fabsf(a)) * epsilon);
     }
     
     static bool definitelyLessThan(float a, float b, float epsilon)
     {
-        return (b - a) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+        return (b - a) > ((fabsf(a) < fabsf(b) ? fabsf(b) : fabsf(a)) * epsilon);
     }
     
     class MathUtils

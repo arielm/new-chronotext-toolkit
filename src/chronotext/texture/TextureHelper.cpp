@@ -139,7 +139,7 @@ namespace chronotext
             
             if (glGetError() == GL_OUT_OF_MEMORY)
             {
-                throw Texture::Exception("GL: OUT OF MEMORY");
+                throw Texture::Exception("GL: OUT-OF-MEMORY");
             }
             else if (texture)
             {
