@@ -7,7 +7,6 @@
  */
 
 #include "chronotext/FileSystem.h"
-#include "chronotext/utils/Utils.h"
 
 #include "cinder/app/App.h"
 
@@ -23,6 +22,14 @@ using namespace app;
 
 namespace chronotext
 {
+    int64_t FileSystem::getAvailableStorage(const fs::path &folderPath)
+    {
+        struct statfs stat;
+        statfs(folderPath.string().c_str(), &stat);
+        
+        return (int64_t)stat.f_bavail * (int64_t)stat.f_bsize;
+    }
+
     /*
      * PATH NORMALIZATION WITHOUT THE NEED FOR FILES TO EXIST
      * REFERENCE: http://stackoverflow.com/a/12797413/50335
@@ -47,12 +54,24 @@ namespace chronotext
         return result;
     }
     
-    int64_t FileSystem::getAvailableStorage(const fs::path &folderPath)
+    fs::path FileSystem::getFolderOrCreateIt(const fs::path &folderPath)
     {
-        struct statfs stat;
-        statfs(folderPath.string().c_str(), &stat);
+        if (!fs::exists(folderPath))
+        {
+            fs::create_directories(folderPath);
+        }
         
-        return (int64_t)stat.f_bavail * (int64_t)stat.f_bsize;
+        return folderPath;
+    }
+    
+    shared_ptr<ofstream> FileSystem::getOFStream(const fs::path &filePath)
+    {
+        return make_shared<ofstream>(filePath.string().c_str(), ios::binary);
+    }
+    
+    shared_ptr<ifstream> FileSystem::getIFStream(const fs::path &filePath)
+    {
+        return make_shared<ifstream>(filePath.string().c_str(), ios::binary);
     }
     
 #if defined(CINDER_COCOA)

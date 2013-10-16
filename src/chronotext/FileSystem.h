@@ -10,6 +10,9 @@
 
 #include "cinder/Filesystem.h"
 
+#include <fstream>
+#include <memory>
+
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
 #endif
@@ -19,8 +22,13 @@ namespace chronotext
     class FileSystem
     {
     public:
-        static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
         static int64_t getAvailableStorage(const ci::fs::path &folderPath);
+        
+        static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
+        static ci::fs::path getFolderOrCreateIt(const ci::fs::path &folderPath);
+        
+        static std::shared_ptr<std::ofstream> getOFStream(const ci::fs::path &filePath);
+        static std::shared_ptr<std::ifstream> getIFStream(const ci::fs::path &filePath);
         
 #if defined(CINDER_COCOA)
         static ci::fs::path getResourcePath();
