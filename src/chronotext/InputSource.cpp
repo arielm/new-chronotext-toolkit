@@ -13,41 +13,16 @@
 
 using namespace std;
 using namespace ci;
-using namespace app;
 
 namespace chronotext
 {
-    /*
-     * PATH NORMALIZATION WITHOUT THE NEED FOR FILES TO EXIST
-     * REFERENCE: http://stackoverflow.com/a/12797413/50335
-     */
-    fs::path InputSource::normalizePath(const fs::path &absolutePath)
-    {
-        fs::path::iterator it = absolutePath.begin();
-        fs::path result = *it++;
-        
-        for (; it != absolutePath.end(); ++it)
-        {
-            if (*it == "..")
-            {
-                result = result.parent_path();
-            }
-            else if (*it != ".")
-            {
-                result /= *it;
-            }
-        }
-        
-        return result;
-    }
-    
     InputSourceRef InputSource::getResource(const std::string &resourceName)
     {
         InputSource *source = new InputSource(TYPE_RESOURCE);
         source->resourceName = source->filePathHint = resourceName;
         
 #if defined(CINDER_COCOA)
-        source->filePath = getResourcePath(resourceName);
+        source->filePath = FileSystem::getResourcePath(resourceName);
 #endif
         
         return InputSourceRef(source);
@@ -82,7 +57,7 @@ namespace chronotext
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
         source->filePath = app::getAssetPath(relativePath);
 #elif defined(CINDER_COCOA_TOUCH)
-        source->filePath = InputSource::getResourcePath() / "assets" / relativePath;
+        source->filePath = FileSystem::getResourcePath() / "assets" / relativePath;
 #endif
         
         return source;
@@ -124,12 +99,12 @@ namespace chronotext
             case TYPE_RESOURCE:
             {
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-                AAsset* asset = AAssetManager_open(gAssetManager, resourceName.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), resourceName.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(gAssetManager, resourceName);
+                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), resourceName);
                 }
                 else
                 {
@@ -184,12 +159,12 @@ namespace chronotext
             {
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
                 string resourcePath = ("assets" / relativePath).string();
-                AAsset* asset = AAssetManager_open(gAssetManager, resourcePath.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(gAssetManager, resourcePath);
+                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), resourcePath);
                 }
                 else
                 {
@@ -259,75 +234,4 @@ namespace chronotext
     {
         filePathHint = hint;
     }
-    
-#if defined(CINDER_COCOA)
-    fs::path InputSource::getResourcePath()
-    {
-#if defined(CHR_COMPLEX)
-        CFBundleRef bundle = CFBundleGetMainBundle();
-        CFURLRef url = CFBundleCopyBundleURL(bundle);
-        CFStringRef tmp = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
-        
-        CFIndex length = CFStringGetLength(tmp);
-        CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
-        char *buffer = (char*)malloc(maxSize);
-        CFStringGetCString(tmp, buffer, maxSize, kCFStringEncodingUTF8);
-        
-        fs::path path(buffer);
-        
-        CFRelease(url);
-        CFRelease(tmp);
-        free(buffer);
-        
-        return path;
-#else
-        return App::getResourcePath();
-#endif
-    }
-#endif
-    
-#if defined(CINDER_COCOA)
-    fs::path InputSource::getResourcePath(const string &resourceName)
-    {
-#if defined(CHR_COMPLEX)
-        return getResourcePath() / resourceName;
-#else
-        return App::getResourcePath(resourceName);
-#endif
-    }
-#endif
-    
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-    
-    void InputSource::setAndroidAssetManager(AAssetManager *assetManager)
-    {
-        gAssetManager = assetManager;
-    }
-    
-    AAssetManager* InputSource::getAndroidAssetManager()
-    {
-        return gAssetManager;
-    }
-    
-    void InputSource::setAndroidInternalDataPath(const string &internalDataPath)
-    {
-        gInternalDataPath = fs::path(internalDataPath);
-    }
-    
-    fs::path InputSource::getAndroidInternalDataPath()
-    {
-        return gInternalDataPath;
-    }
-    
-    void InputSource::setAndroidApkPath(const string &apkPath)
-    {
-        gApkPath = fs::path(apkPath);
-    }
-    
-    fs::path InputSource::getAndroidApkPath()
-    {
-        return gApkPath;
-    }
-    
-#endif
 }

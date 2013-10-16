@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/InputSource.h"
+#include "chronotext/FileSystem.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
 #include <android/asset_manager.h>
@@ -37,7 +37,7 @@ namespace chronotext
         jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getAssets", "()Landroid/content/res/AssetManager;");
         AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(javaContext, getAssetsMethod));
         
-        InputSource::setAndroidAssetManager(assetManager);
+        FileSystem::setAndroidAssetManager(assetManager);
         
         // ---
         
@@ -47,7 +47,7 @@ namespace chronotext
         jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
         
         const char *internalDataPath = env->GetStringUTFChars(absolutePathString, NULL);
-        InputSource::setAndroidInternalDataPath(internalDataPath);
+        FileSystem::setAndroidInternalDataPath(internalDataPath);
         env->ReleaseStringUTFChars(absolutePathString, internalDataPath);
         
         // ---
@@ -56,7 +56,7 @@ namespace chronotext
         jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext, getPackageCodePathMethod);
         
         const char *apkPath = env->GetStringUTFChars(packageCodePathString, NULL);
-        InputSource::setAndroidApkPath(apkPath);
+        FileSystem::setAndroidApkPath(apkPath);
         env->ReleaseStringUTFChars(packageCodePathString, apkPath);
         
         // ---

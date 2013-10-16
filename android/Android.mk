@@ -7,6 +7,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(UTF8_CPP_SRC)
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderDelegate.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderSketchComplex.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/cinder/CinderApp.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/FileSystem.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/InputSource.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/FontManager.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/FontMatrix.cpp

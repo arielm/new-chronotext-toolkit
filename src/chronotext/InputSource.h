@@ -8,20 +8,11 @@
 
 #pragma once
 
+#include "chronotext/FileSystem.h"
+
 #include "cinder/DataSource.h"
 
 #include <exception>
-
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-#include <android/asset_manager.h>
-
-namespace chronotext
-{
-    static AAssetManager *gAssetManager;
-    static ci::fs::path gInternalDataPath;
-    static ci::fs::path gApkPath;
-}
-#endif
 
 namespace chronotext
 {
@@ -51,8 +42,6 @@ namespace chronotext
             TYPE_FILE,
             TYPE_ASSET
         };
-        
-        static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
 
         /*
          * TO USE WITH THE "CINDER_RESOURCE" MACRO OR WITH A RESOURCE-NAME,
@@ -107,22 +96,6 @@ namespace chronotext
         
         std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
-        
-#if defined(CINDER_COCOA)
-        static ci::fs::path getResourcePath();
-        static ci::fs::path getResourcePath(const std::string &resourceName);
-#endif
-        
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-        static void setAndroidAssetManager(AAssetManager *assetManager);
-        static AAssetManager* getAndroidAssetManager();
-        
-        static void setAndroidInternalDataPath(const std::string &internalDataPath);
-        static ci::fs::path getAndroidInternalDataPath();
-        
-        static void setAndroidApkPath(const std::string &apkPath);
-        static ci::fs::path getAndroidApkPath();
-#endif
         
     protected:
         int type;
