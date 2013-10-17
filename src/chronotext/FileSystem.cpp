@@ -54,6 +54,39 @@ namespace chronotext
         return result;
     }
     
+    /*
+     * PATH NORMALIZATION WITHOUT THE NEED FOR FILES TO EXIST
+     * REFERENCE: http://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path
+     */
+    fs::path FileSystem::relativizePath(const fs::path &from, const fs::path &to)
+    {
+        fs::path a_From = fs::absolute(from);
+        fs::path a_To = fs::absolute(to);
+        
+        fs::path ret;
+        fs::path::const_iterator itrFrom(a_From.begin()), itrTo(a_To.begin());
+        
+        // Find common base
+        for (fs::path::const_iterator toEnd(a_To.end()), fromEnd(a_From.end()); itrFrom != fromEnd && itrTo != toEnd && *itrFrom == *itrTo; ++itrFrom, ++itrTo);
+        
+        // Navigate backwards in directory to reach previously found base
+        for (fs::path::const_iterator fromEnd(a_From.end()); itrFrom != fromEnd; ++itrFrom)
+        {
+            if ((*itrFrom) != ".")
+            {
+                ret /= "..";
+            }
+        }
+        
+        // Now navigate down the directory branch
+        for (; itrTo != a_To.end() ; ++itrTo)
+        {
+            ret /= *itrTo;
+        }
+        
+        return ret;
+    }
+    
     fs::path FileSystem::getFolderOrCreateIt(const fs::path &folderPath)
     {
         if (!fs::exists(folderPath))
@@ -104,7 +137,7 @@ namespace chronotext
     fs::path FileSystem::getResourcePath(const string &resourceName)
     {
 #if defined(CHR_COMPLEX)
-        return getResourcePath() / resourceName;
+        return FileSystem::getResourcePath() / resourceName;
 #else
         return App::getResourcePath(resourceName);
 #endif

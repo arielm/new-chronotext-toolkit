@@ -25,6 +25,7 @@ namespace chronotext
         static int64_t getAvailableStorage(const ci::fs::path &folderPath);
         
         static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
+        static ci::fs::path relativizePath(const ci::fs::path &from, const ci::fs::path &to);
         static ci::fs::path getFolderOrCreateIt(const ci::fs::path &folderPath);
         
         static std::shared_ptr<std::ofstream> getOFStream(const ci::fs::path &filePath);
