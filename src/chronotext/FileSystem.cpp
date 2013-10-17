@@ -87,6 +87,30 @@ namespace chronotext
         return ret;
     }
     
+    bool FileSystem::arePathsRelative(const fs::path &ancestor, const fs::path &heir)
+    {
+        if (ancestor.empty())
+        {
+            return true;
+        }
+        else
+        {
+            fs::path parent = heir;
+            
+            while (!parent.empty())
+            {
+                if (parent == ancestor)
+                {
+                    return true;
+                }
+                
+                parent = parent.parent_path();
+            }
+            
+            return false;
+        }
+    }
+    
     fs::path FileSystem::getFolderOrCreateIt(const fs::path &folderPath)
     {
         if (!fs::exists(folderPath))
