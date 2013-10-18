@@ -28,7 +28,7 @@ using namespace ci::app;
 using namespace std;
 using namespace chr;
 
-static std::wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";
+const std::wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";
 
 class Application : public AppNative
 {
@@ -46,7 +46,7 @@ public:
     void draw();
     
     void createFontSafely(const FreetypeHelper &ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
-    XFont* loadFontSafely(InputSourceRef inputSource, bool useMipmap = false);
+    XFont* loadFontSafely(const string &fileName, bool useMipmap = false);
     void drawFontSafely(XFont *font, float size, float x, float y, bool snap = false, float direction = +1);
 };
 
@@ -68,13 +68,13 @@ void Application::setup()
     
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
-     * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT
+     * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT FROM THE RESOURCE-BUNDLE
      */
     createFontSafely(ftHelper, FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15, XParams(3, 2));
 
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
-     * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT
+     * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT FROM THE DOCUMENTS FOLDER
      */
     createFontSafely(ftHelper, FontDescriptor(getDocumentsDirectory() / "frank.ttf"), 64, HEBREW_BIBLICAL, XParams(3, 2));
 
@@ -84,10 +84,10 @@ void Application::setup()
      * LOADING OUR GENERATED FONTS
      */
     
-    font1 = loadFontSafely(InputSource::getFileInDocuments("Helvetica_Regular_16.fnt"));
-    font2 = loadFontSafely(InputSource::getFileInDocuments("Georgia_Regular_64.fnt"), true); // USING MIPMAP
-    font3 = loadFontSafely(InputSource::getFileInDocuments("Roboto_Regular_64.fnt"), true); // USING MIPMAP
-    font4 = loadFontSafely(InputSource::getFileInDocuments("FrankRuehl_Regular_64.fnt"), true); // USING MIPMAP
+    font1 = loadFontSafely("Helvetica_Regular_16.fnt");
+    font2 = loadFontSafely("Georgia_Regular_64.fnt", true); // USING MIPMAP
+    font3 = loadFontSafely("Roboto_Regular_64.fnt", true); // USING MIPMAP
+    font4 = loadFontSafely("FrankRuehl_Regular_64.fnt", true); // USING MIPMAP
     
     // ---
     
@@ -124,11 +124,11 @@ void Application::createFontSafely(const FreetypeHelper &ftHelper, const FontDes
     }
 }
 
-XFont* Application::loadFontSafely(InputSourceRef inputSource, bool useMipmap)
+XFont* Application::loadFontSafely(const string &fileName, bool useMipmap)
 {
     try
     {
-        return fontManager.getFont(inputSource, useMipmap);
+        return fontManager.getFont(InputSource::getFileInDocuments(fileName), useMipmap);
     }
     catch (exception &e)
     {
