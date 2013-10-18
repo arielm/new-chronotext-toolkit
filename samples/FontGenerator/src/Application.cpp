@@ -4,21 +4,24 @@
  *
  * REQUIREMENTS:
  * - OSX
- * - https://github.com/arielm/Freetype
+ * - FREETYPE BLOCK: https://github.com/arielm/Freetype
  *
  *
- * CREDITS:
- * - FrankRuehl FONT, VERSION 1.00: http://www.microsoft.com/typography/fonts/font.aspx?FMID=1886
+ * FONTS USED:
+ * - Helvetica - AVAILABLE ON OSX
+ * - Georgia - AVAILABLE ON OSX AND WINDOWS
+ * - Roboto - AVAILABLE ON ANDROID AND AS GOOGLE-FONT: http://www.google.com/fonts/specimen/Roboto
+ * - FrankRuehl - AVAILABLE ON WINDOWS (WITH HEBREW SUPPORT): http://www.microsoft.com/typography/fonts/font.aspx?FMID=1886
  */
 
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
-#include "cinder/Utilities.h"
 
 #include "chronotext/font/FontManager.h"
 #include "chronotext/text/TextHelper.h"
 #include "chronotext/tools/font/XFontCreator.h"
 #include "chronotext/tools/font/Characters.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -41,6 +44,10 @@ public:
     void prepareSettings(Settings *settings);
     
     void draw();
+    
+    void createFontSafely(const FreetypeHelper &ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
+    XFont* loadFontSafely(InputSourceRef inputSource, bool useMipmap = false);
+    void drawFontSafely(XFont *font, float size, float x, float y, bool snap = false, float direction = +1);
 };
 
 void Application::setup()
@@ -51,25 +58,25 @@ void Application::setup()
      * - NO NEED FOR MARGIN AND PADDING BECAUSE THE FONT IS ONLY INTENDED TO BE RENDERED AT ITS NATIVE-FONT-SIZE
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Helevetica ON OSX
      */
-    XFontCreator(ftHelper.getLib(), FontDescriptor("/System/Library/Fonts/Helvetica.dfont", 0), 16, ASCII, XParams(0, 0)).writeToFolder(getDocumentsDirectory()); // FACE-INDEX 0 CORRESPONDS TO "Helvetica Regular"
+    createFontSafely(ftHelper, FontDescriptor("/System/Library/Fonts/Helvetica.dfont", 0), 16, ASCII, XParams(0, 0)); // FACE-INDEX 0 CORRESPONDS TO "Helvetica Regular"
 
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Georgia ON OSX
      */
-    XFontCreator(ftHelper.getLib(), FontDescriptor("/Library/Fonts/Georgia.ttf"), 64, ISO_8859_15, XParams(3, 2)).writeToFolder(getDocumentsDirectory());
+    createFontSafely(ftHelper, FontDescriptor("/Library/Fonts/Georgia.ttf"), 64, ISO_8859_15, XParams(3, 2));
     
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT
      */
-    XFontCreator(ftHelper.getLib(), FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15, XParams(3, 2)).writeToFolder(getDocumentsDirectory());
+    createFontSafely(ftHelper, FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15, XParams(3, 2));
 
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT
      */
-    XFontCreator(ftHelper.getLib(), FontDescriptor(getResourcePath("frank.ttf")), 64, HEBREW_BIBLICAL, XParams(3, 2)).writeToFolder(getDocumentsDirectory());
+    createFontSafely(ftHelper, FontDescriptor(getDocumentsDirectory() / "frank.ttf"), 64, HEBREW_BIBLICAL, XParams(3, 2));
 
     // ---
     
@@ -77,10 +84,10 @@ void Application::setup()
      * LOADING OUR GENERATED FONTS
      */
     
-    font1 = fontManager.getFont(InputSource::getFileInDocuments("Helvetica_Regular_16.fnt"));
-    font2 = fontManager.getFont(InputSource::getFileInDocuments("Georgia_Regular_64.fnt"), true); // USING MIPMAP
-    font3 = fontManager.getFont(InputSource::getFileInDocuments("Roboto_Regular_64.fnt"), true); // USING MIPMAP
-    font4 = fontManager.getFont(InputSource::getFileInDocuments("FrankRuehl_Regular_64.fnt"), true); // USING MIPMAP
+    font1 = loadFontSafely(InputSource::getFileInDocuments("Helvetica_Regular_16.fnt"));
+    font2 = loadFontSafely(InputSource::getFileInDocuments("Georgia_Regular_64.fnt"), true); // USING MIPMAP
+    font3 = loadFontSafely(InputSource::getFileInDocuments("Roboto_Regular_64.fnt"), true); // USING MIPMAP
+    font4 = loadFontSafely(InputSource::getFileInDocuments("FrankRuehl_Regular_64.fnt"), true); // USING MIPMAP
     
     // ---
     
@@ -99,18 +106,46 @@ void Application::draw()
     gl::clear(Color(0.5f, 0.5f, 0.5f), false);
     glColor4f(1, 1, 1, 1);
     
-    font1->setSize(16); // THIS FONT IS NOT INTENDED TO BE RENDERED AT ANOTHER SIZE
-    TextHelper::drawText(font1, NULL, font1->getCharacters(), 10, getWindowHeight() / 5.0f, true); // USING SNAP
+    drawFontSafely(font1, 16, 10, getWindowHeight() / 5.0f, true); // THIS FONT IS NOT INTENDED TO BE RENDERED AT ANOTHER SIZE
+    drawFontSafely(font2, 32, 10, getWindowHeight() * 2 / 5.0f); // ANY SIZE CAN BE USED
+    drawFontSafely(font3, 32, 10, getWindowHeight() * 3 / 5.0f); // ANY SIZE CAN BE USED
+    drawFontSafely(font4, 64, getWindowWidth() - 10, getWindowHeight() * 4 / 5.0f, false, -1); // ANY SIZE CAN BE USED
+}
+
+void Application::createFontSafely(const FreetypeHelper &ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
+{
+    try
+    {
+        XFontCreator(ftHelper.getLib(), descriptor, size, characters, params).writeToFolder(getDocumentsDirectory());
+    }
+    catch (exception &e)
+    {
+        LOGI << e.what() << endl;
+    }
+}
+
+XFont* Application::loadFontSafely(InputSourceRef inputSource, bool useMipmap)
+{
+    try
+    {
+        return fontManager.getFont(inputSource, useMipmap);
+    }
+    catch (exception &e)
+    {
+        LOGI << e.what() << endl;
+    }
     
-    font2->setSize(32); // ANY SIZE CAN BE USED
-    TextHelper::drawText(font2, NULL, font2->getCharacters(), 10, getWindowHeight() * 2 / 5.0f);
-    
-    font3->setSize(32); // ANY SIZE CAN BE USED
-    TextHelper::drawText(font3, NULL, font3->getCharacters(), 10, getWindowHeight() * 3 / 5.0f);
-    
-    font4->setSize(64); // ANY SIZE CAN BE USED
-    font4->setDirection(-1);
-    TextHelper::drawText(font4, NULL, font4->getCharacters(), getWindowWidth() - 10, getWindowHeight() * 4 / 5.0f);
+    return NULL;
+}
+
+void Application::drawFontSafely(XFont *font, float size, float x, float y, bool snap, float direction)
+{
+    if (font)
+    {
+        font->setSize(size);
+        font->setDirection(direction);
+        TextHelper::drawText(font, NULL, font->getCharacters(), x, y, snap);
+    }
 }
 
 CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

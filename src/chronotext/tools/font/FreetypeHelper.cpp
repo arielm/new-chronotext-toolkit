@@ -18,7 +18,7 @@ FreetypeHelper::~FreetypeHelper()
     FT_Done_FreeType(library);
 }
 
-const FT_Library& FreetypeHelper::getLib()
+const FT_Library& FreetypeHelper::getLib() const
 {
     return library;
 }

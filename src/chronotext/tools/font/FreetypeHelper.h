@@ -20,5 +20,5 @@ public:
     FreetypeHelper();
     ~FreetypeHelper();
     
-    const FT_Library& getLib();
+    const FT_Library& getLib() const;
 };
