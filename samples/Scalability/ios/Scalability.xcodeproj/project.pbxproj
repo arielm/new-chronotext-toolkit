@@ -17,6 +17,7 @@
 		A821DF9216ED362800DB025D /* frame rococo - 1024.png in Resources */ = {isa = PBXBuildFile; fileRef = A821DF9016ED362800DB025D /* frame rococo - 1024.png */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
+		A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFDA18116D42006C2085 /* FileSystem.cpp */; };
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A872080E18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A872080D18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm */; };
 		A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */; };
@@ -61,6 +62,8 @@
 		A821DF9016ED362800DB025D /* frame rococo - 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "frame rococo - 1024.png"; path = "../resources/frame rococo - 1024.png"; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
+		A853DFDB18116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87207FE18081CDE0055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
 		A87207FF18081CDE0055F0BA /* SuperHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SuperHandler.cpp; sourceTree = "<group>"; };
 		A872080018081CDE0055F0BA /* SuperHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperHandler.h; sourceTree = "<group>"; };
@@ -246,6 +249,8 @@
 		A8FA3B9116E3AB8000367F97 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
+				A853DFDA18116D42006C2085 /* FileSystem.cpp */,
+				A853DFDB18116D42006C2085 /* FileSystem.h */,
 				A8FA3BBE16E3AB8000367F97 /* InputSource.h */,
 				A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */,
 				A8FA3B9316E3AB8000367F97 /* cinder */,
@@ -461,6 +466,7 @@
 				A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */,
 				A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */,
 				A872080E18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm in Sources */,
+				A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

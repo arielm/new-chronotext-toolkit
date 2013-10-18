@@ -28,6 +28,7 @@
 		A809530D16F37F120011FAA3 /* frank.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A809530C16F37F120011FAA3 /* frank.ttf */; };
 		A848D0D417FED0A9009C7AC2 /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A848D0D217FED0A9009C7AC2 /* TextHelper.cpp */; };
 		A848D0D717FED0E8009C7AC2 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A848D0D517FED0E8009C7AC2 /* FontManager.cpp */; };
+		A853DFD918116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD718116D42006C2085 /* FileSystem.cpp */; };
 		A8D0D28117EF4868001F6030 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8D0D28017EF4868001F6030 /* Roboto-Regular.ttf */; };
 		A8EB33F117AAB05600798D19 /* BinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33EA17AAB05600798D19 /* BinPack.cpp */; };
 		A8EB33F217AAB05600798D19 /* FreetypeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33ED17AAB05600798D19 /* FreetypeHelper.cpp */; };
@@ -73,6 +74,8 @@
 		A848D0D317FED0A9009C7AC2 /* TextHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextHelper.h; sourceTree = "<group>"; };
 		A848D0D517FED0E8009C7AC2 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
 		A848D0D617FED0E8009C7AC2 /* FontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontManager.h; sourceTree = "<group>"; };
+		A853DFD718116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
+		A853DFD818116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A8D0D28017EF4868001F6030 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../resources/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		A8EB33EA17AAB05600798D19 /* BinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinPack.cpp; sourceTree = "<group>"; };
 		A8EB33EB17AAB05600798D19 /* BinPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinPack.h; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 		A809523E16F3613E0011FAA3 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
+				A853DFD718116D42006C2085 /* FileSystem.cpp */,
+				A853DFD818116D42006C2085 /* FileSystem.h */,
 				A809527616F3613E0011FAA3 /* InputSource.cpp */,
 				A809527716F3613E0011FAA3 /* InputSource.h */,
 				A809525216F3613E0011FAA3 /* font */,
@@ -345,6 +350,7 @@
 				A8EB33F317AAB05600798D19 /* XFontCreator.cpp in Sources */,
 				A848D0D417FED0A9009C7AC2 /* TextHelper.cpp in Sources */,
 				A848D0D717FED0E8009C7AC2 /* FontManager.cpp in Sources */,
+				A853DFD918116D42006C2085 /* FileSystem.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
