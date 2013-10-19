@@ -41,4 +41,57 @@ namespace chronotext
         
         return wstring(tmp.data(), tmp.size());
     }
+    
+    string loadUtf8(DataSourceRef source)
+    {
+        Buffer buffer(source);
+        return string(static_cast<const char*>(buffer.getData()), buffer.getDataSize());
+    }
+    
+    wstring loadWstring(DataSourceRef source)
+    {
+        return utf8ToWstring(loadUtf8(source));
+    }
+    
+    // ---
+    
+    string hexDump(const char *data, int size)
+    {
+        stringstream s;
+        s << hex;
+        
+        for (int i = 0; i < size; i++)
+        {
+            s << setfill('0') << setw(2) << (*data++ & 0xff) << " ";
+        }
+        
+        return s.str();
+    }
+    
+    /*
+     * REFERENCE: http://stackoverflow.com/a/10096779/50335
+     */
+    string prettyBytes(uint64_t numBytes, int precision)
+    {
+        const char *abbrevs[] = { "TB", "GB", "MB", "KB" };
+        const size_t numAbbrevs = sizeof(abbrevs) / sizeof(abbrevs[0]);
+        
+        uint64_t maximum = pow(1024, numAbbrevs);
+        
+        for (size_t i = 0; i < numAbbrevs; ++i)
+        {
+            if (numBytes > maximum)
+            {
+                stringstream s;
+                s << fixed << setprecision(precision) << numBytes / (double)maximum << " " << abbrevs[i];
+                return s.str();
+            }
+            
+            maximum /= 1024;
+        }
+        
+        stringstream s;
+        s << numBytes << " Bytes";
+        return s.str();
+    }
 }

@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "chronotext/InputSource.h"
+
 #include "cinder/app/App.h"
 #include "cinder/Utilities.h"
 
@@ -72,73 +74,31 @@ namespace chronotext
      * cout REDIRECTION, AS DESCRIBED IN http://www.cplusplus.com/reference/iostream/ios/rdbuf/
      */
     
-    static std::streambuf *gLogBackup = NULL;
-    static std::ofstream gLogFileStream;
+    static std::streambuf *coutBackup = NULL;
+    static std::ofstream coutFileStream;
     
-    static void logToFile(const ci::fs::path &filePath)
+    static void endCoutRedirection()
     {
-        if (!gLogBackup)
+        if (coutBackup)
         {
-            gLogFileStream.open(filePath.string().c_str());
-            gLogBackup = chrout().rdbuf();
-            
-            std::streambuf *psbuf = gLogFileStream.rdbuf();
-            chrout().rdbuf(psbuf);
+            chrout().rdbuf(coutBackup);
+            coutFileStream.close();
+            coutBackup = NULL;
         }
     }
     
-    static void logToConsole()
+    static void redirectCoutToFile(const ci::fs::path &filePath)
     {
-        if (gLogBackup)
+        if (coutBackup)
         {
-            chrout().rdbuf(gLogBackup);
-            gLogFileStream.close();
-            gLogBackup = NULL;
-        }
-    }
-    
-    // ---
-    
-    static std::string hexDump(const char *data, int size)
-    {
-        std::stringstream s;
-        s << std::hex;
-        
-        for (int i = 0; i < size; i++)
-        {
-            s << std::setfill('0') << std::setw(2) << (*data++ & 0xff) << " ";
+            endCoutRedirection();
         }
         
-        return s.str();
-    }
-    
-    // ---
-    
-    /*
-     * REFERENCE: http://stackoverflow.com/a/10096779/50335
-     */
-    static std::string prettyBytes(uint64_t numBytes, int precision = 2)
-    {
-        const char *abbrevs[] = { "TB", "GB", "MB", "KB" };
-        const size_t numAbbrevs = sizeof(abbrevs) / sizeof(abbrevs[0]);
+        coutFileStream.open(filePath.string().c_str());
+        coutBackup = chrout().rdbuf();
         
-        uint64_t maximum = pow(1024, numAbbrevs);
-        
-        for (size_t i = 0; i < numAbbrevs; ++i)
-        {
-            if (numBytes > maximum)
-            {
-                std::stringstream s;
-                s << std::fixed << std::setprecision(precision) << numBytes / (double)maximum << " " << abbrevs[i];
-                return s.str();
-            }
-            
-            maximum /= 1024;
-        }
-        
-        std::stringstream s;
-        s << numBytes << " Bytes";
-        return s.str();
+        std::streambuf *psbuf = coutFileStream.rdbuf();
+        chrout().rdbuf(psbuf);
     }
     
     // ---
@@ -178,6 +138,14 @@ namespace chronotext
     
     std::string wstringToUtf8(const std::wstring &s);
     std::wstring utf8ToWstring(const std::string &s);
+    
+    std::string loadUtf8(ci::DataSourceRef source);
+    std::wstring loadWstring(ci::DataSourceRef source);
+    
+    // ---
+    
+    static std::string hexDump(const char *data, int size);
+    static std::string prettyBytes(uint64_t numBytes, int precision = 2);
 }
 
 namespace chr = chronotext;
