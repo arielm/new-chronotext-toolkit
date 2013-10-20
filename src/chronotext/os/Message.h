@@ -24,7 +24,8 @@ namespace chronotext
     public:
         int what;
         std::shared_ptr<void> object;
-        int64_t arg;
+        int arg1;
+        int arg2;
         
         Handler *target;
         
@@ -32,26 +33,29 @@ namespace chronotext
         target(NULL)
         {}
         
-        Message(int what, int64_t arg = 0)
+        Message(int what, int arg1 = 0, int arg2 = 0)
         :
         what(what),
-        arg(arg),
+        arg1(arg1),
+        arg2(arg2),
         target(NULL)
         {}
         
-        Message(int what, std::shared_ptr<void> object, int64_t arg = 0)
+        Message(int what, std::shared_ptr<void> object, int arg1 = 0, int arg2 = 0)
         :
         what(what),
         object(object),
-        arg(arg),
+        arg1(arg1),
+        arg2(arg2),
         target(NULL)
         {}
         
-        Message(int what, const std::string &object, int64_t arg = 0)
+        Message(int what, const std::string &object, int arg1 = 0, int arg2 = 0)
         :
         what(what),
         object(std::make_shared<std::string>(object)),
-        arg(arg),
+        arg1(arg1),
+        arg2(arg2),
         target(NULL)
         {}
         
