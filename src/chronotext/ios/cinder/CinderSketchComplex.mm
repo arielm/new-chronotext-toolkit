@@ -71,6 +71,11 @@ namespace chronotext
         [[UIAccelerometer sharedAccelerometer] setDelegate:nil];
     }
     
+    boost::asio::io_service& CinderSketchComplex::io_service() const
+    {
+        return *((CinderDelegate*)context).io;
+    }
+    
     double CinderSketchComplex::getElapsedSeconds() const
     {
         return ((CinderDelegate*)context).elapsedSeconds;

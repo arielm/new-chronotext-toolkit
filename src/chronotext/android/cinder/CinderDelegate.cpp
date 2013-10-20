@@ -131,6 +131,9 @@ namespace chronotext
         mHeight = height;
         mAccelerometerRotation = accelerometerRotation;
         
+        io = make_shared<boost::asio::io_service>();
+        ioWork = make_shared<boost::asio::io_service::work>(*io);
+        
         sketch->setup(false);
         sketch->resize();
     }
@@ -138,6 +141,7 @@ namespace chronotext
     void CinderDelegate::shutdown()
     {
         ASensorManager_destroyEventQueue(mSensorManager, mSensorEventQueue);
+        io->stop();
         
         sketch->shutdown();
         delete sketch;
@@ -150,10 +154,11 @@ namespace chronotext
          */
         processSensorEvents();
         
+        io->poll();
         sketch->run(); // NECESSARY FOR THE "MESSAGE-PUMP"
         sketch->update();
         sketch->draw();
-        mFrameCount++;
+        mFrameCount++; // FIXME: BEHAVIOR IS DIFFERENT THAN ON THE DESKTOP
     }
     
     void CinderDelegate::event(int id)
@@ -236,6 +241,21 @@ namespace chronotext
         ASensorEventQueue_disableSensor(mSensorEventQueue, mAccelerometerSensor);
     }
     
+    ostream& CinderDelegate::console()
+    {
+        if (!mOutputStream)
+        {
+            mOutputStream = shared_ptr<cinder::android::dostream>(new android::dostream);
+        }
+        
+        return *mOutputStream;
+    }
+    
+    boost::asio::io_service& CinderDelegate::io_service() const
+    {
+        return *io;
+    }
+    
     double CinderDelegate::getElapsedSeconds() const
     {
         return mTimer.getSeconds();
@@ -274,16 +294,6 @@ namespace chronotext
     Area CinderDelegate::getWindowBounds() const
     {
         return Area(0, 0, mWidth, mHeight);
-    }
-    
-    ostream& CinderDelegate::console()
-    {
-        if (!mOutputStream)
-        {
-            mOutputStream = shared_ptr<cinder::android::dostream>(new android::dostream);
-        }
-        
-        return *mOutputStream;
     }
     
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)

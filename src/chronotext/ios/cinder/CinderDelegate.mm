@@ -27,6 +27,7 @@ using namespace chr;
 @synthesize viewController;
 @synthesize sketch;
 @synthesize accelFilterFactor;
+@synthesize io;
 @synthesize width;
 @synthesize height;
 @synthesize contentScale;
@@ -49,6 +50,7 @@ using namespace chr;
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    io->stop();
 
     sketch->shutdown();
     delete sketch;
@@ -114,6 +116,11 @@ using namespace chr;
     height = mx * frameHeight + my * frameWidth;
     
     contentScale = view.contentScaleFactor;
+    
+    // ---
+    
+    io = make_shared<boost::asio::io_service>();
+    ioWork = make_shared<boost::asio::io_service::work>(*io);
 
     sketch->setup(false);
     sketch->resize();
@@ -122,14 +129,15 @@ using namespace chr;
 
 - (void) update
 {
+    io->poll();
     sketch->run(); // NECESSARY FOR THE "MESSAGE-PUMP"
     sketch->update();
-    frameCount++;
 }
 
 - (void) draw
 {
     sketch->draw();
+    frameCount++; // FIXME: BEHAVIOR IS DIFFERENT THAN ON THE DESKTOP
 }
 
 - (double) elapsedSeconds

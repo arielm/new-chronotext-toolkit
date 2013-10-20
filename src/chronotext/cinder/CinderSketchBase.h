@@ -11,6 +11,8 @@
 #include "chronotext/os/SuperHandler.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
+#include <boost/asio.hpp>
+
 namespace chronotext
 {
     class CinderSketchBase : public SuperHandler, public Looper
@@ -55,6 +57,7 @@ namespace chronotext
         virtual void disableAccelerometer() {}
         
         virtual std::ostream& console() = 0;
+        virtual boost::asio::io_service& io_service() const = 0;
         
         virtual double getElapsedSeconds() const = 0;
         virtual uint32_t getElapsedFrames() const = 0;

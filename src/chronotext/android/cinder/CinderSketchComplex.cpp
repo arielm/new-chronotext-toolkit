@@ -77,6 +77,11 @@ namespace chronotext
         return context->console();
     }
     
+    boost::asio::io_service& CinderSketchComplex::io_service() const
+    {
+        return context->io_service();
+    }
+    
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)

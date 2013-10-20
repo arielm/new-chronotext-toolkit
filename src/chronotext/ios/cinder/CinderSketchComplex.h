@@ -27,6 +27,7 @@ namespace chronotext
         void disableAccelerometer();
         
         std::ostream& console() { return std::cout; }
+        boost::asio::io_service& io_service() const;
         
         double getElapsedSeconds() const;
         uint32_t getElapsedFrames() const;

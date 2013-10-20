@@ -22,6 +22,7 @@ namespace chronotext
         CinderSketchSimple(void *context, void *delegate = NULL);
         
         std::ostream& console() { return context->console(); }
+        boost::asio::io_service& io_service() const { return context->io_service(); }
         
         double getElapsedSeconds() const { return context->getElapsedSeconds(); }
         uint32_t getElapsedFrames() const { return context->getElapsedFrames(); }

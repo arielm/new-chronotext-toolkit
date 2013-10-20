@@ -35,6 +35,9 @@ namespace chronotext
         const ASensor *mAccelerometerSensor;
         ASensorEventQueue *mSensorEventQueue;
         
+        std::shared_ptr<boost::asio::io_service> io;
+        std::shared_ptr<boost::asio::io_service::work> ioWork;
+        
         static int sensorEventCallback(int fd, int events, void *data)
         {
             CinderDelegate *instance = (CinderDelegate*)data;
@@ -98,6 +101,9 @@ namespace chronotext
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
         void disableAccelerometer();
         
+        std::ostream& console();
+        boost::asio::io_service& io_service() const;
+
         double getElapsedSeconds() const;
         uint32_t getElapsedFrames() const;
         
@@ -107,8 +113,6 @@ namespace chronotext
         ci::Vec2i getWindowSize() const;
         float getWindowAspectRatio() const;
         ci::Area getWindowBounds() const;
-        
-        std::ostream& console();
         
         virtual void receiveMessageFromSketch(int what, const std::string &body);
         virtual void sendMessageToSketch(int what, const std::string &body);
