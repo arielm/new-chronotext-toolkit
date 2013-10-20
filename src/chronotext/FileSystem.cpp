@@ -12,7 +12,7 @@
 
 #if defined(CINDER_ANDROID)
 #include <sys/statfs.h>
-#else
+#elif defined(CINDER_COCOA)
 #include <sys/mount.h>
 #endif
 
@@ -24,10 +24,14 @@ namespace chronotext
 {
     int64_t FileSystem::getAvailableStorage(const fs::path &folderPath)
     {
+#if defined(CINDER_MSW)
+        return 0; // TODO
+#else
         struct statfs stat;
         statfs(folderPath.string().c_str(), &stat);
         
         return (int64_t)stat.f_bavail * (int64_t)stat.f_bsize;
+#endif
     }
 
     /*
