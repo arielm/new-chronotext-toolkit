@@ -94,4 +94,12 @@ namespace chronotext
         s << numBytes << " Bytes";
         return s.str();
     }
+    
+    string percent(float ratio, int precision)
+    {
+        stringstream s;
+        s << fixed << setprecision(precision) << ratio * 100 << "%";
+        return s.str();
+    }
+
 }
