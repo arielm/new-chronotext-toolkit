@@ -28,45 +28,37 @@
 namespace chronotext
 {
 #if defined(CINDER_MSW)
-    static ci::msw::dostream *CHROUT;
+    static ci::msw::dostream *COUT;
 #elif defined(CINDER_ANDROID)
-    static ci::android::dostream *CHROUT;
+    static ci::android::dostream *COUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-    static mac::dostream *CHROUT;
+    static mac::dostream *COUT;
 #endif
     
-    static inline std::ostream& chrout()
+    static inline std::ostream& cout()
     {
 #if defined(CINDER_MSW)
-        if (!CHROUT)
+        if (!COUT)
         {
-            CHROUT = new ci::msw::dostream;
+            COUT = new ci::msw::dostream;
         }
-        return *CHROUT;
+        return *COUT;
 #elif defined(CINDER_ANDROID)
-        if (!CHROUT)
+        if (!COUT)
         {
-            CHROUT = new ci::android::dostream;
+            COUT = new ci::android::dostream;
         }
-        return *CHROUT;
+        return *COUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-        if (!CHROUT)
+        if (!COUT)
         {
-            CHROUT = new mac::dostream;
+            COUT = new mac::dostream;
         }
-        return *CHROUT;
+        return *COUT;
 #else
         return std::cout;
 #endif
     }
-    
-#define LOGI chrout()
-    
-#if defined(DEBUG) || defined(FORCE_LOG)
-#define LOGD chrout()
-#else
-#define LOGD false && chrout()
-#endif
     
     // ---
     
@@ -81,7 +73,7 @@ namespace chronotext
     {
         if (coutBackup)
         {
-            chrout().rdbuf(coutBackup);
+            cout().rdbuf(coutBackup);
             coutFileStream.close();
             coutBackup = NULL;
         }
@@ -95,10 +87,10 @@ namespace chronotext
         }
         
         coutFileStream.open(filePath.string().c_str());
-        coutBackup = chrout().rdbuf();
+        coutBackup = cout().rdbuf();
         
         std::streambuf *psbuf = coutFileStream.rdbuf();
-        chrout().rdbuf(psbuf);
+        cout().rdbuf(psbuf);
     }
     
     // ---
@@ -149,3 +141,11 @@ namespace chronotext
 }
 
 namespace chr = chronotext;
+
+#define LOGI chr::cout()
+
+#if defined(DEBUG) || defined(FORCE_LOG)
+#define LOGD chr::cout()
+#else
+#define LOGD false && chr::cout()
+#endif
