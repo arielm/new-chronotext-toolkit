@@ -8,8 +8,28 @@
 
 #include "chronotext/os/Handler.h"
 
+using namespace std;
+
 namespace chronotext
 {
+    void Handler::setIOService(boost::asio::io_service &io)
+    {
+        this->io = &io;
+    }
+    
+    bool Handler::post(const function<void()> &fn)
+    {
+        if (io)
+        {
+            io->post(fn);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
     bool Handler::sendMessage(const Message &message)
     {
         if (io)

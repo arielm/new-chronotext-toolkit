@@ -16,9 +16,8 @@
 
 namespace chronotext
 {
-    class Message
+    struct Message
     {
-    public:
         int what;
         std::string body;
         

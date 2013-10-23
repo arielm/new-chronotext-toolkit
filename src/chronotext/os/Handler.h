@@ -24,10 +24,8 @@ namespace chronotext
         Handler() : io(NULL) {}
         virtual ~Handler() {}
         
-        void setIOService(boost::asio::io_service &io)
-        {
-            this->io = &io;
-        }
+        void setIOService(boost::asio::io_service &io);
+        bool post(const std::function<void()> &fn);
         
         bool sendMessage(const Message &message);
         virtual void handleMessage(const Message &message) {}
