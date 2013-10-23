@@ -12,12 +12,10 @@ namespace chronotext
 {
     bool Handler::sendMessage(const Message &message)
     {
-        if (looper)
+        if (io)
         {
-            Message tmp = message;
-            tmp.target = this;
-            
-            return looper->messageQueue.enqueueMessage(tmp);
+            io->post([=] { handleMessage(message); });
+            return true;
         }
         
         return false;

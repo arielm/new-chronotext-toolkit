@@ -18,7 +18,7 @@ namespace chronotext
     class SuperHandler : public Handler
     {
     public:
-        SuperHandler(Looper *looper) : Handler(looper) {}
+        SuperHandler() : Handler() {}
         
         void addSubHandler(SubHandler *handler);
         void removeSubHandler(SubHandler *handler);

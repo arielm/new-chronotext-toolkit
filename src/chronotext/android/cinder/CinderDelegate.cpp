@@ -134,6 +134,7 @@ namespace chronotext
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);
         
+        sketch->setIOService(*io);
         sketch->setup(false);
         sketch->resize();
     }
@@ -155,7 +156,6 @@ namespace chronotext
         processSensorEvents();
         
         io->poll();
-        sketch->poll(); // NECESSARY FOR THE "MESSAGE-PUMP"
         sketch->update();
         mFrameCount++;
 

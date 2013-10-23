@@ -15,7 +15,7 @@
 
 namespace chronotext
 {
-    class CinderSketchBase : public SuperHandler, public Looper
+    class CinderSketchBase : public SuperHandler
     {
     public:
         enum
@@ -34,7 +34,7 @@ namespace chronotext
             EVENT_BACKGROUND
         };
         
-        CinderSketchBase() : SuperHandler(this) {}
+        CinderSketchBase() : SuperHandler() {}
         virtual ~CinderSketchBase() {}
         
         virtual void setup(bool renewContext) {}

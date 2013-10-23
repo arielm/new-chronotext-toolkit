@@ -12,21 +12,28 @@
 
 #pragma once
 
-#include "chronotext/os/Looper.h"
+#include "chronotext/os/Message.h"
+
+#include <boost/asio.hpp>
 
 namespace chronotext
 {
     class Handler
     {
     public:
-        Handler(Looper *looper) : looper(looper) {}
+        Handler() : io(NULL) {}
         virtual ~Handler() {}
+        
+        void setIOService(boost::asio::io_service &io)
+        {
+            this->io = &io;
+        }
         
         bool sendMessage(const Message &message);
         virtual void handleMessage(const Message &message) {}
         
     protected:
-        Looper *looper;
+        boost::asio::io_service *io;
     };
 }
 

@@ -16,31 +16,21 @@
 
 namespace chronotext
 {
-    class Handler;
-
     class Message
     {
     public:
         int what;
         std::string body;
         
-        Handler *target;
-        
-        Message():
-        target(NULL)
-        {}
-        
         Message(int what)
         :
-        what(what),
-        target(NULL)
+        what(what)
         {}
         
         Message(int what, const std::string &body)
         :
         what(what),
-        body(body),
-        target(NULL)
+        body(body)
         {}
     };
 }

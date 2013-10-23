@@ -17,6 +17,7 @@ namespace chronotext
 {
     void CinderApp::setup()
     {
+        sketch->setIOService(io_service());
         sketch->setup(false);
         
 #if defined(CINDER_COCOA_TOUCH)
@@ -59,7 +60,6 @@ namespace chronotext
         
         // ---
         
-        sketch->poll(); // NECESSARY FOR THE "MESSAGE-PUMP"
         sketch->update();
         updateCount++;
     }

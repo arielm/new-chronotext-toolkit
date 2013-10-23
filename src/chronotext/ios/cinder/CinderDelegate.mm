@@ -122,15 +122,16 @@ using namespace chr;
     io = make_shared<boost::asio::io_service>();
     ioWork = make_shared<boost::asio::io_service::work>(*io);
 
+    sketch->setIOService(*io);
     sketch->setup(false);
     sketch->resize();
+    
     initialized = YES;
 }
 
 - (void) update
 {
     io->poll();
-    sketch->poll(); // NECESSARY FOR THE "MESSAGE-PUMP"
     sketch->update();
     frameCount++;
 }
