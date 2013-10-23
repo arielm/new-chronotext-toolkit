@@ -59,7 +59,7 @@ namespace chronotext
         
         // ---
         
-        sketch->run(); // NECESSARY FOR THE "MESSAGE-PUMP"
+        sketch->poll(); // NECESSARY FOR THE "MESSAGE-PUMP"
         sketch->update();
         updateCount++;
     }

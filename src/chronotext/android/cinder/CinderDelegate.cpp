@@ -155,10 +155,11 @@ namespace chronotext
         processSensorEvents();
         
         io->poll();
-        sketch->run(); // NECESSARY FOR THE "MESSAGE-PUMP"
+        sketch->poll(); // NECESSARY FOR THE "MESSAGE-PUMP"
         sketch->update();
+        mFrameCount++;
+
         sketch->draw();
-        mFrameCount++; // FIXME: BEHAVIOR IS DIFFERENT THAN ON THE DESKTOP
     }
     
     void CinderDelegate::event(int id)

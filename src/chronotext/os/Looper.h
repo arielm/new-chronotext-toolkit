@@ -19,7 +19,7 @@ namespace chronotext
     class Looper
     {
     public:
-        void run();
+        void poll();
         
         friend class Handler;
         

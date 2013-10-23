@@ -11,7 +11,7 @@
 
 namespace chronotext
 {
-    void Looper::run()
+    void Looper::poll()
     {
         while (true)
         {

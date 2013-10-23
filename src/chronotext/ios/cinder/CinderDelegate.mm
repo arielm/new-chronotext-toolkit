@@ -130,14 +130,14 @@ using namespace chr;
 - (void) update
 {
     io->poll();
-    sketch->run(); // NECESSARY FOR THE "MESSAGE-PUMP"
+    sketch->poll(); // NECESSARY FOR THE "MESSAGE-PUMP"
     sketch->update();
+    frameCount++;
 }
 
 - (void) draw
 {
     sketch->draw();
-    frameCount++; // FIXME: BEHAVIOR IS DIFFERENT THAN ON THE DESKTOP
 }
 
 - (double) elapsedSeconds

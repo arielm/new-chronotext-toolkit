@@ -12,7 +12,6 @@
 
 #pragma once
 
-#include <memory>
 #include <string>
 
 namespace chronotext
@@ -23,9 +22,7 @@ namespace chronotext
     {
     public:
         int what;
-        std::shared_ptr<void> object;
-        int arg1;
-        int arg2;
+        std::string body;
         
         Handler *target;
         
@@ -33,36 +30,18 @@ namespace chronotext
         target(NULL)
         {}
         
-        Message(int what, int arg1 = 0, int arg2 = 0)
+        Message(int what)
         :
         what(what),
-        arg1(arg1),
-        arg2(arg2),
         target(NULL)
         {}
         
-        Message(int what, std::shared_ptr<void> object, int arg1 = 0, int arg2 = 0)
+        Message(int what, const std::string &body)
         :
         what(what),
-        object(object),
-        arg1(arg1),
-        arg2(arg2),
+        body(body),
         target(NULL)
         {}
-        
-        Message(int what, const std::string &object, int arg1 = 0, int arg2 = 0)
-        :
-        what(what),
-        object(std::make_shared<std::string>(object)),
-        arg1(arg1),
-        arg2(arg2),
-        target(NULL)
-        {}
-        
-        std::string& string() const
-        {
-            return *std::static_pointer_cast<std::string>(object);
-        }
     };
 }
 
