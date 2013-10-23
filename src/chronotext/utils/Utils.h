@@ -28,33 +28,33 @@
 namespace chronotext
 {
 #if defined(CINDER_MSW)
-    static ci::msw::dostream *COUT;
+    static ci::msw::dostream *CHROUT;
 #elif defined(CINDER_ANDROID)
-    static ci::android::dostream *COUT;
+    static ci::android::dostream *CHROUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-    static mac::dostream *COUT;
+    static mac::dostream *CHROUT;
 #endif
     
-    static inline std::ostream& cout()
+    static inline std::ostream& chrout()
     {
 #if defined(CINDER_MSW)
-        if (!COUT)
+        if (!CHROUT)
         {
-            COUT = new ci::msw::dostream;
+            CHROUT = new ci::msw::dostream;
         }
-        return *COUT;
+        return *CHROUT;
 #elif defined(CINDER_ANDROID)
-        if (!COUT)
+        if (!CHROUT)
         {
-            COUT = new ci::android::dostream;
+            CHROUT = new ci::android::dostream;
         }
-        return *COUT;
+        return *CHROUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-        if (!COUT)
+        if (!CHROUT)
         {
-            COUT = new mac::dostream;
+            CHROUT = new mac::dostream;
         }
-        return *COUT;
+        return *CHROUT;
 #else
         return std::cout;
 #endif
@@ -73,7 +73,7 @@ namespace chronotext
     {
         if (coutBackup)
         {
-            cout().rdbuf(coutBackup);
+            chrout().rdbuf(coutBackup);
             coutFileStream.close();
             coutBackup = NULL;
         }
@@ -87,10 +87,10 @@ namespace chronotext
         }
         
         coutFileStream.open(filePath.string().c_str());
-        coutBackup = cout().rdbuf();
+        coutBackup = chrout().rdbuf();
         
         std::streambuf *psbuf = coutFileStream.rdbuf();
-        cout().rdbuf(psbuf);
+        chrout().rdbuf(psbuf);
     }
     
     // ---
@@ -143,10 +143,10 @@ namespace chronotext
 
 namespace chr = chronotext;
 
-#define LOGI chr::cout()
+#define LOGI chr::chrout()
 
 #if defined(DEBUG) || defined(FORCE_LOG)
-#define LOGD chr::cout()
+#define LOGD chr::chrout()
 #else
-#define LOGD false && chr::cout()
+#define LOGD false && chr::chrout()
 #endif
