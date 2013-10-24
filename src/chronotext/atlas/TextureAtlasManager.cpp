@@ -25,7 +25,7 @@ void TextureAtlasManager::setAtlas(const string &resourceName, int index, bool u
     atlases[index] = new TextureAtlas(resourceName, useMipmap);
 }
 
-void TextureAtlasManager::setAtlas(InputSourceRef inputSource, int index, bool useMipmap)
+void TextureAtlasManager::setAtlas(chr::InputSourceRef inputSource, int index, bool useMipmap)
 {
     atlases[index] = new TextureAtlas(inputSource, useMipmap);
 }
