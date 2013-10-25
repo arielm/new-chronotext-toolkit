@@ -82,14 +82,14 @@ static bool isPOT(int n)
  */
 Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
 {
-    gzFile file = gzopen(filePath.string().c_str(), "rb"); // THE CONVERSION TO string IS NECESSARY ON WINDOWS
+    gzFile file = gzopen(filePath.string().c_str(), "rb");
     if (!file)
     {
         throw Texture::Exception("PVR.GZ: CAN'T OPEN FILE");
     }
     
     PVRTexHeader header;
-    if (gzread(file, &header, sizeof(header)) != sizeof(header)) // BYTE-ORDER IS OK FOR INTEL AND ARM
+    if (gzread(file, &header, sizeof(header)) != sizeof(header))
     {
         gzclose(file);
         throw Texture::Exception("PVR.GZ: HEADER ERROR");
@@ -135,19 +135,12 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
         throw Texture::Exception("PVR.CCZ: FORMAT ERROR");
     }
 
-    uint16_t compression_type;
-    uint16_t version;
-    uint32_t len;
-    
-#ifndef BOOST_BIG_ENDIAN
-    compression_type = swapEndian(header->compression_type);
-    version = swapEndian(header->version);
-    len = swapEndian(header->len);
-#else
-    compression_type = header->compression_type;
-    version = header->version;
-    len = header->len;
-#endif
+    /*
+     * ASSERTION: THE SYSTEM IS LITTLE-ENDIAN (OSX, WINDOWS, iOS, ANDROID)
+     */
+    uint16_t compression_type = swapEndian(header->compression_type);
+    uint16_t version = swapEndian(header->version);
+    uint32_t len = swapEndian(header->len);
     
     if (compression_type != CCZ_COMPRESSION_ZLIB)
     {
