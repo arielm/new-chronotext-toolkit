@@ -57,6 +57,12 @@ namespace chronotext
             return format;
         }
         
+        void setWrap(GLenum s, GLenum t)
+        {
+            wrapS = s;
+            wrapT = t;
+        }
+        
         bool operator==(const TextureRequest &rhs) const
         {
             return (inputSource->getUniqueName() == rhs.inputSource->getUniqueName()) && (useMipmap == rhs.useMipmap) && (flags == rhs.flags) && (wrapS == rhs.wrapS) && (wrapT == rhs.wrapT);
