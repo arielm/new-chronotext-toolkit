@@ -126,6 +126,41 @@ namespace chronotext
         glPopMatrix();
     }
     
+    void drawVerticalGradient(const Rectf &bounds, const ColorA &color1, const ColorA &color2, float v1, float v2)
+    {
+        float x1 = bounds.x1;
+        float x2 = bounds.x2;
+
+        float y0 = bounds.y1;
+        float y1 = y0 + bounds.getHeight() * v1;
+        float y2 = y0 + bounds.getHeight() * v2;
+        float y3 = bounds.y2;
+        
+        const float vertices[] =
+        {
+            x1, y0, x2, y0,
+            x1, y1, x2, y1,
+            x1, y2, x2, y2,
+            x1, y3, x2, y3,
+        };
+        
+        vector<ColorA> colors;
+        colors.push_back(color1); colors.push_back(color1);
+        colors.push_back(color1); colors.push_back(color1);
+        colors.push_back(color2); colors.push_back(color2);
+        colors.push_back(color2); colors.push_back(color2);
+        
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+        
+        glVertexPointer(2, GL_FLOAT, 0, vertices);
+        glColorPointer(4, GL_FLOAT, 0, colors.data());
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, colors.size());
+        
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+    }
+    
     void dumpCamera(const Camera &cam, const string &name)
     {
         Vec3f worldUp = cam.getWorldUp();

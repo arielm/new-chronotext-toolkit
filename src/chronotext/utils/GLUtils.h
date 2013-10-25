@@ -20,6 +20,7 @@ namespace chronotext
     void drawGrid(const ci::Rectf &bounds, float size, const ci::Vec2f &offset = ci::Vec2f::zero());
     void drawGrid(const ci::Rectf &bounds, float sx, float sy, const ci::Vec2f &offset = ci::Vec2f::zero());
     void drawFullScreenQuad();
+    void drawVerticalGradient(const ci::Rectf &bounds, const ci::ColorA &color1, const ci::ColorA &color2, float v1 = 0, float v2 = 1);
     
     void dumpCamera(const ci::Camera &cam, const std::string &name = "cam");
 }
