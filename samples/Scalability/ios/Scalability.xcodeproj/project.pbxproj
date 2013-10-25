@@ -35,8 +35,6 @@
 		A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC416E3AB8000367F97 /* CinderSketchComplex.mm */; };
 		A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC716E3AB8000367F97 /* GLViewController.mm */; };
 		A8FA3C1C16E3AB8000367F97 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BCD16E3AB8000367F97 /* Handler.cpp */; };
-		A8FA3C1D16E3AB8000367F97 /* Looper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BCF16E3AB8000367F97 /* Looper.cpp */; };
-		A8FA3C1E16E3AB8000367F97 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BD216E3AB8000367F97 /* MessageQueue.cpp */; };
 		A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */; };
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
@@ -102,11 +100,7 @@
 		A8FA3BC716E3AB8000367F97 /* GLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLViewController.mm; sourceTree = "<group>"; };
 		A8FA3BCD16E3AB8000367F97 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A8FA3BCE16E3AB8000367F97 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
-		A8FA3BCF16E3AB8000367F97 /* Looper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Looper.cpp; sourceTree = "<group>"; };
-		A8FA3BD016E3AB8000367F97 /* Looper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Looper.h; sourceTree = "<group>"; };
 		A8FA3BD116E3AB8000367F97 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		A8FA3BD216E3AB8000367F97 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageQueue.cpp; sourceTree = "<group>"; };
-		A8FA3BD316E3AB8000367F97 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
 		A8FA3BFB16E3AB8000367F97 /* AccelerationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationManager.h; sourceTree = "<group>"; };
 		A8FA3BFC16E3AB8000367F97 /* AccelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelEvent.h; sourceTree = "<group>"; };
 		A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
@@ -319,11 +313,7 @@
 			children = (
 				A8FA3BCE16E3AB8000367F97 /* Handler.h */,
 				A8FA3BCD16E3AB8000367F97 /* Handler.cpp */,
-				A8FA3BD016E3AB8000367F97 /* Looper.h */,
-				A8FA3BCF16E3AB8000367F97 /* Looper.cpp */,
 				A8FA3BD116E3AB8000367F97 /* Message.h */,
-				A8FA3BD316E3AB8000367F97 /* MessageQueue.h */,
-				A8FA3BD216E3AB8000367F97 /* MessageQueue.cpp */,
 				A87207FE18081CDE0055F0BA /* SubHandler.h */,
 				A872080018081CDE0055F0BA /* SuperHandler.h */,
 				A87207FF18081CDE0055F0BA /* SuperHandler.cpp */,
@@ -409,6 +399,8 @@
 /* Begin PBXProject section */
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "Scalability" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -454,8 +446,6 @@
 				A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
 				A8FA3C1C16E3AB8000367F97 /* Handler.cpp in Sources */,
-				A8FA3C1D16E3AB8000367F97 /* Looper.cpp in Sources */,
-				A8FA3C1E16E3AB8000367F97 /* MessageQueue.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
