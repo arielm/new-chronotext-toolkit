@@ -7,12 +7,11 @@
  */
 
 #include "chronotext/incubator/ui/TextBox.h"
-#include "chronotext/utils/Utils.h"
+
+#include <limits>
 
 using namespace std;
 using namespace ci;
-
-#include <limits>
 
 namespace chronotext
 {

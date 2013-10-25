@@ -8,10 +8,9 @@
 
 #include "chronotext/incubator/ui/Button.h"
 #include "chronotext/text/TextHelper.h"
-#include "chronotext/utils/Utils.h"
 
-using namespace ci;
 using namespace std;
+using namespace ci;
 
 namespace chronotext
 {
@@ -96,7 +95,7 @@ namespace chronotext
         }
     }
    
-    std::vector<Touchable*> Button::getTouchables()
+    vector<Touchable*> Button::getTouchables()
     {
         vector<Touchable*> touchables;
         touchables.push_back(this);
