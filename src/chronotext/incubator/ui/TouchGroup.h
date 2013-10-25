@@ -17,14 +17,6 @@ namespace chronotext
 {
     class TouchGroup
     {
-        Touchable* toggledTouchable;
-        bool toggledOrDisabledIsArmed;
-        
-        std::vector<Shape*> shapes;
-        
-        Touchable* getClosestTouchable(const ci::Vec2f &point);
-        Touchable* getArmedTouchableByIndex(int index);
-
     public:
         TouchGroup()
         :
@@ -41,6 +33,15 @@ namespace chronotext
         bool addTouch(int index, const ci::Vec2f &point);
         bool updateTouch(int index, const ci::Vec2f &point);
         bool removeTouch(int index, const ci::Vec2f &point);
+        
+    protected:
+        Touchable* toggledTouchable;
+        bool toggledOrDisabledIsArmed;
+        
+        std::vector<Shape*> shapes;
+        
+        Touchable* getClosestTouchable(const ci::Vec2f &point);
+        Touchable* getArmedTouchableByIndex(int index);
     };
 }
 

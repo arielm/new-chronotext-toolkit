@@ -16,9 +16,6 @@ namespace chronotext
     
     class Icon
     {
-        float width;
-        float height;
-        
     public:
         TextureRef texture;
         float scale;
@@ -27,6 +24,10 @@ namespace chronotext
         
         float getWidth();
         float getHeight();
+        
+    protected:
+        float width;
+        float height;
     };
 };
 

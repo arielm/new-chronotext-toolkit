@@ -22,10 +22,6 @@ namespace chronotext
 
     class HorizontalLayout : public Container
     {
-    protected:
-        float contentWidth;
-        float contentHeight;
-
     public:
         int alignX;
         int alignY;
@@ -42,6 +38,10 @@ namespace chronotext
         void setAlign(int x, int y);
 
         void layout();
+        
+    protected:
+        float contentWidth;
+        float contentHeight;
     };
 }
 

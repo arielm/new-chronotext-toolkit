@@ -28,10 +28,6 @@ namespace chronotext
     
     class VerticalLayout : public Container
     {
-    protected:
-        float contentWidth;
-        float contentHeight;
-        
     public:
         int alignX;
         int alignY;
@@ -46,6 +42,10 @@ namespace chronotext
         {}
         
         void layout();
+        
+    protected:
+        float contentWidth;
+        float contentHeight;
     };
 }
 

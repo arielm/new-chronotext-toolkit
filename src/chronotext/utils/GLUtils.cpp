@@ -145,10 +145,8 @@ namespace chronotext
         };
         
         vector<ColorA> colors;
-        colors.push_back(color1); colors.push_back(color1);
-        colors.push_back(color1); colors.push_back(color1);
-        colors.push_back(color2); colors.push_back(color2);
-        colors.push_back(color2); colors.push_back(color2);
+        for (int i = 0; i < 4; i++) colors.push_back(color1);
+        for (int i = 0; i < 4; i++) colors.push_back(color2);
         
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);

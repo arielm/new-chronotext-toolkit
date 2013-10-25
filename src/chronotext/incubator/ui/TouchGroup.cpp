@@ -28,60 +28,6 @@ namespace chronotext
         }
     }
     
-    Touchable* TouchGroup::getClosestTouchable(const Vec2f &point)
-    {
-        Touchable *closestTouchable = NULL;
-        float closestDistance = numeric_limits<float>::max();
-        
-        for (vector<Shape*>::const_iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
-        {
-            Shape *shape = *it1;
-            
-            if (shape->visible)
-            {
-                vector<Touchable*> touchables = shape->getTouchables();
-                
-                for (vector<Touchable*>::const_iterator it2 = touchables.begin(); it2 != touchables.end(); ++it2)
-                {
-                    Touchable *touchable = *it2;
-                    
-                    float distance;
-                    if (touchable->hitTest(point, &distance))
-                    {
-                        if (distance < closestDistance)
-                        {
-                            closestDistance = distance;
-                            closestTouchable = touchable;
-                        }
-                    }
-                }
-            }
-        }
-        
-        return closestTouchable;
-    }
-    
-    Touchable* TouchGroup::getArmedTouchableByIndex(int index)
-    {
-        for (vector<Shape*>::const_iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
-        {
-            Shape *shape = *it1;
-            vector<Touchable*> touchables = shape->getTouchables();
-            
-            for (vector<Touchable*>::const_iterator it2 = touchables.begin(); it2 != touchables.end(); ++it2)
-            {
-                Touchable *touchable = *it2;
-                
-                if (touchable->armedIndex == index)
-                {
-                    return touchable;
-                }
-            }
-        }
-        
-        return NULL;
-    }
-    
     void TouchGroup::toggleTouchable(Touchable *touchable)
     {
         if (toggledTouchable)
@@ -90,7 +36,7 @@ namespace chronotext
         }
         
         toggledTouchable = touchable;
-
+        
         touchable->changeState(Touchable::STATE_TOGGLED);
         touchable->performAction(Touchable::ACTION_TOGGLED);
     }
@@ -100,7 +46,7 @@ namespace chronotext
         touchable->changeState(Touchable::STATE_NORMAL);
         touchable->performAction(Touchable::ACTION_CLICKED);
     }
-
+    
     bool TouchGroup::addTouch(int index, const Vec2f &point)
     {
         Touchable* closestTouchable = getClosestTouchable(point);
@@ -156,7 +102,7 @@ namespace chronotext
         
         return toggledOrDisabledIsArmed;
     }
-
+    
     bool TouchGroup::removeTouch(int index, const Vec2f &point)
     {
         Touchable *armedTouchable = getArmedTouchableByIndex(index);
@@ -179,5 +125,59 @@ namespace chronotext
         }
         
         return false;
+    }
+    
+    Touchable* TouchGroup::getClosestTouchable(const Vec2f &point)
+    {
+        Touchable *closestTouchable = NULL;
+        float closestDistance = numeric_limits<float>::max();
+        
+        for (vector<Shape*>::const_iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
+        {
+            Shape *shape = *it1;
+            
+            if (shape->visible)
+            {
+                vector<Touchable*> touchables = shape->getTouchables();
+                
+                for (vector<Touchable*>::const_iterator it2 = touchables.begin(); it2 != touchables.end(); ++it2)
+                {
+                    Touchable *touchable = *it2;
+                    
+                    float distance;
+                    if (touchable->hitTest(point, &distance))
+                    {
+                        if (distance < closestDistance)
+                        {
+                            closestDistance = distance;
+                            closestTouchable = touchable;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return closestTouchable;
+    }
+    
+    Touchable* TouchGroup::getArmedTouchableByIndex(int index)
+    {
+        for (vector<Shape*>::const_iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
+        {
+            Shape *shape = *it1;
+            vector<Touchable*> touchables = shape->getTouchables();
+            
+            for (vector<Touchable*>::const_iterator it2 = touchables.begin(); it2 != touchables.end(); ++it2)
+            {
+                Touchable *touchable = *it2;
+                
+                if (touchable->armedIndex == index)
+                {
+                    return touchable;
+                }
+            }
+        }
+        
+        return NULL;
     }
 }

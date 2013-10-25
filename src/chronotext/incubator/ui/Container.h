@@ -16,11 +16,6 @@ namespace chronotext
 
     class Container : public Shape
     {
-    protected:
-        bool layoutRequest;
-        
-        float mergedMargin(float previousMargin, float nextMargin);
-
     public:
         std::vector<ShapeRef> components;
 
@@ -46,6 +41,11 @@ namespace chronotext
         void requestLayout();
         
         void draw();
+        
+    protected:
+        bool layoutRequest;
+        
+        float mergedMargin(float previousMargin, float nextMargin);
     };
 }
 

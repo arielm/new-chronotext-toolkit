@@ -95,41 +95,7 @@ namespace chronotext
             }
         }
     }
-    
-    float Button::getContentWidth()
-    {
-        if (icon)
-        {
-            return icon->getWidth();
-        }
-        else if (style->font)
-        {
-            style->font->setSize(style->fontSize);
-            return TextHelper::getStringWidth(style->font, text, style->snap);
-        }
-        else
-        {
-            return 0;
-        }
-    }
-    
-    float Button::getContentHeight()
-    {
-        if (icon)
-        {
-            return icon->getHeight();
-        }
-        else if (style->font)
-        {
-            style->font->setSize(style->fontSize);
-            return style->font->getHeight();
-        }
-        else
-        {
-            return 0;
-        }
-    }
-    
+   
     std::vector<Touchable*> Button::getTouchables()
     {
         vector<Touchable*> touchables;
@@ -166,5 +132,40 @@ namespace chronotext
         }
         
         return false;
+    }
+    
+    
+    float Button::getContentWidth()
+    {
+        if (icon)
+        {
+            return icon->getWidth();
+        }
+        else if (style->font)
+        {
+            style->font->setSize(style->fontSize);
+            return TextHelper::getStringWidth(style->font, text, style->snap);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    
+    float Button::getContentHeight()
+    {
+        if (icon)
+        {
+            return icon->getHeight();
+        }
+        else if (style->font)
+        {
+            style->font->setSize(style->fontSize);
+            return style->font->getHeight();
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
