@@ -8,9 +8,7 @@
 
 #pragma once
 
-#include "cinder/Vector.h"
-
-#include <vector>
+#include "cinder/Rect.h"
 
 namespace chronotext
 {
@@ -55,8 +53,9 @@ namespace chronotext
         {}
         
         virtual ~Touchable() {}
-        
-        virtual bool hitTest(const ci::Vec2f &point, float *distance) = 0;
+
+        virtual ci::Rectf getTouchableBounds(); // ONLY RELEVANT FOR RECTANGULAR-TOUCHABLES
+        virtual bool hitTest(const ci::Vec2f &point, float *distance); // USE THE DEFAULT (I.E. RECTANGULAR) getTouchableBounds()
         
         void changeState(int nextState);
         void performAction(int action);

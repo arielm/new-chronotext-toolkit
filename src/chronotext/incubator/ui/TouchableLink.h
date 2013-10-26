@@ -12,8 +12,6 @@
 
 #include "cinder/Rect.h"
 
-#include <string>
-
 namespace chronotext
 {
     class TouchableLink : public Touchable
@@ -29,7 +27,7 @@ namespace chronotext
         bounds(bounds)
         {}
         
-        bool hitTest(const ci::Vec2f &point, float *distance);
+        ci::Rectf getTouchableBounds();
     };
 }
 

@@ -9,8 +9,28 @@
 #include "chronotext/incubator/ui/Touchable.h"
 #include "chronotext/incubator/ui/Shape.h"
 
+using namespace ci;
+
 namespace chronotext
 {
+    Rectf Touchable::getTouchableBounds()
+    {
+        return Rectf(0, 0, 0, 0);
+    }
+    
+    bool Touchable::hitTest(const Vec2f &point, float *distance)
+    {
+        Rectf extra = getTouchableBounds().inflated(Vec2f(hitExtra, hitExtra));
+        
+        if (extra.contains(point))
+        {
+            *distance = getTouchableBounds().distance(point);
+            return true;
+        }
+        
+        return false;
+    }
+    
     void Touchable::changeState(int nextState)
     {
         if (state != nextState)

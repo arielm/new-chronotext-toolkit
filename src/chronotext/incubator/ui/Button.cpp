@@ -45,6 +45,18 @@ namespace chronotext
             return height;
         }
     }
+   
+    vector<Touchable*> Button::getTouchables()
+    {
+        vector<Touchable*> touchables;
+        touchables.push_back(this);
+        return touchables;
+    }
+    
+    Rectf Button::getTouchableBounds()
+    {
+        return getBounds();
+    }
     
     void Button::draw()
     {
@@ -70,7 +82,7 @@ namespace chronotext
         if (icon)
         {
             gl::color(*style->color[state]);
-
+            
             glPushMatrix();
             gl::translate(bounds.getCenter());
             gl::scale(icon->scale, icon->scale);
@@ -94,13 +106,6 @@ namespace chronotext
             }
         }
     }
-   
-    vector<Touchable*> Button::getTouchables()
-    {
-        vector<Touchable*> touchables;
-        touchables.push_back(this);
-        return touchables;
-    }
     
     void Button::touchStateChanged(Touchable *touchable, int nextState, int prevState)
     {}
@@ -119,20 +124,6 @@ namespace chronotext
             }
         }
     }
-    
-    bool Button::hitTest(const Vec2f &point, float *distance)
-    {
-        Rectf extra = getBounds().inflated(Vec2f(hitExtra, hitExtra));
-        
-        if (extra.contains(point))
-        {
-            *distance = getBounds().distance(point);
-            return true;
-        }
-        
-        return false;
-    }
-    
     
     float Button::getContentWidth()
     {
