@@ -19,12 +19,6 @@ namespace chronotext
 {
     typedef std::shared_ptr<class HyperTextBox> HyperTextBoxRef;
     
-    class HyperTextBoxDelegate
-    {
-    public:
-        virtual void linkClicked(const std::string &url) = 0;
-    };
-    
     struct LinkSpan
     {
         int startIndex;
@@ -61,9 +55,15 @@ namespace chronotext
         void drawLinkUnderlines();
         
     public:
-        HyperTextBoxStyleRef style;
+        class Delegate
+        {
+        public:
+            virtual void linkClicked(const std::string &url) = 0;
+        };
 
-        HyperTextBoxDelegate *delegate;
+        HyperTextBoxStyleRef style;
+        Delegate *delegate;
+        
         std::vector<ExtractedLink> links;
         
         HyperTextBox() : TextBox() {}

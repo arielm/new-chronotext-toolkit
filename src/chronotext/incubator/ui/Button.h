@@ -19,22 +19,21 @@ namespace chronotext
 {
     typedef std::shared_ptr<class Button> ButtonRef;
     
-    class ButtonDelegate
-    {
-    public:
-        virtual void buttonClicked(int tag) = 0;
-        virtual void buttonToggled(int tag) = 0;
-    };
-    
     class Button : public Shape, public Touchable
     {
     public:
+        class Delegate
+        {
+        public:
+            virtual void buttonClicked(int tag) = 0;
+            virtual void buttonToggled(int tag) = 0;
+        };
+
         ButtonStyleRef style;
+        Delegate *delegate;
         
         std::wstring text;
         IconRef icon;
-        
-        ButtonDelegate *delegate;
         
         Button(ButtonStyleRef style);
         
