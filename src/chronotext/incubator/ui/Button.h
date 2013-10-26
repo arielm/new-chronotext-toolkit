@@ -44,7 +44,7 @@ namespace chronotext
         void draw();
         
         std::vector<Touchable*> getTouchables();
-        void touchStateChanged(Touchable *touchable, int state);
+        void touchStateChanged(Touchable *touchable, int nextState, int prevState);
         void touchActionPerformed(Touchable *touchable, int action);
         
         bool hitTest(const ci::Vec2f &point, float *distance);

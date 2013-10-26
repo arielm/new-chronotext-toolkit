@@ -11,10 +11,13 @@
 
 namespace chronotext
 {
-    void Touchable::changeState(int state)
+    void Touchable::changeState(int nextState)
     {
-        this->state = state;
-        shape->touchStateChanged(this, state);
+        if (state != nextState)
+        {
+            shape->touchStateChanged(this, nextState, state);
+            state = nextState;
+        }
     }
     
     void Touchable::performAction(int action)

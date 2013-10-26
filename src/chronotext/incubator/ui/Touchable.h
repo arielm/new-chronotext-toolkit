@@ -58,7 +58,7 @@ namespace chronotext
         
         virtual bool hitTest(const ci::Vec2f &point, float *distance) = 0;
         
-        void changeState(int state);
+        void changeState(int nextState);
         void performAction(int action);
     };
 }

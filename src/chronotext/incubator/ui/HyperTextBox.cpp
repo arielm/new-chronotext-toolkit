@@ -339,13 +339,13 @@ namespace chronotext
         return touchables;
     }
     
-    void HyperTextBox::touchStateChanged(Touchable *touchable, int state)
+    void HyperTextBox::touchStateChanged(Touchable *touchable, int nextState, int prevState)
     {
-        if (state == Touchable::STATE_NORMAL)
+        if (nextState == Touchable::STATE_NORMAL)
         {
             selectedLinkIndex = -1;
         }
-        else if (state == Touchable::STATE_PRESSED)
+        else if (nextState == Touchable::STATE_PRESSED)
         {
             TouchableLink *touchableLink = static_cast<TouchableLink*>(touchable);
             selectedLinkIndex = touchableLink->linkIndex;

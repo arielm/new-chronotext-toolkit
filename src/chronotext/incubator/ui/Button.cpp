@@ -102,7 +102,7 @@ namespace chronotext
         return touchables;
     }
     
-    void Button::touchStateChanged(Touchable *touchable, int state)
+    void Button::touchStateChanged(Touchable *touchable, int nextState, int prevState)
     {}
     
     void Button::touchActionPerformed(Touchable *touchable, int action)

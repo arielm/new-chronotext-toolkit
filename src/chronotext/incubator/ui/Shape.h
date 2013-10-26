@@ -76,7 +76,7 @@ namespace chronotext
         virtual void draw() {};
         
         virtual std::vector<Touchable*> getTouchables();
-        virtual void touchStateChanged(Touchable *touchable, int state) {}
+        virtual void touchStateChanged(Touchable *touchable, int nextState, int prevState) {}
         virtual void touchActionPerformed(Touchable *touchable, int action) {}
         
         virtual void setContainer(Container *container);

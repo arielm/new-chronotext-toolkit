@@ -36,7 +36,6 @@ namespace chronotext
         {}
         
         void setAlign(int x, int y);
-
         void layout();
         
     protected:
