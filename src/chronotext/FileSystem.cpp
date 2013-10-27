@@ -184,14 +184,24 @@ namespace chronotext
         return gAssetManager;
     }
     
-    void FileSystem::setAndroidInternalDataPath(const string &internalDataPath)
+    void FileSystem::setAndroidInternalDataPath(const string &dataPath)
     {
-        gInternalDataPath = fs::path(internalDataPath);
+        gInternalDataPath = fs::path(dataPath);
     }
     
     fs::path FileSystem::getAndroidInternalDataPath()
     {
         return gInternalDataPath;
+    }
+    
+    void FileSystem::setAndroidExternalDataPath(const string &dataPath)
+    {
+        gExternalDataPath = fs::path(dataPath);
+    }
+    
+    fs::path FileSystem::getAndroidExternalDataPath()
+    {
+        return gExternalDataPath;
     }
     
     void FileSystem::setAndroidApkPath(const string &apkPath)

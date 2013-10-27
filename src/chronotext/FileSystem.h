@@ -29,6 +29,10 @@ namespace chronotext
         static bool arePathsRelative(const ci::fs::path &ancestor, const ci::fs::path &heir);
         static ci::fs::path getFolderOrCreateIt(const ci::fs::path &folderPath);
         
+        /*
+         * BEWARE WHEN CALLING ONE OF THESE AS FUNCTION ARGUMENT:
+         * THE STREAM WILL BE CLOSED AS SOON AS FUNCTION RETURN (I.E. WHEN THE shared_ptr IS RELEASED)
+         */
         static std::shared_ptr<std::ofstream> getOFStream(const ci::fs::path &filePath);
         static std::shared_ptr<std::ifstream> getIFStream(const ci::fs::path &filePath);
         
@@ -41,8 +45,11 @@ namespace chronotext
         static void setAndroidAssetManager(AAssetManager *assetManager);
         static AAssetManager* getAndroidAssetManager();
         
-        static void setAndroidInternalDataPath(const std::string &internalDataPath);
+        static void setAndroidInternalDataPath(const std::string &dataPath);
         static ci::fs::path getAndroidInternalDataPath();
+        
+        static void setAndroidExternalDataPath(const std::string &dataPath);
+        static ci::fs::path getAndroidExternalDataPath();
         
         static void setAndroidApkPath(const std::string &apkPath);
         static ci::fs::path getAndroidApkPath();
@@ -52,6 +59,7 @@ namespace chronotext
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
     static AAssetManager *gAssetManager;
     static ci::fs::path gInternalDataPath;
+    static ci::fs::path gExternalDataPath;
     static ci::fs::path gApkPath;
 #endif
 }

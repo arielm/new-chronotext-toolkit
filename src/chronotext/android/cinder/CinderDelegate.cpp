@@ -52,6 +52,17 @@ namespace chronotext
         
         // ---
         
+        jclass environmentClass = env->FindClass("android/os/Environment");
+        jmethodID getExternalStorageDirectoryMethod = env->GetStaticMethodID(environmentClass, "getExternalStorageDirectory",  "()Ljava/io/File;");
+        jobject externalStorageDirectoryObject = env->CallStaticObjectMethod(environmentClass, getExternalStorageDirectoryMethod);
+        absolutePathString = (jstring)env->CallObjectMethod(externalStorageDirectoryObject, getAbsolutePathMethod);
+        
+        const char *externalDataPath = env->GetStringUTFChars(absolutePathString, NULL);
+        FileSystem::setAndroidExternalDataPath(externalDataPath);
+        env->ReleaseStringUTFChars(absolutePathString, externalDataPath);
+        
+        // ---
+        
         jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getPackageCodePath", "()Ljava/lang/String;");
         jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext, getPackageCodePathMethod);
         
