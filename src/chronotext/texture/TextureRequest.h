@@ -57,10 +57,17 @@ namespace chronotext
             return format;
         }
         
-        void setWrap(GLenum s, GLenum t)
+        TextureRequest& setWrap(GLenum s, GLenum t)
         {
             wrapS = s;
             wrapT = t;
+            return *this;
+        }
+        
+        TextureRequest& setMaxSize(const ci::Vec2i &size)
+        {
+            maxSize = size;
+            return *this;
         }
         
         bool operator==(const TextureRequest &rhs) const
