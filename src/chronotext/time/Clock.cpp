@@ -110,4 +110,11 @@ namespace chronotext
             throw;
         }
     }
+    
+    void Clock::restart()
+    {
+        stop();
+        setTime(0);
+        start();
+    }
 }

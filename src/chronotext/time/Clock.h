@@ -51,6 +51,7 @@ namespace chronotext
         void setTime(int now);
         int getState();
         void setRate(double factor);
+        void restart();
     };
 }
 
