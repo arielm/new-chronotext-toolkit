@@ -26,14 +26,8 @@ namespace chronotext
         int alignX;
         int alignY;
 
-        HorizontalLayout() : Container() {}
-
-        HorizontalLayout(LayoutStyleRef style)
-        :
-        Container(style),
-        alignX(style->alignX),
-        alignY(style->alignY)
-        {}
+        HorizontalLayout();
+        HorizontalLayout(LayoutStyleRef style);
         
         void setAlign(int x, int y);
         void layout();

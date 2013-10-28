@@ -43,15 +43,7 @@ namespace chronotext
         int armedIndex;
         float hitExtra;
         
-        Touchable(Shape *shape, int type, int hitExtra = 0)
-        :
-        shape(shape),
-        state(STATE_NORMAL),
-        type(type),
-        hitExtra(hitExtra),
-        armedIndex(-1)
-        {}
-        
+        Touchable(Shape *shape, int type, int hitExtra = 0);
         virtual ~Touchable() {}
 
         virtual ci::Rectf getTouchableBounds(); // ONLY RELEVANT FOR RECTANGULAR-TOUCHABLES

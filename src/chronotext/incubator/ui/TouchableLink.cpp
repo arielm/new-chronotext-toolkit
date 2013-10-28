@@ -12,6 +12,13 @@ using namespace ci;
 
 namespace chronotext
 {
+    TouchableLink::TouchableLink(Shape *shape, int linkIndex, const ci::Rectf &bounds, int type, int hitExtra)
+    :
+    Touchable(shape, type, hitExtra),
+    linkIndex(linkIndex),
+    bounds(bounds)
+    {}
+    
     Rectf TouchableLink::getTouchableBounds()
     {
         return bounds;

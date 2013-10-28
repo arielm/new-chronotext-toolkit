@@ -15,6 +15,11 @@ using namespace ci;
 
 namespace chronotext
 {
+    TextBox::TextBox()
+    :
+    Shape()
+    {}
+
     TextBox::TextBox(TextBoxStyleRef style)
     :
     Shape(style),
@@ -28,7 +33,7 @@ namespace chronotext
     offsetX(0),
     offsetY(0),
     textColor(style->textColor),
-    backgroundColor(style->backgroundColor),
+    fill(style->fill),
     updateWrapRequest(false),
     updateWidthRequest(false),
     updateHeightRequest(false),
@@ -167,16 +172,6 @@ namespace chronotext
         offsetY = y;
     }
     
-    void TextBox::setTextColor(const ColorA &color)
-    {
-        textColor = color;
-    }
-    
-    void TextBox::setBackgroundColor(const ColorA &color)
-    {
-        backgroundColor = color;
-    }
-    
     void TextBox::setText(const wstring &text)
     {
         this->text = text;
@@ -204,12 +199,7 @@ namespace chronotext
     void TextBox::draw()
     {
         layout();
-        
-        if (backgroundColor.a > 0)
-        {
-            gl::color(backgroundColor);
-            gl::drawSolidRect(getBounds());
-        }
+        fill.draw(getBounds());
         
         /*
          * TODO: BEGIN CLIP

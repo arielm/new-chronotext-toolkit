@@ -18,11 +18,7 @@ namespace chronotext
     class TouchGroup
     {
     public:
-        TouchGroup()
-        :
-        toggledTouchable(NULL),
-        toggledOrDisabledIsArmed(false)
-        {}
+        TouchGroup();
         
         void addShape(Shape *shape);
         void addShapes(const std::vector<ShapeRef> &shapes);

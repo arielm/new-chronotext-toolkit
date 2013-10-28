@@ -13,6 +13,15 @@ using namespace ci;
 
 namespace chronotext
 {
+    Touchable::Touchable(Shape *shape, int type, int hitExtra)
+    :
+    shape(shape),
+    state(STATE_NORMAL),
+    type(type),
+    hitExtra(hitExtra),
+    armedIndex(-1)
+    {}
+    
     Rectf Touchable::getTouchableBounds()
     {
         return Rectf(0, 0, 0, 0);

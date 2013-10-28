@@ -13,6 +13,17 @@ using namespace ci;
 
 namespace chronotext
 {
+    Container::Container()
+    :
+    Shape()
+    {}
+
+    Container::Container(ShapeStyleRef style)
+    :
+    Shape(style),
+    layoutRequest(false)
+    {}
+    
     void Container::setWidth(float newWidth)
     {
         if (autoWidth || newWidth != width)

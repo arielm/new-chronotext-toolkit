@@ -15,6 +15,12 @@ using namespace ci;
 
 namespace chronotext
 {
+    TouchGroup::TouchGroup()
+    :
+    toggledTouchable(NULL),
+    toggledOrDisabledIsArmed(false)
+    {}
+    
     void TouchGroup::addShape(Shape *shape)
     {
         shapes.push_back(shape);

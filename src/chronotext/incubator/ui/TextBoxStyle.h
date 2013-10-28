@@ -9,6 +9,7 @@
 #pragma once
 
 #include "chronotext/incubator/ui/ShapeStyle.h"
+#include "chronotext/incubator/ui/Fill.h"
 #include "chronotext/font/XFont.h"
 
 namespace chronotext
@@ -29,7 +30,7 @@ namespace chronotext
         int textAlignY;
         
         ci::ColorA textColor;
-        ci::ColorA backgroundColor;
+        Fill fill;
 
         TextBoxStyle()
         :

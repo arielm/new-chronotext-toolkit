@@ -47,7 +47,7 @@ namespace chronotext
         int textAlignY;
 
         ci::ColorA textColor;
-        ci::ColorA backgroundColor;
+        Fill fill;
 
         bool overflowX;
         bool overflowY;
@@ -57,7 +57,7 @@ namespace chronotext
         std::wstring text;
         WordWrapper wrapper;
 
-        TextBox() : Shape() {}
+        TextBox();
         TextBox(TextBoxStyleRef style);
         
         void setFont(XFont *font);
@@ -73,8 +73,6 @@ namespace chronotext
         void setWrap(bool wrap);
         void setOffsetX(float x);
         void setOffsetY(float y);
-        void setTextColor(const ci::ColorA &color);
-        void setBackgroundColor(const ci::ColorA &color);
         virtual void setText(const std::wstring &text);
         
         float getWidth();

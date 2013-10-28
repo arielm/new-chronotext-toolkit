@@ -19,13 +19,8 @@ namespace chronotext
     public:
         std::vector<ShapeRef> components;
 
-        Container() : Shape() {}
-
-        Container(ShapeStyleRef style)
-        :
-        Shape(style),
-        layoutRequest(false)
-        {}
+        Container();
+        Container(ShapeStyleRef style);
         
         void setWidth(float newWidth);
         void setHeight(float newHeight);

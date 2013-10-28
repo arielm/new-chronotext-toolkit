@@ -13,6 +13,20 @@ using namespace ci;
 
 namespace chronotext
 {
+    HyperTextBox::HyperTextBox()
+    :
+    TextBox()
+    {}
+    
+    HyperTextBox::HyperTextBox(HyperTextBoxStyleRef style)
+    :
+    TextBox(style),
+    style(style),
+    updateLocationRequest(false),
+    delegate(NULL),
+    selectedLinkIndex(-1)
+    {}
+    
     void HyperTextBox::setLocation(float x, float y)
     {
         if ((x != this->x) || (y != this->y))
@@ -139,12 +153,7 @@ namespace chronotext
     void HyperTextBox::draw()
     {
         layout();
-        
-        if (backgroundColor.a > 0)
-        {
-            gl::color(backgroundColor);
-            gl::drawSolidRect(getBounds());
-        }
+        fill.draw(getBounds());
         
         /*
          * TODO: BEGIN CLIP

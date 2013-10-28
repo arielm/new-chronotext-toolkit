@@ -66,16 +66,8 @@ namespace chronotext
         
         std::vector<ExtractedLink> links;
         
-        HyperTextBox() : TextBox() {}
-        
-        HyperTextBox(HyperTextBoxStyleRef style)
-        :
-        TextBox(style),
-        style(style),
-        updateLocationRequest(false),
-        delegate(NULL),
-        selectedLinkIndex(-1)
-        {}
+        HyperTextBox();
+        HyperTextBox(HyperTextBoxStyleRef style);
 
         void setLocation(float x, float y);
         void setText(const std::wstring &text);

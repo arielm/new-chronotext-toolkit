@@ -20,12 +20,7 @@ namespace chronotext
         ci::Rectf bounds;
         int linkIndex;
         
-        TouchableLink(Shape *shape, int linkIndex, const ci::Rectf &bounds, int type, int hitExtra)
-        :
-        Touchable(shape, type, hitExtra),
-        linkIndex(linkIndex),
-        bounds(bounds)
-        {}
+        TouchableLink(Shape *shape, int linkIndex, const ci::Rectf &bounds, int type, int hitExtra);
         
         ci::Rectf getTouchableBounds();
     };

@@ -13,6 +13,18 @@ using namespace ci;
 
 namespace chronotext
 {
+    VerticalLayout::VerticalLayout()
+    :
+    Container()
+    {}
+    
+    VerticalLayout::VerticalLayout(LayoutStyleRef style)
+    :
+    Container(style),
+    alignX(style->alignX),
+    alignY(style->alignY)
+    {}
+    
     void VerticalLayout::layout()
     {
         if (layoutRequest)
