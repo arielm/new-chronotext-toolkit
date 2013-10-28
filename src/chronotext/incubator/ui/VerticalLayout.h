@@ -31,11 +31,14 @@ namespace chronotext
     public:
         int alignX;
         int alignY;
+        
+        Fill fill;
 
         VerticalLayout();
         VerticalLayout(LayoutStyleRef style);
         
         void layout();
+        void draw();
         
     protected:
         float contentWidth;

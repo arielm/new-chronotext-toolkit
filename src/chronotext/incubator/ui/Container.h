@@ -40,6 +40,7 @@ namespace chronotext
     protected:
         bool layoutRequest;
         
+        void drawChildren();
         float mergedMargin(float previousMargin, float nextMargin);
     };
 }

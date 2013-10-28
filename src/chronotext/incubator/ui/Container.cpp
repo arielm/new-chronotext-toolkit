@@ -106,7 +106,11 @@ namespace chronotext
     void Container::draw()
     {
         layout();
-
+        drawChildren();
+    }
+    
+    void Container::drawChildren()
+    {
         for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
         {
             ShapeRef shape = *it;

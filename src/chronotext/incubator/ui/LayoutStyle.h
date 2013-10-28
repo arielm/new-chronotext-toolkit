@@ -9,6 +9,7 @@
 #pragma once
 
 #include "chronotext/incubator/ui/ShapeStyle.h"
+#include "chronotext/incubator/ui/Fill.h"
 
 namespace chronotext
 {
@@ -19,6 +20,8 @@ namespace chronotext
     public:
         int alignX;
         int alignY;
+        
+        Fill fill;
 
         LayoutStyle()
         :

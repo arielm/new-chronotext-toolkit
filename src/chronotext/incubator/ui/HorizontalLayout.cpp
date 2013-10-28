@@ -22,7 +22,8 @@ namespace chronotext
     :
     Container(style),
     alignX(style->alignX),
-    alignY(style->alignY)
+    alignY(style->alignY),
+    fill(style->fill)
     {}
     
     void HorizontalLayout::setAlign(int x, int y)
@@ -120,5 +121,12 @@ namespace chronotext
         }
         
         layoutRequest = false;
+    }
+    
+    void HorizontalLayout::draw()
+    {
+        layout();
+        fill.draw(getBounds());
+        drawChildren();
     }
 }

@@ -25,12 +25,16 @@ namespace chronotext
     public:
         int alignX;
         int alignY;
+        
+        Fill fill;
 
         HorizontalLayout();
         HorizontalLayout(LayoutStyleRef style);
         
         void setAlign(int x, int y);
+        
         void layout();
+        void draw();
         
     protected:
         float contentWidth;
