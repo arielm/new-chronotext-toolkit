@@ -144,9 +144,12 @@ namespace chronotext
 namespace chr = chronotext;
 
 #define LOGI chr::chrout()
+#define LOGI_IF(COND) (COND) && LOGI
 
 #if defined(DEBUG) || defined(FORCE_LOG)
-#define LOGD chr::chrout()
+#define LOGD LOGI
+#define LOGD_IF(COND) LOGI_IF(COND)
 #else
 #define LOGD false && chr::chrout()
+#define LOGD_IF(COND) false && chr::chrout()
 #endif
