@@ -41,6 +41,7 @@ endif
 ifdef CHR_USE_INCUBATOR_UI
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Button.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Container.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Fill.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/HorizontalLayout.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/HyperTextBox.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Icon.cpp
