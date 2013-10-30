@@ -53,6 +53,32 @@ namespace chronotext
         return utf8ToWstring(loadUtf8(source));
     }
     
+    vector<string> readLinesUtf8(DataSourceRef source)
+    {
+        vector<string> lines;
+        IStreamRef in = source->createStream();
+        
+        while (!in->isEof())
+        {
+            lines.push_back(in->readLine());
+        }
+        
+        return lines;
+    }
+    
+    vector<wstring> readLinesW(DataSourceRef source)
+    {
+        vector<wstring> lines;
+        IStreamRef in = source->createStream();
+        
+        while (!in->isEof())
+        {
+            lines.push_back(utf8ToWstring(in->readLine()));
+        }
+        
+        return lines;
+    }
+    
     // ---
     
     string hexDump(const char *data, int size)

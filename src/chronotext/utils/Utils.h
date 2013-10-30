@@ -134,6 +134,9 @@ namespace chronotext
     std::string loadUtf8(ci::DataSourceRef source);
     std::wstring loadWstring(ci::DataSourceRef source);
     
+    std::vector<std::string> readLinesUtf8(ci::DataSourceRef source);
+    std::vector<std::wstring> readLinesW(ci::DataSourceRef source);
+    
     // ---
     
     std::string hexDump(const char *data, int size);
