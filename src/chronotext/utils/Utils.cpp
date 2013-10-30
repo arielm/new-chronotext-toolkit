@@ -42,18 +42,18 @@ namespace chronotext
         return wstring(tmp.data(), tmp.size());
     }
     
-    string loadUtf8(DataSourceRef source)
+    template<> string loadString<string>(DataSourceRef source)
     {
         Buffer buffer(source);
         return string(static_cast<const char*>(buffer.getData()), buffer.getDataSize());
     }
     
-    wstring loadWstring(DataSourceRef source)
+    template<> wstring loadString<wstring>(DataSourceRef source)
     {
-        return utf8ToWstring(loadUtf8(source));
+        return utf8ToWstring(loadString<string>(source));
     }
     
-    vector<string> readLinesUtf8(DataSourceRef source)
+    template<> vector<std::string> readLines<string>(DataSourceRef source)
     {
         vector<string> lines;
         IStreamRef in = source->createStream();
@@ -66,7 +66,7 @@ namespace chronotext
         return lines;
     }
     
-    vector<wstring> readLinesW(DataSourceRef source)
+    template<> vector<wstring> readLines<wstring>(DataSourceRef source)
     {
         vector<wstring> lines;
         IStreamRef in = source->createStream();
