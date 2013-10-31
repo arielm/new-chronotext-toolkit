@@ -80,11 +80,11 @@ namespace chronotext
     
     Shape* Container::getComponentByTag(int tag)
     {
-        for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
+        for (auto component : components)
         {
-            if ((*it)->tag == tag)
+            if (component->tag == tag)
             {
-                return &**it;
+                return component.get();
             }
         }
         
@@ -111,13 +111,11 @@ namespace chronotext
     
     void Container::drawChildren()
     {
-        for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
+        for (auto component : components)
         {
-            ShapeRef shape = *it;
-            
-            if (shape->visible)
+            if (component->visible)
             {
-                shape->draw();
+                component->draw();
             }
         }
     }

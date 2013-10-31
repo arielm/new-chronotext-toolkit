@@ -28,9 +28,9 @@ namespace chronotext
     
     void TouchGroup::addShapes(const vector<ShapeRef> &shapes)
     {
-        for (vector<ShapeRef>::const_iterator it = shapes.begin(); it != shapes.end(); ++it)
+        for (auto shape : shapes)
         {
-            this->shapes.push_back(&**it);
+            this->shapes.push_back(shape.get());
         }
     }
     
@@ -138,18 +138,14 @@ namespace chronotext
         Touchable *closestTouchable = NULL;
         float closestDistance = numeric_limits<float>::max();
         
-        for (vector<Shape*>::const_iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
+        for (auto shape : shapes)
         {
-            Shape *shape = *it1;
-            
             if (shape->visible)
             {
                 vector<Touchable*> touchables = shape->getTouchables();
-                
-                for (vector<Touchable*>::const_iterator it2 = touchables.begin(); it2 != touchables.end(); ++it2)
+
+                for (auto touchable : touchables)
                 {
-                    Touchable *touchable = *it2;
-                    
                     float distance;
                     if (touchable->hitTest(point, &distance))
                     {
@@ -168,15 +164,12 @@ namespace chronotext
     
     Touchable* TouchGroup::getArmedTouchableByIndex(int index)
     {
-        for (vector<Shape*>::const_iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
+        for (auto shape : shapes)
         {
-            Shape *shape = *it1;
             vector<Touchable*> touchables = shape->getTouchables();
             
-            for (vector<Touchable*>::const_iterator it2 = touchables.begin(); it2 != touchables.end(); ++it2)
+            for (auto touchable : touchables)
             {
-                Touchable *touchable = *it2;
-                
                 if (touchable->armedIndex == index)
                 {
                     return touchable;
