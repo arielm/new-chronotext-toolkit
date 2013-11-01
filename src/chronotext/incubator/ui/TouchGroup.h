@@ -8,10 +8,7 @@
 
 #pragma once
 
-#include "chronotext/incubator/ui/Shape.h"
 #include "chronotext/incubator/ui/Container.h"
-
-#include <vector>
 
 namespace chronotext
 {

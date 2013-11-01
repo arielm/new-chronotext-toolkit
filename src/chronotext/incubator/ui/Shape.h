@@ -18,7 +18,6 @@
 namespace chronotext
 {
     typedef std::shared_ptr<class Shape> ShapeRef;
-    typedef std::shared_ptr<ci::ColorA> ColorRef;
 
     class Container;
 

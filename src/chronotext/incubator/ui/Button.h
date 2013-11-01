@@ -37,9 +37,9 @@ namespace chronotext
             float fontSize;
             bool snap;
             
-            std::map<int, ColorRef> borderColor;
-            std::map<int, ColorRef> backgroundColor;
-            std::map<int, ColorRef> color;
+            std::map<int, std::shared_ptr<ci::ColorA>> borderColor;
+            std::map<int, std::shared_ptr<ci::ColorA>> backgroundColor;
+            std::map<int, std::shared_ptr<ci::ColorA>> color;
             
             std::map<int, bool> strikethrough;
             
