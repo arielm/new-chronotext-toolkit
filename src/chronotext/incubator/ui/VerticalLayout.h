@@ -9,7 +9,6 @@
 #pragma once
 
 #include "chronotext/incubator/ui/Container.h"
-#include "chronotext/incubator/ui/LayoutStyle.h"
 
 /*
  * LIMITATIONS:
@@ -35,7 +34,7 @@ namespace chronotext
         Fill fill;
 
         VerticalLayout();
-        VerticalLayout(LayoutStyleRef style);
+        VerticalLayout(std::shared_ptr<Shape::Style> style);
         
         void layout();
         void draw();

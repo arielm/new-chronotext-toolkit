@@ -18,7 +18,7 @@ namespace chronotext
     Shape()
     {}
 
-    Container::Container(ShapeStyleRef style)
+    Container::Container(shared_ptr<Shape::Style> style)
     :
     Shape(style),
     layoutRequest(false)

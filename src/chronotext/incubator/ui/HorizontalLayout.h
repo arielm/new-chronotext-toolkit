@@ -9,7 +9,6 @@
 #pragma once
 
 #include "chronotext/incubator/ui/Container.h"
-#include "chronotext/incubator/ui/LayoutStyle.h"
 
 /*
  * TODO:
@@ -29,7 +28,7 @@ namespace chronotext
         Fill fill;
 
         HorizontalLayout();
-        HorizontalLayout(LayoutStyleRef style);
+        HorizontalLayout(std::shared_ptr<Shape::Style> style);
         
         void setAlign(int x, int y);
         

@@ -18,7 +18,7 @@ namespace chronotext
     Container()
     {}
     
-    VerticalLayout::VerticalLayout(LayoutStyleRef style)
+    VerticalLayout::VerticalLayout(shared_ptr<Shape::Style> style)
     :
     Container(style),
     alignX(style->alignX),

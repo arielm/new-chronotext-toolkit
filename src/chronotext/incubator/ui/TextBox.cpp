@@ -20,7 +20,7 @@ namespace chronotext
     Shape()
     {}
 
-    TextBox::TextBox(TextBoxStyleRef style)
+    TextBox::TextBox(shared_ptr<Style> style)
     :
     Shape(style),
     font(NULL),
@@ -212,53 +212,28 @@ namespace chronotext
          */
     }
     
-    void TextBox::drawText()
+    /*
+     * AN index EQUAL TO numeric_limits<int>::min() MEANS: FIRST CHARACTER ON THE LINE
+     * AN index EQUAL TO numeric_limits<int>::max() MEANS: LAST CHARACTER ON THE LINE
+     */
+    Vec2f TextBox::getLocationAt(int line, int index)
     {
-        gl::color(textColor);
+        int start = wrapper.offsets[line];
+        int end = start + wrapper.lengths[line];
         
-        float innerWidth = width - paddingLeft - paddingRight;
-        float innerHeight = height - paddingTop - paddingBottom;
-        
-        float limitTop = y + paddingTop + font->getAscent();
-        float limitBottom = limitTop + innerHeight;
-        float yy = limitTop + getOffsetY();
-        
-        font->beginSequence(NULL, 2);
-        
-        for (int i = 0; i < wrapper.size && yy < limitBottom; i++)
+        if (index == numeric_limits<int>::min())
         {
-            if (yy + lineHeight > limitTop)
-            {
-                int start = wrapper.offsets[i];
-                int end = start + wrapper.lengths[i];
-                
-                float limitLeft = x + paddingLeft;
-                float limitRight = limitLeft + innerWidth;
-                float xx = limitLeft + getOffsetX(start, end);
-                
-                drawTextSpan(xx, yy, start, end, limitLeft, limitRight);
-            }
-            
-            yy += lineHeight;
+            index = start;
+        }
+        else if (index == numeric_limits<int>::max())
+        {
+            index = end;
         }
         
-        font->endSequence();
-    }
-    
-    void TextBox::drawTextSpan(float xx, float yy, int start, int end, float limitLeft, float limitRight)
-    {
-        while (start < end && xx < limitRight)
-        {
-            int cc = font->lookup(text[start++]);
-            float ww = font->getGlyphWidth(cc);
-            
-            if (xx + ww > limitLeft)
-            {
-                font->addGlyph(cc, xx, yy);
-            }
-            
-            xx += ww;
-        }
+        float xx = x + paddingLeft + getOffsetX(start, end) + font->getSubStringWidth(text, start, index);
+        float yy = y + paddingTop + getOffsetY() + line * lineHeight;
+        
+        return Vec2f(xx, yy);
     }
     
     float TextBox::getOffsetX(int start, int end)
@@ -357,27 +332,52 @@ namespace chronotext
         updateHeightRequest = false;
     }
     
-    /*
-     * AN index EQUAL TO numeric_limits<int>::min() MEANS: FIRST CHARACTER ON THE LINE
-     * AN index EQUAL TO numeric_limits<int>::max() MEANS: LAST CHARACTER ON THE LINE
-     */ 
-    Vec2f TextBox::getLocationAt(int line, int index)
+    void TextBox::drawText()
     {
-        int start = wrapper.offsets[line];
-        int end = start + wrapper.lengths[line];
+        gl::color(textColor);
         
-        if (index == numeric_limits<int>::min())
+        float innerWidth = width - paddingLeft - paddingRight;
+        float innerHeight = height - paddingTop - paddingBottom;
+        
+        float limitTop = y + paddingTop + font->getAscent();
+        float limitBottom = limitTop + innerHeight;
+        float yy = limitTop + getOffsetY();
+        
+        font->beginSequence(NULL, 2);
+        
+        for (int i = 0; i < wrapper.size && yy < limitBottom; i++)
         {
-            index = start;
+            if (yy + lineHeight > limitTop)
+            {
+                int start = wrapper.offsets[i];
+                int end = start + wrapper.lengths[i];
+                
+                float limitLeft = x + paddingLeft;
+                float limitRight = limitLeft + innerWidth;
+                float xx = limitLeft + getOffsetX(start, end);
+                
+                drawTextSpan(xx, yy, start, end, limitLeft, limitRight);
+            }
+            
+            yy += lineHeight;
         }
-        else if (index == numeric_limits<int>::max())
+        
+        font->endSequence();
+    }
+    
+    void TextBox::drawTextSpan(float xx, float yy, int start, int end, float limitLeft, float limitRight)
+    {
+        while (start < end && xx < limitRight)
         {
-            index = end;
+            int cc = font->lookup(text[start++]);
+            float ww = font->getGlyphWidth(cc);
+            
+            if (xx + ww > limitLeft)
+            {
+                font->addGlyph(cc, xx, yy);
+            }
+            
+            xx += ww;
         }
-        
-        float xx = x + paddingLeft + getOffsetX(start, end) + font->getSubStringWidth(text, start, index);
-        float yy = y + paddingTop + getOffsetY() + line * lineHeight;
-        
-        return Vec2f(xx, yy);
     }
 }

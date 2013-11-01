@@ -9,7 +9,6 @@
 #pragma once
 
 #include "chronotext/incubator/ui/TextBox.h"
-#include "chronotext/incubator/ui/HyperTextBoxStyle.h"
 #include "chronotext/incubator/ui/TouchableLink.h"
 #include "chronotext/text/LinkExtractor.h"
 
@@ -40,34 +39,39 @@ namespace chronotext
     
     class HyperTextBox : public TextBox
     {
-    protected:
-        bool updateLocationRequest;
-
-        int selectedLinkIndex;
-        std::vector<LinkSpan> linkSpans;
-        boost::ptr_vector<Touchable> touchableLinks;
-        
-        LinkSpan getLinkSpan(const ExtractedLink &link);
-        
-        void drawText();
-        void drawSelectedLinkText();
-        void drawSelectedLinkBackground();
-        void drawLinkUnderlines();
-        
     public:
         class Delegate
         {
         public:
             virtual void linkClicked(const std::string &url) = 0;
         };
+        
+        class Style : public TextBox::Style
+        {
+        public:
+            ci::ColorA selectedLinkTextColor;
+            ci::ColorA selectedLinkBackgroundColor;
+            
+            float linkUnderlineFactor;
+            float linkPaddingFactor;
+            float linkHitExtra;
+            
+            Style()
+            :
+            TextBox::Style(),
+            linkUnderlineFactor(0.2),
+            linkPaddingFactor(0.1),
+            linkHitExtra(8)
+            {}
+        };
 
-        HyperTextBoxStyleRef style;
         Delegate *delegate;
+        std::shared_ptr<Style> style;
         
         std::vector<ExtractedLink> links;
         
         HyperTextBox();
-        HyperTextBox(HyperTextBoxStyleRef style);
+        HyperTextBox(std::shared_ptr<Style> style);
 
         void setLocation(float x, float y);
         void setText(const std::wstring &text);
@@ -80,6 +84,20 @@ namespace chronotext
         std::vector<Touchable*> getTouchables();
         void touchStateChanged(Touchable *touchable, int nextState, int prevState);
         void touchActionPerformed(Touchable *touchable, int action);
+        
+    protected:
+        bool updateLocationRequest;
+        
+        int selectedLinkIndex;
+        std::vector<LinkSpan> linkSpans;
+        boost::ptr_vector<Touchable> touchableLinks;
+        
+        LinkSpan getLinkSpan(const ExtractedLink &link);
+        
+        void drawText();
+        void drawSelectedLinkText();
+        void drawSelectedLinkBackground();
+        void drawLinkUnderlines();
     };
 }
 

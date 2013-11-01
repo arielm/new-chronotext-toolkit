@@ -9,7 +9,6 @@
 #pragma once
 
 #include "chronotext/incubator/ui/Shape.h"
-#include "chronotext/incubator/ui/TextBoxStyle.h"
 #include "chronotext/text/WordWrapper.h"
 
 namespace chronotext
@@ -18,24 +17,35 @@ namespace chronotext
 
     class TextBox : public Shape
     {
-    protected:
-        bool updateWrapRequest;
-        bool updateWidthRequest;
-        bool updateHeightRequest;
-        bool updateLineHeightRequest;
-        
-        float contentWidth;
-        float contentHeight;
-        
-        float getOffsetX(int start, int end);
-        float getOffsetY();
-        float getLineTop(int index);
-        float getLinesHeight(int n);
-        
-        void drawText();
-        void drawTextSpan(float xx, float yy, int start, int end, float limitLeft, float limitRight);
-        
     public:
+        class Style : public Shape::Style
+        {
+        public:
+            chr::XFont *font;
+            float fontSize;
+            bool wrap;
+            
+            float lineHeight;
+            float lineHeightFactor;
+            
+            int textAlignX;
+            int textAlignY;
+            
+            ci::ColorA textColor;
+            
+            Style()
+            :
+            Shape::Style(),
+            font(NULL),
+            fontSize(1),
+            wrap(true),
+            lineHeight(0),
+            lineHeightFactor(1),
+            textAlignX(Shape::ALIGN_LEFT),
+            textAlignY(Shape::ALIGN_TOP)
+            {}
+        };
+        
         chr::XFont *font;
         float fontSize;
         bool wrap;
@@ -58,7 +68,7 @@ namespace chronotext
         WordWrapper wrapper;
 
         TextBox();
-        TextBox(TextBoxStyleRef style);
+        TextBox(std::shared_ptr<Style> style);
         
         void setFont(XFont *font);
         void setFontSize(float size);
@@ -83,6 +93,23 @@ namespace chronotext
         void draw();
         
         ci::Vec2f getLocationAt(int line, int index);
+        
+    protected:
+        bool updateWrapRequest;
+        bool updateWidthRequest;
+        bool updateHeightRequest;
+        bool updateLineHeightRequest;
+        
+        float contentWidth;
+        float contentHeight;
+        
+        float getOffsetX(int start, int end);
+        float getOffsetY();
+        float getLineTop(int index);
+        float getLinesHeight(int n);
+        
+        void drawText();
+        void drawTextSpan(float xx, float yy, int start, int end, float limitLeft, float limitRight);
     };
 }
 

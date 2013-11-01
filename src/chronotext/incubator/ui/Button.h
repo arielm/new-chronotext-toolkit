@@ -9,9 +9,10 @@
 #pragma once
 
 #include "chronotext/incubator/ui/Shape.h"
-#include "chronotext/incubator/ui/ButtonStyle.h"
 #include "chronotext/incubator/ui/Icon.h"
 #include "chronotext/incubator/ui/Touchable.h"
+
+#include "chronotext/font/XFont.h"
 
 #include <map>
 
@@ -28,14 +29,39 @@ namespace chronotext
             virtual void buttonClicked(int tag) = 0;
             virtual void buttonToggled(int tag) = 0;
         };
+        
+        class Style : public Shape::Style
+        {
+        public:
+            chr::XFont *font;
+            float fontSize;
+            bool snap;
+            
+            std::map<int, ColorRef> borderColor;
+            std::map<int, ColorRef> backgroundColor;
+            std::map<int, ColorRef> color;
+            
+            std::map<int, bool> strikethrough;
+            
+            float hitExtra;
+            
+            Style()
+            :
+            Shape::Style(),
+            font(NULL),
+            fontSize(1),
+            snap(false),
+            hitExtra(8)
+            {}
+        };
 
-        ButtonStyleRef style;
         Delegate *delegate;
+        std::shared_ptr<Style> style;
         
         std::wstring text;
         IconRef icon;
         
-        Button(ButtonStyleRef style);
+        Button(std::shared_ptr<Style> style);
         
         float getWidth();
         float getHeight();

@@ -14,7 +14,7 @@ using namespace ci;
 
 namespace chronotext
 {
-    Shape::Shape(ShapeStyleRef style)
+    Shape::Shape(shared_ptr<Style> style)
     :
     tag(0),
     container(NULL)

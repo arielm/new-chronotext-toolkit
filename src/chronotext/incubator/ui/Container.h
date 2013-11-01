@@ -20,7 +20,7 @@ namespace chronotext
         std::vector<ShapeRef> components;
 
         Container();
-        Container(ShapeStyleRef style);
+        Container(std::shared_ptr<Shape::Style> style);
         
         void setWidth(float newWidth);
         void setHeight(float newHeight);

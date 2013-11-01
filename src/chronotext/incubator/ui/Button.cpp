@@ -14,7 +14,7 @@ using namespace ci;
 
 namespace chronotext
 {
-    Button::Button(ButtonStyleRef style)
+    Button::Button(shared_ptr<Style> style)
     :
     Shape(style),
     Touchable(this, TYPE_CLICKABLE, style->hitExtra),

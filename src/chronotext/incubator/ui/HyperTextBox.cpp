@@ -18,7 +18,7 @@ namespace chronotext
     TextBox()
     {}
     
-    HyperTextBox::HyperTextBox(HyperTextBoxStyleRef style)
+    HyperTextBox::HyperTextBox(shared_ptr<Style> style)
     :
     TextBox(style),
     style(style),
@@ -61,53 +61,6 @@ namespace chronotext
     void HyperTextBox::deselectLink()
     {
         selectedLinkIndex = -1;
-    }
-    
-    LinkSpan HyperTextBox::getLinkSpan(const ExtractedLink &link)
-    {
-        int startIndex = link.offset;
-        int endIndex = link.offset + link.length;
-        
-        int startLine = wrapper.getLine(startIndex);
-        int endLine = wrapper.getLine(endIndex);
-        
-        int n = endLine - startLine + 1;
-        
-        LinkSpan linkSpan(startIndex, endIndex, startLine, endLine);
-        
-        for (int i = 0; i < n; i++)
-        {
-            Vec2f p1;
-            Vec2f p2;
-            
-            if (i == 0)
-            {
-                p1 = getLocationAt(startLine, startIndex);
-                
-                if (n == 1)
-                {
-                    p2 = getLocationAt(endLine, endIndex);
-                }
-                else
-                {
-                    p2 = getLocationAt(startLine, numeric_limits<int>::max());
-                }
-            }
-            else if (i == n - 1)
-            {
-                p1 = getLocationAt(endLine, numeric_limits<int>::min());
-                p2 = getLocationAt(endLine, endIndex);
-            }
-            else
-            {
-                p1 = getLocationAt(startLine + i, numeric_limits<int>::min());
-                p2 = getLocationAt(startLine + i, numeric_limits<int>::max());
-            }
-            
-            linkSpan.positions.push_back(make_pair(p1, p2));
-        }
-        
-        return linkSpan;
     }
     
     void HyperTextBox::layout()
@@ -167,6 +120,87 @@ namespace chronotext
         /*
          * TODO: END CLIP
          */
+    }
+    
+    vector<Touchable*> HyperTextBox::getTouchables()
+    {
+        vector<Touchable*> touchables;
+        
+        for (boost::ptr_vector<Touchable>::iterator it = touchableLinks.begin(); it != touchableLinks.end(); ++it)
+        {
+            touchables.push_back(&*it);
+        }
+        
+        return touchables;
+    }
+    
+    void HyperTextBox::touchStateChanged(Touchable *touchable, int nextState, int prevState)
+    {
+        if (nextState == Touchable::STATE_NORMAL)
+        {
+            selectedLinkIndex = -1;
+        }
+        else if (nextState == Touchable::STATE_PRESSED)
+        {
+            TouchableLink *touchableLink = static_cast<TouchableLink*>(touchable);
+            selectedLinkIndex = touchableLink->linkIndex;
+        }
+    }
+    
+    void HyperTextBox::touchActionPerformed(Touchable *touchable, int action)
+    {
+        if (delegate)
+        {
+            TouchableLink *touchableLink = static_cast<TouchableLink*>(touchable);
+            delegate->linkClicked(links[touchableLink->linkIndex].url);
+        }
+    }
+    
+    LinkSpan HyperTextBox::getLinkSpan(const ExtractedLink &link)
+    {
+        int startIndex = link.offset;
+        int endIndex = link.offset + link.length;
+        
+        int startLine = wrapper.getLine(startIndex);
+        int endLine = wrapper.getLine(endIndex);
+        
+        int n = endLine - startLine + 1;
+        
+        LinkSpan linkSpan(startIndex, endIndex, startLine, endLine);
+        
+        for (int i = 0; i < n; i++)
+        {
+            Vec2f p1;
+            Vec2f p2;
+            
+            if (i == 0)
+            {
+                p1 = getLocationAt(startLine, startIndex);
+                
+                if (n == 1)
+                {
+                    p2 = getLocationAt(endLine, endIndex);
+                }
+                else
+                {
+                    p2 = getLocationAt(startLine, numeric_limits<int>::max());
+                }
+            }
+            else if (i == n - 1)
+            {
+                p1 = getLocationAt(endLine, numeric_limits<int>::min());
+                p2 = getLocationAt(endLine, endIndex);
+            }
+            else
+            {
+                p1 = getLocationAt(startLine + i, numeric_limits<int>::min());
+                p2 = getLocationAt(startLine + i, numeric_limits<int>::max());
+            }
+            
+            linkSpan.positions.push_back(make_pair(p1, p2));
+        }
+        
+        return linkSpan;
     }
     
     void HyperTextBox::drawText()
@@ -333,40 +367,6 @@ namespace chronotext
                     gl::drawLine(p1, p2);
                 }
             }
-        }
-    }
-    
-    vector<Touchable*> HyperTextBox::getTouchables()
-    {
-        vector<Touchable*> touchables;
-        
-        for (boost::ptr_vector<Touchable>::iterator it = touchableLinks.begin(); it != touchableLinks.end(); ++it)
-        {
-            touchables.push_back(&*it);
-        }
-        
-        return touchables;
-    }
-    
-    void HyperTextBox::touchStateChanged(Touchable *touchable, int nextState, int prevState)
-    {
-        if (nextState == Touchable::STATE_NORMAL)
-        {
-            selectedLinkIndex = -1;
-        }
-        else if (nextState == Touchable::STATE_PRESSED)
-        {
-            TouchableLink *touchableLink = static_cast<TouchableLink*>(touchable);
-            selectedLinkIndex = touchableLink->linkIndex;
-        }
-    }
-    
-    void HyperTextBox::touchActionPerformed(Touchable *touchable, int action)
-    {
-        if (delegate)
-        {
-            TouchableLink *touchableLink = static_cast<TouchableLink*>(touchable);
-            delegate->linkClicked(links[touchableLink->linkIndex].url);
         }
     }
 }
