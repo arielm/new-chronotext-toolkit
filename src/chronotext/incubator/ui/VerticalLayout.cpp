@@ -34,13 +34,11 @@ namespace chronotext
             contentWidth = 0;
             contentHeight = 0;
             
-            for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
+            for (auto component : components)
             {
-                ShapeRef shape = *it;
-                
-                if (shape->visible)
+                if (component->visible)
                 {
-                    if (!shape->autoWidth)
+                    if (!component->autoWidth)
                     {
                         if (autoWidth)
                         {
@@ -48,16 +46,16 @@ namespace chronotext
                         }
                         else
                         {
-                            float availableWidth = max<float>(0, width - paddingLeft - paddingRight - shape->marginLeft - shape->marginRight);
-                            shape->setWidth(availableWidth);
+                            float availableWidth = max<float>(0, width - paddingLeft - paddingRight - component->marginLeft - component->marginRight);
+                            component->setWidth(availableWidth);
                         }
                     }
                     
-                    contentHeight += mergedMargin(previousMargin, shape->marginTop);
-                    contentHeight += shape->getHeight();
+                    contentHeight += mergedMargin(previousMargin, component->marginTop);
+                    contentHeight += component->getHeight();
                     
-                    contentWidth = max<float>(contentWidth, shape->marginLeft + shape->getWidth() + shape->marginRight);
-                    previousMargin = shape->marginBottom;
+                    contentWidth = max<float>(contentWidth, component->marginLeft + component->getWidth() + component->marginRight);
+                    previousMargin = component->marginBottom;
                 }
             }
             
@@ -92,34 +90,32 @@ namespace chronotext
             float innerWidth = width - paddingLeft - paddingRight;
             previousMargin = 0;
             
-            for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
+            for (auto component : components)
             {
-                ShapeRef shape = *it;
-                
-                if (shape->visible)
+                if (component->visible)
                 {
                     float left = paddingLeft;
                     
                     switch (alignX)
                     {
                         case ALIGN_LEFT:
-                            left += shape->marginLeft;
+                            left += component->marginLeft;
                             break;
                             
                         case ALIGN_MIDDLE:
-                            left += (innerWidth - shape->getWidth()) * 0.5f; // XXX
+                            left += (innerWidth - component->getWidth()) * 0.5f; // XXX
                             break;
                             
                         case ALIGN_RIGHT:
-                            left += innerWidth - shape->getWidth() - shape->marginRight;
+                            left += innerWidth - component->getWidth() - component->marginRight;
                             break;
                     }
                     
-                    top += mergedMargin(previousMargin, shape->marginTop);
-                    shape->setLocation(x + left, y + top);
+                    top += mergedMargin(previousMargin, component->marginTop);
+                    component->setLocation(x + left, y + top);
                     
-                    top += shape->getHeight();
-                    previousMargin = shape->marginBottom;
+                    top += component->getHeight();
+                    previousMargin = component->marginBottom;
                 }
             }
         }
@@ -131,6 +127,6 @@ namespace chronotext
     {
         layout();
         fill.draw(getBounds());
-        drawChildren();
+        drawComponents();
     }
 }

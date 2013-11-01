@@ -106,10 +106,10 @@ namespace chronotext
     void Container::draw()
     {
         layout();
-        drawChildren();
+        drawComponents();
     }
     
-    void Container::drawChildren()
+    void Container::drawComponents()
     {
         for (auto component : components)
         {

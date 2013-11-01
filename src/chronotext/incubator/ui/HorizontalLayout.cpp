@@ -41,17 +41,15 @@ namespace chronotext
             contentWidth = 0;
             contentHeight = 0;
             
-            for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
+            for (auto component : components)
             {
-                ShapeRef shape = *it;
-                
-                if (shape->visible)
+                if (component->visible)
                 {
-                    contentWidth += mergedMargin(previousMargin, shape->marginLeft);
-                    contentWidth += shape->getWidth();
+                    contentWidth += mergedMargin(previousMargin, component->marginLeft);
+                    contentWidth += component->getWidth();
                     
-                    contentHeight = max<float>(contentHeight, shape->marginTop + shape->getHeight() + shape->marginBottom);
-                    previousMargin = shape->marginRight;
+                    contentHeight = max<float>(contentHeight, component->marginTop + component->getHeight() + component->marginBottom);
+                    previousMargin = component->marginRight;
                 }
             }
             
@@ -88,34 +86,32 @@ namespace chronotext
             float innerHeight = height - paddingTop - paddingBottom;
             previousMargin = 0;
 
-            for (vector<ShapeRef>::const_iterator it = components.begin(); it != components.end(); ++it)
+            for (auto component : components)
             {
-                ShapeRef shape = *it;
-                
-                if (shape->visible)
+                if (component->visible)
                 {
                     float top = paddingTop;
                     
                     switch (alignY)
                     {
                         case ALIGN_TOP:
-                            top += shape->marginTop;
+                            top += component->marginTop;
                             break;
                             
                         case ALIGN_MIDDLE:
-                            top += (innerHeight - shape->getHeight()) * 0.5f; // XXX
+                            top += (innerHeight - component->getHeight()) * 0.5f; // XXX
                             break;
                             
                         case ALIGN_BOTTOM:
-                            top += innerHeight - shape->getHeight() - shape->marginBottom;
+                            top += innerHeight - component->getHeight() - component->marginBottom;
                             break;
                     }
 
-                    left += mergedMargin(previousMargin, shape->marginLeft);
-                    shape->setLocation(x + left, y + top);
+                    left += mergedMargin(previousMargin, component->marginLeft);
+                    component->setLocation(x + left, y + top);
                     
-                    left += shape->getWidth();
-                    previousMargin = shape->marginRight;
+                    left += component->getWidth();
+                    previousMargin = component->marginRight;
                 }
             }
         }
@@ -127,6 +123,6 @@ namespace chronotext
     {
         layout();
         fill.draw(getBounds());
-        drawChildren();
+        drawComponents();
     }
 }
