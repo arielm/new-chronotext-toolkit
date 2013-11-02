@@ -132,12 +132,7 @@ namespace chronotext
     std::wstring utf8ToWstring(const std::string &s);
 
     template<typename T> T loadString(ci::DataSourceRef source);
-    template<> std::string loadString<std::string>(ci::DataSourceRef source);
-    template<> std::wstring loadString<std::wstring>(ci::DataSourceRef source);
-
     template<typename T> std::vector<T> readLines(ci::DataSourceRef source);
-    template<> std::vector<std::string> readLines<std::string>(ci::DataSourceRef source);
-    template<> std::vector<std::wstring> readLines<std::wstring>(ci::DataSourceRef source);
     
     // ---
     
