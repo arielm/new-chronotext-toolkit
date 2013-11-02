@@ -43,15 +43,15 @@ namespace chronotext
         Clock(TimeBase *timeBase);
         Clock(std::shared_ptr<MasterClock> master);
         
-        ~Clock();
+        virtual ~Clock();
         
-        void start();
-        void stop();
-        double getTime();
-        void setTime(int now);
-        int getState();
-        void setRate(double factor);
-        void restart();
+        virtual void start();
+        virtual void stop();
+        virtual double getTime();
+        virtual void setTime(int now);
+        virtual int getState();
+        virtual void setRate(double factor);
+        virtual void restart();
     };
 }
 

@@ -23,8 +23,8 @@ namespace chronotext
         MasterClock() : Clock() {}
         MasterClock(TimeBase *timeBase) : Clock(timeBase) {}
         
-        void start();
-        void stop();
+        virtual void start();
+        virtual void stop();
         
         void add(Clock *slave);
         void remove(Clock *slave);
