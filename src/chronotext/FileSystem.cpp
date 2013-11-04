@@ -59,7 +59,7 @@ namespace chronotext
     }
     
     /*
-     * PATH NORMALIZATION WITHOUT THE NEED FOR FILES TO EXIST
+     * PATH RELATIVIZATION WITHOUT THE NEED FOR FILES TO EXIST
      * REFERENCE: http://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path
      */
     fs::path FileSystem::relativizePath(const fs::path &from, const fs::path &to)
@@ -162,12 +162,12 @@ namespace chronotext
 #endif
     
 #if defined(CINDER_COCOA)
-    fs::path FileSystem::getResourcePath(const string &resourceName)
+    fs::path FileSystem::getResourcePath(const fs::path &relativePath)
     {
 #if defined(CHR_COMPLEX)
-        return FileSystem::getResourcePath() / resourceName;
+        return FileSystem::getResourcePath() / relativePath;
 #else
-        return App::getResourcePath(resourceName);
+        return App::getResourcePath(relativePath);
 #endif
     }
 #endif

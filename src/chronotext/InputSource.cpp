@@ -57,7 +57,7 @@ namespace chronotext
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
         source->filePath = app::getAssetPath(relativePath);
 #elif defined(CINDER_COCOA_TOUCH)
-        source->filePath = FileSystem::getResourcePath() / "assets" / relativePath;
+        source->filePath = FileSystem::getResourcePath("assets" / relativePath);
 #endif
         
         return source;

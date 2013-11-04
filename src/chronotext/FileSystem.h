@@ -38,7 +38,7 @@ namespace chronotext
         
 #if defined(CINDER_COCOA)
         static ci::fs::path getResourcePath();
-        static ci::fs::path getResourcePath(const std::string &resourceName);
+        static ci::fs::path getResourcePath(const ci::fs::path &relativePath);
 #endif
         
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
