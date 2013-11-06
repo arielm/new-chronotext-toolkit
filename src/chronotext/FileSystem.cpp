@@ -22,6 +22,9 @@ using namespace app;
 
 namespace chronotext
 {
+    /*
+     * FIXME: USE boost::filesystem::space_info() INSTEAD
+     */
     int64_t FileSystem::getAvailableStorage(const fs::path &folderPath)
     {
 #if defined(CINDER_MSW)
