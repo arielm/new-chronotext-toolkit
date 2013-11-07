@@ -10,8 +10,7 @@
 
 #include "cinder/Filesystem.h"
 
-#include <fstream>
-#include <memory>
+#include "boost/filesystem/fstream.hpp" 
 
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
@@ -28,13 +27,6 @@ namespace chronotext
         static ci::fs::path relativizePath(const ci::fs::path &from, const ci::fs::path &to);
         static bool arePathsRelative(const ci::fs::path &ancestor, const ci::fs::path &heir);
         static ci::fs::path getFolderOrCreateIt(const ci::fs::path &folderPath);
-        
-        /*
-         * BEWARE WHEN CALLING ONE OF THESE AS FUNCTION ARGUMENT:
-         * THE STREAM WILL BE CLOSED AS SOON AS FUNCTION RETURN (I.E. WHEN THE shared_ptr IS RELEASED)
-         */
-        static std::shared_ptr<std::ofstream> getOFStream(const ci::fs::path &filePath);
-        static std::shared_ptr<std::ifstream> getIFStream(const ci::fs::path &filePath);
         
 #if defined(CINDER_COCOA)
         static ci::fs::path getResourcePath();

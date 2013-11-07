@@ -128,16 +128,6 @@ namespace chronotext
         return folderPath;
     }
     
-    shared_ptr<ofstream> FileSystem::getOFStream(const fs::path &filePath)
-    {
-        return make_shared<ofstream>(filePath.string().c_str(), ios::binary);
-    }
-    
-    shared_ptr<ifstream> FileSystem::getIFStream(const fs::path &filePath)
-    {
-        return make_shared<ifstream>(filePath.string().c_str(), ios::binary);
-    }
-    
 #if defined(CINDER_COCOA)
     fs::path FileSystem::getResourcePath()
     {
