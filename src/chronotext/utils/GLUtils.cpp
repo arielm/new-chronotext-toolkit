@@ -161,16 +161,12 @@ namespace chronotext
     
     void dumpCamera(const Camera &cam, const string &name)
     {
-        Vec3f worldUp = cam.getWorldUp();
         Vec3f eyepoint = cam.getEyePoint();
-        Vec3f centerOfInterestPoint = cam.getCenterOfInterestPoint();
         Quatf orientation = cam.getOrientation();
-        Vec3f axis = orientation.getAxis();
         
-        LOGI << name << ".setWorldUp(Vec3f(" << worldUp.x << ", " << worldUp.y << ", " << worldUp.z << "));" << endl;
         LOGI << name << ".setEyePoint(Vec3f(" << eyepoint.x << ", " << eyepoint.y << ", " << eyepoint.z << "));" << endl;
-        LOGI << name << ".setCenterOfInterestPoint(Vec3f(" << centerOfInterestPoint.x << ", " << centerOfInterestPoint.y << ", " << centerOfInterestPoint.z << "));" << endl;
-        LOGI << name << ".setOrientation(Quatf(Vec3f(" << axis.x << ", " << axis.y << ", " << axis.z << "), " << orientation.getAngle() << "));" << endl;
+        LOGI << name << ".setCenterOfInterest(" << cam.getCenterOfInterest() << ");" << endl;
+        LOGI << name << ".setOrientation(Quatf(" << orientation.w << ", " << orientation.v.x << ", " << orientation.v.y << ", " << orientation.v.z << "));" << endl;
         LOGI << name << ".setPerspective(" << cam.getFov() << ", getWindowAspectRatio(), " << cam.getNearClip() << ", " << cam.getFarClip() << ");" << endl;
     }
 }
