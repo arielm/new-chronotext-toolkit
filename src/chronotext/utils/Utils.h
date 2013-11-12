@@ -16,6 +16,7 @@
 #include <fstream>
 
 #include <boost/algorithm/string.hpp>
+#include "boost/format.hpp"
 
 #if defined(CINDER_MSW)
 #include "cinder/msw/OutputDebugStringStream.h"
