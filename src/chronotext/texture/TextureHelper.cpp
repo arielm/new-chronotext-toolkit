@@ -10,22 +10,13 @@
 #include "chronotext/texture/Texture.h"
 #include "chronotext/texture/PVRHelper.h"
 #include "chronotext/utils/Utils.h"
+#include "chronotext/utils/MathUtils.h"
 
 #include "cinder/ImageIo.h"
 #include "cinder/ip/Fill.h"
 
 using namespace std;
 using namespace ci;
-
-static int nextPOT(int val)
-{
-    int ret = 1;
-    while (ret < val)
-    {
-        ret <<= 1;
-    }
-    return ret;
-}
 
 namespace chronotext
 {
@@ -305,8 +296,8 @@ namespace chronotext
         int srcWidth = src.getWidth();
         int srcHeight = src.getHeight();
         
-        int dstWidth = nextPOT(srcWidth);
-        int dstHeight = nextPOT(srcHeight);
+        int dstWidth = nextPowerOfTwo(srcWidth);
+        int dstHeight = nextPowerOfTwo(srcHeight);
         
         if ((srcWidth != dstWidth) || (srcHeight != dstHeight))
         {

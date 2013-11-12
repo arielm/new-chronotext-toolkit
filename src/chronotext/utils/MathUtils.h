@@ -56,6 +56,23 @@ namespace chronotext
         return r * x;
     }
     
+    static int nextPowerOfTwo(int x)
+    {
+        int result = 1;
+        
+        while (result < x)
+        {
+            result <<= 1;
+        }
+        
+        return result;
+    }
+    
+	static bool isPowerOfTwo(int x)
+    {
+		return (x > 0) && !(x & (x - 1));
+	}
+    
     /*
      * REFERENCE FOR THE 4 FOLLOWING 4 FUNCTIONS:
      * http://stackoverflow.com/a/253874/50335
