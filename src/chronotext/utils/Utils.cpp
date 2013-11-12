@@ -79,6 +79,24 @@ namespace chronotext
         return lines;
     }
     
+    vector<string> readInstructions(InputSourceRef source)
+    {
+        vector<string> lines = readLines<string>(source->loadDataSource());
+        vector<string> instructions;
+        
+        for (auto line : lines)
+        {
+            boost::algorithm::trim(line);
+            
+            if (!line.empty() && !boost::starts_with(line, "#"))
+            {
+                instructions.emplace_back(line);
+            }
+        }
+        
+        return instructions;
+    }
+    
     // ---
     
     string hexDump(const char *data, int size)

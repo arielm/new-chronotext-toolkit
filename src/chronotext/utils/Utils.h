@@ -134,6 +134,8 @@ namespace chronotext
     template<typename T> T loadString(ci::DataSourceRef source);
     template<typename T> std::vector<T> readLines(ci::DataSourceRef source);
     
+    std::vector<std::string> readInstructions(chr::InputSourceRef source);
+    
     // ---
     
     std::string hexDump(const char *data, int size);
