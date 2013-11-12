@@ -131,8 +131,8 @@ namespace chronotext
     std::string wstringToUtf8(const std::wstring &s);
     std::wstring utf8ToWstring(const std::string &s);
 
-    template<typename T> T loadString(ci::DataSourceRef source);
-    template<typename T> std::vector<T> readLines(ci::DataSourceRef source);
+    template<typename T> T loadString(chr::InputSourceRef source);
+    template<typename T> std::vector<T> readLines(chr::InputSourceRef source);
     
     std::vector<std::string> readInstructions(chr::InputSourceRef source);
     
