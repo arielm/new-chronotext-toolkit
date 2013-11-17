@@ -10,9 +10,14 @@
 
 #include "utf8.h"
 
+#include "boost/date_time/local_time/local_time.hpp"
+
 using namespace std;
 using namespace ci;
 using namespace utf8;
+using namespace boost::gregorian;
+using namespace boost::local_time;
+using namespace boost::posix_time;
 
 namespace chronotext
 {
@@ -146,4 +151,14 @@ namespace chronotext
         return s.str();
     }
 
+    // ---
+    
+    uint64_t millisSinceEpoch()
+    {
+        ptime time_t_epoch(date(1970, 1, 1));
+        ptime now = microsec_clock::local_time();
+        time_duration diff = now - time_t_epoch;
+        
+        return diff.total_milliseconds();
+    }
 }

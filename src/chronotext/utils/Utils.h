@@ -142,6 +142,10 @@ namespace chronotext
     std::string hexDump(const char *data, int size);
     std::string prettyBytes(uint64_t numBytes, int precision = 2);
     std::string percent(float ratio, int precision = 1);
+    
+    // ---
+    
+    uint64_t millisSinceEpoch();
 }
 
 namespace chr = chronotext;
