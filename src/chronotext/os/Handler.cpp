@@ -34,7 +34,7 @@ namespace chronotext
     {
         if (io)
         {
-            io->post([=] { handleMessage(message); });
+            io->post(bind(&Handler::handleMessage, this, message));
             return true;
         }
         
