@@ -17,27 +17,8 @@ namespace chronotext
         this->io = &io;
     }
     
-    bool Handler::post(const function<void()> &fn)
-    {
-        if (io)
-        {
-            io->post(fn);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    
     bool Handler::sendMessage(const Message &message)
     {
-        if (io)
-        {
-            io->post(bind(&Handler::handleMessage, this, message));
-            return true;
-        }
-        
-        return false;
+        return post(bind(&Handler::handleMessage, this, message));
     }
 }
