@@ -12,6 +12,11 @@ using namespace std;
 
 namespace chronotext
 {
+    Handler::Handler()
+    :
+    io(NULL)
+    {}
+
     void Handler::setIOService(boost::asio::io_service &io)
     {
         this->io = &io;

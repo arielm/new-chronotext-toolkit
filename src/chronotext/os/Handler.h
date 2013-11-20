@@ -21,11 +21,9 @@ namespace chronotext
     class Handler
     {
     public:
-        Handler() : io(NULL) {}
+        Handler();
         virtual ~Handler() {}
-        
-        void setIOService(boost::asio::io_service &io);
-        
+
         template <typename F> bool post(const F &fn)
         {
             if (io)
@@ -39,9 +37,11 @@ namespace chronotext
             }
         }
         
+        void setIOService(boost::asio::io_service &io);
         bool sendMessage(const Message &message);
+
         virtual void handleMessage(const Message &message) {}
-        
+
     protected:
         boost::asio::io_service *io;
     };
