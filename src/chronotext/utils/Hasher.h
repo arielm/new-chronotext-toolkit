@@ -78,7 +78,7 @@ namespace chronotext
     template<typename T>
     static uint64_t hash(const std::vector<T> &values, unsigned int seed = 0)
     {
-        return MurmurHash64B((void*)value.data(), values.size() * sizeof(T), seed);
+        return MurmurHash64B((void*)values.data(), values.size() * sizeof(T), seed);
     }
 }
 
