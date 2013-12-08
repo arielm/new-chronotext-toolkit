@@ -111,7 +111,7 @@ public:
     std::map<wchar_t, XGlyph*> glyphs; // SORTED BY UNICODE CHARACTER (SMALLER FIRST)
     std::list<XGlyph*> ordered; // SORTED BY SIZE (LARGEST FIRST)
     
-    XFontCreator(const FT_Library &library, const FontDescriptor &descriptor, float size, const std::wstring &characters, const XParams &params);
+    XFontCreator(FT_Library library, const FontDescriptor &descriptor, float size, const std::wstring &characters, const XParams &params);
     ~XFontCreator();
     
     void writeToFolder(const ci::fs::path &folderPath);

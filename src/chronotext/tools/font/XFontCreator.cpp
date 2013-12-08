@@ -15,7 +15,7 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-XFontCreator::XFontCreator(const FT_Library &library, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
+XFontCreator::XFontCreator(FT_Library library, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
 :
 size(size),
 params(params)
@@ -24,11 +24,11 @@ params(params)
     
     if (error == FT_Err_Unknown_File_Format)
     {
-        throw runtime_error("FREETYPE ERROR: UNKNOWN FILE FORMAT");
+        throw runtime_error("FREETYPE ERROR: UNKNOWN FILE FORMAT - " + descriptor.filePath.string());
     }
     else if (error)
     {
-        throw runtime_error("FREETYPE ERROR: CAN'T OPEN FILE");
+        throw runtime_error("FREETYPE ERROR: CAN'T OPEN FILE - " + descriptor.filePath.string());
     }
     
     // ---
@@ -40,26 +40,27 @@ params(params)
      * - WITHOUT A FRACTIONAL ADVANCE: CHARACTER SPACING LOOKS DUMB
      * - WITHOUT A FRACTIONAL HEIGHT: SOME CHARACTERS WON'T BE PROPERLY ALIGNED ON THE BASE-LINE
      */
-    int hres = 64;
+    int res = 64;
+    int dpi = 72;
     
     FT_Select_Charmap(face, FT_ENCODING_UNICODE);
-    FT_Set_Char_Size(face, size * 64, 0, 72 * hres, 72 * hres); // 72 DPI
+    FT_Set_Char_Size(face, size * 64, 0, dpi * res, dpi * res);
     
     FT_Matrix matrix =
     {
-        int((1.0 / hres) * 0x10000L),
+        int((1.0 / res) * 0x10000L),
         int((0.0) * 0x10000L),
         int((0.0) * 0x10000L),
-        int((1.0 / hres) * 0x10000L)
+        int((1.0 / res) * 0x10000L)
     };
     
     FT_Set_Transform(face, &matrix, NULL);
     
     // ---
     
-    height = face->size->metrics.height / 64.0f / hres;
-    ascent = face->size->metrics.ascender / 64.0f / hres;
-    descent = -face->size->metrics.descender / 64.0f / hres;
+    height = face->size->metrics.height / 64.0f / res;
+    ascent = face->size->metrics.ascender / 64.0f / res;
+    descent = -face->size->metrics.descender / 64.0f / res;
 
     underlineOffset = -face->underline_position / 64.0f;
     underlineThickness = face->underline_thickness / 64.0f;
@@ -74,8 +75,8 @@ params(params)
 
     FT_UInt minusGlyphIndex = FT_Get_Char_Index(face, L'-');
     FT_Load_Glyph(face, minusGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
-    float minusHeight = face->glyph->metrics.height / 64.0f / hres;
-    float minusBearingY = face->glyph->metrics.horiBearingY / 64.0f / hres;
+    float minusHeight = face->glyph->metrics.height / 64.0f / res;
+    float minusBearingY = face->glyph->metrics.horiBearingY / 64.0f / res;
     float strikethroughOffset = minusBearingY - minusHeight * 0.5f;
     strikethroughFactor = strikethroughOffset / (ascent - descent);
 
@@ -112,11 +113,8 @@ XFontCreator::~XFontCreator()
     {
         delete it->second;
     }
-    
-    /*
-     * CRASHING, NOT SURE WHY...
-     */
-    // FT_Done_Face(face);
+
+    FT_Done_Face(face);
 }
 
 void XFontCreator::writeToFolder(const fs::path &folderPath)
