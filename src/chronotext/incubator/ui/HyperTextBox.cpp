@@ -197,7 +197,7 @@ namespace chronotext
                 p2 = getLocationAt(startLine + i, numeric_limits<int>::max());
             }
             
-            linkSpan.positions.push_back(make_pair(p1, p2));
+            linkSpan.positions.emplace_back(p1, p2);
         }
         
         return linkSpan;
