@@ -58,7 +58,7 @@ void Application::setup()
      * - NO NEED FOR MARGIN AND PADDING BECAUSE THE FONT IS ONLY INTENDED TO BE RENDERED AT ITS NATIVE-FONT-SIZE
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Helevetica ON OSX
      */
-    createFontSafely(ftHelper, FontDescriptor("/System/Library/Fonts/Helvetica.dfont", 0), 16, ASCII, XParams(0, 0)); // FACE-INDEX 0 CORRESPONDS TO "Helvetica Regular"
+    createFontSafely(ftHelper, FontDescriptor("/System/Library/Fonts/Helvetica.dfont", 4), 16, ASCII, XParams(0, 0)); // FACE-INDEX 4 CORRESPONDS TO "Helvetica Regular"
 
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
