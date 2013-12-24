@@ -38,7 +38,7 @@ params(params)
      * TRICK FROM http://code.google.com/p/freetype-gl/
      *
      * - WITHOUT A FRACTIONAL ADVANCE: CHARACTER SPACING LOOKS DUMB
-     * - WITHOUT A FRACTIONAL HEIGHT: SOME CHARACTERS WON'T BE PROPERLY ALIGNED ON THE BASE-LINE
+     * - WITHOUT A FRACTIONAL HEIGHT: SOME CHARACTERS WON'T BE PERFECTLY ALIGNED ON THE BASELINE
      */
     int res = 64;
     int dpi = 72;
@@ -73,12 +73,17 @@ params(params)
     
     // ----
 
-    FT_UInt minusGlyphIndex = FT_Get_Char_Index(face, L'-');
-    FT_Load_Glyph(face, minusGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
-    float minusHeight = face->glyph->metrics.height / 64.0f / res;
-    float minusBearingY = face->glyph->metrics.horiBearingY / 64.0f / res;
-    float strikethroughOffset = minusBearingY - minusHeight * 0.5f;
-    strikethroughFactor = strikethroughOffset / (ascent - descent);
+    TT_OS2 *os2 = (TT_OS2*)FT_Get_Sfnt_Table(face, ft_sfnt_os2);
+    
+    if (os2 && (os2->version != 0xFFFF))
+    {
+        float strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, face->size->metrics.y_scale) / 64.0f / res;
+        strikethroughFactor = strikethroughOffset / (ascent - descent);
+    }
+    else
+    {
+        strikethroughFactor = 0.5f;
+    }
 
     // ---
     
