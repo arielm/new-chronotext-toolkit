@@ -15,20 +15,16 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-XFontCreator::XFontCreator(const FT_Library &library, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
+XFontCreator::XFontCreator(shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
 :
 size(size),
 params(params)
 {
-    FT_Error error = FT_New_Face(library, descriptor.filePath.string().c_str(), descriptor.faceIndex, &face);
+    FT_Error error = FT_New_Face(ftHelper->getLib(), descriptor.filePath.string().c_str(), descriptor.faceIndex, &ftFace);
     
-    if (error == FT_Err_Unknown_File_Format)
+    if (error)
     {
-        throw runtime_error("FREETYPE ERROR: UNKNOWN FILE FORMAT");
-    }
-    else if (error)
-    {
-        throw runtime_error("FREETYPE ERROR: CAN'T OPEN FILE");
+        throw runtime_error("FREETYPE: ERROR " + toString(error));
     }
     
     // ---
@@ -43,8 +39,8 @@ params(params)
     int res = 64;
     int dpi = 72;
     
-    FT_Select_Charmap(face, FT_ENCODING_UNICODE);
-    FT_Set_Char_Size(face, size * 64, 0, dpi * res, dpi * res);
+    FT_Select_Charmap(ftFace, FT_ENCODING_UNICODE);
+    FT_Set_Char_Size(ftFace, size * 64, 0, dpi * res, dpi * res);
     
     FT_Matrix matrix =
     {
@@ -54,30 +50,30 @@ params(params)
         int((1.0 / res) * 0x10000L)
     };
     
-    FT_Set_Transform(face, &matrix, NULL);
+    FT_Set_Transform(ftFace, &matrix, NULL);
     
     // ---
     
-    height = face->size->metrics.height / 64.0f / res;
-    ascent = face->size->metrics.ascender / 64.0f / res;
-    descent = -face->size->metrics.descender / 64.0f / res;
+    height = ftFace->size->metrics.height / 64.0f / res;
+    ascent = ftFace->size->metrics.ascender / 64.0f / res;
+    descent = -ftFace->size->metrics.descender / 64.0f / res;
 
-    underlineOffset = -face->underline_position / 64.0f;
-    underlineThickness = face->underline_thickness / 64.0f;
+    underlineOffset = -ftFace->underline_position / 64.0f;
+    underlineThickness = ftFace->underline_thickness / 64.0f;
 
     // ---
     
-    FT_UInt spaceGlyphIndex = FT_Get_Char_Index(face, L' ');
-    FT_Load_Glyph(face, spaceGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
-    spaceWidth = face->glyph->advance.x / 64.0f;
+    FT_UInt spaceGlyphIndex = FT_Get_Char_Index(ftFace, L' ');
+    FT_Load_Glyph(ftFace, spaceGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
+    spaceWidth = ftFace->glyph->advance.x / 64.0f;
     
     // ----
 
-    TT_OS2 *os2 = (TT_OS2*)FT_Get_Sfnt_Table(face, ft_sfnt_os2);
+    TT_OS2 *os2 = (TT_OS2*)FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2);
     
     if (os2 && (os2->version != 0xFFFF))
     {
-        float strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, face->size->metrics.y_scale) / 64.0f / res;
+        float strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, ftFace->size->metrics.y_scale) / 64.0f / res;
         strikethroughFactor = strikethroughOffset / (ascent - descent);
     }
     else
@@ -119,15 +115,12 @@ XFontCreator::~XFontCreator()
         delete it->second;
     }
     
-    /*
-     * CRASHING, NOT SURE WHY...
-     */
-    // FT_Done_Face(face);
+    FT_Done_Face(ftFace);
 }
 
 void XFontCreator::writeToFolder(const fs::path &folderPath)
 {
-    string fileName = string(face->family_name) + "_" + string(face->style_name) + "_" + boost::lexical_cast<string>(size) + ".fnt";
+    string fileName = string(ftFace->family_name) + "_" + string(ftFace->style_name) + "_" + boost::lexical_cast<string>(size) + ".fnt";
     write(writeFile(folderPath / fileName));
     
     LOGI << "GENERATED: " << fileName << " - " << atlasWidth << "x" << atlasHeight << endl;
@@ -176,15 +169,15 @@ void XFontCreator::write(DataTargetRef target)
 
 XGlyph* XFontCreator::getGlyph(wchar_t c)
 {
-    FT_UInt glyphIndex = FT_Get_Char_Index(face, c);
+    FT_UInt glyphIndex = FT_Get_Char_Index(ftFace, c);
     
     if (index)
     {
-        FT_Error error =  FT_Load_Glyph(face, glyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
+        FT_Error error =  FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
         
         if (!error)
         {
-            FT_GlyphSlot slot = face->glyph;
+            FT_GlyphSlot slot = ftFace->glyph;
             
             FT_Glyph glyph;
             error = FT_Get_Glyph(slot, &glyph);
@@ -216,7 +209,7 @@ XGlyph* XFontCreator::getGlyph(wchar_t c)
 
 bool XFontCreator::canDisplay(wchar_t c)
 {
-    return (c > 0) && FT_Get_Char_Index(face, c);
+    return (c > 0) && FT_Get_Char_Index(ftFace, c);
 }
 
 bool XFontCreator::isSpace(wchar_t c)
