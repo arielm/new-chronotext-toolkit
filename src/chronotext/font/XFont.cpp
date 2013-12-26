@@ -144,7 +144,7 @@ namespace chronotext
         tx2 = new float[glyphCount];
         ty2 = new float[glyphCount];
         
-        char *atlasData = (char*) calloc(atlasWidth * atlasHeight , 1); // WE NEED A ZERO-FILLED AREA
+        unique_ptr<unsigned char[]> atlasData(new unsigned char[atlasWidth * atlasHeight]()); // ZERO-FILLED + AUTOMATICALLY FREED
         
         for (int i = 0; i < glyphCount; i++)
         {
@@ -172,9 +172,9 @@ namespace chronotext
             le[i] = glyphLeftExtent - unitPadding;
             te[i] = glyphTopExtent + unitPadding;
             
-            char *data = new char[glyphWidth * glyphHeight];
+            unsigned char *data = new unsigned char[glyphWidth * glyphHeight];
             in->readData(data, glyphWidth * glyphHeight);
-            addAtlasUnit(data, atlasData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
+            addAtlasUnit(data, atlasData.get(), glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
             delete[] data;
             
             int xx = glyphAtlasX + atlasPadding + unitMargin - unitPadding;
@@ -222,17 +222,15 @@ namespace chronotext
             glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
         }
         
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlasWidth, atlasHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlasData);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlasWidth, atlasHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlasData.get());
         
         if (useMipmap)
         {
             glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
         }
-        
-        free(atlasData);
     }
     
-    void XFont::addAtlasUnit(char *srcData, char *dstData, int xx, int yy, int ww, int hh)
+    void XFont::addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int xx, int yy, int ww, int hh)
     {
         for (int iy = 0; iy < hh; iy++)
         {
