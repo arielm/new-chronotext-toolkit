@@ -86,7 +86,7 @@ class XFontCreator
     std::shared_ptr<FreetypeHelper> ftHelper;
     FT_Face ftFace;
     
-    XGlyph* getGlyph(wchar_t c);
+    XGlyph* createGlyph(wchar_t c);
     
     bool canDisplay(wchar_t c);
     bool isSpace(wchar_t c);

@@ -83,17 +83,17 @@ params(params)
 
     // ---
     
-    for (wstring::const_iterator it = characters.begin(); it != characters.end(); ++it)
+    for (auto c : characters)
     {
-        if (!isSpace(*it) && canDisplay(*it))
+        if (!isSpace(c) && canDisplay(c))
         {
-            if (glyphs.find(*it) == glyphs.end())
+            if (glyphs.find(c) == glyphs.end())
             {
-                XGlyph *glyph = getGlyph(*it);
+                XGlyph *glyph = createGlyph(c);
                 
                 if (glyph)
                 {
-                    glyphs[*it] = glyph;
+                    glyphs[c] = glyph;
                     ordered.push_back(glyph);
                 }
             }
@@ -110,9 +110,9 @@ params(params)
 
 XFontCreator::~XFontCreator()
 {
-    for (map<wchar_t, XGlyph*>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it)
+    for (auto it : glyphs)
     {
-        delete it->second;
+        delete it.second;
     }
     
     FT_Done_Face(ftFace);
@@ -151,11 +151,11 @@ void XFontCreator::write(DataTargetRef target)
     out->writeLittle(params.unitMargin);
     out->writeLittle(params.unitPadding);
     
-    for (map<wchar_t, XGlyph*>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it)
+    for (auto it : glyphs)
     {
-        out->writeLittle((int)it->first);
+        out->writeLittle((int)it.first);
         
-        XGlyph *glyph = it->second;
+        XGlyph *glyph = it.second;
         out->writeLittle(glyph->advance);
         out->writeLittle(glyph->width);
         out->writeLittle(glyph->height);
@@ -167,7 +167,7 @@ void XFontCreator::write(DataTargetRef target)
     }
 }
 
-XGlyph* XFontCreator::getGlyph(wchar_t c)
+XGlyph* XFontCreator::createGlyph(wchar_t c)
 {
     FT_UInt glyphIndex = FT_Get_Char_Index(ftFace, c);
     
@@ -265,9 +265,8 @@ bool XFontCreator::pack(int targetWidth, int targetHeight)
     
     BinPackRef pack = BinPack::create(targetWidth - atlasPaddingExtra, targetHeight - atlasPaddingExtra, BinPack::SKYLINE);
     
-    for (list<XGlyph*>::const_iterator it = ordered.begin(); it != ordered.end(); ++it)
+    for (auto glyph : ordered)
     {
-        XGlyph *glyph = *it;
         Area area = pack->allocateArea(glyph->width + unitMarginExtra, glyph->height + unitMarginExtra);
         
         if (area.x1 < 0)
