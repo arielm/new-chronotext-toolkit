@@ -739,9 +739,9 @@ namespace chronotext
                 *sequenceCoords++ = quad.ty2;
                 *sequenceCoords++ = quad.tx2;
                 *sequenceCoords++ = quad.ty1;
+                
+                incrementSequence();
             }
-            
-            incrementSequence();
         }
     }
     
