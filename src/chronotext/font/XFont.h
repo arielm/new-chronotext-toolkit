@@ -122,9 +122,9 @@ namespace chronotext
         void unload();
         void reload();
         
-        bool isSpace(wchar_t c);
-        bool isValid(wchar_t c);
-        int lookup(wchar_t c);
+        bool isSpace(wchar_t c) const;
+        bool isValid(wchar_t c) const;
+        int lookup(wchar_t c) const;
         std::wstring getCharacters() const;
         
         void setSize(float size);
@@ -132,24 +132,24 @@ namespace chronotext
         void setAxis(const ci::Vec2f &axis);
         void setStrikethroughFactor(float factor);
 
-        float getSize();
-        float getDirection();
+        float getSize() const;
+        float getDirection() const;
         ci::Vec2f getAxis() const;
 
-        float getGlyphWidth(int cc);
-        float getCharWidth(wchar_t c);
-        float getStringWidth(const std::wstring &s);
-        float getSubStringWidth(const std::wstring &s, int begin, int end);
+        float getGlyphWidth(int cc) const;
+        float getCharWidth(wchar_t c) const;
+        float getStringWidth(const std::wstring &s) const;
+        float getSubStringWidth(const std::wstring &s, int begin, int end) const;
         
-        float getHeight();
-        float getAscent();
-        float getDescent();
-        float getStrikethroughOffset();
-        float getUnderlineOffset();
-        float getUnderlineThickness();
+        float getHeight() const;
+        float getAscent() const;
+        float getDescent() const;
+        float getStrikethroughOffset() const;
+        float getUnderlineOffset() const;
+        float getUnderlineThickness() const;
         
         FontMatrix* getMatrix();
-        GLushort* getIndices();
+        GLushort* getIndices() const;
         
         void begin();
         void end();

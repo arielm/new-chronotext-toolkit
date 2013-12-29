@@ -274,17 +274,17 @@ namespace chronotext
     
     // ---
     
-    bool XFont::isSpace(wchar_t c)
+    bool XFont::isSpace(wchar_t c) const
     {
         return (c == 0x20) || (c == 0xa0);
     }
     
-    bool XFont::isValid(wchar_t c)
+    bool XFont::isValid(wchar_t c) const
     {
         return glyphs.count(c);
     }
     
-    int XFont::lookup(wchar_t c)
+    int XFont::lookup(wchar_t c) const
     {
         if (isSpace(c))
         {
@@ -292,7 +292,7 @@ namespace chronotext
         }
         else
         {
-            map<wchar_t, int>::iterator it = glyphs.find(c);
+            auto it = glyphs.find(c);
             
             if (it == glyphs.end())
             {
@@ -341,12 +341,12 @@ namespace chronotext
         strikethroughFactor = factor;
     }
     
-    float XFont::getSize()
+    float XFont::getSize() const
     {
         return size;
     }
     
-    float XFont::getDirection()
+    float XFont::getDirection() const
     {
         return direction * axis.x;
     }
@@ -356,7 +356,7 @@ namespace chronotext
         return axis;
     }
     
-    float XFont::getGlyphWidth(int cc)
+    float XFont::getGlyphWidth(int cc) const
     {
         if (cc == - 2)
         {
@@ -372,54 +372,54 @@ namespace chronotext
         }
     }
     
-    float XFont::getCharWidth(wchar_t c)
+    float XFont::getCharWidth(wchar_t c) const
     {
         return getGlyphWidth(lookup(c));
     }
     
-    float XFont::getStringWidth(const wstring &s)
+    float XFont::getStringWidth(const wstring &s) const
     {
         return getSubStringWidth(s, 0, s.size());
     }
     
-    float XFont::getSubStringWidth(const wstring &s, int begin, int end)
+    float XFont::getSubStringWidth(const wstring &s, int begin, int end) const
     {
         float width = 0;
         
-        for (int i = begin; i < end; i++)
+        for (auto c : s)
         {
-            width += getCharWidth(s[i]);
+            width += getCharWidth(c);
         }
         
         return width;
     }
     
-    float XFont::getHeight()
+    float XFont::getHeight() const
     {
         return height * sizeRatio;
     }
     
-    float XFont::getAscent()
+    float XFont::getAscent() const
     {
         return ascent * sizeRatio;
     }
     
-    float XFont::getDescent()
+    float XFont::getDescent() const
     {
         return descent * sizeRatio;
     }
     
-    float XFont::getStrikethroughOffset()
+    float XFont::getStrikethroughOffset() const
     {
         return strikethroughFactor * (ascent - descent) * sizeRatio;
     }
     
-    float XFont::getUnderlineOffset()
+    float XFont::getUnderlineOffset() const
     {
         return underlineOffset * sizeRatio;
     }
     
-    float XFont::getUnderlineThickness()
+    float XFont::getUnderlineThickness() const
     {
         return underlineThickness * sizeRatio;
     }
@@ -429,7 +429,7 @@ namespace chronotext
         return &matrix;
     }
     
-    GLushort* XFont::getIndices()
+    GLushort* XFont::getIndices() const
     {
         return indices;
     }
