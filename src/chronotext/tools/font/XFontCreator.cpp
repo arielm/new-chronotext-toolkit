@@ -169,37 +169,37 @@ void XFontCreator::write(DataTargetRef target)
 
 XGlyph* XFontCreator::createGlyph(wchar_t c)
 {
-    FT_UInt glyphIndex = FT_Get_Char_Index(ftFace, c);
+    auto glyphIndex = FT_Get_Char_Index(ftFace, c);
     
-    if (index)
+    if (glyphIndex)
     {
-        FT_Error error =  FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
+        auto error =  FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
         
         if (!error)
         {
-            FT_GlyphSlot slot = ftFace->glyph;
+            auto slot = ftFace->glyph;
             
             FT_Glyph glyph;
             error = FT_Get_Glyph(slot, &glyph);
             
             if (!error)
             {
+                XGlyph *g = NULL;
                 FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
                 
-                /*
-                 * WE CAN'T TRUST THE FACT THAT FT_Get_Glyph()
-                 * IS NOT RETURNING AN ERROR
-                 */
-                if (slot->bitmap.width * slot->bitmap.rows > 0)
+                auto width = slot->bitmap.width;
+                auto height = slot->bitmap.rows;
+
+                if (width * height > 0)
                 {
-                    XGlyph *g = new XGlyph(slot->bitmap.buffer, slot->bitmap.width, slot->bitmap.rows);
+                    g = new XGlyph(slot->bitmap.buffer, width, height);
                     g->leftExtent = slot->bitmap_left;
                     g->topExtent = slot->bitmap_top;
                     g->advance = slot->advance.x / 64.0f;
-                    
-                    FT_Done_Glyph(glyph);
-                    return g;
                 }
+                
+                FT_Done_Glyph(glyph);
+                return g;
             }
         }
     }
