@@ -70,9 +70,16 @@ namespace chronotext
             return *this;
         }
         
-        bool operator==(const TextureRequest &rhs) const
+        bool operator<(const TextureRequest &rhs) const
         {
-            return (useMipmap == rhs.useMipmap) && (flags == rhs.flags) && (wrapS == rhs.wrapS) && (wrapT == rhs.wrapT) && (inputSource->getURI() == rhs.inputSource->getURI());
+            if (std::tie(useMipmap, flags, wrapS, wrapT) == std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT))
+            {
+                return (inputSource->getURI() < rhs.inputSource->getURI());
+            }
+            else
+            {
+                return std::tie(useMipmap, flags, wrapS, wrapT) < std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT);
+            }
         }
     };
 }

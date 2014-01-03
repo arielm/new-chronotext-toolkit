@@ -25,22 +25,26 @@ namespace chronotext
     
     TextureRef TextureManager::getTexture(const TextureRequest &textureRequest)
     {
-        TextureRef texture = getFromCache(textureRequest);
+        auto it = cache.find(textureRequest);
         
-        if (!texture)
+        if (it != cache.end())
         {
-            texture = make_shared<Texture>(textureRequest);
-            putInCache(texture);
+            return it->second;
         }
-        
-        return texture;
+        else
+        {
+            auto texture = make_shared<Texture>(textureRequest);
+            cache[textureRequest] = texture;
+            
+            return texture;
+        }
     }
     
     bool TextureManager::remove(TextureRef texture)
     {
         for (auto it = cache.begin(); it != cache.end(); ++it)
         {
-            if (texture == *it)
+            if (it->second == texture)
             {
                 cache.erase(it);
                 return true;
@@ -61,9 +65,9 @@ namespace chronotext
         {
             unloaded = true;
             
-            for (auto texture : cache)
+            for (auto &it : cache)
             {
-                texture->unload();
+                it.second->unload();
             }
         }
     }
@@ -74,28 +78,10 @@ namespace chronotext
         {
             unloaded = false;
             
-            for (auto texture : cache)
+            for (auto &it : cache)
             {
-                texture->reload();
+                it.second->reload();
             }
         }
-    }
-    
-    TextureRef TextureManager::getFromCache(const TextureRequest &textureRequest)
-    {
-        for (auto texture : cache)
-        {
-            if (textureRequest == texture->request)
-            {
-                return texture;
-            }
-        }
-        
-        return TextureRef();
-    }
-    
-    void TextureManager::putInCache(TextureRef texture)
-    {
-        cache.push_back(texture);
     }
 }

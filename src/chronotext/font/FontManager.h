@@ -37,7 +37,7 @@ namespace chronotext
         
         bool operator<(const FontKey &rhs) const
         {
-            return tie(useMipmap, useAnisotropy, maxDimensions, slotCapacity, uri) < tie(rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity, rhs.uri);
+            return std::tie(useMipmap, useAnisotropy, maxDimensions, slotCapacity, uri) < std::tie(rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity, rhs.uri);
         }
     };
     
