@@ -15,11 +15,6 @@ using namespace std;
 
 namespace chronotext
 {
-    XFontSequence::~XFontSequence()
-    {
-        clear();
-    }
-    
     void XFontSequence::begin(XFont *font, int dimensions, int slotCapacity)
     {
         this->font = font;
@@ -39,11 +34,11 @@ namespace chronotext
         if (slotIndex + 1 > slots.size())
         {
             slot = new Slot(dimensions, slotCapacity);
-            slots.push_back(slot);
+            slots.push_back(unique_ptr<Slot>(slot));
         }
         else
         {
-            slot = slots[slotIndex];
+            slot = slots[slotIndex].get();
         }
         
         slot->count = count;
@@ -57,10 +52,8 @@ namespace chronotext
     {
         font->begin();
         
-        for (vector<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
+        for (auto &slot : slots)
         {
-            Slot *slot = *it;
-            
             glVertexPointer(dimensions, GL_FLOAT, 0, slot->vertices);
             glTexCoordPointer(2, GL_FLOAT, 0, slot->coords);
             glDrawElements(GL_TRIANGLES, slot->count * 6, GL_UNSIGNED_SHORT, font->getIndices());
@@ -71,11 +64,6 @@ namespace chronotext
     
     void XFontSequence::clear()
     {
-        for (vector<Slot*>::const_iterator it = slots.begin(); it != slots.end(); ++it)
-        {
-            delete *it;
-        }
-        
         slots.clear();
     }
 }
