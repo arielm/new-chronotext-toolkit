@@ -40,7 +40,7 @@ namespace chronotext
         float spaceWidth;
         float strikethroughFactor;
         float underlineOffset;
-        float underlineThickness;
+        float lineThickness;
         
         int atlasWidth;
         int atlasHeight;
@@ -146,7 +146,7 @@ namespace chronotext
         float getDescent() const;
         float getStrikethroughOffset() const;
         float getUnderlineOffset() const;
-        float getUnderlineThickness() const;
+        float getLineThickness() const;
         
         FontMatrix* getMatrix();
         GLushort* getIndices() const;

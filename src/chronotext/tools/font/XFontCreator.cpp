@@ -59,7 +59,7 @@ params(params)
     descent = -ftFace->size->metrics.descender / 64.0f / res;
 
     underlineOffset = -ftFace->underline_position / 64.0f;
-    underlineThickness = ftFace->underline_thickness / 64.0f;
+    lineThickness = ftFace->underline_thickness / 64.0f;
 
     // ---
     
@@ -143,7 +143,7 @@ void XFontCreator::write(DataTargetRef target)
     out->writeLittle(spaceWidth);
     out->writeLittle(strikethroughFactor);
     out->writeLittle(underlineOffset);
-    out->writeLittle(underlineThickness);
+    out->writeLittle(lineThickness);
     
     out->writeLittle(atlasWidth);
     out->writeLittle(atlasHeight);

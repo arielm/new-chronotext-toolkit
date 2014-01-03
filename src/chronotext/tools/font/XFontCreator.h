@@ -101,7 +101,7 @@ public:
     float spaceWidth;
     float strikethroughFactor;
     float underlineOffset;
-    float underlineThickness;
+    float lineThickness;
     
     float size;
     XParams params;

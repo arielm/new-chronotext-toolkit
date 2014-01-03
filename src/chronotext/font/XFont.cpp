@@ -123,7 +123,7 @@ namespace chronotext
         in->readLittle(&spaceWidth);
         in->readLittle(&strikethroughFactor);
         in->readLittle(&underlineOffset);
-        in->readLittle(&underlineThickness);
+        in->readLittle(&lineThickness);
         
         in->readLittle(&atlasWidth);
         in->readLittle(&atlasHeight);
@@ -422,9 +422,9 @@ namespace chronotext
         return underlineOffset * sizeRatio;
     }
     
-    float XFont::getUnderlineThickness() const
+    float XFont::getLineThickness() const
     {
-        return underlineThickness * sizeRatio;
+        return lineThickness * sizeRatio;
     }
     
     FontMatrix* XFont::getMatrix()
