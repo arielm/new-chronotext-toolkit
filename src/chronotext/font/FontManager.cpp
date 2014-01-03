@@ -21,7 +21,7 @@ namespace chronotext
     
     XFont* FontManager::getFont(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
     {
-        FontKey key(inputSource->getUniqueName(), useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+        FontKey key(inputSource->getURI(), useMipmap, useAnisotropy, maxDimensions, slotCapacity);
         auto it = cache.find(key);
         
         if (it != cache.end())

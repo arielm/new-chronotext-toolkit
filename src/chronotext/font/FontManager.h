@@ -20,15 +20,15 @@ namespace chronotext
 {
     struct FontKey
     {
-        std::string uniqueName;
+        std::string uri;
         bool useMipmap;
         bool useAnisotropy;
         int maxDimensions;
         int slotCapacity;
         
-        FontKey(const std::string &uniqueName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+        FontKey(const std::string &uri, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
         :
-        uniqueName(uniqueName),
+        uri(uri),
         useMipmap(useMipmap),
         useAnisotropy(useAnisotropy),
         maxDimensions(maxDimensions),
@@ -37,7 +37,7 @@ namespace chronotext
         
         bool operator<(const FontKey &rhs) const
         {
-            return tie(useMipmap, useAnisotropy, maxDimensions, slotCapacity, uniqueName) < tie(rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity, rhs.uniqueName);
+            return tie(useMipmap, useAnisotropy, maxDimensions, slotCapacity, uri) < tie(rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity, rhs.uri);
         }
     };
     

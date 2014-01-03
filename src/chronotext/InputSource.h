@@ -86,17 +86,21 @@ namespace chronotext
         static InputSourceRef getFile(const ci::fs::path &filePath);
         static ci::DataSourceRef loadFile(const ci::fs::path &filePath);
         
-        InputSource(int type) : type(type) {}
+        InputSource(int type)
+        :
+        type(type)
+        {}
 
         ci::DataSourceRef loadDataSource();
         
         bool isFile() const;
         ci::fs::path getFilePath() const;
-        std::string getUniqueName() const;
         
         std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
-        
+
+        std::string getURI();
+
     protected:
         int type;
         
@@ -106,6 +110,7 @@ namespace chronotext
         ci::fs::path filePath;
         ci::fs::path relativePath;
         std::string filePathHint;
+        std::string uri;
     };
 }
 

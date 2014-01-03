@@ -72,7 +72,7 @@ namespace chronotext
         
         bool operator==(const TextureRequest &rhs) const
         {
-            return (inputSource->getUniqueName() == rhs.inputSource->getUniqueName()) && (useMipmap == rhs.useMipmap) && (flags == rhs.flags) && (wrapS == rhs.wrapS) && (wrapT == rhs.wrapT);
+            return (useMipmap == rhs.useMipmap) && (flags == rhs.flags) && (wrapS == rhs.wrapS) && (wrapT == rhs.wrapT) && (inputSource->getURI() == rhs.inputSource->getURI());
         }
     };
 }

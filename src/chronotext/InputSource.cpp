@@ -205,26 +205,6 @@ namespace chronotext
         return filePath;
     }
     
-    string InputSource::getUniqueName() const
-    {
-        switch (type)
-        {
-            case TYPE_RESOURCE:
-                return "res://" + resourceName;
-                
-            case TYPE_RESOURCE_MSW:
-                return "res_msw://" + boost::lexical_cast<string>(mswID) + "/" + mswType;
-                
-            case TYPE_FILE:
-                return "file://" + filePath.string();
-                
-            case TYPE_ASSET:
-                return "assets://" + relativePath.string();
-        }
-        
-        return "";
-    }
-    
     string InputSource::getFilePathHint() const
     {
         return filePathHint;
@@ -233,5 +213,37 @@ namespace chronotext
     void InputSource::setFilePathHint(const string &hint)
     {
         filePathHint = hint;
+    }
+    
+    string InputSource::getURI()
+    {
+        /*
+         * ADVANTAGES OF COMPUTING THE VALUE ONLY ONCE:
+         * - ALLOWS EFFICIENT USAGE IN std::map KEYS
+         * - WILL MAKE SENSE WHEN WE START CREATING InputSource INSTANCES BASED ON URIS
+         */
+        if (uri.empty())
+        {
+            switch (type)
+            {
+                case TYPE_RESOURCE:
+                    uri = "res://" + resourceName;
+                    break;
+                    
+                case TYPE_RESOURCE_MSW:
+                    uri = "res://" + resourceName + "?id=" + toString(mswID) + "&type=" + mswType;
+                    break;
+                    
+                case TYPE_FILE:
+                    uri = "file://" + filePath.string();
+                    break;
+                    
+                case TYPE_ASSET:
+                    uri = "assets://" + relativePath.string();
+                    break;
+            }
+        }
+        
+        return uri;
     }
 }
