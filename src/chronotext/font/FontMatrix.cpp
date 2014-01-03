@@ -185,7 +185,7 @@ namespace chronotext
         m32 = r32;
     }
     
-    void FontMatrix::transform3D(float x, float y, float *res)
+    Vec3f FontMatrix::transform3D(float x, float y) const
     {
         float x00 = x * m00;
         float x10 = x * m10;
@@ -195,12 +195,21 @@ namespace chronotext
         float y11 = y * m11;
         float y21 = y * m21;
         
-        *res++ = x00 + y01 + m03;
-        *res++ = x10 + y11 + m13;
-        *res   = x20 + y21 + m23;
+        return Vec3f(x00 + y01 + m03, x10 + y11 + m13, x20 + y21 + m23);
     }
     
-    void FontMatrix::transform3D(float x1, float y1, float x2, float y2, float *res)
+    ci::Vec2f FontMatrix::transform2D(float x, float y) const
+    {
+        float x00 = x * m00;
+        float x10 = x * m10;
+        
+        float y01 = y * m01;
+        float y11 = y * m11;
+        
+        return Vec2f(x00 + y01 + m03, x10 + y11 + m13);
+    }
+    
+    int FontMatrix::transform3D(float x1, float y1, float x2, float y2, float *res)
     {
         float x100 = x1 * m00;
         float x110 = x1 * m10;
@@ -241,21 +250,11 @@ namespace chronotext
         *res++ = x200 + y201 + m03;
         *res++ = x210 + y211 + m13;
         *res   = x220 + y221 + m23;
+        
+        return 4 * 3;
     }
     
-    void FontMatrix::transform2D(float x, float y, float *res)
-    {
-        float x00 = x * m00;
-        float x10 = x * m10;
-        
-        float y01 = y * m01;
-        float y11 = y * m11;
-        
-        *res++ = x00 + y01 + m03;
-        *res   = x10 + y11 + m13;
-    }
-    
-    void FontMatrix::transform2D(float x1, float y1, float x2, float y2, float *res)
+    int FontMatrix::transform2D(float x1, float y1, float x2, float y2, float *res)
     {
         float x100 = x1 * m00;
         float x110 = x1 * m10;
@@ -288,5 +287,7 @@ namespace chronotext
         
         *res++ = x200 + y201 + m03;
         *res   = x210 + y211 + m13;
+        
+        return 4 * 2;
     }
 }

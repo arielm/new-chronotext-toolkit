@@ -754,8 +754,7 @@ namespace chronotext
         {
             const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-            sequenceVertices += 4 * 2;
+            sequenceVertices += matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             
             *sequenceCoords++ = quad.tx1;
             *sequenceCoords++ = quad.ty1;
@@ -778,8 +777,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-                sequenceVertices += 4 * 2;
+                sequenceVertices += matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
                 
                 *sequenceCoords++ = quad.tx1;
                 *sequenceCoords++ = quad.ty1;
@@ -801,8 +799,7 @@ namespace chronotext
         {
             const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-            sequenceVertices += 4 * 3;
+            sequenceVertices += matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             
             *sequenceCoords++ = quad.tx1;
             *sequenceCoords++ = quad.ty1;
@@ -825,8 +822,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-                sequenceVertices += 4 * 3;
+                sequenceVertices += matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
                 
                 *sequenceCoords++ = quad.tx1;
                 *sequenceCoords++ = quad.ty1;

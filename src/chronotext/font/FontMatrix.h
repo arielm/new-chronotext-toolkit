@@ -40,11 +40,11 @@ namespace chronotext
         void rotateZ(float a);
         void rotateXY(float sx, float sy);
         
-        void transform3D(float x, float y, float* res);
-        void transform3D(float x1, float y1, float x2, float y2, float* res);
+        ci::Vec3f transform3D(float x, float y) const;
+        ci::Vec2f transform2D(float x, float y) const;
         
-        void transform2D(float x, float y, float* res);
-        void transform2D(float x1, float y1, float x2, float y2, float* res);
+        int transform3D(float x1, float y1, float x2, float y2, float *res);
+        int transform2D(float x1, float y1, float x2, float y2, float *res);
     };
 }
 
