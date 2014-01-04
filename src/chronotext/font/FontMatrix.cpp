@@ -12,12 +12,6 @@ using namespace ci;
 
 namespace chronotext
 {
-    void FontMatrix::setToIdentity()
-    {
-        m00 = m11 = m22 = m33 = 1;
-        m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
-    }
-    
     void FontMatrix::load(const Matrix44f &matrix)
     {
         memcpy(m, matrix.m, 16 * sizeof(float));
@@ -30,13 +24,11 @@ namespace chronotext
         m[ 2] = 0;           m[ 6] = 0;           m[10] = 1; m[14] = 0;
         m[ 3] = 0;           m[ 7] = 0;           m[11] = 0; m[15] = 1;
     }
-    
-    void FontMatrix::translate(float x, float y, float z)
+
+    void FontMatrix::setToIdentity()
     {
-        m03 += x * m00 + y * m01 + z * m02;
-        m13 += x * m10 + y * m11 + z * m12;
-        m23 += x * m20 + y * m21 + z * m22;
-        m33 += x * m30 + y * m31 + z * m32;
+        m00 = m11 = m22 = m33 = 1;
+        m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
     }
     
     void FontMatrix::setTranslation(float x, float y, float z)
@@ -47,6 +39,14 @@ namespace chronotext
         m03 = x;
         m13 = y;
         m23 = z;
+    }
+    
+    void FontMatrix::translate(float x, float y, float z)
+    {
+        m03 += x * m00 + y * m01 + z * m02;
+        m13 += x * m10 + y * m11 + z * m12;
+        m23 += x * m20 + y * m21 + z * m22;
+        m33 += x * m30 + y * m31 + z * m32;
     }
     
     void FontMatrix::scale(float x, float y, float z)
