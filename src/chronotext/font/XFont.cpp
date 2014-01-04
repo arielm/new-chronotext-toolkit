@@ -389,9 +389,9 @@ namespace chronotext
     {
         float width = 0;
         
-        for (auto c : s)
+        for (int i = begin; i < end; i++)
         {
-            width += getCharWidth(c);
+            width += getCharWidth(s.at(i));
         }
         
         return width;
