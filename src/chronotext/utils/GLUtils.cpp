@@ -82,15 +82,15 @@ namespace chronotext
         for (int iy = 0; iy < ny; iy++)
         {
             float y = y1 + iy * sy;
-            vertices.push_back(Vec2f(bounds.x1, y));
-            vertices.push_back(Vec2f(bounds.x2, y));
+            vertices.emplace_back(bounds.x1, y);
+            vertices.emplace_back(bounds.x2, y);
         }
         
         for (int ix = 0; ix < nx; ix++)
         {
             float x = x1 + ix * sx;
-            vertices.push_back(Vec2f(x, bounds.y1));
-            vertices.push_back(Vec2f(x, bounds.y2));
+            vertices.emplace_back(x, bounds.y1);
+            vertices.emplace_back(x, bounds.y2);
         }
         
         glEnableClientState(GL_VERTEX_ARRAY);

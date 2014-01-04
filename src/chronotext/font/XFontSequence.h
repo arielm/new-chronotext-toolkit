@@ -9,6 +9,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 namespace chronotext
 {
@@ -35,21 +36,20 @@ namespace chronotext
     
     class XFontSequence
     {
-        XFont *font;
-        int dimensions;
-        int slotCapacity;
-        
-        int slotIndex;
-        std::vector<Slot*> slots;
-        
     public:
-        ~XFontSequence();
-        
         void begin(XFont *font, int dimensions, int slotCapacity);
         void end();
         void flush(float *vertices, float *coords, int count);
         void replay();
         void clear();
+        
+    protected:
+        XFont *font;
+        int dimensions;
+        int slotCapacity;
+        
+        int slotIndex;
+        std::vector<std::unique_ptr<Slot>> slots;
     };
 }
 

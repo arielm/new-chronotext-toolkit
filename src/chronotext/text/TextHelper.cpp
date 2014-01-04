@@ -19,9 +19,9 @@ namespace chronotext
         {
             float w = 0;
             
-            for (wstring::const_iterator it = text.begin(); it != text.end(); ++it)
+            for (auto c : text)
             {
-                int cc = font->lookup(*it);
+                int cc = font->lookup(c);
                 w += math<float>::floor(font->getGlyphWidth(cc));
             }
             
@@ -43,9 +43,9 @@ namespace chronotext
         
         font->beginSequence(sequence, 2);
         
-        for (wstring::const_iterator it = text.begin(); it != text.end(); ++it)
+        for (auto c : text)
         {
-            int cc = font->lookup(*it);
+            int cc = font->lookup(c);
             font->addGlyph(cc, x, y);
             
             float w = font->getGlyphWidth(cc) * font->getDirection();
@@ -138,7 +138,6 @@ namespace chronotext
     
     float TextHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wstring &text, FollowablePath *path, float offset)
     {
-        int len = text.size();
         float offsetX = offset;
         float offsetY = font->getStrikethroughOffset();
         float sampleSize = font->getSize() * 0.5f;
@@ -146,19 +145,16 @@ namespace chronotext
         FontMatrix *matrix = font->getMatrix();
         font->beginSequence(sequence, 2);
         
-        for (int i = 0; i < len; i++)
+        for (auto c : text)
         {
-            int cc = font->lookup(text[i]);
+            int cc = font->lookup(c);
             float half = 0.5f * font->getGlyphWidth(cc);
             offsetX += half;
             
             if (cc >= 0)
             {
-                const Vec2f point = path->pos2Point(offsetX);
-                float angle = path->pos2SampledAngle(offsetX, sampleSize);
-                
-                matrix->setTranslation(point.x, point.y, 0);
-                matrix->rotateZ(angle);
+                matrix->setTranslation(path->pos2Point(offsetX));
+                matrix->rotateZ(path->pos2SampledAngle(offsetX, sampleSize));
                 font->addTransformedGlyph2D(cc, -half, offsetY);
             }
             

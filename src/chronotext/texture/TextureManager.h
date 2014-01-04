@@ -11,7 +11,7 @@
 #include "chronotext/texture/TextureHelper.h"
 #include "chronotext/texture/Texture.h"
 
-#include <list>
+#include <map>
 
 namespace chronotext
 {
@@ -34,11 +34,8 @@ namespace chronotext
         void reload();
         
     protected:
-        std::list<TextureRef> cache;
+        std::map<TextureRequest, TextureRef> cache;
         bool unloaded;
-        
-        TextureRef getFromCache(const TextureRequest &textureRequest);
-        void putInCache(TextureRef texture);
     };
 }
 

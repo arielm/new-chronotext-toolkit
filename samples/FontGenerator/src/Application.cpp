@@ -32,6 +32,7 @@ const std::wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5
 
 class Application : public AppNative
 {
+    shared_ptr<FreetypeHelper> ftHelper;
     FontManager fontManager;
     
     XFont *font1;
@@ -45,38 +46,38 @@ public:
     
     void draw();
     
-    void createFontSafely(const FreetypeHelper &ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
+    void createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
     XFont* loadFontSafely(const string &fileName, bool useMipmap = false);
     void drawFontSafely(XFont *font, float size, float x, float y, bool snap = false, float direction = +1);
 };
 
 void Application::setup()
 {
-    FreetypeHelper ftHelper;
+    ftHelper = make_shared<FreetypeHelper>();
     
     /*
      * - NO NEED FOR MARGIN AND PADDING BECAUSE THE FONT IS ONLY INTENDED TO BE RENDERED AT ITS NATIVE-FONT-SIZE
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Helevetica ON OSX
      */
-    createFontSafely(ftHelper, FontDescriptor("/System/Library/Fonts/Helvetica.dfont", 4), 16, ASCII, XParams(0, 0)); // FACE-INDEX 4 CORRESPONDS TO "Helvetica Regular"
+    createFontSafely(FontDescriptor("/System/Library/Fonts/Helvetica.dfont", 4), 16, ASCII, XParams(0, 0)); // FACE-INDEX 4 CORRESPONDS TO "Helvetica Regular"
 
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Georgia ON OSX
      */
-    createFontSafely(ftHelper, FontDescriptor("/Library/Fonts/Georgia.ttf"), 64, ISO_8859_15, XParams(3, 2));
+    createFontSafely(FontDescriptor("/Library/Fonts/Georgia.ttf"), 64, ISO_8859_15, XParams(3, 2));
     
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT FROM THE RESOURCE-BUNDLE
      */
-    createFontSafely(ftHelper, FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15, XParams(3, 2));
+    createFontSafely(FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15, XParams(3, 2));
 
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT FROM THE DOCUMENTS FOLDER
      */
-    createFontSafely(ftHelper, FontDescriptor(getDocumentsDirectory() / "frank.ttf"), 64, HEBREW_BIBLICAL, XParams(3, 2));
+    createFontSafely(FontDescriptor(getDocumentsDirectory() / "frank.ttf"), 64, HEBREW_BIBLICAL, XParams(3, 2));
 
     // ---
     
@@ -112,11 +113,11 @@ void Application::draw()
     drawFontSafely(font4, 64, getWindowWidth() - 10, getWindowHeight() * 4 / 5.0f, false, -1); // ANY SIZE CAN BE USED
 }
 
-void Application::createFontSafely(const FreetypeHelper &ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
+void Application::createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
 {
     try
     {
-        XFontCreator(ftHelper.getLib(), descriptor, size, characters, params).writeToFolder(getDocumentsDirectory());
+        XFontCreator(ftHelper, descriptor, size, characters, params).writeToFolder(getDocumentsDirectory());
     }
     catch (exception &e)
     {

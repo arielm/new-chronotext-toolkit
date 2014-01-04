@@ -83,7 +83,10 @@ struct XGlyph
 
 class XFontCreator
 {
-    XGlyph* getGlyph(wchar_t c);
+    std::shared_ptr<FreetypeHelper> ftHelper;
+    FT_Face ftFace;
+    
+    XGlyph* createGlyph(wchar_t c);
     
     bool canDisplay(wchar_t c);
     bool isSpace(wchar_t c);
@@ -92,15 +95,13 @@ class XFontCreator
     bool pack(int targetWidth, int targetHeight);
     
 public:
-    FT_Face face;
-    
     float height;
     float ascent;
     float descent;
     float spaceWidth;
     float strikethroughFactor;
     float underlineOffset;
-    float underlineThickness;
+    float lineThickness;
     
     float size;
     XParams params;
@@ -111,7 +112,7 @@ public:
     std::map<wchar_t, XGlyph*> glyphs; // SORTED BY UNICODE CHARACTER (SMALLER FIRST)
     std::list<XGlyph*> ordered; // SORTED BY SIZE (LARGEST FIRST)
     
-    XFontCreator(FT_Library library, const FontDescriptor &descriptor, float size, const std::wstring &characters, const XParams &params);
+    XFontCreator(std::shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float size, const std::wstring &characters, const XParams &params);
     ~XFontCreator();
     
     void writeToFolder(const ci::fs::path &folderPath);

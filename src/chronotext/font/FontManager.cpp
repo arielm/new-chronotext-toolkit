@@ -14,14 +14,6 @@ using namespace chr;
 
 namespace chronotext
 {
-    FontManager::~FontManager()
-    {
-        for (auto font : cache)
-        {
-            delete font;
-        }
-    }
-    
     XFont* FontManager::getFont(const string &resourceName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
     {
         return getFont(InputSource::getResource(resourceName), useMipmap, useAnisotropy, maxDimensions, slotCapacity);
@@ -29,26 +21,29 @@ namespace chronotext
     
     XFont* FontManager::getFont(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
     {
-        XFont *font = getFromCache(inputSource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+        FontKey key(inputSource->getURI(), useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+        auto it = cache.find(key);
         
-        if (!font)
+        if (it != cache.end())
         {
-            font = new XFont(inputSource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
-            putInCache(font);
+            return it->second.get();
         }
-        
-        return font;
+        else
+        {
+            auto font = new XFont(inputSource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+            cache[key] = unique_ptr<XFont>(font);
+            
+            return font;
+        }
     }
     
     bool FontManager::remove(XFont *font)
     {
         for (auto it = cache.begin(); it != cache.end(); ++it)
         {
-            if (font == *it)
+            if (it->second.get() == font)
             {
-                delete *it;
                 cache.erase(it);
-                
                 return true;
             }
         }
@@ -58,45 +53,22 @@ namespace chronotext
     
     void FontManager::clear()
     {
-        for (auto font : cache)
-        {
-            delete font;
-        }
-        
         cache.clear();
     }
     
     void FontManager::unload()
     {
-        for (auto font : cache)
+        for (auto &it : cache)
         {
-            font->unload();
+            it.second->unload();
         }
     }
     
     void FontManager::reload()
     {
-        for (auto font : cache)
+        for (auto &it : cache)
         {
-            font->reload();
+            it.second->reload();
         }
-    }
-    
-    XFont* FontManager::getFromCache(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
-    {
-        for (auto font : cache)
-        {
-            if ((font->inputSource->getUniqueName() == inputSource->getUniqueName()) && (font->useMipmap == useMipmap) && (font->useAnisotropy == useAnisotropy) && (font->maxDimensions == maxDimensions) && (font->slotCapacity == slotCapacity))
-            {
-                return font;
-            }
-        }
-        
-        return NULL;
-    }
-    
-    void FontManager::putInCache(XFont *font)
-    {
-        cache.push_back(font);
     }
 }

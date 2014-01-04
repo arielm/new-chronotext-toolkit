@@ -28,23 +28,30 @@ namespace chronotext
         };
         
     public:
-        void setToIdentity();
         void load(const ci::Matrix44f &matrix);
         void load(const ci::MatrixAffine2f &matrix);
+        
+        void setToIdentity();
 
-        void translate(float x, float y, float z);
+        inline void setTranslation(const ci::Vec2f &t) { setTranslation(t.x, t.y, 0); }
         void setTranslation(float x, float y, float z);
+
+        inline void translate(const ci::Vec2f &t) { translate(t.x, t.y, 0); }
+        void translate(float x, float y, float z);
+        
+        inline void scale(float s) { scale(s, s, s); }
         void scale(float x, float y, float z);
+        
         void rotateX(float a);
         void rotateY(float a);
         void rotateZ(float a);
         void rotateXY(float sx, float sy);
         
-        void transform3D(float x, float y, float* res);
-        void transform3D(float x1, float y1, float x2, float y2, float* res);
+        ci::Vec3f transform3D(float x, float y) const;
+        ci::Vec2f transform2D(float x, float y) const;
         
-        void transform2D(float x, float y, float* res);
-        void transform2D(float x1, float y1, float x2, float y2, float* res);
+        int transform3D(float x1, float y1, float x2, float y2, float *res);
+        int transform2D(float x1, float y1, float x2, float y2, float *res);
     };
 }
 

@@ -18,11 +18,32 @@
 
 namespace chronotext
 {
+    struct FontKey
+    {
+        std::string uri;
+        bool useMipmap;
+        bool useAnisotropy;
+        int maxDimensions;
+        int slotCapacity;
+        
+        FontKey(const std::string &uri, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+        :
+        uri(uri),
+        useMipmap(useMipmap),
+        useAnisotropy(useAnisotropy),
+        maxDimensions(maxDimensions),
+        slotCapacity(slotCapacity)
+        {}
+        
+        bool operator<(const FontKey &rhs) const
+        {
+            return std::tie(useMipmap, useAnisotropy, maxDimensions, slotCapacity, uri) < std::tie(rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity, rhs.uri);
+        }
+    };
+    
     class FontManager
     {
     public:
-        ~FontManager();
-        
         chr::XFont* getFont(const std::string &resourceName, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
         chr::XFont* getFont(InputSourceRef inputSource, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
         
@@ -33,10 +54,7 @@ namespace chronotext
         void reload();
         
     protected:
-        std::list<chr::XFont*> cache;
-        
-        chr::XFont* getFromCache(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity);
-        void putInCache(chr::XFont *font);
+        std::map<FontKey, std::unique_ptr<XFont>> cache;
     };
 }
 

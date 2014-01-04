@@ -15,20 +15,16 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-XFontCreator::XFontCreator(FT_Library library, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
+XFontCreator::XFontCreator(shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
 :
 size(size),
 params(params)
 {
-    FT_Error error = FT_New_Face(library, descriptor.filePath.string().c_str(), descriptor.faceIndex, &face);
+    FT_Error error = FT_New_Face(ftHelper->getLib(), descriptor.filePath.string().c_str(), descriptor.faceIndex, &ftFace);
     
-    if (error == FT_Err_Unknown_File_Format)
+    if (error)
     {
-        throw runtime_error("FREETYPE ERROR: UNKNOWN FILE FORMAT - " + descriptor.filePath.string());
-    }
-    else if (error)
-    {
-        throw runtime_error("FREETYPE ERROR: CAN'T OPEN FILE - " + descriptor.filePath.string());
+        throw runtime_error("FREETYPE: ERROR " + toString(error));
     }
     
     // ---
@@ -38,13 +34,13 @@ params(params)
      * TRICK FROM http://code.google.com/p/freetype-gl/
      *
      * - WITHOUT A FRACTIONAL ADVANCE: CHARACTER SPACING LOOKS DUMB
-     * - WITHOUT A FRACTIONAL HEIGHT: SOME CHARACTERS WON'T BE PROPERLY ALIGNED ON THE BASE-LINE
+     * - WITHOUT A FRACTIONAL HEIGHT: SOME CHARACTERS WON'T BE PERFECTLY ALIGNED ON THE BASELINE
      */
     int res = 64;
     int dpi = 72;
     
-    FT_Select_Charmap(face, FT_ENCODING_UNICODE);
-    FT_Set_Char_Size(face, size * 64, 0, dpi * res, dpi * res);
+    FT_Select_Charmap(ftFace, FT_ENCODING_UNICODE);
+    FT_Set_Char_Size(ftFace, size * 64, 0, dpi * res, dpi * res);
     
     FT_Matrix matrix =
     {
@@ -54,45 +50,50 @@ params(params)
         int((1.0 / res) * 0x10000L)
     };
     
-    FT_Set_Transform(face, &matrix, NULL);
+    FT_Set_Transform(ftFace, &matrix, NULL);
     
     // ---
     
-    height = face->size->metrics.height / 64.0f / res;
-    ascent = face->size->metrics.ascender / 64.0f / res;
-    descent = -face->size->metrics.descender / 64.0f / res;
+    height = ftFace->size->metrics.height / 64.0f / res;
+    ascent = ftFace->size->metrics.ascender / 64.0f / res;
+    descent = -ftFace->size->metrics.descender / 64.0f / res;
 
-    underlineOffset = -face->underline_position / 64.0f;
-    underlineThickness = face->underline_thickness / 64.0f;
+    underlineOffset = -ftFace->underline_position / 64.0f;
+    lineThickness = ftFace->underline_thickness / 64.0f;
 
     // ---
     
-    FT_UInt spaceGlyphIndex = FT_Get_Char_Index(face, L' ');
-    FT_Load_Glyph(face, spaceGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
-    spaceWidth = face->glyph->advance.x / 64.0f;
+    FT_UInt spaceGlyphIndex = FT_Get_Char_Index(ftFace, L' ');
+    FT_Load_Glyph(ftFace, spaceGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
+    spaceWidth = ftFace->glyph->advance.x / 64.0f;
     
     // ----
 
-    FT_UInt minusGlyphIndex = FT_Get_Char_Index(face, L'-');
-    FT_Load_Glyph(face, minusGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
-    float minusHeight = face->glyph->metrics.height / 64.0f / res;
-    float minusBearingY = face->glyph->metrics.horiBearingY / 64.0f / res;
-    float strikethroughOffset = minusBearingY - minusHeight * 0.5f;
-    strikethroughFactor = strikethroughOffset / (ascent - descent);
+    TT_OS2 *os2 = (TT_OS2*)FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2);
+    
+    if (os2 && (os2->version != 0xFFFF))
+    {
+        float strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, ftFace->size->metrics.y_scale) / 64.0f / res;
+        strikethroughFactor = strikethroughOffset / (ascent - descent);
+    }
+    else
+    {
+        strikethroughFactor = 0.5f;
+    }
 
     // ---
     
-    for (wstring::const_iterator it = characters.begin(); it != characters.end(); ++it)
+    for (auto c : characters)
     {
-        if (!isSpace(*it) && canDisplay(*it))
+        if (!isSpace(c) && canDisplay(c))
         {
-            if (glyphs.find(*it) == glyphs.end())
+            if (glyphs.find(c) == glyphs.end())
             {
-                XGlyph *glyph = getGlyph(*it);
+                XGlyph *glyph = createGlyph(c);
                 
                 if (glyph)
                 {
-                    glyphs[*it] = glyph;
+                    glyphs[c] = glyph;
                     ordered.push_back(glyph);
                 }
             }
@@ -109,17 +110,17 @@ params(params)
 
 XFontCreator::~XFontCreator()
 {
-    for (map<wchar_t, XGlyph*>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it)
+    for (auto it : glyphs)
     {
-        delete it->second;
+        delete it.second;
     }
-
-    FT_Done_Face(face);
+    
+    FT_Done_Face(ftFace);
 }
 
 void XFontCreator::writeToFolder(const fs::path &folderPath)
 {
-    string fileName = string(face->family_name) + "_" + string(face->style_name) + "_" + boost::lexical_cast<string>(size) + ".fnt";
+    string fileName = string(ftFace->family_name) + "_" + string(ftFace->style_name) + "_" + boost::lexical_cast<string>(size) + ".fnt";
     write(writeFile(folderPath / fileName));
     
     LOGI << "GENERATED: " << fileName << " - " << atlasWidth << "x" << atlasHeight << endl;
@@ -142,7 +143,7 @@ void XFontCreator::write(DataTargetRef target)
     out->writeLittle(spaceWidth);
     out->writeLittle(strikethroughFactor);
     out->writeLittle(underlineOffset);
-    out->writeLittle(underlineThickness);
+    out->writeLittle(lineThickness);
     
     out->writeLittle(atlasWidth);
     out->writeLittle(atlasHeight);
@@ -150,11 +151,11 @@ void XFontCreator::write(DataTargetRef target)
     out->writeLittle(params.unitMargin);
     out->writeLittle(params.unitPadding);
     
-    for (map<wchar_t, XGlyph*>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it)
+    for (auto it : glyphs)
     {
-        out->writeLittle((int)it->first);
+        out->writeLittle((int)it.first);
         
-        XGlyph *glyph = it->second;
+        XGlyph *glyph = it.second;
         out->writeLittle(glyph->advance);
         out->writeLittle(glyph->width);
         out->writeLittle(glyph->height);
@@ -166,39 +167,39 @@ void XFontCreator::write(DataTargetRef target)
     }
 }
 
-XGlyph* XFontCreator::getGlyph(wchar_t c)
+XGlyph* XFontCreator::createGlyph(wchar_t c)
 {
-    FT_UInt glyphIndex = FT_Get_Char_Index(face, c);
+    auto glyphIndex = FT_Get_Char_Index(ftFace, c);
     
-    if (index)
+    if (glyphIndex)
     {
-        FT_Error error =  FT_Load_Glyph(face, glyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
+        auto error =  FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
         
         if (!error)
         {
-            FT_GlyphSlot slot = face->glyph;
+            auto slot = ftFace->glyph;
             
             FT_Glyph glyph;
             error = FT_Get_Glyph(slot, &glyph);
             
             if (!error)
             {
+                XGlyph *g = NULL;
                 FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
                 
-                /*
-                 * WE CAN'T TRUST THE FACT THAT FT_Get_Glyph()
-                 * IS NOT RETURNING AN ERROR
-                 */
-                if (slot->bitmap.width * slot->bitmap.rows > 0)
+                auto width = slot->bitmap.width;
+                auto height = slot->bitmap.rows;
+
+                if (width * height > 0)
                 {
-                    XGlyph *g = new XGlyph(slot->bitmap.buffer, slot->bitmap.width, slot->bitmap.rows);
+                    g = new XGlyph(slot->bitmap.buffer, width, height);
                     g->leftExtent = slot->bitmap_left;
                     g->topExtent = slot->bitmap_top;
                     g->advance = slot->advance.x / 64.0f;
-                    
-                    FT_Done_Glyph(glyph);
-                    return g;
                 }
+                
+                FT_Done_Glyph(glyph);
+                return g;
             }
         }
     }
@@ -208,7 +209,7 @@ XGlyph* XFontCreator::getGlyph(wchar_t c)
 
 bool XFontCreator::canDisplay(wchar_t c)
 {
-    return (c > 0) && FT_Get_Char_Index(face, c);
+    return (c > 0) && FT_Get_Char_Index(ftFace, c);
 }
 
 bool XFontCreator::isSpace(wchar_t c)
@@ -264,9 +265,8 @@ bool XFontCreator::pack(int targetWidth, int targetHeight)
     
     BinPackRef pack = BinPack::create(targetWidth - atlasPaddingExtra, targetHeight - atlasPaddingExtra, BinPack::SKYLINE);
     
-    for (list<XGlyph*>::const_iterator it = ordered.begin(); it != ordered.end(); ++it)
+    for (auto glyph : ordered)
     {
-        XGlyph *glyph = *it;
         Area area = pack->allocateArea(glyph->width + unitMarginExtra, glyph->height + unitMarginExtra);
         
         if (area.x1 < 0)

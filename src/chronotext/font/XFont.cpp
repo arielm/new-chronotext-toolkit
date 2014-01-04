@@ -123,7 +123,7 @@ namespace chronotext
         in->readLittle(&spaceWidth);
         in->readLittle(&strikethroughFactor);
         in->readLittle(&underlineOffset);
-        in->readLittle(&underlineThickness);
+        in->readLittle(&lineThickness);
         
         in->readLittle(&atlasWidth);
         in->readLittle(&atlasHeight);
@@ -144,7 +144,7 @@ namespace chronotext
         tx2 = new float[glyphCount];
         ty2 = new float[glyphCount];
         
-        char *atlasData = (char*) calloc(atlasWidth * atlasHeight , 1); // WE NEED A ZERO-FILLED AREA
+        auto atlasData = new unsigned char[atlasWidth * atlasHeight](); // ZERO-FILLED
         
         for (int i = 0; i < glyphCount; i++)
         {
@@ -172,7 +172,7 @@ namespace chronotext
             le[i] = glyphLeftExtent - unitPadding;
             te[i] = glyphTopExtent + unitPadding;
             
-            char *data = new char[glyphWidth * glyphHeight];
+            unsigned char *data = new unsigned char[glyphWidth * glyphHeight];
             in->readData(data, glyphWidth * glyphHeight);
             addAtlasUnit(data, atlasData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
             delete[] data;
@@ -229,10 +229,11 @@ namespace chronotext
             glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
         }
         
-        free(atlasData);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        delete[] atlasData;
     }
     
-    void XFont::addAtlasUnit(char *srcData, char *dstData, int xx, int yy, int ww, int hh)
+    void XFont::addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int xx, int yy, int ww, int hh)
     {
         for (int iy = 0; iy < hh; iy++)
         {
@@ -276,17 +277,17 @@ namespace chronotext
     
     // ---
     
-    bool XFont::isSpace(wchar_t c)
+    bool XFont::isSpace(wchar_t c) const
     {
         return (c == 0x20) || (c == 0xa0);
     }
     
-    bool XFont::isValid(wchar_t c)
+    bool XFont::isValid(wchar_t c) const
     {
         return glyphs.count(c);
     }
     
-    int XFont::lookup(wchar_t c)
+    int XFont::lookup(wchar_t c) const
     {
         if (isSpace(c))
         {
@@ -294,7 +295,7 @@ namespace chronotext
         }
         else
         {
-            map<wchar_t, int>::iterator it = glyphs.find(c);
+            auto it = glyphs.find(c);
             
             if (it == glyphs.end())
             {
@@ -343,12 +344,12 @@ namespace chronotext
         strikethroughFactor = factor;
     }
     
-    float XFont::getSize()
+    float XFont::getSize() const
     {
         return size;
     }
     
-    float XFont::getDirection()
+    float XFont::getDirection() const
     {
         return direction * axis.x;
     }
@@ -358,7 +359,7 @@ namespace chronotext
         return axis;
     }
     
-    float XFont::getGlyphWidth(int cc)
+    float XFont::getGlyphWidth(int cc) const
     {
         if (cc == - 2)
         {
@@ -374,56 +375,56 @@ namespace chronotext
         }
     }
     
-    float XFont::getCharWidth(wchar_t c)
+    float XFont::getCharWidth(wchar_t c) const
     {
         return getGlyphWidth(lookup(c));
     }
     
-    float XFont::getStringWidth(const wstring &s)
+    float XFont::getStringWidth(const wstring &s) const
     {
         return getSubStringWidth(s, 0, s.size());
     }
     
-    float XFont::getSubStringWidth(const wstring &s, int begin, int end)
+    float XFont::getSubStringWidth(const wstring &s, int begin, int end) const
     {
         float width = 0;
         
         for (int i = begin; i < end; i++)
         {
-            width += getCharWidth(s[i]);
+            width += getCharWidth(s.at(i));
         }
         
         return width;
     }
     
-    float XFont::getHeight()
+    float XFont::getHeight() const
     {
         return height * sizeRatio;
     }
     
-    float XFont::getAscent()
+    float XFont::getAscent() const
     {
         return ascent * sizeRatio;
     }
     
-    float XFont::getDescent()
+    float XFont::getDescent() const
     {
         return descent * sizeRatio;
     }
     
-    float XFont::getStrikethroughOffset()
+    float XFont::getStrikethroughOffset() const
     {
         return strikethroughFactor * (ascent - descent) * sizeRatio;
     }
     
-    float XFont::getUnderlineOffset()
+    float XFont::getUnderlineOffset() const
     {
         return underlineOffset * sizeRatio;
     }
     
-    float XFont::getUnderlineThickness()
+    float XFont::getLineThickness() const
     {
-        return underlineThickness * sizeRatio;
+        return lineThickness * sizeRatio;
     }
     
     FontMatrix* XFont::getMatrix()
@@ -431,7 +432,7 @@ namespace chronotext
         return &matrix;
     }
     
-    GLushort* XFont::getIndices()
+    GLushort* XFont::getIndices() const
     {
         return indices;
     }
@@ -741,9 +742,9 @@ namespace chronotext
                 *sequenceCoords++ = quad.ty2;
                 *sequenceCoords++ = quad.tx2;
                 *sequenceCoords++ = quad.ty1;
+                
+                incrementSequence();
             }
-            
-            incrementSequence();
         }
     }
     
@@ -753,8 +754,7 @@ namespace chronotext
         {
             const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-            sequenceVertices += 4 * 2;
+            sequenceVertices += matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             
             *sequenceCoords++ = quad.tx1;
             *sequenceCoords++ = quad.ty1;
@@ -777,8 +777,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-                sequenceVertices += 4 * 2;
+                sequenceVertices += matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
                 
                 *sequenceCoords++ = quad.tx1;
                 *sequenceCoords++ = quad.ty1;
@@ -800,8 +799,7 @@ namespace chronotext
         {
             const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-            sequenceVertices += 4 * 3;
+            sequenceVertices += matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             
             *sequenceCoords++ = quad.tx1;
             *sequenceCoords++ = quad.ty1;
@@ -824,8 +822,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
-                sequenceVertices += 4 * 3;
+                sequenceVertices += matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
                 
                 *sequenceCoords++ = quad.tx1;
                 *sequenceCoords++ = quad.ty1;
