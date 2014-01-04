@@ -19,16 +19,16 @@ namespace chronotext
     
     void FontMatrix::load(const MatrixAffine2f &matrix)
     {
-        m[ 0] = matrix.m[0]; m[ 4] = matrix.m[2]; m[ 8] = 0; m[12] = matrix.m[4];
-        m[ 1] = matrix.m[1]; m[ 5] = matrix.m[3]; m[ 9] = 0; m[13] = matrix.m[5];
-        m[ 2] = 0;           m[ 6] = 0;           m[10] = 1; m[14] = 0;
-        m[ 3] = 0;           m[ 7] = 0;           m[11] = 0; m[15] = 1;
+        m[ 0] = matrix.m[0]; m[ 4] = matrix.m[2]; m[ 8] = 0.0f; m[12] = matrix.m[4];
+        m[ 1] = matrix.m[1]; m[ 5] = matrix.m[3]; m[ 9] = 0.0f; m[13] = matrix.m[5];
+        m[ 2] = 0.0f;        m[ 6] = 0.0f;        m[10] = 1.0f; m[14] = 0.0f;
+        m[ 3] = 0.0f;        m[ 7] = 0.0f;        m[11] = 0.0f; m[15] = 1.0f;
     }
 
     void FontMatrix::setToIdentity()
     {
-        m00 = m11 = m22 = m33 = 1;
-        m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
+        m00 = m11 = m22 = m33 = 1.0f;
+        m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
     }
     
     void FontMatrix::setTranslation(float x, float y, float z)
