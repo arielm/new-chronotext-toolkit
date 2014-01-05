@@ -68,14 +68,74 @@ namespace chronotext
         return InputSource::getAsset(relativePath)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFileInDocuments(const fs::path &relativePath)
+    /*
+     * TODO:
+     * THERE IS PROBABLY A BETTER WAY TO HANDLE THE PARSING,
+     * BUT Boost.Regex IS CURRENTLY NOT AN OPTION ON COCOA
+     */
+    InputSourceRef InputSource::get(const string &uri)
     {
-        return InputSource::getFile(getDocumentsDirectory() / relativePath);
+        string scheme;
+        string path;
+        int mswID = -1;
+        string mswType;
+        
+        auto found = uri.find("://");
+        
+        if (found != string::npos)
+        {
+            scheme = uri.substr(0, found);
+            
+            auto remainder1 = uri.substr(found + 3);
+            auto found1 = remainder1.find("?id=");
+            
+            if (found1 != string::npos)
+            {
+                auto remainder2 = remainder1.substr(found1 + 4);
+                auto found2 = remainder2.find("&type=");
+                
+                if (found2 != string::npos)
+                {
+                    path = remainder1.substr(0, found1);
+                    mswID = fromString<int>(remainder2.substr(0, found2));
+                    mswType = remainder2.substr(found2 + 6);
+                }
+            }
+            else
+            {
+                path = remainder1;
+            }
+        }
+        
+        if (!path.empty())
+        {
+            if (scheme == "res")
+            {
+                if ((mswID != -1) && !mswType.empty())
+                {
+                    return InputSource::getResource(path, mswID, mswType);
+                }
+                else
+                {
+                    return InputSource::getResource(path);
+                }
+            }
+            else if (scheme == "file")
+            {
+                return InputSource::getFile(path);
+            }
+            else if (scheme == "assets")
+            {
+                return InputSource::getAsset(path);
+            }
+        }
+        
+        throw Exception("INVALID URI: " + uri);
     }
     
-    DataSourceRef InputSource::loadFileInDocuments(const fs::path &relativePath)
+    DataSourceRef InputSource::load(const string &uri)
     {
-        return DataSourcePath::create(getDocumentsDirectory() / relativePath);
+        return InputSource::get(uri)->loadDataSource();
     }
     
     InputSourceRef InputSource::getFile(const fs::path &filePath)
@@ -90,6 +150,16 @@ namespace chronotext
     DataSourceRef InputSource::loadFile(const fs::path &filePath)
     {
         return DataSourcePath::create(filePath);
+    }
+
+    InputSourceRef InputSource::getFileInDocuments(const fs::path &relativePath)
+    {
+        return InputSource::getFile(getDocumentsDirectory() / relativePath);
+    }
+    
+    DataSourceRef InputSource::loadFileInDocuments(const fs::path &relativePath)
+    {
+        return DataSourcePath::create(getDocumentsDirectory() / relativePath);
     }
     
     DataSourceRef InputSource::loadDataSource()
@@ -218,9 +288,7 @@ namespace chronotext
     string InputSource::getURI()
     {
         /*
-         * ADVANTAGES OF COMPUTING THE VALUE ONLY ONCE:
-         * - ALLOWS EFFICIENT USAGE IN std::map KEYS
-         * - WILL MAKE SENSE WHEN WE START CREATING InputSource INSTANCES BASED ON URIS
+         * COMPUTING THE VALUE ONLY ONCE ALLOWS FOR EFFICIENT USAGE IN std::map KEYS
          */
         if (uri.empty())
         {
