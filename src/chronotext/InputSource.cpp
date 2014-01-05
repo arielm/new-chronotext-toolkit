@@ -18,14 +18,14 @@ namespace chronotext
 {
     InputSourceRef InputSource::getResource(const std::string &resourceName)
     {
-        InputSource *source = new InputSource(TYPE_RESOURCE);
+        auto source = make_shared<InputSource>(TYPE_RESOURCE);
         source->resourceName = source->filePathHint = resourceName;
         
 #if defined(CINDER_COCOA)
         source->filePath = FileSystem::getResourcePath(resourceName);
 #endif
         
-        return InputSourceRef(source);
+        return source;
     }
     
     DataSourceRef InputSource::loadResource(const std::string &resourceName)
@@ -35,12 +35,12 @@ namespace chronotext
     
     InputSourceRef InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
     {
-        InputSource *source = new InputSource(TYPE_RESOURCE_MSW);
+        auto source = make_shared<InputSource>(TYPE_RESOURCE_MSW);
         source->mswID = mswID;
         source->mswType = mswType;
         source->resourceName = source->filePathHint = resourceName;
         
-        return InputSourceRef(source);
+        return source;
     }
     
     DataSourceRef InputSource::loadResource(const string &resourceName, int mswID, const std::string &mswType)
@@ -50,7 +50,7 @@ namespace chronotext
     
     InputSourceRef InputSource::getAsset(const fs::path &relativePath)
     {
-        InputSourceRef source = make_shared<InputSource>(TYPE_ASSET);
+        auto source = make_shared<InputSource>(TYPE_ASSET);
         source->relativePath = relativePath;
         source->filePathHint = relativePath.string();
 
@@ -80,11 +80,11 @@ namespace chronotext
     
     InputSourceRef InputSource::getFile(const fs::path &filePath)
     {
-        InputSource *source = new InputSource(TYPE_FILE);
+        auto source = make_shared<InputSource>(TYPE_FILE);
         source->filePath = filePath;
         source->filePathHint = filePath.string();
         
-        return InputSourceRef(source);
+        return source;
     }
     
     DataSourceRef InputSource::loadFile(const fs::path &filePath)
