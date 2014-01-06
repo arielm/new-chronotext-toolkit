@@ -79,13 +79,16 @@ namespace chronotext
          */
         static InputSourceRef getAsset(const ci::fs::path &relativePath);
         static ci::DataSourceRef loadAsset(const ci::fs::path &relativePath);
-        
-        static InputSourceRef getFileInDocuments(const ci::fs::path &relativePath);
-        static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath);
-        
+
+        static InputSourceRef get(const std::string &uri);
+        static ci::DataSourceRef load(const std::string &uri);
+
         static InputSourceRef getFile(const ci::fs::path &filePath);
         static ci::DataSourceRef loadFile(const ci::fs::path &filePath);
-        
+
+        static InputSourceRef getFileInDocuments(const ci::fs::path &relativePath);
+        static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath);
+
         InputSource(int type)
         :
         type(type)
