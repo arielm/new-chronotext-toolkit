@@ -155,17 +155,20 @@ namespace chronotext
     
     DataSourceRef InputSource::loadFile(const fs::path &filePath)
     {
-        return DataSourcePath::create(filePath);
+        return InputSource::getFile(filePath)->loadDataSource();
     }
-
+    
     InputSourceRef InputSource::getFileInDocuments(const fs::path &relativePath)
     {
-        return InputSource::getFile(getDocumentsDirectory() / relativePath);
+        auto source = InputSource::getFile(getDocumentsDirectory() / relativePath);
+        source->relativePath = relativePath;
+        
+        return source;
     }
     
     DataSourceRef InputSource::loadFileInDocuments(const fs::path &relativePath)
     {
-        return DataSourcePath::create(getDocumentsDirectory() / relativePath);
+        return InputSource::getFileInDocuments(relativePath)->loadDataSource();
     }
     
     DataSourceRef InputSource::loadDataSource()
