@@ -91,14 +91,20 @@ namespace chronotext
             
             if (found1 != string::npos)
             {
+                path = remainder1.substr(0, found1);
+                
                 auto remainder2 = remainder1.substr(found1 + 4);
                 auto found2 = remainder2.find("&type=");
                 
                 if (found2 != string::npos)
                 {
-                    path = remainder1.substr(0, found1);
                     mswID = fromString<int>(remainder2.substr(0, found2));
                     mswType = remainder2.substr(found2 + 6);
+                }
+                else
+                {
+                    mswID = fromString<int>(remainder2);
+                    mswType = "DATA";
                 }
             }
             else
