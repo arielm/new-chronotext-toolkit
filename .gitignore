@@ -1,6 +1,7 @@
 # Xcode
 *.xcworkspace
-xcuserdata
+xcuserdata/
+build/
 
 # OSX
 .DS_Store
