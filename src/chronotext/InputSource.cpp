@@ -276,7 +276,15 @@ namespace chronotext
     
     bool InputSource::isFile() const
     {
-        return !filePath.empty();
+        switch (type)
+        {
+            case TYPE_RESOURCE:
+            case TYPE_FILE:
+            case TYPE_ASSET:
+                return true;
+        }
+        
+        return false;
     }
     
     fs::path InputSource::getFilePath() const
