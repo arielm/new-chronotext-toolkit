@@ -274,6 +274,11 @@ namespace chronotext
         return DataSourceRef();
     }
     
+    Buffer& InputSource::getBuffer()
+    {
+        return loadDataSource()->getBuffer();
+    }
+    
     bool InputSource::isFile() const
     {
         switch (type)
