@@ -53,13 +53,11 @@ namespace chronotext
     
     TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest)
     {
-        TextureData textureData;
-        
         if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.gz"))
         {
             if (textureRequest.inputSource->isFile())
             {
-                textureData = TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath()));
+                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath()));
             }
             else
             {
@@ -68,29 +66,29 @@ namespace chronotext
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
         {
-            textureData = TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
+            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr"))
         {
-            textureData = TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
+            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
         }
         else
         {
             if (textureRequest.flags & TextureRequest::FLAGS_TRANSLUCENT)
             {
-                textureData = TextureData(fetchTranslucentTextureData(textureRequest));
+                return TextureData(fetchTranslucentTextureData(textureRequest));
             }
             else if (textureRequest.flags & TextureRequest::FLAGS_POT)
             {
-                textureData = TextureData(fetchPowerOfTwoTextureData(textureRequest));
+                return TextureData(fetchPowerOfTwoTextureData(textureRequest));
             }
             else
             {
-                textureData = TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
+                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
             }
         }
         
-        return textureData;
+        return TextureData();
     }
     
     gl::TextureRef TextureHelper::uploadTextureData(const TextureData &textureData)
