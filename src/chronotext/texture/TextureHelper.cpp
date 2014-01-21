@@ -57,7 +57,7 @@ namespace chronotext
         {
             if (textureRequest.inputSource->isFile())
             {
-                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath()));
+                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath())); // RVO-READY
             }
             else
             {
@@ -66,25 +66,25 @@ namespace chronotext
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
         {
-            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
+            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource())); // RVO-READY
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr"))
         {
-            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
+            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer()); // RVO-READY
         }
         else
         {
             if (textureRequest.flags & TextureRequest::FLAGS_TRANSLUCENT)
             {
-                return TextureData(fetchTranslucentTextureData(textureRequest));
+                return TextureData(fetchTranslucentTextureData(textureRequest)); // RVO-READY
             }
             else if (textureRequest.flags & TextureRequest::FLAGS_POT)
             {
-                return TextureData(fetchPowerOfTwoTextureData(textureRequest));
+                return TextureData(fetchPowerOfTwoTextureData(textureRequest)); // RVO-READY
             }
             else
             {
-                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
+                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource())); // RVO-READY
             }
         }
         
@@ -265,10 +265,11 @@ namespace chronotext
         {
             data = shared_ptr<uint8_t>(new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>());
             uint8_t *dest = data.get();
-            const int8_t inc = channel.getIncrement();
-            const int32_t width = channel.getWidth();
+            int8_t inc = channel.getIncrement();
+            int32_t width = channel.getWidth();
+            int32_t height = channel.getHeight();
             
-            for (int y = 0; y < channel.getHeight(); ++y)
+            for (int y = 0; y < height; ++y)
             {
                 const uint8_t *src = channel.getData(0, y);
                 
@@ -284,11 +285,16 @@ namespace chronotext
             data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
         }
         
-        return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight());
+        return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight()); // RVO-READY
     }
     
     TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &textureRequest)
     {
+        /*
+         * NO EXTRA DATA-COPYING WILL OCCUR BECAUSE ci::Surface
+         * IS EMULATING shared_ptr BEHAVIOR INTERNALLY
+         */
+        
         Surface src(loadImage(textureRequest.inputSource->loadDataSource()));
         
         int srcWidth = src.getWidth();
@@ -318,11 +324,11 @@ namespace chronotext
             dst.copyFrom(src, Area(srcWidth - 1, 0, srcWidth, srcHeight), Vec2i(1, 0));
             dst.copyFrom(src, Area(0, srcHeight - 1, srcWidth, srcHeight), Vec2i(0, 1));
             
-            return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
+            return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight)); // RVO-READY
         }
         else
         {
-            return TextureData(textureRequest, src);
+            return TextureData(textureRequest, src); // RVO-READY
         }
     }
 }

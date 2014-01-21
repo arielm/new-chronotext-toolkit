@@ -31,6 +31,10 @@ namespace chronotext
         int type;
         TextureRequest request;
         
+        /*
+         * NO SPECIAL-TREATMENT IS NECESSARY FOR surface AND buffer IN ORDER TO AVOID EXTRA DATA-COPYING
+         * SINCE ci::Surface AND ci::Buffer EMULATE shared_ptr INTERNALLY
+         */
         ci::Surface surface;
         ci::ImageSourceRef imageSource;
         ci::Buffer buffer;
