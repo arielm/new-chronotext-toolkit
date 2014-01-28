@@ -274,18 +274,15 @@ namespace chronotext
         return DataSourceRef();
     }
     
-    Buffer& InputSource::getBuffer()
-    {
-        return loadDataSource()->getBuffer();
-    }
-    
     bool InputSource::isFile() const
     {
         switch (type)
         {
-            case TYPE_RESOURCE:
             case TYPE_FILE:
             case TYPE_ASSET:
+#if defined(CINDER_COCOA)
+            case TYPE_RESOURCE:
+#endif
                 return true;
         }
         
