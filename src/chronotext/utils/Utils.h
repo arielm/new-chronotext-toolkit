@@ -14,6 +14,7 @@
 #include "cinder/Utilities.h"
 
 #include <fstream>
+#include <set>
 
 #include <boost/algorithm/string.hpp>
 #include "boost/format.hpp"
@@ -58,6 +59,26 @@ namespace chronotext
         return *CHROUT;
 #else
         return std::cout;
+#endif
+    }
+    
+    // ---
+    
+    static std::set<std::string> LOGGED_ONCE;
+
+    static void LOGI_ONCE(const std::string &msg)
+    {
+        if (!LOGGED_ONCE.count(msg))
+        {
+            LOGGED_ONCE.insert(msg);
+            chrout() << msg << std::endl;
+        }
+    }
+    
+    static inline void LOGD_ONCE(const std::string &msg)
+    {
+#if defined(DEBUG) || defined(FORCE_LOG)
+        LOGI_ONCE(msg);
 #endif
     }
     
