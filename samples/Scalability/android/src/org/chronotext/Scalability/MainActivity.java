@@ -1,5 +1,5 @@
 
-package org.chronotext.samples;
+package org.chronotext.Scalability;
 
 import org.chronotext.cinder.CinderDelegate;
 
