@@ -31,7 +31,8 @@ namespace chronotext
         enum
         {
             EVENT_FOREGROUND,
-            EVENT_BACKGROUND
+            EVENT_BACKGROUND,
+            EVENT_MEMORY_WARNING
         };
         
         CinderSketchBase() : SuperHandler() {}
