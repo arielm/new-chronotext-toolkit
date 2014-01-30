@@ -1,6 +1,7 @@
 #include "Sketch.h"
 
 #include "chronotext/utils/GLUtils.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
@@ -35,8 +36,25 @@ void Sketch::resize()
     position = getWindowCenter() / scale;
 }
 
+void Sketch::event(int id)
+{
+    if (id == EVENT_MEMORY_WARNING)
+    {
+        LOGI << "******************** EVENT_MEMORY_WARNING ********************" << endl;
+        LOGI << "******************** EVENT_MEMORY_WARNING ********************" << endl;
+        LOGI << "******************** EVENT_MEMORY_WARNING ********************" << endl;
+        LOGI << "******************** EVENT_MEMORY_WARNING ********************" << endl;
+        LOGI << "******************** EVENT_MEMORY_WARNING ********************" << endl;
+        textures.clear();
+    }
+}
+
 void Sketch::draw()
 {
+    auto texture = TextureHelper::loadTexture("Louis XIV of France - 1024.jpg", true);
+    textures.push_back(texture);
+    LOGI << "LOADING TEXTURE " << texture->getId() << endl;
+    
     gl::clear(Color(0.5f, 0.5f, 0.5f), false);
     gl::setMatricesWindow(getWindowSize(), true);
     

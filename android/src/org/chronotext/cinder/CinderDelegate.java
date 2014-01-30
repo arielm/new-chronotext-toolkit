@@ -85,6 +85,11 @@ public class CinderDelegate extends Handler
     mView.onDestroy();
   }
 
+  public void onLowMemory()
+  {
+    mView.onLowMemory();
+  }
+
   // ---------------------------------------- MESSAGING SYSTEM ----------------------------------------
 
   public void sendMessageToSketch(int what)

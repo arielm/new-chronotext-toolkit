@@ -1,5 +1,5 @@
 
-package org.chronotext.samples;
+package org.chronotext.Scalability;
 
 import org.chronotext.cinder.CinderDelegate;
 
@@ -44,5 +44,16 @@ public class MainActivity extends Activity
   {
     super.onDestroy();
     delegate.onDestroy();
+  }
+    
+  @Override
+  public void onLowMemory()
+  {
+      System.out.println("|||||||||||||||||||| onLowMemory ||||||||||||||||||||");
+      System.out.println("|||||||||||||||||||| onLowMemory ||||||||||||||||||||");
+      System.out.println("|||||||||||||||||||| onLowMemory ||||||||||||||||||||");
+      System.out.println("|||||||||||||||||||| onLowMemory ||||||||||||||||||||");
+      System.out.println("|||||||||||||||||||| onLowMemory ||||||||||||||||||||");
+      delegate.onLowMemory();
   }
 }

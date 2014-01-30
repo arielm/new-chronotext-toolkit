@@ -34,6 +34,7 @@ public class CinderRenderer extends GLRenderer
   public static final int EVENT_HIDDEN = 6;
   public static final int EVENT_BACKGROUND = 7;
   public static final int EVENT_FOREGROUND = 8;
+  public static final int EVENT_MEMORY_WARNING = 9;
 
   public static final int ACCELEROMETER_ROTATION_DEFAULT = 0;
   public static final int ACCELEROMETER_ROTATION_PORTRAIT = 1;
@@ -126,6 +127,11 @@ public class CinderRenderer extends GLRenderer
   public void foreground()
   {
     event(EVENT_FOREGROUND);
+  }
+
+  public void lowMemory()
+  {
+    event(EVENT_MEMORY_WARNING);
   }
 
   public void shown()

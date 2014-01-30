@@ -19,12 +19,16 @@ class Sketch : public chr::CinderSketch
     float scale;
     ci::Vec2f dragOrigin;
     ci::Vec2f position;
+    
+    std::vector<ci::gl::TextureRef> textures;
 
 public:
     Sketch(void *context, void *delegate = NULL) : chr::CinderSketch(context, delegate) {}
 
     void setup(bool renewContext);
     void resize();
+    
+    void event(int id);
     void draw();
     
     void addTouch(int index, float x, float y);

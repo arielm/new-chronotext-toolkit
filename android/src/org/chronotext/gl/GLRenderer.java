@@ -175,6 +175,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     shutdown();
   }
 
+  public void onLowMemory()
+  {
+      lowMemory();
+  }
+
   // ---------------------------------------- ABSTRACT METHODS ----------------------------------------
 
   public abstract void launch();
@@ -196,6 +201,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public abstract void background();
 
   public abstract void foreground();
+
+  public abstract void lowMemory();
 
   public abstract void shown();
 

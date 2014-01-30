@@ -115,6 +115,17 @@ public class GLView extends GLSurfaceView
     });
   }
 
+  public void onLowMemory()
+  {
+    queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        renderer.onLowMemory();
+      }
+    });
+  }
+
   @Override
   public boolean onTouchEvent(MotionEvent event)
   {
