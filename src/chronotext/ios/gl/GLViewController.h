@@ -14,7 +14,7 @@
 OBJC_EXPORT NSString* kGLViewControllerPropertyRenderingAPI;
 OBJC_EXPORT NSString* kGLViewControllerPropertyPreferredFramesPerSecond;
 OBJC_EXPORT NSString* kGLViewControllerPropertyMultipleTouchEnabled;
-OBJC_EXPORT NSString* kGLViewControllerPropertyInterfaceOrientation;
+OBJC_EXPORT NSString* kGLViewControllerPropertyInterfaceOrientationMask;
 OBJC_EXPORT NSString* kGLViewControllerPropertyColorFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyDepthFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyStencilFormat;
@@ -23,7 +23,7 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
 @interface GLViewController : GLKViewController
 {
     NSMutableDictionary *properties;
-    int interfaceOrientation;
+    int interfaceOrientationMask;
 
     GLKView *glView;
     CinderDelegate *cinderDelegate;

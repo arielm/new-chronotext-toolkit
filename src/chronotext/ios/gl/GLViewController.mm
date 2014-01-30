@@ -11,7 +11,7 @@
 NSString* kGLViewControllerPropertyRenderingAPI = @"kGLViewControllerPropertyRenderingAPI";
 NSString* kGLViewControllerPropertyPreferredFramesPerSecond = @"kGLViewControllerPropertyPreferredFramesPerSecond";
 NSString* kGLViewControllerPropertyMultipleTouchEnabled = @"kGLViewControllerPropertyMultipleTouchEnabled";
-NSString* kGLViewControllerPropertyInterfaceOrientation = @"kGLViewControllerPropertyInterfaceOrientation";
+NSString* kGLViewControllerPropertyInterfaceOrientationMask = @"kGLViewControllerPropertyInterfaceOrientationMask";
 NSString* kGLViewControllerPropertyColorFormat = @"kGLViewControllerPropertyColorFormat";
 NSString* kGLViewControllerPropertyDepthFormat = @"kGLViewControllerPropertyDepthFormat";
 NSString* kGLViewControllerPropertyStencilFormat = @"kGLViewControllerPropertyStencilFormat";
@@ -37,7 +37,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
                                   [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES2], kGLViewControllerPropertyRenderingAPI,
                                   [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
                                   [NSNumber numberWithBool:NO], kGLViewControllerPropertyMultipleTouchEnabled,
-                                  [NSNumber numberWithInt:UIInterfaceOrientationPortrait], kGLViewControllerPropertyInterfaceOrientation,
+                                  [NSNumber numberWithInt:UIInterfaceOrientationMaskPortrait], kGLViewControllerPropertyInterfaceOrientationMask,
                                   [NSNumber numberWithInt:GLKViewDrawableColorFormatRGBA8888], kGLViewControllerPropertyColorFormat,
                                   [NSNumber numberWithInt:GLKViewDrawableDepthFormat24], kGLViewControllerPropertyDepthFormat,
                                   [NSNumber numberWithInt:GLKViewDrawableStencilFormatNone], kGLViewControllerPropertyStencilFormat,
@@ -63,7 +63,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         
         // ---
         
-        interfaceOrientation = [[properties objectForKey:kGLViewControllerPropertyInterfaceOrientation] intValue];
+        interfaceOrientationMask = [[properties objectForKey:kGLViewControllerPropertyInterfaceOrientationMask] intValue];
     }
     
     return self;
@@ -185,14 +185,35 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     [cinderDelegate draw];
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
-    return (toInterfaceOrientation == interfaceOrientation);
-}
+#pragma mark ---------------------------------------- ORIENTATION ----------------------------------------
+
+/*
+ * IMPORTANT:
+ * - SUPPORTED ORIENTATIONS SHOULD ALSO BE LISTED IN Info.plist
+ * - THE APP WILL START USING THE 1ST ORIENTATION IN THE LIST (Item 0)
+ */
+
+/*
+ * FOR iOS 6+
+ */
 
 - (BOOL) shouldAutorotate
 {
     return YES;
+}
+
+- (NSUInteger) supportedInterfaceOrientations
+{
+    return interfaceOrientationMask;
+}
+
+/*
+ * FOR iOS 5.x
+ */
+
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return (1 << toInterfaceOrientation) & interfaceOrientationMask;
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
