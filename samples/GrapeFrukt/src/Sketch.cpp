@@ -58,17 +58,14 @@ void Sketch::loadSheet(DataSourceRef dataSource)
 {
     XmlTree doc(dataSource);
     
-    for (XmlTree::Iter textureElement = doc.begin("Textures/TextureSheet/Texture"); textureElement != doc.end(); ++textureElement)
+    for (auto textureElement = doc.begin("Textures/TextureSheet/Texture"); textureElement != doc.end(); ++textureElement)
     {
-        string name = textureElement->getAttributeValue<string>("name");
-        string path = textureElement->getAttributeValue<string>("path");
-        
-        float width = textureElement->getAttributeValue<float>("width");
-        float height = textureElement->getAttributeValue<float>("height");
-        
-        float registrationPointX = textureElement->getAttributeValue<float>("registrationPointX");
-        float registrationPointY = textureElement->getAttributeValue<float>("registrationPointY");
-        
+        auto name = textureElement->getAttributeValue<string>("name");
+        auto path = textureElement->getAttributeValue<string>("path");
+        auto width = textureElement->getAttributeValue<float>("width");
+        auto height = textureElement->getAttributeValue<float>("height");
+        auto registrationPointX = textureElement->getAttributeValue<float>("registrationPointX");
+        auto registrationPointY = textureElement->getAttributeValue<float>("registrationPointY");
         int zIndex = textureElement->getAttributeValue<int>("zIndex", 0);
         
         auto item = new TextureItem(path, width, height, registrationPointX, registrationPointY, zIndex);
@@ -83,28 +80,28 @@ void Sketch::loadAnimation(DataSourceRef dataSource)
 {
     XmlTree doc(dataSource);
     
-    const XmlTree animationElement = doc.getChild("Animations/Animation");
+    auto animationElement = doc.getChild("Animations/Animation");
     frameCount = animationElement.getAttributeValue<int>("frameCount");
     
-    for (XmlTree::Iter partElement = doc.begin("Animations/Animation/Part"); partElement != doc.end(); ++partElement)
+    for (auto partElement = doc.begin("Animations/Animation/Part"); partElement != doc.end(); ++partElement)
     {
-        string name = partElement->getAttributeValue<string>("name");
+        auto name = partElement->getAttributeValue<string>("name");
         auto it = itemMap.find(name);
         
         if (it != itemMap.end())
         {
             auto &item = it->second;
             
-            for (XmlTree::Iter frameElement = partElement->begin("Frame"); frameElement != partElement->end(); ++frameElement)
+            for (auto frameElement = partElement->begin("Frame"); frameElement != partElement->end(); ++frameElement)
             {
-                float x = frameElement->getAttributeValue<float>("x");
-                float y = frameElement->getAttributeValue<float>("y");
-                float scaleX = frameElement->getAttributeValue<float>("scaleX", 1);
-                float scaleY = frameElement->getAttributeValue<float>("scaleY", 1);
-                float rotation = frameElement->getAttributeValue<float>("rotation", 0);
-                float alpha = frameElement->getAttributeValue<float>("alpha", 1);
+                auto x = frameElement->getAttributeValue<float>("x");
+                auto y = frameElement->getAttributeValue<float>("y");
+                auto scaleX = frameElement->getAttributeValue<float>("scaleX", 1);
+                auto scaleY = frameElement->getAttributeValue<float>("scaleY", 1);
+                auto rotation = frameElement->getAttributeValue<float>("rotation", 0);
+                auto alpha = frameElement->getAttributeValue<float>("alpha", 1);
                 
-                item->frames.push_back(Frame(x, y, scaleX, scaleY, rotation, alpha));
+                item->frames.emplace_back(x, y, scaleX, scaleY, rotation, alpha);
             }
         }
         else

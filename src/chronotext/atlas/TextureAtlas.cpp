@@ -36,21 +36,19 @@ void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
     
     // ---
     
-    for (XmlTree::Iter spriteElement = doc.begin("TextureAtlas/sprite"); spriteElement != doc.end(); ++spriteElement)
+    for (auto spriteElement = doc.begin("TextureAtlas/sprite"); spriteElement != doc.end(); ++spriteElement)
     {
-        string spritePath = spriteElement->getAttributeValue<string>("n");
+        auto spritePath = spriteElement->getAttributeValue<string>("n");
         
-        float x = spriteElement->getAttributeValue<float>("x");
-        float y = spriteElement->getAttributeValue<float>("y");
-        float w = spriteElement->getAttributeValue<float>("w");
-        float h = spriteElement->getAttributeValue<float>("h");
+        auto x = spriteElement->getAttributeValue<float>("x");
+        auto y = spriteElement->getAttributeValue<float>("y");
+        auto w = spriteElement->getAttributeValue<float>("w");
+        auto h = spriteElement->getAttributeValue<float>("h");
         
-        bool rotated = spriteElement->hasAttribute("r");
+        auto rotated = spriteElement->hasAttribute("r");
         
-        float ox;
-        float oy;
-        float ow;
-        float oh;
+        float ox, oy;
+        float ow, oh;
         
         if (rotated)
         {
