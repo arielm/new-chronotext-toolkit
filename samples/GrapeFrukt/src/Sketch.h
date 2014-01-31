@@ -1,23 +1,31 @@
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/atlas/TextureAtlas.h"
 #include "chronotext/texture/TextureManager.h"
+
+#include "TextureItem.h"
 
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
     
+    std::unique_ptr<TextureAtlas> atlas;
+    std::map<std::string, std::unique_ptr<TextureItem>> itemMap;
+    std::vector<TextureItem*> sheet;
+    int frameCount;
+
     float scale;
-    ci::Vec2f dragOrigin;
-    ci::Vec2f position;
 
 public:
-    Sketch(void *context, void *delegate = NULL) : chr::CinderSketch(context, delegate) {}
-
+    Sketch(void *context, void *delegate = NULL);
+    
     void setup(bool renewContext);
     void resize();
     void draw();
     
-    void addTouch(int index, float x, float y);
-    void updateTouch(int index, float x, float y);
+    void loadSheet(ci::DataSourceRef dataSource);
+    void loadAnimation(ci::DataSourceRef dataSource);
+    
+    void drawFrame(int frameIndex);
 };

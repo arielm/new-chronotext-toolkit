@@ -28,8 +28,8 @@ void Application::prepareSettings(Settings *settings)
 {
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
 //  settings->setWindowSize(480, 320); // IPHONE
-    settings->setWindowSize(960, 640); // IPHONE RETINA
-//  settings->setWindowSize(1024, 768); // IPAD-1
+//  settings->setWindowSize(960, 640); // IPHONE RETINA
+    settings->setWindowSize(1024, 768); // IPAD-1
 //  settings->setWindowSize(800, 480); // ANDROID WVGA800
 #endif
 }
