@@ -2,7 +2,6 @@
 
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/atlas/TextureAtlas.h"
-#include "chronotext/texture/TextureManager.h"
 
 #include "TextureItem.h"
 

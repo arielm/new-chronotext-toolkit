@@ -11,7 +11,7 @@
 using namespace std;
 using namespace chr;
 
-TextureAtlasAnimation::TextureAtlasAnimation(TextureAtlas *atlas, const string &path, float fps, bool looping, bool reverse)
+TextureAtlasAnimation::TextureAtlasAnimation(TextureAtlas &atlas, const string &path, float fps, bool looping, bool reverse)
 :
 atlas(atlas),
 fps(fps),
@@ -19,7 +19,7 @@ looping(looping)
 {
     if (reverse)
     {
-        vector<Sprite*> tmp = atlas->getAnimationSprites(path);
+        auto tmp = atlas.getAnimationSprites(path);
         
         for (int i = tmp.size() - 1; i >= 0; i--)
         {
@@ -28,22 +28,22 @@ looping(looping)
     }
     else
     {
-        sprites = atlas->getAnimationSprites(path);
+        sprites = atlas.getAnimationSprites(path);
     }
     
-    if (sprites.size() == 0)
+    if (sprites.empty())
     {
         throw runtime_error("INVALID ANIMATION");
     }
 }
 
-TextureAtlasAnimation::TextureAtlasAnimation(TextureAtlas *atlas, const string &path, float fps, bool looping, int firstFrameIndex, int lastFrameIndex)
+TextureAtlasAnimation::TextureAtlasAnimation(TextureAtlas &atlas, const string &path, float fps, bool looping, int firstFrameIndex, int lastFrameIndex)
 :
 atlas(atlas),
 fps(fps),
 looping(looping)
 {
-    vector<Sprite*> tmp = atlas->getAnimationSprites(path);
+    auto tmp = atlas.getAnimationSprites(path);
     
     if (((firstFrameIndex < 0) || (firstFrameIndex >= tmp.size()) || ((lastFrameIndex < 0) || (lastFrameIndex >= tmp.size()))))
     {
@@ -65,35 +65,35 @@ looping(looping)
         }
     }
     
-    if (sprites.size() == 0)
+    if (sprites.empty())
     {
         throw runtime_error("INVALID ANIMATION");
     }
 }
 
-int TextureAtlasAnimation::getFrameCount()
+int TextureAtlasAnimation::getFrameCount() const
 {
     return sprites.size();
 }
 
-float TextureAtlasAnimation::getDuration()
+float TextureAtlasAnimation::getDuration() const
 {
     return sprites.size() / fps;
 }
 
 void TextureAtlasAnimation::beginTexture()
 {
-    atlas->beginTexture();
+    atlas.beginTexture();
 }
 
 void TextureAtlasAnimation::endTexture()
 {
-    atlas->endTexture();
+    atlas.endTexture();
 }
 
 void TextureAtlasAnimation::drawFromCenter(int frameIndex)
 {
-    Sprite *sprite = sprites[looping ? (frameIndex % sprites.size()) : min<int>(frameIndex, sprites.size() - 1)];
+    auto sprite = sprites[looping ? (frameIndex % sprites.size()) : min<int>(frameIndex, sprites.size() - 1)];
     sprite->drawFromCenter();
 }
 
@@ -111,7 +111,7 @@ void TextureAtlasAnimation::playFromCenter(double now)
 
 void TextureAtlasAnimation::draw(int frameIndex, float rx, float ry)
 {
-    Sprite *sprite = sprites[looping ? (frameIndex % sprites.size()) : min<int>(frameIndex, sprites.size() - 1)];
+    auto sprite = sprites[looping ? (frameIndex % sprites.size()) : min<int>(frameIndex, sprites.size() - 1)];
     sprite->draw(rx, ry);
 }
 

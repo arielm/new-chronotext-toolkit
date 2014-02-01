@@ -13,6 +13,7 @@ struct TextureItem
     float registrationPointX;
     float registrationPointY;
     int zIndex;
+    
     std::vector<Frame> frames;
     
     TextureItem(const std::string &path, float width, float height, float registrationPointX, float registrationPointY, float zIndex)

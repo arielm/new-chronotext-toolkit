@@ -14,12 +14,16 @@ using namespace ci;
 using namespace std;
 using namespace chr;
 
-TextureAtlas::TextureAtlas(const string &resourceName, bool useMipmap)
+TextureAtlas::TextureAtlas(TextureManager &textureManager, const string &resourceName, bool useMipmap)
+:
+textureManager(textureManager)
 {
     init(InputSource::getResource(resourceName), useMipmap);    
 }
 
-TextureAtlas::TextureAtlas(InputSourceRef inputSource, bool useMipmap)
+TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap)
+:
+textureManager(textureManager)
 {
     init(inputSource, useMipmap);
 }
@@ -28,9 +32,10 @@ void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
 {
     XmlTree doc(inputSource->loadDataSource());
     
-    string resourceName = doc.getChild("TextureAtlas").getAttributeValue<string>("imagePath");
-    texture = make_shared<Texture>(InputSource::getResource(resourceName), useMipmap); // FIXME: WE SHOULD NOT ASSERT THAT inputSource IS OF "RESOURCE" TYPE
+    auto texturePath = doc.getChild("TextureAtlas").getAttributeValue<string>("imagePath");
+    auto textureSource = InputSource::getResource(texturePath);  // TODO: USE "RELATIVE INPUT-SOURCE" (I.E. INSTEAD OF MAKING THE ASSUMPTION THAT inputSource IS OF TYPE "RESOURCE")
     
+    texture = textureManager.getTexture(textureSource, useMipmap);
     float width = texture->getWidth();
     float height = texture->getHeight();
     
@@ -44,7 +49,6 @@ void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
         auto y = spriteElement->getAttributeValue<float>("y");
         auto w = spriteElement->getAttributeValue<float>("w");
         auto h = spriteElement->getAttributeValue<float>("h");
-        
         auto rotated = spriteElement->hasAttribute("r");
         
         float ox, oy;
@@ -71,35 +75,17 @@ void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
         float tx2 = (x + w) / width;
         float ty2 = (y + h) / height;
         
-        sprites[spritePath] = new Sprite(texture, w, h, ox, oy, ow, oh, rotated, tx1, ty1, tx2, ty2);
+        sprites[spritePath] = make_shared<Sprite>(texture, w, h, ox, oy, ow, oh, rotated, tx1, ty1, tx2, ty2);
     }
 }
 
-TextureAtlas::~TextureAtlas()
+SpriteRef TextureAtlas::getSprite(const string &path) const
 {
-    for (map<string, Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
-    {
-        delete it->second;
-    }
-}
-
-void TextureAtlas::unload()
-{
-    texture->unload();
-}
-
-void TextureAtlas::reload()
-{
-    texture->reload();
-}
-
-Sprite* TextureAtlas::getSprite(const string &path)
-{
-    map<string, Sprite*>::iterator it = sprites.find(path);
+    auto it = sprites.find(path);
     
     if (it == sprites.end())
     {
-        return NULL;
+        return make_shared<Sprite>();
     }
     else
     {
@@ -107,19 +93,19 @@ Sprite* TextureAtlas::getSprite(const string &path)
     }
 }
 
-vector<Sprite*> TextureAtlas::getAnimationSprites(const string &path) const
+vector<SpriteRef> TextureAtlas::getAnimationSprites(const string &path) const
 {
-    vector<Sprite*> animationSprites;
+    vector<SpriteRef> animationSprites;
     string pattern = path + "%d";
     
-    for (map<string, Sprite*>::const_iterator it = sprites.begin(); it != sprites.end(); ++it)
+    for (auto &it : sprites)
     {
         int i = -1;
-        sscanf((it->first).c_str(), pattern.c_str(), &i);
+        sscanf(it.first.c_str(), pattern.c_str(), &i);
         
         if (i != -1)
         {
-            animationSprites.push_back(it->second);
+            animationSprites.push_back(it.second);
         }
     }
     
@@ -138,10 +124,20 @@ void TextureAtlas::endTexture()
 
 void TextureAtlas::drawSprite(const string &path, float rx, float ry)
 {
-    sprites[path]->draw(rx, ry);
+    auto it = sprites.find(path);
+    
+    if (it != sprites.end())
+    {
+        it->second->draw(rx, ry);
+    }
 }
 
 void TextureAtlas::drawSpriteFromCenter(const std::string &path)
 {
-    sprites[path]->drawFromCenter();
+    auto it = sprites.find(path);
+    
+    if (it != sprites.end())
+    {
+        it->second->drawFromCenter();
+    }
 }

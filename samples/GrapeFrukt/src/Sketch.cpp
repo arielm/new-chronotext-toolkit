@@ -26,7 +26,7 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        atlas = unique_ptr<TextureAtlas>(new TextureAtlas("MonocleMan.xml"));
+        atlas = unique_ptr<TextureAtlas>(new TextureAtlas(textureManager, "MonocleMan.xml"));
         
         loadSheet(InputSource::loadResource("sheets.xml"));
         loadAnimation(InputSource::loadResource("animations.xml"));
@@ -48,9 +48,10 @@ void Sketch::draw()
 {
     gl::clear(Color::gray(1.0f), false);
     gl::setMatricesWindow(getWindowSize(), true);
+
     glScalef(scale, scale, 1);
-    
     gl::translate(getWindowCenter() / scale);
+    
     drawFrame(getElapsedFrames() % frameCount);
 }
 
