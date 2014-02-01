@@ -13,9 +13,6 @@
 class TextureAtlasAnimation
 {
 public:
-    float fps;
-    bool looping;
-    
     TextureAtlasAnimation(TextureAtlas &atlas, const std::string &path, float fps = 24, bool looping = false, bool reverse = false);
     TextureAtlasAnimation(TextureAtlas &atlas, const std::string &path, float fps, bool looping, int firstFrameIndex, int lastFrameIndex);
     
@@ -35,5 +32,8 @@ public:
     
 protected:
     TextureAtlas &atlas;
+    float fps;
+    bool looping;
+
     std::vector<chr::SpriteRef> sprites;
 };

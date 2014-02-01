@@ -21,6 +21,7 @@
 		A81B24AE189C1F5D00EA0A4B /* TextureAtlasAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A81B24AB189C1F5D00EA0A4B /* TextureAtlasAnimation.cpp */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
+		A83CDB17189C808700640CA2 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83CDB16189C808700640CA2 /* Animation.cpp */; };
 		A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFDA18116D42006C2085 /* FileSystem.cpp */; };
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A872080E18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A872080D18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm */; };
@@ -64,14 +65,14 @@
 		A81B2496189C195400EA0A4B /* MonocleMan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MonocleMan.png; path = ../resources/MonocleMan.png; sourceTree = "<group>"; };
 		A81B2497189C195400EA0A4B /* MonocleMan.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = MonocleMan.xml; path = ../resources/MonocleMan.xml; sourceTree = "<group>"; };
 		A81B2498189C195400EA0A4B /* sheets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = sheets.xml; path = ../resources/sheets.xml; sourceTree = "<group>"; };
-		A81B249E189C196700EA0A4B /* TextureItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureItem.h; path = ../src/TextureItem.h; sourceTree = "<group>"; };
-		A81B249F189C196700EA0A4B /* Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Frame.h; path = ../src/Frame.h; sourceTree = "<group>"; };
 		A81B24A9189C1F5D00EA0A4B /* TextureAtlas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureAtlas.cpp; sourceTree = "<group>"; };
 		A81B24AA189C1F5D00EA0A4B /* TextureAtlas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureAtlas.h; sourceTree = "<group>"; };
 		A81B24AB189C1F5D00EA0A4B /* TextureAtlasAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureAtlasAnimation.cpp; sourceTree = "<group>"; };
 		A81B24AC189C1F5D00EA0A4B /* TextureAtlasAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureAtlasAnimation.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		A83CDB15189C808700640CA2 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = ../src/Animation.h; sourceTree = "<group>"; };
+		A83CDB16189C808700640CA2 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Animation.cpp; path = ../src/Animation.cpp; sourceTree = "<group>"; };
 		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFDB18116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87207FE18081CDE0055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
@@ -201,8 +202,8 @@
 			children = (
 				A8DB3EC516E0B96C00504D27 /* Sketch.h */,
 				A8DB3EC416E0B96C00504D27 /* Sketch.cpp */,
-				A81B249F189C196700EA0A4B /* Frame.h */,
-				A81B249E189C196700EA0A4B /* TextureItem.h */,
+				A83CDB15189C808700640CA2 /* Animation.h */,
+				A83CDB16189C808700640CA2 /* Animation.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -489,6 +490,7 @@
 				A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */,
 				A872080E18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm in Sources */,
 				A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */,
+				A83CDB17189C808700640CA2 /* Animation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

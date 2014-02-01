@@ -35,6 +35,7 @@
 		A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C90FD16E00B3B00FF519C /* MathUtils.cpp */; };
 		A82C910716E00B3B00FF519C /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910216E00B3B00FF519C /* Utils.cpp */; };
 		A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910816E02DAA00FF519C /* Sketch.cpp */; };
+		A83CDB14189C74D300640CA2 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83CDB12189C74D300640CA2 /* Animation.cpp */; };
 		A848D0DA17FED47F009C7AC2 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A848D0D817FED47F009C7AC2 /* Sprite.cpp */; };
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
 		A87207F918081C460055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207F718081C460055F0BA /* SuperHandler.cpp */; };
@@ -63,8 +64,6 @@
 		A81B248C189BFE8900EA0A4B /* MonocleMan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MonocleMan.png; path = ../resources/MonocleMan.png; sourceTree = "<group>"; };
 		A81B248D189BFE8900EA0A4B /* MonocleMan.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = MonocleMan.xml; path = ../resources/MonocleMan.xml; sourceTree = "<group>"; };
 		A81B248E189BFE8900EA0A4B /* sheets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = sheets.xml; path = ../resources/sheets.xml; sourceTree = "<group>"; };
-		A81B2493189C007100EA0A4B /* Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Frame.h; path = ../src/Frame.h; sourceTree = "<group>"; };
-		A81B2494189C007100EA0A4B /* TextureItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureItem.h; path = ../src/TextureItem.h; sourceTree = "<group>"; };
 		A821DF8D16ED34A800DB025D /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../src/Application.cpp; sourceTree = "<group>"; };
 		A82C908A16DFA3B100FF519C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A82C908B16DFA3B100FF519C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
@@ -93,6 +92,8 @@
 		A82C910316E00B3B00FF519C /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A82C910816E02DAA00FF519C /* Sketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sketch.cpp; path = ../src/Sketch.cpp; sourceTree = "<group>"; };
 		A82C910916E02DAA00FF519C /* Sketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sketch.h; path = ../src/Sketch.h; sourceTree = "<group>"; };
+		A83CDB12189C74D300640CA2 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Animation.cpp; path = ../src/Animation.cpp; sourceTree = "<group>"; };
+		A83CDB13189C74D300640CA2 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = ../src/Animation.h; sourceTree = "<group>"; };
 		A848D0D817FED47F009C7AC2 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
 		A848D0D917FED47F009C7AC2 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		A853DFD418116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
@@ -127,11 +128,11 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A821DF8D16ED34A800DB025D /* Application.cpp */,
 				A82C910916E02DAA00FF519C /* Sketch.h */,
 				A82C910816E02DAA00FF519C /* Sketch.cpp */,
-				A821DF8D16ED34A800DB025D /* Application.cpp */,
-				A81B2493189C007100EA0A4B /* Frame.h */,
-				A81B2494189C007100EA0A4B /* TextureItem.h */,
+				A83CDB13189C74D300640CA2 /* Animation.h */,
+				A83CDB12189C74D300640CA2 /* Animation.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -185,9 +186,9 @@
 			isa = PBXGroup;
 			children = (
 				A81B248B189BFE8900EA0A4B /* animations.xml */,
-				A81B248C189BFE8900EA0A4B /* MonocleMan.png */,
-				A81B248D189BFE8900EA0A4B /* MonocleMan.xml */,
 				A81B248E189BFE8900EA0A4B /* sheets.xml */,
+				A81B248D189BFE8900EA0A4B /* MonocleMan.xml */,
+				A81B248C189BFE8900EA0A4B /* MonocleMan.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -388,6 +389,7 @@
 				A81B2489189BFA3200EA0A4B /* TextureAtlasAnimation.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
 				A821DF8E16ED34A800DB025D /* Application.cpp in Sources */,
+				A83CDB14189C74D300640CA2 /* Animation.cpp in Sources */,
 				A848D0DA17FED47F009C7AC2 /* Sprite.cpp in Sources */,
 				A87207F918081C460055F0BA /* SuperHandler.cpp in Sources */,
 				A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */,
