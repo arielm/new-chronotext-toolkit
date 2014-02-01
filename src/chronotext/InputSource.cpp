@@ -279,7 +279,9 @@ namespace chronotext
         switch (type)
         {
             case TYPE_FILE:
+#if !defined(CINDER_ANDROID)
             case TYPE_ASSET:
+#endif
 #if defined(CINDER_COCOA)
             case TYPE_RESOURCE:
 #endif
