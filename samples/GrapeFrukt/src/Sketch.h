@@ -17,7 +17,7 @@
  * 1) ADAPT TO WINDOWS
  *    - PRE-REQUISITE:
  *      - EITHER: HANDLING RESOURCES VIA ASSETS
- *      - OR: ADAPTING InputSource::getSubSource() WINDOWS
+ *      - OR: ADAPTING InputSource::getSubSource() FOR WINDOWS
  */
 
 #pragma once
