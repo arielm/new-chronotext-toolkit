@@ -31,12 +31,8 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/time/TickingClock.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/GLUtils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/MathUtils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/Utils.cpp
-
-ifdef CHR_USE_TEXTURE_ATLAS
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlas.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasAnimation.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasManager.cpp
-endif
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlas.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasAnimation.cpp
 
 ifdef CHR_USE_INCUBATOR_UI
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Button.cpp

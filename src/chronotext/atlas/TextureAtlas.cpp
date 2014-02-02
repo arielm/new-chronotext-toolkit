@@ -12,132 +12,134 @@
 
 using namespace ci;
 using namespace std;
-using namespace chr;
 
-TextureAtlas::TextureAtlas(TextureManager &textureManager, const string &resourceName, bool useMipmap)
-:
-textureManager(textureManager)
+namespace chronotext
 {
-    init(InputSource::getResource(resourceName), useMipmap);    
-}
-
-TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap)
-:
-textureManager(textureManager)
-{
-    init(inputSource, useMipmap);
-}
-
-void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
-{
-    XmlTree doc(inputSource->loadDataSource());
-    
-    auto texturePath = doc.getChild("TextureAtlas").getAttributeValue<string>("imagePath");
-    auto textureSource = InputSource::getResource(texturePath);  // TODO: USE "RELATIVE INPUT-SOURCE" (I.E. INSTEAD OF MAKING THE ASSUMPTION THAT inputSource IS OF TYPE "RESOURCE")
-    
-    texture = textureManager.getTexture(textureSource, useMipmap);
-    float width = texture->getWidth();
-    float height = texture->getHeight();
-    
-    // ---
-    
-    for (auto spriteElement = doc.begin("TextureAtlas/sprite"); spriteElement != doc.end(); ++spriteElement)
+    TextureAtlas::TextureAtlas(TextureManager &textureManager, const string &resourceName, bool useMipmap)
+    :
+    textureManager(textureManager)
     {
-        auto spritePath = spriteElement->getAttributeValue<string>("n");
+        init(InputSource::getResource(resourceName), useMipmap);
+    }
+    
+    TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap)
+    :
+    textureManager(textureManager)
+    {
+        init(inputSource, useMipmap);
+    }
+    
+    void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
+    {
+        XmlTree doc(inputSource->loadDataSource());
         
-        auto x = spriteElement->getAttributeValue<float>("x");
-        auto y = spriteElement->getAttributeValue<float>("y");
-        auto w = spriteElement->getAttributeValue<float>("w");
-        auto h = spriteElement->getAttributeValue<float>("h");
-        auto rotated = spriteElement->hasAttribute("r");
+        auto texturePath = doc.getChild("TextureAtlas").getAttributeValue<string>("imagePath");
+        auto textureSource = inputSource->getSubSource(texturePath);
         
-        float ox, oy;
-        float ow, oh;
+        texture = textureManager.getTexture(textureSource, useMipmap);
+        float width = texture->getWidth();
+        float height = texture->getHeight();
         
-        if (rotated)
+        // ---
+        
+        for (auto spriteElement = doc.begin("TextureAtlas/sprite"); spriteElement != doc.end(); ++spriteElement)
         {
-            oy = spriteElement->getAttributeValue<float>("oX", 0);
-            ox = spriteElement->getAttributeValue<float>("oY", 0);
-            ow = spriteElement->getAttributeValue<float>("oW", h);
-            oh = spriteElement->getAttributeValue<float>("oH", w);
+            auto spritePath = spriteElement->getAttributeValue<string>("n");
+            
+            auto x = spriteElement->getAttributeValue<float>("x");
+            auto y = spriteElement->getAttributeValue<float>("y");
+            auto w = spriteElement->getAttributeValue<float>("w");
+            auto h = spriteElement->getAttributeValue<float>("h");
+            auto rotated = spriteElement->hasAttribute("r");
+            
+            float ox, oy;
+            float ow, oh;
+            
+            if (rotated)
+            {
+                oy = spriteElement->getAttributeValue<float>("oX", 0);
+                ox = spriteElement->getAttributeValue<float>("oY", 0);
+                ow = spriteElement->getAttributeValue<float>("oW", h);
+                oh = spriteElement->getAttributeValue<float>("oH", w);
+            }
+            else
+            {
+                ox = spriteElement->getAttributeValue<float>("oX", 0);
+                oy = spriteElement->getAttributeValue<float>("oY", 0);
+                ow = spriteElement->getAttributeValue<float>("oW", w);
+                oh = spriteElement->getAttributeValue<float>("oH", h);
+            }
+            
+            float tx1 = x / width;
+            float ty1 = y / height;
+            
+            float tx2 = (x + w) / width;
+            float ty2 = (y + h) / height;
+            
+            sprites[spritePath] = make_shared<Sprite>(texture, w, h, ox, oy, ow, oh, rotated, tx1, ty1, tx2, ty2);
+        }
+    }
+    
+    SpriteRef TextureAtlas::getSprite(const string &path) const
+    {
+        auto it = sprites.find(path);
+        
+        if (it == sprites.end())
+        {
+            return make_shared<Sprite>();
         }
         else
         {
-            ox = spriteElement->getAttributeValue<float>("oX", 0);
-            oy = spriteElement->getAttributeValue<float>("oY", 0);
-            ow = spriteElement->getAttributeValue<float>("oW", w);
-            oh = spriteElement->getAttributeValue<float>("oH", h);
+            return it->second;
         }
-        
-        float tx1 = x / width;
-        float ty1 = y / height;
-        
-        float tx2 = (x + w) / width;
-        float ty2 = (y + h) / height;
-        
-        sprites[spritePath] = make_shared<Sprite>(texture, w, h, ox, oy, ow, oh, rotated, tx1, ty1, tx2, ty2);
     }
-}
-
-SpriteRef TextureAtlas::getSprite(const string &path) const
-{
-    auto it = sprites.find(path);
     
-    if (it == sprites.end())
+    vector<SpriteRef> TextureAtlas::getAnimationSprites(const string &path) const
     {
-        return make_shared<Sprite>();
-    }
-    else
-    {
-        return it->second;
-    }
-}
-
-vector<SpriteRef> TextureAtlas::getAnimationSprites(const string &path) const
-{
-    vector<SpriteRef> animationSprites;
-    string pattern = path + "%d";
-    
-    for (auto &it : sprites)
-    {
-        int i = -1;
-        sscanf(it.first.c_str(), pattern.c_str(), &i);
+        vector<SpriteRef> animationSprites;
+        string pattern = path + "%d";
         
-        if (i != -1)
+        for (auto &it : sprites)
         {
-            animationSprites.push_back(it.second);
+            int i = -1;
+            sscanf(it.first.c_str(), pattern.c_str(), &i);
+            
+            if (i != -1)
+            {
+                animationSprites.push_back(it.second);
+            }
+        }
+        
+        return animationSprites;
+    }
+    
+    void TextureAtlas::beginTexture()
+    {
+        texture->begin();
+    }
+    
+    void TextureAtlas::endTexture()
+    {
+        texture->end();
+    }
+    
+    void TextureAtlas::drawSprite(const string &path, float rx, float ry)
+    {
+        auto it = sprites.find(path);
+        
+        if (it != sprites.end())
+        {
+            it->second->draw(rx, ry);
         }
     }
     
-    return animationSprites;
-}
-
-void TextureAtlas::beginTexture()
-{
-    texture->begin();
-}
-
-void TextureAtlas::endTexture()
-{
-    texture->end();
-}
-
-void TextureAtlas::drawSprite(const string &path, float rx, float ry)
-{
-    auto it = sprites.find(path);
-    
-    if (it != sprites.end())
+    void TextureAtlas::drawSpriteFromCenter(const std::string &path)
     {
-        it->second->draw(rx, ry);
-    }
-}
-
-void TextureAtlas::drawSpriteFromCenter(const std::string &path)
-{
-    auto it = sprites.find(path);
-    
-    if (it != sprites.end())
-    {
-        it->second->drawFromCenter();
+        auto it = sprites.find(path);
+        
+        if (it != sprites.end())
+        {
+            it->second->drawFromCenter();
+        }
     }
 }

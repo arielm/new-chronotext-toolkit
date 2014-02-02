@@ -18,26 +18,31 @@
 
 #include <map>
 
-class TextureAtlas
+namespace chronotext
 {
-public:
-    std::map<std::string, chr::SpriteRef> sprites;
-    chr::TextureRef texture;
+    class TextureAtlas
+    {
+    public:
+        std::map<std::string, SpriteRef> sprites;
+        TextureRef texture;
+        
+        TextureAtlas(TextureManager &textureManager, const std::string &resourceName, bool useMipmap = false);
+        TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap = false);
+        
+        SpriteRef getSprite(const std::string &path) const;
+        std::vector<SpriteRef> getAnimationSprites(const std::string &path) const;
+        
+        void beginTexture();
+        void endTexture();
+        
+        void drawSprite(const std::string &path, float rx = 0, float ry = 0);
+        void drawSpriteFromCenter(const std::string &path);
+        
+    protected:
+        TextureManager &textureManager;
+        
+        void init(InputSourceRef inputSource, bool useMipmap);
+    };
+}
 
-    TextureAtlas(chr::TextureManager &textureManager, const std::string &resourceName, bool useMipmap = false);
-    TextureAtlas(chr::TextureManager &textureManager, chr::InputSourceRef inputSource, bool useMipmap = false);
-
-    chr::SpriteRef getSprite(const std::string &path) const;
-    std::vector<chr::SpriteRef> getAnimationSprites(const std::string &path) const;
-
-    void beginTexture();
-    void endTexture();
-
-    void drawSprite(const std::string &path, float rx = 0, float ry = 0);
-    void drawSpriteFromCenter(const std::string &path);
-    
-protected:
-    chr::TextureManager &textureManager;
-    
-    void init(chr::InputSourceRef inputSource, bool useMipmap);
-};
+namespace chr = chronotext;

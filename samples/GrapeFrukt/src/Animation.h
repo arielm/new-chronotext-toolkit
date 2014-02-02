@@ -52,7 +52,7 @@ class Animation
     };
     
 public:
-    Animation(std::shared_ptr<TextureAtlas> atlas, chr::InputSourceRef sheetInputSource, chr::InputSourceRef animationInputSource, float fps = 24);
+    Animation(std::shared_ptr<chr::TextureAtlas> atlas, chr::InputSourceRef sheetInputSource, chr::InputSourceRef animationInputSource, float fps = 24);
     
     int getFrameCount() const;
     float getDuration() const;
@@ -62,7 +62,7 @@ public:
     void play(double now);
     
 protected:
-    std::shared_ptr<TextureAtlas> atlas;
+    std::shared_ptr<chr::TextureAtlas> atlas;
     float fps;
     int frameCount;
 
