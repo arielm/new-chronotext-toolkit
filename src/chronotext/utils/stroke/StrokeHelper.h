@@ -19,10 +19,9 @@ namespace chronotext
         static void stroke(FollowablePath *path, TexturedTriangleStrip &strip, float width, float ratio = 1)
         {
             auto size = path->size;
-
+            
             strip.clear();
-            strip.vertices.reserve(size * 2);
-            strip.coords.reserve(size * 2);
+            strip.vertices.reserve(size * 4);
             
             float ufreq = ratio * 0.5f / width;
             
@@ -45,23 +44,22 @@ namespace chronotext
                 float dx = (path->x[i + o1] - path->x[i + o2]) / len;
                 float dy = (path->y[i + o1] - path->y[i + o2]) / len;
                 float textureU = path->len[i] * ufreq;
-
-                strip.vertices.emplace_back(path->x[i] + width * dy, path->y[i] - width * dx);
-                strip.vertices.emplace_back(path->x[i] - width * dy, path->y[i] + width * dx);
                 
-                strip.coords.emplace_back(textureU, 0);
-                strip.coords.emplace_back(textureU, 1);
+                strip.vertices.emplace_back(path->x[i] + width * dy, path->y[i] - width * dx);
+                strip.vertices.emplace_back(textureU, 0);
+                
+                strip.vertices.emplace_back(path->x[i] - width * dy, path->y[i] + width * dx);
+                strip.vertices.emplace_back(textureU, 1);
             }
         }
         
         static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float ratio = 1)
         {
             auto size = points.size();
-
+            
             strip.clear();
-            strip.vertices.reserve(size * 2);
-            strip.coords.reserve(size * 2);
-
+            strip.vertices.reserve(size * 4);
+            
             if (size > 1)
             {
                 float textureU = 0;
@@ -78,12 +76,12 @@ namespace chronotext
                     float d = ci::math<float>::sqrt(dx * dx + dy * dy);
                     dx /= d;
                     dy /= d;
-
-                    strip.coords.emplace_back(textureU, 0);
-                    strip.coords.emplace_back(textureU, 1);
                     
                     strip.vertices.emplace_back(p0.x - width * dx, p0.y - width * dy);
+                    strip.vertices.emplace_back(textureU, 0);
+                    
                     strip.vertices.emplace_back(p0.x + width * dx, p0.y + width * dy);
+                    strip.vertices.emplace_back(textureU, 1);
                     
                     textureU += ufreq * d;
                 }
@@ -105,12 +103,12 @@ namespace chronotext
                         
                         float dist = ci::math<float>::sqrt((p1.x - p0.x) * (p1.x - p0.x) + (p1.y - p0.y) * (p1.y - p0.y));
                         textureU += ufreq * dist;
-
-                        strip.coords.emplace_back(textureU, 0);
-                        strip.coords.emplace_back(textureU, 1);
                         
                         strip.vertices.emplace_back(p1.x - width * dx, p1.y - width * dy);
+                        strip.vertices.emplace_back(textureU, 0);
+                        
                         strip.vertices.emplace_back(p1.x + width * dx, p1.y + width * dy);
+                        strip.vertices.emplace_back(textureU, 1);
                     }
                 }
                 
@@ -127,11 +125,11 @@ namespace chronotext
                     dy /= d;
                     
                     textureU += ufreq * d;
-
-                    strip.coords.emplace_back(textureU, 0);
-                    strip.coords.emplace_back(textureU, 1);
                     
                     strip.vertices.emplace_back(p1.x - width * dx, p1.y - width * dy);
+                    strip.vertices.emplace_back(textureU, 0);
+                    
+                    strip.vertices.emplace_back(textureU, 1);
                     strip.vertices.emplace_back(p1.x + width * dx, p1.y + width * dy);
                 }
             }

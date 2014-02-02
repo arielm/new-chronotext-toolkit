@@ -17,12 +17,10 @@ namespace chronotext
     struct TexturedTriangleStrip
     {
         std::vector<ci::Vec2f> vertices;
-        std::vector<ci::Vec2f> coords;
         
         void clear()
         {
             vertices.clear();
-            coords.clear();
         }
         
         bool empty() const
@@ -32,9 +30,16 @@ namespace chronotext
         
         void draw() const
         {
-            glVertexPointer(2, GL_FLOAT, 0, vertices.data());
-            glTexCoordPointer(2, GL_FLOAT, 0, coords.data());
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size());
+            if (!vertices.empty())
+            {
+                int stride = sizeof(ci::Vec2f) << 1;
+                auto pointer = vertices.data();
+                int count = vertices.size() >> 1;
+                
+                glVertexPointer(2, GL_FLOAT, stride, pointer);
+                glTexCoordPointer(2, GL_FLOAT, stride, pointer + 1);
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
+            }
         }
     };
 }
