@@ -95,6 +95,7 @@ namespace chronotext
         {}
 
         ci::DataSourceRef loadDataSource();
+        InputSourceRef getSubSource(const ci::fs::path &subPath);
         
         bool isFile() const;
         ci::fs::path getFilePath() const;

@@ -275,6 +275,32 @@ namespace chronotext
         return DataSourceRef();
     }
     
+    InputSourceRef InputSource::getSubSource(const fs::path &subPath)
+    {
+        if (type == TYPE_RESOURCE_MSW)
+        {
+            /*
+             * TODO: PARSE "resourceName", "mswID" AND "mswType"
+             */
+        }
+        else
+        {
+            switch (type)
+            {
+                case TYPE_FILE:
+                    return getFile(filePath.parent_path() / subPath);
+                    
+                case TYPE_ASSET:
+                    return getAsset(relativePath.parent_path() / subPath);
+                    
+                case TYPE_RESOURCE:
+                    return getResource(relativePath.parent_path() / subPath);
+            }
+        }
+        
+        return InputSourceRef();
+    }
+    
     bool InputSource::isFile() const
     {
         switch (type)
