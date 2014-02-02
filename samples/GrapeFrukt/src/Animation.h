@@ -52,6 +52,7 @@ class Animation
     };
     
 public:
+    Animation();
     Animation(std::shared_ptr<chr::TextureAtlas> atlas, chr::InputSourceRef sheetInputSource, chr::InputSourceRef animationInputSource, float fps = 24);
     
     int getFrameCount() const;

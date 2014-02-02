@@ -40,7 +40,7 @@ void Sketch::setup(bool renewContext)
 #endif
         
         auto atlas = make_shared<TextureAtlas>(textureManager, InputSource::getResource("MonocleMan.xml"), true);
-        animation = unique_ptr<Animation>(new Animation(atlas, InputSource::getResource("sheets.xml"), InputSource::getResource("animations.xml"), FPS));
+        animation = Animation(atlas, InputSource::getResource("sheets.xml"), InputSource::getResource("animations.xml"), FPS);
     }
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -73,5 +73,5 @@ void Sketch::draw()
     gl::translate(getWindowCenter());
     glScalef(scale, scale, 1);
     
-    animation->play(clock.getTime());
+    animation.play(clock.getTime());
 }

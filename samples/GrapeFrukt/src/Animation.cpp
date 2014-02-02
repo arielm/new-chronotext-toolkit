@@ -6,6 +6,12 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
+Animation::Animation()
+:
+fps(1),
+frameCount(0)
+{}
+
 Animation::Animation(shared_ptr<TextureAtlas> atlas, InputSourceRef sheetInputSource, InputSourceRef animationInputSource, float fps)
 :
 atlas(atlas),
@@ -28,23 +34,26 @@ float Animation::getDuration() const
 
 void Animation::draw(int frameIndex)
 {
-    atlas->beginTexture();
-    
-    for (auto &item : itemList)
+    if (atlas)
     {
-        auto &frame = item->frames[frameIndex % frameCount];
+        atlas->beginTexture();
         
-        glPushMatrix();
-        glColor4f(1, 1, 1, frame.alpha);
-        glTranslatef(frame.x, frame.y, 0);
-        glScalef(frame.scaleX, frame.scaleY, 1);
-        glRotatef(frame.rotation, 0, 0, 1);
+        for (auto &item : itemList)
+        {
+            auto &frame = item->frames[frameIndex % frameCount];
+            
+            glPushMatrix();
+            glColor4f(1, 1, 1, frame.alpha);
+            glTranslatef(frame.x, frame.y, 0);
+            glScalef(frame.scaleX, frame.scaleY, 1);
+            glRotatef(frame.rotation, 0, 0, 1);
+            
+            atlas->drawSprite(item->path, item->registrationPointX, item->registrationPointY);
+            glPopMatrix();
+        }
         
-        atlas->drawSprite(item->path, item->registrationPointX, item->registrationPointY);
-        glPopMatrix();
+        atlas->endTexture();
     }
-    
-    atlas->endTexture();
 }
 
 void Animation::draw(float t)

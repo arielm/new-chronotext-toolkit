@@ -30,7 +30,7 @@
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
-    std::unique_ptr<Animation> animation;
+    Animation animation;
     
     float scale;
     chr::Clock clock;
