@@ -13,6 +13,9 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
+        /*
+         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
+         */
         textureManager.unload();
         textureManager.reload();
     }
@@ -40,15 +43,15 @@ void Sketch::draw()
     gl::clear(Color(0.5f, 0.5f, 0.5f), false);
     gl::setMatricesWindow(getWindowSize(), true);
     
-    glColor4f(1, 1, 1, 0.25f);
-    glScalef(scale, scale, 1);
+    gl::color(1, 1, 1, 0.25f);
+    gl::scale(scale);
     drawGrid(Rectf(getWindowBounds()) / scale, GRID_SIZE, position);
 
-    glColor4f(1, 1, 1, 1);
+    gl::color(1, 1, 1, 1);
 
     glPushMatrix();
     gl::translate(position);
-    glScalef(FRAME_SCALE, FRAME_SCALE, 1);
+    gl::scale(FRAME_SCALE);
     picture->begin();
     picture->drawFromCenter();
     picture->end();

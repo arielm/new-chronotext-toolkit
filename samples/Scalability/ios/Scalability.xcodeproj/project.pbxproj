@@ -101,15 +101,11 @@
 		A8FA3BCD16E3AB8000367F97 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A8FA3BCE16E3AB8000367F97 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
 		A8FA3BD116E3AB8000367F97 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		A8FA3BFB16E3AB8000367F97 /* AccelerationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationManager.h; sourceTree = "<group>"; };
-		A8FA3BFC16E3AB8000367F97 /* AccelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelEvent.h; sourceTree = "<group>"; };
 		A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
 		A8FA3BFE16E3AB8000367F97 /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
 		A8FA3BFF16E3AB8000367F97 /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
 		A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		A8FA3C0116E3AB8000367F97 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
-		A8FA3C0316E3AB8000367F97 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
-		A8FA3C0416E3AB8000367F97 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A8FA3C0516E3AB8000367F97 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		A8FA3C0616E3AB8000367F97 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -343,35 +339,15 @@
 		A8FA3BF916E3AB8000367F97 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3BFA16E3AB8000367F97 /* accel */,
 				A8FA3BFE16E3AB8000367F97 /* GLUtils.h */,
 				A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */,
 				A8FA3BFF16E3AB8000367F97 /* Hasher.h */,
 				A8FA3C0116E3AB8000367F97 /* MathUtils.h */,
 				A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */,
-				A8FA3C0216E3AB8000367F97 /* stroke */,
 				A8FA3C0616E3AB8000367F97 /* Utils.h */,
 				A8FA3C0516E3AB8000367F97 /* Utils.cpp */,
 			);
 			path = utils;
-			sourceTree = "<group>";
-		};
-		A8FA3BFA16E3AB8000367F97 /* accel */ = {
-			isa = PBXGroup;
-			children = (
-				A8FA3BFB16E3AB8000367F97 /* AccelerationManager.h */,
-				A8FA3BFC16E3AB8000367F97 /* AccelEvent.h */,
-			);
-			path = accel;
-			sourceTree = "<group>";
-		};
-		A8FA3C0216E3AB8000367F97 /* stroke */ = {
-			isa = PBXGroup;
-			children = (
-				A8FA3C0316E3AB8000367F97 /* StrokeHelper.h */,
-				A8FA3C0416E3AB8000367F97 /* TexturedTriangleStrip.h */,
-			);
-			path = stroke;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

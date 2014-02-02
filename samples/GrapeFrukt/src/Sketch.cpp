@@ -71,7 +71,7 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
 
     gl::translate(getWindowCenter());
-    glScalef(scale, scale, 1);
+    gl::scale(scale);
     
     animation.play(clock.getTime());
 }
