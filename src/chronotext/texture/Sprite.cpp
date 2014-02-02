@@ -76,14 +76,24 @@ namespace chronotext
     
     void Sprite::draw(float rx, float ry)
     {
-        float vertices[4][2];
-        float coords[4][2];
+        float x1, y1;
         
-        float x1 = -rx + ox;
-        float y1 = -ry + oy;
+        if (rotated)
+        {
+            x1 = -ry + oy;
+            y1 = -rx + ox;
+        }
+        else
+        {
+            x1 = -rx + ox;
+            y1 = -ry + oy;
+        }
         
         float x2 = x1 + w;
         float y2 = y1 + h;
+        
+        GLfloat vertices[4][2];
+        GLfloat coords[4][2];
         
         if (rotated)
         {
