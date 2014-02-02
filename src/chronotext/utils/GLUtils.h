@@ -25,4 +25,12 @@ namespace chronotext
     void dumpCamera(const ci::Camera &cam, const std::string &name = "cam");
 }
 
+namespace cinder
+{
+    namespace gl
+    {
+        inline void scale(float s) { glScalef(s, s, 1); }
+    }
+}
+
 namespace chr = chronotext;
