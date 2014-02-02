@@ -36,7 +36,7 @@ void Sketch::setup(bool renewContext)
         ImageIoRegistrar::registerSourceType("png", ImageSourceFileStbImage::createRef, 1);
 #endif
         
-        auto atlas = make_shared<TextureAtlas>(textureManager, "MonocleMan.xml", true);
+        auto atlas = make_shared<TextureAtlas>(textureManager, InputSource::getResource("MonocleMan.xml"), true);
         animation = unique_ptr<Animation>(new Animation(atlas, InputSource::getResource("sheets.xml"), InputSource::getResource("animations.xml"), FPS));
     }
     

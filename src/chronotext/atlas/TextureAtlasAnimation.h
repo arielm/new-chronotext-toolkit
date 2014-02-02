@@ -15,6 +15,8 @@ namespace chronotext
     class TextureAtlasAnimation
     {
     public:
+        std::vector<SpriteRef> sprites;
+        
         TextureAtlasAnimation(TextureAtlas &atlas, const std::string &path, float fps = 24, bool looping = false, bool reverse = false);
         TextureAtlasAnimation(TextureAtlas &atlas, const std::string &path, float fps, bool looping, int firstFrameIndex, int lastFrameIndex);
         
@@ -36,8 +38,6 @@ namespace chronotext
         TextureAtlas &atlas;
         float fps;
         bool looping;
-        
-        std::vector<SpriteRef> sprites;
     };
 }
 

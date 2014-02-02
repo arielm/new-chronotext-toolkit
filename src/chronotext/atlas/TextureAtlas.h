@@ -7,7 +7,11 @@
  */
 
 /*
- * MANAGING SPRITES FROM TEXTURE-ATLAS MADE WITH TexturePacker
+ * MANAGING SPRITES FROM TEXTURE-ATLAS MADE WITH TexturePacker:
+ * http://www.codeandweb.com/texturepacker
+ *
+ * THE UNDERLYING TEXTURE IS CONTROLLED BY TextureManager, I.E.
+ * IT CAN BE AUTOMATICALLY RELOADED AFTER OPEN-GL CONTEXT-LOSS
  */
 
 #pragma once
@@ -23,7 +27,6 @@ namespace chronotext
     class TextureAtlas
     {
     public:
-        std::map<std::string, SpriteRef> sprites;
         TextureRef texture;
         
         TextureAtlas(TextureManager &textureManager, const std::string &resourceName, bool useMipmap = false);
@@ -40,6 +43,7 @@ namespace chronotext
         
     protected:
         TextureManager &textureManager;
+        std::map<std::string, SpriteRef> sprites;
         
         void init(InputSourceRef inputSource, bool useMipmap);
     };

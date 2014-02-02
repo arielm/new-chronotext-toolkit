@@ -86,7 +86,7 @@ namespace chronotext
         
         if (it == sprites.end())
         {
-            return make_shared<Sprite>();
+            return SpriteRef();
         }
         else
         {
