@@ -8,6 +8,7 @@
 
 #include "chronotext/incubator/ui/Button.h"
 #include "chronotext/text/TextHelper.h"
+#include "chronotext/utils/GLUtils.h"
 
 using namespace std;
 using namespace ci;
@@ -85,7 +86,7 @@ namespace chronotext
             
             glPushMatrix();
             gl::translate(bounds.getCenter());
-            gl::scale(icon->scale, icon->scale);
+            gl::scale(icon->scale);
             
             icon->texture->begin();
             icon->texture->drawFromCenter();

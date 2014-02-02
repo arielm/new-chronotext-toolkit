@@ -153,7 +153,7 @@ namespace chronotext
         
         glVertexPointer(2, GL_FLOAT, 0, vertices);
         glColorPointer(4, GL_FLOAT, 0, colors.data());
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, colors.size());
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4 * 2);
         
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
