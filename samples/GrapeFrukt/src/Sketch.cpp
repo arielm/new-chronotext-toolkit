@@ -22,6 +22,9 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
+        /*
+         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
+         */
         textureManager.unload();
         textureManager.reload();
     }
@@ -52,6 +55,16 @@ void Sketch::resize()
     scale = getWindowHeight() / SCALE;
 }
 
+void Sketch::start(int flags)
+{
+    clock.start();
+}
+
+void Sketch::stop(int flags)
+{
+    clock.stop();
+}
+
 void Sketch::draw()
 {
     gl::clear(Color::gray(1.0f), false);
@@ -60,5 +73,5 @@ void Sketch::draw()
     gl::translate(getWindowCenter());
     glScalef(scale, scale, 1);
     
-    animation->play(getElapsedSeconds());
+    animation->play(clock.getTime());
 }

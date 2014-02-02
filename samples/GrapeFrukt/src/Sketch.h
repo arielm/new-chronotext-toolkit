@@ -7,7 +7,9 @@
  * FEATURES:
  *
  * 1) DEMONSTRATES USAGE OF TextureAtlas
- * 2) DEMONSTRATES AUTOMATIC TEXTURE RELOADING AFTER OPEN-GL CONTEXT-LOSS
+ * 2) DEMONSTRATES SOLUTION TO "PREMULTIPLIED PNG CURSE" (NECESSARY ON iOS)
+ * 3) DEMONSTRATES AUTOMATIC TEXTURE RELOADING AFTER OPEN-GL CONTEXT-LOSS (NECESSARY ON ANDROID)
+ * 4) DEMONSTRATES USAGE OF Clock IN ORDER TO "FREEZE TIME" WHEN APP IS IN BACKGROUND (iOS, ANDROID)
  *
  *
  * TODO:
@@ -21,6 +23,7 @@
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/time/Clock.h"
 
 #include "Animation.h"
 
@@ -28,12 +31,16 @@ class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
     std::unique_ptr<Animation> animation;
+    
     float scale;
+    chr::Clock clock;
 
 public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
     void resize();
+    void start(int flags);
+    void stop(int flags);
     void draw();
 };
