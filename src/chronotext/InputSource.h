@@ -51,8 +51,8 @@ namespace chronotext
          * OSX, IOS: isFile() WILL RETURN true
          * ANDROID: isFile() WILL RETURN false
          */
-        static InputSourceRef getResource(const std::string &resourceName);
-        static ci::DataSourceRef loadResource(const std::string &resourceName);
+        static InputSourceRef getResource(const ci::fs::path &relativePath);
+        static ci::DataSourceRef loadResource(const ci::fs::path &relativePath);
         
         /*
          * TO USE WITH THE "CINDER_RESOURCE" MACRO,
@@ -106,8 +106,6 @@ namespace chronotext
 
     protected:
         int type;
-        
-        std::string resourceName;
         int mswID;
         std::string mswType;
         ci::fs::path filePath;

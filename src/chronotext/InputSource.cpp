@@ -16,21 +16,22 @@ using namespace ci;
 
 namespace chronotext
 {
-    InputSourceRef InputSource::getResource(const std::string &resourceName)
+    InputSourceRef InputSource::getResource(const ci::fs::path &relativePath)
     {
         auto source = make_shared<InputSource>(TYPE_RESOURCE);
-        source->resourceName = source->filePathHint = resourceName;
+        source->relativePath = relativePath;
+        source->filePathHint = relativePath.string();
         
 #if defined(CINDER_COCOA)
-        source->filePath = FileSystem::getResourcePath(resourceName);
+        source->filePath = FileSystem::getResourcePath(relativePath);
 #endif
         
         return source;
     }
     
-    DataSourceRef InputSource::loadResource(const std::string &resourceName)
+    DataSourceRef InputSource::loadResource(const ci::fs::path &relativePath)
     {
-        return InputSource::getResource(resourceName)->loadDataSource();
+        return InputSource::getResource(relativePath)->loadDataSource();
     }
     
     InputSourceRef InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
@@ -38,7 +39,7 @@ namespace chronotext
         auto source = make_shared<InputSource>(TYPE_RESOURCE_MSW);
         source->mswID = mswID;
         source->mswType = mswType;
-        source->resourceName = source->filePathHint = resourceName;
+        source->filePathHint = resourceName;
         
         return source;
     }
@@ -178,25 +179,25 @@ namespace chronotext
             case TYPE_RESOURCE:
             {
 #if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), resourceName.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), filePathHint.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), resourceName);
+                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), filePathHint);
                 }
                 else
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
+                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
                 }
 #elif defined(CINDER_ANDROID)
                 try
                 {
-                    return app::loadResource(resourceName); // TODO: TEST IF IT REALLY THROWS UPON ERROR
+                    return app::loadResource(filePathHint); // TODO: TEST IF IT REALLY THROWS UPON ERROR
                 }
                 catch (exception &e)
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
+                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
                 }
 #else
                 if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
@@ -205,7 +206,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
+                    throw Exception("RESOURCE NOT FOUND: " + relativePath.string());
                 }
 #endif
             }
@@ -214,11 +215,11 @@ namespace chronotext
             {
                 try
                 {
-                    return app::loadResource(resourceName, mswID, mswType); // TODO: TEST IF IT REALLY THROWS UPON ERROR
+                    return app::loadResource(filePathHint, mswID, mswType); // TODO: TEST IF IT REALLY THROWS UPON ERROR
                 }
                 catch (exception &e)
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + resourceName);
+                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
                 }
             }
                 
@@ -316,11 +317,11 @@ namespace chronotext
             switch (type)
             {
                 case TYPE_RESOURCE:
-                    uri = "res://" + resourceName;
+                    uri = "res://" + filePathHint;
                     break;
                     
                 case TYPE_RESOURCE_MSW:
-                    uri = "res://" + resourceName + "?id=" + toString(mswID) + "&type=" + mswType;
+                    uri = "res://" + filePathHint + "?id=" + toString(mswID) + "&type=" + mswType;
                     break;
                     
                 case TYPE_FILE:
