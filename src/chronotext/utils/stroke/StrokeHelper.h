@@ -11,6 +11,10 @@
 #include "chronotext/path/FollowablePath.h"
 #include "chronotext/utils/stroke/TexturedTriangleStrip.h"
 
+/*
+ * ASSOCIATED TEXTURES SHOULD HAVE THEIR "GL_TEXTURE_WRAP_S" SET TO "GL_REPEAT",
+ */
+
 namespace chronotext
 {
     class StrokeHelper
@@ -77,14 +81,14 @@ namespace chronotext
                     ci::Vec2f d(p1 - p0);
                     float l = d.length();
                     d /= l;
-                    
+
+                    textureU += ufreq * l;
+
                     strip.vertices.emplace_back(p0 + w1 * d.yx());
                     strip.vertices.emplace_back(textureU, 0);
                     
                     strip.vertices.emplace_back(p0 + w2 * d.yx());
                     strip.vertices.emplace_back(textureU, 1);
-                    
-                    textureU += ufreq * l;
                 }
                 
                 for (int i = 1; i < size - 1; i++)
