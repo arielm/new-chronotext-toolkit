@@ -32,9 +32,9 @@ namespace chronotext
         {
             if (!vertices.empty())
             {
-                int stride = sizeof(ci::Vec2f) << 1;
+                int stride = sizeof(ci::Vec2f) * 2;
                 auto pointer = vertices.data();
-                int count = vertices.size() >> 1;
+                int count = vertices.size() / 2;
                 
                 glVertexPointer(2, GL_FLOAT, stride, pointer);
                 glTexCoordPointer(2, GL_FLOAT, stride, pointer + 1);
