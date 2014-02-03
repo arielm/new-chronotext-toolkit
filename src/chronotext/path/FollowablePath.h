@@ -69,7 +69,7 @@ namespace chronotext
         float pos2SampledAngle(float pos, float sampleSize) const;
         ci::Vec2f pos2Gradient(float pos, float sampleSize) const;
         
-        bool findClosestPoint(const ci::Vec2f &point, float min, ClosePoint &res) const;
+        bool findClosestPoint(const ci::Vec2f &point, float threshold, ClosePoint &res) const;
         ClosePoint closestPointFromSegment(const ci::Vec2f &point, int segmentIndex) const;
         
         ci::Rectf getBounds() const;

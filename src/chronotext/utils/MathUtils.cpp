@@ -41,16 +41,13 @@ namespace chronotext
         float maxX = numeric_limits<float>::min();
         float maxY = numeric_limits<float>::min();
         
-        for (auto point : polygon)
+        for (auto &point : polygon)
         {
-            const float x = point.x;
-            const float y = point.y;
+            if (point.x < minX) minX = point.x;
+            if (point.y < minY) minY = point.y;
             
-            if (x < minX) minX = x;
-            if (y < minY) minY = y;
-            
-            if (x > maxX) maxX = x;
-            if (y > maxY) maxY = y;
+            if (point.x > maxX) maxX = point.x;
+            if (point.y > maxY) maxY = point.y;
         }
         
         return Rectf(minX, minY, maxX, maxY);
@@ -94,37 +91,37 @@ namespace chronotext
             Vec2f p0 = polygon[i0];
             Vec2f p1 = polygon[i1];
             
-            Vec2f delta = p1 - p0;
-            float u = delta.dot(point - p0) / delta.lengthSquared();
-            
-            if (u >= 0 && u <= 1)
+            if (p0 != p1)
             {
-                Vec2f d = p0 + u * delta - point;
-                float mag = d.lengthSquared();
+                Vec2f delta = p1 - p0;
+                float u = delta.dot(point - p0) / delta.lengthSquared();
                 
-                if (mag < min)
+                if (u >= 0 && u <= 1)
                 {
-                    min = mag;
-                    found = true;
+                    Vec2f p = p0 + u * delta;
+                    float mag = (p - point).lengthSquared();
+                    
+                    if (mag < min)
+                    {
+                        min = mag;
+                        found = true;
+                    }
                 }
-            }
-            else
-            {
-                Vec2f d0 = p0 - point;
-                float mag0 = d0.lengthSquared();
-                
-                Vec2f d1 = p1 - point;
-                float mag1 = d1.lengthSquared();
-                
-                if ((mag0 < min) && (mag0 < mag1))
+                else
                 {
-                    min = mag0;
-                    found = true;
-                }
-                else if ((mag1 < min) && (mag1 < mag0))
-                {
-                    min = mag1;
-                    found = true;
+                    float mag0 = (p0 - point).lengthSquared();
+                    float mag1 = (p1 - point).lengthSquared();
+                    
+                    if ((mag0 < min) && (mag0 < mag1))
+                    {
+                        min = mag0;
+                        found = true;
+                    }
+                    else if ((mag1 < min) && (mag1 < mag0))
+                    {
+                        min = mag1;
+                        found = true;
+                    }
                 }
             }
         }
