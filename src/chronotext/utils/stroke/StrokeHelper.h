@@ -24,8 +24,8 @@ namespace chronotext
             strip.vertices.reserve(size * 4);
             
             float ufreq = ratio * 0.5f / width;
-            const ci::Vec2f w1(+width, -width);
-            const ci::Vec2f w2(-width, +width);
+            ci::Vec2f w1(+width, -width);
+            ci::Vec2f w2(-width, +width);
             
             for (int i = 0; i < size; i++)
             {
@@ -43,7 +43,7 @@ namespace chronotext
                 }
                 
                 float l = path->len[i + o1] - path->len[i + o2];
-                const ci::Vec2f &d = (path->points[i + o1] - path->points[i + o2]) / l;
+                ci::Vec2f d = (path->points[i + o1] - path->points[i + o2]) / l;
                 float textureU = ufreq * path->len[i];
                 
                 strip.vertices.emplace_back(path->points[i] + w1 * d.yx());
@@ -66,8 +66,8 @@ namespace chronotext
                 float textureU = 0;
                 
                 float ufreq = ratio * 0.5f / width;
-                const ci::Vec2f w1(+width, -width);
-                const ci::Vec2f w2(-width, +width);
+                ci::Vec2f w1(+width, -width);
+                ci::Vec2f w2(-width, +width);
                 
                 auto p0 = points[0];
                 auto p1 = points[1];
@@ -95,7 +95,7 @@ namespace chronotext
                     
                     if (p1 != p2)
                     {
-                        const ci::Vec2f &d = (p2 - p1).normalized();
+                        ci::Vec2f d = (p2 - p1).normalized();
                         textureU += ufreq * (p1 - p0).length();
                         
                         strip.vertices.emplace_back(p1 + w1 * d.yx());

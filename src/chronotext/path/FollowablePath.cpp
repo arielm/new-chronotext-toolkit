@@ -51,13 +51,13 @@ namespace chronotext
         points.reserve(capacity);
         len.reserve(capacity);
         
-        float xx, yy;
+        Vec2f point;
         
         for (int i = 0; i < capacity; i++)
         {
-            in->readLittle(&xx);
-            in->readLittle(&yy);
-            add(xx, yy);
+            in->readLittle(&point.x);
+            in->readLittle(&point.y);
+            add(point);
         }
     }
     
@@ -114,8 +114,8 @@ namespace chronotext
         
         if (size > 0)
         {
-            const Vec2f &d = point - points[size - 1];
-            len.push_back(len[size - 1] + d.length());
+            Vec2f delta = point - points[size - 1];
+            len.push_back(len[size - 1] + delta.length());
         }
         else
         {
