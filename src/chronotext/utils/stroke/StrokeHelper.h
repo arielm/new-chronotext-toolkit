@@ -120,8 +120,8 @@ namespace chronotext
                     strip.vertices.emplace_back(p1 + w1 * d.yx());
                     strip.vertices.emplace_back(textureU, 0);
                     
-                    strip.vertices.emplace_back(textureU, 1);
                     strip.vertices.emplace_back(p1 + w2 * d.yx());
+                    strip.vertices.emplace_back(textureU, 1);
                 }
             }
         }
