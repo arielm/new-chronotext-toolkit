@@ -24,16 +24,14 @@ namespace chronotext
     public:
         struct Value
         {
-            float x;
-            float y;
+            ci::Vec2f point;
             float angle;
             float position;
         };
         
         struct ClosePoint
         {
-            float x; // CLOSEST-POINT ON PATH
-            float y; // CLOSEST-POINT ON PATH
+            ci::Vec2f point; // CLOSEST-POINT ON PATH
             float position; // POSITION OF CLOSEST-POINT ON PATH
             float distance; // DISTANCE TO CLOSEST-POINT ON PATH
         };
@@ -49,8 +47,7 @@ namespace chronotext
         int mode;
         int size;
         
-        std::vector<float> x;
-        std::vector<float> y;
+        std::vector<ci::Vec2f> points;
         std::vector<float> len;
         
         FollowablePath(int mode = MODE_TANGENT, int capacity = 256);
@@ -62,7 +59,9 @@ namespace chronotext
         
         void clear();
         float getLength();
-        void add(float x, float y);
+        
+        void add(const ci::Vec2f &point);
+        inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
         
         Value pos2Value(float pos) const;
         ci::Vec2f pos2Point(float pos) const;
@@ -70,8 +69,8 @@ namespace chronotext
         float pos2SampledAngle(float pos, float sampleSize) const;
         ci::Vec2f pos2Gradient(float pos, float sampleSize) const;
         
-        bool findClosestPoint(float x, float y, float min, ClosePoint &res) const;
-        ClosePoint closestPointFromSegment(float x, float y, int segmentIndex) const;
+        bool findClosestPoint(const ci::Vec2f &point, float min, ClosePoint &res) const;
+        ClosePoint closestPointFromSegment(const ci::Vec2f &point, int segmentIndex) const;
         
         ci::Rectf getBounds() const;
     };

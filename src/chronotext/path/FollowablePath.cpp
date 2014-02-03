@@ -20,8 +20,7 @@ namespace chronotext
     mode(mode),
     size(0)
     {
-        x.reserve(capacity);
-        y.reserve(capacity);
+        points.reserve(capacity);
         len.reserve(capacity);
     }
     
@@ -49,12 +48,10 @@ namespace chronotext
         in->readLittle(&capacity);
         
         size = 0;
-        x.reserve(capacity);
-        y.reserve(capacity);
+        points.reserve(capacity);
         len.reserve(capacity);
         
-        float xx;
-        float yy;
+        float xx, yy;
         
         for (int i = 0; i < capacity; i++)
         {
@@ -68,10 +65,10 @@ namespace chronotext
     {
         out->writeLittle(size);
         
-        for (int i = 0; i < size; i++)
+        for (auto &point : points)
         {
-            out->writeLittle(x[i]);
-            out->writeLittle(y[i]);
+            out->writeLittle(point.x);
+            out->writeLittle(point.y);
         }
     }
     
@@ -82,7 +79,7 @@ namespace chronotext
     
     Buffer FollowablePath::write()
     {
-        int bufferSize = sizeof(int) + 2 * size * sizeof(float);
+        int bufferSize = sizeof(int) + size * sizeof(Vec2f);
         OStreamMemRef out = OStreamMem::create(bufferSize);
         
         write(out);
@@ -95,8 +92,7 @@ namespace chronotext
     void FollowablePath::clear()
     {
         size = 0;
-        x.clear();
-        y.clear();
+        points.clear();
         len.clear();
     }
     
@@ -112,16 +108,14 @@ namespace chronotext
         }
     }
     
-    void FollowablePath::add(float xx, float yy)
+    void FollowablePath::add(const ci::Vec2f &point)
     {
-        x.push_back(xx);
-        y.push_back(yy);
+        points.push_back(point);
         
         if (size > 0)
         {
-            float dx = xx - x[size - 1];
-            float dy = yy - y[size - 1];
-            len.push_back(len[size - 1] + math<float>::sqrt(dx * dx + dy * dy));
+            const Vec2f &d = point - points[size - 1];
+            len.push_back(len[size - 1] + d.length());
         }
         else
         {
@@ -158,19 +152,14 @@ namespace chronotext
         }
         
         int index = search(len, pos, 1, size);
-        
-        float x0 = x[index];
-        float y0 = y[index];
-        
-        float x1 = x[index + 1];
-        float y1 = y[index + 1];
+        auto p0 = points[index];
+        auto p1 = points[index + 1];
         
         float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
         
         FollowablePath::Value value;
-        value.x = x0 + (x1 - x0) * ratio;
-        value.y = y0 + (y1 - y0) * ratio;
-        value.angle = math<float>::atan2(y1 - y0, x1 - x0);
+        value.point = p0 + (p1 - p0) * ratio;
+        value.angle = math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
         value.position = pos;
         
         return value;
@@ -190,28 +179,24 @@ namespace chronotext
             {
                 if (mode == MODE_BOUNDED)
                 {
-                    return Vec2f(x[0], y[0]);
+                    return points[0];
                 }
             }
             else if (pos >= length)
             {
                 if (mode == MODE_BOUNDED)
                 {
-                    return Vec2f(x[size - 1], y[size - 1]);
+                    return points[size - 1];
                 }
             }
         }
         
         int index = search(len, pos, 1, size);
-        
-        float x0 = x[index];
-        float y0 = y[index];
-        
-        float x1 = x[index + 1];
-        float y1 = y[index + 1];
+        auto p0 = points[index];
+        auto p1 = points[index + 1];
         
         float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
-        return Vec2f(x0 + (x1 - x0) * ratio, y0 + (y1 - y0) * ratio);
+        return p0 + (p1 - p0) * ratio;
     }
     
     float FollowablePath::pos2Angle(float pos) const
@@ -241,14 +226,10 @@ namespace chronotext
         }
         
         int index = search(len, pos, 1, size);
+        auto p0 = points[index];
+        auto p1 = points[index + 1];
         
-        float x0 = x[index];
-        float y0 = y[index];
-        
-        float x1 = x[index + 1];
-        float y1 = y[index + 1];
-        
-        return math<float>::atan2(y1 - y0, x1 - x0);
+        return math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
     }
     
     float FollowablePath::pos2SampledAngle(float pos, float sampleSize) const
@@ -284,16 +265,18 @@ namespace chronotext
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
      * http://paulbourke.net/geometry/pointlineplane/
      */
-    bool FollowablePath::findClosestPoint(float xx, float yy, float min, FollowablePath::ClosePoint &res) const
+    bool FollowablePath::findClosestPoint(const Vec2f &point, float min, FollowablePath::ClosePoint &res) const
     {
         min *= min; // BECAUSE COMPARING "MAGNIFIED DISTANCES" IS FASTER
         
         int index = -1;
-        float _x, _y, _len;
+        ci::Vec2f _point;
+        float _len;
         
         for (int i = 0; i < size; i++)
         {
             int i0, i1;
+            
             if (i == size - 1)
             {
                 i0 = i - 1;
@@ -305,58 +288,45 @@ namespace chronotext
                 i1 = i + 1;
             }
             
-            float d = len[i1] - len[i0];
-            float x0 = x[i0];
-            float y0 = y[i0];
-            float x1 = x[i1];
-            float y1 = y[i1];
+            float l = len[i1] - len[i0];
+            auto p0 = points[i0];
+            auto p1 = points[i1];
             
-            float u = ((xx - x0) * (x1 - x0) + (yy - y0) * (y1 - y0)) / (d * d);
+            float u = ((point.x - p0.x) * (p1.x - p0.x) + (point.y - p0.y) * (p1.y - p0.y)) / (l * l);
+            
             if (u >= 0 && u <= 1)
             {
-                float xp = x0 + u * (x1 - x0);
-                float yp = y0 + u * (y1 - y0);
-                
-                float dx = xp - xx;
-                float dy = yp - yy;
-                float mag = dx * dx + dy * dy;
+                const Vec2f &p = p0 + (p1 - p0) * u;
+                float mag = (p - point).lengthSquared();
                 
                 if (mag < min)
                 {
                     min = mag;
                     index = i0;
                     
-                    _x = xp;
-                    _y = yp;
-                    _len = len[index] + d * u;
+                    _point = p;
+                    _len = len[index] + l * u;
                 }
             }
             else
             {
-                float dx0 = x0 - xx;
-                float dy0 = y0 - yy;
-                float mag1 = dx0 * dx0 + dy0 * dy0;
+                float mag0 = (p0 - point).lengthSquared();
+                float mag1 = (p1 - point).lengthSquared();
                 
-                float dx1 = x1 - xx;
-                float dy1 = y1 - yy;
-                float mag2 = dx1 * dx1 + dy1 * dy1;
-                
-                if ((mag1 < min) && (mag1 < mag2))
+                if ((mag0 < min) && (mag0 < mag1))
                 {
-                    min = mag1;
+                    min = mag0;
                     index = i0;
                     
-                    _x = x0;
-                    _y = y0;
+                    _point = points[i0];
                     _len = len[index];
                 }
-                else if ((mag2 < min) && (mag2 < mag1))
+                else if ((mag1 < min) && (mag1 < mag0))
                 {
-                    min = mag2;
+                    min = mag1;
                     index = i1;
                     
-                    _x = x1;
-                    _y = y1;
+                    _point = points[i1];
                     _len = len[index];
                 }
             }
@@ -364,8 +334,7 @@ namespace chronotext
         
         if (index != -1)
         {
-            res.x = _x;
-            res.y = _y;
+            res.point = _point;
             res.position = _len;
             res.distance = math<float>::sqrt(min);
             
@@ -381,55 +350,42 @@ namespace chronotext
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
      * http://paulbourke.net/geometry/pointlineplane/
      */
-    FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(float xx, float yy, int segmentIndex) const
+    FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(const Vec2f &point, int segmentIndex) const
     {
         FollowablePath::ClosePoint res;
         
         int i0 = segmentIndex;
         int i1 = segmentIndex + 1;
         
-        float d = len[i1] - len[i0];
-        float x0 = x[i0];
-        float y0 = y[i0];
-        float x1 = x[i1];
-        float y1 = y[i1];
+        float l = len[i1] - len[i0];
+        auto p0 = points[i0];
+        auto p1 = points[i1];
         
-        float u = ((xx - x0) * (x1 - x0) + (yy - y0) * (y1 - y0)) / (d * d);
+        float u = ((point.x - p0.x) * (p1.x - p0.x) + (point.y - p0.y) * (p1.y - p0.y)) / (l * l);
+        
         if (u >= 0 && u <= 1)
         {
-            float xp = x0 + u * (x1 - x0);
-            float yp = y0 + u * (y1 - y0);
+            const Vec2f &p = p0 + (p1 - p0) * u;
+            float mag = (p - point).lengthSquared();
             
-            float dx = xp - xx;
-            float dy = yp - yy;
-            float mag = dx * dx + dy * dy;
-            
-            res.x = xp;
-            res.y = yp;
-            res.position = len[i0] + d * u;
+            res.point = p;
+            res.position = len[i0] + l * u;
             res.distance = math<float>::sqrt(mag);
         }
         else
         {
-            float dx0 = x0 - xx;
-            float dy0 = y0 - yy;
-            float mag0 = dx0 * dx0 + dy0 * dy0;
-            
-            float dx1 = x1 - xx;
-            float dy1 = y1 - yy;
-            float mag1 = dx1 * dx1 + dy1 * dy1;
+            float mag0 = (p0 - point).lengthSquared();
+            float mag1 = (p1 - point).lengthSquared();
             
             if (mag0 < mag1)
             {
-                res.x = x0;
-                res.y = y0;
+                res.point = p0;
                 res.position = len[i0];
                 res.distance = math<float>::sqrt(mag0);
             }
             else
             {
-                res.x = x1;
-                res.y = y1;
+                res.point = p1;
                 res.position = len[i1];
                 res.distance = math<float>::sqrt(mag1);
             }
@@ -445,16 +401,13 @@ namespace chronotext
         float maxX = numeric_limits<float>::min();
         float maxY = numeric_limits<float>::min();
         
-        for (int i = 0; i < size; i++)
+        for (auto &point : points)
         {
-            float xx = x[i];
-            float yy = y[i];
+            if (point.x < minX) minX = point.x;
+            if (point.y < minY) minY = point.y;
             
-            if (xx < minX) minX = xx;
-            if (yy < minY) minY = yy;
-            
-            if (xx > maxX) maxX = xx;
-            if (yy > maxY) maxY = yy;
+            if (point.x > maxX) maxX = point.x;
+            if (point.y > maxY) maxY = point.y;
         }
         
         return Rectf(minX, minY, maxX, maxY);

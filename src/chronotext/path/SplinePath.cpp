@@ -49,7 +49,7 @@ namespace chronotext
         
         if (path->mode == FollowablePath::MODE_LOOP)
         {
-            path->add(path->x[0], path->y[0]);
+            path->add(path->points.front());
         }
     }
 }

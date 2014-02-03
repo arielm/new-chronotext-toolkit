@@ -24,6 +24,8 @@ namespace chronotext
             strip.vertices.reserve(size * 4);
             
             float ufreq = ratio * 0.5f / width;
+            const ci::Vec2f w1(+width, -width);
+            const ci::Vec2f w2(-width, +width);
             
             for (int i = 0; i < size; i++)
             {
@@ -40,15 +42,14 @@ namespace chronotext
                     o2 = 0;
                 }
                 
-                float len = path->len[i + o1] - path->len[i + o2];
-                float dx = (path->x[i + o1] - path->x[i + o2]) / len;
-                float dy = (path->y[i + o1] - path->y[i + o2]) / len;
-                float textureU = path->len[i] * ufreq;
+                float l = path->len[i + o1] - path->len[i + o2];
+                const ci::Vec2f &d = (path->points[i + o1] - path->points[i + o2]) / l;
+                float textureU = ufreq * path->len[i];
                 
-                strip.vertices.emplace_back(path->x[i] + width * dy, path->y[i] - width * dx);
+                strip.vertices.emplace_back(path->points[i] + w1 * d.yx());
                 strip.vertices.emplace_back(textureU, 0);
                 
-                strip.vertices.emplace_back(path->x[i] - width * dy, path->y[i] + width * dx);
+                strip.vertices.emplace_back(path->points[i] + w2 * d.yx());
                 strip.vertices.emplace_back(textureU, 1);
             }
         }
@@ -63,27 +64,27 @@ namespace chronotext
             if (size > 1)
             {
                 float textureU = 0;
+                
                 float ufreq = ratio * 0.5f / width;
+                const ci::Vec2f w1(+width, -width);
+                const ci::Vec2f w2(-width, +width);
                 
                 auto p0 = points[0];
                 auto p1 = points[1];
                 
                 if (p0 != p1)
                 {
-                    float dx = p1.y - p0.y;
-                    float dy = p0.x - p1.x;
+                    ci::Vec2f d(p1 - p0);
+                    float l = d.length();
+                    d /= l;
                     
-                    float d = ci::math<float>::sqrt(dx * dx + dy * dy);
-                    dx /= d;
-                    dy /= d;
-                    
-                    strip.vertices.emplace_back(p0.x - width * dx, p0.y - width * dy);
+                    strip.vertices.emplace_back(p0 + w1 * d.yx());
                     strip.vertices.emplace_back(textureU, 0);
                     
-                    strip.vertices.emplace_back(p0.x + width * dx, p0.y + width * dy);
+                    strip.vertices.emplace_back(p0 + w2 * d.yx());
                     strip.vertices.emplace_back(textureU, 1);
                     
-                    textureU += ufreq * d;
+                    textureU += ufreq * l;
                 }
                 
                 for (int i = 1; i < size - 1; i++)
@@ -94,20 +95,13 @@ namespace chronotext
                     
                     if (p1 != p2)
                     {
-                        float dx = p2.y - p0.y;
-                        float dy = p0.x - p2.x;
+                        const ci::Vec2f &d = (p2 - p1).normalized();
+                        textureU += ufreq * (p1 - p0).length();
                         
-                        float d = ci::math<float>::sqrt(dx * dx + dy * dy);
-                        dx /= d;
-                        dy /= d;
-                        
-                        float dist = ci::math<float>::sqrt((p1.x - p0.x) * (p1.x - p0.x) + (p1.y - p0.y) * (p1.y - p0.y));
-                        textureU += ufreq * dist;
-                        
-                        strip.vertices.emplace_back(p1.x - width * dx, p1.y - width * dy);
+                        strip.vertices.emplace_back(p1 + w1 * d.yx());
                         strip.vertices.emplace_back(textureU, 0);
                         
-                        strip.vertices.emplace_back(p1.x + width * dx, p1.y + width * dy);
+                        strip.vertices.emplace_back(p1 + w2 * d.yx());
                         strip.vertices.emplace_back(textureU, 1);
                     }
                 }
@@ -117,20 +111,17 @@ namespace chronotext
                 
                 if (p0 != p1)
                 {
-                    float dx = p1.y - p0.y;
-                    float dy = p0.x - p1.x;
+                    ci::Vec2f d(p1 - p0);
+                    float l = d.length();
+                    d /= l;
                     
-                    float d = ci::math<float>::sqrt(dx * dx + dy * dy);
-                    dx /= d;
-                    dy /= d;
+                    textureU += ufreq * l;
                     
-                    textureU += ufreq * d;
-                    
-                    strip.vertices.emplace_back(p1.x - width * dx, p1.y - width * dy);
+                    strip.vertices.emplace_back(p1 + w1 * d.yx());
                     strip.vertices.emplace_back(textureU, 0);
                     
                     strip.vertices.emplace_back(textureU, 1);
-                    strip.vertices.emplace_back(p1.x + width * dx, p1.y + width * dy);
+                    strip.vertices.emplace_back(p1 + w2 * d.yx());
                 }
             }
         }

@@ -25,6 +25,7 @@ namespace chronotext
         SplinePath(const std::function<float (float, float*)> &gamma, float tol = 1, int capacity = 256);
         
         void clear();
+        inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
         void add(float x, float y);
         void compute(FollowablePath *path);
     };
