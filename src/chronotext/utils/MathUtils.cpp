@@ -28,7 +28,7 @@ namespace chronotext
         target.clear();
         target.reserve(source.size());
         
-        for (auto vertex : source)
+        for (auto &vertex : source)
         {
             target.push_back(matrix.transformPoint(vertex));
         }
@@ -189,7 +189,7 @@ namespace chronotext
     {
         int numPathsInside = 0;
         
-        for (auto polygon : polygons)
+        for (auto &polygon : polygons)
         {
             if (isPointInside(point, polygon))
             {

@@ -89,7 +89,7 @@ namespace chronotext
         vector<string> lines = readLines<string>(source);
         vector<string> instructions;
         
-        for (auto line : lines)
+        for (auto &line : lines)
         {
             boost::algorithm::trim(line);
             

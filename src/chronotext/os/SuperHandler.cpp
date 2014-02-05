@@ -22,7 +22,7 @@ namespace chronotext
     
     void SuperHandler::handleMessage(const Message &message)
     {
-        for (auto handler : handlers)
+        for (auto &handler : handlers)
         {
             if (handler->handleSubMessage(message))
             {
