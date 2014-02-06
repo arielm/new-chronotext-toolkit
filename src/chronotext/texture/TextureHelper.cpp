@@ -258,10 +258,10 @@ namespace chronotext
     {
         Surface surface(loadImage(textureRequest.inputSource->loadDataSource()));
         
-        Channel8u channel = surface.getChannel(0);
+        Channel8u &channel = surface.getChannel(0);
         shared_ptr<uint8_t> data;
         
-        if ((channel.getIncrement() != 1 ) || (channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t)))
+        if ((channel.getIncrement() != 1) || (channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t)))
         {
             data = shared_ptr<uint8_t>(new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>());
             uint8_t *dest = data.get();

@@ -35,17 +35,6 @@ namespace chronotext
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
     
-    void Texture::setTarget(ci::gl::TextureRef texture)
-    {
-        target = texture;
-        
-        name = texture->getId();
-        width = texture->getWidth();
-        height = texture->getHeight();
-        maxU = texture->getMaxU();
-        maxV = texture->getMaxV();
-    }
-    
     void Texture::unload()
     {
         if (target)
@@ -184,5 +173,16 @@ namespace chronotext
     float Texture::getMaxV() const
     {
         return maxV;
+    }
+    
+    void Texture::setTarget(ci::gl::TextureRef texture)
+    {
+        target = texture;
+        
+        name = texture->getId();
+        width = texture->getWidth();
+        height = texture->getHeight();
+        maxU = texture->getMaxU();
+        maxV = texture->getMaxV();
     }
 }
