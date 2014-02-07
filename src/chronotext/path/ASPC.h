@@ -19,6 +19,12 @@ namespace chronotext
 {
     class ASPC
     {
+    public:
+        ASPC(float tol, const std::function<float (float, float*)> &gamma, FollowablePath *path);
+        
+        void segment(float *x, float *y);
+        
+    protected:
         float tol;
         std::function<float (float, float*)> gamma;
         FollowablePath *path;
@@ -27,16 +33,6 @@ namespace chronotext
         float *yy;
         
         void sample(float t0, float x0, float y0, float t1, float x1, float y1);
-        
-    public:
-        ASPC(float tol, const std::function<float (float, float*)> &gamma, FollowablePath *path)
-        :
-        tol(tol),
-        gamma(gamma),
-        path(path)
-        {}
-        
-        void segment(float *x, float *y);
     };
 }
 

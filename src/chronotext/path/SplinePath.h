@@ -14,20 +14,22 @@ namespace chronotext
 {
     class SplinePath
     {
+    public:
+        SplinePath(const std::function<float (float, float*)> &gamma, float tol = 1, int capacity = 256);
+        
+        inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
+        void add(float x, float y);
+
+        void clear();
+        void compute(FollowablePath *path);
+        
+    protected:
         std::function<float (float, float*)> gamma;
         float tol;
         int size;
         
         std::vector<float> x;
         std::vector<float> y;
-        
-    public:
-        SplinePath(const std::function<float (float, float*)> &gamma, float tol = 1, int capacity = 256);
-        
-        void clear();
-        inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
-        void add(float x, float y);
-        void compute(FollowablePath *path);
     };
     
     static float GammaCatmullRom(float t, float *in)

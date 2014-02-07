@@ -8,8 +8,17 @@
 
 #include "chronotext/path/ASPC.h"
 
+using namespace std;
+
 namespace chronotext
 {
+    ASPC::ASPC(float tol, const function<float (float, float*)> &gamma, FollowablePath *path)
+    :
+    tol(tol),
+    gamma(gamma),
+    path(path)
+    {}
+    
     void ASPC::sample(float t0, float x0, float y0, float t1, float x1, float y1)
     {
         float t = 0.45f + 0.1f * float(rand() / RAND_MAX);

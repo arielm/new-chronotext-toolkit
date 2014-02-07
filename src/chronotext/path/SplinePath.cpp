@@ -22,20 +22,19 @@ namespace chronotext
         x.reserve(capacity);
         y.reserve(capacity);
     }
+
+    void SplinePath::add(float xx, float yy)
+    {
+        x.push_back(xx);
+        y.push_back(yy);
+        size++;
+    }
     
     void SplinePath::clear()
     {
         size = 0;
         x.clear();
         y.clear();
-    }
-    
-    void SplinePath::add(float xx, float yy)
-    {
-        x.push_back(xx);
-        y.push_back(yy);
-        
-        size++;
     }
     
     void SplinePath::compute(FollowablePath *path)
