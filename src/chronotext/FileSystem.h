@@ -21,7 +21,7 @@ namespace chronotext
     class FileSystem
     {
     public:
-        static int64_t getAvailableStorage(const ci::fs::path &folderPath);
+        static int64_t getAvailableStorage(const ci::fs::path &folderPath = ci::fs::path());
         
         static ci::fs::path normalizePath(const ci::fs::path &absolutePath);
         static ci::fs::path relativizePath(const ci::fs::path &from, const ci::fs::path &to);

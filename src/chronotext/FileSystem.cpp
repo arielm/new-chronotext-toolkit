@@ -10,12 +10,6 @@
 
 #include "cinder/app/App.h"
 
-#if defined(CINDER_ANDROID)
-#include <sys/statfs.h>
-#elif defined(CINDER_COCOA)
-#include <sys/mount.h>
-#endif
-
 using namespace std;
 using namespace ci;
 using namespace app;
@@ -23,18 +17,29 @@ using namespace app;
 namespace chronotext
 {
     /*
-     * FIXME: USE boost::filesystem::space_info() INSTEAD
+     * TODO: TEST ON WINDOWS
      */
     int64_t FileSystem::getAvailableStorage(const fs::path &folderPath)
     {
-#if defined(CINDER_MSW)
-        return 0; // TODO
-#else
-        struct statfs stat;
-        statfs(folderPath.string().c_str(), &stat);
+        fs::path target;
         
-        return (int64_t)stat.f_bavail * (int64_t)stat.f_bsize;
+        if (folderPath.empty())
+        {
+#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+            target = getAndroidInternalDataPath();
+#else
+            target = fs::current_path();
 #endif
+        }
+        
+        if (fs::exists(target))
+        {
+            return fs::space(target).available;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     /*
