@@ -6,6 +6,14 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * ADD SUPPORT FOR BEZIER CURVES:
+ * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/Path2d.cpp#L653-657
+ * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/Path2d.cpp#L689-697
+ */
+
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
@@ -17,8 +25,8 @@ namespace chronotext
     public:
         SplinePath(const std::function<float (float, float*)> &gamma, float tol = 1, int capacity = 256);
         
-        inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
         void add(float x, float y);
+        inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
 
         void clear();
         void compute(FollowablePath *path);
@@ -26,7 +34,6 @@ namespace chronotext
     protected:
         std::function<float (float, float*)> gamma;
         float tol;
-        int size;
         
         std::vector<float> x;
         std::vector<float> y;
