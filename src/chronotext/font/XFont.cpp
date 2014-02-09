@@ -25,6 +25,17 @@ namespace chronotext
     {
         reload();
         
+        // ---
+        
+        anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
+        
+        if (anisotropyAvailable)
+        {
+            glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+        }
+        
+        // ---
+        
         setSize(nativeFontSize);
         setDirection(+1);
         setAxis(Vec2f(+1, +1));
@@ -39,6 +50,8 @@ namespace chronotext
     {
         if (!unloaded)
         {
+            glDeleteTextures(1, &textureName);
+
             delete[] w;
             delete[] h;
             delete[] le;
@@ -49,11 +62,9 @@ namespace chronotext
             delete[] v1;
             delete[] u2;
             delete[] v2;
-            
+
             delete[] indices;
             delete[] vertices;
-            
-            glDeleteTextures(1, &textureName);
             
             // ---
             
@@ -168,18 +179,24 @@ namespace chronotext
             u2[i] = (xx + w[i]) / ww;
             v2[i] = (yy + h[i]) / hh;
         }
-        
-        // ---
-        
-        anisotropyAvailable = strstr((char*)glGetString(GL_EXTENSIONS), "GL_EXT_texture_filter_anisotropic");
-        
-        if (anisotropyAvailable)
+
+        uploadAtlasData(atlasData);
+        delete[] atlasData;
+    }
+    
+    void XFont::addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int xx, int yy, int ww, int hh)
+    {
+        for (int iy = 0; iy < hh; iy++)
         {
-            glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+            for (int ix = 0; ix < ww; ix++)
+            {
+                dstData[(iy + yy) * atlasWidth + ix + xx] = srcData[iy * ww + ix];
+            }
         }
-        
-        // ---
-        
+    }
+    
+    void XFont::uploadAtlasData(unsigned char *atlasData)
+    {
         glGenTextures(1, &textureName);
         glBindTexture(GL_TEXTURE_2D, textureName);
         
@@ -210,18 +227,6 @@ namespace chronotext
         }
         
         glBindTexture(GL_TEXTURE_2D, 0);
-        delete[] atlasData;
-    }
-    
-    void XFont::addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int xx, int yy, int ww, int hh)
-    {
-        for (int iy = 0; iy < hh; iy++)
-        {
-            for (int ix = 0; ix < ww; ix++)
-            {
-                dstData[(iy + yy) * atlasWidth + ix + xx] = srcData[iy * ww + ix];
-            }
-        }
     }
     
     void XFont::init()

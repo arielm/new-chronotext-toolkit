@@ -74,6 +74,7 @@ namespace chronotext
         
         void read(ci::IStreamRef in);
         void addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int xx, int yy, int ww, int hh);
+        void uploadAtlasData(unsigned char *atlasData);
         void init();
         
         void flush(int count);
