@@ -18,19 +18,6 @@
 
 namespace chronotext
 {
-    struct GlyphQuad
-    {
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        
-        float u1;
-        float v1;
-        float u2;
-        float v2;
-    };
-    
     class XFont
     {
         float nativeFontSize;

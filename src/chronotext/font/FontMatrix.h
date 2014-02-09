@@ -12,6 +12,19 @@
 
 namespace chronotext
 {
+    struct GlyphQuad
+    {
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        
+        float u1;
+        float v1;
+        float u2;
+        float v2;
+    };
+    
     class FontMatrix
     {
         union
@@ -50,8 +63,8 @@ namespace chronotext
         ci::Vec3f transform3D(float x, float y) const;
         ci::Vec2f transform2D(float x, float y) const;
         
-        int transform3D(float x1, float y1, float x2, float y2, float *res);
-        int transform2D(float x1, float y1, float x2, float y2, float *res);
+        void addTransformedQuad3D(const GlyphQuad &quad, float *vertices, float *coords);
+        void addTransformedQuad2D(const GlyphQuad &quad, float *vertices, float *coords);
     };
 }
 
