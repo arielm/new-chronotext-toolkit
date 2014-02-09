@@ -25,10 +25,10 @@ namespace chronotext
         float x2;
         float y2;
         
-        float tx1;
-        float ty1;
-        float tx2;
-        float ty2;
+        float u1;
+        float v1;
+        float u2;
+        float v2;
     };
     
     class XFont
@@ -57,10 +57,10 @@ namespace chronotext
         float *te;
         float *lw;
         
-        float *tx1;
-        float *ty1;
-        float *tx2;
-        float *ty2;
+        float *u1;
+        float *v1;
+        float *u2;
+        float *v2;
         
         bool anisotropyAvailable;
         float maxAnisotropy;

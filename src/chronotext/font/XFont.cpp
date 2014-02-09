@@ -64,10 +64,10 @@ namespace chronotext
             delete[] te;
             delete[] lw;
             
-            delete[] tx1;
-            delete[] ty1;
-            delete[] tx2;
-            delete[] ty2;
+            delete[] u1;
+            delete[] v1;
+            delete[] u2;
+            delete[] v2;
             
             delete[] indices;
             delete[] vertices;
@@ -139,10 +139,10 @@ namespace chronotext
         te = new float[glyphCount];
         lw = new float[glyphCount];
         
-        tx1 = new float[glyphCount];
-        ty1 = new float[glyphCount];
-        tx2 = new float[glyphCount];
-        ty2 = new float[glyphCount];
+        u1 = new float[glyphCount];
+        v1 = new float[glyphCount];
+        u2 = new float[glyphCount];
+        v2 = new float[glyphCount];
         
         auto atlasData = new unsigned char[atlasWidth * atlasHeight](); // ZERO-FILLED
         
@@ -183,10 +183,10 @@ namespace chronotext
             float ww = (float)atlasWidth;
             float hh = (float)atlasHeight;
             
-            tx1[i] = xx / ww;
-            ty1[i] = yy / hh;
-            tx2[i] = (xx + w[i]) / ww;
-            ty2[i] = (yy + h[i]) / hh;
+            u1[i] = xx / ww;
+            v1[i] = yy / hh;
+            u2[i] = (xx + w[i]) / ww;
+            v2[i] = (yy + h[i]) / hh;
         }
         
         // ---
@@ -553,13 +553,13 @@ namespace chronotext
         
         if (axis.x > 0)
         {
-            quad.tx1 = tx1[cc];
-            quad.tx2 = tx2[cc];
+            quad.u1 = u1[cc];
+            quad.u2 = u2[cc];
         }
         else
         {
-            quad.tx1 = tx2[cc];
-            quad.tx2 = tx1[cc];
+            quad.u1 = u2[cc];
+            quad.u2 = u1[cc];
         }
         
         if (axis.y > 0)
@@ -567,16 +567,16 @@ namespace chronotext
             quad.y1 = y - te[cc] * sizeRatio;
             quad.y2 = quad.y1 + h[cc] * sizeRatio;
             
-            quad.ty1 = ty1[cc];
-            quad.ty2 = ty2[cc];
+            quad.v1 = v1[cc];
+            quad.v2 = v2[cc];
         }
         else
         {
             quad.y2 = y + te[cc] * sizeRatio;
             quad.y1 = quad.y2 - h[cc] * sizeRatio;
             
-            quad.ty1 = ty2[cc];
-            quad.ty2 = ty1[cc];
+            quad.v1 = v2[cc];
+            quad.v2 = v1[cc];
         }
         
         return quad;
@@ -594,28 +594,28 @@ namespace chronotext
             {
                 float dx = clip.x1 - quad.x1;
                 quad.x1 += dx;
-                quad.tx1 += axis.x * dx / atlasWidth / sizeRatio;;
+                quad.u1 += axis.x * dx / atlasWidth / sizeRatio;;
             }
             
             if (quad.x2 > clip.x2)
             {
                 float dx = clip.x2 - quad.x2;
                 quad.x2 += dx;
-                quad.tx2 += axis.x * dx / atlasWidth / sizeRatio;;
+                quad.u2 += axis.x * dx / atlasWidth / sizeRatio;;
             }
             
             if (quad.y1 < clip.y1)
             {
                 float dy = clip.y1 - quad.y1;
                 quad.y1 += dy;
-                quad.ty1 += axis.y * dy / atlasHeight / sizeRatio;
+                quad.v1 += axis.y * dy / atlasHeight / sizeRatio;
             }
             
             if (quad.y2 > clip.y2)
             {
                 float dy = clip.y2 - quad.y2;
                 quad.y2 += dy;
-                quad.ty2 += axis.y * dy / atlasHeight / sizeRatio;
+                quad.v2 += axis.y * dy / atlasHeight / sizeRatio;
             }
             
             return true;
@@ -637,14 +637,14 @@ namespace chronotext
             *sequenceVertices++ = quad.x2;
             *sequenceVertices++ = quad.y1;
             
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty1;
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v1;
             
             incrementSequence();
         }
@@ -667,14 +667,14 @@ namespace chronotext
                 *sequenceVertices++ = quad.x2;
                 *sequenceVertices++ = quad.y1;
                 
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty1;
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v1;
                 
                 incrementSequence();
             }
@@ -700,14 +700,14 @@ namespace chronotext
             *sequenceVertices++ = quad.y1;
             *sequenceVertices++ = z;
             
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty1;
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v1;
             
             incrementSequence();
         }
@@ -734,14 +734,14 @@ namespace chronotext
                 *sequenceVertices++ = quad.y1;
                 *sequenceVertices++ = z;
                 
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty1;
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v1;
                 
                 incrementSequence();
             }
@@ -756,14 +756,14 @@ namespace chronotext
             
             sequenceVertices += matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty1;
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v1;
             
             incrementSequence();
         }
@@ -779,14 +779,14 @@ namespace chronotext
             {
                 sequenceVertices += matrix.transform2D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
                 
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty1;
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v1;
                 
                 incrementSequence();
             }
@@ -801,14 +801,14 @@ namespace chronotext
             
             sequenceVertices += matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
             
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty1;
-            *sequenceCoords++ = quad.tx1;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty2;
-            *sequenceCoords++ = quad.tx2;
-            *sequenceCoords++ = quad.ty1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v1;
+            *sequenceCoords++ = quad.u1;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v2;
+            *sequenceCoords++ = quad.u2;
+            *sequenceCoords++ = quad.v1;
             
             incrementSequence();
         }
@@ -824,14 +824,14 @@ namespace chronotext
             {
                 sequenceVertices += matrix.transform3D(quad.x1, quad.y2, quad.x2, quad.y1, sequenceVertices);
                 
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty1;
-                *sequenceCoords++ = quad.tx1;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty2;
-                *sequenceCoords++ = quad.tx2;
-                *sequenceCoords++ = quad.ty1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v1;
+                *sequenceCoords++ = quad.u1;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v2;
+                *sequenceCoords++ = quad.u2;
+                *sequenceCoords++ = quad.v1;
                 
                 incrementSequence();
             }
