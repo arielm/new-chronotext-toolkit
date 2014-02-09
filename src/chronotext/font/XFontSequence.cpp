@@ -27,7 +27,7 @@ namespace chronotext
     void XFontSequence::end()
     {}
     
-    void XFontSequence::flush(float *vertices, float *coords, int count)
+    void XFontSequence::flush(float *vertices, int count)
     {
         Slot *slot;
         
@@ -42,8 +42,7 @@ namespace chronotext
         }
         
         slot->count = count;
-        memcpy(slot->vertices, vertices, count * dimensions * 4 * sizeof(float));
-        memcpy(slot->coords, coords, count * 2 * 4 * sizeof(float));
+        memcpy(slot->vertices, vertices, sizeof(float) * count * (dimensions * 4 + 2 * 4));
         
         slotIndex++;
     }
@@ -54,8 +53,10 @@ namespace chronotext
         
         for (auto &slot : slots)
         {
-            glVertexPointer(dimensions, GL_FLOAT, 0, slot->vertices);
-            glTexCoordPointer(2, GL_FLOAT, 0, slot->coords);
+            int stride = sizeof(float) * (dimensions + 2);
+
+            glVertexPointer(dimensions, GL_FLOAT, stride, slot->vertices);
+            glTexCoordPointer(2, GL_FLOAT, stride, slot->vertices + dimensions);
             glDrawElements(GL_TRIANGLES, slot->count * 6, GL_UNSIGNED_SHORT, font->getIndices());
         }
         

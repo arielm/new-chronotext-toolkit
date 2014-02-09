@@ -71,7 +71,6 @@ namespace chronotext
             
             delete[] indices;
             delete[] vertices;
-            delete[] coords;
             
             glDeleteTextures(1, &textureName);
             
@@ -253,8 +252,7 @@ namespace chronotext
         // ---
         
         indices = new GLushort[slotCapacity * 6];
-        vertices = new float[slotCapacity * maxDimensions * 4];
-        coords = new float[slotCapacity * 2 * 4];
+        vertices = new float[slotCapacity * (maxDimensions * 4 + 2 * 4)];
         
         /*
          * FILLING THE INDICES WITH A QUAD PATTERN
@@ -477,10 +475,9 @@ namespace chronotext
     void XFont::beginSequence(XFontSequence *sequence, int dimensions)
     {
         sequenceDimensions = dimensions;
-        
+
         sequenceSize = 0;
         sequenceVertices = vertices;
-        sequenceCoords = coords;
         
         if (sequence)
         {
@@ -497,7 +494,7 @@ namespace chronotext
     {
         if (sequence)
         {
-            sequence->flush(vertices, coords, sequenceSize);
+            sequence->flush(vertices, sequenceSize);
             sequence->end();
             sequence = NULL;
         }
@@ -510,8 +507,10 @@ namespace chronotext
     
     void XFont::flush(int count)
     {
-        glTexCoordPointer(2, GL_FLOAT, 0, coords);
-        glVertexPointer(sequenceDimensions, GL_FLOAT, 0, vertices);
+        int stride = sizeof(float) * (sequenceDimensions + 2);
+
+        glVertexPointer(sequenceDimensions, GL_FLOAT, stride, vertices);
+        glTexCoordPointer(2, GL_FLOAT, stride, vertices + sequenceDimensions);
         glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, indices);
     }
     
@@ -523,7 +522,7 @@ namespace chronotext
         {
             if (sequence)
             {
-                sequence->flush(vertices, coords, sequenceSize);
+                sequence->flush(vertices, sequenceSize);
             }
             else
             {
@@ -532,7 +531,6 @@ namespace chronotext
             
             sequenceSize = 0;
             sequenceVertices = vertices;
-            sequenceCoords = coords;
         }
     }
     
@@ -630,21 +628,33 @@ namespace chronotext
             
             *sequenceVertices++ = quad.x1;
             *sequenceVertices++ = quad.y1;
+            
+            *sequenceVertices++ = quad.u1;
+            *sequenceVertices++ = quad.v1;
+
+            //
+            
             *sequenceVertices++ = quad.x1;
             *sequenceVertices++ = quad.y2;
+
+            *sequenceVertices++ = quad.u1;
+            *sequenceVertices++ = quad.v2;
+
+            //
+            
             *sequenceVertices++ = quad.x2;
             *sequenceVertices++ = quad.y2;
+
+            *sequenceVertices++ = quad.u2;
+            *sequenceVertices++ = quad.v2;
+
+            //
+            
             *sequenceVertices++ = quad.x2;
             *sequenceVertices++ = quad.y1;
             
-            *sequenceCoords++ = quad.u1;
-            *sequenceCoords++ = quad.v1;
-            *sequenceCoords++ = quad.u1;
-            *sequenceCoords++ = quad.v2;
-            *sequenceCoords++ = quad.u2;
-            *sequenceCoords++ = quad.v2;
-            *sequenceCoords++ = quad.u2;
-            *sequenceCoords++ = quad.v1;
+            *sequenceVertices++ = quad.u2;
+            *sequenceVertices++ = quad.v1;
             
             incrementSequence();
         }
@@ -660,21 +670,33 @@ namespace chronotext
             {
                 *sequenceVertices++ = quad.x1;
                 *sequenceVertices++ = quad.y1;
+                
+                *sequenceVertices++ = quad.u1;
+                *sequenceVertices++ = quad.v1;
+                
+                //
+                
                 *sequenceVertices++ = quad.x1;
                 *sequenceVertices++ = quad.y2;
+                
+                *sequenceVertices++ = quad.u1;
+                *sequenceVertices++ = quad.v2;
+                
+                //
+                
                 *sequenceVertices++ = quad.x2;
                 *sequenceVertices++ = quad.y2;
+                
+                *sequenceVertices++ = quad.u2;
+                *sequenceVertices++ = quad.v2;
+                
+                //
+                
                 *sequenceVertices++ = quad.x2;
                 *sequenceVertices++ = quad.y1;
                 
-                *sequenceCoords++ = quad.u1;
-                *sequenceCoords++ = quad.v1;
-                *sequenceCoords++ = quad.u1;
-                *sequenceCoords++ = quad.v2;
-                *sequenceCoords++ = quad.u2;
-                *sequenceCoords++ = quad.v2;
-                *sequenceCoords++ = quad.u2;
-                *sequenceCoords++ = quad.v1;
+                *sequenceVertices++ = quad.u2;
+                *sequenceVertices++ = quad.v1;
                 
                 incrementSequence();
             }
@@ -690,24 +712,36 @@ namespace chronotext
             *sequenceVertices++ = quad.x1;
             *sequenceVertices++ = quad.y1;
             *sequenceVertices++ = z;
+
+            *sequenceVertices++ = quad.u1;
+            *sequenceVertices++ = quad.v1;
+
+            //
+            
             *sequenceVertices++ = quad.x1;
             *sequenceVertices++ = quad.y2;
             *sequenceVertices++ = z;
+
+            *sequenceVertices++ = quad.u1;
+            *sequenceVertices++ = quad.v2;
+
+            //
+            
             *sequenceVertices++ = quad.x2;
             *sequenceVertices++ = quad.y2;
             *sequenceVertices++ = z;
+
+            *sequenceVertices++ = quad.u2;
+            *sequenceVertices++ = quad.v2;
+
+            //
+            
             *sequenceVertices++ = quad.x2;
             *sequenceVertices++ = quad.y1;
             *sequenceVertices++ = z;
             
-            *sequenceCoords++ = quad.u1;
-            *sequenceCoords++ = quad.v1;
-            *sequenceCoords++ = quad.u1;
-            *sequenceCoords++ = quad.v2;
-            *sequenceCoords++ = quad.u2;
-            *sequenceCoords++ = quad.v2;
-            *sequenceCoords++ = quad.u2;
-            *sequenceCoords++ = quad.v1;
+            *sequenceVertices++ = quad.u2;
+            *sequenceVertices++ = quad.v1;
             
             incrementSequence();
         }
@@ -724,24 +758,36 @@ namespace chronotext
                 *sequenceVertices++ = quad.x1;
                 *sequenceVertices++ = quad.y1;
                 *sequenceVertices++ = z;
+                
+                *sequenceVertices++ = quad.u1;
+                *sequenceVertices++ = quad.v1;
+                
+                //
+                
                 *sequenceVertices++ = quad.x1;
                 *sequenceVertices++ = quad.y2;
                 *sequenceVertices++ = z;
+                
+                *sequenceVertices++ = quad.u1;
+                *sequenceVertices++ = quad.v2;
+                
+                //
+                
                 *sequenceVertices++ = quad.x2;
                 *sequenceVertices++ = quad.y2;
                 *sequenceVertices++ = z;
+                
+                *sequenceVertices++ = quad.u2;
+                *sequenceVertices++ = quad.v2;
+                
+                //
+                
                 *sequenceVertices++ = quad.x2;
                 *sequenceVertices++ = quad.y1;
                 *sequenceVertices++ = z;
                 
-                *sequenceCoords++ = quad.u1;
-                *sequenceCoords++ = quad.v1;
-                *sequenceCoords++ = quad.u1;
-                *sequenceCoords++ = quad.v2;
-                *sequenceCoords++ = quad.u2;
-                *sequenceCoords++ = quad.v2;
-                *sequenceCoords++ = quad.u2;
-                *sequenceCoords++ = quad.v1;
+                *sequenceVertices++ = quad.u2;
+                *sequenceVertices++ = quad.v1;
                 
                 incrementSequence();
             }
@@ -754,10 +800,7 @@ namespace chronotext
         {
             const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            matrix.addTransformedQuad2D(quad, sequenceVertices, sequenceCoords);
-            sequenceVertices += 4 * 2;
-            sequenceCoords += 4 * 2;
-            
+            sequenceVertices += matrix.addTransformedQuad2D(quad, sequenceVertices);
             incrementSequence();
         }
     }
@@ -770,10 +813,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                matrix.addTransformedQuad2D(quad, sequenceVertices, sequenceCoords);
-                sequenceVertices += 4 * 2;
-                sequenceCoords += 4 * 2;
-                
+                sequenceVertices += matrix.addTransformedQuad2D(quad, sequenceVertices);
                 incrementSequence();
             }
         }
@@ -785,10 +825,7 @@ namespace chronotext
         {
             const GlyphQuad quad = getGlyphQuad(cc, x, y);
             
-            matrix.addTransformedQuad3D(quad, sequenceVertices, sequenceCoords);
-            sequenceVertices += 4 * 3;
-            sequenceCoords += 4 * 2;
-            
+            sequenceVertices += matrix.addTransformedQuad3D(quad, sequenceVertices);
             incrementSequence();
         }
     }
@@ -801,10 +838,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                matrix.addTransformedQuad3D(quad, sequenceVertices, sequenceCoords);
-                sequenceVertices += 4 * 3;
-                sequenceCoords += 4 * 2;
-                
+                sequenceVertices += matrix.addTransformedQuad3D(quad, sequenceVertices);
                 incrementSequence();
             }
         }

@@ -64,12 +64,10 @@ namespace chronotext
 
         GLushort *indices;
         float *vertices;
-        float *coords;
         
         int sequenceSize;
         int sequenceDimensions;
         float *sequenceVertices;
-        float *sequenceCoords;
         XFontSequence *sequence;
         
         bool unloaded;

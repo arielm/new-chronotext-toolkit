@@ -209,7 +209,7 @@ namespace chronotext
         return Vec2f(x00 + y01 + m03, x10 + y11 + m13);
     }
     
-    void FontMatrix::addTransformedQuad3D(const GlyphQuad &quad, float *vertices, float *coords)
+    int FontMatrix::addTransformedQuad3D(const GlyphQuad &quad, float *vertices)
     {
         float x100 = quad.x1 * m00;
         float x110 = quad.x1 * m10;
@@ -233,8 +233,8 @@ namespace chronotext
         *vertices++ = x110 + y211 + m13;
         *vertices++ = x120 + y221 + m23;
         
-        *coords++ = quad.u1;
-        *coords++ = quad.v1;
+        *vertices++ = quad.u1;
+        *vertices++ = quad.v1;
         
         // --- x1, y1 ---
         
@@ -242,8 +242,8 @@ namespace chronotext
         *vertices++ = x110 + y111 + m13;
         *vertices++ = x120 + y121 + m23;
         
-        *coords++ = quad.u1;
-        *coords++ = quad.v2;
+        *vertices++ = quad.u1;
+        *vertices++ = quad.v2;
         
         // --- x2, y1 ---
         
@@ -251,20 +251,22 @@ namespace chronotext
         *vertices++ = x210 + y111 + m13;
         *vertices++ = x220 + y121 + m23;
         
-        *coords++ = quad.u2;
-        *coords++ = quad.v2;
+        *vertices++ = quad.u2;
+        *vertices++ = quad.v2;
         
         // --- x2, y2 ---
         
         *vertices++ = x200 + y201 + m03;
         *vertices++ = x210 + y211 + m13;
-        *vertices   = x220 + y221 + m23;
+        *vertices++ = x220 + y221 + m23;
         
-        *coords++ = quad.u2;
-        *coords   = quad.v1;
+        *vertices++ = quad.u2;
+        *vertices++ = quad.v1;
+        
+        return 4 * (3 + 2);
     }
     
-    void FontMatrix::addTransformedQuad2D(const GlyphQuad &quad, float *vertices, float *coords)
+    int FontMatrix::addTransformedQuad2D(const GlyphQuad &quad, float *vertices)
     {
         float x100 = quad.x1 * m00;
         float x110 = quad.x1 * m10;
@@ -283,31 +285,33 @@ namespace chronotext
         *vertices++ = x100 + y201 + m03;
         *vertices++ = x110 + y211 + m13;
         
-        *coords++ = quad.u1;
-        *coords++ = quad.v1;
+        *vertices++ = quad.u1;
+        *vertices++ = quad.v1;
         
         // --- x1, y1 ---
         
         *vertices++ = x100 + y101 + m03;
         *vertices++ = x110 + y111 + m13;
 
-        *coords++ = quad.u1;
-        *coords++ = quad.v2;
+        *vertices++ = quad.u1;
+        *vertices++ = quad.v2;
 
         // --- x2, y1 ---
         
         *vertices++ = x200 + y101 + m03;
         *vertices++ = x210 + y111 + m13;
 
-        *coords++ = quad.u2;
-        *coords++ = quad.v2;
+        *vertices++ = quad.u2;
+        *vertices++ = quad.v2;
 
         // --- x2, y2 ---
         
         *vertices++ = x200 + y201 + m03;
-        *vertices   = x210 + y211 + m13;
+        *vertices++ = x210 + y211 + m13;
         
-        *coords++ = quad.u2;
-        *coords   = quad.v1;
+        *vertices++ = quad.u2;
+        *vertices++ = quad.v1;
+        
+        return 4 * (2 + 2);
     }
 }
