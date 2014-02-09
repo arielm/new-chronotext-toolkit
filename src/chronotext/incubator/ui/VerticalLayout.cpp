@@ -34,7 +34,7 @@ namespace chronotext
             contentWidth = 0;
             contentHeight = 0;
             
-            for (auto component : components)
+            for (auto &component : components)
             {
                 if (component->visible)
                 {
@@ -90,7 +90,7 @@ namespace chronotext
             float innerWidth = width - paddingLeft - paddingRight;
             previousMargin = 0;
             
-            for (auto component : components)
+            for (auto &component : components)
             {
                 if (component->visible)
                 {

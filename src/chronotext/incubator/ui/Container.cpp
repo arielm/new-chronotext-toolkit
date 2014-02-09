@@ -80,7 +80,7 @@ namespace chronotext
     
     Shape* Container::getComponentByTag(int tag)
     {
-        for (auto component : components)
+        for (auto &component : components)
         {
             if (component->tag == tag)
             {
@@ -111,7 +111,7 @@ namespace chronotext
     
     void Container::drawComponents()
     {
-        for (auto component : components)
+        for (auto &component : components)
         {
             if (component->visible)
             {
