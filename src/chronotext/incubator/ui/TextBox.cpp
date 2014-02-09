@@ -230,7 +230,7 @@ namespace chronotext
             index = end;
         }
         
-        float xx = x + paddingLeft + getOffsetX(start, end) + font->getSubStringWidth(text, start, index);
+        float xx = x + paddingLeft + getOffsetX(start, end) + font->getSubStringAdvance(text, start, index);
         float yy = y + paddingTop + getOffsetY() + line * lineHeight;
         
         return Vec2f(xx, yy);
@@ -243,11 +243,11 @@ namespace chronotext
         switch (textAlignX)
         {
             case ALIGN_MIDDLE :
-                ox += (width - paddingLeft - paddingRight - font->getSubStringWidth(text, start, end)) / 2;
+                ox += (width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end)) / 2;
                 break;
                 
             case ALIGN_RIGHT :
-                ox += width - paddingLeft - paddingRight - font->getSubStringWidth(text, start, end);
+                ox += width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end);
                 break;
         }
         
@@ -370,7 +370,7 @@ namespace chronotext
         while (start < end && xx < limitRight)
         {
             int cc = font->getGlyphIndex(text[start++]);
-            float ww = font->getGlyphWidth(cc);
+            float ww = font->getGlyphAdvance(cc);
             
             if (xx + ww > limitLeft)
             {

@@ -16,7 +16,7 @@ namespace chronotext
     class TextHelper
     {
     public:
-        static float getStringWidth(XFont *font, const std::wstring &text, bool snap = false);
+        static float getStringAdvance(XFont *font, const std::wstring &text, bool snap = false);
         
         static void drawText(XFont *font, XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, bool snap = false);
         static void drawAlignedText(XFont *font, XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, int alignX = XFont::ALIGN_MIDDLE, int alignY = XFont::ALIGN_MIDDLE, bool snap = false);

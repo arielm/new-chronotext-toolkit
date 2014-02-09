@@ -24,7 +24,7 @@ namespace chronotext
         float height;
         float ascent;
         float descent;
-        float spaceWidth;
+        float spaceAdvance;
         float strikethroughFactor;
         float underlineOffset;
         float lineThickness;
@@ -42,7 +42,7 @@ namespace chronotext
         float *h;
         float *le;
         float *te;
-        float *lw;
+        float *advance;
         
         float *u1;
         float *v1;
@@ -124,10 +124,10 @@ namespace chronotext
         float getDirection() const;
         ci::Vec2f getAxis() const;
 
-        float getGlyphWidth(int cc) const;
-        float getCharWidth(wchar_t c) const;
-        float getStringWidth(const std::wstring &s) const;
-        float getSubStringWidth(const std::wstring &s, int begin, int end) const;
+        float getGlyphAdvance(int cc) const;
+        float getCharAdvance(wchar_t c) const;
+        float getStringAdvance(const std::wstring &s) const;
+        float getSubStringAdvance(const std::wstring &s, int begin, int end) const;
         
         float getHeight() const;
         float getAscent() const;

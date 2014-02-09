@@ -247,7 +247,7 @@ namespace chronotext
                         
                         if (i == linkSpan.endLine)
                         {
-                            xx += font->getSubStringWidth(text, start, linkSpan.endIndex);
+                            xx += font->getSubStringAdvance(text, start, linkSpan.endIndex);
                             drawTextSpan(xx, yy, linkSpan.endIndex, end, limitLeft, limitRight);
                             skip = true;
                         }
@@ -296,7 +296,7 @@ namespace chronotext
                     
                     if (i == linkSpan.startLine)
                     {
-                        xx += font->getSubStringWidth(text, start, linkSpan.startIndex);
+                        xx += font->getSubStringAdvance(text, start, linkSpan.startIndex);
                         start = linkSpan.startIndex;
                     }
                     

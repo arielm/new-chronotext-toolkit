@@ -51,7 +51,7 @@ namespace chronotext
             }
             
             lineLength++;
-            x += font->getCharWidth(c);
+            x += font->getCharAdvance(c);
         }
         
         if (lineLength > 0)
@@ -125,7 +125,7 @@ namespace chronotext
                 hyphenIndex = i;
             }
             
-            float charWidth = font->getCharWidth(c);
+            float charWidth = font->getCharAdvance(c);
             
             if (x + charWidth >= width)
             {

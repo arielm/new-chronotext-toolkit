@@ -135,7 +135,7 @@ namespace chronotext
         else if (style->font)
         {
             style->font->setSize(style->fontSize);
-            return TextHelper::getStringWidth(style->font, text, style->snap);
+            return TextHelper::getStringAdvance(style->font, text, style->snap);
         }
         else
         {

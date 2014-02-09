@@ -13,23 +13,23 @@ using namespace ci;
 
 namespace chronotext
 {
-    float TextHelper::getStringWidth(XFont *font, const wstring &text, bool snap)
+    float TextHelper::getStringAdvance(XFont *font, const wstring &text, bool snap)
     {
         if (snap)
         {
-            float w = 0;
+            float advance = 0;
             
             for (auto c : text)
             {
                 int cc = font->getGlyphIndex(c);
-                w += math<float>::floor(font->getGlyphWidth(cc));
+                advance += math<float>::floor(font->getGlyphAdvance(cc));
             }
             
-            return w;
+            return advance;
         }
         else
         {
-            return font->getStringWidth(text);
+            return font->getStringAdvance(text);
         }
     }
     
@@ -48,8 +48,8 @@ namespace chronotext
             int cc = font->getGlyphIndex(c);
             font->addGlyph(cc, x, y);
             
-            float w = font->getGlyphWidth(cc) * font->getDirection();
-            x += snap ? math<float>::floor(w) : w;
+            float advance = font->getGlyphAdvance(cc) * font->getDirection();
+            x += snap ? math<float>::floor(advance) : advance;
         }
         
         font->endSequence();
@@ -60,11 +60,11 @@ namespace chronotext
         switch (alignX)
         {
             case XFont::ALIGN_MIDDLE:
-                x -= getStringWidth(font, text, snap) * 0.5f;
+                x -= getStringAdvance(font, text, snap) * 0.5f;
                 break;
                 
             case XFont::ALIGN_RIGHT:
-                x -= getStringWidth(font, text, snap);
+                x -= getStringAdvance(font, text, snap);
                 break;
         }
         
@@ -94,7 +94,7 @@ namespace chronotext
     void TextHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
     {
         float w = x2 - x1;
-        float x = x1 + (w - getStringWidth(font, text, snap)) * 0.5f;
+        float x = x1 + (w - getStringAdvance(font, text, snap)) * 0.5f;
         
         float h = y2 - y1;
         float y = y1 + h * 0.5f + font->getStrikethroughOffset();
@@ -109,7 +109,7 @@ namespace chronotext
     
     void TextHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
     {
-        float w1 = getStringWidth(font, text, snap);
+        float w1 = getStringAdvance(font, text, snap);
         float w2 = x2 - x1;
         float x3 = x1 + (w2 - w1) * 0.5f;
         float x4 = x3 + w1;
@@ -148,7 +148,7 @@ namespace chronotext
         for (auto c : text)
         {
             int cc = font->getGlyphIndex(c);
-            float half = 0.5f * font->getGlyphWidth(cc);
+            float half = 0.5f * font->getGlyphAdvance(cc);
             offsetX += half;
             
             if (cc >= 0)

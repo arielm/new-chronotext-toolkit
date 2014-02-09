@@ -62,7 +62,7 @@ namespace chronotext
             delete[] h;
             delete[] le;
             delete[] te;
-            delete[] lw;
+            delete[] advance;
             
             delete[] u1;
             delete[] v1;
@@ -119,7 +119,7 @@ namespace chronotext
         in->readLittle(&height);
         in->readLittle(&ascent);
         in->readLittle(&descent);
-        in->readLittle(&spaceWidth);
+        in->readLittle(&spaceAdvance);
         in->readLittle(&strikethroughFactor);
         in->readLittle(&underlineOffset);
         in->readLittle(&lineThickness);
@@ -136,7 +136,7 @@ namespace chronotext
         h = new float[glyphCount];
         le = new float[glyphCount];
         te = new float[glyphCount];
-        lw = new float[glyphCount];
+        advance = new float[glyphCount];
         
         u1 = new float[glyphCount];
         v1 = new float[glyphCount];
@@ -158,7 +158,7 @@ namespace chronotext
             in->readLittle(&glyphChar);
             glyphs[(wchar_t)glyphChar] = i;
             
-            in->readLittle(&lw[i]);
+            in->readLittle(&advance[i]);
             in->readLittle(&glyphWidth);
             in->readLittle(&glyphHeight);
             in->readLittle(&glyphLeftExtent);
@@ -357,11 +357,11 @@ namespace chronotext
         return axis;
     }
     
-    float XFont::getGlyphWidth(int cc) const
+    float XFont::getGlyphAdvance(int cc) const
     {
         if (cc == - 2)
         {
-            return spaceWidth * sizeRatio;
+            return spaceAdvance * sizeRatio;
         }
         else if (cc == - 1)
         {
@@ -369,30 +369,30 @@ namespace chronotext
         }
         else
         {
-            return lw[cc] * sizeRatio;
+            return advance[cc] * sizeRatio;
         }
     }
     
-    float XFont::getCharWidth(wchar_t c) const
+    float XFont::getCharAdvance(wchar_t c) const
     {
-        return getGlyphWidth(getGlyphIndex(c));
+        return getGlyphAdvance(getGlyphIndex(c));
     }
     
-    float XFont::getStringWidth(const wstring &s) const
+    float XFont::getStringAdvance(const wstring &s) const
     {
-        return getSubStringWidth(s, 0, s.size());
+        return getSubStringAdvance(s, 0, s.size());
     }
     
-    float XFont::getSubStringWidth(const wstring &s, int begin, int end) const
+    float XFont::getSubStringAdvance(const wstring &s, int begin, int end) const
     {
-        float width = 0;
+        float advance = 0;
         
         for (int i = begin; i < end; i++)
         {
-            width += getCharWidth(s.at(i));
+            advance += getCharAdvance(s.at(i));
         }
         
-        return width;
+        return advance;
     }
     
     float XFont::getHeight() const
