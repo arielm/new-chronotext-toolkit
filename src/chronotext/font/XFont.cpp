@@ -63,7 +63,6 @@ namespace chronotext
             delete[] u2;
             delete[] v2;
 
-            delete[] indices;
             delete[] vertices;
             
             // ---
@@ -237,24 +236,23 @@ namespace chronotext
         
         // ---
         
-        indices = new GLushort[slotCapacity * 6];
         vertices = new float[slotCapacity * (maxDimensions * 4 + 2 * 4)];
         
         /*
          * FILLING THE INDICES WITH A QUAD PATTERN
          */
-        
-        GLushort *tmp = indices;
+
+        indices.reserve(slotCapacity * 6);
         int offset = 0;
         
         for (int i = 0; i < slotCapacity; i++)
         {
-            *tmp++ = offset;
-            *tmp++ = offset + 1;
-            *tmp++ = offset + 2;
-            *tmp++ = offset + 2;
-            *tmp++ = offset + 3;
-            *tmp++ = offset;
+            indices.push_back(offset);
+            indices.push_back(offset + 1);
+            indices.push_back(offset + 2);
+            indices.push_back(offset + 2);
+            indices.push_back(offset + 3);
+            indices.push_back(offset);
             offset += 4;
         }
     }
@@ -345,11 +343,11 @@ namespace chronotext
     
     float XFont::getGlyphAdvance(int cc) const
     {
-        if (cc == - 2)
+        if (cc == -2)
         {
             return spaceAdvance * sizeRatio;
         }
-        else if (cc == - 1)
+        else if (cc == -1)
         {
             return 0;
         }
@@ -418,7 +416,7 @@ namespace chronotext
     
     GLushort* XFont::getIndices() const
     {
-        return indices;
+        return const_cast<GLushort*>(indices.data());
     }
     
     void XFont::begin()
@@ -497,7 +495,7 @@ namespace chronotext
 
         glVertexPointer(sequenceDimensions, GL_FLOAT, stride, vertices);
         glTexCoordPointer(2, GL_FLOAT, stride, vertices + sequenceDimensions);
-        glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, indices);
+        glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, indices.data());
     }
     
     void XFont::incrementSequence()

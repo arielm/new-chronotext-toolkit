@@ -62,7 +62,7 @@ namespace chronotext
 
         GLuint textureName;
 
-        GLushort *indices;
+        std::vector<GLushort> indices;
         float *vertices;
         
         int sequenceSize;
