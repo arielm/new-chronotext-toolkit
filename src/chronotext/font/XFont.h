@@ -124,7 +124,7 @@ namespace chronotext
         
         bool isSpace(wchar_t c) const;
         bool isValid(wchar_t c) const;
-        int lookup(wchar_t c) const;
+        int getGlyphIndex(wchar_t c) const;
         std::wstring getCharacters() const;
         
         void setSize(float size);

@@ -21,7 +21,7 @@ namespace chronotext
             
             for (auto c : text)
             {
-                int cc = font->lookup(c);
+                int cc = font->getGlyphIndex(c);
                 w += math<float>::floor(font->getGlyphWidth(cc));
             }
             
@@ -45,7 +45,7 @@ namespace chronotext
         
         for (auto c : text)
         {
-            int cc = font->lookup(c);
+            int cc = font->getGlyphIndex(c);
             font->addGlyph(cc, x, y);
             
             float w = font->getGlyphWidth(cc) * font->getDirection();
@@ -147,7 +147,7 @@ namespace chronotext
         
         for (auto c : text)
         {
-            int cc = font->lookup(c);
+            int cc = font->getGlyphIndex(c);
             float half = 0.5f * font->getGlyphWidth(cc);
             offsetX += half;
             

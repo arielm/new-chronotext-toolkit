@@ -369,7 +369,7 @@ namespace chronotext
     {
         while (start < end && xx < limitRight)
         {
-            int cc = font->lookup(text[start++]);
+            int cc = font->getGlyphIndex(text[start++]);
             float ww = font->getGlyphWidth(cc);
             
             if (xx + ww > limitLeft)

@@ -287,7 +287,7 @@ namespace chronotext
         return glyphs.count(c);
     }
     
-    int XFont::lookup(wchar_t c) const
+    int XFont::getGlyphIndex(wchar_t c) const
     {
         if (isSpace(c))
         {
@@ -377,7 +377,7 @@ namespace chronotext
     
     float XFont::getCharWidth(wchar_t c) const
     {
-        return getGlyphWidth(lookup(c));
+        return getGlyphWidth(getGlyphIndex(c));
     }
     
     float XFont::getStringWidth(const wstring &s) const
