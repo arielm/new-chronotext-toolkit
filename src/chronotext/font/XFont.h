@@ -96,15 +96,39 @@ namespace chronotext
             ALIGN_BOTTOM
         };
         
+        struct Properties
+        {
+            bool useMipmap;
+            bool useAnisotropy;
+            int maxDimensions;
+            int slotCapacity;
+            
+            Properties(bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+            :
+            useMipmap(useMipmap),
+            useAnisotropy(useAnisotropy),
+            maxDimensions(maxDimensions),
+            slotCapacity(slotCapacity)
+            {}
+            
+            static Properties DEFAULTS_2D(bool useMipmap = true, int slotCapacity = 1024)
+            {
+                return Properties(useMipmap, false, 2, slotCapacity);
+            }
+            
+            static Properties DEFAULTS_3D(int slotCapacity = 8192)
+            {
+                return Properties(true, true, 3, slotCapacity);
+            }
+        };
+        
         InputSourceRef inputSource;
         bool useMipmap;
         bool useAnisotropy;
         int maxDimensions;
         int slotCapacity;
         
-        XFont(const std::string &resourceName, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
-        XFont(InputSourceRef inputSource, bool useMipmap = false, bool useAnisotropy = false, int maxDimensions = 3, int slotCapacity = 1024);
-        
+        XFont(InputSourceRef inputSource, const Properties &properties);
         ~XFont();
         
         void unload();

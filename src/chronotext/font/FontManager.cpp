@@ -14,14 +14,14 @@ using namespace chr;
 
 namespace chronotext
 {
-    XFont* FontManager::getFont(const string &resourceName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+    XFont* FontManager::getFont(const string &resourceName, const XFont::Properties &properties)
     {
-        return getFont(InputSource::getResource(resourceName), useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+        return getFont(InputSource::getResource(resourceName), properties);
     }
     
-    XFont* FontManager::getFont(InputSourceRef inputSource, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+    XFont* FontManager::getFont(InputSourceRef inputSource, const XFont::Properties &properties)
     {
-        FontKey key(inputSource->getURI(), useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+        FontKey key(inputSource->getURI(), properties.useMipmap, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
         auto it = cache.find(key);
         
         if (it != cache.end())
@@ -30,7 +30,7 @@ namespace chronotext
         }
         else
         {
-            auto font = new XFont(inputSource, useMipmap, useAnisotropy, maxDimensions, slotCapacity);
+            auto font = new XFont(inputSource, properties);
             cache[key] = unique_ptr<XFont>(font);
             
             return font;

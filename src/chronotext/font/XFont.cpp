@@ -14,37 +14,18 @@ using namespace std;
 
 namespace chronotext
 {
-    /*
-     * XXX: COULD NOT GET C++11'S DELEGATED CONSTRUCTOR TO COMPILE WITH VISUAL STUDIO 2012
-     */
-    XFont::XFont(const string &resourceName, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
-    :
-    inputSource(InputSource::getResource(resourceName)),
-    useMipmap(useMipmap),
-    useAnisotropy(useAnisotropy),
-    maxDimensions(maxDimensions),
-    slotCapacity(slotCapacity),
-    unloaded(true)
-    {
-        reload();
-        
-        setSize(1);
-        setDirection(+1);
-        setAxis(Vec2f(+1, +1));
-    }
-    
-    XFont::XFont(InputSourceRef source, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+    XFont::XFont(InputSourceRef source, const Properties &properties)
     :
     inputSource(source),
-    useMipmap(useMipmap),
-    useAnisotropy(useAnisotropy),
-    maxDimensions(maxDimensions),
-    slotCapacity(slotCapacity),
+    useMipmap(properties.useMipmap),
+    useAnisotropy(properties.useAnisotropy),
+    maxDimensions(properties.maxDimensions),
+    slotCapacity(properties.slotCapacity),
     unloaded(true)
     {
         reload();
         
-        setSize(1);
+        setSize(nativeFontSize);
         setDirection(+1);
         setAxis(Vec2f(+1, +1));
     }

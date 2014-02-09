@@ -129,7 +129,7 @@ XFont* Application::loadFontSafely(const string &fileName, bool useMipmap)
 {
     try
     {
-        return fontManager.getFont(InputSource::getFileInDocuments(fileName), useMipmap);
+        return fontManager.getFont(InputSource::getFileInDocuments(fileName), XFont::Properties::DEFAULTS_2D());
     }
     catch (exception &e)
     {
