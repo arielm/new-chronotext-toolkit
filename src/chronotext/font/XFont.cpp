@@ -164,7 +164,7 @@ namespace chronotext
             
             unsigned char *data = new unsigned char[glyphWidth * glyphHeight];
             in->readData(data, glyphWidth * glyphHeight);
-            addAtlasUnit(data, atlasData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
+            addAtlasUnit(data, atlasData, atlasWidth, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
             delete[] data;
             
             int xx = glyphAtlasX + atlasPadding + unitMargin - unitPadding;
@@ -179,11 +179,11 @@ namespace chronotext
             v2[i] = (yy + h[i]) / hh;
         }
 
-        uploadAtlasData(atlasData);
+        textureName = uploadAtlasData(atlasData, atlasWidth, atlasHeight, useMipmap);
         delete[] atlasData;
     }
     
-    void XFont::addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int xx, int yy, int ww, int hh)
+    void XFont::addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int atlasWidth, int xx, int yy, int ww, int hh)
     {
         for (int iy = 0; iy < hh; iy++)
         {
@@ -194,10 +194,12 @@ namespace chronotext
         }
     }
     
-    void XFont::uploadAtlasData(unsigned char *atlasData)
+    GLuint XFont::uploadAtlasData(unsigned char *atlasData, int atlasWidth, int atlasHeight, bool useMipmap)
     {
-        glGenTextures(1, &textureName);
-        glBindTexture(GL_TEXTURE_2D, textureName);
+        GLuint name;
+        glGenTextures(1, &name);
+        
+        glBindTexture(GL_TEXTURE_2D, name);
         
         if (useMipmap)
         {
@@ -226,6 +228,8 @@ namespace chronotext
         }
         
         glBindTexture(GL_TEXTURE_2D, 0);
+        
+        return name;
     }
     
     void XFont::init()

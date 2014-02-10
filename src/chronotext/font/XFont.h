@@ -20,6 +20,40 @@ namespace chronotext
 {
     class XFont
     {
+        struct Data
+        {
+            float nativeFontSize;
+            float height;
+            float ascent;
+            float descent;
+            float spaceAdvance;
+            float strikethroughFactor;
+            float underlineOffset;
+            float lineThickness;
+            
+            int atlasWidth;
+            int atlasHeight;
+            int atlasPadding;
+            int unitMargin;
+            int unitPadding;
+            
+            std::unique_ptr<unsigned char*> atlasData;
+            
+            std::unique_ptr<float*> w;
+            std::unique_ptr<float*> h;
+            std::unique_ptr<float*> le;
+            std::unique_ptr<float*> te;
+            std::unique_ptr<float*> advance;
+            
+            std::unique_ptr<float*> u1;
+            std::unique_ptr<float*> v1;
+            std::unique_ptr<float*> u2;
+            std::unique_ptr<float*> v2;
+            
+            int glyphCount;
+            std::map<wchar_t, int> glyphs;
+        };
+        
         float nativeFontSize;
         float height;
         float ascent;
@@ -48,7 +82,9 @@ namespace chronotext
         float *v1;
         float *u2;
         float *v2;
-        
+
+        GLuint textureName;
+
         bool anisotropyAvailable;
         float maxAnisotropy;
 
@@ -57,10 +93,10 @@ namespace chronotext
         float direction;
         ci::Vec2f axis;
         
+        bool unloaded;
         int began;
+        
         FontMatrix matrix;
-
-        GLuint textureName;
 
         std::vector<GLushort> indices;
         float *vertices;
@@ -70,11 +106,10 @@ namespace chronotext
         float *sequenceVertices;
         XFontSequence *sequence;
         
-        bool unloaded;
-        
         void read(ci::IStreamRef in);
-        void addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int xx, int yy, int ww, int hh);
-        void uploadAtlasData(unsigned char *atlasData);
+        static void addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int atlasWidth, int xx, int yy, int ww, int hh);
+        static GLuint uploadAtlasData(unsigned char *atlasData, int atlasWidth, int atlasHeight, bool useMipmap);
+        
         void init();
         
         void flush(int count);
@@ -117,7 +152,7 @@ namespace chronotext
                 return Properties(useMipmap, false, 2, slotCapacity);
             }
             
-            static Properties DEFAULTS_3D(int slotCapacity = 8192)
+            static Properties DEFAULTS_3D(int slotCapacity = 2048)
             {
                 return Properties(true, true, 3, slotCapacity);
             }
