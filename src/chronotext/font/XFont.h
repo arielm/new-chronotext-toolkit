@@ -37,23 +37,26 @@ namespace chronotext
             int unitMargin;
             int unitPadding;
             
-            std::unique_ptr<unsigned char*> atlasData;
+            std::unique_ptr<unsigned char[]> atlasData;
             
-            std::unique_ptr<float*> w;
-            std::unique_ptr<float*> h;
-            std::unique_ptr<float*> le;
-            std::unique_ptr<float*> te;
-            std::unique_ptr<float*> advance;
+            std::unique_ptr<float[]> w;
+            std::unique_ptr<float[]> h;
+            std::unique_ptr<float[]> le;
+            std::unique_ptr<float[]> te;
+            std::unique_ptr<float[]> advance;
             
-            std::unique_ptr<float*> u1;
-            std::unique_ptr<float*> v1;
-            std::unique_ptr<float*> u2;
-            std::unique_ptr<float*> v2;
+            std::unique_ptr<float[]> u1;
+            std::unique_ptr<float[]> v1;
+            std::unique_ptr<float[]> u2;
+            std::unique_ptr<float[]> v2;
             
             int glyphCount;
             std::map<wchar_t, int> glyphs;
         };
         
+        std::unique_ptr<Data> data; // FIXME: SHOULD BE STORED IN FontManager;
+        GLuint textureName;
+
         float nativeFontSize;
         float height;
         float ascent;
@@ -83,18 +86,16 @@ namespace chronotext
         float *u2;
         float *v2;
 
-        GLuint textureName;
-
         bool anisotropyAvailable;
         float maxAnisotropy;
+
+        bool unloaded;
+        int began;
 
         float size;
         float sizeRatio;
         float direction;
         ci::Vec2f axis;
-        
-        bool unloaded;
-        int began;
         
         FontMatrix matrix;
 
@@ -106,7 +107,7 @@ namespace chronotext
         float *sequenceVertices;
         XFontSequence *sequence;
         
-        void read(ci::IStreamRef in);
+        static Data* fetchFontData(InputSourceRef source);
         static void addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int atlasWidth, int xx, int yy, int ww, int hh);
         static GLuint uploadAtlasData(unsigned char *atlasData, int atlasWidth, int atlasHeight, bool useMipmap);
         
