@@ -73,6 +73,8 @@ namespace chronotext
         
         FontAtlas(int width, int height);
         ~FontAtlas();
+        
+        void addGlyph(unsigned char *glyphData, int x, int y, int glyphWidth, int glyphHeight);
     };
     
     struct FontTexture
@@ -80,8 +82,9 @@ namespace chronotext
         int width;
         int height;
         GLuint name;
+        bool useMipmap;
         
-        FontTexture(int width, int height, GLuint name);
+        FontTexture(FontAtlas *atlas, bool useMipmap);
         ~FontTexture();
     };
     
@@ -104,11 +107,8 @@ namespace chronotext
         std::map<std::string, std::unique_ptr<FontData>> fontData;
         std::map<std::pair<std::string, bool>, std::unique_ptr<FontTexture>> textures;
 
-        FontTexture* uploadTexture(chr::InputSourceRef source, FontAtlas *atlas, bool useMipmap);
-
         static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
-        static void addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height);
-        static GLuint uploadAtlas(FontAtlas *atlas, bool useMipmap);
+        FontTexture* uploadTexture(chr::InputSourceRef source, FontAtlas *atlas, bool useMipmap);
     };
 }
 

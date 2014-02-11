@@ -60,18 +60,65 @@ namespace chronotext
         delete[] data;
     }
     
+    void FontAtlas::addGlyph(unsigned char *glyphData, int x, int y, int glyphWidth, int glyphHeight)
+    {
+        for (int iy = 0; iy < glyphHeight; iy++)
+        {
+            for (int ix = 0; ix < glyphWidth; ix++)
+            {
+                data[(iy + y) * width + ix + x] = glyphData[iy * glyphWidth + ix];
+            }
+        }
+    }
+    
     // ---
     
-    FontTexture::FontTexture(int width, int height, GLuint name)
+    FontTexture::FontTexture(FontAtlas *atlas, bool useMipmap)
     :
-    width(width),
-    height(height),
-    name(name)
-    {}
+    width(atlas->width),
+    height(atlas->height)
+    {
+        glGenTextures(1, &name);
+        
+        glBindTexture(GL_TEXTURE_2D, name);
+        
+        if (useMipmap)
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        }
+        else
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        }
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        
+        if (useMipmap)
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+            glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+        }
+        
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
+        
+        if (useMipmap)
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+        }
+        
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
     
     FontTexture::~FontTexture()
     {
         glDeleteTextures(1, &name);
+        
+        LOGD <<
+        "FONT UNLOADED: " <<
+        name <<
+        endl;
     }
     
     // ---
@@ -175,24 +222,6 @@ namespace chronotext
     }
     */
     
-    FontTexture* FontManager::uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap)
-    {
-        auto name = uploadAtlas(atlas, useMipmap);
-        
-        LOGD <<
-        "FONT UPLOADED: " <<
-        source->getFilePathHint() << " | " <<
-        name << " | " <<
-        atlas->width << "x" << atlas->height  <<
-        (useMipmap ? " (M)" : "") <<
-        endl;
-
-        auto texture = new FontTexture(atlas->width, atlas->height, name);
-        textures[make_pair(source->getURI(), useMipmap)] = unique_ptr<FontTexture>(texture);
-        
-        return texture;
-    }
-    
     std::pair<FontData*, FontAtlas*> FontManager::fetchFont(InputSourceRef source)
     {
         auto in = source->loadDataSource()->createStream(); // CAN THROW
@@ -258,7 +287,7 @@ namespace chronotext
             
             auto glyphData = new unsigned char[glyphWidth * glyphHeight];
             in->readData(glyphData, glyphWidth * glyphHeight);
-            addAtlasUnit(atlas, glyphData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
+            atlas->addGlyph(glyphData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
             delete[] glyphData;
             
             data->w[i] = glyphWidth + unitPadding * 2;
@@ -278,51 +307,19 @@ namespace chronotext
         return make_pair(data, atlas);
     }
     
-    void FontManager::addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height)
+    FontTexture* FontManager::uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap)
     {
-        for (int iy = 0; iy < height; iy++)
-        {
-            for (int ix = 0; ix < width; ix++)
-            {
-                atlas->data[(iy + y) * atlas->width + ix + x] = glyphData[iy * width + ix];
-            }
-        }
-    }
-    
-    GLuint FontManager::uploadAtlas(FontAtlas *atlas, bool useMipmap)
-    {
-        GLuint name;
-        glGenTextures(1, &name);
+        auto texture = new FontTexture(atlas, useMipmap);
+        textures[make_pair(source->getURI(), useMipmap)] = unique_ptr<FontTexture>(texture);
         
-        glBindTexture(GL_TEXTURE_2D, name);
+        LOGD <<
+        "FONT UPLOADED: " <<
+        source->getFilePathHint() << " | " <<
+        texture->name << " | " <<
+        texture->width << "x" << texture->height  <<
+        (useMipmap ? " (M)" : "") <<
+        endl;
         
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        }
-        else
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-            glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-        }
-        
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-        }
-        
-        glBindTexture(GL_TEXTURE_2D, 0);
-        return name;
+        return texture;
     }
 }
