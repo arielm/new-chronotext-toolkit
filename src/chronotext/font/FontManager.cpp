@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/font/FontManager.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace ci;
 using namespace std;
@@ -24,26 +25,52 @@ namespace chronotext
         auto uri = inputSource->getURI();
         
         FontKey key(uri, properties.useMipmap, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
-        auto it = cache.find(key);
+        auto it1 = cache.find(key);
         
-        if (it != cache.end())
+        if (it1 != cache.end())
         {
-            return it->second.get();
+            return it1->second.get();
         }
         else
         {
             FontData *data;
-            FontAtlas *atlas;
-            tie(data, atlas) = fetchFont(inputSource); // CAN THROW
+            auto it2 = fontData.find(uri);
             
-            auto textureWidth = atlas->width;
-            auto textureHeight = atlas->height;
-            auto textureName = uploadAtlas(atlas, properties.useMipmap);
+            if (it2 == fontData.end())
+            {
+                FontAtlas *atlas;
+                tie(data, atlas) = fetchFont(inputSource); // CAN THROW
+
+                fontData[uri] = unique_ptr<FontData>(data);
+                
+                uploadTexture(inputSource, atlas, properties.useMipmap);
+                delete atlas;
+            }
+            else
+            {
+                data = it2->second.get();
+            }
             
-            fontData[uri] = unique_ptr<FontData>(data);
-            textures[make_pair(uri, properties.useMipmap)] = make_tuple(textureWidth, textureHeight, textureName);
+            tuple<int, int, GLuint> texture;
+            auto it3 = textures.find(make_pair(uri, properties.useMipmap));
             
-            auto font = new XFont(data, textureWidth, textureHeight, textureName, properties);
+            if (it3 == textures.end())
+            {
+                FontData *tmp;
+                FontAtlas *atlas;
+                tie(tmp, atlas) = fetchFont(inputSource); // CAN THROW
+
+                delete tmp;
+
+                texture = uploadTexture(inputSource, atlas, properties.useMipmap);
+                delete atlas;
+            }
+            else
+            {
+                texture = it3->second;
+            }
+            
+            auto font = new XFont(data, texture, properties);
             cache[key] = unique_ptr<XFont>(font);
             
             return font;
@@ -86,6 +113,24 @@ namespace chronotext
         }
     }
     */
+    
+    tuple<int, int, GLuint> FontManager::uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap)
+    {
+        auto name = uploadAtlas(atlas, useMipmap);
+        
+        LOGD <<
+        "FONT UPLOADED: " <<
+        source->getFilePathHint() << " | " <<
+        name << " | " <<
+        atlas->width << "x" << atlas->height  <<
+        (useMipmap ? " (M)" : "") <<
+        endl;
+
+        auto texture = make_tuple(atlas->width, atlas->height, name);
+        textures[make_pair(source->getURI(), useMipmap)] = texture;
+        
+        return texture;
+    }
     
     std::pair<FontData*, FontAtlas*> FontManager::fetchFont(InputSourceRef source)
     {

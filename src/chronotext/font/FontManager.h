@@ -54,7 +54,9 @@ namespace chronotext
         std::map<FontKey, std::unique_ptr<XFont>> cache;
         std::map<std::string, std::unique_ptr<FontData>> fontData;
         std::map<std::pair<std::string, bool>, std::tuple<int, int, GLuint>> textures;
-        
+
+        std::tuple<int, int, GLuint> uploadTexture(chr::InputSourceRef source, FontAtlas *atlas, bool useMipmap);
+
         static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
         static void addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height);
         static GLuint uploadAtlas(FontAtlas *atlas, bool useMipmap);

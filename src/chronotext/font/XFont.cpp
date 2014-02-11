@@ -14,11 +14,11 @@ using namespace std;
 
 namespace chronotext
 {
-    XFont::XFont(FontData *data, int textureWidth, int textureHeight, GLuint textureName, const Properties &properties)
+    XFont::XFont(FontData *data, tuple<int, int, GLuint> texture, const Properties &properties)
     :
-    textureWidth(textureWidth),
-    textureHeight(textureHeight),
-    textureName(textureName),
+    textureWidth(get<0>(texture)),
+    textureHeight(get<1>(texture)),
+    textureName(get<2>(texture)),
     properties(properties),
     began(0),
     sequence(NULL)

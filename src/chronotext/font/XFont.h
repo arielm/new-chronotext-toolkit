@@ -55,7 +55,7 @@ namespace chronotext
             }
         };
         
-        XFont(FontData *data, int textureWidth, int textureHeight, GLuint textureName, const Properties &properties);
+        XFont(FontData *data, std::tuple<int, int, GLuint> texture, const Properties &properties);
         ~XFont();
         
         bool isSpace(wchar_t c) const;
