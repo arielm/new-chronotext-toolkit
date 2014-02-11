@@ -93,7 +93,9 @@ namespace chronotext
     {
         if (unloaded)
         {
-            data = unique_ptr<XFont::Data>(fetchFontData(inputSource));
+            auto tmp = fetchFont(inputSource);
+            data = unique_ptr<FontData>(tmp.first);
+            auto atlas = unique_ptr<FontAtlas>(tmp.second);
 
             glyphCount = data->glyphCount;
             glyphs = data->glyphs;
@@ -107,25 +109,20 @@ namespace chronotext
             underlineOffset = data->underlineOffset;
             lineThickness = data->lineThickness;
             
-            atlasWidth = data->atlasWidth;
-            atlasHeight = data->atlasHeight;
-            atlasPadding = data->atlasPadding;
-            unitMargin = data->unitMargin;
-            unitPadding = data->unitPadding;
+            w = data->w;
+            h = data->h;
+            le = data->le;
+            te = data->te;
+            advance = data->advance;
             
-            w = data->w.get();
-            h = data->h.get();
-            le = data->le.get();
-            te = data->te.get();
-            advance = data->advance.get();
-            
-            u1 = data->u1.get();
-            v1 = data->v1.get();
-            u2 = data->u2.get();
-            v2 = data->v2.get();
-            
-            textureName = uploadAtlasData(data->atlasData.get(), data->atlasWidth, data->atlasHeight, useMipmap);
-            data->atlasData.reset();
+            u1 = data->u1;
+            v1 = data->v1;
+            u2 = data->u2;
+            v2 = data->v2;
+
+            textureWidth = atlas->width;
+            textureHeight = atlas->height;
+            textureName = uploadAtlasData(atlas.get(), useMipmap);
             
             // ---
             
@@ -135,12 +132,12 @@ namespace chronotext
             "FONT UPLOADED: " <<
             inputSource->getFilePathHint() << " | " <<
             textureName << " | " <<
-            atlasWidth << "x" << atlasHeight  <<
+            textureWidth << "x" << textureHeight  <<
             endl;
         }
     }
     
-    XFont::Data* XFont::fetchFontData(InputSourceRef source)
+    std::pair<FontData*, FontAtlas*> XFont::fetchFont(InputSourceRef source)
     {
         auto in = source->loadDataSource()->createStream(); // CAN THROW
         
@@ -152,9 +149,12 @@ namespace chronotext
             throw runtime_error("XFont: WRONG FORMAT");
         }
         
-        auto data = new XFont::Data;
+        // ---
         
-        in->readLittle(&data->glyphCount);
+        int glyphCount;
+        in->readLittle(&glyphCount);
+        
+        auto data = new FontData(glyphCount);
         
         in->readLittle(&data->nativeFontSize);
         in->readLittle(&data->height);
@@ -165,28 +165,21 @@ namespace chronotext
         in->readLittle(&data->underlineOffset);
         in->readLittle(&data->lineThickness);
         
-        in->readLittle(&data->atlasWidth);
-        in->readLittle(&data->atlasHeight);
-        in->readLittle(&data->atlasPadding);
-        in->readLittle(&data->unitMargin);
-        in->readLittle(&data->unitPadding);
+        int atlasWidth;
+        int atlasHeight;
+        int atlasPadding;
+        int unitMargin;
+        int unitPadding;
         
-        // ---
+        in->readLittle(&atlasWidth);
+        in->readLittle(&atlasHeight);
+        in->readLittle(&atlasPadding);
+        in->readLittle(&unitMargin);
+        in->readLittle(&unitPadding);
         
-        auto w = new float[data->glyphCount];
-        auto h = new float[data->glyphCount];
-        auto le = new float[data->glyphCount];
-        auto te = new float[data->glyphCount];
-        auto advance = new float[data->glyphCount];
-        
-        auto u1 = new float[data->glyphCount];
-        auto v1 = new float[data->glyphCount];
-        auto u2 = new float[data->glyphCount];
-        auto v2 = new float[data->glyphCount];
-        
-        auto atlasData = new unsigned char[data->atlasWidth * data->atlasHeight](); // ZERO-FILLED
-        
-        for (int i = 0; i < data->glyphCount; i++)
+        auto atlas = new FontAtlas(atlasWidth, atlasHeight);
+
+        for (int i = 0; i < glyphCount; i++)
         {
             int glyphChar;
             int glyphWidth;
@@ -199,64 +192,48 @@ namespace chronotext
             in->readLittle(&glyphChar);
             data->glyphs[(wchar_t)glyphChar] = i;
             
-            in->readLittle(&advance[i]);
+            in->readLittle(&data->advance[i]);
             in->readLittle(&glyphWidth);
             in->readLittle(&glyphHeight);
             in->readLittle(&glyphLeftExtent);
             in->readLittle(&glyphTopExtent);
             in->readLittle(&glyphAtlasX);
             in->readLittle(&glyphAtlasY);
-            
-            w[i] = glyphWidth + data->unitPadding * 2;
-            h[i] = glyphHeight + data->unitPadding * 2;
-            le[i] = glyphLeftExtent - data->unitPadding;
-            te[i] = glyphTopExtent + data->unitPadding;
-            
-            unsigned char *glyphData = new unsigned char[glyphWidth * glyphHeight];
+
+            auto glyphData = new unsigned char[glyphWidth * glyphHeight];
             in->readData(glyphData, glyphWidth * glyphHeight);
-            addAtlasUnit(glyphData, atlasData, data->atlasWidth, glyphAtlasX + data->atlasPadding + data->unitMargin, glyphAtlasY + data->atlasPadding + data->unitMargin, glyphWidth, glyphHeight);
+            addAtlasUnit(atlas, glyphData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
             delete[] glyphData;
             
-            int xx = glyphAtlasX + data->atlasPadding + data->unitMargin - data->unitPadding;
-            int yy = glyphAtlasY + data->atlasPadding + data->unitMargin - data->unitPadding;
+            data->w[i] = glyphWidth + unitPadding * 2;
+            data->h[i] = glyphHeight + unitPadding * 2;
+            data->le[i] = glyphLeftExtent - unitPadding;
+            data->te[i] = glyphTopExtent + unitPadding;
             
-            float ww = (float)data->atlasWidth;
-            float hh = (float)data->atlasHeight;
+            int x = glyphAtlasX + atlasPadding + unitMargin - unitPadding;
+            int y = glyphAtlasY + atlasPadding + unitMargin - unitPadding;
             
-            u1[i] = xx / ww;
-            v1[i] = yy / hh;
-            u2[i] = (xx + w[i]) / ww;
-            v2[i] = (yy + h[i]) / hh;
+            data->u1[i] = x / (float)atlasWidth;
+            data->v1[i] = y / (float)atlasHeight;
+            data->u2[i] = (x + data->w[i]) / (float)atlasWidth;
+            data->v2[i] = (y + data->h[i]) / (float)atlasHeight;
         }
         
-        data->w = unique_ptr<float[]>(w);
-        data->h = unique_ptr<float[]>(h);
-        data->le = unique_ptr<float[]>(le);
-        data->te = unique_ptr<float[]>(te);
-        data->advance = unique_ptr<float[]>(advance);
-        
-        data->u1 = unique_ptr<float[]>(u1);
-        data->v1 = unique_ptr<float[]>(v1);
-        data->u2 = unique_ptr<float[]>(u2);
-        data->v2 = unique_ptr<float[]>(v2);
-        
-        data->atlasData = unique_ptr<unsigned char[]>(atlasData);
-        
-        return data;
+        return make_pair(data, atlas);
     }
     
-    void XFont::addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int atlasWidth, int xx, int yy, int ww, int hh)
+    void XFont::addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height)
     {
-        for (int iy = 0; iy < hh; iy++)
+        for (int iy = 0; iy < height; iy++)
         {
-            for (int ix = 0; ix < ww; ix++)
+            for (int ix = 0; ix < width; ix++)
             {
-                dstData[(iy + yy) * atlasWidth + ix + xx] = srcData[iy * ww + ix];
+                atlas->data[(iy + y) * atlas->width + ix + x] = glyphData[iy * width + ix];
             }
         }
     }
     
-    GLuint XFont::uploadAtlasData(unsigned char *atlasData, int atlasWidth, int atlasHeight, bool useMipmap)
+    GLuint XFont::uploadAtlasData(FontAtlas *atlas, bool useMipmap)
     {
         GLuint name;
         glGenTextures(1, &name);
@@ -282,7 +259,7 @@ namespace chronotext
             glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
         }
         
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlasWidth, atlasHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlasData);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
         
         if (useMipmap)
         {
@@ -613,28 +590,28 @@ namespace chronotext
             {
                 float dx = clip.x1 - quad.x1;
                 quad.x1 += dx;
-                quad.u1 += axis.x * dx / atlasWidth / sizeRatio;;
+                quad.u1 += axis.x * dx / textureWidth / sizeRatio;;
             }
             
             if (quad.x2 > clip.x2)
             {
                 float dx = clip.x2 - quad.x2;
                 quad.x2 += dx;
-                quad.u2 += axis.x * dx / atlasWidth / sizeRatio;;
+                quad.u2 += axis.x * dx / textureWidth / sizeRatio;;
             }
             
             if (quad.y1 < clip.y1)
             {
                 float dy = clip.y1 - quad.y1;
                 quad.y1 += dy;
-                quad.v1 += axis.y * dy / atlasHeight / sizeRatio;
+                quad.v1 += axis.y * dy / textureHeight / sizeRatio;
             }
             
             if (quad.y2 > clip.y2)
             {
                 float dy = clip.y2 - quad.y2;
                 quad.y2 += dy;
-                quad.v2 += axis.y * dy / atlasHeight / sizeRatio;
+                quad.v2 += axis.y * dy / textureHeight / sizeRatio;
             }
             
             return true;

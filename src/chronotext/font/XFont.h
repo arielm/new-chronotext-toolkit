@@ -11,51 +11,18 @@
 #include "chronotext/InputSource.h"
 #include "chronotext/font/FontMatrix.h"
 #include "chronotext/font/XFontSequence.h"
+#include "chronotext/font/FontData.h"
 
 #include "cinder/gl/gl.h"
-
-#include <map>
 
 namespace chronotext
 {
     class XFont
     {
-        struct Data
-        {
-            float nativeFontSize;
-            float height;
-            float ascent;
-            float descent;
-            float spaceAdvance;
-            float strikethroughFactor;
-            float underlineOffset;
-            float lineThickness;
-            
-            int atlasWidth;
-            int atlasHeight;
-            int atlasPadding;
-            int unitMargin;
-            int unitPadding;
-            
-            std::unique_ptr<unsigned char[]> atlasData;
-            
-            std::unique_ptr<float[]> w;
-            std::unique_ptr<float[]> h;
-            std::unique_ptr<float[]> le;
-            std::unique_ptr<float[]> te;
-            std::unique_ptr<float[]> advance;
-            
-            std::unique_ptr<float[]> u1;
-            std::unique_ptr<float[]> v1;
-            std::unique_ptr<float[]> u2;
-            std::unique_ptr<float[]> v2;
-            
-            int glyphCount;
-            std::map<wchar_t, int> glyphs;
-        };
-        
-        std::unique_ptr<Data> data; // FIXME: SHOULD BE STORED IN FontManager;
-        GLuint textureName;
+        std::unique_ptr<FontData> data; // FIXME: SHOULD BE STORED IN FontManager;
+
+        int glyphCount;
+        std::map<wchar_t, int> glyphs;
 
         float nativeFontSize;
         float height;
@@ -65,15 +32,6 @@ namespace chronotext
         float strikethroughFactor;
         float underlineOffset;
         float lineThickness;
-        
-        int atlasWidth;
-        int atlasHeight;
-        int atlasPadding;
-        int unitMargin;
-        int unitPadding;
-        
-        int glyphCount;
-        std::map<wchar_t, int> glyphs;
         
         float *w;
         float *h;
@@ -85,6 +43,10 @@ namespace chronotext
         float *v1;
         float *u2;
         float *v2;
+        
+        int textureWidth;
+        int textureHeight;
+        GLuint textureName;
 
         bool anisotropyAvailable;
         float maxAnisotropy;
@@ -107,9 +69,9 @@ namespace chronotext
         float *sequenceVertices;
         XFontSequence *sequence;
         
-        static Data* fetchFontData(InputSourceRef source);
-        static void addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int atlasWidth, int xx, int yy, int ww, int hh);
-        static GLuint uploadAtlasData(unsigned char *atlasData, int atlasWidth, int atlasHeight, bool useMipmap);
+        static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
+        static void addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height);
+        static GLuint uploadAtlasData(FontAtlas *atlas, bool useMipmap);
         
         void flush(int count);
         void incrementSequence();
