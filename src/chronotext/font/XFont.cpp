@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/font/XFont.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/font/FontManager.h"
 
 using namespace ci;
 using namespace std;

@@ -15,6 +15,67 @@ using namespace chr;
 
 namespace chronotext
 {
+    FontData::FontData(int glyphCount)
+    :
+    glyphCount(glyphCount)
+    {
+        w = new float[glyphCount];
+        h = new float[glyphCount];
+        le = new float[glyphCount];
+        te = new float[glyphCount];
+        advance = new float[glyphCount];
+        
+        u1 = new float[glyphCount];
+        v1 = new float[glyphCount];
+        u2 = new float[glyphCount];
+        v2 = new float[glyphCount];
+    }
+    
+    FontData::~FontData()
+    {
+        delete[] w;
+        delete[] h;
+        delete[] le;
+        delete[] te;
+        delete[] advance;
+        
+        delete[] u1;
+        delete[] v1;
+        delete[] u2;
+        delete[] v2;
+    }
+    
+    // ---
+    
+    FontAtlas::FontAtlas(int width, int height)
+    :
+    width(width),
+    height(height)
+    {
+        data = new unsigned char[width * height](); // ZERO-FILLED
+    }
+    
+    FontAtlas::~FontAtlas()
+    {
+        delete[] data;
+    }
+    
+    // ---
+    
+    FontTexture::FontTexture(int width, int height, GLuint name)
+    :
+    width(width),
+    height(height),
+    name(name)
+    {}
+    
+    FontTexture::~FontTexture()
+    {
+        glDeleteTextures(1, &name);
+    }
+    
+    // ---
+    
     XFont* FontManager::getFont(const string &resourceName, const XFont::Properties &properties)
     {
         return getFont(InputSource::getResource(resourceName), properties);

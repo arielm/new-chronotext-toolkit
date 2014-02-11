@@ -36,6 +36,55 @@ namespace chronotext
         }
     };
     
+    struct FontData
+    {
+        int glyphCount;
+        std::map<wchar_t, int> glyphs;
+        
+        float nativeFontSize;
+        float height;
+        float ascent;
+        float descent;
+        float spaceAdvance;
+        float strikethroughFactor;
+        float underlineOffset;
+        float lineThickness;
+        
+        float *w;
+        float *h;
+        float *le;
+        float *te;
+        float *advance;
+        
+        float *u1;
+        float *v1;
+        float *u2;
+        float *v2;
+        
+        FontData(int glyphCount);
+        ~FontData();
+    };
+    
+    struct FontAtlas
+    {
+        int width;
+        int height;
+        unsigned char *data;
+        
+        FontAtlas(int width, int height);
+        ~FontAtlas();
+    };
+    
+    struct FontTexture
+    {
+        int width;
+        int height;
+        GLuint name;
+        
+        FontTexture(int width, int height, GLuint name);
+        ~FontTexture();
+    };
+    
     class FontManager
     {
     public:

@@ -10,12 +10,16 @@
 
 #include "chronotext/font/FontMatrix.h"
 #include "chronotext/font/XFontSequence.h"
-#include "chronotext/font/FontData.h"
 
 #include "cinder/gl/gl.h"
 
+#include <map>
+
 namespace chronotext
 {
+    struct FontData;
+    struct FontTexture;
+
     class XFont
     {
     public:
