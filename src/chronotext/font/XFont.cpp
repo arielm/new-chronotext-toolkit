@@ -378,19 +378,19 @@ namespace chronotext
         return axis;
     }
     
-    float XFont::getGlyphAdvance(int cc) const
+    float XFont::getGlyphAdvance(int glyphIndex) const
     {
-        if (cc == -2)
+        if (glyphIndex == -2)
         {
             return spaceAdvance * sizeRatio;
         }
-        else if (cc == -1)
+        else if (glyphIndex == -1)
         {
             return 0;
         }
         else
         {
-            return advance[cc] * sizeRatio;
+            return advance[glyphIndex] * sizeRatio;
         }
     }
     
@@ -555,47 +555,47 @@ namespace chronotext
         }
     }
     
-    GlyphQuad XFont::getGlyphQuad(int cc, float x, float y) const
+    GlyphQuad XFont::getGlyphQuad(int glyphIndex, float x, float y) const
     {
         GlyphQuad quad;
         
         if (direction * axis.x > 0)
         {
-            quad.x1 = x + le[cc] * sizeRatio;
-            quad.x2 = quad.x1 + w[cc] * sizeRatio;
+            quad.x1 = x + le[glyphIndex] * sizeRatio;
+            quad.x2 = quad.x1 + w[glyphIndex] * sizeRatio;
         }
         else
         {
-            quad.x2 = x - le[cc] * sizeRatio;
-            quad.x1 = quad.x2 - w[cc] * sizeRatio;
+            quad.x2 = x - le[glyphIndex] * sizeRatio;
+            quad.x1 = quad.x2 - w[glyphIndex] * sizeRatio;
         }
         
         if (axis.x > 0)
         {
-            quad.u1 = u1[cc];
-            quad.u2 = u2[cc];
+            quad.u1 = u1[glyphIndex];
+            quad.u2 = u2[glyphIndex];
         }
         else
         {
-            quad.u1 = u2[cc];
-            quad.u2 = u1[cc];
+            quad.u1 = u2[glyphIndex];
+            quad.u2 = u1[glyphIndex];
         }
         
         if (axis.y > 0)
         {
-            quad.y1 = y - te[cc] * sizeRatio;
-            quad.y2 = quad.y1 + h[cc] * sizeRatio;
+            quad.y1 = y - te[glyphIndex] * sizeRatio;
+            quad.y2 = quad.y1 + h[glyphIndex] * sizeRatio;
             
-            quad.v1 = v1[cc];
-            quad.v2 = v2[cc];
+            quad.v1 = v1[glyphIndex];
+            quad.v2 = v2[glyphIndex];
         }
         else
         {
-            quad.y2 = y + te[cc] * sizeRatio;
-            quad.y1 = quad.y2 - h[cc] * sizeRatio;
+            quad.y2 = y + te[glyphIndex] * sizeRatio;
+            quad.y1 = quad.y2 - h[glyphIndex] * sizeRatio;
             
-            quad.v1 = v2[cc];
-            quad.v2 = v1[cc];
+            quad.v1 = v2[glyphIndex];
+            quad.v2 = v1[glyphIndex];
         }
         
         return quad;
@@ -716,20 +716,20 @@ namespace chronotext
     }
 
     
-    void XFont::addGlyph(int cc, float x, float y)
+    void XFont::addGlyph(int glyphIndex, float x, float y)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            sequenceVertices += addQuad(getGlyphQuad(cc, x, y), sequenceVertices);
+            sequenceVertices += addQuad(getGlyphQuad(glyphIndex, x, y), sequenceVertices);
             incrementSequence();
         }
     }
     
-    void XFont::addGlyph(int cc, float x, float y, const Rectf &clip)
+    void XFont::addGlyph(int glyphIndex, float x, float y, const Rectf &clip)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            GlyphQuad quad = getGlyphQuad(cc, x, y);
+            GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
             if (computeClip(quad, clip))
             {
@@ -739,20 +739,20 @@ namespace chronotext
         }
     }
     
-    void XFont::addGlyph(int cc, float x, float y, float z)
+    void XFont::addGlyph(int glyphIndex, float x, float y, float z)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            sequenceVertices += addQuad(getGlyphQuad(cc, x, y), z, sequenceVertices);
+            sequenceVertices += addQuad(getGlyphQuad(glyphIndex, x, y), z, sequenceVertices);
             incrementSequence();
         }
     }
     
-    void XFont::addGlyph(int cc, float x, float y, float z, const Rectf &clip)
+    void XFont::addGlyph(int glyphIndex, float x, float y, float z, const Rectf &clip)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            GlyphQuad quad = getGlyphQuad(cc, x, y);
+            GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
             if (computeClip(quad, clip))
             {
@@ -762,20 +762,20 @@ namespace chronotext
         }
     }
     
-    void XFont::addTransformedGlyph2D(int cc, float x, float y)
+    void XFont::addTransformedGlyph2D(int glyphIndex, float x, float y)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            sequenceVertices += matrix.addTransformedQuad2D(getGlyphQuad(cc, x, y), sequenceVertices);
+            sequenceVertices += matrix.addTransformedQuad2D(getGlyphQuad(glyphIndex, x, y), sequenceVertices);
             incrementSequence();
         }
     }
     
-    void XFont::addTransformedGlyph2D(int cc, float x, float y, const Rectf &clip)
+    void XFont::addTransformedGlyph2D(int glyphIndex, float x, float y, const Rectf &clip)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            GlyphQuad quad = getGlyphQuad(cc, x, y);
+            GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
             if (computeClip(quad, clip))
             {
@@ -785,20 +785,20 @@ namespace chronotext
         }
     }
     
-    void XFont::addTransformedGlyph3D(int cc, float x, float y)
+    void XFont::addTransformedGlyph3D(int glyphIndex, float x, float y)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            sequenceVertices += matrix.addTransformedQuad3D(getGlyphQuad(cc, x, y), sequenceVertices);
+            sequenceVertices += matrix.addTransformedQuad3D(getGlyphQuad(glyphIndex, x, y), sequenceVertices);
             incrementSequence();
         }
     }
     
-    void XFont::addTransformedGlyph3D(int cc, float x, float y, const Rectf &clip)
+    void XFont::addTransformedGlyph3D(int glyphIndex, float x, float y, const Rectf &clip)
     {
-        if (cc >= 0)
+        if (glyphIndex >= 0)
         {
-            GlyphQuad quad = getGlyphQuad(cc, x, y);
+            GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
             if (computeClip(quad, clip))
             {

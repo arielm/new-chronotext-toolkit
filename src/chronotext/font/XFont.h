@@ -114,7 +114,7 @@ namespace chronotext
         void flush(int count);
         void incrementSequence();
         
-        GlyphQuad getGlyphQuad(int cc, float x, float y) const;
+        GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;
         bool computeClip(GlyphQuad &quad, const ci::Rectf &clip);
         
         static int addQuad(const GlyphQuad &quad, float *vertices);
@@ -183,7 +183,7 @@ namespace chronotext
         float getDirection() const;
         ci::Vec2f getAxis() const;
 
-        float getGlyphAdvance(int cc) const;
+        float getGlyphAdvance(int glyphIndex) const;
         float getCharAdvance(wchar_t c) const;
         float getStringAdvance(const std::wstring &s) const;
         float getSubStringAdvance(const std::wstring &s, int begin, int end) const;
@@ -204,17 +204,17 @@ namespace chronotext
         void beginSequence(XFontSequence *sequence, int dimensions);
         void endSequence();
         
-        void addGlyph(int cc, float x, float y);
-        void addGlyph(int cc, float x, float y, const ci::Rectf &clip);
+        void addGlyph(int glyphIndex, float x, float y);
+        void addGlyph(int glyphIndex, float x, float y, const ci::Rectf &clip);
 
-        void addGlyph(int cc, float x, float y, float z);
-        void addGlyph(int cc, float x, float y, float z, const ci::Rectf &clip);
+        void addGlyph(int glyphIndex, float x, float y, float z);
+        void addGlyph(int glyphIndex, float x, float y, float z, const ci::Rectf &clip);
         
-        void addTransformedGlyph2D(int cc, float x, float y);
-        void addTransformedGlyph2D(int cc, float x, float y, const ci::Rectf &clip);
+        void addTransformedGlyph2D(int glyphIndex, float x, float y);
+        void addTransformedGlyph2D(int glyphIndex, float x, float y, const ci::Rectf &clip);
         
-        void addTransformedGlyph3D(int cc, float x, float y);
-        void addTransformedGlyph3D(int cc, float x, float y, const ci::Rectf &clip);
+        void addTransformedGlyph3D(int glyphIndex, float x, float y);
+        void addTransformedGlyph3D(int glyphIndex, float x, float y, const ci::Rectf &clip);
     };
 }
 
