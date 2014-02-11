@@ -117,8 +117,8 @@ namespace chronotext
         GlyphQuad getGlyphQuad(int cc, float x, float y) const;
         bool computeClip(GlyphQuad &quad, const ci::Rectf &clip);
         
-        static int addGlyph(const GlyphQuad &quad, float *vertices);
-        static int addGlyph(const GlyphQuad &quad, float z, float *vertices);
+        static int addQuad(const GlyphQuad &quad, float *vertices);
+        static int addQuad(const GlyphQuad &quad, float z, float *vertices);
         
     public:
         enum

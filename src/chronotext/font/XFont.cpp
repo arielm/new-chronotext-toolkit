@@ -641,7 +641,7 @@ namespace chronotext
         }
     }
     
-    int XFont::addGlyph(const GlyphQuad &quad, float *vertices)
+    int XFont::addQuad(const GlyphQuad &quad, float *vertices)
     {
         *vertices++ = quad.x1;
         *vertices++ = quad.y1;
@@ -676,7 +676,7 @@ namespace chronotext
         return 4 * (2 + 2);
     }
     
-    int XFont::addGlyph(const GlyphQuad &quad, float z, float *vertices)
+    int XFont::addQuad(const GlyphQuad &quad, float z, float *vertices)
     {
         *vertices++ = quad.x1;
         *vertices++ = quad.y1;
@@ -720,7 +720,7 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            sequenceVertices += addGlyph(getGlyphQuad(cc, x, y), sequenceVertices);
+            sequenceVertices += addQuad(getGlyphQuad(cc, x, y), sequenceVertices);
             incrementSequence();
         }
     }
@@ -733,7 +733,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                sequenceVertices += addGlyph(quad, sequenceVertices);
+                sequenceVertices += addQuad(quad, sequenceVertices);
                 incrementSequence();
             }
         }
@@ -743,7 +743,7 @@ namespace chronotext
     {
         if (cc >= 0)
         {
-            sequenceVertices += addGlyph(getGlyphQuad(cc, x, y), z, sequenceVertices);
+            sequenceVertices += addQuad(getGlyphQuad(cc, x, y), z, sequenceVertices);
             incrementSequence();
         }
     }
@@ -756,7 +756,7 @@ namespace chronotext
             
             if (computeClip(quad, clip))
             {
-                sequenceVertices += addGlyph(quad, z, sequenceVertices);
+                sequenceVertices += addQuad(quad, z, sequenceVertices);
                 incrementSequence();
             }
         }
