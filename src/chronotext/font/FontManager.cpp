@@ -21,7 +21,9 @@ namespace chronotext
     
     XFont* FontManager::getFont(InputSourceRef inputSource, const XFont::Properties &properties)
     {
-        FontKey key(inputSource->getURI(), properties.useMipmap, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
+        auto uri = inputSource->getURI();
+        
+        FontKey key(uri, properties.useMipmap, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
         auto it = cache.find(key);
         
         if (it != cache.end())
@@ -30,13 +32,25 @@ namespace chronotext
         }
         else
         {
-            auto font = new XFont(inputSource, properties);
+            FontData *data;
+            FontAtlas *atlas;
+            tie(data, atlas) = fetchFont(inputSource); // CAN THROW
+            
+            auto textureWidth = atlas->width;
+            auto textureHeight = atlas->height;
+            auto textureName = uploadAtlas(atlas, properties.useMipmap);
+            
+            fontData[uri] = unique_ptr<FontData>(data);
+            textures[make_pair(uri, properties.useMipmap)] = make_tuple(textureWidth, textureHeight, textureName);
+            
+            auto font = new XFont(data, textureWidth, textureHeight, textureName, properties);
             cache[key] = unique_ptr<XFont>(font);
             
             return font;
         }
     }
     
+    /*
     bool FontManager::remove(XFont *font)
     {
         for (auto it = cache.begin(); it != cache.end(); ++it)
@@ -70,5 +84,139 @@ namespace chronotext
         {
             it.second->reload();
         }
+    }
+    */
+    
+    std::pair<FontData*, FontAtlas*> FontManager::fetchFont(InputSourceRef source)
+    {
+        auto in = source->loadDataSource()->createStream(); // CAN THROW
+        
+        string version;
+        in->readFixedString(&version, 10);
+        
+        if (version != "XFONT.003")
+        {
+            throw runtime_error("XFont: WRONG FORMAT");
+        }
+        
+        // ---
+        
+        int glyphCount;
+        in->readLittle(&glyphCount);
+        
+        auto data = new FontData(glyphCount);
+        
+        in->readLittle(&data->nativeFontSize);
+        in->readLittle(&data->height);
+        in->readLittle(&data->ascent);
+        in->readLittle(&data->descent);
+        in->readLittle(&data->spaceAdvance);
+        in->readLittle(&data->strikethroughFactor);
+        in->readLittle(&data->underlineOffset);
+        in->readLittle(&data->lineThickness);
+        
+        int atlasWidth;
+        int atlasHeight;
+        int atlasPadding;
+        int unitMargin;
+        int unitPadding;
+        
+        in->readLittle(&atlasWidth);
+        in->readLittle(&atlasHeight);
+        in->readLittle(&atlasPadding);
+        in->readLittle(&unitMargin);
+        in->readLittle(&unitPadding);
+        
+        auto atlas = new FontAtlas(atlasWidth, atlasHeight);
+        
+        for (int i = 0; i < glyphCount; i++)
+        {
+            int glyphChar;
+            int glyphWidth;
+            int glyphHeight;
+            int glyphLeftExtent;
+            int glyphTopExtent;
+            int glyphAtlasX;
+            int glyphAtlasY;
+            
+            in->readLittle(&glyphChar);
+            data->glyphs[(wchar_t)glyphChar] = i;
+            
+            in->readLittle(&data->advance[i]);
+            in->readLittle(&glyphWidth);
+            in->readLittle(&glyphHeight);
+            in->readLittle(&glyphLeftExtent);
+            in->readLittle(&glyphTopExtent);
+            in->readLittle(&glyphAtlasX);
+            in->readLittle(&glyphAtlasY);
+            
+            auto glyphData = new unsigned char[glyphWidth * glyphHeight];
+            in->readData(glyphData, glyphWidth * glyphHeight);
+            addAtlasUnit(atlas, glyphData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
+            delete[] glyphData;
+            
+            data->w[i] = glyphWidth + unitPadding * 2;
+            data->h[i] = glyphHeight + unitPadding * 2;
+            data->le[i] = glyphLeftExtent - unitPadding;
+            data->te[i] = glyphTopExtent + unitPadding;
+            
+            int x = glyphAtlasX + atlasPadding + unitMargin - unitPadding;
+            int y = glyphAtlasY + atlasPadding + unitMargin - unitPadding;
+            
+            data->u1[i] = x / (float)atlasWidth;
+            data->v1[i] = y / (float)atlasHeight;
+            data->u2[i] = (x + data->w[i]) / (float)atlasWidth;
+            data->v2[i] = (y + data->h[i]) / (float)atlasHeight;
+        }
+        
+        return make_pair(data, atlas);
+    }
+    
+    void FontManager::addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height)
+    {
+        for (int iy = 0; iy < height; iy++)
+        {
+            for (int ix = 0; ix < width; ix++)
+            {
+                atlas->data[(iy + y) * atlas->width + ix + x] = glyphData[iy * width + ix];
+            }
+        }
+    }
+    
+    GLuint FontManager::uploadAtlas(FontAtlas *atlas, bool useMipmap)
+    {
+        GLuint name;
+        glGenTextures(1, &name);
+        
+        glBindTexture(GL_TEXTURE_2D, name);
+        
+        if (useMipmap)
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        }
+        else
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        }
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        
+        if (useMipmap)
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+            glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+        }
+        
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
+        
+        if (useMipmap)
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+        }
+        
+        glBindTexture(GL_TEXTURE_2D, 0);
+        return name;
     }
 }

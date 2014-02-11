@@ -14,40 +14,50 @@ using namespace std;
 
 namespace chronotext
 {
-    XFont::XFont(InputSourceRef source, const Properties &properties)
+    XFont::XFont(FontData *data, int textureWidth, int textureHeight, GLuint textureName, const Properties &properties)
     :
-    inputSource(source),
-    useMipmap(properties.useMipmap),
-    useAnisotropy(properties.useAnisotropy),
-    maxDimensions(properties.maxDimensions),
-    slotCapacity(properties.slotCapacity),
-    unloaded(true),
+    textureWidth(textureWidth),
+    textureHeight(textureHeight),
+    textureName(textureName),
+    properties(properties),
     began(0),
     sequence(NULL)
     {
-        anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
+        glyphCount = data->glyphCount;
+        glyphs = data->glyphs;
         
-        if (anisotropyAvailable)
-        {
-            glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-        }
+        nativeFontSize = data->nativeFontSize;
+        height = data->height;
+        ascent = data->ascent;
+        descent = data->descent;
+        spaceAdvance = data->spaceAdvance;
+        strikethroughFactor = data->strikethroughFactor;
+        underlineOffset = data->underlineOffset;
+        lineThickness = data->lineThickness;
+        
+        w = data->w;
+        h = data->h;
+        le = data->le;
+        te = data->te;
+        advance = data->advance;
+        
+        u1 = data->u1;
+        v1 = data->v1;
+        u2 = data->u2;
+        v2 = data->v2;
         
         // ---
         
-        reload();
-        
-        // ---
-        
-        vertices = new float[slotCapacity * (maxDimensions * 4 + 2 * 4)];
+        vertices = new float[properties.slotCapacity * (properties.maxDimensions * 4 + 2 * 4)];
         
         /*
-         * FILLING THE INDICES WITH A QUAD PATTERN
+         * FILLING THE INDICES WITH A QUAD PATTERN (FIXME: INDICES SHOULD BE DEFINED AT THE FontManager LEVEL)
          */
         
-        indices.reserve(slotCapacity * 6);
+        indices.reserve(properties.slotCapacity * 6);
         int offset = 0;
         
-        for (int i = 0; i < slotCapacity; i++)
+        for (int i = 0; i < properties.slotCapacity; i++)
         {
             indices.push_back(offset);
             indices.push_back(offset + 1);
@@ -60,6 +70,15 @@ namespace chronotext
         
         // ---
         
+        anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
+        
+        if (anisotropyAvailable)
+        {
+            glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+        }
+        
+        // ---
+        
         setSize(nativeFontSize);
         setDirection(+1);
         setAxis(Vec2f(+1, +1));
@@ -68,210 +87,7 @@ namespace chronotext
     XFont::~XFont()
     {
         delete[] vertices;
-        unload();
     }
-    
-    void XFont::unload()
-    {
-        if (!unloaded)
-        {
-            glDeleteTextures(1, &textureName);
-            data.reset();
-            
-            // ---
-            
-            unloaded = true;
-            
-            LOGD <<
-            "FONT UNLOADED: " <<
-            textureName <<
-            endl;
-        }
-    }
-    
-    void XFont::reload()
-    {
-        if (unloaded)
-        {
-            auto tmp = fetchFont(inputSource);
-            data = unique_ptr<FontData>(tmp.first);
-            auto atlas = unique_ptr<FontAtlas>(tmp.second);
-
-            glyphCount = data->glyphCount;
-            glyphs = data->glyphs;
-
-            nativeFontSize = data->nativeFontSize;
-            height = data->height;
-            ascent = data->ascent;
-            descent = data->descent;
-            spaceAdvance = data->spaceAdvance;
-            strikethroughFactor = data->strikethroughFactor;
-            underlineOffset = data->underlineOffset;
-            lineThickness = data->lineThickness;
-            
-            w = data->w;
-            h = data->h;
-            le = data->le;
-            te = data->te;
-            advance = data->advance;
-            
-            u1 = data->u1;
-            v1 = data->v1;
-            u2 = data->u2;
-            v2 = data->v2;
-
-            textureWidth = atlas->width;
-            textureHeight = atlas->height;
-            textureName = uploadAtlasData(atlas.get(), useMipmap);
-            
-            // ---
-            
-            unloaded = false;
-            
-            LOGD <<
-            "FONT UPLOADED: " <<
-            inputSource->getFilePathHint() << " | " <<
-            textureName << " | " <<
-            textureWidth << "x" << textureHeight  <<
-            endl;
-        }
-    }
-    
-    std::pair<FontData*, FontAtlas*> XFont::fetchFont(InputSourceRef source)
-    {
-        auto in = source->loadDataSource()->createStream(); // CAN THROW
-        
-        string version;
-        in->readFixedString(&version, 10);
-        
-        if (version != "XFONT.003")
-        {
-            throw runtime_error("XFont: WRONG FORMAT");
-        }
-        
-        // ---
-        
-        int glyphCount;
-        in->readLittle(&glyphCount);
-        
-        auto data = new FontData(glyphCount);
-        
-        in->readLittle(&data->nativeFontSize);
-        in->readLittle(&data->height);
-        in->readLittle(&data->ascent);
-        in->readLittle(&data->descent);
-        in->readLittle(&data->spaceAdvance);
-        in->readLittle(&data->strikethroughFactor);
-        in->readLittle(&data->underlineOffset);
-        in->readLittle(&data->lineThickness);
-        
-        int atlasWidth;
-        int atlasHeight;
-        int atlasPadding;
-        int unitMargin;
-        int unitPadding;
-        
-        in->readLittle(&atlasWidth);
-        in->readLittle(&atlasHeight);
-        in->readLittle(&atlasPadding);
-        in->readLittle(&unitMargin);
-        in->readLittle(&unitPadding);
-        
-        auto atlas = new FontAtlas(atlasWidth, atlasHeight);
-
-        for (int i = 0; i < glyphCount; i++)
-        {
-            int glyphChar;
-            int glyphWidth;
-            int glyphHeight;
-            int glyphLeftExtent;
-            int glyphTopExtent;
-            int glyphAtlasX;
-            int glyphAtlasY;
-            
-            in->readLittle(&glyphChar);
-            data->glyphs[(wchar_t)glyphChar] = i;
-            
-            in->readLittle(&data->advance[i]);
-            in->readLittle(&glyphWidth);
-            in->readLittle(&glyphHeight);
-            in->readLittle(&glyphLeftExtent);
-            in->readLittle(&glyphTopExtent);
-            in->readLittle(&glyphAtlasX);
-            in->readLittle(&glyphAtlasY);
-
-            auto glyphData = new unsigned char[glyphWidth * glyphHeight];
-            in->readData(glyphData, glyphWidth * glyphHeight);
-            addAtlasUnit(atlas, glyphData, glyphAtlasX + atlasPadding + unitMargin, glyphAtlasY + atlasPadding + unitMargin, glyphWidth, glyphHeight);
-            delete[] glyphData;
-            
-            data->w[i] = glyphWidth + unitPadding * 2;
-            data->h[i] = glyphHeight + unitPadding * 2;
-            data->le[i] = glyphLeftExtent - unitPadding;
-            data->te[i] = glyphTopExtent + unitPadding;
-            
-            int x = glyphAtlasX + atlasPadding + unitMargin - unitPadding;
-            int y = glyphAtlasY + atlasPadding + unitMargin - unitPadding;
-            
-            data->u1[i] = x / (float)atlasWidth;
-            data->v1[i] = y / (float)atlasHeight;
-            data->u2[i] = (x + data->w[i]) / (float)atlasWidth;
-            data->v2[i] = (y + data->h[i]) / (float)atlasHeight;
-        }
-        
-        return make_pair(data, atlas);
-    }
-    
-    void XFont::addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height)
-    {
-        for (int iy = 0; iy < height; iy++)
-        {
-            for (int ix = 0; ix < width; ix++)
-            {
-                atlas->data[(iy + y) * atlas->width + ix + x] = glyphData[iy * width + ix];
-            }
-        }
-    }
-    
-    GLuint XFont::uploadAtlasData(FontAtlas *atlas, bool useMipmap)
-    {
-        GLuint name;
-        glGenTextures(1, &name);
-        
-        glBindTexture(GL_TEXTURE_2D, name);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        }
-        else
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-            glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-        }
-        
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-        }
-        
-        glBindTexture(GL_TEXTURE_2D, 0);
-        
-        return name;
-    }
-    
-    // ---
     
     bool XFont::isSpace(wchar_t c) const
     {
@@ -295,7 +111,7 @@ namespace chronotext
             
             if (it == glyphs.end())
             {
-                return -1; // TODO: RETURN "MISSING GLYPH"
+                return -1; // SHALL WE USE A "MISSING GLYPH" AND RETURN ITS INDEX?
             }
             else
             {
@@ -316,8 +132,6 @@ namespace chronotext
         
         return characters;
     }
-    
-    // ---
     
     void XFont::setSize(float size)
     {
@@ -350,7 +164,7 @@ namespace chronotext
         return direction * axis.x;
     }
     
-    Vec2f XFont::getAxis() const
+    const Vec2f& XFont::getAxis() const
     {
         return axis;
     }
@@ -440,7 +254,7 @@ namespace chronotext
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, textureName);
             
-            if (useAnisotropy && anisotropyAvailable)
+            if (properties.useAnisotropy && anisotropyAvailable)
             {
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
             }
@@ -458,7 +272,7 @@ namespace chronotext
         
         if (began == 0)
         {
-            if (useAnisotropy && anisotropyAvailable)
+            if (properties.useAnisotropy && anisotropyAvailable)
             {
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
             }
@@ -479,7 +293,7 @@ namespace chronotext
         
         if (sequence)
         {
-            sequence->begin(this, dimensions, slotCapacity);
+            sequence->begin(this, dimensions, properties.slotCapacity);
             this->sequence = sequence;
         }
         else
@@ -516,7 +330,7 @@ namespace chronotext
     {
         sequenceSize++;
         
-        if (sequenceSize == slotCapacity)
+        if (sequenceSize == properties.slotCapacity)
         {
             if (sequence)
             {

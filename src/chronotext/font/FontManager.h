@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "chronotext/InputSource.h"
 #include "chronotext/font/XFont.h"
 
 namespace chronotext
@@ -31,7 +32,7 @@ namespace chronotext
         
         bool operator<(const FontKey &rhs) const
         {
-            return std::tie(useMipmap, useAnisotropy, maxDimensions, slotCapacity, uri) < std::tie(rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity, rhs.uri);
+            return std::tie(uri, useMipmap, useAnisotropy, maxDimensions, slotCapacity) < std::tie(rhs.uri, rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity);
         }
     };
     
@@ -41,14 +42,22 @@ namespace chronotext
         XFont* getFont(const std::string &resourceName, const XFont::Properties &properties);
         XFont* getFont(InputSourceRef inputSource, const XFont::Properties &properties);
         
+        /*
         bool remove(chr::XFont *font);
         void clear();
         
         void unload();
         void reload();
+        */
         
     protected:
         std::map<FontKey, std::unique_ptr<XFont>> cache;
+        std::map<std::string, std::unique_ptr<FontData>> fontData;
+        std::map<std::pair<std::string, bool>, std::tuple<int, int, GLuint>> textures;
+        
+        static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
+        static void addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height);
+        static GLuint uploadAtlas(FontAtlas *atlas, bool useMipmap);
     };
 }
 

@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "chronotext/InputSource.h"
 #include "chronotext/font/FontMatrix.h"
 #include "chronotext/font/XFontSequence.h"
 #include "chronotext/font/FontData.h"
@@ -19,69 +18,6 @@ namespace chronotext
 {
     class XFont
     {
-        std::unique_ptr<FontData> data; // FIXME: SHOULD BE STORED IN FontManager;
-
-        int glyphCount;
-        std::map<wchar_t, int> glyphs;
-
-        float nativeFontSize;
-        float height;
-        float ascent;
-        float descent;
-        float spaceAdvance;
-        float strikethroughFactor;
-        float underlineOffset;
-        float lineThickness;
-        
-        float *w;
-        float *h;
-        float *le;
-        float *te;
-        float *advance;
-        
-        float *u1;
-        float *v1;
-        float *u2;
-        float *v2;
-        
-        int textureWidth;
-        int textureHeight;
-        GLuint textureName;
-
-        bool anisotropyAvailable;
-        float maxAnisotropy;
-
-        bool unloaded;
-        int began;
-
-        float size;
-        float sizeRatio;
-        float direction;
-        ci::Vec2f axis;
-        
-        FontMatrix matrix;
-
-        std::vector<GLushort> indices;
-        float *vertices;
-        
-        int sequenceSize;
-        int sequenceDimensions;
-        float *sequenceVertices;
-        XFontSequence *sequence;
-        
-        static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
-        static void addAtlasUnit(FontAtlas *atlas, unsigned char *glyphData, int x, int y, int width, int height);
-        static GLuint uploadAtlasData(FontAtlas *atlas, bool useMipmap);
-        
-        void flush(int count);
-        void incrementSequence();
-        
-        GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;
-        bool computeClip(GlyphQuad &quad, const ci::Rectf &clip);
-        
-        static int addQuad(const GlyphQuad &quad, float *vertices);
-        static int addQuad(const GlyphQuad &quad, float z, float *vertices);
-        
     public:
         enum
         {
@@ -119,17 +55,8 @@ namespace chronotext
             }
         };
         
-        InputSourceRef inputSource;
-        bool useMipmap;
-        bool useAnisotropy;
-        int maxDimensions;
-        int slotCapacity;
-        
-        XFont(InputSourceRef inputSource, const Properties &properties);
+        XFont(FontData *data, int textureWidth, int textureHeight, GLuint textureName, const Properties &properties);
         ~XFont();
-        
-        void unload();
-        void reload();
         
         bool isSpace(wchar_t c) const;
         bool isValid(wchar_t c) const;
@@ -143,7 +70,7 @@ namespace chronotext
 
         float getSize() const;
         float getDirection() const;
-        ci::Vec2f getAxis() const;
+        const ci::Vec2f& getAxis() const;
 
         float getGlyphAdvance(int glyphIndex) const;
         float getCharAdvance(wchar_t c) const;
@@ -177,6 +104,64 @@ namespace chronotext
         
         void addTransformedGlyph3D(int glyphIndex, float x, float y);
         void addTransformedGlyph3D(int glyphIndex, float x, float y, const ci::Rectf &clip);
+        
+    protected:
+        int glyphCount;
+        std::map<wchar_t, int> glyphs;
+        
+        float nativeFontSize;
+        float height;
+        float ascent;
+        float descent;
+        float spaceAdvance;
+        float strikethroughFactor;
+        float underlineOffset;
+        float lineThickness;
+        
+        float *w;
+        float *h;
+        float *le;
+        float *te;
+        float *advance;
+        
+        float *u1;
+        float *v1;
+        float *u2;
+        float *v2;
+        
+        int textureWidth;
+        int textureHeight;
+        GLuint textureName;
+        
+        Properties properties;
+        
+        bool anisotropyAvailable;
+        float maxAnisotropy;
+        
+        float size;
+        float sizeRatio;
+        float direction;
+        ci::Vec2f axis;
+
+        int began;
+        FontMatrix matrix;
+        
+        std::vector<GLushort> indices;
+        float *vertices;
+        
+        int sequenceSize;
+        int sequenceDimensions;
+        float *sequenceVertices;
+        XFontSequence *sequence;
+        
+        void flush(int count);
+        void incrementSequence();
+        
+        GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;
+        bool computeClip(GlyphQuad &quad, const ci::Rectf &clip);
+        
+        static int addQuad(const GlyphQuad &quad, float *vertices);
+        static int addQuad(const GlyphQuad &quad, float z, float *vertices);
     };
 }
 
