@@ -21,7 +21,9 @@ namespace chronotext
     useAnisotropy(properties.useAnisotropy),
     maxDimensions(properties.maxDimensions),
     slotCapacity(properties.slotCapacity),
-    unloaded(true)
+    unloaded(true),
+    began(0),
+    sequence(NULL)
     {
         anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
         
@@ -33,7 +35,30 @@ namespace chronotext
         // ---
         
         reload();
-        init();
+        
+        // ---
+        
+        vertices = new float[slotCapacity * (maxDimensions * 4 + 2 * 4)];
+        
+        /*
+         * FILLING THE INDICES WITH A QUAD PATTERN
+         */
+        
+        indices.reserve(slotCapacity * 6);
+        int offset = 0;
+        
+        for (int i = 0; i < slotCapacity; i++)
+        {
+            indices.push_back(offset);
+            indices.push_back(offset + 1);
+            indices.push_back(offset + 2);
+            indices.push_back(offset + 2);
+            indices.push_back(offset + 3);
+            indices.push_back(offset);
+            offset += 4;
+        }
+        
+        // ---
         
         setSize(nativeFontSize);
         setDirection(+1);
@@ -267,35 +292,6 @@ namespace chronotext
         glBindTexture(GL_TEXTURE_2D, 0);
         
         return name;
-    }
-    
-    void XFont::init()
-    {
-        matrix.setToIdentity();
-        began = 0;
-        sequence = NULL;
-        
-        // ---
-        
-        vertices = new float[slotCapacity * (maxDimensions * 4 + 2 * 4)];
-        
-        /*
-         * FILLING THE INDICES WITH A QUAD PATTERN
-         */
-
-        indices.reserve(slotCapacity * 6);
-        int offset = 0;
-        
-        for (int i = 0; i < slotCapacity; i++)
-        {
-            indices.push_back(offset);
-            indices.push_back(offset + 1);
-            indices.push_back(offset + 2);
-            indices.push_back(offset + 2);
-            indices.push_back(offset + 3);
-            indices.push_back(offset);
-            offset += 4;
-        }
     }
     
     // ---

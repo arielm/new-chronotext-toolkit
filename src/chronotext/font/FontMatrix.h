@@ -41,9 +41,11 @@ namespace chronotext
         };
         
     public:
+        FontMatrix();
+
         void load(const ci::Matrix44f &matrix);
         void load(const ci::MatrixAffine2f &matrix);
-        
+
         void setToIdentity();
 
         inline void setTranslation(const ci::Vec2f &t) { setTranslation(t.x, t.y, 0); }

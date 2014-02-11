@@ -12,6 +12,11 @@ using namespace ci;
 
 namespace chronotext
 {
+    FontMatrix::FontMatrix()
+    {
+        setToIdentity();
+    }
+    
     void FontMatrix::load(const Matrix44f &matrix)
     {
         memcpy(m, matrix.m, 16 * sizeof(float));

@@ -111,8 +111,6 @@ namespace chronotext
         static void addAtlasUnit(unsigned char *srcData, unsigned char *dstData, int atlasWidth, int xx, int yy, int ww, int hh);
         static GLuint uploadAtlasData(unsigned char *atlasData, int atlasWidth, int atlasHeight, bool useMipmap);
         
-        void init();
-        
         void flush(int count);
         void incrementSequence();
         
