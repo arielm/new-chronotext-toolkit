@@ -11,6 +11,8 @@
 #include <map>
 #include <memory>
 
+#include "cinder/gl/gl.h"
+
 struct FontData
 {
     int glyphCount;
@@ -84,5 +86,24 @@ struct FontAtlas
     ~FontAtlas()
     {
         delete[] data;
+    }
+};
+
+struct FontTexture
+{
+    int width;
+    int height;
+    GLuint name;
+    
+    FontTexture(int width, int height, GLuint name)
+    :
+    width(width),
+    height(height),
+    name(name)
+    {}
+    
+    ~FontTexture()
+    {
+        glDeleteTextures(1, &name);
     }
 };

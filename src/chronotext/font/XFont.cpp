@@ -14,11 +14,9 @@ using namespace std;
 
 namespace chronotext
 {
-    XFont::XFont(FontData *data, tuple<int, int, GLuint> texture, const Properties &properties)
+    XFont::XFont(FontData *data, FontTexture *texture, const Properties &properties)
     :
-    textureWidth(get<0>(texture)),
-    textureHeight(get<1>(texture)),
-    textureName(get<2>(texture)),
+    texture(texture),
     properties(properties),
     began(0),
     sequence(NULL)
@@ -252,7 +250,7 @@ namespace chronotext
         if (began == 0)
         {
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureName);
+            glBindTexture(GL_TEXTURE_2D, texture->name);
             
             if (properties.useAnisotropy && anisotropyAvailable)
             {
@@ -404,28 +402,28 @@ namespace chronotext
             {
                 float dx = clip.x1 - quad.x1;
                 quad.x1 += dx;
-                quad.u1 += axis.x * dx / textureWidth / sizeRatio;;
+                quad.u1 += axis.x * dx / texture->width / sizeRatio;;
             }
             
             if (quad.x2 > clip.x2)
             {
                 float dx = clip.x2 - quad.x2;
                 quad.x2 += dx;
-                quad.u2 += axis.x * dx / textureWidth / sizeRatio;;
+                quad.u2 += axis.x * dx / texture->width / sizeRatio;;
             }
             
             if (quad.y1 < clip.y1)
             {
                 float dy = clip.y1 - quad.y1;
                 quad.y1 += dy;
-                quad.v1 += axis.y * dy / textureHeight / sizeRatio;
+                quad.v1 += axis.y * dy / texture->height / sizeRatio;
             }
             
             if (quad.y2 > clip.y2)
             {
                 float dy = clip.y2 - quad.y2;
                 quad.y2 += dy;
-                quad.v2 += axis.y * dy / textureHeight / sizeRatio;
+                quad.v2 += axis.y * dy / texture->height / sizeRatio;
             }
             
             return true;

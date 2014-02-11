@@ -55,7 +55,7 @@ namespace chronotext
             }
         };
         
-        XFont(FontData *data, std::tuple<int, int, GLuint> texture, const Properties &properties);
+        XFont(FontData *data, FontTexture *texture, const Properties &properties);
         ~XFont();
         
         bool isSpace(wchar_t c) const;
@@ -129,10 +129,7 @@ namespace chronotext
         float *u2;
         float *v2;
         
-        int textureWidth;
-        int textureHeight;
-        GLuint textureName;
-        
+        FontTexture *texture;
         Properties properties;
         
         bool anisotropyAvailable;

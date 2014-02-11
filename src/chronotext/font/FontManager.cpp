@@ -51,7 +51,7 @@ namespace chronotext
                 data = it2->second.get();
             }
             
-            tuple<int, int, GLuint> texture;
+            FontTexture *texture;
             auto it3 = textures.find(make_pair(uri, properties.useMipmap));
             
             if (it3 == textures.end())
@@ -67,7 +67,7 @@ namespace chronotext
             }
             else
             {
-                texture = it3->second;
+                texture = it3->second.get();
             }
             
             auto font = new XFont(data, texture, properties);
@@ -114,7 +114,7 @@ namespace chronotext
     }
     */
     
-    tuple<int, int, GLuint> FontManager::uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap)
+    FontTexture* FontManager::uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap)
     {
         auto name = uploadAtlas(atlas, useMipmap);
         
@@ -126,8 +126,8 @@ namespace chronotext
         (useMipmap ? " (M)" : "") <<
         endl;
 
-        auto texture = make_tuple(atlas->width, atlas->height, name);
-        textures[make_pair(source->getURI(), useMipmap)] = texture;
+        auto texture = new FontTexture(atlas->width, atlas->height, name);
+        textures[make_pair(source->getURI(), useMipmap)] = unique_ptr<FontTexture>(texture);
         
         return texture;
     }
