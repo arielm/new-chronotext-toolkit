@@ -76,49 +76,66 @@ namespace chronotext
     FontTexture::FontTexture(FontAtlas *atlas, bool useMipmap)
     :
     width(atlas->width),
-    height(atlas->height)
+    height(atlas->height),
+    name(0)
     {
-        glGenTextures(1, &name);
-        
-        glBindTexture(GL_TEXTURE_2D, name);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        }
-        else
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-            glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-        }
-        
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
-        
-        if (useMipmap)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-        }
-        
-        glBindTexture(GL_TEXTURE_2D, 0);
+        upload(atlas, useMipmap);
     }
     
     FontTexture::~FontTexture()
     {
-        glDeleteTextures(1, &name);
-        
-        LOGD <<
-        "FONT UNLOADED: " <<
-        name <<
-        endl;
+        discard();
+    }
+    
+    void FontTexture::upload(FontAtlas *atlas, bool useMipmap)
+    {
+        if (!name)
+        {
+            glGenTextures(1, &name);
+            
+            glBindTexture(GL_TEXTURE_2D, name);
+            
+            if (useMipmap)
+            {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            }
+            else
+            {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            }
+            
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            
+            if (useMipmap)
+            {
+                glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+                glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+            }
+            
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
+            
+            if (useMipmap)
+            {
+                glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+            }
+            
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+    }
+    
+    void FontTexture::discard()
+    {
+        if (name)
+        {
+            glDeleteTextures(1, &name);
+            
+            LOGD <<
+            "FONT DISCARDED: " <<
+            name <<
+            endl;
+        }
     }
     
     // ---

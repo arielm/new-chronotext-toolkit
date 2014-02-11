@@ -82,10 +82,12 @@ namespace chronotext
         int width;
         int height;
         GLuint name;
-        bool useMipmap;
         
         FontTexture(FontAtlas *atlas, bool useMipmap);
         ~FontTexture();
+        
+        void upload(FontAtlas *atlas, bool useMipmap);
+        void discard();
     };
     
     class FontManager
