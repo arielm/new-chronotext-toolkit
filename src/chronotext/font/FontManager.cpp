@@ -183,7 +183,8 @@ namespace chronotext
 
                 fontData[uri] = unique_ptr<FontData>(data);
                 
-                uploadTexture(inputSource, atlas, properties.useMipmap);
+                auto texture = new FontTexture(atlas, inputSource, properties.useMipmap);
+                textures[make_pair(inputSource->getURI(), properties.useMipmap)] = unique_ptr<FontTexture>(texture);
                 delete atlas;
             }
             else
@@ -202,7 +203,8 @@ namespace chronotext
 
                 delete tmp;
 
-                texture = uploadTexture(inputSource, atlas, properties.useMipmap);
+                texture = new FontTexture(atlas, inputSource, properties.useMipmap);
+                textures[make_pair(inputSource->getURI(), properties.useMipmap)] = unique_ptr<FontTexture>(texture);
                 delete atlas;
             }
             else
@@ -255,7 +257,9 @@ namespace chronotext
             tie(tmp, atlas) = fetchFont(it.second->inputSource); // CAN THROW
             
             delete tmp;
+            
             it.second->upload(atlas);
+            delete atlas;
         }
     }
     
@@ -342,12 +346,5 @@ namespace chronotext
         }
         
         return make_pair(data, atlas);
-    }
-    
-    FontTexture* FontManager::uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap)
-    {
-        auto texture = new FontTexture(atlas, source, useMipmap);
-        textures[make_pair(source->getURI(), useMipmap)] = unique_ptr<FontTexture>(texture);
-        return texture;
     }
 }

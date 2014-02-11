@@ -113,7 +113,6 @@ namespace chronotext
         std::map<std::pair<std::string, bool>, std::unique_ptr<FontTexture>> textures;
 
         static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
-        FontTexture* uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap);
     };
 }
 
