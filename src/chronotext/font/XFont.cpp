@@ -44,6 +44,9 @@ namespace chronotext
         u2 = data->u2;
         v2 = data->v2;
         
+        textureWidth = texture->width;
+        textureHeight = texture->height;
+        
         // ---
         
         vertices = new float[properties.slotCapacity * (properties.maxDimensions * 4 + 2 * 4)];
@@ -402,28 +405,28 @@ namespace chronotext
             {
                 float dx = clip.x1 - quad.x1;
                 quad.x1 += dx;
-                quad.u1 += axis.x * dx / texture->width / sizeRatio;;
+                quad.u1 += axis.x * dx / textureWidth / sizeRatio;
             }
             
             if (quad.x2 > clip.x2)
             {
                 float dx = clip.x2 - quad.x2;
                 quad.x2 += dx;
-                quad.u2 += axis.x * dx / texture->width / sizeRatio;;
+                quad.u2 += axis.x * dx / textureWidth / sizeRatio;
             }
             
             if (quad.y1 < clip.y1)
             {
                 float dy = clip.y1 - quad.y1;
                 quad.y1 += dy;
-                quad.v1 += axis.y * dy / texture->height / sizeRatio;
+                quad.v1 += axis.y * dy / textureHeight / sizeRatio;
             }
             
             if (quad.y2 > clip.y2)
             {
                 float dy = clip.y2 - quad.y2;
                 quad.y2 += dy;
-                quad.v2 += axis.y * dy / texture->height / sizeRatio;
+                quad.v2 += axis.y * dy / textureHeight / sizeRatio;
             }
             
             return true;

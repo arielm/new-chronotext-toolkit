@@ -59,9 +59,8 @@ namespace chronotext
             }
         };
         
-        XFont(FontData *data, FontTexture *texture, const Properties &properties);
-        ~XFont();
-        
+        ~XFont(); // MUST BE PUBLIC BECAUSE OF unique_ptr
+
         bool isSpace(wchar_t c) const;
         bool isValid(wchar_t c) const;
         int getGlyphIndex(wchar_t c) const;
@@ -109,6 +108,8 @@ namespace chronotext
         void addTransformedGlyph3D(int glyphIndex, float x, float y);
         void addTransformedGlyph3D(int glyphIndex, float x, float y, const ci::Rectf &clip);
         
+        friend class FontManager;
+        
     protected:
         int glyphCount;
         std::map<wchar_t, int> glyphs;
@@ -133,8 +134,13 @@ namespace chronotext
         float *u2;
         float *v2;
         
+        int textureWidth;
+        int textureHeight;
         FontTexture *texture;
+        
         Properties properties;
+        std::vector<GLushort> indices;
+        float *vertices;
         
         bool anisotropyAvailable;
         float maxAnisotropy;
@@ -147,13 +153,12 @@ namespace chronotext
         int began;
         FontMatrix matrix;
         
-        std::vector<GLushort> indices;
-        float *vertices;
-        
         int sequenceSize;
         int sequenceDimensions;
         float *sequenceVertices;
         XFontSequence *sequence;
+        
+        XFont(FontData *data, FontTexture *texture, const Properties &properties);
         
         void flush(int count);
         void incrementSequence();

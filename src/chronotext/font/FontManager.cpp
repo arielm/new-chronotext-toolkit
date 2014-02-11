@@ -184,7 +184,7 @@ namespace chronotext
                 fontData[uri] = unique_ptr<FontData>(data);
                 
                 auto texture = new FontTexture(atlas, inputSource, properties.useMipmap);
-                textures[make_pair(inputSource->getURI(), properties.useMipmap)] = unique_ptr<FontTexture>(texture);
+                textures[make_pair(uri, properties.useMipmap)] = unique_ptr<FontTexture>(texture);
                 delete atlas;
             }
             else
@@ -194,17 +194,20 @@ namespace chronotext
             
             FontTexture *texture;
             auto it3 = textures.find(make_pair(uri, properties.useMipmap));
-            
+
+            /*
+             * WE MAY NEED A TEXTURE WITH THE SAME ATLAS, BUT WITH (OR WITHOUT) MIPMAPS
+             */
             if (it3 == textures.end())
             {
                 FontData *tmp;
                 FontAtlas *atlas;
                 tie(tmp, atlas) = fetchFont(inputSource); // CAN THROW
 
-                delete tmp;
+                delete tmp; // WE'RE ONLY INTERESTED IN THE FontAtlas
 
                 texture = new FontTexture(atlas, inputSource, properties.useMipmap);
-                textures[make_pair(inputSource->getURI(), properties.useMipmap)] = unique_ptr<FontTexture>(texture);
+                textures[make_pair(uri, properties.useMipmap)] = unique_ptr<FontTexture>(texture);
                 delete atlas;
             }
             else
@@ -256,7 +259,7 @@ namespace chronotext
             FontAtlas *atlas;
             tie(tmp, atlas) = fetchFont(it.second->inputSource); // CAN THROW
             
-            delete tmp;
+            delete tmp; // WE'RE ONLY INTERESTED IN THE FontAtlas
             
             it.second->upload(atlas);
             delete atlas;
