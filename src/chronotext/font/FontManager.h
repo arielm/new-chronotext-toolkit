@@ -83,10 +83,13 @@ namespace chronotext
         int height;
         GLuint name;
         
-        FontTexture(FontAtlas *atlas, bool useMipmap);
+        InputSourceRef inputSource;
+        bool useMipmap;
+        
+        FontTexture(FontAtlas *atlas, InputSourceRef inputSource, bool useMipmap);
         ~FontTexture();
         
-        void upload(FontAtlas *atlas, bool useMipmap);
+        void upload(FontAtlas *atlas);
         void discard();
     };
     
@@ -97,20 +100,20 @@ namespace chronotext
         XFont* getFont(InputSourceRef inputSource, const XFont::Properties &properties);
         
         /*
-        bool remove(chr::XFont *font);
+        bool remove(XFont *font);
         void clear();
-        
-        void unload();
-        void reload();
         */
         
+        void discardTextures();
+        void reloadTextures();
+        
     protected:
-        std::map<FontKey, std::unique_ptr<XFont>> cache;
+        std::map<FontKey, std::unique_ptr<XFont>> fonts;
         std::map<std::string, std::unique_ptr<FontData>> fontData;
         std::map<std::pair<std::string, bool>, std::unique_ptr<FontTexture>> textures;
 
         static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
-        FontTexture* uploadTexture(chr::InputSourceRef source, FontAtlas *atlas, bool useMipmap);
+        FontTexture* uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap);
     };
 }
 

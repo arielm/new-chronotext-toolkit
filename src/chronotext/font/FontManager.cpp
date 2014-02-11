@@ -73,13 +73,15 @@ namespace chronotext
     
     // ---
     
-    FontTexture::FontTexture(FontAtlas *atlas, bool useMipmap)
+    FontTexture::FontTexture(FontAtlas *atlas, InputSourceRef inputSource, bool useMipmap)
     :
     width(atlas->width),
     height(atlas->height),
-    name(0)
+    name(0),
+    inputSource(inputSource),
+    useMipmap(useMipmap)
     {
-        upload(atlas, useMipmap);
+        upload(atlas);
     }
     
     FontTexture::~FontTexture()
@@ -87,12 +89,11 @@ namespace chronotext
         discard();
     }
     
-    void FontTexture::upload(FontAtlas *atlas, bool useMipmap)
+    void FontTexture::upload(FontAtlas *atlas)
     {
         if (!name)
         {
             glGenTextures(1, &name);
-            
             glBindTexture(GL_TEXTURE_2D, name);
             
             if (useMipmap)
@@ -114,7 +115,7 @@ namespace chronotext
                 glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
             }
             
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, atlas->width, atlas->height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
             
             if (useMipmap)
             {
@@ -122,6 +123,17 @@ namespace chronotext
             }
             
             glBindTexture(GL_TEXTURE_2D, 0);
+            
+            // ---
+            
+            LOGD <<
+            "FONT UPLOADED: " <<
+            inputSource->getFilePathHint() << " | " <<
+            name << " | " <<
+            width << "x" << height  <<
+            (useMipmap ? " (M)" : "") <<
+            endl;
+
         }
     }
     
@@ -129,12 +141,15 @@ namespace chronotext
     {
         if (name)
         {
-            glDeleteTextures(1, &name);
-            
             LOGD <<
             "FONT DISCARDED: " <<
             name <<
             endl;
+            
+            // ---
+            
+            glDeleteTextures(1, &name);
+            name = 0;
         }
     }
     
@@ -150,9 +165,9 @@ namespace chronotext
         auto uri = inputSource->getURI();
         
         FontKey key(uri, properties.useMipmap, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
-        auto it1 = cache.find(key);
+        auto it1 = fonts.find(key);
         
-        if (it1 != cache.end())
+        if (it1 != fonts.end())
         {
             return it1->second.get();
         }
@@ -196,7 +211,7 @@ namespace chronotext
             }
             
             auto font = new XFont(data, texture, properties);
-            cache[key] = unique_ptr<XFont>(font);
+            fonts[key] = unique_ptr<XFont>(font);
             
             return font;
         }
@@ -221,23 +236,28 @@ namespace chronotext
     {
         cache.clear();
     }
-    
-    void FontManager::unload()
-    {
-        for (auto &it : cache)
-        {
-            it.second->unload();
-        }
-    }
-    
-    void FontManager::reload()
-    {
-        for (auto &it : cache)
-        {
-            it.second->reload();
-        }
-    }
     */
+    
+    void FontManager::discardTextures()
+    {
+        for (auto &it : textures)
+        {
+            it.second->discard();
+        }
+    }
+    
+    void FontManager::reloadTextures()
+    {
+        for (auto &it : textures)
+        {
+            FontData *tmp;
+            FontAtlas *atlas;
+            tie(tmp, atlas) = fetchFont(it.second->inputSource); // CAN THROW
+            
+            delete tmp;
+            it.second->upload(atlas);
+        }
+    }
     
     std::pair<FontData*, FontAtlas*> FontManager::fetchFont(InputSourceRef source)
     {
@@ -326,17 +346,8 @@ namespace chronotext
     
     FontTexture* FontManager::uploadTexture(InputSourceRef source, FontAtlas *atlas, bool useMipmap)
     {
-        auto texture = new FontTexture(atlas, useMipmap);
+        auto texture = new FontTexture(atlas, source, useMipmap);
         textures[make_pair(source->getURI(), useMipmap)] = unique_ptr<FontTexture>(texture);
-        
-        LOGD <<
-        "FONT UPLOADED: " <<
-        source->getFilePathHint() << " | " <<
-        texture->name << " | " <<
-        texture->width << "x" << texture->height  <<
-        (useMipmap ? " (M)" : "") <<
-        endl;
-        
         return texture;
     }
 }
