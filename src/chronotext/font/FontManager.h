@@ -109,7 +109,6 @@ namespace chronotext
         int width;
         int height;
         GLuint name;
-        
         InputSourceRef inputSource;
         
         FontTexture(FontAtlas *atlas, InputSourceRef inputSource);
@@ -117,6 +116,7 @@ namespace chronotext
         
         void upload(FontAtlas *atlas);
         void discard();
+        void reload();
     };
     
     class FontManager
@@ -133,15 +133,15 @@ namespace chronotext
         void discardTextures();
         void reloadTextures();
         
+        static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
+        
     protected:
         std::map<FontKey, std::unique_ptr<XFont>> fonts;
         std::map<std::string, std::unique_ptr<FontData>> fontData;
         std::map<std::string, std::unique_ptr<FontTexture>> textures;
-        
         std::vector<GLushort> indices;
 
         const std::vector<GLushort>& getIndices(int capacity); // REMINDER: indices.data() WILL RETURN A DIFFERENT ADDRESS FOR EACH NEW CAPACITY
-        static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
     };
 }
 

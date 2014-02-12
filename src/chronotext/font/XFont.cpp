@@ -235,6 +235,8 @@ namespace chronotext
     {
         if (began == 0)
         {
+            texture->reload();
+            
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, texture->name);
             

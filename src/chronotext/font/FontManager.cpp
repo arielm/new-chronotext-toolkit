@@ -139,6 +139,21 @@ namespace chronotext
         }
     }
     
+    void FontTexture::reload()
+    {
+        if (!name)
+        {
+            FontData *data;
+            FontAtlas *atlas;
+            tie(data, atlas) = FontManager::fetchFont(inputSource); // CAN THROW
+            
+            delete data; // WE'RE ONLY INTERESTED IN THE FontAtlas
+            
+            upload(atlas);
+            delete atlas;
+        }
+    }
+    
     // ---
     
     XFont* FontManager::getFont(const string &resourceName, const XFont::Properties &properties)
@@ -200,43 +215,8 @@ namespace chronotext
     {
         for (auto &it : textures)
         {
-            FontData *tmp;
-            FontAtlas *atlas;
-            tie(tmp, atlas) = fetchFont(it.second->inputSource); // CAN THROW
-            
-            delete tmp; // WE'RE ONLY INTERESTED IN THE FontAtlas
-            
-            it.second->upload(atlas);
-            delete atlas;
+            it.second->reload();
         }
-    }
-    
-    const vector<GLushort>& FontManager::getIndices(int capacity)
-    {
-        if (capacity * 6 > indices.size())
-        {
-            /*
-             * FILLING THE INDICES WITH A QUAD PATTERN
-             */
-            
-            indices.clear();
-            indices.reserve(capacity * 6);
-            
-            int offset = 0;
-            
-            for (int i = 0; i < capacity; i++)
-            {
-                indices.push_back(offset);
-                indices.push_back(offset + 1);
-                indices.push_back(offset + 2);
-                indices.push_back(offset + 2);
-                indices.push_back(offset + 3);
-                indices.push_back(offset);
-                offset += 4;
-            }
-        }
-        
-        return indices;
     }
     
     std::pair<FontData*, FontAtlas*> FontManager::fetchFont(InputSourceRef source)
@@ -322,5 +302,33 @@ namespace chronotext
         }
         
         return make_pair(data, atlas);
+    }
+    
+    const vector<GLushort>& FontManager::getIndices(int capacity)
+    {
+        if (capacity * 6 > indices.size())
+        {
+            /*
+             * FILLING THE INDICES WITH A QUAD PATTERN
+             */
+            
+            indices.clear();
+            indices.reserve(capacity * 6);
+            
+            int offset = 0;
+            
+            for (int i = 0; i < capacity; i++)
+            {
+                indices.push_back(offset);
+                indices.push_back(offset + 1);
+                indices.push_back(offset + 2);
+                indices.push_back(offset + 2);
+                indices.push_back(offset + 3);
+                indices.push_back(offset);
+                offset += 4;
+            }
+        }
+        
+        return indices;
     }
 }
