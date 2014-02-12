@@ -160,7 +160,6 @@ namespace chronotext
         else
         {
             FontData *data;
-            FontTexture *texture;
             auto it2 = fontData.find(uri);
             
             if (it2 == fontData.end())
@@ -170,14 +169,17 @@ namespace chronotext
                 
                 fontData[uri] = unique_ptr<FontData>(data);
                 
-                texture = new FontTexture(atlas, inputSource);
-                textures[uri] = unique_ptr<FontTexture>(texture);
+                textures[uri] = unique_ptr<FontTexture>(new FontTexture(atlas, inputSource));
                 delete atlas;
             }
             else
             {
                 data = it2->second.get();
             }
+            
+            auto it3 = textures.find(uri);
+            assert(it3 != textures.end());
+            FontTexture *texture = it3->second.get();
             
             auto font = new XFont(data, texture, getIndices(properties.slotCapacity), properties);
             fonts[key] = unique_ptr<XFont>(font);
