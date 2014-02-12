@@ -214,7 +214,7 @@ namespace chronotext
         return Vec2f(x00 + y01 + m03, x10 + y11 + m13);
     }
     
-    int FontMatrix::addTransformedQuad3D(const GlyphQuad &quad, float *vertices)
+    int FontMatrix::addTransformedQuad3D(const GlyphQuad &quad, float *vertices) const
     {
         float x100 = quad.x1 * m00;
         float x110 = quad.x1 * m10;
@@ -271,7 +271,7 @@ namespace chronotext
         return 4 * (3 + 2);
     }
     
-    int FontMatrix::addTransformedQuad2D(const GlyphQuad &quad, float *vertices)
+    int FontMatrix::addTransformedQuad2D(const GlyphQuad &quad, float *vertices) const
     {
         float x100 = quad.x1 * m00;
         float x110 = quad.x1 * m10;

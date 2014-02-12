@@ -65,8 +65,8 @@ namespace chronotext
         ci::Vec3f transform3D(float x, float y) const;
         ci::Vec2f transform2D(float x, float y) const;
         
-        int addTransformedQuad3D(const GlyphQuad &quad, float *vertices);
-        int addTransformedQuad2D(const GlyphQuad &quad, float *vertices);
+        int addTransformedQuad3D(const GlyphQuad &quad, float *vertices) const;
+        int addTransformedQuad2D(const GlyphQuad &quad, float *vertices) const;
     };
 }
 
