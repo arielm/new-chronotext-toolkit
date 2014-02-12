@@ -88,7 +88,7 @@ namespace chronotext
         float getLineThickness() const;
         
         FontMatrix* getMatrix();
-        GLushort* getIndices() const;
+        const GLushort* getIndices() const;
         
         void begin();
         void end();
@@ -139,7 +139,7 @@ namespace chronotext
         FontTexture *texture;
         
         Properties properties;
-        std::vector<GLushort> indices;
+        const std::vector<GLushort> &indices;
         float *vertices;
         
         bool anisotropyAvailable;
@@ -158,7 +158,7 @@ namespace chronotext
         float *sequenceVertices;
         XFontSequence *sequence;
         
-        XFont(FontData *data, FontTexture *texture, const Properties &properties);
+        XFont(FontData *data, FontTexture *texture, const std::vector<GLushort> &indices, const Properties &properties);
         
         void flush(int count);
         void incrementSequence();

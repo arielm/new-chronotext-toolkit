@@ -215,33 +215,12 @@ namespace chronotext
                 texture = it3->second.get();
             }
             
-            auto font = new XFont(data, texture, properties);
+            auto font = new XFont(data, texture, getIndices(properties.slotCapacity), properties);
             fonts[key] = unique_ptr<XFont>(font);
             
             return font;
         }
     }
-    
-    /*
-    bool FontManager::remove(XFont *font)
-    {
-        for (auto it = cache.begin(); it != cache.end(); ++it)
-        {
-            if (it->second.get() == font)
-            {
-                cache.erase(it);
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    void FontManager::clear()
-    {
-        cache.clear();
-    }
-    */
     
     void FontManager::discardTextures()
     {
@@ -264,6 +243,34 @@ namespace chronotext
             it.second->upload(atlas);
             delete atlas;
         }
+    }
+    
+    const vector<GLushort>& FontManager::getIndices(int capacity)
+    {
+        if (capacity * 6 > indices.size())
+        {
+            /*
+             * FILLING THE INDICES WITH A QUAD PATTERN
+             */
+            
+            indices.clear();
+            indices.reserve(capacity * 6);
+            
+            int offset = 0;
+            
+            for (int i = 0; i < capacity; i++)
+            {
+                indices.push_back(offset);
+                indices.push_back(offset + 1);
+                indices.push_back(offset + 2);
+                indices.push_back(offset + 2);
+                indices.push_back(offset + 3);
+                indices.push_back(offset);
+                offset += 4;
+            }
+        }
+        
+        return indices;
     }
     
     std::pair<FontData*, FontAtlas*> FontManager::fetchFont(InputSourceRef source)

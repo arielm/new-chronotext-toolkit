@@ -14,9 +14,10 @@ using namespace std;
 
 namespace chronotext
 {
-    XFont::XFont(FontData *data, FontTexture *texture, const Properties &properties)
+    XFont::XFont(FontData *data, FontTexture *texture, const vector<GLushort> &indices, const Properties &properties)
     :
     texture(texture),
+    indices(indices),
     properties(properties),
     began(0),
     sequence(NULL)
@@ -50,24 +51,6 @@ namespace chronotext
         // ---
         
         vertices = new float[properties.slotCapacity * (properties.maxDimensions * 4 + 2 * 4)];
-        
-        /*
-         * FILLING THE INDICES WITH A QUAD PATTERN (FIXME: INDICES SHOULD BE DEFINED AT THE FontManager LEVEL)
-         */
-        
-        indices.reserve(properties.slotCapacity * 6);
-        int offset = 0;
-        
-        for (int i = 0; i < properties.slotCapacity; i++)
-        {
-            indices.push_back(offset);
-            indices.push_back(offset + 1);
-            indices.push_back(offset + 2);
-            indices.push_back(offset + 2);
-            indices.push_back(offset + 3);
-            indices.push_back(offset);
-            offset += 4;
-        }
         
         // ---
         
@@ -243,7 +226,7 @@ namespace chronotext
         return &matrix;
     }
     
-    GLushort* XFont::getIndices() const
+    const GLushort* XFont::getIndices() const
     {
         return const_cast<GLushort*>(indices.data());
     }
