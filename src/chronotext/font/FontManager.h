@@ -137,8 +137,7 @@ namespace chronotext
         
     protected:
         std::map<FontKey, std::unique_ptr<XFont>> fonts;
-        std::map<std::string, std::unique_ptr<FontData>> fontData;
-        std::map<std::string, std::unique_ptr<FontTexture>> textures;
+        std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;
         std::vector<GLushort> indices;
 
         const std::vector<GLushort>& getIndices(int capacity); // REMINDER: indices.data() WILL RETURN A DIFFERENT ADDRESS FOR EACH NEW CAPACITY

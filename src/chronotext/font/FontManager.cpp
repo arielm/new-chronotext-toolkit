@@ -175,26 +175,24 @@ namespace chronotext
         else
         {
             FontData *data;
-            auto it2 = fontData.find(uri);
+            FontTexture *texture;
+            auto it2 = fontDataAndTextures.find(uri);
             
-            if (it2 == fontData.end())
+            if (it2 == fontDataAndTextures.end())
             {
                 FontAtlas *atlas;
                 tie(data, atlas) = fetchFontDataAndAtlas(inputSource); // CAN THROW
                 
-                fontData[uri] = unique_ptr<FontData>(data);
-                
-                textures[uri] = unique_ptr<FontTexture>(new FontTexture(atlas, inputSource));
+                texture = new FontTexture(atlas, inputSource);
                 delete atlas;
+                
+                fontDataAndTextures[uri] = make_pair(unique_ptr<FontData>(data), unique_ptr<FontTexture>(texture));
             }
             else
             {
-                data = it2->second.get();
+                data = it2->second.first.get();
+                texture = it2->second.second.get();
             }
-            
-            auto it3 = textures.find(uri);
-            assert(it3 != textures.end());
-            FontTexture *texture = it3->second.get();
             
             auto font = new XFont(data, texture, getIndices(properties.slotCapacity), properties);
             fonts[key] = unique_ptr<XFont>(font);
@@ -205,17 +203,17 @@ namespace chronotext
     
     void FontManager::discardTextures()
     {
-        for (auto &it : textures)
+        for (auto &it : fontDataAndTextures)
         {
-            it.second->discard();
+            it.second.second->discard();
         }
     }
     
     void FontManager::reloadTextures()
     {
-        for (auto &it : textures)
+        for (auto &it : fontDataAndTextures)
         {
-            it.second->reload();
+            it.second.second->reload();
         }
     }
     
