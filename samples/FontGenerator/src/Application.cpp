@@ -43,7 +43,7 @@ public:
     void draw();
     
     void createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
-    void loadFontSafely(const string &fileName, bool useMipmap = false);
+    void loadFontSafely(const string &fileName);
     void drawFonts(float size);
 };
 
@@ -111,7 +111,7 @@ void Application::createFontSafely(const FontDescriptor &descriptor, float size,
     }
 }
 
-void Application::loadFontSafely(const string &fileName, bool useMipmap)
+void Application::loadFontSafely(const string &fileName)
 {
     try
     {
