@@ -156,12 +156,7 @@ namespace chronotext
     
     // ---
     
-    XFont* FontManager::getFont(const string &resourceName, const XFont::Properties &properties)
-    {
-        return getFont(InputSource::getResource(resourceName), properties);
-    }
-    
-    XFont* FontManager::getFont(InputSourceRef inputSource, const XFont::Properties &properties)
+    std::shared_ptr<XFont> FontManager::getCachedFont(InputSourceRef inputSource, const XFont::Properties &properties)
     {
         auto uri = inputSource->getURI();
         
@@ -170,7 +165,7 @@ namespace chronotext
         
         if (it1 != fonts.end())
         {
-            return it1->second.get();
+            return it1->second;
         }
         else
         {
@@ -194,8 +189,8 @@ namespace chronotext
                 texture = it2->second.second.get();
             }
             
-            auto font = new XFont(data, texture, getIndices(properties.slotCapacity), properties);
-            fonts[key] = unique_ptr<XFont>(font);
+            auto font = shared_ptr<XFont>(new XFont(data, texture, getIndices(properties.slotCapacity), properties));
+            fonts[key] = font;
             
             return font;
         }

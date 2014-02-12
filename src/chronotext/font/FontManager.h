@@ -122,12 +122,13 @@ namespace chronotext
     class FontManager
     {
     public:
-        XFont* getFont(const std::string &resourceName, const XFont::Properties &properties);
-        XFont* getFont(InputSourceRef inputSource, const XFont::Properties &properties);
+        std::shared_ptr<XFont> getCachedFont(InputSourceRef inputSource, const XFont::Properties &properties);
         
         /*
-        bool remove(XFont *font);
-        void clear();
+        void unload(XFont *font);
+        void unload(InputSourceRef inputSource);
+        
+        void unload();
         */
         
         void discardTextures();
@@ -136,7 +137,7 @@ namespace chronotext
         static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
         
     protected:
-        std::map<FontKey, std::unique_ptr<XFont>> fonts;
+        std::map<FontKey, std::shared_ptr<XFont>> fonts;
         std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;
         std::vector<GLushort> indices;
 
