@@ -8,7 +8,6 @@
  *
  *
  * FONTS USED:
- * - Helvetica - AVAILABLE ON OSX
  * - Georgia - AVAILABLE ON OSX AND WINDOWS
  * - Roboto - AVAILABLE ON ANDROID AND AS GOOGLE-FONT: http://www.google.com/fonts/specimen/Roboto
  * - FrankRuehl - AVAILABLE ON WINDOWS (WITH HEBREW SUPPORT): http://www.microsoft.com/typography/fonts/font.aspx?FMID=1886
@@ -35,10 +34,9 @@ class Application : public AppNative
     shared_ptr<FreetypeHelper> ftHelper;
     FontManager fontManager;
     
-    XFont *font1;
-    XFont *font2;
-    XFont *font3;
-    XFont *font4;
+    shared_ptr<XFont> font1;
+    shared_ptr<XFont> font2;
+    shared_ptr<XFont> font3;
     
 public:
     void setup();
@@ -47,20 +45,14 @@ public:
     void draw();
     
     void createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
-    XFont* loadFontSafely(const string &fileName, bool useMipmap = false);
-    void drawFontSafely(XFont *font, float size, float x, float y, bool snap = false, float direction = +1);
+    shared_ptr<XFont> loadFontSafely(const string &fileName);
+    void drawFontSafely(shared_ptr<XFont> &font, float size, float x, float y, float direction = +1);
 };
 
 void Application::setup()
 {
     ftHelper = make_shared<FreetypeHelper>();
     
-    /*
-     * - NO NEED FOR MARGIN AND PADDING BECAUSE THE FONT IS ONLY INTENDED TO BE RENDERED AT ITS NATIVE-FONT-SIZE
-     * - DEMONSTRATES HOW TO LOAD FONTS LIKE Helevetica ON OSX
-     */
-    createFontSafely(FontDescriptor("/System/Library/Fonts/Helvetica.dfont", 4), 16, ASCII, XParams(0, 0)); // FACE-INDEX 4 CORRESPONDS TO "Helvetica Regular"
-
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Georgia ON OSX
@@ -85,10 +77,9 @@ void Application::setup()
      * LOADING OUR GENERATED FONTS
      */
     
-    font1 = loadFontSafely("Helvetica_Regular_16.fnt");
-    font2 = loadFontSafely("Georgia_Regular_64.fnt", true); // USING MIPMAP
-    font3 = loadFontSafely("Roboto_Regular_64.fnt", true); // USING MIPMAP
-    font4 = loadFontSafely("FrankRuehl_Regular_64.fnt", true); // USING MIPMAP
+    font1 = loadFontSafely("Georgia_Regular_64.fnt");
+    font2 = loadFontSafely("Roboto_Regular_64.fnt");
+    font3 = loadFontSafely("FrankRuehl_Regular_64.fnt");
     
     // ---
     
@@ -107,10 +98,9 @@ void Application::draw()
     gl::clear(Color(0.5f, 0.5f, 0.5f), false);
     glColor4f(1, 1, 1, 1);
     
-    drawFontSafely(font1, 16, 10, getWindowHeight() / 5.0f, true); // THIS FONT IS NOT INTENDED TO BE RENDERED AT ANOTHER SIZE
-    drawFontSafely(font2, 32, 10, getWindowHeight() * 2 / 5.0f); // ANY SIZE CAN BE USED
-    drawFontSafely(font3, 32, 10, getWindowHeight() * 3 / 5.0f); // ANY SIZE CAN BE USED
-    drawFontSafely(font4, 64, getWindowWidth() - 10, getWindowHeight() * 4 / 5.0f, false, -1); // ANY SIZE CAN BE USED
+    drawFontSafely(font1, 32, 10, getWindowHeight() * 1 / 4.0f);
+    drawFontSafely(font2, 32, 10, getWindowHeight() * 2 / 4.0f);
+    drawFontSafely(font3, 64, getWindowWidth() - 10, getWindowHeight() * 3 / 4.0f, -1);
 }
 
 void Application::createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
@@ -125,11 +115,11 @@ void Application::createFontSafely(const FontDescriptor &descriptor, float size,
     }
 }
 
-XFont* Application::loadFontSafely(const string &fileName, bool useMipmap)
+shared_ptr<XFont> Application::loadFontSafely(const string &fileName)
 {
     try
     {
-        return fontManager.getFont(InputSource::getFileInDocuments(fileName), XFont::Properties::DEFAULTS_2D());
+        return fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties::Default2D());
     }
     catch (exception &e)
     {
@@ -139,13 +129,13 @@ XFont* Application::loadFontSafely(const string &fileName, bool useMipmap)
     return NULL;
 }
 
-void Application::drawFontSafely(XFont *font, float size, float x, float y, bool snap, float direction)
+void Application::drawFontSafely(shared_ptr<XFont> &font, float size, float x, float y, float direction)
 {
     if (font)
     {
         font->setSize(size);
         font->setDirection(direction);
-        TextHelper::drawText(font, NULL, font->getCharacters(), x, y, snap);
+        TextHelper::drawText(*font, font->getCharacters(), x, y);
     }
 }
 
