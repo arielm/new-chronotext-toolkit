@@ -15,12 +15,16 @@ namespace chronotext
 {
     void TextHelper::drawText(XFont &font, const wstring &text, float x, float y)
     {
+        font.beginSequence(NULL, 2);
+        
         for (auto c : text)
         {
             auto glyphIndex = font.getGlyphIndex(c);
             font.addGlyph(glyphIndex, x, y);
             x += font.getGlyphAdvance(glyphIndex) * font.getDirection();
         }
+        
+        font.endSequence();
     }
     
     void TextHelper::drawAlignedText(XFont &font, const wstring &text, float x, float y, int alignX, int alignY)
@@ -104,6 +108,7 @@ namespace chronotext
         float sampleSize = font.getSize() * 0.5f;
         
         auto matrix = font.getMatrix();
+        font.beginSequence(NULL, 2);
         
         for (auto c : text)
         {
@@ -120,7 +125,8 @@ namespace chronotext
             
             offsetX += half;
         }
-        
+
+        font.endSequence();
         return offsetX;
     }
 }

@@ -13,7 +13,7 @@ using namespace ci;
 
 namespace chronotext
 {
-    float WordWrapper::wrap(XFont *font, const wstring &text)
+    float WordWrapper::wrap(const XFont &font, const wstring &text)
     {
         offsets.clear();
         lengths.clear();
@@ -51,7 +51,7 @@ namespace chronotext
             }
             
             lineLength++;
-            x += font->getCharAdvance(c);
+            x += font.getCharAdvance(c);
         }
         
         if (lineLength > 0)
@@ -63,7 +63,7 @@ namespace chronotext
         return max;
     }
     
-    void WordWrapper::wrap(XFont *font, const wstring &text, float width)
+    void WordWrapper::wrap(const XFont &font, const wstring &text, float width)
     {
         offsets.clear();
         lengths.clear();
@@ -125,7 +125,7 @@ namespace chronotext
                 hyphenIndex = i;
             }
             
-            float charWidth = font->getCharAdvance(c);
+            float charWidth = font.getCharAdvance(c);
             
             if (x + charWidth >= width)
             {

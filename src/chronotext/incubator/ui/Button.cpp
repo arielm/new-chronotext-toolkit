@@ -99,11 +99,11 @@ namespace chronotext
             gl::color(*style->color[state]);
             
             style->font->setSize(style->fontSize);
-            TextHelper::drawTextInRect(style->font, NULL, text, bounds, style->snap);
+            TextHelper::drawTextInRect(*style->font, text, bounds);
             
             if (style->strikethrough[state])
             {
-                TextHelper::drawStrikethroughInRect(style->font, text, bounds, style->snap);
+                TextHelper::drawStrikethroughInRect(*style->font, text, bounds);
             }
         }
     }
@@ -135,7 +135,7 @@ namespace chronotext
         else if (style->font)
         {
             style->font->setSize(style->fontSize);
-            return TextHelper::getStringAdvance(style->font, text, style->snap);
+            return style->font->getStringAdvance(text);
         }
         else
         {

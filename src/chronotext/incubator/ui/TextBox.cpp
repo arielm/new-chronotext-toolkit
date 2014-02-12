@@ -23,7 +23,6 @@ namespace chronotext
     TextBox::TextBox(shared_ptr<Style> style)
     :
     Shape(style),
-    font(NULL),
     fontSize(0),
     wrap(false),
     lineHeight(0),
@@ -54,7 +53,7 @@ namespace chronotext
         }
     }
     
-    void TextBox::setFont(XFont *font)
+    void TextBox::setFont(std::shared_ptr<XFont> font)
     {
         if (font != this->font)
         {
@@ -298,11 +297,11 @@ namespace chronotext
         {
             if (wrap && !autoWidth)
             {
-                wrapper.wrap(font, text, width - paddingLeft - paddingRight);
+                wrapper.wrap(*font, text, width - paddingLeft - paddingRight);
             }
             else
             {
-                contentWidth = wrapper.wrap(font, text);
+                contentWidth = wrapper.wrap(*font, text);
             }
         }
         
@@ -369,12 +368,12 @@ namespace chronotext
     {
         while (start < end && xx < limitRight)
         {
-            int cc = font->getGlyphIndex(text[start++]);
-            float ww = font->getGlyphAdvance(cc);
+            int glyphIndex = font->getGlyphIndex(text[start++]);
+            float ww = font->getGlyphAdvance(glyphIndex);
             
             if (xx + ww > limitLeft)
             {
-                font->addGlyph(cc, xx, yy);
+                font->addGlyph(glyphIndex, xx, yy);
             }
             
             xx += ww;

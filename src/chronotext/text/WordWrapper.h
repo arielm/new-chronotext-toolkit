@@ -23,8 +23,8 @@ namespace chronotext
         std::vector<int> offsets;
         std::vector<int> lengths;
         
-        float wrap(XFont *font, const std::wstring &text);
-        void wrap(XFont *font, const std::wstring &text, float width);
+        float wrap(const XFont &font, const std::wstring &text);
+        void wrap(const XFont &font, const std::wstring &text, float width);
         
         int getLine(int offset);
     };

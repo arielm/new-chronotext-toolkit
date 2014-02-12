@@ -21,7 +21,7 @@ namespace chronotext
         class Style : public Shape::Style
         {
         public:
-            chr::XFont *font;
+            std::shared_ptr<XFont> font;
             float fontSize;
             bool wrap;
             
@@ -36,7 +36,6 @@ namespace chronotext
             Style()
             :
             Shape::Style(),
-            font(NULL),
             fontSize(1),
             wrap(true),
             lineHeight(0),
@@ -46,7 +45,7 @@ namespace chronotext
             {}
         };
         
-        chr::XFont *font;
+        std::shared_ptr<XFont> font;
         float fontSize;
         bool wrap;
 
@@ -70,7 +69,7 @@ namespace chronotext
         TextBox();
         TextBox(std::shared_ptr<Style> style);
         
-        void setFont(XFont *font);
+        void setFont(std::shared_ptr<XFont> font);
         void setFontSize(float size);
         void setLineHeightFactor(float factor);
         void setLineHeight(float height);

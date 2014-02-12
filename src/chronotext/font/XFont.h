@@ -46,12 +46,12 @@ namespace chronotext
             slotCapacity(slotCapacity)
             {}
             
-            static Properties DEFAULTS_2D(int slotCapacity = 1024)
+            static Properties Default2D(int slotCapacity = 1024)
             {
                 return Properties(false, 2, slotCapacity);
             }
             
-            static Properties DEFAULTS_3D(int slotCapacity = 2048)
+            static Properties Default3D(int slotCapacity = 2048)
             {
                 return Properties(true, 3, slotCapacity);
             }
