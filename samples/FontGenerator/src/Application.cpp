@@ -34,9 +34,7 @@ class Application : public AppNative
     shared_ptr<FreetypeHelper> ftHelper;
     FontManager fontManager;
     
-    shared_ptr<XFont> font1;
-    shared_ptr<XFont> font2;
-    shared_ptr<XFont> font3;
+    vector<shared_ptr<XFont>> fonts;
     
 public:
     void setup();
@@ -45,8 +43,8 @@ public:
     void draw();
     
     void createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
-    shared_ptr<XFont> loadFontSafely(const string &fileName);
-    void drawFontSafely(shared_ptr<XFont> &font, float size, float x, float y, float direction = +1);
+    void loadFontSafely(const string &fileName, bool useMipmap = false);
+    void drawFonts(float size);
 };
 
 void Application::setup()
@@ -77,9 +75,9 @@ void Application::setup()
      * LOADING OUR GENERATED FONTS
      */
     
-    font1 = loadFontSafely("Georgia_Regular_64.fnt");
-    font2 = loadFontSafely("Roboto_Regular_64.fnt");
-    font3 = loadFontSafely("FrankRuehl_Regular_64.fnt");
+    loadFontSafely("Georgia_Regular_64.fnt");
+    loadFontSafely("Roboto_Regular_64.fnt");
+    loadFontSafely("FrankRuehl_Regular_64.fnt");
     
     // ---
     
@@ -98,9 +96,7 @@ void Application::draw()
     gl::clear(Color(0.5f, 0.5f, 0.5f), false);
     glColor4f(1, 1, 1, 1);
     
-    drawFontSafely(font1, 32, 10, getWindowHeight() * 1 / 4.0f);
-    drawFontSafely(font2, 32, 10, getWindowHeight() * 2 / 4.0f);
-    drawFontSafely(font3, 64, getWindowWidth() - 10, getWindowHeight() * 3 / 4.0f, -1);
+    drawFonts(32);
 }
 
 void Application::createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
@@ -115,27 +111,30 @@ void Application::createFontSafely(const FontDescriptor &descriptor, float size,
     }
 }
 
-shared_ptr<XFont> Application::loadFontSafely(const string &fileName)
+void Application::loadFontSafely(const string &fileName, bool useMipmap)
 {
     try
     {
-        return fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties::Default2D());
+        fonts.push_back(fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties::Default2D()));
     }
     catch (exception &e)
     {
         LOGI << e.what() << endl;
     }
-    
-    return NULL;
 }
 
-void Application::drawFontSafely(shared_ptr<XFont> &font, float size, float x, float y, float direction)
+void Application::drawFonts(float size)
 {
-    if (font)
+    int current = 0;
+    int count = fonts.size();
+    
+    for (auto &font : fonts)
     {
+        current++;
+        float y = getWindowHeight() * current / float(count + 1);
+        
         font->setSize(size);
-        font->setDirection(direction);
-        TextHelper::drawText(*font, font->getCharacters(), x, y);
+        TextHelper::drawAlignedText(*font, font->getCharacters(), getWindowWidth() * 0.5f, y, XFont::ALIGN_MIDDLE, XFont::ALIGN_MIDDLE);
     }
 }
 
