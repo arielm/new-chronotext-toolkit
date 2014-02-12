@@ -45,15 +45,13 @@ namespace chronotext
     struct FontKey
     {
         std::string uri;
-        bool useMipmap;
         bool useAnisotropy;
         int maxDimensions;
         int slotCapacity;
         
-        FontKey(const std::string &uri, bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+        FontKey(const std::string &uri, bool useAnisotropy, int maxDimensions, int slotCapacity)
         :
         uri(uri),
-        useMipmap(useMipmap),
         useAnisotropy(useAnisotropy),
         maxDimensions(maxDimensions),
         slotCapacity(slotCapacity)
@@ -61,7 +59,7 @@ namespace chronotext
         
         bool operator<(const FontKey &rhs) const
         {
-            return std::tie(uri, useMipmap, useAnisotropy, maxDimensions, slotCapacity) < std::tie(rhs.uri, rhs.useMipmap, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity);
+            return std::tie(uri, useAnisotropy, maxDimensions, slotCapacity) < std::tie(rhs.uri, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity);
         }
     };
     
@@ -113,9 +111,8 @@ namespace chronotext
         GLuint name;
         
         InputSourceRef inputSource;
-        bool useMipmap;
         
-        FontTexture(FontAtlas *atlas, InputSourceRef inputSource, bool useMipmap);
+        FontTexture(FontAtlas *atlas, InputSourceRef inputSource);
         ~FontTexture();
         
         void upload(FontAtlas *atlas);
@@ -139,7 +136,7 @@ namespace chronotext
     protected:
         std::map<FontKey, std::unique_ptr<XFont>> fonts;
         std::map<std::string, std::unique_ptr<FontData>> fontData;
-        std::map<std::pair<std::string, bool>, std::unique_ptr<FontTexture>> textures;
+        std::map<std::string, std::unique_ptr<FontTexture>> textures;
         
         std::vector<GLushort> indices;
 

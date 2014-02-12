@@ -73,13 +73,12 @@ namespace chronotext
     
     // ---
     
-    FontTexture::FontTexture(FontAtlas *atlas, InputSourceRef inputSource, bool useMipmap)
+    FontTexture::FontTexture(FontAtlas *atlas, InputSourceRef inputSource)
     :
     width(atlas->width),
     height(atlas->height),
     name(0),
-    inputSource(inputSource),
-    useMipmap(useMipmap)
+    inputSource(inputSource)
     {
         upload(atlas);
     }
@@ -91,37 +90,25 @@ namespace chronotext
     
     void FontTexture::upload(FontAtlas *atlas)
     {
+        assert(width == atlas->width);
+        assert(height == atlas->height);
+        
         if (!name)
         {
             glGenTextures(1, &name);
             glBindTexture(GL_TEXTURE_2D, name);
             
-            if (useMipmap)
-            {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            }
-            else
-            {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            }
-            
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             
-            if (useMipmap)
-            {
-                glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-                glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-            }
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+            glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
             
             glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlas->data);
             
-            if (useMipmap)
-            {
-                glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-            }
-            
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
             glBindTexture(GL_TEXTURE_2D, 0);
             
             // ---
@@ -131,9 +118,8 @@ namespace chronotext
             inputSource->getFilePathHint() << " | " <<
             name << " | " <<
             width << "x" << height  <<
-            (useMipmap ? " (M)" : "") <<
             endl;
-
+            
         }
     }
     
@@ -164,7 +150,7 @@ namespace chronotext
     {
         auto uri = inputSource->getURI();
         
-        FontKey key(uri, properties.useMipmap, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
+        FontKey key(uri, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
         auto it1 = fonts.find(key);
         
         if (it1 != fonts.end())
@@ -174,45 +160,23 @@ namespace chronotext
         else
         {
             FontData *data;
+            FontTexture *texture;
             auto it2 = fontData.find(uri);
             
             if (it2 == fontData.end())
             {
                 FontAtlas *atlas;
                 tie(data, atlas) = fetchFont(inputSource); // CAN THROW
-
+                
                 fontData[uri] = unique_ptr<FontData>(data);
                 
-                auto texture = new FontTexture(atlas, inputSource, properties.useMipmap);
-                textures[make_pair(uri, properties.useMipmap)] = unique_ptr<FontTexture>(texture);
+                texture = new FontTexture(atlas, inputSource);
+                textures[uri] = unique_ptr<FontTexture>(texture);
                 delete atlas;
             }
             else
             {
                 data = it2->second.get();
-            }
-            
-            FontTexture *texture;
-            auto it3 = textures.find(make_pair(uri, properties.useMipmap));
-
-            /*
-             * WE MAY NEED A TEXTURE WITH THE SAME ATLAS, BUT WITH (OR WITHOUT) MIPMAPS
-             */
-            if (it3 == textures.end())
-            {
-                FontData *tmp;
-                FontAtlas *atlas;
-                tie(tmp, atlas) = fetchFont(inputSource); // CAN THROW
-
-                delete tmp; // WE'RE ONLY INTERESTED IN THE FontAtlas
-
-                texture = new FontTexture(atlas, inputSource, properties.useMipmap);
-                textures[make_pair(uri, properties.useMipmap)] = unique_ptr<FontTexture>(texture);
-                delete atlas;
-            }
-            else
-            {
-                texture = it3->second.get();
             }
             
             auto font = new XFont(data, texture, getIndices(properties.slotCapacity), properties);

@@ -35,27 +35,25 @@ namespace chronotext
         
         struct Properties
         {
-            bool useMipmap;
             bool useAnisotropy;
             int maxDimensions;
             int slotCapacity;
             
-            Properties(bool useMipmap, bool useAnisotropy, int maxDimensions, int slotCapacity)
+            Properties(bool useAnisotropy, int maxDimensions, int slotCapacity)
             :
-            useMipmap(useMipmap),
             useAnisotropy(useAnisotropy),
             maxDimensions(maxDimensions),
             slotCapacity(slotCapacity)
             {}
             
-            static Properties DEFAULTS_2D(bool useMipmap = true, int slotCapacity = 1024)
+            static Properties DEFAULTS_2D(int slotCapacity = 1024)
             {
-                return Properties(useMipmap, false, 2, slotCapacity);
+                return Properties(false, 2, slotCapacity);
             }
             
             static Properties DEFAULTS_3D(int slotCapacity = 2048)
             {
-                return Properties(true, true, 3, slotCapacity);
+                return Properties(true, 3, slotCapacity);
             }
         };
         
