@@ -101,7 +101,7 @@ namespace chronotext
         FontAtlas(int width, int height);
         ~FontAtlas();
         
-        void addGlyph(unsigned char *glyphData, int x, int y, int glyphWidth, int glyphHeight);
+        void addGlyph(unsigned char *glyphData, int glyphX, int glyphY, int glyphWidth, int glyphHeight);
     };
     
     struct FontTexture
@@ -133,7 +133,7 @@ namespace chronotext
         void discardTextures();
         void reloadTextures();
         
-        static std::pair<FontData*, FontAtlas*> fetchFont(InputSourceRef source);
+        static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
         
     protected:
         std::map<FontKey, std::unique_ptr<XFont>> fonts;

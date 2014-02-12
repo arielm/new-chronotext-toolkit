@@ -60,13 +60,13 @@ namespace chronotext
         delete[] data;
     }
     
-    void FontAtlas::addGlyph(unsigned char *glyphData, int x, int y, int glyphWidth, int glyphHeight)
+    void FontAtlas::addGlyph(unsigned char *glyphData, int glyphX, int glyphY, int glyphWidth, int glyphHeight)
     {
-        for (int iy = 0; iy < glyphHeight; iy++)
+        for (int y = 0; y < glyphHeight; y++)
         {
-            for (int ix = 0; ix < glyphWidth; ix++)
+            for (int x = 0; x < glyphWidth; x++)
             {
-                data[(iy + y) * width + ix + x] = glyphData[iy * glyphWidth + ix];
+                data[(y + glyphY) * width + x + glyphX] = glyphData[y * glyphWidth + x];
             }
         }
     }
@@ -145,7 +145,7 @@ namespace chronotext
         {
             FontData *data;
             FontAtlas *atlas;
-            tie(data, atlas) = FontManager::fetchFont(inputSource); // CAN THROW
+            tie(data, atlas) = FontManager::fetchFontDataAndAtlas(inputSource); // CAN THROW
             
             delete data; // WE'RE ONLY INTERESTED IN THE FontAtlas
             
@@ -180,7 +180,7 @@ namespace chronotext
             if (it2 == fontData.end())
             {
                 FontAtlas *atlas;
-                tie(data, atlas) = fetchFont(inputSource); // CAN THROW
+                tie(data, atlas) = fetchFontDataAndAtlas(inputSource); // CAN THROW
                 
                 fontData[uri] = unique_ptr<FontData>(data);
                 
@@ -219,7 +219,7 @@ namespace chronotext
         }
     }
     
-    std::pair<FontData*, FontAtlas*> FontManager::fetchFont(InputSourceRef source)
+    std::pair<FontData*, FontAtlas*> FontManager::fetchFontDataAndAtlas(InputSourceRef source)
     {
         auto in = source->loadDataSource()->createStream(); // CAN THROW
         
