@@ -16,18 +16,16 @@ namespace chronotext
     class TextHelper
     {
     public:
-        static float getStringAdvance(XFont *font, const std::wstring &text, bool snap = false);
+        static void drawText(XFont &font, const std::wstring &text, float x = 0, float y = 0);
+        static void drawAlignedText(XFont &font, const std::wstring &text, float x = 0, float y = 0, int alignX = XFont::ALIGN_MIDDLE, int alignY = XFont::ALIGN_MIDDLE);
         
-        static void drawText(XFont *font, XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, bool snap = false);
-        static void drawAlignedText(XFont *font, XFontSequence *sequence, const std::wstring &text, float x = 0, float y = 0, int alignX = XFont::ALIGN_MIDDLE, int alignY = XFont::ALIGN_MIDDLE, bool snap = false);
+        static void drawTextInRect(XFont &font, const std::wstring &text, const ci::Rectf &rect);
+        static void drawTextInRect(XFont &font, const std::wstring &text, float x1, float y1, float x2, float y2);
         
-        static void drawTextInRect(XFont *font, XFontSequence *sequence, const std::wstring &text, const ci::Rectf &rect, bool snap = false);
-        static void drawTextInRect(XFont *font, XFontSequence *sequence, const std::wstring &text, float x1, float y1, float x2, float y2, bool snap = false);
+        static void drawStrikethroughInRect(XFont &font, const std::wstring &text, const ci::Rectf &rect);
+        static void drawStrikethroughInRect(XFont &font, const std::wstring &text, float x1, float y1, float x2, float y2);
         
-        static void drawStrikethroughInRect(XFont *font, const std::wstring &text, const ci::Rectf &rect, bool snap = false);
-        static void drawStrikethroughInRect(XFont *font, const std::wstring &text, float x1, float y1, float x2, float y2, bool snap = false);
-        
-        static float drawTextOnPath(XFont *font, XFontSequence *sequence, const std::wstring &text, FollowablePath *path, float offset);
+        static float drawTextOnPath(XFont &font, const std::wstring &text, const FollowablePath &path, float offset = 0);
     };
 }
 

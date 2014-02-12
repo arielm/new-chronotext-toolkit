@@ -13,116 +13,77 @@ using namespace ci;
 
 namespace chronotext
 {
-    float TextHelper::getStringAdvance(XFont *font, const wstring &text, bool snap)
+    void TextHelper::drawText(XFont &font, const wstring &text, float x, float y)
     {
-        if (snap)
-        {
-            float advance = 0;
-            
-            for (auto c : text)
-            {
-                int cc = font->getGlyphIndex(c);
-                advance += math<float>::floor(font->getGlyphAdvance(cc));
-            }
-            
-            return advance;
-        }
-        else
-        {
-            return font->getStringAdvance(text);
-        }
-    }
-    
-    void TextHelper::drawText(XFont *font, XFontSequence *sequence, const wstring &text, float x, float y, bool snap)
-    {
-        if (snap)
-        {
-            x = math<float>::floor(x);
-            y = math<float>::floor(y);
-        }
-        
-        font->beginSequence(sequence, 2);
-        
         for (auto c : text)
         {
-            int cc = font->getGlyphIndex(c);
-            font->addGlyph(cc, x, y);
-            
-            float advance = font->getGlyphAdvance(cc) * font->getDirection();
-            x += snap ? math<float>::floor(advance) : advance;
+            auto glyphIndex = font.getGlyphIndex(c);
+            font.addGlyph(glyphIndex, x, y);
+            x += font.getGlyphAdvance(glyphIndex) * font.getDirection();
         }
-        
-        font->endSequence();
     }
     
-    void TextHelper::drawAlignedText(XFont *font, XFontSequence *sequence, const wstring &text, float x, float y, int alignX, int alignY, bool snap)
+    void TextHelper::drawAlignedText(XFont &font, const wstring &text, float x, float y, int alignX, int alignY)
     {
         switch (alignX)
         {
             case XFont::ALIGN_MIDDLE:
-                x -= getStringAdvance(font, text, snap) * 0.5f;
+                x -= font.getStringAdvance(text) * 0.5f;
                 break;
                 
             case XFont::ALIGN_RIGHT:
-                x -= getStringAdvance(font, text, snap);
+                x -= font.getStringAdvance(text);
                 break;
         }
         
         switch (alignY)
         {
             case XFont::ALIGN_TOP:
-                y += font->getAscent();
+                y += font.getAscent();
                 break;
                 
             case XFont::ALIGN_MIDDLE:
-                y += font->getStrikethroughOffset();
+                y += font.getStrikethroughOffset();
                 break;
                 
             case XFont::ALIGN_BOTTOM:
-                y -= font->getDescent();
+                y -= font.getDescent();
                 break;
         }
         
-        drawText(font, sequence, text, x, y, snap);
+        drawText(font, text, x, y);
     }
     
-    void TextHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstring &text, const Rectf &rect, bool snap)
+    void TextHelper::drawTextInRect(XFont &font, const wstring &text, const Rectf &rect)
     {
-        drawTextInRect(font, sequence, text, rect.x1, rect.y1, rect.x2, rect.y2, snap);
+        drawTextInRect(font, text, rect.x1, rect.y1, rect.x2, rect.y2);
     }
     
-    void TextHelper::drawTextInRect(XFont *font, XFontSequence *sequence, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
+    void TextHelper::drawTextInRect(XFont &font, const wstring &text, float x1, float y1, float x2, float y2)
     {
         float w = x2 - x1;
-        float x = x1 + (w - getStringAdvance(font, text, snap)) * 0.5f;
+        float x = x1 + (w - font.getStringAdvance(text)) * 0.5f;
         
         float h = y2 - y1;
-        float y = y1 + h * 0.5f + font->getStrikethroughOffset();
+        float y = y1 + h * 0.5f + font.getStrikethroughOffset();
         
-        drawText(font, sequence, text, x, y, snap);
+        drawText(font, text, x, y);
     }
     
-    void TextHelper::drawStrikethroughInRect(XFont *font, const wstring &text, const Rectf &rect, bool snap)
+    void TextHelper::drawStrikethroughInRect(XFont &font, const wstring &text, const Rectf &rect)
     {
-        drawStrikethroughInRect(font, text, rect.x1, rect.y1, rect.x2, rect.y2, snap);
+        drawStrikethroughInRect(font, text, rect.x1, rect.y1, rect.x2, rect.y2);
     }
     
-    void TextHelper::drawStrikethroughInRect(XFont *font, const wstring &text, float x1, float y1, float x2, float y2, bool snap)
+    void TextHelper::drawStrikethroughInRect(XFont &font, const wstring &text, float x1, float y1, float x2, float y2)
     {
-        float w1 = getStringAdvance(font, text, snap);
+        float w1 = font.getStringAdvance(text);
         float w2 = x2 - x1;
         float x3 = x1 + (w2 - w1) * 0.5f;
         float x4 = x3 + w1;
         
         float h = y2 - y1;
         float y3 = y1 + h * 0.5f;
-        
-        if (snap)
-        {
-            x3 = math<float>::floor(x3);
-            x4 = math<float>::floor(x4);
-            y3 = math<float>::floor(y3);
-        }
         
         const float vertices[] =
         {
@@ -136,32 +97,29 @@ namespace chronotext
         glDisableClientState(GL_VERTEX_ARRAY);
     }
     
-    float TextHelper::drawTextOnPath(XFont *font, XFontSequence *sequence, const wstring &text, FollowablePath *path, float offset)
+    float TextHelper::drawTextOnPath(XFont &font, const wstring &text, const FollowablePath &path, float offset)
     {
         float offsetX = offset;
-        float offsetY = font->getStrikethroughOffset();
-        float sampleSize = font->getSize() * 0.5f;
+        float offsetY = font.getStrikethroughOffset();
+        float sampleSize = font.getSize() * 0.5f;
         
-        FontMatrix *matrix = font->getMatrix();
-        font->beginSequence(sequence, 2);
+        auto matrix = font.getMatrix();
         
         for (auto c : text)
         {
-            int cc = font->getGlyphIndex(c);
-            float half = 0.5f * font->getGlyphAdvance(cc);
+            auto glyphIndex = font.getGlyphIndex(c);
+            float half = 0.5f * font.getGlyphAdvance(glyphIndex);
             offsetX += half;
             
-            if (cc >= 0)
+            if (glyphIndex >= 0)
             {
-                matrix->setTranslation(path->pos2Point(offsetX));
-                matrix->rotateZ(path->pos2SampledAngle(offsetX, sampleSize));
-                font->addTransformedGlyph2D(cc, -half, offsetY);
+                matrix->setTranslation(path.pos2Point(offsetX));
+                matrix->rotateZ(path.pos2SampledAngle(offsetX, sampleSize));
+                font.addTransformedGlyph2D(glyphIndex, -half, offsetY);
             }
             
             offsetX += half;
         }
-        
-        font->endSequence();
         
         return offsetX;
     }
