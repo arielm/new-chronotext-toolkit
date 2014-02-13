@@ -6,14 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * TODO:
- *
- * void unload(std::shared_ptr<XFont> font);
- * void unload(InputSourceRef inputSource);
- * void unload();
- */
-
 #pragma once
 
 #include "chronotext/InputSource.h"
@@ -103,11 +95,8 @@ namespace chronotext
     public:
         std::shared_ptr<XFont> getCachedFont(InputSourceRef inputSource, const XFont::Properties &properties);
         
-        /*
         void unload(std::shared_ptr<XFont> font);
         void unload(InputSourceRef inputSource);
-        */
-        
         void unload();
         
         void discardTextures();
@@ -121,6 +110,7 @@ namespace chronotext
         std::vector<GLushort> indices;
 
         const std::vector<GLushort>& getIndices(int capacity); // REMINDER: indices.data() WILL RETURN A DIFFERENT ADDRESS FOR EACH NEW CAPACITY
+        void discardUnusedTextures();
     };
 }
 

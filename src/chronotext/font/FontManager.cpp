@@ -196,6 +196,37 @@ namespace chronotext
         }
     }
     
+    void FontManager::unload(shared_ptr<XFont> font)
+    {
+        for (auto it = fonts.begin(); it != fonts.end(); ++it)
+        {
+            if (it->second == font)
+            {
+                fonts.erase(it);
+                break;
+            }
+        }
+        
+        discardUnusedTextures();
+    }
+    
+    void FontManager::unload(InputSourceRef inputSource)
+    {
+        for (auto it = fonts.begin(); it != fonts.end();)
+        {
+            if (it->first.uri == inputSource->getURI())
+            {
+                it = fonts.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+        
+        discardUnusedTextures();
+    }
+    
     void FontManager::unload()
     {
         fonts.clear();
@@ -212,7 +243,7 @@ namespace chronotext
     
     void FontManager::reloadTextures()
     {
-        set<FontTexture*> textures;
+        set<FontTexture*> texturesInUse;
         
         for (auto &it1 : fonts)
         {
@@ -221,13 +252,37 @@ namespace chronotext
             
             if (it2 != fontDataAndTextures.end())
             {
-                textures.insert(it2->second.second.get());
+                texturesInUse.insert(it2->second.second.get());
             }
         }
         
-        for (auto &texture : textures)
+        for (auto &texture : texturesInUse)
         {
             texture->reload();
+        }
+    }
+    
+    void FontManager::discardUnusedTextures()
+    {
+        set<FontTexture*> texturesInUse;
+        
+        for (auto &it1 : fonts)
+        {
+            auto uri = it1.first.uri;
+            auto it2 = fontDataAndTextures.find(uri);
+            
+            if (it2 != fontDataAndTextures.end())
+            {
+                texturesInUse.insert(it2->second.second.get());
+            }
+        }
+        
+        for (auto &it : fontDataAndTextures)
+        {
+            if (!texturesInUse.count(it.second.second.get()))
+            {
+                it.second.second->discard();
+            }
         }
     }
     
