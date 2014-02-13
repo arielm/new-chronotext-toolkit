@@ -189,11 +189,17 @@ namespace chronotext
                 texture = it2->second.second.get();
             }
             
-            auto font = shared_ptr<XFont>(new XFont(data, texture, getIndices(properties.slotCapacity), properties));
+            auto font = shared_ptr<XFont>(new XFont(data, texture, getIndices(properties.slotCapacity), properties)); // make_shared WON'T WORK WITH XFont'S PROTECTED CONSTRUCTOR
             fonts[key] = font;
             
             return font;
         }
+    }
+    
+    void FontManager::unload()
+    {
+        fonts.clear();
+        discardTextures();
     }
     
     void FontManager::discardTextures()
@@ -206,9 +212,22 @@ namespace chronotext
     
     void FontManager::reloadTextures()
     {
-        for (auto &it : fontDataAndTextures)
+        set<FontTexture*> textures;
+        
+        for (auto &it1 : fonts)
         {
-            it.second.second->reload();
+            auto uri = it1.first.uri;
+            auto it2 = fontDataAndTextures.find(uri);
+            
+            if (it2 != fontDataAndTextures.end())
+            {
+                textures.insert(it2->second.second.get());
+            }
+        }
+        
+        for (auto &texture : textures)
+        {
+            texture->reload();
         }
     }
     

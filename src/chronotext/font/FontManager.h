@@ -106,9 +106,9 @@ namespace chronotext
         /*
         void unload(std::shared_ptr<XFont> font);
         void unload(InputSourceRef inputSource);
+        */
         
         void unload();
-        */
         
         void discardTextures();
         void reloadTextures();
