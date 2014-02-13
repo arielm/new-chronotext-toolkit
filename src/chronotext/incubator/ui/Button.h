@@ -33,7 +33,7 @@ namespace chronotext
         class Style : public Shape::Style
         {
         public:
-            chr::XFont *font;
+            std::shared_ptr<chr::XFont> font;
             float fontSize;
             bool snap;
             
@@ -48,7 +48,6 @@ namespace chronotext
             Style()
             :
             Shape::Style(),
-            font(NULL),
             fontSize(1),
             snap(false),
             hitExtra(8)

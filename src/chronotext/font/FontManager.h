@@ -7,32 +7,11 @@
  */
 
 /*
- * REACHING A JUNCTION WHERE SOME IMPORTANT DESIGN DECISION MUST BE TAKEN...
+ * TODO:
  *
- *
- * OPEN QUESTIONS:
- *
- * 1) SHOULD FontManager::getFont(...) RETURN A shared_ptr?
- *
- * 2) SHOULD TEXTURES-ATLASES BE "AUTOMATICALLY RELOADABLE"?
- *    E.G. FontManager::discardTextures() IS CALLED, BUT NOT FOLLOWED BY FontManager::reloadTextures()
- *
- * 3) IN ADDITION, WE NEED TO HANDLE THE FOLLOWING IN FontManager:
- *    bool remove(XFont *font);
- *    void clear();
- *
- *
- * CURRENTLY, THE FACT THAT WE CAN USE MIPMAP AND NON-MIPMAP VERSIONS OF THE SAME ATLAS
- * IS MAKING THE IMPLEMENTATION OF 1) AND 2) VERY COMPLICATED
- *
- * ON THE OTHER-HAND, WE DON'T REALLY NEED THE NON-MIPMAP FEATURE (TO BE USED FOR CRIP TEXT)
- *
- * TO BE MORE EXACT: THE FEATURE WILL BE PROPERLY ADDRESSED BY THE FORTHCOMING ZFont SYSTEM,
- * WHERE, AMONG OTHER THINGS, IT IS POSSIBLE TO GENERATE GLYPHS ON-THE-FLY ACCORDING THE
- * RESOLUTION OF THE TARGET-DEVICE...
- *
- *
- * CONCLUSION: LET'S MAKE XFont MIPMAP-ONLY!
+ * void unload(std::shared_ptr<XFont> font);
+ * void unload(InputSourceRef inputSource);
+ * void unload();
  */
 
 #pragma once
@@ -125,7 +104,7 @@ namespace chronotext
         std::shared_ptr<XFont> getCachedFont(InputSourceRef inputSource, const XFont::Properties &properties);
         
         /*
-        void unload(XFont *font);
+        void unload(std::shared_ptr<XFont> font);
         void unload(InputSourceRef inputSource);
         
         void unload();
