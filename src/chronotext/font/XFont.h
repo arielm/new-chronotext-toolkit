@@ -23,7 +23,7 @@ namespace chronotext
     class XFont
     {
     public:
-        enum
+        typedef enum
         {
             ALIGN_MIDDLE,
             ALIGN_LEFT,
@@ -31,7 +31,8 @@ namespace chronotext
             ALIGN_TOP,
             ALIGN_BASELINE,
             ALIGN_BOTTOM
-        };
+        }
+        Alignment;
         
         struct Properties
         {
@@ -84,6 +85,10 @@ namespace chronotext
         float getStrikethroughOffset() const;
         float getUnderlineOffset() const;
         float getLineThickness() const;
+        
+        float getOffsetX(const std::wstring &text, Alignment align) const;
+        float getOffsetY(Alignment align) const;
+        inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
         
         FontMatrix* getMatrix();
         const GLushort* getIndices() const;

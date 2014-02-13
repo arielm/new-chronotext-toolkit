@@ -145,7 +145,7 @@ namespace chronotext
         Shape::setPadding(left, top, right, bottom);
     }
     
-    void TextBox::setTextAlign(int x, int y)
+    void TextBox::setTextAlign(XFont::Alignment x, XFont::Alignment y)
     {
         textAlignX = x;
         textAlignY = y;
@@ -248,9 +248,10 @@ namespace chronotext
             case ALIGN_RIGHT :
                 ox += width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end);
                 break;
+                
+            default:
+                return ox;
         }
-        
-        return ox;
     }
     
     float TextBox::getOffsetY()
@@ -266,9 +267,10 @@ namespace chronotext
             case ALIGN_BOTTOM :
                 oy += height - paddingTop - paddingBottom - contentHeight;
                 break;
+                
+            default:
+                return oy;
         }
-        
-        return oy;
     }
     
     float TextBox::getLineTop(int index)

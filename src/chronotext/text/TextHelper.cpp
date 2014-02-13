@@ -27,51 +27,14 @@ namespace chronotext
         font.endSequence();
     }
     
-    void TextHelper::drawAlignedText(XFont &font, const wstring &text, float x, float y, int alignX, int alignY)
+    void TextHelper::drawAlignedText(XFont &font, const wstring &text, const Vec2f &position, XFont::Alignment alignX, XFont::Alignment alignY)
     {
-        switch (alignX)
-        {
-            case XFont::ALIGN_MIDDLE:
-                x -= font.getStringAdvance(text) * 0.5f;
-                break;
-                
-            case XFont::ALIGN_RIGHT:
-                x -= font.getStringAdvance(text);
-                break;
-        }
-        
-        switch (alignY)
-        {
-            case XFont::ALIGN_TOP:
-                y += font.getAscent();
-                break;
-                
-            case XFont::ALIGN_MIDDLE:
-                y += font.getStrikethroughOffset();
-                break;
-                
-            case XFont::ALIGN_BOTTOM:
-                y -= font.getDescent();
-                break;
-        }
-        
-        drawText(font, text, x, y);
+        drawText(font, text, position + font.getOffset(text, alignX, alignY));
     }
     
     void TextHelper::drawTextInRect(XFont &font, const wstring &text, const Rectf &rect)
     {
-        drawTextInRect(font, text, rect.x1, rect.y1, rect.x2, rect.y2);
-    }
-    
-    void TextHelper::drawTextInRect(XFont &font, const wstring &text, float x1, float y1, float x2, float y2)
-    {
-        float w = x2 - x1;
-        float x = x1 + (w - font.getStringAdvance(text)) * 0.5f;
-        
-        float h = y2 - y1;
-        float y = y1 + h * 0.5f + font.getStrikethroughOffset();
-        
-        drawText(font, text, x, y);
+        drawAlignedText(font, text, rect.getCenter());
     }
     
     void TextHelper::drawStrikethroughInRect(XFont &font, const wstring &text, const Rectf &rect)

@@ -17,10 +17,13 @@ namespace chronotext
     {
     public:
         static void drawText(XFont &font, const std::wstring &text, float x = 0, float y = 0);
-        static void drawAlignedText(XFont &font, const std::wstring &text, float x = 0, float y = 0, int alignX = XFont::ALIGN_MIDDLE, int alignY = XFont::ALIGN_MIDDLE);
+        static inline void drawText(XFont &font, const std::wstring &text, const ci::Vec2f &position) { drawText(font, text, position.x, position.y); }
+        
+        static void drawAlignedText(XFont &font, const std::wstring &text, const ci::Vec2f &position, XFont::Alignment alignX = XFont::ALIGN_MIDDLE, XFont::Alignment alignY = XFont::ALIGN_MIDDLE);
+        static inline void drawAlignedText(XFont &font, const std::wstring &text, float x = 0, float y = 0, XFont::Alignment alignX = XFont::ALIGN_MIDDLE, XFont::Alignment alignY = XFont::ALIGN_MIDDLE) { drawAlignedText(font, text, ci::Vec2f(x, y), alignX, alignY); }
         
         static void drawTextInRect(XFont &font, const std::wstring &text, const ci::Rectf &rect);
-        static void drawTextInRect(XFont &font, const std::wstring &text, float x1, float y1, float x2, float y2);
+        static inline void drawTextInRect(XFont &font, const std::wstring &text, float x1, float y1, float x2, float y2) { drawTextInRect(font, text, ci::Rectf(x1, y1, x2, y2)); }
         
         static void drawStrikethroughInRect(XFont &font, const std::wstring &text, const ci::Rectf &rect);
         static void drawStrikethroughInRect(XFont &font, const std::wstring &text, float x1, float y1, float x2, float y2);

@@ -221,6 +221,39 @@ namespace chronotext
         return lineThickness * sizeRatio;
     }
     
+    float XFont::getOffsetX(const wstring &text, Alignment align) const
+    {
+        switch (align)
+        {
+            case ALIGN_MIDDLE:
+                return -0.5f * getStringAdvance(text);
+                
+            case XFont::ALIGN_RIGHT:
+                return -getStringAdvance(text);
+                
+            default:
+                return 0;
+        }
+    }
+    
+    float XFont::getOffsetY(Alignment align) const
+    {
+        switch (align)
+        {
+            case ALIGN_MIDDLE:
+                return getStrikethroughOffset();
+                
+            case ALIGN_TOP:
+                return +getAscent();
+                
+            case ALIGN_BOTTOM:
+                return -getDescent();
+                
+            default:
+                return 0;
+        }
+    }
+    
     FontMatrix* XFont::getMatrix()
     {
         return &matrix;

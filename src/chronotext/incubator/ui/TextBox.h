@@ -28,8 +28,8 @@ namespace chronotext
             float lineHeight;
             float lineHeightFactor;
             
-            int textAlignX;
-            int textAlignY;
+            XFont::Alignment textAlignX;
+            XFont::Alignment textAlignY;
             
             ci::ColorA textColor;
             
@@ -40,8 +40,8 @@ namespace chronotext
             wrap(true),
             lineHeight(0),
             lineHeightFactor(1),
-            textAlignX(Shape::ALIGN_LEFT),
-            textAlignY(Shape::ALIGN_TOP)
+            textAlignX(XFont::ALIGN_LEFT),
+            textAlignY(XFont::ALIGN_TOP)
             {}
         };
         
@@ -52,8 +52,8 @@ namespace chronotext
         float lineHeight;
         float lineHeightFactor;
 
-        int textAlignX;
-        int textAlignY;
+        XFont::Alignment textAlignX;
+        XFont::Alignment textAlignY;
 
         ci::ColorA textColor;
         Fill fill;
@@ -78,7 +78,7 @@ namespace chronotext
         void setAutoWidth(bool autoWidth);
         void setAutoHeight(bool autoHeight);
         void setPadding(float left, float top, float right, float bottom);
-        void setTextAlign(int x, int y);
+        void setTextAlign(XFont::Alignment x, XFont::Alignment y);
         void setWrap(bool wrap);
         void setOffsetX(float x);
         void setOffsetY(float y);
