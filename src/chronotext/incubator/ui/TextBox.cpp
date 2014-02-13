@@ -241,11 +241,11 @@ namespace chronotext
         
         switch (textAlignX)
         {
-            case ALIGN_MIDDLE :
+            case XFont::ALIGN_MIDDLE :
                 ox += (width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end)) / 2;
                 break;
                 
-            case ALIGN_RIGHT :
+            case XFont::ALIGN_RIGHT :
                 ox += width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end);
                 break;
                 
@@ -260,11 +260,11 @@ namespace chronotext
         
         switch (textAlignY)
         {
-            case ALIGN_MIDDLE :
+            case XFont::ALIGN_MIDDLE :
                 oy += (height - paddingTop - paddingBottom - contentHeight) / 2;
                 break;
                 
-            case ALIGN_BOTTOM :
+            case XFont::ALIGN_BOTTOM :
                 oy += height - paddingTop - paddingBottom - contentHeight;
                 break;
                 
