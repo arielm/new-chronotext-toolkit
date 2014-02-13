@@ -76,6 +76,8 @@ namespace chronotext
     protected:
         float getContentWidth();
         float getContentHeight();
+        
+        static void drawStrikethroughInRect(XFont &font, const std::wstring &text, const ci::Rectf &rect);
     };
 }
 
