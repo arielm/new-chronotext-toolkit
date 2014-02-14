@@ -335,7 +335,7 @@ namespace chronotext
     
     void TextBox::drawText()
     {
-        gl::color(textColor);
+        font->setColor(textColor);
         
         float innerWidth = width - paddingLeft - paddingRight;
         float innerHeight = height - paddingTop - paddingBottom;

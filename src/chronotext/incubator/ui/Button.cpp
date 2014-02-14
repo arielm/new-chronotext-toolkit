@@ -96,13 +96,13 @@ namespace chronotext
         }
         else if (style->font)
         {
-            gl::color(*style->color[state]);
-            
+            style->font->setColor(*style->color[state]);
             style->font->setSize(style->fontSize);
             TextHelper::drawTextInRect(*style->font, text, bounds);
             
             if (style->strikethrough[state])
             {
+                gl::color(*style->color[state]);
                 drawStrikethroughInRect(*style->font, text, bounds);
             }
         }
