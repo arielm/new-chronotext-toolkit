@@ -69,6 +69,9 @@ namespace chronotext
         void setDirection(float direction);
         void setAxis(const ci::Vec2f &axis);
         void setStrikethroughFactor(float factor);
+        
+        void setClip(const ci::Rectf &clip);
+        void clearClip();
 
         float getSize() const;
         float getDirection() const;
@@ -100,16 +103,10 @@ namespace chronotext
         void endSequence();
         
         void addGlyph(int glyphIndex, float x, float y);
-        void addGlyph(int glyphIndex, float x, float y, const ci::Rectf &clip);
-
         void addGlyph(int glyphIndex, float x, float y, float z);
-        void addGlyph(int glyphIndex, float x, float y, float z, const ci::Rectf &clip);
         
         void addTransformedGlyph2D(int glyphIndex, float x, float y);
-        void addTransformedGlyph2D(int glyphIndex, float x, float y, const ci::Rectf &clip);
-        
         void addTransformedGlyph3D(int glyphIndex, float x, float y);
-        void addTransformedGlyph3D(int glyphIndex, float x, float y, const ci::Rectf &clip);
         
         friend class FontManager;
         
@@ -156,6 +153,9 @@ namespace chronotext
         int began;
         FontMatrix matrix;
         
+        bool hasClip;
+        ci::Rectf clip;
+        
         int sequenceSize;
         int sequenceDimensions;
         float *sequenceVertices;
@@ -167,7 +167,7 @@ namespace chronotext
         void incrementSequence();
         
         GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;
-        bool computeClip(GlyphQuad &quad, const ci::Rectf &clip);
+        bool clipQuad(GlyphQuad &quad);
         
         static int addQuad(const GlyphQuad &quad, float *vertices);
         static int addQuad(const GlyphQuad &quad, float z, float *vertices);

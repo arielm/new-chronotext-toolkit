@@ -20,6 +20,7 @@ namespace chronotext
     indices(indices),
     properties(properties),
     began(0),
+    hasClip(false),
     sequence(NULL)
     {
         glyphCount = data->glyphCount;
@@ -136,6 +137,17 @@ namespace chronotext
     void XFont::setStrikethroughFactor(float factor)
     {
         strikethroughFactor = factor;
+    }
+    
+    void XFont::setClip(const Rectf &clip)
+    {
+        this->clip = clip;
+        hasClip = true;
+    }
+    
+    void XFont::clearClip()
+    {
+        hasClip = false;
     }
     
     float XFont::getSize() const
@@ -319,6 +331,8 @@ namespace chronotext
         {
             begin();
         }
+        
+        clearClip();
     }
     
     void XFont::endSequence()
@@ -411,7 +425,7 @@ namespace chronotext
         return quad;
     }
     
-    bool XFont::computeClip(GlyphQuad &quad, const ci::Rectf &clip)
+    bool XFont::clipQuad(GlyphQuad &quad)
     {
         if ((quad.x1 > clip.x2 ) || (quad.x2 < clip.x1) || (quad.y1 > clip.y2) || (quad.y2 < clip.y1))
         {
@@ -525,23 +539,13 @@ namespace chronotext
         return 4 * (3 + 2);
     }
 
-    
     void XFont::addGlyph(int glyphIndex, float x, float y)
-    {
-        if (glyphIndex >= 0)
-        {
-            sequenceVertices += addQuad(getGlyphQuad(glyphIndex, x, y), sequenceVertices);
-            incrementSequence();
-        }
-    }
-    
-    void XFont::addGlyph(int glyphIndex, float x, float y, const Rectf &clip)
     {
         if (glyphIndex >= 0)
         {
             GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
-            if (computeClip(quad, clip))
+            if (!hasClip || clipQuad(quad))
             {
                 sequenceVertices += addQuad(quad, sequenceVertices);
                 incrementSequence();
@@ -553,18 +557,9 @@ namespace chronotext
     {
         if (glyphIndex >= 0)
         {
-            sequenceVertices += addQuad(getGlyphQuad(glyphIndex, x, y), z, sequenceVertices);
-            incrementSequence();
-        }
-    }
-    
-    void XFont::addGlyph(int glyphIndex, float x, float y, float z, const Rectf &clip)
-    {
-        if (glyphIndex >= 0)
-        {
             GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
-            if (computeClip(quad, clip))
+            if (!hasClip || clipQuad(quad))
             {
                 sequenceVertices += addQuad(quad, z, sequenceVertices);
                 incrementSequence();
@@ -576,18 +571,9 @@ namespace chronotext
     {
         if (glyphIndex >= 0)
         {
-            sequenceVertices += matrix.addTransformedQuad2D(getGlyphQuad(glyphIndex, x, y), sequenceVertices);
-            incrementSequence();
-        }
-    }
-    
-    void XFont::addTransformedGlyph2D(int glyphIndex, float x, float y, const Rectf &clip)
-    {
-        if (glyphIndex >= 0)
-        {
             GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
-            if (computeClip(quad, clip))
+            if (!hasClip || clipQuad(quad))
             {
                 sequenceVertices += matrix.addTransformedQuad2D(quad, sequenceVertices);
                 incrementSequence();
@@ -599,18 +585,9 @@ namespace chronotext
     {
         if (glyphIndex >= 0)
         {
-            sequenceVertices += matrix.addTransformedQuad3D(getGlyphQuad(glyphIndex, x, y), sequenceVertices);
-            incrementSequence();
-        }
-    }
-    
-    void XFont::addTransformedGlyph3D(int glyphIndex, float x, float y, const Rectf &clip)
-    {
-        if (glyphIndex >= 0)
-        {
             GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
             
-            if (computeClip(quad, clip))
+            if (!hasClip || clipQuad(quad))
             {
                 sequenceVertices += matrix.addTransformedQuad3D(quad, sequenceVertices);
                 incrementSequence();
