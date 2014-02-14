@@ -11,6 +11,8 @@
 #include <vector>
 #include <memory>
 
+#include "cinder/Color.h"
+
 namespace chronotext
 {
     class XFont;
@@ -19,33 +21,46 @@ namespace chronotext
     {
         int count;
         float *vertices;
+        ci::ColorA *colors;
         
-        Slot(int dimensions, int slotCapacity)
+        Slot(int slotCapacity, int dimensions, bool useColor = false)
         :
-        count(0)
+        count(0),
+        colors(NULL)
         {
-            vertices = new float[slotCapacity * (dimensions * 4 + 2 * 4)];
+            vertices = new float[slotCapacity * (dimensions + 2) * 4];
+            
+            if (useColor)
+            {
+                colors = new ci::ColorA[slotCapacity * 4];
+            }
         }
         
         ~Slot()
         {
             delete[] vertices;
+            
+            if (colors)
+            {
+                delete[] colors;
+            }
         }
     };
     
     class XFontSequence
     {
     public:
-        void begin(XFont *font, int dimensions, int slotCapacity);
+        void begin(XFont *font, int slotCapacity, int dimensions, bool useColor = false);
         void end();
-        void flush(float *vertices, int count);
+        void flush(int count, float *vertices, ci::ColorA *colors = NULL);
         void replay();
         void clear();
         
     protected:
         XFont *font;
-        int dimensions;
         int slotCapacity;
+        int dimensions;
+        bool useColor;
         
         int slotIndex;
         std::vector<std::unique_ptr<Slot>> slots;

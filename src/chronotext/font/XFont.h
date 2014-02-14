@@ -68,8 +68,10 @@ namespace chronotext
         void setSize(float size);
         void setDirection(float direction);
         void setAxis(const ci::Vec2f &axis);
+        void setColor(const ci::ColorA &color);
+        void setColor(float r, float g, float b, float a);
         void setStrikethroughFactor(float factor);
-        
+
         void setClip(const ci::Rectf &clip);
         void clearClip();
 
@@ -96,10 +98,10 @@ namespace chronotext
         FontMatrix* getMatrix();
         const GLushort* getIndices() const;
         
-        void begin();
-        void end();
+        void begin(bool useColor = false);
+        void end(bool useColor = false);
         
-        void beginSequence(XFontSequence *sequence, int dimensions);
+        void beginSequence(XFontSequence *sequence, int dimensions, bool useColor = false);
         void endSequence();
         
         void addGlyph(int glyphIndex, float x, float y);
@@ -139,8 +141,10 @@ namespace chronotext
         FontTexture *texture;
         
         Properties properties;
+        
         const std::vector<GLushort> &indices;
         float *vertices;
+        ci::ColorA *colors;
         
         bool anisotropyAvailable;
         float maxAnisotropy;
@@ -149,18 +153,21 @@ namespace chronotext
         float sizeRatio;
         float direction;
         ci::Vec2f axis;
+        ci::ColorA color;
+
+        bool hasClip;
+        ci::Rectf clip;
+
+        int sequenceSize;
+        int sequenceDimensions;
+        bool sequenceUseColor;
+        float *sequenceVertices;
+        ci::ColorA *sequenceColors;
+        XFontSequence *sequence;
 
         int began;
         FontMatrix matrix;
-        
-        bool hasClip;
-        ci::Rectf clip;
-        
-        int sequenceSize;
-        int sequenceDimensions;
-        float *sequenceVertices;
-        XFontSequence *sequence;
-        
+
         XFont(FontData *data, FontTexture *texture, const std::vector<GLushort> &indices, const Properties &properties);
         
         void flush(int count);

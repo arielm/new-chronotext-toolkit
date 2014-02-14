@@ -21,6 +21,7 @@ namespace chronotext
     properties(properties),
     began(0),
     hasClip(false),
+    colors(NULL),
     sequence(NULL)
     {
         glyphCount = data->glyphCount;
@@ -51,7 +52,7 @@ namespace chronotext
         
         // ---
         
-        vertices = new float[properties.slotCapacity * (properties.maxDimensions * 4 + 2 * 4)];
+        vertices = new float[properties.slotCapacity * (properties.maxDimensions + 2) * 4];
         
         // ---
         
@@ -67,11 +68,17 @@ namespace chronotext
         setSize(nativeFontSize);
         setDirection(+1);
         setAxis(Vec2f(+1, +1));
+        setColor(ColorA(0, 0, 1, 1)); // FIXME
     }
     
     XFont::~XFont()
     {
         delete[] vertices;
+        
+        if (colors)
+        {
+            delete[] colors;
+        }
     }
     
     bool XFont::isSpace(wchar_t c) const
@@ -133,12 +140,25 @@ namespace chronotext
     {
         this->axis = axis;
     }
+
+    void XFont::setColor(const ColorA &color)
+    {
+        this->color = color;
+    }
+    
+    void XFont::setColor(float r, float g, float b, float a)
+    {
+        color.r = r;
+        color.g = g;
+        color.b = b;
+        color.a = a;
+    }
     
     void XFont::setStrikethroughFactor(float factor)
     {
         strikethroughFactor = factor;
     }
-    
+
     void XFont::setClip(const Rectf &clip)
     {
         this->clip = clip;
@@ -276,7 +296,7 @@ namespace chronotext
         return const_cast<GLushort*>(indices.data());
     }
     
-    void XFont::begin()
+    void XFont::begin(bool useColor)
     {
         if (began == 0)
         {
@@ -290,6 +310,15 @@ namespace chronotext
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
             }
             
+            if (useColor)
+            {
+                glEnableClientState(GL_COLOR_ARRAY);
+            }
+            else
+            {
+                gl::color(color);
+            }
+            
             glEnableClientState(GL_VERTEX_ARRAY);
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         }
@@ -297,7 +326,7 @@ namespace chronotext
         began++;
     }
     
-    void XFont::end()
+    void XFont::end(bool useColor)
     {
         began--;
         
@@ -310,26 +339,38 @@ namespace chronotext
             
             glDisable(GL_TEXTURE_2D);
             
+            if (useColor)
+            {
+                glDisableClientState(GL_COLOR_ARRAY);
+            }
+            
             glDisableClientState(GL_VERTEX_ARRAY);
             glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         }
     }
     
-    void XFont::beginSequence(XFontSequence *sequence, int dimensions)
+    void XFont::beginSequence(XFontSequence *sequence, int dimensions, bool useColor)
     {
         sequenceDimensions = dimensions;
+        sequenceUseColor = useColor;
 
+        if (useColor && !colors)
+        {
+            colors = new ColorA[properties.slotCapacity * 4];
+        }
+        
         sequenceSize = 0;
         sequenceVertices = vertices;
-        
+        sequenceColors = colors;
+
         if (sequence)
         {
-            sequence->begin(this, dimensions, properties.slotCapacity);
             this->sequence = sequence;
+            sequence->begin(this, properties.slotCapacity, dimensions, useColor);
         }
         else
         {
-            begin();
+            begin(useColor);
         }
         
         clearClip();
@@ -339,20 +380,25 @@ namespace chronotext
     {
         if (sequence)
         {
-            sequence->flush(vertices, sequenceSize);
+            sequence->flush(sequenceSize, vertices, colors);
             sequence->end();
             sequence = NULL;
         }
         else
         {
             flush(sequenceSize);
-            end();
+            end(sequenceUseColor);
         }
     }
     
     void XFont::flush(int count)
     {
         int stride = sizeof(float) * (sequenceDimensions + 2);
+        
+        if (sequenceUseColor)
+        {
+            glColorPointer(4, GL_FLOAT, 0, colors);
+        }
 
         glVertexPointer(sequenceDimensions, GL_FLOAT, stride, vertices);
         glTexCoordPointer(2, GL_FLOAT, stride, vertices + sequenceDimensions);
@@ -361,13 +407,21 @@ namespace chronotext
     
     void XFont::incrementSequence()
     {
+        if (sequenceUseColor)
+        {
+            *sequenceColors++ = color;
+            *sequenceColors++ = color;
+            *sequenceColors++ = color;
+            *sequenceColors++ = color;
+        }
+
         sequenceSize++;
         
         if (sequenceSize == properties.slotCapacity)
         {
             if (sequence)
             {
-                sequence->flush(vertices, sequenceSize);
+                sequence->flush(sequenceSize, vertices, colors);
             }
             else
             {
@@ -376,6 +430,7 @@ namespace chronotext
             
             sequenceSize = 0;
             sequenceVertices = vertices;
+            sequenceColors = colors;
         }
     }
     
