@@ -58,7 +58,7 @@ namespace chronotext
         ci::Buffer write();
         
         void clear();
-        float getLength();
+        float getLength() const;
         
         void add(const ci::Vec2f &point);
         inline void add(float x, float y) { add(ci::Vec2f(x, y)); }

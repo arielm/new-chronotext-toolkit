@@ -96,7 +96,7 @@ namespace chronotext
         len.clear();
     }
     
-    float FollowablePath::getLength()
+    float FollowablePath::getLength() const
     {
         if (size > 0)
         {

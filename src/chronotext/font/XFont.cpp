@@ -165,6 +165,16 @@ namespace chronotext
         hasClip = true;
     }
     
+    void XFont::setClip(float x1, float y1, float x2, float y2)
+    {
+        clip.x1 = x1;
+        clip.y1 = y1;
+        clip.x2 = x2;
+        clip.y2 = y2;
+        
+        hasClip = true;
+    }
+    
     void XFont::clearClip()
     {
         hasClip = false;

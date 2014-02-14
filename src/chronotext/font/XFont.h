@@ -73,6 +73,7 @@ namespace chronotext
         void setStrikethroughFactor(float factor);
 
         void setClip(const ci::Rectf &clip);
+        void setClip(float x1, float y1, float x2, float y2);
         void clearClip();
 
         float getSize() const;
