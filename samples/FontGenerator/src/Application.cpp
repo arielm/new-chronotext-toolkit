@@ -3,7 +3,7 @@
  *
  *
  * REQUIREMENTS:
- * - OSX
+ * - OSX (CAN BE TRIVIALLY ADAPTED TO WINDOWS)
  * - FREETYPE BLOCK: https://github.com/arielm/Freetype
  *
  *
@@ -14,7 +14,6 @@
  */
 
 #include "cinder/app/AppNative.h"
-#include "cinder/gl/gl.h"
 
 #include "chronotext/font/FontManager.h"
 #include "chronotext/text/TextHelper.h"
@@ -44,7 +43,7 @@ public:
     
     void createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
     void loadFontSafely(const string &fileName);
-    void drawFonts(float size);
+    void drawFonts(float size, const ColorA &color);
 };
 
 void Application::setup()
@@ -81,8 +80,11 @@ void Application::setup()
     
     // ---
     
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
 }
 
 void Application::prepareSettings(AppBasic::Settings *settings)
@@ -93,10 +95,8 @@ void Application::prepareSettings(AppBasic::Settings *settings)
 
 void Application::draw()
 {
-    gl::clear(Color(0.5f, 0.5f, 0.5f), false);
-    glColor4f(1, 1, 1, 1);
-    
-    drawFonts(32);
+    gl::clear(Color::gray(0.5f), false);
+    drawFonts(32, ColorA::white());
 }
 
 void Application::createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
@@ -123,7 +123,7 @@ void Application::loadFontSafely(const string &fileName)
     }
 }
 
-void Application::drawFonts(float size)
+void Application::drawFonts(float size, const ColorA &color)
 {
     int current = 0;
     int count = fonts.size();
@@ -133,8 +133,10 @@ void Application::drawFonts(float size)
         current++;
         float y = getWindowHeight() * current / float(count + 1);
         
+        font->setColor(color);
         font->setSize(size);
-        TextHelper::drawAlignedText(*font, font->getCharacters(), getWindowWidth() * 0.5f, y, XFont::ALIGN_MIDDLE, XFont::ALIGN_MIDDLE);
+        
+        TextHelper::drawAlignedText(*font, font->getCharacters(), getWindowWidth() * 0.5f, y);
     }
 }
 

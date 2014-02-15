@@ -142,6 +142,7 @@ namespace chronotext
         FontTexture *texture;
         
         Properties properties;
+        FontMatrix matrix;
         
         const std::vector<GLushort> &indices;
         float *vertices;
@@ -159,15 +160,13 @@ namespace chronotext
         bool hasClip;
         ci::Rectf clip;
 
+        int began;
         int sequenceSize;
         int sequenceDimensions;
         bool sequenceUseColor;
         float *sequenceVertices;
         ci::ColorA *sequenceColors;
         XFontSequence *sequence;
-
-        int began;
-        FontMatrix matrix;
 
         XFont(FontData *data, FontTexture *texture, const std::vector<GLushort> &indices, const Properties &properties);
         
