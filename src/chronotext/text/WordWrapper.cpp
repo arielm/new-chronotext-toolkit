@@ -13,204 +13,207 @@ using namespace ci;
 
 namespace chronotext
 {
-    float WordWrapper::wrap(const XFont &font, const wstring &text)
+    namespace xf
     {
-        offsets.clear();
-        lengths.clear();
-        
-        size = 0;
-        int length = text.size();
-        
-        int lineIndex = 0;
-        int lineLength = 0;
-        wchar_t c = 0;
-        float x = 0;
-        float max = 0;
-        
-        for (int i = 0; i < length; i++)
+        float WordWrapper::wrap(const Font &font, const wstring &text)
         {
-            wchar_t lastC = c;
-            c = text[i];
+            offsets.clear();
+            lengths.clear();
             
-            if (c == '\r' || c == '\n') // WIN, UNIX, OSX
+            size = 0;
+            int length = text.size();
+            
+            int lineIndex = 0;
+            int lineLength = 0;
+            wchar_t c = 0;
+            float x = 0;
+            float max = 0;
+            
+            for (int i = 0; i < length; i++)
             {
-                if (lastC == '\r' && c == '\n') // WIN
-                {
-                    lineIndex = i + 1;
-                }
-                else
-                {
-                    max = math<float>::max(max, x);
-                    addLine(text, lineIndex, lineLength);
-                    lineIndex = i + 1;
-                    lineLength = 0;
-                    x = 0;
-                }
+                wchar_t lastC = c;
+                c = text[i];
                 
-                continue;
-            }
-            
-            lineLength++;
-            x += font.getCharAdvance(c);
-        }
-        
-        if (lineLength > 0)
-        {
-            max = math<float>::max(max, x);
-            addLine(text, lineIndex, lineLength);
-        }
-        
-        return max;
-    }
-    
-    void WordWrapper::wrap(const XFont &font, const wstring &text, float width)
-    {
-        offsets.clear();
-        lengths.clear();
-        
-        size = 0;
-        int length = text.size();
-        
-        int spaceIndex = -2; // lastToken = 2
-        int wordIndex = -2; // lastToken = 3
-        int hyphenIndex = -2;
-        int brokenIndex = -2;
-        int lastToken = 0;
-        bool newLine = true;
-        int lineIndex = 0;
-        int lineLength = 0;
-        wchar_t c = 0;
-        float x = 0;
-        
-        for (int i = 0; i < length; i++)
-        {
-            wchar_t lastC = c;
-            c = text[i];
-            wchar_t nextC = (i + 1) < length ? text[i + 1] : 0;
-            
-            if (c == '\r' || c == '\n') // WIN, UNIX, OSX
-            {
-                if (lastC == '\r' && c == '\n') // WIN
+                if (c == '\r' || c == '\n') // WIN, UNIX, OSX
                 {
-                    lineIndex = i + 1;
-                }
-                else
-                {
-                    if (brokenIndex != i - 1)
+                    if (lastC == '\r' && c == '\n') // WIN
                     {
+                        lineIndex = i + 1;
+                    }
+                    else
+                    {
+                        max = math<float>::max(max, x);
                         addLine(text, lineIndex, lineLength);
+                        lineIndex = i + 1;
+                        lineLength = 0;
+                        x = 0;
                     }
                     
-                    lineIndex = i + 1;
+                    continue;
+                }
+                
+                lineLength++;
+                x += font.getCharAdvance(c);
+            }
+            
+            if (lineLength > 0)
+            {
+                max = math<float>::max(max, x);
+                addLine(text, lineIndex, lineLength);
+            }
+            
+            return max;
+        }
+        
+        void WordWrapper::wrap(const Font &font, const wstring &text, float width)
+        {
+            offsets.clear();
+            lengths.clear();
+            
+            size = 0;
+            int length = text.size();
+            
+            int spaceIndex = -2; // lastToken = 2
+            int wordIndex = -2; // lastToken = 3
+            int hyphenIndex = -2;
+            int brokenIndex = -2;
+            int lastToken = 0;
+            bool newLine = true;
+            int lineIndex = 0;
+            int lineLength = 0;
+            wchar_t c = 0;
+            float x = 0;
+            
+            for (int i = 0; i < length; i++)
+            {
+                wchar_t lastC = c;
+                c = text[i];
+                wchar_t nextC = (i + 1) < length ? text[i + 1] : 0;
+                
+                if (c == '\r' || c == '\n') // WIN, UNIX, OSX
+                {
+                    if (lastC == '\r' && c == '\n') // WIN
+                    {
+                        lineIndex = i + 1;
+                    }
+                    else
+                    {
+                        if (brokenIndex != i - 1)
+                        {
+                            addLine(text, lineIndex, lineLength);
+                        }
+                        
+                        lineIndex = i + 1;
+                        lineLength = 0;
+                        x = 0;
+                        lastToken = 0;
+                        newLine = true;
+                    }
+                    continue;
+                }
+                
+                if (c == ' ' && (lastC != ' ' || lineIndex == i))
+                {
+                    spaceIndex = i;
+                    lastToken = 2;
+                }
+                else if (c != ' ' && (lastC == ' ' || lineIndex == i || hyphenIndex == i - 1))
+                {
+                    wordIndex = i;
+                    lastToken = 3;
+                }
+                else if (wordIndex != i && c == '-' && lastC != '-' && nextC != 0 && nextC != ' ' && nextC != '\r' && nextC != '\n')
+                {
+                    hyphenIndex = i;
+                }
+                
+                float charWidth = font.getCharAdvance(c);
+                
+                if (x + charWidth >= width)
+                {
+                    if (lastToken == 2) // LINES ENDING WITH SPACES
+                    {
+                        while (spaceIndex + 1 < length && text[spaceIndex + 1] == ' ')
+                        {
+                            spaceIndex++;
+                        }
+                        if (newLine || wordIndex >= lineIndex)
+                        {
+                            addLine(text, lineIndex, spaceIndex - lineIndex);
+                        }
+                        
+                        lineIndex = spaceIndex + 1;
+                        i = brokenIndex = lineIndex - 1;
+                    }
+                    else if (lastToken == 3 && hyphenIndex >= lineIndex && hyphenIndex < wordIndex) // HYPHEN-BREAK
+                    {
+                        addLine(text, lineIndex, wordIndex - lineIndex);
+                        lineIndex = wordIndex;
+                        i = lineIndex - 1;
+                    }
+                    else if (lastToken == 3 && spaceIndex >= lineIndex) // WORD-BREAK
+                    {
+                        addLine(text, lineIndex, wordIndex - lineIndex);
+                        lineIndex = wordIndex;
+                        i = lineIndex - 1;
+                    }
+                    else // LONG-LINE-BREAK
+                    {
+                        lineLength += lineLength == 0 ? 1 : 0; // FOR EXTREMELY-NARROWED-WIDTH CASES
+                        addLine(text, lineIndex, lineLength);
+                        lineIndex = lineIndex + lineLength;
+                        i = brokenIndex = lineIndex - 1;
+                    }
+                    
+                    c = text[i];
                     lineLength = 0;
                     x = 0;
                     lastToken = 0;
-                    newLine = true;
+                    newLine = false;
                 }
-                continue;
+                else if (!newLine && x == 0 && c == ' ') // ONLY SPACES AT THE BEGINNING OF NEW-LINE ARE ENABLED
+                {
+                    lineIndex++;
+                }
+                else
+                {
+                    lineLength++;
+                    x += charWidth;
+                }
             }
             
-            if (c == ' ' && (lastC != ' ' || lineIndex == i))
+            if (lineLength > 0)
             {
-                spaceIndex = i;
-                lastToken = 2;
-            }
-            else if (c != ' ' && (lastC == ' ' || lineIndex == i || hyphenIndex == i - 1))
-            {
-                wordIndex = i;
-                lastToken = 3;
-            }
-            else if (wordIndex != i && c == '-' && lastC != '-' && nextC != 0 && nextC != ' ' && nextC != '\r' && nextC != '\n')
-            {
-                hyphenIndex = i;
-            }
-            
-            float charWidth = font.getCharAdvance(c);
-            
-            if (x + charWidth >= width)
-            {
-                if (lastToken == 2) // LINES ENDING WITH SPACES
-                {
-                    while (spaceIndex + 1 < length && text[spaceIndex + 1] == ' ')
-                    {
-                        spaceIndex++;
-                    }
-                    if (newLine || wordIndex >= lineIndex)
-                    {
-                        addLine(text, lineIndex, spaceIndex - lineIndex);
-                    }
-                    
-                    lineIndex = spaceIndex + 1;
-                    i = brokenIndex = lineIndex - 1;
-                }
-                else if (lastToken == 3 && hyphenIndex >= lineIndex && hyphenIndex < wordIndex) // HYPHEN-BREAK
-                {
-                    addLine(text, lineIndex, wordIndex - lineIndex);
-                    lineIndex = wordIndex;
-                    i = lineIndex - 1;
-                }
-                else if (lastToken == 3 && spaceIndex >= lineIndex) // WORD-BREAK
-                {
-                    addLine(text, lineIndex, wordIndex - lineIndex);
-                    lineIndex = wordIndex;
-                    i = lineIndex - 1;
-                }
-                else // LONG-LINE-BREAK
-                {
-                    lineLength += lineLength == 0 ? 1 : 0; // FOR EXTREMELY-NARROWED-WIDTH CASES
-                    addLine(text, lineIndex, lineLength);
-                    lineIndex = lineIndex + lineLength;
-                    i = brokenIndex = lineIndex - 1;
-                }
-                
-                c = text[i];
-                lineLength = 0;
-                x = 0;
-                lastToken = 0;
-                newLine = false;
-            }
-            else if (!newLine && x == 0 && c == ' ') // ONLY SPACES AT THE BEGINNING OF NEW-LINE ARE ENABLED
-            {
-                lineIndex++;
-            }
-            else
-            {
-                lineLength++;
-                x += charWidth;
+                addLine(text, lineIndex, lineLength);
             }
         }
         
-        if (lineLength > 0)
+        void WordWrapper::addLine(const wstring &text, int offset, int length)
         {
-            addLine(text, lineIndex, lineLength);
-        }
-    }
-    
-    void WordWrapper::addLine(const wstring &text, int offset, int length)
-    {
-        /*
-         * TRIMMING TRAILING SPACES FROM DISPLAY
-         */
-        while (length > 0 && text[offset + length - 1] == ' ')
-        {
-            length--;
-        }
-        
-        offsets.push_back(offset);
-        lengths.push_back(length);
-        size++;
-    }
-    
-    int WordWrapper::getLine(int offset)
-    {
-        for (int i = 1; i < size; i++)
-        {
-            if (offsets[i] > offset)
+            /*
+             * TRIMMING TRAILING SPACES FROM DISPLAY
+             */
+            while (length > 0 && text[offset + length - 1] == ' ')
             {
-                return i - 1;
+                length--;
             }
+            
+            offsets.push_back(offset);
+            lengths.push_back(length);
+            size++;
         }
         
-        return size - 1;
+        int WordWrapper::getLine(int offset)
+        {
+            for (int i = 1; i < size; i++)
+            {
+                if (offsets[i] > offset)
+                {
+                    return i - 1;
+                }
+            }
+            
+            return size - 1;
+        }
     }
 }

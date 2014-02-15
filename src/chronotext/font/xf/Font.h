@@ -1,0 +1,189 @@
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+#pragma once
+
+#include "chronotext/font/FontMatrix.h"
+#include "chronotext/font/xf/FontSequence.h"
+
+#include "cinder/gl/gl.h"
+
+#include <map>
+
+namespace chronotext
+{
+    typedef class xf::Font XFont;
+
+    namespace xf
+    {
+        struct FontData;
+        struct FontTexture;
+        
+        class Font
+        {
+        public:
+            typedef enum
+            {
+                ALIGN_MIDDLE,
+                ALIGN_LEFT,
+                ALIGN_RIGHT,
+                ALIGN_TOP,
+                ALIGN_BASELINE,
+                ALIGN_BOTTOM
+            }
+            Alignment;
+            
+            struct Properties
+            {
+                bool useAnisotropy;
+                int maxDimensions;
+                int slotCapacity;
+                
+                Properties(bool useAnisotropy, int maxDimensions, int slotCapacity)
+                :
+                useAnisotropy(useAnisotropy),
+                maxDimensions(maxDimensions),
+                slotCapacity(slotCapacity)
+                {}
+                
+                static Properties Default2D(int slotCapacity = 1024)
+                {
+                    return Properties(false, 2, slotCapacity);
+                }
+                
+                static Properties Default3D(int slotCapacity = 2048)
+                {
+                    return Properties(true, 3, slotCapacity);
+                }
+            };
+            
+            ~Font(); // MUST BE PUBLIC BECAUSE OF unique_ptr
+            
+            bool isSpace(wchar_t c) const;
+            bool isValid(wchar_t c) const;
+            int getGlyphIndex(wchar_t c) const;
+            std::wstring getCharacters() const;
+            
+            void setSize(float size);
+            void setDirection(float direction);
+            void setAxis(const ci::Vec2f &axis);
+            void setColor(const ci::ColorA &color);
+            void setColor(float r, float g, float b, float a);
+            void setStrikethroughFactor(float factor);
+            
+            void setClip(const ci::Rectf &clip);
+            void setClip(float x1, float y1, float x2, float y2);
+            void clearClip();
+            
+            float getSize() const;
+            float getDirection() const;
+            const ci::Vec2f& getAxis() const;
+            
+            float getGlyphAdvance(int glyphIndex) const;
+            float getCharAdvance(wchar_t c) const;
+            float getStringAdvance(const std::wstring &s) const;
+            float getSubStringAdvance(const std::wstring &s, int begin, int end) const;
+            
+            float getHeight() const;
+            float getAscent() const;
+            float getDescent() const;
+            float getStrikethroughOffset() const;
+            float getUnderlineOffset() const;
+            float getLineThickness() const;
+            
+            float getOffsetX(const std::wstring &text, Alignment align) const;
+            float getOffsetY(Alignment align) const;
+            inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
+            
+            FontMatrix* getMatrix();
+            const GLushort* getIndices() const;
+            
+            void begin(bool useColor = false);
+            void end(bool useColor = false);
+            
+            void beginSequence(FontSequence *sequence, int dimensions, bool useColor = false);
+            void endSequence();
+            
+            void addGlyph(int glyphIndex, float x, float y);
+            void addGlyph(int glyphIndex, float x, float y, float z);
+            
+            void addTransformedGlyph2D(int glyphIndex, float x, float y);
+            void addTransformedGlyph3D(int glyphIndex, float x, float y);
+            
+            friend class FontManager;
+            
+        protected:
+            int glyphCount;
+            std::map<wchar_t, int> glyphs;
+            
+            float nativeFontSize;
+            float height;
+            float ascent;
+            float descent;
+            float spaceAdvance;
+            float strikethroughFactor;
+            float underlineOffset;
+            float lineThickness;
+            
+            float *w;
+            float *h;
+            float *le;
+            float *te;
+            float *advance;
+            
+            float *u1;
+            float *v1;
+            float *u2;
+            float *v2;
+            
+            int textureWidth;
+            int textureHeight;
+            FontTexture *texture;
+            
+            Properties properties;
+            FontMatrix matrix;
+            
+            const std::vector<GLushort> &indices;
+            float *vertices;
+            ci::ColorA *colors;
+            
+            bool anisotropyAvailable;
+            float maxAnisotropy;
+            
+            float size;
+            float sizeRatio;
+            float direction;
+            ci::Vec2f axis;
+            ci::ColorA color;
+            
+            bool hasClip;
+            ci::Rectf clip;
+            
+            int began;
+            int sequenceSize;
+            int sequenceDimensions;
+            bool sequenceUseColor;
+            float *sequenceVertices;
+            ci::ColorA *sequenceColors;
+            FontSequence *sequence;
+            
+            Font(FontData *data, FontTexture *texture, const std::vector<GLushort> &indices, const Properties &properties);
+            
+            void flush(int count);
+            void incrementSequence();
+            
+            GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;
+            bool clipQuad(GlyphQuad &quad);
+            
+            static int addQuad(const GlyphQuad &quad, float *vertices);
+            static int addQuad(const GlyphQuad &quad, float z, float *vertices);
+        };
+    }
+}
+
+namespace chr = chronotext;

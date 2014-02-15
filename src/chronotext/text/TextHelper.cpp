@@ -13,56 +13,59 @@ using namespace ci;
 
 namespace chronotext
 {
-    void TextHelper::drawText(XFont &font, const wstring &text, float x, float y)
+    namespace xf
     {
-        font.beginSequence(NULL, 2);
-        
-        for (auto c : text)
+        void TextHelper::drawText(Font &font, const wstring &text, float x, float y)
         {
-            auto glyphIndex = font.getGlyphIndex(c);
-            font.addGlyph(glyphIndex, x, y);
-            x += font.getGlyphAdvance(glyphIndex) * font.getDirection();
-        }
-        
-        font.endSequence();
-    }
-    
-    void TextHelper::drawAlignedText(XFont &font, const wstring &text, const Vec2f &position, XFont::Alignment alignX, XFont::Alignment alignY)
-    {
-        drawText(font, text, position + font.getOffset(text, alignX, alignY));
-    }
-    
-    void TextHelper::drawTextInRect(XFont &font, const wstring &text, const Rectf &rect)
-    {
-        drawAlignedText(font, text, rect.getCenter());
-    }
-    
-    float TextHelper::drawTextOnPath(XFont &font, const wstring &text, const FollowablePath &path, float offset)
-    {
-        float offsetX = offset;
-        float offsetY = font.getStrikethroughOffset();
-        float sampleSize = font.getSize() * 0.5f;
-        
-        auto matrix = font.getMatrix();
-        font.beginSequence(NULL, 2);
-        
-        for (auto c : text)
-        {
-            auto glyphIndex = font.getGlyphIndex(c);
-            float half = 0.5f * font.getGlyphAdvance(glyphIndex);
-            offsetX += half;
+            font.beginSequence(NULL, 2);
             
-            if (glyphIndex >= 0)
+            for (auto c : text)
             {
-                matrix->setTranslation(path.pos2Point(offsetX));
-                matrix->rotateZ(path.pos2SampledAngle(offsetX, sampleSize));
-                font.addTransformedGlyph2D(glyphIndex, -half, offsetY);
+                auto glyphIndex = font.getGlyphIndex(c);
+                font.addGlyph(glyphIndex, x, y);
+                x += font.getGlyphAdvance(glyphIndex) * font.getDirection();
             }
             
-            offsetX += half;
+            font.endSequence();
         }
-
-        font.endSequence();
-        return offsetX;
+        
+        void TextHelper::drawAlignedText(Font &font, const wstring &text, const Vec2f &position, Font::Alignment alignX, Font::Alignment alignY)
+        {
+            drawText(font, text, position + font.getOffset(text, alignX, alignY));
+        }
+        
+        void TextHelper::drawTextInRect(Font &font, const wstring &text, const Rectf &rect)
+        {
+            drawAlignedText(font, text, rect.getCenter());
+        }
+        
+        float TextHelper::drawTextOnPath(Font &font, const wstring &text, const FollowablePath &path, float offset)
+        {
+            float offsetX = offset;
+            float offsetY = font.getStrikethroughOffset();
+            float sampleSize = font.getSize() * 0.5f;
+            
+            auto matrix = font.getMatrix();
+            font.beginSequence(NULL, 2);
+            
+            for (auto c : text)
+            {
+                auto glyphIndex = font.getGlyphIndex(c);
+                float half = 0.5f * font.getGlyphAdvance(glyphIndex);
+                offsetX += half;
+                
+                if (glyphIndex >= 0)
+                {
+                    matrix->setTranslation(path.pos2Point(offsetX));
+                    matrix->rotateZ(path.pos2SampledAngle(offsetX, sampleSize));
+                    font.addTransformedGlyph2D(glyphIndex, -half, offsetY);
+                }
+                
+                offsetX += half;
+            }
+            
+            font.endSequence();
+            return offsetX;
+        }
     }
 }

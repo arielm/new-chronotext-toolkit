@@ -15,7 +15,7 @@
 
 #include "cinder/app/AppNative.h"
 
-#include "chronotext/font/FontManager.h"
+#include "chronotext/font/xf/FontManager.h"
 #include "chronotext/text/TextHelper.h"
 #include "chronotext/tools/font/XFontCreator.h"
 #include "chronotext/tools/font/Characters.h"
@@ -25,6 +25,7 @@ using namespace std;
 using namespace ci;
 using namespace app;
 using namespace chr;
+using namespace xf;
 
 const std::wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";
 
