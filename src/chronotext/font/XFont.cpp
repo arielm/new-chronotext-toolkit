@@ -68,7 +68,7 @@ namespace chronotext
         setSize(nativeFontSize);
         setDirection(+1);
         setAxis(Vec2f(+1, +1));
-        setColor(ColorA(0, 0, 1, 1)); // FIXME
+        setColor(ColorA(0, 0, 0, 1));
     }
     
     XFont::~XFont()
@@ -270,7 +270,7 @@ namespace chronotext
             case ALIGN_MIDDLE:
                 return -0.5f * getStringAdvance(text);
                 
-            case XFont::ALIGN_RIGHT:
+            case ALIGN_RIGHT:
                 return -getStringAdvance(text);
                 
             default:
