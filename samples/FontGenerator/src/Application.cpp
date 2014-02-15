@@ -16,7 +16,7 @@
 #include "cinder/app/AppNative.h"
 
 #include "chronotext/font/xf/FontManager.h"
-#include "chronotext/text/TextHelper.h"
+#include "chronotext/font/xf/TextHelper.h"
 #include "chronotext/tools/font/XFontCreator.h"
 #include "chronotext/tools/font/Characters.h"
 #include "chronotext/utils/Utils.h"

@@ -27,7 +27,7 @@ namespace chronotext
             static void drawTextInRect(Font &font, const std::wstring &text, const ci::Rectf &rect);
             static inline void drawTextInRect(Font &font, const std::wstring &text, float x1, float y1, float x2, float y2) { drawTextInRect(font, text, ci::Rectf(x1, y1, x2, y2)); }
             
-            static float drawTextOnPath(Font &font, const std::wstring &text, const FollowablePath &path, float offset = 0);
+            static float drawTextOnPath(Font &font, const std::wstring &text, const FollowablePath &path, float offsetX = 0);
         };
     }
 }
