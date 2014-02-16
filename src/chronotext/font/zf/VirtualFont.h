@@ -118,7 +118,7 @@ namespace chronotext
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
             
-            ActualFont::Glyph* obtainQuad(GlyphQuad &quad, const Cluster &cluster, const Shape &shape, const ci::Vec2f &position) const;
+            std::pair<GlyphQuad, ActualFont::Glyph*> obtainQuad(const Cluster &cluster, const Shape &shape, const ci::Vec2f &position) const;
             void addQuad(const GlyphQuad &quad);
             
             friend class FontManager;

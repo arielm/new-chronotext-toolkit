@@ -297,7 +297,8 @@ namespace chronotext
             for (auto &shape : cluster.shapes)
             {
                 GlyphQuad quad;
-                auto glyph = obtainQuad(quad, cluster, shape, position);
+                ActualFont::Glyph *glyph;
+                tie(quad, glyph) = obtainQuad(cluster, shape, position);
                 
                 if (glyph)
                 {
@@ -338,30 +339,34 @@ namespace chronotext
             }
         }
         
-        ActualFont::Glyph* VirtualFont::obtainQuad(GlyphQuad &quad, const Cluster &cluster, const Shape &shape, const Vec2f &position) const
+        pair<GlyphQuad, ActualFont::Glyph*> VirtualFont::obtainQuad(const Cluster &cluster, const Shape &shape, const Vec2f &position) const
         {
+            GlyphQuad quad;
             auto glyph = cluster.font->getGlyph(shape.codepoint);
             
-            if (glyph && glyph->texture)
+            if (glyph)
             {
-                auto ul = position + (shape.position + glyph->offset) * sizeRatio;
-                
-                quad.x1 = ul.x;
-                quad.y1 = ul.y,
-                quad.x2 = ul.x + glyph->size.x * sizeRatio;
-                quad.y2 = ul.y + glyph->size.y * sizeRatio;
-                
-                quad.u1 = glyph->u1;
-                quad.v1 = glyph->v1;
-                quad.u2 = glyph->u2;
-                quad.v2 = glyph->v2;
-                
-                return glyph;
+                if (glyph->texture)
+                {
+                    auto ul = position + (shape.position + glyph->offset) * sizeRatio;
+                    
+                    quad.x1 = ul.x;
+                    quad.y1 = ul.y,
+                    quad.x2 = ul.x + glyph->size.x * sizeRatio;
+                    quad.y2 = ul.y + glyph->size.y * sizeRatio;
+                    
+                    quad.u1 = glyph->u1;
+                    quad.v1 = glyph->v1;
+                    quad.u2 = glyph->u2;
+                    quad.v2 = glyph->v2;
+                }
+                else
+                {
+                    glyph = NULL;
+                }
             }
-            else
-            {
-                return NULL;
-            }
+            
+            return make_pair(quad, glyph);
         }
         
         void VirtualFont::addQuad(const GlyphQuad &quad)
