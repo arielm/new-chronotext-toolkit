@@ -396,5 +396,35 @@ namespace chronotext
                 return ActualFont::Descriptor();
             }
         }
+        
+        const vector<GLushort>& FontManager::getIndices(int capacity)
+        {
+            if (capacity * 6 > indices.size())
+            {
+                /*
+                 * FILLING THE INDICES WITH A QUAD PATTERN:
+                 * - FROM UPPER-LEFT CORNER
+                 * - COUNTER-CLOCKWISE
+                 */
+                
+                indices.clear();
+                indices.reserve(capacity * 6);
+                
+                int offset = 0;
+                
+                for (int i = 0; i < capacity; i++)
+                {
+                    indices.push_back(offset);
+                    indices.push_back(offset + 1);
+                    indices.push_back(offset + 2);
+                    indices.push_back(offset + 2);
+                    indices.push_back(offset + 3);
+                    indices.push_back(offset);
+                    offset += 4;
+                }
+            }
+            
+            return indices;
+        }
     }
 }

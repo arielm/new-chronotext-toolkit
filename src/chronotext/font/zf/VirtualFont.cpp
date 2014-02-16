@@ -12,6 +12,8 @@
 using namespace std;
 using namespace ci;
 
+#define SLOT_CAPACITY 1024 /* FIXME */
+
 namespace chronotext
 {
     namespace zf
@@ -20,21 +22,11 @@ namespace chronotext
         :
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
-        baseSize(baseSize)
+        baseSize(baseSize),
+        indices(fontManager.getIndices(SLOT_CAPACITY))
         {
             vertices.reserve(4 * 2);
             colors.reserve(4);
-            
-            // ---
-            
-            indices.reserve(6);
-            
-            indices.push_back(0);
-            indices.push_back(1);
-            indices.push_back(2);
-            indices.push_back(2);
-            indices.push_back(3);
-            indices.push_back(0);
             
             // ---
             

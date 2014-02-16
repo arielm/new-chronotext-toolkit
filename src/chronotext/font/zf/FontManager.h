@@ -86,6 +86,8 @@ namespace chronotext
              */
             size_t getTextureMemoryUsage() const;
             
+            friend class VirtualFont;
+            
         protected:
             int platform;
             
@@ -96,6 +98,8 @@ namespace chronotext
             std::map<std::pair<std::string, VirtualFont::Style>, std::pair<std::string, float>> globalMap;
             std::map<std::tuple<std::string, VirtualFont::Style, float>, std::shared_ptr<VirtualFont>> shortcuts;
             std::map<std::string, std::string> aliases;
+
+            std::vector<GLushort> indices;
             
             std::map<VirtualFont::Key, std::shared_ptr<VirtualFont>> virtualFonts;
             std::map<ActualFont::Key, std::unique_ptr<ActualFont>> actualFonts;
@@ -104,6 +108,8 @@ namespace chronotext
             
             static std::vector<std::string> splitLanguages(const std::string &languages);
             static ActualFont::Descriptor parseDescriptor(const ci::XmlTree &element);
+            
+            const std::vector<GLushort>& getIndices(int capacity);
         };
     }
 }

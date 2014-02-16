@@ -109,10 +109,10 @@ namespace chronotext
         protected:
             float size;
             float sizeRatio;
-            
+
+            const std::vector<GLushort> &indices;
             std::vector<ci::Vec2f> vertices;
             std::vector<ci::ColorA> colors;
-            std::vector<GLushort> indices;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;

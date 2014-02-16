@@ -113,8 +113,8 @@ namespace chronotext
             std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;
             std::vector<GLushort> indices;
             
-            const std::vector<GLushort>& getIndices(int capacity); // REMINDER: indices.data() WILL RETURN A DIFFERENT ADDRESS FOR EACH NEW CAPACITY
             void discardUnusedTextures();
+            const std::vector<GLushort>& getIndices(int capacity); // REMINDER: indices.data() WILL RETURN A DIFFERENT ADDRESS FOR EACH NEW CAPACITY
         };
     }
 }

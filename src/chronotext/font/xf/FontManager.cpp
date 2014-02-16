@@ -378,7 +378,9 @@ namespace chronotext
             if (capacity * 6 > indices.size())
             {
                 /*
-                 * FILLING THE INDICES WITH A QUAD PATTERN
+                 * FILLING THE INDICES WITH A QUAD PATTERN:
+                 * - FROM UPPER-LEFT CORNER
+                 * - COUNTER-CLOCKWISE
                  */
                 
                 indices.clear();
