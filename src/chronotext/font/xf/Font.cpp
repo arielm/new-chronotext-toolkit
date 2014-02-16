@@ -16,11 +16,11 @@ namespace chronotext
 {
     namespace xf
     {
-        Font::Font(FontData *data, FontTexture *texture, const vector<GLushort> &indices, const Properties &properties)
+        Font::Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties)
         :
         texture(texture),
-        indices(indices),
         properties(properties),
+        indices(fontManager.getIndices(properties.slotCapacity)),
         began(0),
         hasClip(false),
         colors(NULL),

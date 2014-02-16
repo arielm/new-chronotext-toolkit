@@ -106,6 +106,8 @@ namespace chronotext
             
             static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
             
+            friend class Font;
+            
         protected:
             std::map<FontKey, std::shared_ptr<Font>> fonts;
             std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;

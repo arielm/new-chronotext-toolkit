@@ -191,7 +191,7 @@ namespace chronotext
                     texture = it2->second.second.get();
                 }
                 
-                auto font = shared_ptr<Font>(new Font(data, texture, getIndices(properties.slotCapacity), properties)); // make_shared WON'T WORK WITH Font'S PROTECTED CONSTRUCTOR
+                auto font = shared_ptr<Font>(new Font(*this, data, texture, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
                 fonts[key] = font;
                 
                 return font;

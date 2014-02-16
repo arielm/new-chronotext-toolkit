@@ -21,6 +21,7 @@ namespace chronotext
 
     namespace xf
     {
+        class FontManager;
         struct FontData;
         struct FontTexture;
         
@@ -172,7 +173,7 @@ namespace chronotext
             ci::ColorA *sequenceColors;
             FontSequence *sequence;
             
-            Font(FontData *data, FontTexture *texture, const std::vector<GLushort> &indices, const Properties &properties);
+            Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties);
             
             void flush(int count);
             void incrementSequence();
