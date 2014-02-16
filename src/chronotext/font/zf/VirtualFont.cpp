@@ -15,8 +15,6 @@ namespace chronotext
 {
     namespace zf
     {
-        const int stride = sizeof(Vec2f) * 2;
-        
         VirtualFont::VirtualFont(LayoutCache &layoutCache, TextItemizer &itemizer, float baseSize)
         :
         layoutCache(layoutCache),
@@ -25,6 +23,19 @@ namespace chronotext
         {
             vertices.reserve(4 * 2);
             colors.reserve(4);
+            
+            // ---
+            
+            indices.reserve(6);
+            
+            indices.push_back(0);
+            indices.push_back(1);
+            indices.push_back(2);
+            indices.push_back(2);
+            indices.push_back(3);
+            indices.push_back(0);
+            
+            // ---
             
             setSize(baseSize);
             setColor(ColorA(0, 0, 0, 1));
@@ -277,6 +288,8 @@ namespace chronotext
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
             
+            const int stride = sizeof(Vec2f) * 2;
+            
             glVertexPointer(2, GL_FLOAT, stride, vertices.data());
             glTexCoordPointer(2, GL_FLOAT, stride, vertices.data() + 1);
             glColorPointer(4, GL_FLOAT, 0, colors.data());
@@ -284,8 +297,6 @@ namespace chronotext
         
         void VirtualFont::end()
         {
-            glBindTexture(GL_TEXTURE_2D, 0);
-            
             glDisable(GL_TEXTURE_2D);
             glDisableClientState(GL_VERTEX_ARRAY);
             glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -306,7 +317,7 @@ namespace chronotext
                     addQuad(quad);
                     
                     glyph->texture->bind();
-                    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+                    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices.data());
                 }
             }
         }
