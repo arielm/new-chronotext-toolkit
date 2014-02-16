@@ -24,22 +24,6 @@ namespace chronotext
         float v1;
         float u2;
         float v2;
-        
-        GlyphQuad()
-        {}
-        
-        GlyphQuad(const ci::Vec2f &position, const ci::Vec2f &size, const ci::Rectf &coords)
-        :
-        x1(position.x),
-        y1(position.y),
-        u1(coords.x1),
-        v1(coords.y1),
-        u2(coords.x2),
-        v2(coords.y2)
-        {
-            x2 = x1 + size.x;
-            y2 = y1 + size.y;
-        }
     };
     
     class FontMatrix

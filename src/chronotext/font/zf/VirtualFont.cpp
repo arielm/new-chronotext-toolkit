@@ -296,12 +296,13 @@ namespace chronotext
         {
             for (auto &shape : cluster.shapes)
             {
-                auto glyph = cluster.font->getGlyph(shape.codepoint);
+                GlyphQuad quad;
+                auto glyph = obtainQuad(quad, cluster, shape, position);
                 
-                if (glyph && glyph->texture)
+                if (glyph)
                 {
                     vertices.clear();
-                    addQuad(getGlyphQuad(shape, glyph, position));
+                    addQuad(quad);
                     
                     glyph->texture->bind();
                     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -337,9 +338,30 @@ namespace chronotext
             }
         }
         
-        GlyphQuad VirtualFont::getGlyphQuad(const Shape &shape, const ActualFont::Glyph *glyph, const Vec2f &position) const
+        ActualFont::Glyph* VirtualFont::obtainQuad(GlyphQuad &quad, const Cluster &cluster, const Shape &shape, const Vec2f &position) const
         {
-            return GlyphQuad(position + (shape.position + glyph->offset) * sizeRatio, glyph->size * sizeRatio, glyph->coords);
+            auto glyph = cluster.font->getGlyph(shape.codepoint);
+            
+            if (glyph && glyph->texture)
+            {
+                auto ul = position + (shape.position + glyph->offset) * sizeRatio;
+                
+                quad.x1 = ul.x;
+                quad.y1 = ul.y,
+                quad.x2 = ul.x + glyph->size.x * sizeRatio;
+                quad.y2 = ul.y + glyph->size.y * sizeRatio;
+                
+                quad.u1 = glyph->u1;
+                quad.v1 = glyph->v1;
+                quad.u2 = glyph->u2;
+                quad.v2 = glyph->v2;
+                
+                return glyph;
+            }
+            else
+            {
+                return NULL;
+            }
         }
         
         void VirtualFont::addQuad(const GlyphQuad &quad)
