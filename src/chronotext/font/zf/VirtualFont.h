@@ -11,6 +11,7 @@
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
+#include "chronotext/font/FontMatrix.h"
 
 #include <set>
 #include <map>
@@ -116,6 +117,9 @@ namespace chronotext
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
+            
+            GlyphQuad getGlyphQuad(const Shape &shape, const ActualFont::Glyph *Glyph, const ci::Vec2f &position) const;
+            void addQuad(const GlyphQuad &quad);
             
             friend class FontManager;
         };

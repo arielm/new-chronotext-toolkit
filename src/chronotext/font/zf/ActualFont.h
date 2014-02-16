@@ -73,11 +73,7 @@ namespace chronotext
                 ReloadableTexture *texture;
                 ci::Vec2f offset;
                 ci::Vec2f size;
-                
-                float u1;
-                float v1;
-                float u2;
-                float v2;
+                ci::Rectf coords;
                 
                 Glyph()
                 :
@@ -88,13 +84,9 @@ namespace chronotext
                 :
                 texture(texture),
                 offset(offset),
-                size(size)
-                {
-                    u1 = 0;
-                    v1 = 0;
-                    u2 = size.x / texture->getWidth();
-                    v2 = size.y / texture->getHeight();
-                }
+                size(size),
+                coords(0, 0, size.x / texture->getWidth(), size.y / texture->getHeight())
+                {}
             };
             
             struct Metrics

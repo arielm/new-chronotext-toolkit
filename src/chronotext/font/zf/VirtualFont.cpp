@@ -300,22 +300,8 @@ namespace chronotext
                 
                 if (glyph && glyph->texture)
                 {
-                    auto ul = position + (shape.position + glyph->offset) * sizeRatio;
-                    auto lr = ul + glyph->size * sizeRatio;
-                    
                     vertices.clear();
-                    
-                    vertices.emplace_back(ul);
-                    vertices.emplace_back(glyph->u1, glyph->v1);
-                    
-                    vertices.emplace_back(lr.x, ul.y);
-                    vertices.emplace_back(glyph->u2, glyph->v1);
-                    
-                    vertices.emplace_back(lr);
-                    vertices.emplace_back(glyph->u2, glyph->v2);
-                    
-                    vertices.emplace_back(ul.x, lr.y);
-                    vertices.emplace_back(glyph->u1, glyph->v2);
+                    addQuad(getGlyphQuad(shape, glyph, position));
                     
                     glyph->texture->bind();
                     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -349,6 +335,26 @@ namespace chronotext
                 case VirtualFont::STYLE_REGULAR:
                     return "regular";
             }
+        }
+        
+        GlyphQuad VirtualFont::getGlyphQuad(const Shape &shape, const ActualFont::Glyph *glyph, const Vec2f &position) const
+        {
+            return GlyphQuad(position + (shape.position + glyph->offset) * sizeRatio, glyph->size * sizeRatio, glyph->coords);
+        }
+        
+        void VirtualFont::addQuad(const GlyphQuad &quad)
+        {
+            vertices.emplace_back(quad.x1, quad.y1);
+            vertices.emplace_back(quad.u1, quad.v1);
+            
+            vertices.emplace_back(quad.x2, quad.y1);
+            vertices.emplace_back(quad.u2, quad.v1);
+            
+            vertices.emplace_back(quad.x2, quad.y2);
+            vertices.emplace_back(quad.u2, quad.v2);
+            
+            vertices.emplace_back(quad.x1, quad.y2);
+            vertices.emplace_back(quad.u1, quad.v2);
         }
     }
 }
