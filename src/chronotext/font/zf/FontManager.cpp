@@ -212,7 +212,7 @@ namespace chronotext
                  */
                 if (doc.hasChild("VirtualFont"))
                 {
-                    auto font = shared_ptr<VirtualFont>(new VirtualFont(layoutCache, itemizer, baseSize)); // make_shared WOULD HAVE BEEN BETTER, BUT IT WON'T WORK WITH PROTECTED CONSTRUCTORS
+                    auto font = shared_ptr<VirtualFont>(new VirtualFont(*this, baseSize)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
                     virtualFonts[key] = font;
                     
                     for (auto setElement = doc.begin("VirtualFont/Set"); setElement != doc.end(); ++setElement)

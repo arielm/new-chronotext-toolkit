@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/font/zf/VirtualFont.h"
+#include "chronotext/font/zf/FontManager.h"
 
 using namespace std;
 using namespace ci;
@@ -15,10 +16,10 @@ namespace chronotext
 {
     namespace zf
     {
-        VirtualFont::VirtualFont(LayoutCache &layoutCache, TextItemizer &itemizer, float baseSize)
+        VirtualFont::VirtualFont(FontManager &fontManager, float baseSize)
         :
-        layoutCache(layoutCache),
-        itemizer(itemizer),
+        layoutCache(fontManager.layoutCache),
+        itemizer(fontManager.itemizer),
         baseSize(baseSize)
         {
             vertices.reserve(4 * 2);

@@ -22,6 +22,7 @@ namespace chronotext
 
     namespace zf
     {
+        class FontManager;
         typedef std::vector<ActualFont*> FontSet;
         
         class VirtualFont
@@ -103,6 +104,8 @@ namespace chronotext
             static Style styleStringToEnum(const std::string &style);
             static std::string styleEnumToString(Style style);
             
+            friend class FontManager;
+            
         protected:
             float size;
             float sizeRatio;
@@ -114,15 +117,13 @@ namespace chronotext
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
             
-            VirtualFont(LayoutCache &layoutCache, TextItemizer &itemizer, float baseSize);
+            VirtualFont(FontManager &fontManager, float baseSize);
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
             
             std::pair<GlyphQuad, ActualFont::Glyph*> obtainQuad(const Cluster &cluster, const Shape &shape, const ci::Vec2f &position) const;
             void addQuad(const GlyphQuad &quad);
-            
-            friend class FontManager;
         };
     }
 }
