@@ -292,15 +292,16 @@ namespace chronotext
             
             for (auto &it : fontSequence)
             {
+                it.first->bind();
+
                 auto &glyphSequence = it.second;
                 auto vertices = glyphSequence->vertices.data();
+                int size = glyphSequence->vertices.size() >> 3;
                 
                 glVertexPointer(2, GL_FLOAT, stride, vertices);
                 glTexCoordPointer(2, GL_FLOAT, stride, vertices + 1);
                 glColorPointer(4, GL_FLOAT, 0, glyphSequence->colors.data());
-
-                it.first->bind();
-                glDrawElements(GL_TRIANGLES, 6 * glyphSequence->size, GL_UNSIGNED_SHORT, indices.data());
+                glDrawElements(GL_TRIANGLES, 6 * size, GL_UNSIGNED_SHORT, indices.data());
             }
 
             glDisable(GL_TEXTURE_2D);
@@ -332,7 +333,8 @@ namespace chronotext
                         glyphSequence = it->second.get();
                     }
                     
-                    glyphSequence->addQuad(quad, color);
+                    glyphSequence->addQuad(quad);
+                    glyphSequence->addColor(color);
                 }
             }
         }

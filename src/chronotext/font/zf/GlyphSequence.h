@@ -19,21 +19,14 @@ namespace chronotext
         public:
             std::vector<ci::Vec2f> vertices;
             std::vector<ci::ColorA> colors;
-            int size;
-            
-            GlyphSequence()
-            :
-            size(0)
-            {}
             
             void clear()
             {
                 vertices.clear();
                 colors.clear();
-                size = 0;
             }
             
-            void addQuad(const GlyphQuad &quad, const ci::ColorA &color)
+            inline void addQuad(const GlyphQuad &quad)
             {
                 vertices.emplace_back(quad.x1, quad.y1);
                 vertices.emplace_back(quad.u1, quad.v1);
@@ -46,17 +39,14 @@ namespace chronotext
                 
                 vertices.emplace_back(quad.x1, quad.y2);
                 vertices.emplace_back(quad.u1, quad.v2);
-                
-                // ---
-                
+            }
+            
+            inline void addColor(const ci::ColorA &color)
+            {
                 colors.emplace_back(color);
                 colors.emplace_back(color);
                 colors.emplace_back(color);
                 colors.emplace_back(color);
-                
-                // ---
-                
-                size++;
             }
         };
     }
