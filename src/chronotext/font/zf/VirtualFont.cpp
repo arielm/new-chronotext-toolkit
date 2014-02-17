@@ -12,7 +12,7 @@
 using namespace std;
 using namespace ci;
 
-#define SLOT_CAPACITY 1024 /* FIXME */
+#define SLOT_CAPACITY 1024 /* FIXME: TEMPORARY (SEE TARGET FUNCTIONALITY IN XFont) */
 
 namespace chronotext
 {
@@ -20,18 +20,13 @@ namespace chronotext
     {
         VirtualFont::VirtualFont(FontManager &fontManager, float baseSize)
         :
+        baseSize(baseSize),
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
-        baseSize(baseSize),
         indices(fontManager.getIndices(SLOT_CAPACITY))
         {
-            vertices.reserve(4 * 2);
-            colors.reserve(4);
-            
-            // ---
-            
             setSize(baseSize);
-            setColor(ColorA(0, 0, 0, 1));
+            setColor(0, 0, 0, 1);
         }
         
         bool VirtualFont::addActualFont(const string &lang, ActualFont *font)
@@ -265,16 +260,25 @@ namespace chronotext
             sizeRatio = newSize / baseSize;
         }
         
-        void VirtualFont::setColor(const ColorA &color)
+        void VirtualFont::setColor(const ColorA &newColor)
         {
-            colors.clear();
-            colors.emplace_back(color);
-            colors.emplace_back(color);
-            colors.emplace_back(color);
-            colors.emplace_back(color);
+            color = newColor;
+        }
+        
+        void VirtualFont::setColor(float r, float g, float b, float a)
+        {
+            color.r = r;
+            color.g = g;
+            color.b = b;
+            color.a = a;
         }
         
         void VirtualFont::begin()
+        {
+            sequence.clear();
+        }
+        
+        void VirtualFont::end()
         {
             glEnable(GL_TEXTURE_2D);
             glEnableClientState(GL_VERTEX_ARRAY);
@@ -283,20 +287,29 @@ namespace chronotext
             
             const int stride = sizeof(Vec2f) * 2;
             
-            glVertexPointer(2, GL_FLOAT, stride, vertices.data());
-            glTexCoordPointer(2, GL_FLOAT, stride, vertices.data() + 1);
-            glColorPointer(4, GL_FLOAT, 0, colors.data());
-        }
-        
-        void VirtualFont::end()
-        {
+            for (auto &it : sequence)
+            {
+                const auto &glyph = it.first;
+                const auto &vertices = it.second.first;
+                const auto &colors = it.second.second;
+                
+                int count = colors->size() >> 2;
+                
+                glVertexPointer(2, GL_FLOAT, stride, vertices->data());
+                glTexCoordPointer(2, GL_FLOAT, stride, vertices->data() + 1);
+                glColorPointer(4, GL_FLOAT, 0, colors->data());
+
+                glyph->texture->bind();
+                glDrawElements(GL_TRIANGLES, 6 * count, GL_UNSIGNED_SHORT, indices.data());
+            }
+
             glDisable(GL_TEXTURE_2D);
             glDisableClientState(GL_VERTEX_ARRAY);
             glDisableClientState(GL_TEXTURE_COORD_ARRAY);
             glDisableClientState(GL_COLOR_ARRAY);
         }
         
-        void VirtualFont::drawCluster(const Cluster &cluster, const Vec2f &position)
+        void VirtualFont::addCluster(const Cluster &cluster, const Vec2f &position)
         {
             for (auto &shape : cluster.shapes)
             {
@@ -306,11 +319,28 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    vertices.clear();
-                    addQuad(quad);
+                    vector<Vec2f> *vertices;
+                    vector<ColorA> *colors;
+                    auto it = sequence.find(glyph);
                     
-                    glyph->texture->bind();
-                    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices.data());
+                    if (it == sequence.end())
+                    {
+                        vertices = new vector<Vec2f>;
+                        colors = new vector<ColorA>;
+                        sequence[glyph] = make_pair(unique_ptr<vector<Vec2f>>(vertices), unique_ptr<vector<ColorA>>(colors));
+                    }
+                    else
+                    {
+                        vertices = it->second.first.get();
+                        colors = it->second.second.get();
+                    }
+                    
+                    addQuad(quad, *vertices);
+                    
+                    colors->emplace_back(color);
+                    colors->emplace_back(color);
+                    colors->emplace_back(color);
+                    colors->emplace_back(color);
                 }
             }
         }
@@ -373,7 +403,7 @@ namespace chronotext
             return make_pair(quad, glyph);
         }
         
-        void VirtualFont::addQuad(const GlyphQuad &quad)
+        void VirtualFont::addQuad(const GlyphQuad &quad, vector<Vec2f> &vertices)
         {
             vertices.emplace_back(quad.x1, quad.y1);
             vertices.emplace_back(quad.u1, quad.v1);

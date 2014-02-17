@@ -96,10 +96,12 @@ namespace chronotext
             
             void setSize(float size);
             void setColor(const ci::ColorA &color);
+            void setColor(float r, float g, float b, float a);
             
             void begin();
             void end();
-            void drawCluster(const Cluster &cluster, const ci::Vec2f &position);
+            
+            void addCluster(const Cluster &cluster, const ci::Vec2f &position);
             
             static Style styleStringToEnum(const std::string &style);
             static std::string styleEnumToString(Style style);
@@ -109,10 +111,10 @@ namespace chronotext
         protected:
             float size;
             float sizeRatio;
+            ci::ColorA color;
 
             const std::vector<GLushort> &indices;
-            std::vector<ci::Vec2f> vertices;
-            std::vector<ci::ColorA> colors;
+            std::map<ActualFont::Glyph*, std::pair<std::unique_ptr<std::vector<ci::Vec2f>>, std::unique_ptr<std::vector<ci::ColorA>>>> sequence;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
@@ -123,7 +125,7 @@ namespace chronotext
             const FontSet& getFontSet(const std::string &lang) const;
             
             std::pair<GlyphQuad, ActualFont::Glyph*> obtainQuad(const Cluster &cluster, const Shape &shape, const ci::Vec2f &position) const;
-            void addQuad(const GlyphQuad &quad);
+            void addQuad(const GlyphQuad &quad, std::vector<ci::Vec2f> &vertices);
         };
     }
 }
