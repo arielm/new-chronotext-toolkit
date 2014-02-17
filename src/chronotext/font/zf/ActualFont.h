@@ -10,6 +10,8 @@
 
 #include "chronotext/font/zf/GlyphData.h"
 #include "chronotext/font/zf/ReloadableTexture.h"
+#include "chronotext/font/zf/LineLayout.h"
+#include "chronotext/font/FontMatrix.h"
 #include "chronotext/InputSource.h"
 
 #include "hb.h"
@@ -149,6 +151,7 @@ namespace chronotext
             
             Glyph* getGlyph(uint32_t codepoint);
             Glyph* createGlyph(uint32_t codepoint);
+            std::pair<GlyphQuad, Glyph*> obtainQuad(const Shape &shape, const ci::Vec2f &position, float sizeRatio);
             
             std::string getFullName() const;
             

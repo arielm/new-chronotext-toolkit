@@ -315,7 +315,7 @@ namespace chronotext
             {
                 GlyphQuad quad;
                 ActualFont::Glyph *glyph;
-                tie(quad, glyph) = obtainQuad(cluster, shape, position);
+                tie(quad, glyph) = cluster.font->obtainQuad(shape, position, sizeRatio);
                 
                 if (glyph)
                 {
@@ -371,36 +371,6 @@ namespace chronotext
                 case VirtualFont::STYLE_REGULAR:
                     return "regular";
             }
-        }
-        
-        pair<GlyphQuad, ActualFont::Glyph*> VirtualFont::obtainQuad(const Cluster &cluster, const Shape &shape, const Vec2f &position) const
-        {
-            GlyphQuad quad;
-            auto glyph = cluster.font->getGlyph(shape.codepoint);
-            
-            if (glyph)
-            {
-                if (glyph->texture)
-                {
-                    auto ul = position + (shape.position + glyph->offset) * sizeRatio;
-                    
-                    quad.x1 = ul.x;
-                    quad.y1 = ul.y,
-                    quad.x2 = ul.x + glyph->size.x * sizeRatio;
-                    quad.y2 = ul.y + glyph->size.y * sizeRatio;
-                    
-                    quad.u1 = glyph->u1;
-                    quad.v1 = glyph->v1;
-                    quad.u2 = glyph->u2;
-                    quad.v2 = glyph->v2;
-                }
-                else
-                {
-                    glyph = NULL;
-                }
-            }
-            
-            return make_pair(quad, glyph);
         }
         
         void VirtualFont::addQuad(const GlyphQuad &quad, vector<Vec2f> &vertices)

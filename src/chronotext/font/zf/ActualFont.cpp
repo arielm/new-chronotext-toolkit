@@ -272,6 +272,36 @@ namespace chronotext
             return NULL;
         }
         
+        pair<GlyphQuad, ActualFont::Glyph*> ActualFont::obtainQuad(const Shape &shape, const Vec2f &position, float sizeRatio)
+        {
+            GlyphQuad quad;
+            auto glyph = getGlyph(shape.codepoint);
+            
+            if (glyph)
+            {
+                if (glyph->texture)
+                {
+                    auto ul = position + (shape.position + glyph->offset) * sizeRatio;
+                    
+                    quad.x1 = ul.x;
+                    quad.y1 = ul.y,
+                    quad.x2 = ul.x + glyph->size.x * sizeRatio;
+                    quad.y2 = ul.y + glyph->size.y * sizeRatio;
+                    
+                    quad.u1 = glyph->u1;
+                    quad.v1 = glyph->v1;
+                    quad.u2 = glyph->u2;
+                    quad.v2 = glyph->v2;
+                }
+                else
+                {
+                    glyph = NULL;
+                }
+            }
+            
+            return make_pair(quad, glyph);
+        }
+        
         string ActualFont::getFullName() const
         {
             if (ftFace)
