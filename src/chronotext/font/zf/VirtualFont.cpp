@@ -275,7 +275,10 @@ namespace chronotext
         
         void VirtualFont::begin()
         {
-            sequence.clear();
+            for (auto &it : fontSequence)
+            {
+                it.second->clear();
+            }
         }
         
         void VirtualFont::end()
@@ -287,20 +290,17 @@ namespace chronotext
             
             const int stride = sizeof(Vec2f) * 2;
             
-            for (auto &it : sequence)
+            for (auto &it : fontSequence)
             {
                 const auto &glyph = it.first;
-                const auto &vertices = it.second.first;
-                const auto &colors = it.second.second;
+                const auto &glyphSequence = it.second;
                 
-                int count = colors->size() >> 2;
-                
-                glVertexPointer(2, GL_FLOAT, stride, vertices->data());
-                glTexCoordPointer(2, GL_FLOAT, stride, vertices->data() + 1);
-                glColorPointer(4, GL_FLOAT, 0, colors->data());
+                glVertexPointer(2, GL_FLOAT, stride, glyphSequence->vertices.data());
+                glTexCoordPointer(2, GL_FLOAT, stride, glyphSequence->vertices.data() + 1);
+                glColorPointer(4, GL_FLOAT, 0, glyphSequence->colors.data());
 
                 glyph->texture->bind();
-                glDrawElements(GL_TRIANGLES, 6 * count, GL_UNSIGNED_SHORT, indices.data());
+                glDrawElements(GL_TRIANGLES, 6 * glyphSequence->size, GL_UNSIGNED_SHORT, indices.data());
             }
 
             glDisable(GL_TEXTURE_2D);
@@ -319,28 +319,20 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    vector<Vec2f> *vertices;
-                    vector<ColorA> *colors;
-                    auto it = sequence.find(glyph);
+                    GlyphSequence *glyphSequence;
+                    auto it = fontSequence.find(glyph);
                     
-                    if (it == sequence.end())
+                    if (it == fontSequence.end())
                     {
-                        vertices = new vector<Vec2f>;
-                        colors = new vector<ColorA>;
-                        sequence[glyph] = make_pair(unique_ptr<vector<Vec2f>>(vertices), unique_ptr<vector<ColorA>>(colors));
+                        glyphSequence = new GlyphSequence;
+                        fontSequence[glyph] = unique_ptr<GlyphSequence>(glyphSequence);
                     }
                     else
                     {
-                        vertices = it->second.first.get();
-                        colors = it->second.second.get();
+                        glyphSequence = it->second.get();
                     }
                     
-                    addQuad(quad, *vertices);
-                    
-                    colors->emplace_back(color);
-                    colors->emplace_back(color);
-                    colors->emplace_back(color);
-                    colors->emplace_back(color);
+                    glyphSequence->addQuad(quad, color);
                 }
             }
         }
@@ -371,21 +363,6 @@ namespace chronotext
                 case VirtualFont::STYLE_REGULAR:
                     return "regular";
             }
-        }
-        
-        void VirtualFont::addQuad(const GlyphQuad &quad, vector<Vec2f> &vertices)
-        {
-            vertices.emplace_back(quad.x1, quad.y1);
-            vertices.emplace_back(quad.u1, quad.v1);
-            
-            vertices.emplace_back(quad.x2, quad.y1);
-            vertices.emplace_back(quad.u2, quad.v1);
-            
-            vertices.emplace_back(quad.x2, quad.y2);
-            vertices.emplace_back(quad.u2, quad.v2);
-            
-            vertices.emplace_back(quad.x1, quad.y2);
-            vertices.emplace_back(quad.u1, quad.v2);
         }
     }
 }

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/zf/ActualFont.h"
+#include "chronotext/font/zf/GlyphSequence.h"
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/font/FontMatrix.h"
@@ -114,7 +114,7 @@ namespace chronotext
             ci::ColorA color;
 
             const std::vector<GLushort> &indices;
-            std::map<ActualFont::Glyph*, std::pair<std::unique_ptr<std::vector<ci::Vec2f>>, std::unique_ptr<std::vector<ci::ColorA>>>> sequence;
+            std::map<ActualFont::Glyph*, std::unique_ptr<GlyphSequence>> fontSequence;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
@@ -123,8 +123,6 @@ namespace chronotext
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
-            
-            void addQuad(const GlyphQuad &quad, std::vector<ci::Vec2f> &vertices);
         };
     }
 }
