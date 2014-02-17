@@ -220,26 +220,17 @@ namespace chronotext
         float x110 = quad.x1 * m10;
         float x120 = quad.x1 * m20;
         
-        float y101 = quad.y2 * m01;
-        float y111 = quad.y2 * m11;
-        float y121 = quad.y2 * m21;
+        float y101 = quad.y1 * m01;
+        float y111 = quad.y1 * m11;
+        float y121 = quad.y1 * m21;
         
         float x200 = quad.x2 * m00;
         float x210 = quad.x2 * m10;
         float x220 = quad.x2 * m20;
         
-        float y201 = quad.y1 * m01;
-        float y211 = quad.y1 * m11;
-        float y221 = quad.y1 * m21;
-        
-        // --- x1, y2 ---
-        
-        *vertices++ = x100 + y201 + m03;
-        *vertices++ = x110 + y211 + m13;
-        *vertices++ = x120 + y221 + m23;
-        
-        *vertices++ = quad.u1;
-        *vertices++ = quad.v1;
+        float y201 = quad.y2 * m01;
+        float y211 = quad.y2 * m11;
+        float y221 = quad.y2 * m21;
         
         // --- x1, y1 ---
         
@@ -248,15 +239,15 @@ namespace chronotext
         *vertices++ = x120 + y121 + m23;
         
         *vertices++ = quad.u1;
-        *vertices++ = quad.v2;
+        *vertices++ = quad.v1;
         
-        // --- x2, y1 ---
+        // --- x1, y2 ---
         
-        *vertices++ = x200 + y101 + m03;
-        *vertices++ = x210 + y111 + m13;
-        *vertices++ = x220 + y121 + m23;
+        *vertices++ = x100 + y201 + m03;
+        *vertices++ = x110 + y211 + m13;
+        *vertices++ = x120 + y221 + m23;
         
-        *vertices++ = quad.u2;
+        *vertices++ = quad.u1;
         *vertices++ = quad.v2;
         
         // --- x2, y2 ---
@@ -264,6 +255,15 @@ namespace chronotext
         *vertices++ = x200 + y201 + m03;
         *vertices++ = x210 + y211 + m13;
         *vertices++ = x220 + y221 + m23;
+        
+        *vertices++ = quad.u2;
+        *vertices++ = quad.v2;
+        
+        // --- x2, y1 ---
+        
+        *vertices++ = x200 + y101 + m03;
+        *vertices++ = x210 + y111 + m13;
+        *vertices++ = x220 + y121 + m23;
         
         *vertices++ = quad.u2;
         *vertices++ = quad.v1;
@@ -276,43 +276,43 @@ namespace chronotext
         float x100 = quad.x1 * m00;
         float x110 = quad.x1 * m10;
         
-        float y101 = quad.y2 * m01;
-        float y111 = quad.y2 * m11;
+        float y101 = quad.y1 * m01;
+        float y111 = quad.y1 * m11;
         
         float x200 = quad.x2 * m00;
         float x210 = quad.x2 * m10;
         
-        float y201 = quad.y1 * m01;
-        float y211 = quad.y1 * m11;
-        
-        // --- x1, y2 ---
-        
-        *vertices++ = x100 + y201 + m03;
-        *vertices++ = x110 + y211 + m13;
-        
-        *vertices++ = quad.u1;
-        *vertices++ = quad.v1;
+        float y201 = quad.y2 * m01;
+        float y211 = quad.y2 * m11;
         
         // --- x1, y1 ---
         
         *vertices++ = x100 + y101 + m03;
         *vertices++ = x110 + y111 + m13;
+        
+        *vertices++ = quad.u1;
+        *vertices++ = quad.v1;
+        
+        // --- x1, y2 ---
+        
+        *vertices++ = x100 + y201 + m03;
+        *vertices++ = x110 + y211 + m13;
 
         *vertices++ = quad.u1;
-        *vertices++ = quad.v2;
-
-        // --- x2, y1 ---
-        
-        *vertices++ = x200 + y101 + m03;
-        *vertices++ = x210 + y111 + m13;
-
-        *vertices++ = quad.u2;
         *vertices++ = quad.v2;
 
         // --- x2, y2 ---
         
         *vertices++ = x200 + y201 + m03;
         *vertices++ = x210 + y211 + m13;
+
+        *vertices++ = quad.u2;
+        *vertices++ = quad.v2;
+
+        // --- x2, y1 ---
+        
+        *vertices++ = x200 + y101 + m03;
+        *vertices++ = x210 + y111 + m13;
         
         *vertices++ = quad.u2;
         *vertices++ = quad.v1;
