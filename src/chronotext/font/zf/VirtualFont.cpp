@@ -292,14 +292,14 @@ namespace chronotext
             
             for (auto &it : fontSequence)
             {
-                const auto &glyph = it.first;
+                const auto &texture = it.first;
                 const auto &glyphSequence = it.second;
                 
                 glVertexPointer(2, GL_FLOAT, stride, glyphSequence->vertices.data());
                 glTexCoordPointer(2, GL_FLOAT, stride, glyphSequence->vertices.data() + 1);
                 glColorPointer(4, GL_FLOAT, 0, glyphSequence->colors.data());
 
-                glyph->texture->bind();
+                texture->bind();
                 glDrawElements(GL_TRIANGLES, 6 * glyphSequence->size, GL_UNSIGNED_SHORT, indices.data());
             }
 
@@ -320,12 +320,12 @@ namespace chronotext
                 if (glyph)
                 {
                     GlyphSequence *glyphSequence;
-                    auto it = fontSequence.find(glyph);
+                    auto it = fontSequence.find(glyph->texture);
                     
                     if (it == fontSequence.end())
                     {
                         glyphSequence = new GlyphSequence;
-                        fontSequence[glyph] = unique_ptr<GlyphSequence>(glyphSequence);
+                        fontSequence[glyph->texture] = unique_ptr<GlyphSequence>(glyphSequence);
                     }
                     else
                     {

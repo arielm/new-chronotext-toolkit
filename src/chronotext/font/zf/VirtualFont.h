@@ -114,7 +114,7 @@ namespace chronotext
             ci::ColorA color;
 
             const std::vector<GLushort> &indices;
-            std::map<ActualFont::Glyph*, std::unique_ptr<GlyphSequence>> fontSequence;
+            std::map<ReloadableTexture*, std::unique_ptr<GlyphSequence>> fontSequence;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
