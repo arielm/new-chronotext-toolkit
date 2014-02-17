@@ -175,7 +175,7 @@ namespace chronotext
             
             Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties);
             
-            void flush(int count);
+            void flush();
             void incrementSequence();
             
             GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;

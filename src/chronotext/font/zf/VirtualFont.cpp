@@ -292,14 +292,14 @@ namespace chronotext
             
             for (auto &it : fontSequence)
             {
-                const auto &texture = it.first;
-                const auto &glyphSequence = it.second;
+                auto &glyphSequence = it.second;
+                auto vertices = glyphSequence->vertices.data();
                 
-                glVertexPointer(2, GL_FLOAT, stride, glyphSequence->vertices.data());
-                glTexCoordPointer(2, GL_FLOAT, stride, glyphSequence->vertices.data() + 1);
+                glVertexPointer(2, GL_FLOAT, stride, vertices);
+                glTexCoordPointer(2, GL_FLOAT, stride, vertices + 1);
                 glColorPointer(4, GL_FLOAT, 0, glyphSequence->colors.data());
 
-                texture->bind();
+                it.first->bind();
                 glDrawElements(GL_TRIANGLES, 6 * glyphSequence->size, GL_UNSIGNED_SHORT, indices.data());
             }
 

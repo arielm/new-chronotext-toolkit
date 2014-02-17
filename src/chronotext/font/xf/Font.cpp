@@ -398,12 +398,12 @@ namespace chronotext
             }
             else
             {
-                flush(sequenceSize);
+                flush();
                 end(sequenceUseColor);
             }
         }
         
-        void Font::flush(int count)
+        void Font::flush()
         {
             int stride = sizeof(float) * (sequenceDimensions + 2);
             
@@ -414,7 +414,7 @@ namespace chronotext
             
             glVertexPointer(sequenceDimensions, GL_FLOAT, stride, vertices);
             glTexCoordPointer(2, GL_FLOAT, stride, vertices + sequenceDimensions);
-            glDrawElements(GL_TRIANGLES, count * 6, GL_UNSIGNED_SHORT, indices.data());
+            glDrawElements(GL_TRIANGLES, sequenceSize * 6, GL_UNSIGNED_SHORT, indices.data());
         }
         
         void Font::incrementSequence()
@@ -437,7 +437,7 @@ namespace chronotext
                 }
                 else
                 {
-                    flush(sequenceSize);
+                    flush();
                 }
                 
                 sequenceSize = 0;
