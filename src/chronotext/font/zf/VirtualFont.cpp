@@ -320,22 +320,26 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    GlyphSequence *glyphSequence;
-                    auto it = fontSequence.find(glyph->texture);
-                    
-                    if (it == fontSequence.end())
-                    {
-                        glyphSequence = new GlyphSequence;
-                        fontSequence[glyph->texture] = unique_ptr<GlyphSequence>(glyphSequence);
-                    }
-                    else
-                    {
-                        glyphSequence = it->second.get();
-                    }
-                    
+                    auto glyphSequence = getGlyphSequence(glyph->texture);
                     glyphSequence->addQuad(quad);
                     glyphSequence->addColor(color);
                 }
+            }
+        }
+        
+        GlyphSequence* VirtualFont::getGlyphSequence(ReloadableTexture *texture)
+        {
+            auto it = fontSequence.find(texture);
+            
+            if (it == fontSequence.end())
+            {
+                auto glyphSequence = new GlyphSequence;
+                fontSequence[texture] = unique_ptr<GlyphSequence>(glyphSequence);
+                return glyphSequence;
+            }
+            else
+            {
+                return it->second.get();
             }
         }
         

@@ -123,6 +123,8 @@ namespace chronotext
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
+            
+            GlyphSequence* getGlyphSequence(ReloadableTexture *texture);
         };
     }
 }
