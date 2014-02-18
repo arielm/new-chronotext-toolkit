@@ -8,10 +8,7 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
-
-#include "cinder/Color.h"
+#include "chronotext/font/GlyphSequence.h"
 
 namespace chronotext
 {
@@ -19,52 +16,18 @@ namespace chronotext
     {
         class Font;
         
-        struct Slot
-        {
-            int count;
-            float *vertices;
-            ci::ColorA *colors;
-            
-            Slot(int slotCapacity, bool useColor = false)
-            :
-            count(0),
-            colors(NULL)
-            {
-                vertices = new float[slotCapacity * (3 + 2) * 4];
-                
-                if (useColor)
-                {
-                    colors = new ci::ColorA[slotCapacity * 4];
-                }
-            }
-            
-            ~Slot()
-            {
-                delete[] vertices;
-                
-                if (colors)
-                {
-                    delete[] colors;
-                }
-            }
-        };
-        
         class FontSequence
         {
         public:
-            void begin(Font *font, int slotCapacity, bool useColor = false);
+            void begin(bool useColor = false);
             void end();
-            void flush(int count, float *vertices, ci::ColorA *colors = NULL);
-            void replay();
-            void clear();
+            
+            void flush(const GlyphSequence &glyphSequence);
+            void replay(Font &font);
             
         protected:
-            Font *font;
-            int slotCapacity;
             bool useColor;
-            
-            int slotIndex;
-            std::vector<std::unique_ptr<Slot>> slots;
+            std::vector<GlyphSequence> slots;
         };
     }
 }

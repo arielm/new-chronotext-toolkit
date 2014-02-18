@@ -61,8 +61,6 @@ namespace chronotext
                 }
             };
             
-            ~Font(); // MUST BE PUBLIC BECAUSE OF unique_ptr
-            
             bool isSpace(wchar_t c) const;
             bool isValid(wchar_t c) const;
             int getGlyphIndex(wchar_t c) const;
@@ -145,8 +143,6 @@ namespace chronotext
             FontMatrix matrix;
             
             const std::vector<GLushort> &indices;
-            float *vertices;
-            ci::ColorA *colors;
             
             bool anisotropyAvailable;
             float maxAnisotropy;
@@ -161,21 +157,15 @@ namespace chronotext
             ci::Rectf clip;
             
             int began;
-            int sequenceSize;
             bool sequenceUseColor;
-            float *sequenceVertices;
-            ci::ColorA *sequenceColors;
+            GlyphSequence glyphSequence;
             FontSequence *sequence;
             
             Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties);
             
-            void flush();
             void incrementSequence();
-            
-            GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;
+            GlyphQuad obtainQuad(int glyphIndex, float x, float y) const;
             bool clipQuad(GlyphQuad &quad);
-            
-            static int addQuad(const GlyphQuad &quad, float z, float *vertices);
         };
     }
 }

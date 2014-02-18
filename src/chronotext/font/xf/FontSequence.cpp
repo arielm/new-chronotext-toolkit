@@ -9,8 +9,6 @@
 #include "chronotext/font/xf/FontSequence.h"
 #include "chronotext/font/xf/Font.h"
 
-#include "cinder/gl/gl.h"
-
 using namespace std;
 using namespace ci;
 
@@ -18,71 +16,30 @@ namespace chronotext
 {
     namespace xf
     {
-        void FontSequence::begin(Font *font, int slotCapacity, bool useColor)
+        void FontSequence::begin(bool useColor)
         {
-            this->font = font;
-            this->slotCapacity = slotCapacity;
             this->useColor = useColor;
-            
-            slotIndex = 0;
+            slots.clear();
         }
         
         void FontSequence::end()
         {}
         
-        void FontSequence::flush(int count, float *vertices, ci::ColorA *colors)
+        void FontSequence::flush(const GlyphSequence &glyphSequence)
         {
-            assert(!useColor || colors);
-            
-            // ---
-            
-            Slot *slot;
-            
-            if (slotIndex + 1 > slots.size())
-            {
-                slot = new Slot(slotCapacity, useColor);
-                slots.push_back(unique_ptr<Slot>(slot));
-            }
-            else
-            {
-                slot = slots[slotIndex].get();
-            }
-            
-            memcpy(slot->vertices, vertices, sizeof(float) * count * (3 + 2) * 4);
-            
-            if (useColor)
-            {
-                memcpy(slot->colors, colors, sizeof(ColorA) * count * 4);
-            }
-            
-            slot->count = count;
-            slotIndex++;
+            slots.push_back(glyphSequence);
         }
         
-        void FontSequence::replay()
+        void FontSequence::replay(Font &font)
         {
-            font->begin(useColor);
+            font.begin(useColor);
             
             for (auto &slot : slots)
             {
-                static const int stride = sizeof(float) * (3 + 2);
-                
-                if (useColor)
-                {
-                    glColorPointer(4, GL_FLOAT, 0, slot->colors);
-                }
-                
-                glVertexPointer(3, GL_FLOAT, stride, slot->vertices);
-                glTexCoordPointer(2, GL_FLOAT, stride, slot->vertices + 3);
-                glDrawElements(GL_TRIANGLES, slot->count * 6, GL_UNSIGNED_SHORT, font->getIndices());
+                slot.flush(font.getIndices(), useColor);
             }
             
-            font->end(useColor);
-        }
-        
-        void FontSequence::clear()
-        {
-            slots.clear();
+            font.end(useColor);
         }
     }
 }

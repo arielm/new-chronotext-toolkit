@@ -10,11 +10,11 @@
 
 #include "chronotext/font/GlyphQuad.h"
 
-#include "cinder/Color.h"
+#include "cinder/gl/gl.h"
 
 namespace chronotext
 {
-    struct Vertex3D
+    struct Vertex
     {
         float x;
         float y;
@@ -23,7 +23,7 @@ namespace chronotext
         float u;
         float v;
         
-        Vertex3D(float x, float y, float z, float u, float v)
+        Vertex(float x, float y, float z, float u, float v)
         :
         x(x),
         y(y),
@@ -33,12 +33,12 @@ namespace chronotext
         {}
     };
     
-    class GlyphSequence3D
+    class GlyphSequence
     {
     public:
         static const int stride = sizeof(float) * (3 + 2);
         
-        std::vector<Vertex3D> vertices;
+        std::vector<Vertex> vertices;
         std::vector<ci::ColorA> colors;
         
         void clear()
@@ -46,7 +46,12 @@ namespace chronotext
             vertices.clear();
             colors.clear();
         }
-        
+
+        int size() const
+        {
+            return vertices.size() >> 2;
+        }
+
         inline void addQuad(const GlyphQuad &quad, float z = 0)
         {
             vertices.emplace_back(quad.x1, quad.y1, z, quad.u1, quad.v1);
@@ -63,16 +68,18 @@ namespace chronotext
             colors.emplace_back(color);
         }
         
-        void flush(const std::vector<GLushort> &indices)
+        void flush(const GLushort *indices, bool useColor = false) const
         {
-            float *pointer = reinterpret_cast<float*>(vertices.data());
-            int size = vertices.size() >> 2;
-            
+            const float *pointer = reinterpret_cast<const float*>(vertices.data());
+
+            if (useColor)
+            {
+                glColorPointer(4, GL_FLOAT, 0, colors.data());
+            }
+
             glVertexPointer(3, GL_FLOAT, stride, pointer);
             glTexCoordPointer(2, GL_FLOAT, stride, pointer + 3);
-            glColorPointer(4, GL_FLOAT, 0, colors.data());
-            
-            glDrawElements(GL_TRIANGLES, 6 * size, GL_UNSIGNED_SHORT, indices.data());
+            glDrawElements(GL_TRIANGLES, 6 * size(), GL_UNSIGNED_SHORT, indices);
         }
     };
 }

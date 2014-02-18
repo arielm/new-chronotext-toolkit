@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/GlyphQuad.h"
+#include "chronotext/font/GlyphSequence.h"
 
 #include "cinder/Matrix44.h"
 
@@ -54,7 +54,7 @@ namespace chronotext
         void rotateXY(float sx, float sy);
         
         ci::Vec3f transform(float x, float y) const;
-        int addTransformedQuad(const GlyphQuad &quad, float *vertices) const;
+        void addTransformedQuad(const GlyphQuad &quad, std::vector<Vertex> &vertices) const;
     };
 }
 
