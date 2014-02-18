@@ -9,7 +9,7 @@
 #pragma once
 
 #include "chronotext/incubator/ui/Shape.h"
-#include "chronotext/text/WordWrapper.h"
+#include "chronotext/incubator/ui/WordWrapper.h"
 
 namespace chronotext
 {
@@ -64,7 +64,7 @@ namespace chronotext
         float offsetY;
         
         std::wstring text;
-        xf::WordWrapper wrapper;
+        WordWrapper wrapper;
 
         TextBox();
         TextBox(std::shared_ptr<Style> style);

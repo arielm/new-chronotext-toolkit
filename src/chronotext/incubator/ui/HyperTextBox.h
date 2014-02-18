@@ -10,7 +10,7 @@
 
 #include "chronotext/incubator/ui/TextBox.h"
 #include "chronotext/incubator/ui/TouchableLink.h"
-#include "chronotext/text/LinkExtractor.h"
+#include "chronotext/incubator/ui/LinkExtractor.h"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
