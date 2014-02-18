@@ -12,7 +12,6 @@
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/font/FontMatrix.h"
-#include "chronotext/font/GlyphSequence2D.h" // FIXME: SHOULD BE INCLUDED IN FontMatrix
 
 #include <set>
 #include <map>
@@ -115,8 +114,7 @@ namespace chronotext
             ci::ColorA color;
 
             const std::vector<GLushort> &indices;
-            
-            std::map<ReloadableTexture*, std::unique_ptr<GlyphSequence2D>> fontSequence;
+            std::map<ReloadableTexture*, std::unique_ptr<GlyphSequence>> fontSequence;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
@@ -126,7 +124,7 @@ namespace chronotext
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
             
-            GlyphSequence2D* getGlyphSequence2D(ReloadableTexture *texture);
+            GlyphSequence* getGlyphSequence(ReloadableTexture *texture);
         };
     }
 }

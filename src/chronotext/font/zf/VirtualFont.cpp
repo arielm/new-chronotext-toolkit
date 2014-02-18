@@ -291,7 +291,7 @@ namespace chronotext
             for (auto &it : fontSequence)
             {
                 it.first->bind();
-                it.second->flush(indices);
+                it.second->flush(reinterpret_cast<const GLushort*>(indices.data()), true); // XXX
             }
 
             glDisable(GL_TEXTURE_2D);
@@ -310,21 +310,21 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    auto glyphSequence = getGlyphSequence2D(glyph->texture);
+                    auto glyphSequence = getGlyphSequence(glyph->texture);
                     glyphSequence->addQuad(quad);
                     glyphSequence->addColor(color);
                 }
             }
         }
         
-        GlyphSequence2D* VirtualFont::getGlyphSequence2D(ReloadableTexture *texture)
+        GlyphSequence* VirtualFont::getGlyphSequence(ReloadableTexture *texture)
         {
             auto it = fontSequence.find(texture);
             
             if (it == fontSequence.end())
             {
-                auto glyphSequence = new GlyphSequence2D;
-                fontSequence[texture] = unique_ptr<GlyphSequence2D>(glyphSequence);
+                auto glyphSequence = new GlyphSequence;
+                fontSequence[texture] = unique_ptr<GlyphSequence>(glyphSequence);
                 return glyphSequence;
             }
             else
