@@ -288,20 +288,10 @@ namespace chronotext
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
             
-            const int stride = sizeof(Vec2f) * 2;
-            
             for (auto &it : fontSequence)
             {
                 it.first->bind();
-
-                auto &glyphSequence = it.second;
-                auto vertices = glyphSequence->vertices.data();
-                int size = glyphSequence->vertices.size() >> 3;
-                
-                glVertexPointer(2, GL_FLOAT, stride, vertices);
-                glTexCoordPointer(2, GL_FLOAT, stride, vertices + 1);
-                glColorPointer(4, GL_FLOAT, 0, glyphSequence->colors.data());
-                glDrawElements(GL_TRIANGLES, 6 * size, GL_UNSIGNED_SHORT, indices.data());
+                it.second->flush(indices);
             }
 
             glDisable(GL_TEXTURE_2D);
@@ -320,21 +310,21 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    auto glyphSequence = getGlyphSequence(glyph->texture);
+                    auto glyphSequence = getGlyphSequence2D(glyph->texture);
                     glyphSequence->addQuad(quad);
                     glyphSequence->addColor(color);
                 }
             }
         }
         
-        GlyphSequence* VirtualFont::getGlyphSequence(ReloadableTexture *texture)
+        GlyphSequence2D* VirtualFont::getGlyphSequence2D(ReloadableTexture *texture)
         {
             auto it = fontSequence.find(texture);
             
             if (it == fontSequence.end())
             {
-                auto glyphSequence = new GlyphSequence;
-                fontSequence[texture] = unique_ptr<GlyphSequence>(glyphSequence);
+                auto glyphSequence = new GlyphSequence2D;
+                fontSequence[texture] = unique_ptr<GlyphSequence2D>(glyphSequence);
                 return glyphSequence;
             }
             else

@@ -8,24 +8,12 @@
 
 #pragma once
 
+#include "chronotext/font/GlyphQuad.h"
+
 #include "cinder/Matrix44.h"
-#include "cinder/Rect.h"
 
 namespace chronotext
 {
-    struct GlyphQuad
-    {
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        
-        float u1;
-        float v1;
-        float u2;
-        float v2;
-    };
-    
     class FontMatrix
     {
         union
