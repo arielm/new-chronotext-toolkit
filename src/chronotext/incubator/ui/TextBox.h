@@ -64,7 +64,7 @@ namespace chronotext
         float offsetY;
         
         std::wstring text;
-        WordWrapper wrapper;
+        xf::WordWrapper wrapper;
 
         TextBox();
         TextBox(std::shared_ptr<Style> style);
