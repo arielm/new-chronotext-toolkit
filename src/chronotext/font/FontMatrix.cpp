@@ -190,7 +190,7 @@ namespace chronotext
         m32 = r32;
     }
     
-    Vec3f FontMatrix::transform3D(float x, float y) const
+    Vec3f FontMatrix::transform(float x, float y) const
     {
         float x00 = x * m00;
         float x10 = x * m10;
@@ -203,18 +203,7 @@ namespace chronotext
         return Vec3f(x00 + y01 + m03, x10 + y11 + m13, x20 + y21 + m23);
     }
     
-    ci::Vec2f FontMatrix::transform2D(float x, float y) const
-    {
-        float x00 = x * m00;
-        float x10 = x * m10;
-        
-        float y01 = y * m01;
-        float y11 = y * m11;
-        
-        return Vec2f(x00 + y01 + m03, x10 + y11 + m13);
-    }
-    
-    int FontMatrix::addTransformedQuad3D(const GlyphQuad &quad, float *vertices) const
+    int FontMatrix::addTransformedQuad(const GlyphQuad &quad, float *vertices) const
     {
         float x100 = quad.x1 * m00;
         float x110 = quad.x1 * m10;
@@ -269,54 +258,5 @@ namespace chronotext
         *vertices++ = quad.v1;
         
         return 4 * (3 + 2);
-    }
-    
-    int FontMatrix::addTransformedQuad2D(const GlyphQuad &quad, float *vertices) const
-    {
-        float x100 = quad.x1 * m00;
-        float x110 = quad.x1 * m10;
-        
-        float y101 = quad.y1 * m01;
-        float y111 = quad.y1 * m11;
-        
-        float x200 = quad.x2 * m00;
-        float x210 = quad.x2 * m10;
-        
-        float y201 = quad.y2 * m01;
-        float y211 = quad.y2 * m11;
-        
-        // --- x1, y1 ---
-        
-        *vertices++ = x100 + y101 + m03;
-        *vertices++ = x110 + y111 + m13;
-        
-        *vertices++ = quad.u1;
-        *vertices++ = quad.v1;
-        
-        // --- x1, y2 ---
-        
-        *vertices++ = x100 + y201 + m03;
-        *vertices++ = x110 + y211 + m13;
-
-        *vertices++ = quad.u1;
-        *vertices++ = quad.v2;
-
-        // --- x2, y2 ---
-        
-        *vertices++ = x200 + y201 + m03;
-        *vertices++ = x210 + y211 + m13;
-
-        *vertices++ = quad.u2;
-        *vertices++ = quad.v2;
-
-        // --- x2, y1 ---
-        
-        *vertices++ = x200 + y101 + m03;
-        *vertices++ = x210 + y111 + m13;
-        
-        *vertices++ = quad.u2;
-        *vertices++ = quad.v1;
-        
-        return 4 * (2 + 2);
     }
 }

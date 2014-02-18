@@ -42,24 +42,22 @@ namespace chronotext
             struct Properties
             {
                 bool useAnisotropy;
-                int maxDimensions;
                 int slotCapacity;
                 
-                Properties(bool useAnisotropy, int maxDimensions, int slotCapacity)
+                Properties(bool useAnisotropy, int slotCapacity)
                 :
                 useAnisotropy(useAnisotropy),
-                maxDimensions(maxDimensions),
                 slotCapacity(slotCapacity)
                 {}
                 
                 static Properties Default2D(int slotCapacity = 1024)
                 {
-                    return Properties(false, 2, slotCapacity);
+                    return Properties(false, slotCapacity);
                 }
                 
                 static Properties Default3D(int slotCapacity = 2048)
                 {
-                    return Properties(true, 3, slotCapacity);
+                    return Properties(true, slotCapacity);
                 }
             };
             
@@ -107,14 +105,11 @@ namespace chronotext
             void begin(bool useColor = false);
             void end(bool useColor = false);
             
-            void beginSequence(FontSequence *sequence, int dimensions, bool useColor = false);
+            void beginSequence(FontSequence *sequence, bool useColor = false);
             void endSequence();
             
-            void addGlyph(int glyphIndex, float x, float y);
-            void addGlyph(int glyphIndex, float x, float y, float z);
-            
-            void addTransformedGlyph2D(int glyphIndex, float x, float y);
-            void addTransformedGlyph3D(int glyphIndex, float x, float y);
+            void addGlyph(int glyphIndex, float x, float y, float z = 0);
+            void addTransformedGlyph(int glyphIndex, float x, float y);
             
             friend class FontManager;
             
@@ -167,7 +162,6 @@ namespace chronotext
             
             int began;
             int sequenceSize;
-            int sequenceDimensions;
             bool sequenceUseColor;
             float *sequenceVertices;
             ci::ColorA *sequenceColors;
@@ -181,7 +175,6 @@ namespace chronotext
             GlyphQuad getGlyphQuad(int glyphIndex, float x, float y) const;
             bool clipQuad(GlyphQuad &quad);
             
-            static int addQuad(const GlyphQuad &quad, float *vertices);
             static int addQuad(const GlyphQuad &quad, float z, float *vertices);
         };
     }

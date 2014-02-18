@@ -19,20 +19,18 @@ namespace chronotext
         {
             std::string uri;
             bool useAnisotropy;
-            int maxDimensions;
             int slotCapacity;
             
-            FontKey(const std::string &uri, bool useAnisotropy, int maxDimensions, int slotCapacity)
+            FontKey(const std::string &uri, bool useAnisotropy, int slotCapacity)
             :
             uri(uri),
             useAnisotropy(useAnisotropy),
-            maxDimensions(maxDimensions),
             slotCapacity(slotCapacity)
             {}
             
             bool operator<(const FontKey &rhs) const
             {
-                return std::tie(uri, useAnisotropy, maxDimensions, slotCapacity) < std::tie(rhs.uri, rhs.useAnisotropy, rhs.maxDimensions, rhs.slotCapacity);
+                return std::tie(uri, useAnisotropy, slotCapacity) < std::tie(rhs.uri, rhs.useAnisotropy, rhs.slotCapacity);
             }
         };
         

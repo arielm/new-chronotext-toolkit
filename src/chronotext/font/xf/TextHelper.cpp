@@ -17,7 +17,7 @@ namespace chronotext
     {
         void TextHelper::drawText(Font &font, const wstring &text, float x, float y)
         {
-            font.beginSequence(NULL, 2);
+            font.beginSequence(NULL);
             
             for (auto c : text)
             {
@@ -45,7 +45,7 @@ namespace chronotext
             float sampleSize = font.getSize() * 0.5f;
             
             auto matrix = font.getMatrix();
-            font.beginSequence(NULL, 2);
+            font.beginSequence(NULL);
             
             for (auto c : text)
             {
@@ -57,7 +57,7 @@ namespace chronotext
                 {
                     matrix->setTranslation(path.pos2Point(offsetX));
                     matrix->rotateZ(path.pos2SampledAngle(offsetX, sampleSize));
-                    font.addTransformedGlyph2D(glyphIndex, -half, offsetY);
+                    font.addTransformedGlyph(glyphIndex, -half, offsetY);
                 }
                 
                 offsetX += half;

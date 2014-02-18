@@ -18,11 +18,10 @@ namespace chronotext
 {
     namespace xf
     {
-        void FontSequence::begin(Font *font, int slotCapacity, int dimensions, bool useColor)
+        void FontSequence::begin(Font *font, int slotCapacity, bool useColor)
         {
             this->font = font;
             this->slotCapacity = slotCapacity;
-            this->dimensions = dimensions;
             this->useColor = useColor;
             
             slotIndex = 0;
@@ -41,7 +40,7 @@ namespace chronotext
             
             if (slotIndex + 1 > slots.size())
             {
-                slot = new Slot(slotCapacity, dimensions, useColor);
+                slot = new Slot(slotCapacity, useColor);
                 slots.push_back(unique_ptr<Slot>(slot));
             }
             else
@@ -49,7 +48,7 @@ namespace chronotext
                 slot = slots[slotIndex].get();
             }
             
-            memcpy(slot->vertices, vertices, sizeof(float) * count * (dimensions + 2) * 4);
+            memcpy(slot->vertices, vertices, sizeof(float) * count * (3 + 2) * 4);
             
             if (useColor)
             {
@@ -57,9 +56,6 @@ namespace chronotext
             }
             
             slot->count = count;
-            
-            // ---
-            
             slotIndex++;
         }
         
@@ -69,15 +65,15 @@ namespace chronotext
             
             for (auto &slot : slots)
             {
-                int stride = sizeof(float) * (dimensions + 2);
+                static const int stride = sizeof(float) * (3 + 2);
                 
                 if (useColor)
                 {
                     glColorPointer(4, GL_FLOAT, 0, slot->colors);
                 }
                 
-                glVertexPointer(dimensions, GL_FLOAT, stride, slot->vertices);
-                glTexCoordPointer(2, GL_FLOAT, stride, slot->vertices + dimensions);
+                glVertexPointer(3, GL_FLOAT, stride, slot->vertices);
+                glTexCoordPointer(2, GL_FLOAT, stride, slot->vertices + 3);
                 glDrawElements(GL_TRIANGLES, slot->count * 6, GL_UNSIGNED_SHORT, font->getIndices());
             }
             

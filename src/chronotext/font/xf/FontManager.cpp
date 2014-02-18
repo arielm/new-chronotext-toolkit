@@ -162,7 +162,7 @@ namespace chronotext
         {
             auto uri = inputSource->getURI();
             
-            FontKey key(uri, properties.useAnisotropy, properties.maxDimensions, properties.slotCapacity);
+            FontKey key(uri, properties.useAnisotropy, properties.slotCapacity);
             auto it1 = fonts.find(key);
             
             if (it1 != fonts.end())

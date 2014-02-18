@@ -54,7 +54,7 @@ namespace chronotext
             
             // ---
             
-            vertices = new float[properties.slotCapacity * (properties.maxDimensions + 2) * 4];
+            vertices = new float[properties.slotCapacity * (3 + 2) * 4];
             
             // ---
             
@@ -361,9 +361,8 @@ namespace chronotext
             }
         }
         
-        void Font::beginSequence(FontSequence *sequence, int dimensions, bool useColor)
+        void Font::beginSequence(FontSequence *sequence, bool useColor)
         {
-            sequenceDimensions = dimensions;
             sequenceUseColor = useColor;
             
             if (useColor && !colors)
@@ -378,7 +377,7 @@ namespace chronotext
             if (sequence)
             {
                 this->sequence = sequence;
-                sequence->begin(this, properties.slotCapacity, dimensions, useColor);
+                sequence->begin(this, properties.slotCapacity, useColor);
             }
             else
             {
@@ -405,15 +404,15 @@ namespace chronotext
         
         void Font::flush()
         {
-            int stride = sizeof(float) * (sequenceDimensions + 2);
+            static const int stride = sizeof(float) * (3 + 2);
             
             if (sequenceUseColor)
             {
                 glColorPointer(4, GL_FLOAT, 0, colors);
             }
             
-            glVertexPointer(sequenceDimensions, GL_FLOAT, stride, vertices);
-            glTexCoordPointer(2, GL_FLOAT, stride, vertices + sequenceDimensions);
+            glVertexPointer(3, GL_FLOAT, stride, vertices);
+            glTexCoordPointer(2, GL_FLOAT, stride, vertices + 3);
             glDrawElements(GL_TRIANGLES, sequenceSize * 6, GL_UNSIGNED_SHORT, indices.data());
         }
         
@@ -532,41 +531,6 @@ namespace chronotext
             }
         }
         
-        int Font::addQuad(const GlyphQuad &quad, float *vertices)
-        {
-            *vertices++ = quad.x1;
-            *vertices++ = quad.y1;
-            
-            *vertices++ = quad.u1;
-            *vertices++ = quad.v1;
-            
-            //
-            
-            *vertices++ = quad.x1;
-            *vertices++ = quad.y2;
-            
-            *vertices++ = quad.u1;
-            *vertices++ = quad.v2;
-            
-            //
-            
-            *vertices++ = quad.x2;
-            *vertices++ = quad.y2;
-            
-            *vertices++ = quad.u2;
-            *vertices++ = quad.v2;
-            
-            //
-            
-            *vertices++ = quad.x2;
-            *vertices++ = quad.y1;
-            
-            *vertices++ = quad.u2;
-            *vertices++ = quad.v1;
-            
-            return 4 * (2 + 2);
-        }
-        
         int Font::addQuad(const GlyphQuad &quad, float z, float *vertices)
         {
             *vertices++ = quad.x1;
@@ -606,20 +570,6 @@ namespace chronotext
             return 4 * (3 + 2);
         }
         
-        void Font::addGlyph(int glyphIndex, float x, float y)
-        {
-            if (glyphIndex >= 0)
-            {
-                GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
-                
-                if (!hasClip || clipQuad(quad))
-                {
-                    sequenceVertices += addQuad(quad, sequenceVertices);
-                    incrementSequence();
-                }
-            }
-        }
-        
         void Font::addGlyph(int glyphIndex, float x, float y, float z)
         {
             if (glyphIndex >= 0)
@@ -634,7 +584,7 @@ namespace chronotext
             }
         }
         
-        void Font::addTransformedGlyph2D(int glyphIndex, float x, float y)
+        void Font::addTransformedGlyph(int glyphIndex, float x, float y)
         {
             if (glyphIndex >= 0)
             {
@@ -642,21 +592,7 @@ namespace chronotext
                 
                 if (!hasClip || clipQuad(quad))
                 {
-                    sequenceVertices += matrix.addTransformedQuad2D(quad, sequenceVertices);
-                    incrementSequence();
-                }
-            }
-        }
-        
-        void Font::addTransformedGlyph3D(int glyphIndex, float x, float y)
-        {
-            if (glyphIndex >= 0)
-            {
-                GlyphQuad quad = getGlyphQuad(glyphIndex, x, y);
-                
-                if (!hasClip || clipQuad(quad))
-                {
-                    sequenceVertices += matrix.addTransformedQuad3D(quad, sequenceVertices);
+                    sequenceVertices += matrix.addTransformedQuad(quad, sequenceVertices);
                     incrementSequence();
                 }
             }

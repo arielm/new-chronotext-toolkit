@@ -25,12 +25,12 @@ namespace chronotext
             float *vertices;
             ci::ColorA *colors;
             
-            Slot(int slotCapacity, int dimensions, bool useColor = false)
+            Slot(int slotCapacity, bool useColor = false)
             :
             count(0),
             colors(NULL)
             {
-                vertices = new float[slotCapacity * (dimensions + 2) * 4];
+                vertices = new float[slotCapacity * (3 + 2) * 4];
                 
                 if (useColor)
                 {
@@ -52,7 +52,7 @@ namespace chronotext
         class FontSequence
         {
         public:
-            void begin(Font *font, int slotCapacity, int dimensions, bool useColor = false);
+            void begin(Font *font, int slotCapacity, bool useColor = false);
             void end();
             void flush(int count, float *vertices, ci::ColorA *colors = NULL);
             void replay();
@@ -61,7 +61,6 @@ namespace chronotext
         protected:
             Font *font;
             int slotCapacity;
-            int dimensions;
             bool useColor;
             
             int slotIndex;
