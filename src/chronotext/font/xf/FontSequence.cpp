@@ -19,24 +19,24 @@ namespace chronotext
         void FontSequence::begin(bool useColor)
         {
             this->useColor = useColor;
-            slots.clear();
+            batches.clear();
         }
         
         void FontSequence::end()
         {}
         
-        void FontSequence::flush(const GlyphSequence &glyphSequence)
+        void FontSequence::addBatch(const GlyphBatch &batch)
         {
-            slots.push_back(glyphSequence);
+            batches.push_back(batch);
         }
         
         void FontSequence::replay(Font &font)
         {
             font.begin(useColor);
             
-            for (auto &slot : slots)
+            for (auto &batch : batches)
             {
-                slot.flush(font.getIndices(), useColor);
+                batch.flush(font.getIndices(), useColor);
             }
             
             font.end(useColor);

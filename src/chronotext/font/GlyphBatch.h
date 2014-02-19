@@ -33,7 +33,7 @@ namespace chronotext
         {}
     };
     
-    class GlyphSequence
+    class GlyphBatch
     {
     public:
         static const int stride = sizeof(float) * (3 + 2);

@@ -164,8 +164,8 @@ namespace chronotext
             
             int began;
             bool sequenceUseColor;
-            GlyphSequence glyphSequence;
             FontSequence *sequence;
+            GlyphBatch batch;
             
             Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties);
             

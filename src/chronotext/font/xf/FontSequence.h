@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/GlyphSequence.h"
+#include "chronotext/font/GlyphBatch.h"
 
 namespace chronotext
 {
@@ -22,12 +22,12 @@ namespace chronotext
             void begin(bool useColor = false);
             void end();
             
-            void flush(const GlyphSequence &glyphSequence);
+            void addBatch(const GlyphBatch &batch);
             void replay(Font &font);
             
         protected:
             bool useColor;
-            std::vector<GlyphSequence> slots;
+            std::vector<GlyphBatch> batches;
         };
     }
 }

@@ -351,7 +351,7 @@ namespace chronotext
             sequenceUseColor = useColor;
 
             clearClip();
-            glyphSequence.clear();
+            batch.clear();
             
             if (sequence)
             {
@@ -368,13 +368,13 @@ namespace chronotext
         {
             if (sequence)
             {
-                sequence->flush(glyphSequence);
+                sequence->addBatch(batch);
                 sequence->end();
                 sequence = NULL;
             }
             else
             {
-                glyphSequence.flush(getIndices(), sequenceUseColor);
+                batch.flush(getIndices(), sequenceUseColor);
                 end(sequenceUseColor);
             }
         }
@@ -383,21 +383,21 @@ namespace chronotext
         {
             if (sequenceUseColor)
             {
-                glyphSequence.addColor(color);
+                batch.addColor(color);
             }
             
-            if (glyphSequence.size() == properties.slotCapacity)
+            if (batch.size() == properties.slotCapacity)
             {
                 if (sequence)
                 {
-                    sequence->flush(glyphSequence);
+                    sequence->addBatch(batch);
                 }
                 else
                 {
-                    glyphSequence.flush(getIndices(), sequenceUseColor);
+                    batch.flush(getIndices(), sequenceUseColor);
                 }
                 
-                glyphSequence.clear();
+                batch.clear();
             }
         }
         
@@ -495,7 +495,7 @@ namespace chronotext
                 
                 if (!hasClip || clipQuad(quad))
                 {
-                    glyphSequence.addQuad(quad);
+                    batch.addQuad(quad);
                     incrementSequence();
                 }
             }
@@ -509,7 +509,7 @@ namespace chronotext
                 
                 if (!hasClip || clipQuad(quad))
                 {
-                    matrix.addTransformedQuad(quad, glyphSequence.vertices);
+                    matrix.addTransformedQuad(quad, batch.vertices);
                     incrementSequence();
                 }
             }
