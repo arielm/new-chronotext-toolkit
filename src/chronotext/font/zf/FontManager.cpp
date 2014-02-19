@@ -195,7 +195,7 @@ namespace chronotext
         
         shared_ptr<VirtualFont> FontManager::getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties)
         {
-            VirtualFont::Key key(source->getURI(), properties.baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity);
+            auto key = make_pair(source->getURI(), properties);
             auto it = virtualFonts.find(key);
             
             if (it != virtualFonts.end())

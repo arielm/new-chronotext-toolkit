@@ -99,7 +99,7 @@ namespace chronotext
 
             std::vector<GLushort> indices;
             
-            std::map<VirtualFont::Key, std::shared_ptr<VirtualFont>> virtualFonts;
+            std::map<std::pair<std::string, VirtualFont::Properties>, std::shared_ptr<VirtualFont>> virtualFonts;
             std::map<ActualFont::Key, std::unique_ptr<ActualFont>> actualFonts;
             
             ActualFont* getActualFont(const ActualFont::Descriptor &descriptor, float baseSize, bool useMipmap = false);

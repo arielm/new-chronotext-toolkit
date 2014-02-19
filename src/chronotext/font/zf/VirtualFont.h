@@ -89,29 +89,6 @@ namespace chronotext
                 return Properties(baseSize, false, false, slotCapacity);
             }
             
-            struct Key
-            {
-                std::string uri;
-                float baseSize;
-                bool useMipmap;
-                bool useAnisotropy;
-                int slotCapacity;
-                
-                Key(const std::string &uri, float baseSize, bool useMipmap, bool useAnisotropy, int slotCapacity)
-                :
-                uri(uri),
-                baseSize(baseSize),
-                useMipmap(useMipmap),
-                useAnisotropy(useAnisotropy),
-                slotCapacity(slotCapacity)
-                {}
-                
-                bool operator<(const Key &rhs) const
-                {
-                    return std::tie(uri, baseSize, useMipmap, useAnisotropy, slotCapacity) < std::tie(rhs.uri, rhs.baseSize, rhs.useMipmap, rhs.useAnisotropy, rhs.slotCapacity);
-                }
-            };
-            
             LayoutCache &layoutCache;
             TextItemizer &itemizer;
             float baseSize;
