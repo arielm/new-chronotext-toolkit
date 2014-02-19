@@ -123,7 +123,7 @@ namespace chronotext
             int glyphCount;
             std::map<wchar_t, int> glyphs;
             
-            float nativeFontSize;
+            float baseSize;
             float height;
             float ascent;
             float descent;

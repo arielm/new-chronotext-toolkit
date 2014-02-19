@@ -307,7 +307,7 @@ namespace chronotext
             
             auto data = new FontData(glyphCount);
             
-            in->readLittle(&data->nativeFontSize);
+            in->readLittle(&data->baseSize);
             in->readLittle(&data->height);
             in->readLittle(&data->ascent);
             in->readLittle(&data->descent);

@@ -28,7 +28,7 @@ namespace chronotext
             glyphCount = data->glyphCount;
             glyphs = data->glyphs;
             
-            nativeFontSize = data->nativeFontSize;
+            baseSize = data->baseSize;
             height = data->height;
             ascent = data->ascent;
             descent = data->descent;
@@ -62,7 +62,7 @@ namespace chronotext
             
             // ---
             
-            setSize(nativeFontSize);
+            setSize(baseSize);
             setDirection(+1);
             setAxis(Vec2f(+1, +1));
             setColor(0, 0, 0, 1);
@@ -115,7 +115,7 @@ namespace chronotext
         void Font::setSize(float size)
         {
             this->size = size;
-            sizeRatio = size / nativeFontSize;
+            sizeRatio = size / baseSize;
         }
         
         void Font::setDirection(float direction)
