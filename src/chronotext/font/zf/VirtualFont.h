@@ -48,22 +48,67 @@ namespace chronotext
             }
             Alignment;
             
+            struct Properties
+            {
+                float baseSize;
+                bool useMipmap;
+                bool useAnisotropy;
+                int slotCapacity;
+                
+                Properties(float baseSize, bool useMipmap, bool useAnisotropy, int slotCapacity)
+                :
+                baseSize(baseSize),
+                useMipmap(useMipmap),
+                useAnisotropy(useAnisotropy),
+                slotCapacity(slotCapacity)
+                {
+                    assert(baseSize >= 0);
+                    assert((slotCapacity > 0) && (slotCapacity <= 8192));
+                    assert(!(useAnisotropy && !useMipmap));
+                    assert(!(!useMipmap && (baseSize == 0)));
+                }
+                
+                bool operator<(const Properties &rhs) const
+                {
+                    return std::tie(baseSize, useMipmap, useAnisotropy, slotCapacity) < std::tie(rhs.baseSize, rhs.useMipmap, rhs.useAnisotropy, rhs.slotCapacity);
+                }
+            };
+            
+            static Properties Properties2d(float baseSize = 0, int slotCapacity = 1024)
+            {
+                return Properties(baseSize, true, false, slotCapacity);
+            }
+            
+            static Properties Properties3d(float baseSize = 0, int slotCapacity = 1024)
+            {
+                return Properties(baseSize, true, true, slotCapacity);
+            }
+            
+            static Properties PropertiesCrisp(float baseSize, int slotCapacity = 1024)
+            {
+                return Properties(baseSize, false, false, slotCapacity);
+            }
+            
             struct Key
             {
                 std::string uri;
                 float baseSize;
                 bool useMipmap;
+                bool useAnisotropy;
+                int slotCapacity;
                 
-                Key(const std::string &uri, float baseSize, bool useMipmap)
+                Key(const std::string &uri, float baseSize, bool useMipmap, bool useAnisotropy, int slotCapacity)
                 :
                 uri(uri),
                 baseSize(baseSize),
-                useMipmap(useMipmap)
+                useMipmap(useMipmap),
+                useAnisotropy(useAnisotropy),
+                slotCapacity(slotCapacity)
                 {}
                 
                 bool operator<(const Key &rhs) const
                 {
-                    return tie(uri, baseSize, useMipmap) < tie(rhs.uri, rhs.baseSize, rhs.useMipmap);
+                    return std::tie(uri, baseSize, useMipmap, useAnisotropy, slotCapacity) < std::tie(rhs.uri, rhs.baseSize, rhs.useMipmap, rhs.useAnisotropy, rhs.slotCapacity);
                 }
             };
             
@@ -113,13 +158,15 @@ namespace chronotext
             float sizeRatio;
             ci::ColorA color;
 
+            Properties properties;
             const std::vector<GLushort> &indices;
+            
             std::map<ReloadableTexture*, std::unique_ptr<GlyphSequence>> fontSequence;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
             
-            VirtualFont(FontManager &fontManager, float baseSize);
+            VirtualFont(FontManager &fontManager, const Properties &properties);
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;

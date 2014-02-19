@@ -48,14 +48,16 @@ namespace chronotext
                 :
                 useAnisotropy(useAnisotropy),
                 slotCapacity(slotCapacity)
-                {}
+                {
+                    assert((slotCapacity > 0) && (slotCapacity <= 8192));
+                }
                 
                 static Properties Default2D(int slotCapacity = 1024)
                 {
                     return Properties(false, slotCapacity);
                 }
                 
-                static Properties Default3D(int slotCapacity = 2048)
+                static Properties Default3D(int slotCapacity = 4096)
                 {
                     return Properties(true, slotCapacity);
                 }
@@ -140,9 +142,8 @@ namespace chronotext
             FontTexture *texture;
             
             Properties properties;
-            FontMatrix matrix;
-            
             const std::vector<GLushort> &indices;
+            FontMatrix matrix;
             
             bool anisotropyAvailable;
             float maxAnisotropy;

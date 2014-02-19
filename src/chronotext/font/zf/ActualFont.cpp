@@ -158,7 +158,7 @@ namespace chronotext
                 // ---
                 
                 loaded = true;
-                LOGD << "LOADING ActualFont: " << getFullName() << " " << baseSize << endl;
+                LOGD << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
             }
         }
         
@@ -167,7 +167,7 @@ namespace chronotext
             if (loaded)
             {
                 loaded = false;
-                LOGD << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << endl;
+                LOGD << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
                 
                 glyphCache.clear();
                 standaloneTextures.clear();

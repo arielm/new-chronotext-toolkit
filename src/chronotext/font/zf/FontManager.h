@@ -51,12 +51,12 @@ namespace chronotext
              * - MIPMAPS ARE ALLOWED
              * - VirtualFont::setSize() SHALL BE USED DURING THE FONT'S LIFE-CYCLE
              */
-            std::shared_ptr<VirtualFont> getCachedFont(const std::string &name, VirtualFont::Style style = VirtualFont::STYLE_REGULAR, float baseSize = 0);
+            std::shared_ptr<VirtualFont> getCachedFont(const std::string &name, VirtualFont::Style style = VirtualFont::STYLE_REGULAR, const VirtualFont::Properties &properties = VirtualFont::Properties2d());
             
             /*
              * LOWER-LEVEL METHOD, FOR ACCESSING A FONT DIRECTLY VIA ITS XML-DEFINITION
              */
-            std::shared_ptr<VirtualFont> getCachedFont(InputSourceRef source, float baseSize, bool useMipmap = false);
+            std::shared_ptr<VirtualFont> getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties);
             
             /*
              * CLEARS THE FONT RESOURCES (HARFBUZZ AND FREETYPE RELATED) AND DISCARDS THE GLYPH TEXTURES
@@ -64,8 +64,6 @@ namespace chronotext
              * FROM THIS POINT: RESOURCES WILL BE RELOADED AND TEXTURES RECREATED ONLY WHEN NECESSARY
              */
             void unload(std::shared_ptr<VirtualFont> virtualFont);
-            void unload(const std::string &name, VirtualFont::Style style = VirtualFont::STYLE_REGULAR, float baseSize = 0); // NO-OP IF NO SUCH VirtualFont IS DEFINED
-            void unload(InputSourceRef source, float baseSize, bool useMipmap = false); // NO-OP IF NO SUCH VirtualFont IS DEFINED
             
             /*
              * CLEARS ALL THE FONT RESOURCES (HARFBUZZ AND FREETYPE RELATED) AND DISCARDS ALL THE GLYPH TEXTURES
@@ -96,7 +94,7 @@ namespace chronotext
             VirtualFont::Style defaultFontStyle;
             
             std::map<std::pair<std::string, VirtualFont::Style>, std::pair<std::string, float>> globalMap;
-            std::map<std::tuple<std::string, VirtualFont::Style, float>, std::shared_ptr<VirtualFont>> shortcuts;
+            std::map<std::tuple<std::string, VirtualFont::Style, VirtualFont::Properties>, std::shared_ptr<VirtualFont>> shortcuts;
             std::map<std::string, std::string> aliases;
 
             std::vector<GLushort> indices;

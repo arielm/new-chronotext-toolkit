@@ -113,9 +113,9 @@ namespace chronotext
             }
         }
         
-        shared_ptr<VirtualFont> FontManager::getCachedFont(const std::string &name, VirtualFont::Style style, float baseSize)
+        shared_ptr<VirtualFont> FontManager::getCachedFont(const std::string &name, VirtualFont::Style style, const VirtualFont::Properties &properties)
         {
-            auto key = make_tuple(name, style, baseSize);
+            auto key = make_tuple(name, style, properties);
             auto it1 = shortcuts.find(key);
             
             if (it1 != shortcuts.end())
@@ -143,12 +143,14 @@ namespace chronotext
             
             if (it3 != globalMap.end())
             {
-                bool useMipmap = false;
+                float baseSize = properties.baseSize;
                 
+                /*
+                 * TRYING TO USE THE base-size ATTRIBUTE AT THE FONT-CONFIG LEVEL
+                 */
                 if (baseSize == 0)
                 {
                     baseSize = it3->second.second;
-                    useMipmap = true;
                 }
                 
                 if (baseSize == 0)
@@ -157,7 +159,7 @@ namespace chronotext
                 }
                 
                 auto uri = it3->second.first;
-                auto font = getCachedFont(InputSource::get(uri), baseSize, useMipmap); // CAN THROW
+                auto font = getCachedFont(InputSource::get(uri), VirtualFont::Properties(baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity)); // CAN THROW
                 
                 /*
                  * ALLOWING CACHING UPON FURTHER ACCESS
@@ -173,13 +175,13 @@ namespace chronotext
             {
                 if (name != defaultFontName)
                 {
-                    auto font = getCachedFont(defaultFontName, get<1>(key), get<2>(key));
+                    auto font = getCachedFont(defaultFontName, style, properties);
                     shortcuts[key] = font;
                     return font;
                 }
                 else if (style != defaultFontStyle)
                 {
-                    auto font = getCachedFont(defaultFontName, defaultFontStyle, get<2>(key));
+                    auto font = getCachedFont(defaultFontName, defaultFontStyle, properties);
                     shortcuts[key] = font;
                     return font;
                 }
@@ -191,9 +193,9 @@ namespace chronotext
             throw invalid_argument(string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
         }
         
-        shared_ptr<VirtualFont> FontManager::getCachedFont(InputSourceRef source, float baseSize, bool useMipmap)
+        shared_ptr<VirtualFont> FontManager::getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties)
         {
-            VirtualFont::Key key(source->getURI(), baseSize, useMipmap);
+            VirtualFont::Key key(source->getURI(), properties.baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity);
             auto it = virtualFonts.find(key);
             
             if (it != virtualFonts.end())
@@ -212,7 +214,7 @@ namespace chronotext
                  */
                 if (doc.hasChild("VirtualFont"))
                 {
-                    auto font = shared_ptr<VirtualFont>(new VirtualFont(*this, baseSize)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
+                    auto font = shared_ptr<VirtualFont>(new VirtualFont(*this, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
                     virtualFonts[key] = font;
                     
                     for (auto setElement = doc.begin("VirtualFont/Set"); setElement != doc.end(); ++setElement)
@@ -229,7 +231,7 @@ namespace chronotext
                                     {
                                         auto descriptor = parseDescriptor(*refElement);
                                         
-                                        if (!descriptor.empty() && font->addActualFont(lang, getActualFont(descriptor, baseSize, useMipmap)))
+                                        if (!descriptor.empty() && font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap)))
                                         {
                                             break;
                                         }
@@ -241,7 +243,7 @@ namespace chronotext
                                     
                                     if (!descriptor.empty())
                                     {
-                                        font->addActualFont(lang, getActualFont(descriptor, baseSize, useMipmap));
+                                        font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap));
                                     }
                                 }
                             }
@@ -296,28 +298,6 @@ namespace chronotext
                 {
                     it->second->unload();
                 }
-            }
-        }
-        
-        void FontManager::unload(const string &name, VirtualFont::Style style, float baseSize)
-        {
-            auto key = make_tuple(name, style, baseSize);
-            auto it = shortcuts.find(key);
-            
-            if (it != shortcuts.end())
-            {
-                unload(it->second);
-            }
-        }
-        
-        void FontManager::unload(InputSourceRef source, float baseSize, bool useMipmap)
-        {
-            VirtualFont::Key key(source->getURI(), baseSize, useMipmap);
-            auto it = virtualFonts.find(key);
-            
-            if (it != virtualFonts.end())
-            {
-                unload(it->second);
             }
         }
         

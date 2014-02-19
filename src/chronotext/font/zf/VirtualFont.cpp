@@ -12,18 +12,17 @@
 using namespace std;
 using namespace ci;
 
-#define SLOT_CAPACITY 1024 /* FIXME: TEMPORARY (SEE TARGET FUNCTIONALITY IN XFont) */
-
 namespace chronotext
 {
     namespace zf
     {
-        VirtualFont::VirtualFont(FontManager &fontManager, float baseSize)
+        VirtualFont::VirtualFont(FontManager &fontManager, const Properties &properties)
         :
-        baseSize(baseSize),
+        baseSize(properties.baseSize),
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
-        indices(fontManager.getIndices(SLOT_CAPACITY))
+        properties(properties),
+        indices(fontManager.getIndices(properties.slotCapacity))
         {
             setSize(baseSize);
             setColor(0, 0, 0, 1);
