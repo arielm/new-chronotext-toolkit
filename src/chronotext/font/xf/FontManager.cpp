@@ -162,7 +162,7 @@ namespace chronotext
         {
             auto uri = inputSource->getURI();
             
-            FontKey key(uri, properties.useAnisotropy, properties.slotCapacity);
+            auto key = make_pair(uri, properties);
             auto it1 = fonts.find(key);
             
             if (it1 != fonts.end())
@@ -216,7 +216,7 @@ namespace chronotext
         {
             for (auto it = fonts.begin(); it != fonts.end();)
             {
-                if (it->first.uri == inputSource->getURI())
+                if (it->first.first == inputSource->getURI())
                 {
                     it = fonts.erase(it);
                 }
@@ -249,7 +249,7 @@ namespace chronotext
             
             for (auto &it1 : fonts)
             {
-                auto uri = it1.first.uri;
+                auto &uri = it1.first.first;
                 auto it2 = fontDataAndTextures.find(uri);
                 
                 if (it2 != fontDataAndTextures.end())
@@ -270,7 +270,7 @@ namespace chronotext
             
             for (auto &it1 : fonts)
             {
-                auto uri = it1.first.uri;
+                auto &uri = it1.first.first;
                 auto it2 = fontDataAndTextures.find(uri);
                 
                 if (it2 != fontDataAndTextures.end())

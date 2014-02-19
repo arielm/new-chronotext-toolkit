@@ -15,25 +15,6 @@ namespace chronotext
 {
     namespace xf
     {
-        struct FontKey
-        {
-            std::string uri;
-            bool useAnisotropy;
-            int slotCapacity;
-            
-            FontKey(const std::string &uri, bool useAnisotropy, int slotCapacity)
-            :
-            uri(uri),
-            useAnisotropy(useAnisotropy),
-            slotCapacity(slotCapacity)
-            {}
-            
-            bool operator<(const FontKey &rhs) const
-            {
-                return std::tie(uri, useAnisotropy, slotCapacity) < std::tie(rhs.uri, rhs.useAnisotropy, rhs.slotCapacity);
-            }
-        };
-        
         struct FontData
         {
             int glyphCount;
@@ -107,7 +88,7 @@ namespace chronotext
             friend class Font;
             
         protected:
-            std::map<FontKey, std::shared_ptr<Font>> fonts;
+            std::map<std::pair<std::string, Font::Properties>, std::shared_ptr<Font>> fonts;
             std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;
             std::vector<GLushort> indices;
             

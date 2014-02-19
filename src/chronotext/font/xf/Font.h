@@ -51,6 +51,11 @@ namespace chronotext
                 {
                     assert((slotCapacity > 0) && (slotCapacity <= 8192));
                 }
+                
+                bool operator<(const Properties &rhs) const
+                {
+                    return std::tie(useAnisotropy, slotCapacity) < std::tie(rhs.useAnisotropy, rhs.slotCapacity);
+                }
             };
             
             static Properties Properties2d(int slotCapacity = 1024)
