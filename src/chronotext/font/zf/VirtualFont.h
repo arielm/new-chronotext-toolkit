@@ -11,6 +11,7 @@
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
+#include "chronotext/font/zf/GlyphBatchMap.h"
 #include "chronotext/font/FontMatrix.h"
 
 #include <set>
@@ -138,7 +139,7 @@ namespace chronotext
             Properties properties;
             const std::vector<GLushort> &indices;
             
-            std::map<ReloadableTexture*, std::unique_ptr<GlyphBatch>> sequence;
+            GlyphBatchMap batchMap;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
@@ -147,8 +148,6 @@ namespace chronotext
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
-            
-            GlyphBatch* getGlyphBatch(ReloadableTexture *texture);
         };
     }
 }

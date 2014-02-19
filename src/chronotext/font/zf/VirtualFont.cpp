@@ -274,10 +274,7 @@ namespace chronotext
         
         void VirtualFont::begin()
         {
-            for (auto &it : sequence)
-            {
-                it.second->clear();
-            }
+            batchMap.clear();
         }
         
         void VirtualFont::end()
@@ -287,13 +284,7 @@ namespace chronotext
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
             
-            const GLushort *pointer = reinterpret_cast<const GLushort*>(indices.data()); // XXX
-            
-            for (auto &it : sequence)
-            {
-                it.first->bind();
-                it.second->flush(pointer, true);
-            }
+            batchMap.flush(reinterpret_cast<const GLushort*>(indices.data()), true); // XXX
 
             glDisable(GL_TEXTURE_2D);
             glDisableClientState(GL_VERTEX_ARRAY);
@@ -311,26 +302,10 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    auto batch = getGlyphBatch(glyph->texture);
+                    auto batch = batchMap.getBatch(glyph->texture);
                     batch->addQuad(quad);
                     batch->addColor(color);
                 }
-            }
-        }
-        
-        GlyphBatch* VirtualFont::getGlyphBatch(ReloadableTexture *texture)
-        {
-            auto it = sequence.find(texture);
-            
-            if (it == sequence.end())
-            {
-                auto batch = new GlyphBatch;
-                sequence[texture] = unique_ptr<GlyphBatch>(batch);
-                return batch;
-            }
-            else
-            {
-                return it->second.get();
             }
         }
         
