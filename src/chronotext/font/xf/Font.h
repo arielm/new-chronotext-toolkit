@@ -111,6 +111,7 @@ namespace chronotext
             void end(bool useColor = false);
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
+            inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
             void endSequence();
             
             void addGlyph(int glyphIndex, float x, float y, float z = 0);

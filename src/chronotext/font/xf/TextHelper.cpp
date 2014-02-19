@@ -17,7 +17,7 @@ namespace chronotext
     {
         void TextHelper::drawText(Font &font, const wstring &text, float x, float y)
         {
-            font.beginSequence(NULL);
+            font.beginSequence();
             
             for (auto c : text)
             {
@@ -45,7 +45,7 @@ namespace chronotext
             float sampleSize = font.getSize() * 0.5f;
             
             auto matrix = font.getMatrix();
-            font.beginSequence(NULL);
+            font.beginSequence();
             
             for (auto c : text)
             {

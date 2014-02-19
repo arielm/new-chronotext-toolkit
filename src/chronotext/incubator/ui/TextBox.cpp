@@ -348,7 +348,7 @@ namespace chronotext
         float limitBottom = limitTop + innerHeight;
         float yy = limitTop + getOffsetY();
         
-        font->beginSequence(NULL);
+        font->beginSequence();
         
         for (int i = 0; i < wrapper.size && yy < limitBottom; i++)
         {

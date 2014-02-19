@@ -23,7 +23,7 @@ namespace chronotext
         indices(fontManager.getIndices(properties.slotCapacity)),
         began(0),
         hasClip(false),
-        sequence(NULL)
+        sequence(nullptr)
         {
             glyphCount = data->glyphCount;
             glyphs = data->glyphs;
@@ -370,7 +370,7 @@ namespace chronotext
             {
                 sequence->addBatch(batch);
                 sequence->end();
-                sequence = NULL;
+                sequence = nullptr;
             }
             else
             {
