@@ -255,10 +255,13 @@ namespace chronotext
             switch (align)
             {
                 case ALIGN_MIDDLE:
-                    return -0.5f * getStringAdvance(text);
-                    
+                    return -0.5f * getStringAdvance(text) * direction;
+
+                case ALIGN_LEFT:
+                    return (direction > 0) ? 0 : getStringAdvance(text);
+
                 case ALIGN_RIGHT:
-                    return -getStringAdvance(text);
+                    return (direction > 0) ? -getStringAdvance(text) : 0;
                     
                 default:
                     return 0;

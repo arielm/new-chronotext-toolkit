@@ -43,7 +43,7 @@ public:
     void draw();
     
     void createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
-    void loadFontSafely(const string &fileName);
+    void loadFontSafely(const string &fileName, float direction = +1);
     void drawFonts(float size, const ColorA &color);
 };
 
@@ -77,7 +77,7 @@ void Application::setup()
     
     loadFontSafely("Georgia_Regular_64.fnt");
     loadFontSafely("Roboto_Regular_64.fnt");
-    loadFontSafely("FrankRuehl_Regular_64.fnt");
+    loadFontSafely("FrankRuehl_Regular_64.fnt", -1);
     
     // ---
     
@@ -112,11 +112,13 @@ void Application::createFontSafely(const FontDescriptor &descriptor, float size,
     }
 }
 
-void Application::loadFontSafely(const string &fileName)
+void Application::loadFontSafely(const string &fileName, float direction)
 {
     try
     {
-        fonts.push_back(fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties2d()));
+        auto font = fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties2d());
+        font->setDirection(direction);
+        fonts.push_back(font);
     }
     catch (exception &e)
     {
