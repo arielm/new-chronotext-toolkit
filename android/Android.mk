@@ -27,7 +27,6 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/SuperHandler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/ASPC.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/FollowablePath.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/SplinePath.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/text/WordWrapper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/PVRHelper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/Sprite.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/Texture.cpp
@@ -55,4 +54,5 @@ ifdef CHR_USE_INCUBATOR_UI
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/TouchableLink.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/TouchGroup.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/VerticalLayout.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/WordWrapper.cpp
 endif
