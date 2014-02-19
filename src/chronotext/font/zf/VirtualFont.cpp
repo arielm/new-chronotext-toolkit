@@ -18,10 +18,10 @@ namespace chronotext
     {
         VirtualFont::VirtualFont(FontManager &fontManager, const Properties &properties)
         :
+        properties(properties),
         baseSize(properties.baseSize),
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
-        properties(properties),
         indices(fontManager.getIndices(properties.slotCapacity))
         {
             setSize(baseSize);
@@ -274,7 +274,7 @@ namespace chronotext
         
         void VirtualFont::begin()
         {
-            for (auto &it : fontSequence)
+            for (auto &it : sequence)
             {
                 it.second->clear();
             }
@@ -287,10 +287,12 @@ namespace chronotext
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
             
-            for (auto &it : fontSequence)
+            const GLushort *pointer = reinterpret_cast<const GLushort*>(indices.data()); // XXX
+            
+            for (auto &it : sequence)
             {
                 it.first->bind();
-                it.second->flush(reinterpret_cast<const GLushort*>(indices.data()), true); // XXX
+                it.second->flush(pointer, true);
             }
 
             glDisable(GL_TEXTURE_2D);
@@ -309,22 +311,22 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    auto glyphSequence = getGlyphSequence(glyph->texture);
-                    glyphSequence->addQuad(quad);
-                    glyphSequence->addColor(color);
+                    auto batch = getGlyphBatch(glyph->texture);
+                    batch->addQuad(quad);
+                    batch->addColor(color);
                 }
             }
         }
         
-        GlyphSequence* VirtualFont::getGlyphSequence(ReloadableTexture *texture)
+        GlyphBatch* VirtualFont::getGlyphBatch(ReloadableTexture *texture)
         {
-            auto it = fontSequence.find(texture);
+            auto it = sequence.find(texture);
             
-            if (it == fontSequence.end())
+            if (it == sequence.end())
             {
-                auto glyphSequence = new GlyphSequence;
-                fontSequence[texture] = unique_ptr<GlyphSequence>(glyphSequence);
-                return glyphSequence;
+                auto batch = new GlyphBatch;
+                sequence[texture] = unique_ptr<GlyphBatch>(batch);
+                return batch;
             }
             else
             {

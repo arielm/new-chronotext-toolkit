@@ -138,7 +138,7 @@ namespace chronotext
             Properties properties;
             const std::vector<GLushort> &indices;
             
-            std::map<ReloadableTexture*, std::unique_ptr<GlyphSequence>> fontSequence;
+            std::map<ReloadableTexture*, std::unique_ptr<GlyphBatch>> sequence;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
@@ -148,7 +148,7 @@ namespace chronotext
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
             
-            GlyphSequence* getGlyphSequence(ReloadableTexture *texture);
+            GlyphBatch* getGlyphBatch(ReloadableTexture *texture);
         };
     }
 }
