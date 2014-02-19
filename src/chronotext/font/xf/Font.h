@@ -51,17 +51,17 @@ namespace chronotext
                 {
                     assert((slotCapacity > 0) && (slotCapacity <= 8192));
                 }
-                
-                static Properties Default2D(int slotCapacity = 1024)
-                {
-                    return Properties(false, slotCapacity);
-                }
-                
-                static Properties Default3D(int slotCapacity = 4096)
-                {
-                    return Properties(true, slotCapacity);
-                }
             };
+            
+            static Properties Properties2d(int slotCapacity = 1024)
+            {
+                return Properties(false, slotCapacity);
+            }
+            
+            static Properties Properties3d(int slotCapacity = 4096)
+            {
+                return Properties(true, slotCapacity);
+            }
             
             bool isSpace(wchar_t c) const;
             bool isValid(wchar_t c) const;

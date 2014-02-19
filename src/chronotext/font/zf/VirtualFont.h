@@ -64,8 +64,8 @@ namespace chronotext
                 {
                     assert(baseSize >= 0);
                     assert((slotCapacity > 0) && (slotCapacity <= 8192));
-                    assert(!(useAnisotropy && !useMipmap));
-                    assert(!(!useMipmap && (baseSize == 0)));
+                    assert(!(useAnisotropy && !useMipmap)); // ANISOTROPY DOESN'T MAKE SENSE WITHOUT MIPMAPS
+                    assert(!((baseSize == 0) && !useMipmap)); // FOR CRISP-RENDERING: A FONT-SIZE MUST BE DEFINED AND MIPMAPS DISABLED
                 }
                 
                 bool operator<(const Properties &rhs) const

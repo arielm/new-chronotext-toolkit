@@ -116,7 +116,7 @@ void Application::loadFontSafely(const string &fileName)
 {
     try
     {
-        fonts.push_back(fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties::Default2D()));
+        fonts.push_back(fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties2d()));
     }
     catch (exception &e)
     {
