@@ -146,18 +146,18 @@ namespace chronotext
             strikethroughFactor = factor;
         }
         
-        void Font::setClip(const Rectf &clip)
+        void Font::setClip(const Rectf &clipRect)
         {
-            this->clip = clip;
+            this->clipRect = clipRect;
             hasClip = true;
         }
         
         void Font::setClip(float x1, float y1, float x2, float y2)
         {
-            clip.x1 = x1;
-            clip.y1 = y1;
-            clip.x2 = x2;
-            clip.y2 = y2;
+            clipRect.x1 = x1;
+            clipRect.y1 = y1;
+            clipRect.x2 = x2;
+            clipRect.y2 = y2;
             
             hasClip = true;
         }
@@ -448,46 +448,6 @@ namespace chronotext
             }
             
             return quad;
-        }
-        
-        bool Font::clipQuad(GlyphQuad &quad)
-        {
-            if ((quad.x1 > clip.x2 ) || (quad.x2 < clip.x1) || (quad.y1 > clip.y2) || (quad.y2 < clip.y1))
-            {
-                return false;
-            }
-            else
-            {
-                if (quad.x1 < clip.x1)
-                {
-                    float dx = clip.x1 - quad.x1;
-                    quad.x1 += dx;
-                    quad.u1 += axis.x * dx / textureWidth / sizeRatio;
-                }
-                
-                if (quad.x2 > clip.x2)
-                {
-                    float dx = clip.x2 - quad.x2;
-                    quad.x2 += dx;
-                    quad.u2 += axis.x * dx / textureWidth / sizeRatio;
-                }
-                
-                if (quad.y1 < clip.y1)
-                {
-                    float dy = clip.y1 - quad.y1;
-                    quad.y1 += dy;
-                    quad.v1 += axis.y * dy / textureHeight / sizeRatio;
-                }
-                
-                if (quad.y2 > clip.y2)
-                {
-                    float dy = clip.y2 - quad.y2;
-                    quad.y2 += dy;
-                    quad.v2 += axis.y * dy / textureHeight / sizeRatio;
-                }
-                
-                return true;
-            }
         }
         
         void Font::addGlyph(int glyphIndex, float x, float y, float z)

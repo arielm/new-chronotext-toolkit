@@ -80,7 +80,7 @@ namespace chronotext
             void setColor(float r, float g, float b, float a);
             void setStrikethroughFactor(float factor);
             
-            void setClip(const ci::Rectf &clip);
+            void setClip(const ci::Rectf &clipRect);
             void setClip(float x1, float y1, float x2, float y2);
             void clearClip();
             
@@ -161,7 +161,7 @@ namespace chronotext
             ci::ColorA color;
             
             bool hasClip;
-            ci::Rectf clip;
+            ci::Rectf clipRect;
             
             int began;
             bool sequenceUseColor;
@@ -172,7 +172,7 @@ namespace chronotext
             
             void incrementSequence();
             GlyphQuad obtainQuad(int glyphIndex, float x, float y) const;
-            bool clipQuad(GlyphQuad &quad);
+            inline bool clipQuad(GlyphQuad &quad) { return quad.clip(clipRect, axis / ci::Vec2f(textureWidth, textureHeight) / sizeRatio); }
         };
     }
 }
