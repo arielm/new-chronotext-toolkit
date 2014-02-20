@@ -143,8 +143,6 @@ namespace chronotext
             float *u2;
             float *v2;
             
-            int textureWidth;
-            int textureHeight;
             FontTexture *texture;
             
             Properties properties;
@@ -172,7 +170,7 @@ namespace chronotext
             
             void incrementSequence();
             GlyphQuad obtainQuad(int glyphIndex, float x, float y) const;
-            inline bool clipQuad(GlyphQuad &quad) { return quad.clip(clipRect, axis / ci::Vec2f(textureWidth, textureHeight) / sizeRatio); }
+            bool clipQuad(GlyphQuad &quad) const;
         };
     }
 }

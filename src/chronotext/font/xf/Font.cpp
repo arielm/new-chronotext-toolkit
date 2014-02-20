@@ -48,9 +48,6 @@ namespace chronotext
             u2 = data->u2;
             v2 = data->v2;
             
-            textureWidth = texture->width;
-            textureHeight = texture->height;
-            
             // ---
             
             anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
@@ -468,6 +465,11 @@ namespace chronotext
             return quad;
         }
         
+        bool Font::clipQuad(GlyphQuad &quad) const
+        {
+            return quad.clip(clipRect, texture->getSize() * sizeRatio / axis);
+        }
+
         void Font::addGlyph(int glyphIndex, float x, float y, float z)
         {
             if (glyphIndex >= 0)

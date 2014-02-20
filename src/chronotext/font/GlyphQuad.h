@@ -36,28 +36,28 @@ namespace chronotext
                 {
                     float dx = clipRect.x1 - x1;
                     x1 += dx;
-                    u1 += dx * textureFactor.x;
+                    u1 += dx / textureFactor.x;
                 }
                 
                 if (x2 > clipRect.x2)
                 {
                     float dx = clipRect.x2 - x2;
                     x2 += dx;
-                    u2 += dx * textureFactor.x;
+                    u2 += dx / textureFactor.x;
                 }
                 
                 if (y1 < clipRect.y1)
                 {
                     float dy = clipRect.y1 - y1;
                     y1 += dy;
-                    v1 += dy * textureFactor.y;
+                    v1 += dy / textureFactor.y;
                 }
                 
                 if (y2 > clipRect.y2)
                 {
                     float dy = clipRect.y2 - y2;
                     y2 += dy;
-                    v2 += dy * textureFactor.y;
+                    v2 += dy / textureFactor.y;
                 }
                 
                 return true;

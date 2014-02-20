@@ -69,6 +69,8 @@ namespace chronotext
             void upload(FontAtlas *atlas);
             void discard();
             void reload();
+            
+            inline ci::Vec2i getSize() const { return ci::Vec2i(width, height); }
         };
         
         class FontManager
