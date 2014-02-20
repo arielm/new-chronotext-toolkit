@@ -18,11 +18,12 @@ namespace chronotext
         {
         public:
             bool useColor;
+            float anisotropy;
 
         protected:
             std::vector<std::unique_ptr<GlyphBatchMap>> maps;
             
-            void begin(bool useColor = false);
+            void begin(bool useColor = false, float anisotropy = 1);
             void end();
             
             void addMap(std::unique_ptr<GlyphBatchMap> &&map);

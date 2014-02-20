@@ -14,9 +14,11 @@ namespace chronotext
 {
     namespace zf
     {
-        void FontSequence::begin(bool useColor)
+        void FontSequence::begin(bool useColor, float anisotropy)
         {
             this->useColor = useColor;
+            this->anisotropy = anisotropy;
+            
             maps.clear();
         }
         
@@ -32,7 +34,7 @@ namespace chronotext
         {
             for (auto &map : maps)
             {
-                map->flush(indices, useColor);
+                map->flush(indices, useColor, anisotropy);
             }
         }
     }

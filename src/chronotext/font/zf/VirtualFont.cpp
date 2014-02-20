@@ -26,11 +26,13 @@ namespace chronotext
         hasClip(false),
         sequence(nullptr)
         {
-            anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
-            
-            if (anisotropyAvailable)
+            if (properties.useAnisotropy && gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic"))
             {
-                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
+            }
+            else
+            {
+                anisotropy = 1;
             }
             
             // ---
@@ -320,11 +322,6 @@ namespace chronotext
             {
                 glEnable(GL_TEXTURE_2D);
                 
-                if (properties.useAnisotropy && anisotropyAvailable)
-                {
-                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
-                }
-                
                 if (useColor)
                 {
                     glEnableClientState(GL_COLOR_ARRAY);
@@ -347,11 +344,6 @@ namespace chronotext
             
             if (began == 0)
             {
-                if (properties.useAnisotropy && anisotropyAvailable)
-                {
-                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
-                }
-                
                 glDisable(GL_TEXTURE_2D);
                 
                 if (useColor)
@@ -380,7 +372,7 @@ namespace chronotext
             if (sequence)
             {
                 this->sequence = sequence;
-                sequence->begin(useColor);
+                sequence->begin(useColor, anisotropy);
             }
             else
             {
@@ -402,7 +394,7 @@ namespace chronotext
             }
             else
             {
-                batchMap->flush(getIndices(), sequenceUseColor);
+                batchMap->flush(getIndices(), sequenceUseColor, anisotropy);
                 end(sequenceUseColor);
             }
         }
@@ -430,7 +422,7 @@ namespace chronotext
                 }
                 else
                 {
-                    batchMap->flush(getIndices(), sequenceUseColor);
+                    batchMap->flush(getIndices(), sequenceUseColor, anisotropy);
                 }
                 
                 if (!batchMap)

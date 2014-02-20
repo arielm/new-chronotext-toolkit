@@ -63,11 +63,13 @@ namespace chronotext
                 }
             }
             
-            void flush(const GLushort *indices, bool useColor = false) const
+            void flush(const GLushort *indices, bool useColor = false, float anisotropy = 1) const
             {
                 for (auto &it : map)
                 {
                     it.first->bind();
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
+
                     it.second->flush(indices, useColor);
                 }
             }
