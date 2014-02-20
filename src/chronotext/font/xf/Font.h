@@ -147,8 +147,7 @@ namespace chronotext
             const std::vector<GLushort> &indices;
             FontMatrix matrix;
             
-            bool anisotropyAvailable;
-            float maxAnisotropy;
+            float anisotropy;
             
             float size;
             float sizeRatio;

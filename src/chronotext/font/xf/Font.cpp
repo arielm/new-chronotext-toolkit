@@ -50,11 +50,20 @@ namespace chronotext
             
             // ---
             
-            anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
-            
-            if (anisotropyAvailable)
+            if (gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic"))
             {
-                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+                if (properties.useAnisotropy)
+                {
+                    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
+                }
+                else
+                {
+                    anisotropy = 1;
+                }
+            }
+            else
+            {
+                anisotropy = 0;
             }
             
             // ---
@@ -302,9 +311,9 @@ namespace chronotext
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, texture->name);
                 
-                if (properties.useAnisotropy && anisotropyAvailable)
+                if (anisotropy)
                 {
-                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
                 }
                 
                 if (useColor)
@@ -329,11 +338,6 @@ namespace chronotext
             
             if (began == 0)
             {
-                if (properties.useAnisotropy && anisotropyAvailable)
-                {
-                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
-                }
-                
                 glDisable(GL_TEXTURE_2D);
                 
                 if (useColor)

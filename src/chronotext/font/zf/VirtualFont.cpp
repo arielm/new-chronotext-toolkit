@@ -26,13 +26,20 @@ namespace chronotext
         hasClip(false),
         sequence(nullptr)
         {
-            if (properties.useAnisotropy && gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic"))
+            if (gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic"))
             {
-                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
+                if (properties.useAnisotropy)
+                {
+                    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
+                }
+                else
+                {
+                    anisotropy = 1;
+                }
             }
             else
             {
-                anisotropy = 1;
+                anisotropy = 0;
             }
             
             // ---

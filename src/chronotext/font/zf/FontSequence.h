@@ -23,7 +23,7 @@ namespace chronotext
         protected:
             std::vector<std::unique_ptr<GlyphBatchMap>> maps;
             
-            void begin(bool useColor = false, float anisotropy = 1);
+            void begin(bool useColor = false, float anisotropy = 0);
             void end();
             
             void addMap(std::unique_ptr<GlyphBatchMap> &&map);
