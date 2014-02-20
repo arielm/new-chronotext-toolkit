@@ -407,6 +407,13 @@ namespace chronotext
             }
         }
         
+        void VirtualFont::replaySequence(FontSequence *sequence)
+        {
+            begin(sequence->useColor);
+            sequence->replay(getIndices());
+            end(sequence->useColor);
+        }
+        
         void VirtualFont::incrementSequence(GlyphBatch *batch)
         {
             if (sequenceUseColor)

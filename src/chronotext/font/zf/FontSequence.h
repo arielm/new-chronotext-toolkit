@@ -14,20 +14,21 @@ namespace chronotext
 {
     namespace zf
     {
-        class VirtualFont;
-        
         class FontSequence
         {
         public:
+            bool useColor;
+
+        protected:
+            std::vector<std::unique_ptr<GlyphBatchMap>> maps;
+            
             void begin(bool useColor = false);
             void end();
             
             void addMap(std::unique_ptr<GlyphBatchMap> &&map);
-            void replay(VirtualFont &font);
+            void replay(const GLushort *indices);
             
-        protected:
-            bool useColor;
-            std::vector<std::unique_ptr<GlyphBatchMap>> maps;
+            friend class VirtualFont;
         };
     }
 }

@@ -7,10 +7,8 @@
  */
 
 #include "chronotext/font/zf/FontSequence.h"
-#include "chronotext/font/zf/VirtualFont.h"
 
 using namespace std;
-using namespace ci;
 
 namespace chronotext
 {
@@ -30,16 +28,12 @@ namespace chronotext
             maps.emplace_back(forward<unique_ptr<GlyphBatchMap>>(map));
         }
         
-        void FontSequence::replay(VirtualFont &font)
+        void FontSequence::replay(const GLushort *indices)
         {
-            font.begin(useColor);
-            
             for (auto &map : maps)
             {
-                map->flush(font.getIndices(), useColor);
+                map->flush(indices, useColor);
             }
-            
-            font.end(useColor);
         }
     }
 }
