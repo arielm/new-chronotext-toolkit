@@ -389,6 +389,13 @@ namespace chronotext
             }
         }
         
+        void Font::replaySequence(FontSequence *sequence)
+        {
+            begin(sequence->useColor);
+            sequence->replay(getIndices());
+            end(sequence->useColor);
+        }
+        
         void Font::incrementSequence()
         {
             if (sequenceUseColor)

@@ -7,10 +7,8 @@
  */
 
 #include "chronotext/font/xf/FontSequence.h"
-#include "chronotext/font/xf/Font.h"
 
 using namespace std;
-using namespace ci;
 
 namespace chronotext
 {
@@ -30,16 +28,12 @@ namespace chronotext
             batches.emplace_back(forward<unique_ptr<GlyphBatch>>(batch));
         }
         
-        void FontSequence::replay(Font &font)
+        void FontSequence::replay(const GLushort *indices)
         {
-            font.begin(useColor);
-            
             for (auto &batch : batches)
             {
-                batch->flush(font.getIndices(), useColor);
+                batch->flush(indices, useColor);
             }
-            
-            font.end(useColor);
         }
     }
 }

@@ -107,12 +107,10 @@ namespace chronotext
             FontMatrix* getMatrix();
             const GLushort* getIndices() const;
             
-            void begin(bool useColor = false);
-            void end(bool useColor = false);
-            
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
             void endSequence();
+            void replaySequence(FontSequence *sequence);
             
             void addGlyph(int glyphIndex, float x, float y, float z = 0);
             void addTransformedGlyph(int glyphIndex, float x, float y);
@@ -168,6 +166,9 @@ namespace chronotext
             
             Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties);
             
+            void begin(bool useColor = false);
+            void end(bool useColor = false);
+
             void incrementSequence();
             GlyphQuad obtainQuad(int glyphIndex, float x, float y) const;
             bool clipQuad(GlyphQuad &quad) const;

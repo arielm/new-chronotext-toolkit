@@ -19,15 +19,18 @@ namespace chronotext
         class FontSequence
         {
         public:
+            bool useColor;
+            
+        protected:
+            std::vector<std::unique_ptr<GlyphBatch>> batches;
+            
             void begin(bool useColor = false);
             void end();
             
             void addBatch(std::unique_ptr<GlyphBatch> &&batch);
-            void replay(Font &font);
+            void replay(const GLushort *indices);
             
-        protected:
-            bool useColor;
-            std::vector<std::unique_ptr<GlyphBatch>> batches;
+            friend class Font;
         };
     }
 }
