@@ -8,11 +8,11 @@
 
 #pragma once
 
+#include "chronotext/font/FontMatrix.h"
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
-#include "chronotext/font/zf/GlyphBatchMap.h"
-#include "chronotext/font/FontMatrix.h"
+#include "chronotext/font/zf/FontSequence.h"
 
 #include <set>
 #include <map>
@@ -121,8 +121,19 @@ namespace chronotext
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);
             
-            void begin();
-            void end();
+            void setClip(const ci::Rectf &clipRect);
+            void setClip(float x1, float y1, float x2, float y2);
+            void clearClip();
+            
+            FontMatrix* getMatrix();
+            const GLushort* getIndices() const;
+            
+            void begin(bool useColor = false);
+            void end(bool useColor = false);
+            
+            void beginSequence(FontSequence *sequence, bool useColor = false);
+            inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
+            void endSequence();
             
             void addCluster(const Cluster &cluster, const ci::Vec2f &position);
             
@@ -135,11 +146,21 @@ namespace chronotext
             float size;
             float sizeRatio;
             ci::ColorA color;
+            
+            bool hasClip;
+            ci::Rectf clipRect;
 
             Properties properties;
             const std::vector<GLushort> &indices;
+            FontMatrix matrix;
             
-            GlyphBatchMap batchMap;
+            bool anisotropyAvailable;
+            float maxAnisotropy;
+            
+            int began;
+            bool sequenceUseColor;
+            FontSequence *sequence;
+            std::unique_ptr<GlyphBatchMap> batchMap;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
@@ -148,6 +169,9 @@ namespace chronotext
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
+            
+            void incrementSequence(GlyphBatch *batch);
+            inline bool clipQuad(GlyphQuad &quad, ReloadableTexture *texture) { return quad.clip(clipRect, ci::Vec2f::one() / ci::Vec2f(texture->getWidth(), texture->getHeight()) / sizeRatio); }
         };
     }
 }

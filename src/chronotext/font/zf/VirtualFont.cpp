@@ -22,8 +22,20 @@ namespace chronotext
         baseSize(properties.baseSize),
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
-        indices(fontManager.getIndices(properties.slotCapacity))
+        indices(fontManager.getIndices(properties.slotCapacity)),
+        began(0),
+        hasClip(false),
+        sequence(nullptr)
         {
+            anisotropyAvailable = gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic");
+            
+            if (anisotropyAvailable)
+            {
+                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+            }
+            
+            // ---
+
             setSize(baseSize);
             setColor(0, 0, 0, 1);
         }
@@ -272,24 +284,153 @@ namespace chronotext
             color.a = a;
         }
         
-        void VirtualFont::begin()
+        void VirtualFont::setClip(const Rectf &clipRect)
         {
-            batchMap.clear();
+            this->clipRect = clipRect;
+            hasClip = true;
         }
         
-        void VirtualFont::end()
+        void VirtualFont::setClip(float x1, float y1, float x2, float y2)
         {
-            glEnable(GL_TEXTURE_2D);
-            glEnableClientState(GL_VERTEX_ARRAY);
-            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-            glEnableClientState(GL_COLOR_ARRAY);
+            clipRect.x1 = x1;
+            clipRect.y1 = y1;
+            clipRect.x2 = x2;
+            clipRect.y2 = y2;
             
-            batchMap.flush(reinterpret_cast<const GLushort*>(indices.data()), true); // XXX
-
-            glDisable(GL_TEXTURE_2D);
-            glDisableClientState(GL_VERTEX_ARRAY);
-            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-            glDisableClientState(GL_COLOR_ARRAY);
+            hasClip = true;
+        }
+        
+        void VirtualFont::clearClip()
+        {
+            hasClip = false;
+        }
+        
+        FontMatrix* VirtualFont::getMatrix()
+        {
+            return &matrix;
+        }
+        
+        const GLushort* VirtualFont::getIndices() const
+        {
+            return const_cast<GLushort*>(indices.data());
+        }
+        
+        void VirtualFont::begin(bool useColor)
+        {
+            if (began == 0)
+            {
+                glEnable(GL_TEXTURE_2D);
+                
+                if (properties.useAnisotropy && anisotropyAvailable)
+                {
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+                }
+                
+                if (useColor)
+                {
+                    glEnableClientState(GL_COLOR_ARRAY);
+                }
+                else
+                {
+                    gl::color(color);
+                }
+                
+                glEnableClientState(GL_VERTEX_ARRAY);
+                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            }
+            
+            began++;
+        }
+        
+        void VirtualFont::end(bool useColor)
+        {
+            began--;
+            
+            if (began == 0)
+            {
+                if (properties.useAnisotropy && anisotropyAvailable)
+                {
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
+                }
+                
+                glDisable(GL_TEXTURE_2D);
+                
+                if (useColor)
+                {
+                    glDisableClientState(GL_COLOR_ARRAY);
+                }
+                
+                glDisableClientState(GL_VERTEX_ARRAY);
+                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+            }
+        }
+        
+        void VirtualFont::beginSequence(FontSequence *sequence, bool useColor)
+        {
+            sequenceUseColor = useColor;
+            
+            if (!batchMap)
+            {
+                batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
+            }
+            else
+            {
+                batchMap->clear();
+            }
+            
+            if (sequence)
+            {
+                this->sequence = sequence;
+                sequence->begin(useColor);
+            }
+            else
+            {
+                begin(useColor);
+            }
+            
+            clearClip();
+        }
+        
+        void VirtualFont::endSequence()
+        {
+            if (sequence)
+            {
+                batchMap->pack();
+                sequence->addMap(move(batchMap));
+                
+                sequence->end();
+                sequence = nullptr;
+            }
+            else
+            {
+                batchMap->flush(getIndices(), sequenceUseColor);
+                end(sequenceUseColor);
+            }
+        }
+        
+        void VirtualFont::incrementSequence(GlyphBatch *batch)
+        {
+            if (batch->size() == properties.slotCapacity)
+            {
+                if (sequence)
+                {
+                    batchMap->pack();
+                    sequence->addMap(move(batchMap));
+                }
+                else
+                {
+                    batchMap->flush(getIndices(), sequenceUseColor);
+                }
+                
+                if (!batchMap)
+                {
+                    batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
+                }
+                else
+                {
+                    batchMap->clear();
+                }
+            }
         }
         
         void VirtualFont::addCluster(const Cluster &cluster, const Vec2f &position)
@@ -302,9 +443,11 @@ namespace chronotext
                 
                 if (glyph)
                 {
-                    auto batch = batchMap.getBatch(glyph->texture);
+                    auto batch = batchMap->getBatch(glyph->texture);
                     batch->addQuad(quad);
                     batch->addColor(color);
+                    
+                    incrementSequence(batch);
                 }
             }
         }

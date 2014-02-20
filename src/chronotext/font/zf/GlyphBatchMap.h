@@ -31,6 +31,22 @@ namespace chronotext
                 }
             }
             
+            void pack()
+            {
+                for (auto it = map.begin(); it != map.end();)
+                {
+                    if (it->second->size() == 0)
+                    {
+                        it = map.erase(it);
+                    }
+                    else
+                    {
+                        it->second->pack();
+                        ++it;
+                    }
+                }
+            }
+            
             GlyphBatch* getBatch(ReloadableTexture *texture)
             {
                 auto it = map.find(texture);
