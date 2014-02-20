@@ -353,8 +353,14 @@ namespace chronotext
         {
             sequenceUseColor = useColor;
 
-            clearClip();
-            batch.clear();
+            if (!batch)
+            {
+                batch = unique_ptr<GlyphBatch>(new GlyphBatch);
+            }
+            else
+            {
+                batch->clear();
+            }
             
             if (sequence)
             {
@@ -365,19 +371,23 @@ namespace chronotext
             {
                 begin(useColor);
             }
+            
+            clearClip();
         }
         
         void Font::endSequence()
         {
             if (sequence)
             {
-                sequence->addBatch(batch);
+                batch->pack();
+                sequence->addBatch(move(batch));
+                
                 sequence->end();
                 sequence = nullptr;
             }
             else
             {
-                batch.flush(getIndices(), sequenceUseColor);
+                batch->flush(getIndices(), sequenceUseColor);
                 end(sequenceUseColor);
             }
         }
@@ -386,21 +396,29 @@ namespace chronotext
         {
             if (sequenceUseColor)
             {
-                batch.addColor(color);
+                batch->addColor(color);
             }
             
-            if (batch.size() == properties.slotCapacity)
+            if (batch->size() == properties.slotCapacity)
             {
                 if (sequence)
                 {
-                    sequence->addBatch(batch);
+                    batch->pack();
+                    sequence->addBatch(move(batch));
                 }
                 else
                 {
-                    batch.flush(getIndices(), sequenceUseColor);
+                    batch->flush(getIndices(), sequenceUseColor);
                 }
                 
-                batch.clear();
+                if (!batch)
+                {
+                    batch = unique_ptr<GlyphBatch>(new GlyphBatch);
+                }
+                else
+                {
+                    batch->clear();
+                }
             }
         }
         
@@ -458,7 +476,7 @@ namespace chronotext
                 
                 if (!hasClip || clipQuad(quad))
                 {
-                    batch.addQuad(quad);
+                    batch->addQuad(quad);
                     incrementSequence();
                 }
             }
@@ -472,7 +490,7 @@ namespace chronotext
                 
                 if (!hasClip || clipQuad(quad))
                 {
-                    matrix.addTransformedQuad(quad, batch.vertices);
+                    matrix.addTransformedQuad(quad, batch->vertices);
                     incrementSequence();
                 }
             }

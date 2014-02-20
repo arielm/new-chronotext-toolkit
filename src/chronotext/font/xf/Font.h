@@ -166,7 +166,7 @@ namespace chronotext
             int began;
             bool sequenceUseColor;
             FontSequence *sequence;
-            GlyphBatch batch;
+            std::unique_ptr<GlyphBatch> batch;
             
             Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties);
             

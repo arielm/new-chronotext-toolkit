@@ -25,9 +25,9 @@ namespace chronotext
         void FontSequence::end()
         {}
         
-        void FontSequence::addBatch(const GlyphBatch &batch)
+        void FontSequence::addBatch(unique_ptr<GlyphBatch> &&batch)
         {
-            batches.push_back(batch);
+            batches.emplace_back(forward<unique_ptr<GlyphBatch>>(batch));
         }
         
         void FontSequence::replay(Font &font)
@@ -36,7 +36,7 @@ namespace chronotext
             
             for (auto &batch : batches)
             {
-                batch.flush(font.getIndices(), useColor);
+                batch->flush(font.getIndices(), useColor);
             }
             
             font.end(useColor);

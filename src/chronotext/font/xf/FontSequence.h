@@ -22,12 +22,12 @@ namespace chronotext
             void begin(bool useColor = false);
             void end();
             
-            void addBatch(const GlyphBatch &batch);
+            void addBatch(std::unique_ptr<GlyphBatch> &&batch);
             void replay(Font &font);
             
         protected:
             bool useColor;
-            std::vector<GlyphBatch> batches;
+            std::vector<std::unique_ptr<GlyphBatch>> batches;
         };
     }
 }

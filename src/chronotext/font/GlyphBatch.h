@@ -46,6 +46,12 @@ namespace chronotext
             vertices.clear();
             colors.clear();
         }
+        
+        void pack()
+        {
+            vertices.shrink_to_fit();
+            colors.shrink_to_fit();
+        }
 
         int size() const
         {
