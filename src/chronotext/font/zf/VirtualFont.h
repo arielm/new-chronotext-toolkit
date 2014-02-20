@@ -92,7 +92,6 @@ namespace chronotext
             
             LayoutCache &layoutCache;
             TextItemizer &itemizer;
-            float baseSize;
             
             ActualFont::Metrics getMetrics(const Cluster &cluster) const; // RETURNS THE SIZED METRICS OF THE ActualFont USED BY cluster
             ActualFont::Metrics getMetrics(const std::string &lang = "") const; // RETURNS THE SIZED METRICS OF THE FIRST ActualFont IN THE SET USED FOR lang
@@ -135,7 +134,10 @@ namespace chronotext
             inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
             void endSequence();
             
-            void addCluster(const Cluster &cluster, float x, float y, float z = 0);
+            void addCluster(const Cluster &cluster, const ci::Vec3f &position);
+            inline void addCluster(const Cluster &cluster, float x, float y, float z = 0) { addCluster(cluster, ci::Vec3f(x, y, z)); }
+            void addTransformedCluster(const Cluster &cluster, const ci::Vec2f &position);
+            inline void addTransformedCluster(const Cluster &cluster, float x, float y) { addTransformedCluster(cluster, ci::Vec2f(x, y)); }
             
             static Style styleStringToEnum(const std::string &style);
             static std::string styleEnumToString(Style style);

@@ -32,14 +32,14 @@ namespace chronotext
         
         void FontSequence::replay(VirtualFont &font)
         {
-//            font.begin(useColor);
-//            
-//            for (auto &map : maps)
-//            {
-//                map->flush(font.getIndices(), useColor);
-//            }
-//            
-//            font.end(useColor);
+            font.begin(useColor);
+            
+            for (auto &map : maps)
+            {
+                map->flush(font.getIndices(), useColor);
+            }
+            
+            font.end(useColor);
         }
     }
 }

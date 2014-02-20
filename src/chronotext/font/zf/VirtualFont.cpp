@@ -19,7 +19,6 @@ namespace chronotext
         VirtualFont::VirtualFont(FontManager &fontManager, const Properties &properties)
         :
         properties(properties),
-        baseSize(properties.baseSize),
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
         indices(fontManager.getIndices(properties.slotCapacity)),
@@ -36,7 +35,7 @@ namespace chronotext
             
             // ---
 
-            setSize(baseSize);
+            setSize(properties.baseSize);
             setColor(0, 0, 0, 1);
         }
         
@@ -268,7 +267,7 @@ namespace chronotext
         void VirtualFont::setSize(float newSize)
         {
             size = newSize;
-            sizeRatio = newSize / baseSize;
+            sizeRatio = newSize / properties.baseSize;
         }
         
         void VirtualFont::setColor(const ColorA &newColor)
@@ -410,6 +409,11 @@ namespace chronotext
         
         void VirtualFont::incrementSequence(GlyphBatch *batch)
         {
+            if (sequenceUseColor)
+            {
+                batch->addColor(color);
+            }
+            
             if (batch->size() == properties.slotCapacity)
             {
                 if (sequence)
@@ -438,22 +442,40 @@ namespace chronotext
             return quad.clip(clipRect, texture->getSize() * sizeRatio);
         }
 
-        void VirtualFont::addCluster(const Cluster &cluster, float x, float y, float z)
+        void VirtualFont::addCluster(const Cluster &cluster, const Vec3f &position)
         {
             for (auto &shape : cluster.shapes)
             {
                 GlyphQuad quad;
                 ActualFont::Glyph *glyph;
-                tie(quad, glyph) = cluster.font->obtainQuad(shape, Vec2f(x, y), sizeRatio);
+                tie(quad, glyph) = cluster.font->obtainQuad(shape, position.xy(), sizeRatio);
                 
                 if (glyph)
                 {
                     if (!hasClip || clipQuad(quad, glyph->texture))
                     {
                         auto batch = batchMap->getBatch(glyph->texture);
-                        batch->addQuad(quad, z);
-                        batch->addColor(color);
-                        
+                        batch->addQuad(quad, position.z);
+                        incrementSequence(batch);
+                    }
+                }
+            }
+        }
+        
+        void VirtualFont::addTransformedCluster(const Cluster &cluster, const Vec2f &position)
+        {
+            for (auto &shape : cluster.shapes)
+            {
+                GlyphQuad quad;
+                ActualFont::Glyph *glyph;
+                tie(quad, glyph) = cluster.font->obtainQuad(shape, position, sizeRatio);
+                
+                if (glyph)
+                {
+                    if (!hasClip || clipQuad(quad, glyph->texture))
+                    {
+                        auto batch = batchMap->getBatch(glyph->texture);
+                        matrix.addTransformedQuad(quad, batch->vertices);
                         incrementSequence(batch);
                     }
                 }
