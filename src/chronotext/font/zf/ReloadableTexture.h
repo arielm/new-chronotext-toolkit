@@ -31,6 +31,7 @@ namespace chronotext
             GLuint getId() const;
             int getWidth() const;
             int getHeight() const;
+            ci::Vec2i getSize() const;
             
         protected:
             GLuint textureId;

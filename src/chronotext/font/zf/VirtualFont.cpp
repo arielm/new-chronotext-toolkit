@@ -433,21 +433,29 @@ namespace chronotext
             }
         }
         
-        void VirtualFont::addCluster(const Cluster &cluster, const Vec2f &position)
+        bool VirtualFont::clipQuad(GlyphQuad &quad, ReloadableTexture *texture) const
+        {
+            return quad.clip(clipRect, texture->getSize() * sizeRatio);
+        }
+
+        void VirtualFont::addCluster(const Cluster &cluster, float x, float y, float z)
         {
             for (auto &shape : cluster.shapes)
             {
                 GlyphQuad quad;
                 ActualFont::Glyph *glyph;
-                tie(quad, glyph) = cluster.font->obtainQuad(shape, position, sizeRatio);
+                tie(quad, glyph) = cluster.font->obtainQuad(shape, Vec2f(x, y), sizeRatio);
                 
                 if (glyph)
                 {
-                    auto batch = batchMap->getBatch(glyph->texture);
-                    batch->addQuad(quad);
-                    batch->addColor(color);
-                    
-                    incrementSequence(batch);
+                    if (!hasClip || clipQuad(quad, glyph->texture))
+                    {
+                        auto batch = batchMap->getBatch(glyph->texture);
+                        batch->addQuad(quad, z);
+                        batch->addColor(color);
+                        
+                        incrementSequence(batch);
+                    }
                 }
             }
         }

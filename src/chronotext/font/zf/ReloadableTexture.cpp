@@ -137,5 +137,10 @@ namespace chronotext
         {
             return textureHeight;
         }
+        
+        Vec2i ReloadableTexture::getSize() const
+        {
+            return Vec2i(textureWidth, textureHeight);
+        }
     }
 }

@@ -135,7 +135,7 @@ namespace chronotext
             inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
             void endSequence();
             
-            void addCluster(const Cluster &cluster, const ci::Vec2f &position);
+            void addCluster(const Cluster &cluster, float x, float y, float z = 0);
             
             static Style styleStringToEnum(const std::string &style);
             static std::string styleEnumToString(Style style);
@@ -171,7 +171,7 @@ namespace chronotext
             const FontSet& getFontSet(const std::string &lang) const;
             
             void incrementSequence(GlyphBatch *batch);
-            inline bool clipQuad(GlyphQuad &quad, ReloadableTexture *texture) { return quad.clip(clipRect, ci::Vec2f::one() / ci::Vec2f(texture->getWidth(), texture->getHeight()) / sizeRatio); }
+            bool clipQuad(GlyphQuad &quad, ReloadableTexture *texture) const;
         };
     }
 }
