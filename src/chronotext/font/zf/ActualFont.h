@@ -17,6 +17,7 @@
 #include "hb.h"
 
 #include <map>
+#include <set>
 
 namespace chronotext
 {
@@ -122,7 +123,10 @@ namespace chronotext
             };
             
             ~ActualFont(); // MUST BE PUBLIC BECAUSE OF unique_ptr
-            
+
+            bool isSpace(hb_codepoint_t codepoint) const;
+            std::string getFullName() const;
+
         protected:
             std::shared_ptr<FreetypeHelper> ftHelper;
             
@@ -141,6 +145,7 @@ namespace chronotext
             
             std::map<uint32_t, std::unique_ptr<Glyph>> glyphCache;
             std::vector<std::unique_ptr<ReloadableTexture>> standaloneTextures;
+            std::set<hb_codepoint_t> spaceSeparators;
             
             ActualFont(std::shared_ptr<FreetypeHelper> ftHelper, const Descriptor &descriptor, float baseSize, bool useMipmap);
             
@@ -152,8 +157,6 @@ namespace chronotext
             Glyph* getGlyph(uint32_t codepoint);
             Glyph* createGlyph(uint32_t codepoint);
             std::pair<GlyphQuad, Glyph*> obtainQuad(const Shape &shape, const ci::Vec2f &position, float sizeRatio);
-            
-            std::string getFullName() const;
             
             friend class FontManager;
             friend class VirtualFont;

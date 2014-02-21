@@ -26,11 +26,7 @@ namespace chronotext
             hb_codepoint_t codepoint;
             ci::Vec2f position;
             
-            Shape(hb_codepoint_t codepoint, const ci::Vec2f &position)
-            :
-            codepoint(codepoint),
-            position(position)
-            {}
+            Shape(hb_codepoint_t codepoint, const ci::Vec2f &position);
         };
         
         struct Cluster
@@ -39,20 +35,10 @@ namespace chronotext
             
             float combinedAdvance;
             std::vector<Shape> shapes;
+            bool isSpace;
             
-            Cluster(ActualFont *font, hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance)
-            :
-            font(font),
-            combinedAdvance(advance)
-            {
-                shapes.emplace_back(codepoint, offset);
-            }
-            
-            void addShape(hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance)
-            {
-                shapes.emplace_back(codepoint, ci::Vec2f(combinedAdvance, 0) + offset);
-                combinedAdvance += advance;
-            }
+            Cluster(ActualFont *font, hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance);
+            void addShape(hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance);
         };
         
         struct LineLayout
@@ -68,22 +54,8 @@ namespace chronotext
             float maxAscent;
             float maxDescent;
             
-            LineLayout(VirtualFont *font, const std::string &langHint, hb_direction_t overallDirection)
-            :
-            font(font),
-            langHint(langHint),
-            overallDirection(overallDirection),
-            advance(0),
-            maxHeight(0),
-            maxAscent(0),
-            maxDescent(0)
-            {}
-            
-            void addCluster(const Cluster &cluster)
-            {
-                clusters.emplace_back(cluster);
-                advance += cluster.combinedAdvance;
-            }
+            LineLayout(VirtualFont *font, const std::string &langHint, hb_direction_t overallDirection);
+            void addCluster(const Cluster &cluster);
         };
     }
 }

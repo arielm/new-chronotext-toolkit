@@ -39,6 +39,13 @@ static FT_Error force_ucs2_charmap(FT_Face face)
     return -1;
 }
 
+static const FT_ULong SPACE_SEPARATORS[] =
+{
+    0x0020, 0x00A0, 0x1680, 0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x202F, 0x205F, 0x3000
+};
+
+static const size_t SPACE_SEPARATORS_COUNT = sizeof(SPACE_SEPARATORS) / sizeof(FT_ULong);
+
 namespace chronotext
 {
     namespace zf
@@ -74,6 +81,23 @@ namespace chronotext
         ActualFont::~ActualFont()
         {
             unload();
+        }
+        
+        bool ActualFont::isSpace(hb_codepoint_t codepoint) const
+        {
+            return spaceSeparators.count(codepoint);
+        }
+        
+        string ActualFont::getFullName() const
+        {
+            if (ftFace)
+            {
+                return string(ftFace->family_name) + " " + ftFace->style_name;
+            }
+            else
+            {
+                return "";
+            }
         }
         
         void ActualFont::reload()
@@ -153,6 +177,18 @@ namespace chronotext
                 else
                 {
                     metrics.strikethroughOffset = 0.5f * (metrics.ascent - metrics.descent);
+                }
+                
+                // ---
+                
+                for (int i = 0; i < SPACE_SEPARATORS_COUNT; i++)
+                {
+                    hb_codepoint_t codepoint = (hb_codepoint_t)FT_Get_Char_Index(ftFace, SPACE_SEPARATORS[i]);
+                    
+                    if (codepoint)
+                    {
+                        spaceSeparators.insert(codepoint);
+                    }
                 }
                 
                 // ---
@@ -300,18 +336,6 @@ namespace chronotext
             }
             
             return make_pair(quad, glyph);
-        }
-        
-        string ActualFont::getFullName() const
-        {
-            if (ftFace)
-            {
-                return string(ftFace->family_name) + " " + ftFace->style_name;
-            }
-            else
-            {
-                return "";
-            }
         }
     }
 }
