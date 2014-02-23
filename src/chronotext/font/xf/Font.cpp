@@ -435,50 +435,55 @@ namespace chronotext
             }
         }
         
-        GlyphQuad Font::obtainQuad(int glyphIndex, float x, float y) const
+        bool Font::fillQuad(GlyphQuad &quad, int glyphIndex, float x, float y) const
         {
-            GlyphQuad quad;
-            
-            if (direction * axis.x > 0)
+            if (glyphIndex < 0)
             {
-                quad.x1 = x + le[glyphIndex] * sizeRatio;
-                quad.x2 = quad.x1 + w[glyphIndex] * sizeRatio;
+                return false;
             }
             else
             {
-                quad.x2 = x - le[glyphIndex] * sizeRatio;
-                quad.x1 = quad.x2 - w[glyphIndex] * sizeRatio;
-            }
-            
-            if (axis.x > 0)
-            {
-                quad.u1 = u1[glyphIndex];
-                quad.u2 = u2[glyphIndex];
-            }
-            else
-            {
-                quad.u1 = u2[glyphIndex];
-                quad.u2 = u1[glyphIndex];
-            }
-            
-            if (axis.y > 0)
-            {
-                quad.y1 = y - te[glyphIndex] * sizeRatio;
-                quad.y2 = quad.y1 + h[glyphIndex] * sizeRatio;
+                if (direction * axis.x > 0)
+                {
+                    quad.x1 = x + le[glyphIndex] * sizeRatio;
+                    quad.x2 = quad.x1 + w[glyphIndex] * sizeRatio;
+                }
+                else
+                {
+                    quad.x2 = x - le[glyphIndex] * sizeRatio;
+                    quad.x1 = quad.x2 - w[glyphIndex] * sizeRatio;
+                }
                 
-                quad.v1 = v1[glyphIndex];
-                quad.v2 = v2[glyphIndex];
-            }
-            else
-            {
-                quad.y2 = y + te[glyphIndex] * sizeRatio;
-                quad.y1 = quad.y2 - h[glyphIndex] * sizeRatio;
+                if (axis.x > 0)
+                {
+                    quad.u1 = u1[glyphIndex];
+                    quad.u2 = u2[glyphIndex];
+                }
+                else
+                {
+                    quad.u1 = u2[glyphIndex];
+                    quad.u2 = u1[glyphIndex];
+                }
                 
-                quad.v1 = v2[glyphIndex];
-                quad.v2 = v1[glyphIndex];
+                if (axis.y > 0)
+                {
+                    quad.y1 = y - te[glyphIndex] * sizeRatio;
+                    quad.y2 = quad.y1 + h[glyphIndex] * sizeRatio;
+                    
+                    quad.v1 = v1[glyphIndex];
+                    quad.v2 = v2[glyphIndex];
+                }
+                else
+                {
+                    quad.y2 = y + te[glyphIndex] * sizeRatio;
+                    quad.y1 = quad.y2 - h[glyphIndex] * sizeRatio;
+                    
+                    quad.v1 = v2[glyphIndex];
+                    quad.v2 = v1[glyphIndex];
+                }
+                
+                return true;
             }
-            
-            return quad;
         }
         
         bool Font::clipQuad(GlyphQuad &quad) const
@@ -488,10 +493,10 @@ namespace chronotext
 
         void Font::addGlyph(int glyphIndex, float x, float y, float z)
         {
-            if (glyphIndex >= 0)
+            GlyphQuad quad;
+            
+            if (fillQuad(quad, glyphIndex, x, y));
             {
-                GlyphQuad quad = obtainQuad(glyphIndex, x, y);
-                
                 if (!hasClip || clipQuad(quad))
                 {
                     batch->addQuad(quad);
@@ -502,10 +507,10 @@ namespace chronotext
         
         void Font::addTransformedGlyph(int glyphIndex, float x, float y)
         {
-            if (glyphIndex >= 0)
+            GlyphQuad quad;
+            
+            if (fillQuad(quad, glyphIndex, x, y));
             {
-                GlyphQuad quad = obtainQuad(glyphIndex, x, y);
-                
                 if (!hasClip || clipQuad(quad))
                 {
                     matrix.addTransformedQuad(quad, batch->vertices);

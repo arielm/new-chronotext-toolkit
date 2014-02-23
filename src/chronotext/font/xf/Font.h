@@ -173,7 +173,7 @@ namespace chronotext
             void end(bool useColor = false);
 
             void incrementSequence();
-            GlyphQuad obtainQuad(int glyphIndex, float x, float y) const;
+            bool fillQuad(GlyphQuad &quad, int glyphIndex, float x, float y) const;
             bool clipQuad(GlyphQuad &quad) const;
         };
     }
