@@ -311,7 +311,7 @@ namespace chronotext
                      * IN CASE A PREVIOUSLY-LOADED TEXTURE HAVE BEEN
                      * DISCARDED, E.G. AFTER SOME OPENGL CONTEXT-LOSS
                      */
-                    if (glyph->texture && !glyph->texture->id)
+                    if (glyph->texture && !glyph->texture->isLoaded())
                     {
                         GlyphData glyphData(ftFace, codepoint, useMipmap, padding);
                         
@@ -332,7 +332,7 @@ namespace chronotext
             
             if (glyphData.isValid())
             {
-                auto texture = new ReloadableTexture(glyphData);
+                auto texture = new ReloadableTexture(this, codepoint, glyphData);
                 textures.push_back(unique_ptr<ReloadableTexture>(texture));
                 
                 return new Glyph(texture, glyphData.offset, glyphData.size);

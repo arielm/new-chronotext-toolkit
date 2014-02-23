@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/font/zf/ReloadableTexture.h"
+#include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/utils/MathUtils.h"
 
 using namespace std;
@@ -16,8 +17,10 @@ namespace chronotext
 {
     namespace zf
     {
-        ReloadableTexture::ReloadableTexture(const GlyphData &glyphData)
+        ReloadableTexture::ReloadableTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData)
         :
+        font(font),
+        codepoint(codepoint),
         id(0)
         {
             upload(glyphData);
@@ -92,9 +95,23 @@ namespace chronotext
             }
         }
         
+        void ReloadableTexture::reload()
+        {
+            if (!id)
+            {
+                font->reloadTexture(this, codepoint);
+            }
+        }
+        
         bool ReloadableTexture::isLoaded() const
         {
             return (id != 0);
+        }
+        
+        void ReloadableTexture::bind()
+        {
+            reload();
+            glBindTexture(GL_TEXTURE_2D, id);
         }
         
         size_t ReloadableTexture::getMemoryUsage() const

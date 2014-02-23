@@ -10,27 +10,37 @@
 
 #include "chronotext/font/zf/GlyphData.h"
 
+#include "hb.h"
+
 #include "cinder/gl/gl.h"
 
 namespace chronotext
 {
     namespace zf
     {
+        class ActualFont;
+
         class ReloadableTexture
         {
         public:
+            ActualFont *font;
+            hb_codepoint_t codepoint;
+            
             bool useMipmap;
             int width;
             int height;
             GLuint id;
 
-            ReloadableTexture(const GlyphData &glyphData);
+            ReloadableTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData);
             ~ReloadableTexture();
             
             void upload(const GlyphData &glyphData);
             void discard();
+            void reload();
             
             bool isLoaded() const;
+            void bind();
+            
             size_t getMemoryUsage() const;
             ci::Vec2i getSize() const;
         };

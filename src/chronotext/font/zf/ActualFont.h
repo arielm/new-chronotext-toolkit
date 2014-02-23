@@ -162,6 +162,7 @@ namespace chronotext
             
             friend class FontManager;
             friend class VirtualFont;
+            friend class ReloadableTexture;
         };
     }
 }

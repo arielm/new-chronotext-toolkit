@@ -67,7 +67,7 @@ namespace chronotext
             {
                 for (auto &it : map)
                 {
-                    glBindTexture(GL_TEXTURE_2D, it.first->id);
+                    it.first->bind();
 
                     if (anisotropy)
                     {
