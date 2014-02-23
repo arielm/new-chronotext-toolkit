@@ -58,8 +58,8 @@ namespace chronotext
         baseSize(baseSize * descriptor.scale),
         useMipmap(useMipmap),
         loaded(false),
-        ftFace(NULL),
-        hbFont(NULL)
+        ftFace(nullptr),
+        hbFont(nullptr)
         {
             /*
              * PADDING IS NECESSARY IN ORDER TO AVOID BORDER ARTIFACTS
@@ -124,7 +124,7 @@ namespace chronotext
                 
                 if (force_ucs2_charmap(ftFace))
                 {
-                    FT_Done_Face(ftFace); ftFace = NULL;
+                    FT_Done_Face(ftFace); ftFace = nullptr;
                     throw runtime_error("HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
                 
@@ -151,12 +151,12 @@ namespace chronotext
                     int((1.0 / res) * 0x10000L)
                 };
                 
-                FT_Set_Transform(ftFace, &matrix, NULL);
+                FT_Set_Transform(ftFace, &matrix, nullptr);
                 
                 /*
                  * THIS MUST TAKE PLACE AFTER ftFace IS PROPERLY SCALED AND TRANSFORMED
                  */
-                hbFont = hb_ft_font_create(ftFace, NULL);
+                hbFont = hb_ft_font_create(ftFace, nullptr);
                 
                 // ---
                 
@@ -215,21 +215,15 @@ namespace chronotext
                 loaded = false;
                 LOGD << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
                 
-                /*
-                 * FIXME:
-                 * - DO NOT CLEAR THE FOLLOWING
-                 * - INSTEAD: ONLY CALL discardTextures()
-                 */
-                glyphs.clear();
-                textures.clear();
+                discardTextures();
                 
                 if (descriptor.forceMemoryLoad)
                 {
                     memoryBuffer.reset();
                 }
                 
-                hb_font_destroy(hbFont); hbFont = NULL;
-                FT_Done_Face(ftFace); ftFace = NULL;
+                hb_font_destroy(hbFont); hbFont = nullptr;
+                FT_Done_Face(ftFace); ftFace = nullptr;
             }
         }
         
@@ -257,12 +251,53 @@ namespace chronotext
             return total;
         }
         
+        ActualFont::Glyph* ActualFont::fillQuad(GlyphQuad &quad, Shape &shape, const Vec2f &position, float sizeRatio)
+        {
+            auto glyph = shape.glyph;
+            
+            if (!glyph)
+            {
+                glyph = shape.glyph = getGlyph(shape.codepoint);
+            }
+            
+            if (glyph)
+            {
+                if (glyph->texture)
+                {
+                    /*
+                     * IN CASE A PREVIOUSLY-LOADED TEXTURE HAVE BEEN
+                     * DISCARDED, E.G. AFTER SOME OPENGL CONTEXT-LOSS
+                     */
+                    if (!glyph->texture->id)
+                    {
+                        reloadTexture(glyph->texture, shape.codepoint);
+                    }
+                    
+                    auto ul = position + (shape.position + glyph->offset) * sizeRatio;
+                    
+                    quad.x1 = ul.x;
+                    quad.y1 = ul.y,
+                    quad.x2 = ul.x + glyph->size.x * sizeRatio;
+                    quad.y2 = ul.y + glyph->size.y * sizeRatio;
+                    
+                    quad.u1 = glyph->u1;
+                    quad.v1 = glyph->v1;
+                    quad.u2 = glyph->u2;
+                    quad.v2 = glyph->v2;
+                    
+                    return glyph;
+                }
+            }
+            
+            return nullptr;
+        }
+        
         ActualFont::Glyph* ActualFont::getGlyph(uint32_t codepoint)
         {
-            Glyph *glyph = NULL;
+            Glyph *glyph = nullptr;
             
             reload();
-            
+
             if (loaded)
             {
                 auto entry = glyphs.find(codepoint);
@@ -288,20 +323,6 @@ namespace chronotext
                 else
                 {
                     glyph = entry->second.get();
-                    
-                    /*
-                     * IN CASE A PREVIOUSLY-LOADED TEXTURE HAVE BEEN
-                     * DISCARDED, E.G. AFTER SOME OPENGL CONTEXT-LOSS
-                     */
-                    if (glyph->texture && !glyph->texture->isLoaded())
-                    {
-                        GlyphData glyphData(ftFace, codepoint, useMipmap, padding);
-                        
-                        if (glyphData.isValid())
-                        {
-                            glyph->texture->upload(glyphData);
-                        }
-                    }
                 }
             }
             
@@ -320,37 +341,22 @@ namespace chronotext
                 return new Glyph(texture, glyphData.offset, glyphData.size);
             }
             
-            return NULL;
+            return nullptr;
         }
         
-        pair<GlyphQuad, ActualFont::Glyph*> ActualFont::obtainQuad(const Shape &shape, const Vec2f &position, float sizeRatio)
+        void ActualFont::reloadTexture(ReloadableTexture *texture, uint32_t codepoint)
         {
-            GlyphQuad quad;
-            auto glyph = getGlyph(shape.codepoint);
+            reload();
             
-            if (glyph)
+            if (loaded)
             {
-                if (glyph->texture)
+                GlyphData glyphData(ftFace, codepoint, useMipmap, padding);
+                
+                if (glyphData.isValid())
                 {
-                    auto ul = position + (shape.position + glyph->offset) * sizeRatio;
-                    
-                    quad.x1 = ul.x;
-                    quad.y1 = ul.y,
-                    quad.x2 = ul.x + glyph->size.x * sizeRatio;
-                    quad.y2 = ul.y + glyph->size.y * sizeRatio;
-                    
-                    quad.u1 = glyph->u1;
-                    quad.v1 = glyph->v1;
-                    quad.u2 = glyph->u2;
-                    quad.v2 = glyph->v2;
-                }
-                else
-                {
-                    glyph = NULL;
+                    texture->upload(glyphData);
                 }
             }
-            
-            return make_pair(quad, glyph);
         }
     }
 }

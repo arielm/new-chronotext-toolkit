@@ -137,10 +137,10 @@ namespace chronotext
             void endSequence();
             void replaySequence(FontSequence *sequence);
             
-            void addCluster(const Cluster &cluster, const ci::Vec3f &position);
-            inline void addCluster(const Cluster &cluster, float x, float y, float z = 0) { addCluster(cluster, ci::Vec3f(x, y, z)); }
-            void addTransformedCluster(const Cluster &cluster, const ci::Vec2f &position);
-            inline void addTransformedCluster(const Cluster &cluster, float x, float y) { addTransformedCluster(cluster, ci::Vec2f(x, y)); }
+            void addCluster(Cluster &cluster, const ci::Vec3f &position);
+            inline void addCluster(Cluster &cluster, float x, float y, float z = 0) { addCluster(cluster, ci::Vec3f(x, y, z)); }
+            void addTransformedCluster(Cluster &cluster, const ci::Vec2f &position);
+            inline void addTransformedCluster(Cluster &cluster, float x, float y) { addTransformedCluster(cluster, ci::Vec2f(x, y)); }
             
             static Style styleStringToEnum(const std::string &style);
             static std::string styleEnumToString(Style style);

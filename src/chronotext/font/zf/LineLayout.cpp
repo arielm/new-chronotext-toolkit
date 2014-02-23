@@ -18,7 +18,8 @@ namespace chronotext
         Shape::Shape(hb_codepoint_t codepoint, const Vec2f &position)
         :
         codepoint(codepoint),
-        position(position)
+        position(position),
+        glyph(NULL)
         {}
         
         Cluster::Cluster(ActualFont *font, hb_codepoint_t codepoint, const Vec2f &offset, float advance)
@@ -29,7 +30,7 @@ namespace chronotext
             shapes.emplace_back(codepoint, offset);
             
             /*
-             * ASSERTION: IF THE FIRST SHAPE IS A SPACE-SEPARATOR, NO SHAPES WILL FOLLOW
+             * ASSERTION: IF THE FIRST SHAPE IS A SPACE-SEPARATOR, NO FURTHER SHAPES WILL BE ADDED
              */
             isSpace = font->isSpace(codepoint);
         }

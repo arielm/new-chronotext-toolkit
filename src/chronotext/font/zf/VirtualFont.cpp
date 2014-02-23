@@ -456,13 +456,12 @@ namespace chronotext
             return quad.clip(clipRect, texture->getSize() * sizeRatio);
         }
 
-        void VirtualFont::addCluster(const Cluster &cluster, const Vec3f &position)
+        void VirtualFont::addCluster(Cluster &cluster, const Vec3f &position)
         {
             for (auto &shape : cluster.shapes)
             {
                 GlyphQuad quad;
-                ActualFont::Glyph *glyph;
-                tie(quad, glyph) = cluster.font->obtainQuad(shape, position.xy(), sizeRatio);
+                auto glyph = cluster.font->fillQuad(quad, shape, position.xy(), sizeRatio);
                 
                 if (glyph)
                 {
@@ -476,13 +475,12 @@ namespace chronotext
             }
         }
         
-        void VirtualFont::addTransformedCluster(const Cluster &cluster, const Vec2f &position)
+        void VirtualFont::addTransformedCluster(Cluster &cluster, const Vec2f &position)
         {
             for (auto &shape : cluster.shapes)
             {
                 GlyphQuad quad;
-                ActualFont::Glyph *glyph;
-                tie(quad, glyph) = cluster.font->obtainQuad(shape, position, sizeRatio);
+                auto glyph = cluster.font->fillQuad(quad, shape, position, sizeRatio);
                 
                 if (glyph)
                 {
