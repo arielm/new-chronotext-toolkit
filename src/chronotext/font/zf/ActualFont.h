@@ -95,8 +95,8 @@ namespace chronotext
                 {
                     u1 = 0;
                     v1 = 0;
-                    u2 = size.x / texture->getWidth();
-                    v2 = size.y / texture->getHeight();
+                    u2 = size.x / texture->width;
+                    v2 = size.y / texture->height;
                 }
             };
             

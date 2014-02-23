@@ -226,7 +226,7 @@ namespace chronotext
         {
             for (auto &texture : standaloneTextures)
             {
-                texture->unload();
+                texture->discard();
             }
         }
         
@@ -284,7 +284,7 @@ namespace chronotext
                         
                         if (glyphData.isValid())
                         {
-                            glyph->texture->load(glyphData);
+                            glyph->texture->upload(glyphData);
                         }
                     }
                 }

@@ -25,7 +25,8 @@ namespace chronotext
         hasClip(false),
         sequence(nullptr)
         {
-            assert((properties.slotCapacity > 0) && (properties.slotCapacity <= 8192));
+            assert(properties.slotCapacity > 0);
+            assert(properties.slotCapacity <= 8192);
 
             // ---
             
@@ -313,7 +314,7 @@ namespace chronotext
                 texture->reload();
                 
                 glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, texture->name);
+                glBindTexture(GL_TEXTURE_2D, texture->id);
                 
                 if (anisotropy)
                 {

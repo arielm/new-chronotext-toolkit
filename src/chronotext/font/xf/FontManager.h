@@ -60,7 +60,7 @@ namespace chronotext
         {
             int width;
             int height;
-            GLuint name;
+            GLuint id;
             InputSourceRef inputSource;
             
             FontTexture(FontAtlas *atlas, InputSourceRef inputSource);

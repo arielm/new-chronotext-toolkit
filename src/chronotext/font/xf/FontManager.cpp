@@ -79,7 +79,7 @@ namespace chronotext
         :
         width(atlas->width),
         height(atlas->height),
-        name(0),
+        id(0),
         inputSource(inputSource)
         {
             upload(atlas);
@@ -95,10 +95,10 @@ namespace chronotext
             assert(width == atlas->width);
             assert(height == atlas->height);
             
-            if (!name)
+            if (!id)
             {
-                glGenTextures(1, &name);
-                glBindTexture(GL_TEXTURE_2D, name);
+                glGenTextures(1, &id);
+                glBindTexture(GL_TEXTURE_2D, id);
                 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -118,32 +118,31 @@ namespace chronotext
                 LOGD <<
                 "FONT UPLOADED: " <<
                 inputSource->getFilePathHint() << " | " <<
-                name << " | " <<
+                id << " | " <<
                 width << "x" << height  <<
                 endl;
-                
             }
         }
         
         void FontTexture::discard()
         {
-            if (name)
+            if (id)
             {
                 LOGD <<
                 "FONT DISCARDED: " <<
-                name <<
+                id <<
                 endl;
                 
                 // ---
                 
-                glDeleteTextures(1, &name);
-                name = 0;
+                glDeleteTextures(1, &id);
+                id = 0;
             }
         }
         
         void FontTexture::reload()
         {
-            if (!name)
+            if (!id)
             {
                 FontData *data;
                 FontAtlas *atlas;

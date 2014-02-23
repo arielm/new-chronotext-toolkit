@@ -19,25 +19,20 @@ namespace chronotext
         class ReloadableTexture
         {
         public:
+            bool useMipmap;
+            int width;
+            int height;
+            GLuint id;
+
             ReloadableTexture(const GlyphData &glyphData);
             ~ReloadableTexture();
             
-            void unload();
-            void load(const GlyphData &glyphData);
+            void upload(const GlyphData &glyphData);
+            void discard();
+            
             bool isLoaded() const;
             size_t getMemoryUsage() const;
-            
-            void bind();
-            GLuint getId() const;
-            int getWidth() const;
-            int getHeight() const;
             ci::Vec2i getSize() const;
-            
-        protected:
-            GLuint textureId;
-            int textureWidth;
-            int textureHeight;
-            bool useMipmap;
         };
     }
 }
