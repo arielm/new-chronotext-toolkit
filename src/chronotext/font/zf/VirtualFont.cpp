@@ -456,7 +456,7 @@ namespace chronotext
             return quad.clip(clipRect, texture->getSize() * sizeRatio);
         }
 
-        void VirtualFont::addCluster(Cluster &cluster, const Vec3f &position)
+        void VirtualFont::addCluster(const Cluster &cluster, const Vec3f &position)
         {
             for (auto &shape : cluster.shapes)
             {
@@ -475,7 +475,7 @@ namespace chronotext
             }
         }
         
-        void VirtualFont::addTransformedCluster(Cluster &cluster, const Vec2f &position)
+        void VirtualFont::addTransformedCluster(const Cluster &cluster, const Vec2f &position)
         {
             for (auto &shape : cluster.shapes)
             {

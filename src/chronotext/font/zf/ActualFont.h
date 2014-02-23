@@ -155,7 +155,7 @@ namespace chronotext
             void discardTextures();
             size_t getTextureMemoryUsage() const;
             
-            Glyph* fillQuad(GlyphQuad &quad, Shape &shape, const ci::Vec2f &position, float sizeRatio);
+            Glyph* fillQuad(GlyphQuad &quad, const Shape &shape, const ci::Vec2f &position, float sizeRatio);
             Glyph* getGlyph(uint32_t codepoint);
             Glyph* createGlyph(uint32_t codepoint);
             void reloadTexture(ReloadableTexture *texture, uint32_t codepoint);

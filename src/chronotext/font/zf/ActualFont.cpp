@@ -251,42 +251,25 @@ namespace chronotext
             return total;
         }
         
-        ActualFont::Glyph* ActualFont::fillQuad(GlyphQuad &quad, Shape &shape, const Vec2f &position, float sizeRatio)
+        ActualFont::Glyph* ActualFont::fillQuad(GlyphQuad &quad, const Shape &shape, const Vec2f &position, float sizeRatio)
         {
-            auto glyph = shape.glyph;
+            auto glyph = getGlyph(shape.codepoint);
             
-            if (!glyph)
+            if (glyph && glyph->texture)
             {
-                glyph = shape.glyph = getGlyph(shape.codepoint);
-            }
-            
-            if (glyph)
-            {
-                if (glyph->texture)
-                {
-                    /*
-                     * IN CASE A PREVIOUSLY-LOADED TEXTURE HAVE BEEN
-                     * DISCARDED, E.G. AFTER SOME OPENGL CONTEXT-LOSS
-                     */
-                    if (!glyph->texture->id)
-                    {
-                        reloadTexture(glyph->texture, shape.codepoint);
-                    }
-                    
-                    auto ul = position + (shape.position + glyph->offset) * sizeRatio;
-                    
-                    quad.x1 = ul.x;
-                    quad.y1 = ul.y,
-                    quad.x2 = ul.x + glyph->size.x * sizeRatio;
-                    quad.y2 = ul.y + glyph->size.y * sizeRatio;
-                    
-                    quad.u1 = glyph->u1;
-                    quad.v1 = glyph->v1;
-                    quad.u2 = glyph->u2;
-                    quad.v2 = glyph->v2;
-                    
-                    return glyph;
-                }
+                auto ul = position + (shape.position + glyph->offset) * sizeRatio;
+                
+                quad.x1 = ul.x;
+                quad.y1 = ul.y,
+                quad.x2 = ul.x + glyph->size.x * sizeRatio;
+                quad.y2 = ul.y + glyph->size.y * sizeRatio;
+                
+                quad.u1 = glyph->u1;
+                quad.v1 = glyph->v1;
+                quad.u2 = glyph->u2;
+                quad.v2 = glyph->v2;
+                
+                return glyph;
             }
             
             return nullptr;
@@ -297,7 +280,7 @@ namespace chronotext
             Glyph *glyph = nullptr;
             
             reload();
-
+            
             if (loaded)
             {
                 auto entry = glyphs.find(codepoint);
@@ -323,6 +306,20 @@ namespace chronotext
                 else
                 {
                     glyph = entry->second.get();
+                    
+                    /*
+                     * IN CASE A PREVIOUSLY-LOADED TEXTURE HAVE BEEN
+                     * DISCARDED, E.G. AFTER SOME OPENGL CONTEXT-LOSS
+                     */
+                    if (glyph->texture && !glyph->texture->id)
+                    {
+                        GlyphData glyphData(ftFace, codepoint, useMipmap, padding);
+                        
+                        if (glyphData.isValid())
+                        {
+                            glyph->texture->upload(glyphData);
+                        }
+                    }
                 }
             }
             
