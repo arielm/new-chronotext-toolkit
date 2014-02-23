@@ -26,6 +26,13 @@ namespace chronotext
         hasClip(false),
         sequence(nullptr)
         {
+            assert(properties.baseSize >= 0);
+            assert((properties.slotCapacity > 0) && (properties.slotCapacity <= 8192));
+            assert(!(properties.useAnisotropy && !properties.useMipmap)); // ANISOTROPY DOESN'T MAKE SENSE WITHOUT MIPMAPS
+            assert(!((properties.baseSize == 0) && !properties.useMipmap)); // FOR CRISP-RENDERING: A FONT-SIZE MUST BE DEFINED AND MIPMAPS DISABLED
+
+            // ---
+            
             if (gl::isExtensionAvailable("GL_EXT_texture_filter_anisotropic"))
             {
                 if (properties.useAnisotropy)

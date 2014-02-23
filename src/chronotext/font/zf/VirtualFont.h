@@ -62,11 +62,18 @@ namespace chronotext
                 useMipmap(useMipmap),
                 useAnisotropy(useAnisotropy),
                 slotCapacity(slotCapacity)
-                {
-                    assert(baseSize >= 0);
-                    assert((slotCapacity > 0) && (slotCapacity <= 8192));
-                    assert(!(useAnisotropy && !useMipmap)); // ANISOTROPY DOESN'T MAKE SENSE WITHOUT MIPMAPS
-                    assert(!((baseSize == 0) && !useMipmap)); // FOR CRISP-RENDERING: A FONT-SIZE MUST BE DEFINED AND MIPMAPS DISABLED
+                {}
+                
+                Properties&	capacity(float slotCapacity)
+				{
+                    this->slotCapacity = slotCapacity;
+                    return *this;
+                }
+                
+                Properties&	crisp()
+				{
+                    useMipmap = false;
+                    return *this;
                 }
                 
                 bool operator<(const Properties &rhs) const
@@ -75,19 +82,14 @@ namespace chronotext
                 }
             };
             
-            static Properties Properties2d(float baseSize = 0, int slotCapacity = 1024)
+            static Properties Properties2d(float baseSize = 0)
             {
-                return Properties(baseSize, true, false, slotCapacity);
+                return Properties(baseSize, true, false, 1024);
             }
             
-            static Properties Properties3d(float baseSize = 0, int slotCapacity = 1024)
+            static Properties Properties3d(float baseSize = 0)
             {
-                return Properties(baseSize, true, true, slotCapacity);
-            }
-            
-            static Properties PropertiesCrisp(float baseSize, int slotCapacity = 1024)
-            {
-                return Properties(baseSize, false, false, slotCapacity);
+                return Properties(baseSize, true, true, 1024);
             }
             
             LayoutCache &layoutCache;

@@ -48,8 +48,12 @@ namespace chronotext
                 :
                 useAnisotropy(useAnisotropy),
                 slotCapacity(slotCapacity)
-                {
-                    assert((slotCapacity > 0) && (slotCapacity <= 8192));
+                {}
+                
+                Properties&	capacity(float slotCapacity)
+				{
+                    this->slotCapacity = slotCapacity;
+                    return *this;
                 }
                 
                 bool operator<(const Properties &rhs) const
@@ -58,14 +62,14 @@ namespace chronotext
                 }
             };
             
-            static Properties Properties2d(int slotCapacity = 1024)
+            static Properties Properties2d()
             {
-                return Properties(false, slotCapacity);
+                return Properties(false, 1024);
             }
             
-            static Properties Properties3d(int slotCapacity = 4096)
+            static Properties Properties3d()
             {
-                return Properties(true, slotCapacity);
+                return Properties(true, 4096);
             }
             
             bool isSpace(wchar_t c) const;

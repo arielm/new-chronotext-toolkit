@@ -25,6 +25,10 @@ namespace chronotext
         hasClip(false),
         sequence(nullptr)
         {
+            assert((properties.slotCapacity > 0) && (properties.slotCapacity <= 8192));
+
+            // ---
+            
             glyphCount = data->glyphCount;
             glyphs = data->glyphs;
             
