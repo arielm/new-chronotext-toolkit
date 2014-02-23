@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/font/zf/ActualFont.h"
+#include "chronotext/font/zf/LineLayout.h"
 #include "chronotext/utils/Utils.h"
 
 #include "hb-ft.h"
@@ -181,13 +182,22 @@ namespace chronotext
                 
                 // ---
                 
-                for (int i = 0; i < SPACE_SEPARATORS_COUNT; i++)
+                /*
+                 * THE FOLLOWING IS NECESSARY BECAUSE THE CODEPOINTS PROVIDED BY
+                 * FREETYPE FOR SPACE-SEPARATORS ARE SOMEHOW NOT UNICODE VALUES, E.G.
+                 * DEPENDING ON THE FONT, THE CODEPOINT FOR A "REGULAR SPACE" CAN BE 2 OR 3 (INSTEAD OF 32)
+                 */
+                
+                if (spaceSeparators.empty())
                 {
-                    hb_codepoint_t codepoint = (hb_codepoint_t)FT_Get_Char_Index(ftFace, SPACE_SEPARATORS[i]);
-                    
-                    if (codepoint)
+                    for (int i = 0; i < SPACE_SEPARATORS_COUNT; i++)
                     {
-                        spaceSeparators.insert(codepoint);
+                        hb_codepoint_t codepoint = (hb_codepoint_t)FT_Get_Char_Index(ftFace, SPACE_SEPARATORS[i]);
+                        
+                        if (codepoint)
+                        {
+                            spaceSeparators.insert(codepoint);
+                        }
                     }
                 }
                 
@@ -205,8 +215,13 @@ namespace chronotext
                 loaded = false;
                 LOGD << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
                 
-                glyphCache.clear();
-                standaloneTextures.clear();
+                /*
+                 * FIXME:
+                 * - DO NOT CLEAR THE FOLLOWING
+                 * - INSTEAD: ONLY CALL discardTextures()
+                 */
+                glyphs.clear();
+                textures.clear();
                 
                 if (descriptor.forceMemoryLoad)
                 {
@@ -224,7 +239,7 @@ namespace chronotext
          */
         void ActualFont::discardTextures()
         {
-            for (auto &texture : standaloneTextures)
+            for (auto &texture : textures)
             {
                 texture->discard();
             }
@@ -234,7 +249,7 @@ namespace chronotext
         {
             size_t total = 0;
             
-            for (auto &texture : standaloneTextures)
+            for (auto &texture : textures)
             {
                 total += texture->getMemoryUsage();
             }
@@ -250,15 +265,15 @@ namespace chronotext
             
             if (loaded)
             {
-                auto entry = glyphCache.find(codepoint);
+                auto entry = glyphs.find(codepoint);
                 
-                if (entry == glyphCache.end())
+                if (entry == glyphs.end())
                 {
                     glyph = createGlyph(codepoint);
                     
                     if (glyph)
                     {
-                        glyphCache[codepoint] = unique_ptr<Glyph>(glyph);
+                        glyphs[codepoint] = unique_ptr<Glyph>(glyph);
                     }
                     else
                     {
@@ -267,7 +282,7 @@ namespace chronotext
                          * IS NECESSARY, OTHERWISE createGlyph() WOULD BE INVOKED
                          * INDEFINITELY FOR THE SAME CODEPOINT
                          */
-                        glyphCache[codepoint] = unique_ptr<Glyph>(new Glyph());
+                        glyphs[codepoint] = unique_ptr<Glyph>(new Glyph());
                     }
                 }
                 else
@@ -300,7 +315,7 @@ namespace chronotext
             if (glyphData.isValid())
             {
                 auto texture = new ReloadableTexture(glyphData);
-                standaloneTextures.push_back(unique_ptr<ReloadableTexture>(texture));
+                textures.push_back(unique_ptr<ReloadableTexture>(texture));
                 
                 return new Glyph(texture, glyphData.offset, glyphData.size);
             }

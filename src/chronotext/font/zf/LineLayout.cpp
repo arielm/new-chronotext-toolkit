@@ -7,7 +7,6 @@
  */
 
 #include "chronotext/font/zf/LineLayout.h"
-#include "chronotext/font/zf/ActualFont.h"
 
 using namespace std;
 using namespace ci;

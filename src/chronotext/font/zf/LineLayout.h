@@ -8,17 +8,12 @@
 
 #pragma once
 
-#include "hb.h"
-
-#include "cinder/Vector.h"
-
-#include <vector>
+#include "chronotext/font/zf/ActualFont.h"
 
 namespace chronotext
 {
     namespace zf
     {
-        class ActualFont;
         class VirtualFont;
         
         struct Shape

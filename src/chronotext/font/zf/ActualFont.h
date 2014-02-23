@@ -10,7 +10,6 @@
 
 #include "chronotext/font/zf/GlyphData.h"
 #include "chronotext/font/zf/ReloadableTexture.h"
-#include "chronotext/font/zf/LineLayout.h"
 #include "chronotext/font/FontMatrix.h"
 #include "chronotext/InputSource.h"
 
@@ -23,6 +22,8 @@ namespace chronotext
 {
     namespace zf
     {
+        struct Shape;
+        
         class ActualFont
         {
         public:
@@ -143,8 +144,8 @@ namespace chronotext
             FT_Face ftFace;
             hb_font_t *hbFont;
             
-            std::map<uint32_t, std::unique_ptr<Glyph>> glyphCache;
-            std::vector<std::unique_ptr<ReloadableTexture>> standaloneTextures;
+            std::map<uint32_t, std::unique_ptr<Glyph>> glyphs;
+            std::vector<std::unique_ptr<ReloadableTexture>> textures;
             std::set<hb_codepoint_t> spaceSeparators;
             
             ActualFont(std::shared_ptr<FreetypeHelper> ftHelper, const Descriptor &descriptor, float baseSize, bool useMipmap);
