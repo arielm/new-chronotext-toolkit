@@ -78,6 +78,11 @@ namespace chronotext
             void discardTextures();
             
             /*
+             * FORCES ALL THE PREVIOUSLY DISCARDED GLYPH TEXTURES TO BE RELOADED
+             */
+            void reloadTextures();
+            
+            /*
              * RETURNS THE MEMORY USED BY ALL THE GLYPH TEXTURES
              * CURRENTLY: "ALPHA" TEXTURES ARE USED (ONE BYTE PER PIXEL)
              * NOTE THAT THE GPU MAY DECIDE TO USE MORE MEMORY INTERNALLY

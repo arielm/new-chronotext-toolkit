@@ -99,7 +99,7 @@ namespace chronotext
         {
             if (!id)
             {
-                font->reloadTexture(this, codepoint);
+                font->reloadTexture(this);
             }
         }
         

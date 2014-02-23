@@ -227,15 +227,32 @@ namespace chronotext
             }
         }
         
-        /*
-         * THIS IS NOT DESTROYING THE ReloadableTexture INSTANCES
-         * I.E. THE POINTER INSIDE ActualFont::Glyph REMAINS VALID
-         */
         void ActualFont::discardTextures()
         {
             for (auto &texture : textures)
             {
                 texture->discard();
+            }
+        }
+        
+        void ActualFont::reloadTextures()
+        {
+            reload();
+            
+            if (loaded)
+            {
+                for (auto &texture : textures)
+                {
+                    if (!texture->isLoaded())
+                    {
+                        GlyphData glyphData(ftFace, texture->codepoint, useMipmap, padding);
+                        
+                        if (glyphData.isValid())
+                        {
+                            texture->upload(glyphData);
+                        }
+                    }
+                }
             }
         }
         
@@ -341,13 +358,13 @@ namespace chronotext
             return nullptr;
         }
         
-        void ActualFont::reloadTexture(ReloadableTexture *texture, uint32_t codepoint)
+        void ActualFont::reloadTexture(ReloadableTexture *texture)
         {
             reload();
             
             if (loaded)
             {
-                GlyphData glyphData(ftFace, codepoint, useMipmap, padding);
+                GlyphData glyphData(ftFace, texture->codepoint, useMipmap, padding);
                 
                 if (glyphData.isValid())
                 {

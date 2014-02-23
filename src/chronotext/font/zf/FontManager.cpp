@@ -317,6 +317,14 @@ namespace chronotext
             }
         }
         
+        void FontManager::reloadTextures()
+        {
+            for (auto &it : actualFonts)
+            {
+                it.second->reloadTextures();
+            }
+        }
+        
         size_t FontManager::getTextureMemoryUsage() const
         {
             size_t total = 0;
