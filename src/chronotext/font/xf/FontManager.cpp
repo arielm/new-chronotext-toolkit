@@ -155,6 +155,12 @@ namespace chronotext
             }
         }
         
+        void FontTexture::bind()
+        {
+            reload();
+            glBindTexture(GL_TEXTURE_2D, id);
+        }
+        
         // ---
         
         std::shared_ptr<Font> FontManager::getCachedFont(InputSourceRef inputSource, const Font::Properties &properties)

@@ -311,15 +311,7 @@ namespace chronotext
         {
             if (began == 0)
             {
-                texture->reload();
-                
                 glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, texture->id);
-                
-                if (anisotropy)
-                {
-                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
-                }
                 
                 if (useColor)
                 {
@@ -332,6 +324,15 @@ namespace chronotext
                 
                 glEnableClientState(GL_VERTEX_ARRAY);
                 glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                
+                // ---
+                
+                texture->bind(); // RELOADS TEXTURE, IF NECESSARY
+                
+                if (anisotropy)
+                {
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
+                }
             }
             
             began++;

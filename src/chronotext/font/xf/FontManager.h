@@ -69,6 +69,7 @@ namespace chronotext
             void upload(FontAtlas *atlas);
             void discard();
             void reload();
+            void bind();
             
             inline ci::Vec2i getSize() const { return ci::Vec2i(width, height); }
         };
@@ -85,9 +86,8 @@ namespace chronotext
             void discardTextures();
             void reloadTextures();
             
-            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
-            
             friend class Font;
+            friend class FontTexture;
             
         protected:
             std::map<std::pair<std::string, Font::Properties>, std::shared_ptr<Font>> fonts;
@@ -95,7 +95,9 @@ namespace chronotext
             std::vector<GLushort> indices;
             
             void discardUnusedTextures();
-            const std::vector<GLushort>& getIndices(int capacity); // REMINDER: indices.data() WILL RETURN A DIFFERENT ADDRESS FOR EACH NEW CAPACITY
+            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
+            
+            const std::vector<GLushort>& getIndices(int capacity);
         };
     }
 }
