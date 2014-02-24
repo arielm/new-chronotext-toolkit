@@ -21,6 +21,8 @@ namespace chronotext
             hb_codepoint_t codepoint;
             ci::Vec2f position;
             
+            ActualFont::Glyph *glyph;
+
             Shape(hb_codepoint_t codepoint, const ci::Vec2f &position);
         };
         

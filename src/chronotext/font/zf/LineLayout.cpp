@@ -18,7 +18,8 @@ namespace chronotext
         Shape::Shape(hb_codepoint_t codepoint, const Vec2f &position)
         :
         codepoint(codepoint),
-        position(position)
+        position(position),
+        glyph(NULL)
         {}
         
         Cluster::Cluster(ActualFont *font, hb_codepoint_t codepoint, const Vec2f &offset, float advance)

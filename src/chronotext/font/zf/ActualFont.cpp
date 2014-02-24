@@ -265,7 +265,12 @@ namespace chronotext
         
         ActualFont::Glyph* ActualFont::fillQuad(GlyphQuad &quad, const Shape &shape, const Vec2f &position, float sizeRatio)
         {
-            auto glyph = getGlyph(shape.codepoint);
+            auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout HAVE BEEN PREVIOUSLY PRELOADED
+            
+            if (!glyph)
+            {
+                glyph = getGlyph(shape.codepoint);
+            }
             
             if (glyph && glyph->texture)
             {

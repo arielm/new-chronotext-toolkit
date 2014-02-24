@@ -118,6 +118,12 @@ namespace chronotext
             
             std::shared_ptr<LineLayout> getCachedLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             
+            /*
+             * - WILL LOAD THE GLYPH TEXTURES IMMEDIATELY (I.E. INSTEAD OF "JUST BEFORE DRAWING")
+             * - WILL SAVE ONE std::map LOOKUP AT EACH addCluster() OR addTransformedCluster()
+             */
+            void preload(LineLayout &layout);
+            
             void setSize(float size);
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);

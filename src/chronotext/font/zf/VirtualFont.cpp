@@ -281,6 +281,22 @@ namespace chronotext
             return layoutCache.getLineLayout(this, text, langHint, overallDirection);
         }
         
+        void VirtualFont::preload(LineLayout &layout)
+        {
+            for (auto &cluster : layout.clusters)
+            {
+                for (auto &shape : cluster.shapes)
+                {
+                    auto glyph = shape.glyph = cluster.font->getGlyph(shape.codepoint);
+                    
+                    if (glyph && glyph->texture)
+                    {
+                        glyph->texture->reload(); // JUST IN CASE THE GLYPH HAVE BEEN PREVIOUSLY DISCARDED
+                    }
+                }
+            }
+        }
+        
         void VirtualFont::setSize(float newSize)
         {
             size = newSize;
