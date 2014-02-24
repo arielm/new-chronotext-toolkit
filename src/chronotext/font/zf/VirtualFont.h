@@ -181,7 +181,7 @@ namespace chronotext
             void end(bool useColor = false);
             
             void incrementSequence(GlyphBatch *batch);
-            bool clipQuad(GlyphQuad &quad, ReloadableTexture *texture) const;
+            bool clipQuad(GlyphQuad &quad, FontTexture *texture) const;
         };
     }
 }

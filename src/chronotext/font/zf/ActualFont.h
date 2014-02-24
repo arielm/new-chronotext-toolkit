@@ -9,7 +9,7 @@
 #pragma once
 
 #include "chronotext/font/zf/GlyphData.h"
-#include "chronotext/font/zf/ReloadableTexture.h"
+#include "chronotext/font/zf/FontTexture.h"
 #include "chronotext/font/FontMatrix.h"
 #include "chronotext/InputSource.h"
 
@@ -74,7 +74,7 @@ namespace chronotext
             
             struct Glyph
             {
-                ReloadableTexture *texture;
+                FontTexture *texture;
                 ci::Vec2f offset;
                 ci::Vec2f size;
                 
@@ -88,7 +88,7 @@ namespace chronotext
                 texture(NULL)
                 {}
                 
-                Glyph(ReloadableTexture *texture, ci::Vec2f offset, ci::Vec2f size)
+                Glyph(FontTexture *texture, ci::Vec2f offset, ci::Vec2f size)
                 :
                 texture(texture),
                 offset(offset),
@@ -145,7 +145,7 @@ namespace chronotext
             hb_font_t *hbFont;
             
             std::map<hb_codepoint_t, std::unique_ptr<Glyph>> glyphs;
-            std::vector<std::unique_ptr<ReloadableTexture>> textures;
+            std::vector<std::unique_ptr<FontTexture>> textures;
             std::set<hb_codepoint_t> spaceSeparators;
             
             ActualFont(std::shared_ptr<FreetypeHelper> ftHelper, const Descriptor &descriptor, float baseSize, bool useMipmap);
@@ -159,11 +159,11 @@ namespace chronotext
             Glyph* fillQuad(GlyphQuad &quad, const Shape &shape, const ci::Vec2f &position, float sizeRatio);
             Glyph* getGlyph(hb_codepoint_t codepoint);
             Glyph* createGlyph(hb_codepoint_t codepoint);
-            void reloadTexture(ReloadableTexture *texture);
+            void reloadTexture(FontTexture *texture);
             
             friend class FontManager;
             friend class VirtualFont;
-            friend class ReloadableTexture;
+            friend class FontTexture;
         };
     }
 }

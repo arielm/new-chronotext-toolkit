@@ -473,7 +473,7 @@ namespace chronotext
             }
         }
         
-        bool VirtualFont::clipQuad(GlyphQuad &quad, ReloadableTexture *texture) const
+        bool VirtualFont::clipQuad(GlyphQuad &quad, FontTexture *texture) const
         {
             return quad.clip(clipRect, texture->getSize() * sizeRatio);
         }

@@ -20,7 +20,7 @@ namespace chronotext
     {
         class ActualFont;
 
-        class ReloadableTexture
+        class FontTexture
         {
         public:
             ActualFont *font;
@@ -31,8 +31,8 @@ namespace chronotext
             int height;
             GLuint id;
 
-            ReloadableTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData);
-            ~ReloadableTexture();
+            FontTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData);
+            ~FontTexture();
             
             void upload(const GlyphData &glyphData);
             void discard();
@@ -40,7 +40,7 @@ namespace chronotext
             void bind();
             
             size_t getMemoryUsage() const;
-            ci::Vec2i getSize() const;
+            inline ci::Vec2i getSize() const { return ci::Vec2i(width, height); }
         };
     }
 }

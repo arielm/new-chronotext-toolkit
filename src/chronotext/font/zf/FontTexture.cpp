@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/font/zf/ReloadableTexture.h"
+#include "chronotext/font/zf/FontTexture.h"
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/utils/MathUtils.h"
 
@@ -17,7 +17,7 @@ namespace chronotext
 {
     namespace zf
     {
-        ReloadableTexture::ReloadableTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData)
+        FontTexture::FontTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData)
         :
         font(font),
         codepoint(codepoint),
@@ -26,12 +26,12 @@ namespace chronotext
             upload(glyphData);
         }
         
-        ReloadableTexture::~ReloadableTexture()
+        FontTexture::~FontTexture()
         {
             discard();
         }
         
-        void ReloadableTexture::upload(const GlyphData &glyphData)
+        void FontTexture::upload(const GlyphData &glyphData)
         {
             if (!id && glyphData.isValid())
             {
@@ -90,7 +90,7 @@ namespace chronotext
             }
         }
         
-        void ReloadableTexture::discard()
+        void FontTexture::discard()
         {
             if (id)
             {
@@ -99,7 +99,7 @@ namespace chronotext
             }
         }
         
-        void ReloadableTexture::reload()
+        void FontTexture::reload()
         {
             if (!id)
             {
@@ -107,13 +107,13 @@ namespace chronotext
             }
         }
         
-        void ReloadableTexture::bind()
+        void FontTexture::bind()
         {
             reload();
             glBindTexture(GL_TEXTURE_2D, id);
         }
         
-        size_t ReloadableTexture::getMemoryUsage() const
+        size_t FontTexture::getMemoryUsage() const
         {
             if (id)
             {
@@ -130,11 +130,6 @@ namespace chronotext
             {
                 return 0;
             }
-        }
-        
-        Vec2i ReloadableTexture::getSize() const
-        {
-            return Vec2i(width, height);
         }
     }
 }

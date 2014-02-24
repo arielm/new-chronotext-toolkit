@@ -9,7 +9,7 @@
 #pragma once
 
 #include "chronotext/font/GlyphBatch.h"
-#include "chronotext/font/zf/ReloadableTexture.h"
+#include "chronotext/font/zf/FontTexture.h"
 
 #include <map>
 #include <memory>
@@ -21,7 +21,7 @@ namespace chronotext
         class GlyphBatchMap
         {
         public:
-            std::map<ReloadableTexture*, std::unique_ptr<GlyphBatch>> map;
+            std::map<FontTexture*, std::unique_ptr<GlyphBatch>> map;
             
             void clear()
             {
@@ -47,7 +47,7 @@ namespace chronotext
                 }
             }
             
-            GlyphBatch* getBatch(ReloadableTexture *texture)
+            GlyphBatch* getBatch(FontTexture *texture)
             {
                 auto it = map.find(texture);
                 

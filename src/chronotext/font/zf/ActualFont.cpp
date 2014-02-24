@@ -335,8 +335,8 @@ namespace chronotext
             
             if (glyphData.isValid())
             {
-                auto texture = new ReloadableTexture(this, codepoint, glyphData);
-                textures.push_back(unique_ptr<ReloadableTexture>(texture));
+                auto texture = new FontTexture(this, codepoint, glyphData);
+                textures.push_back(unique_ptr<FontTexture>(texture));
                 
                 return new Glyph(texture, glyphData.offset, glyphData.size);
             }
@@ -344,7 +344,7 @@ namespace chronotext
             return nullptr;
         }
         
-        void ActualFont::reloadTexture(ReloadableTexture *texture)
+        void ActualFont::reloadTexture(FontTexture *texture)
         {
             reload();
             
