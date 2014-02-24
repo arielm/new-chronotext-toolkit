@@ -243,14 +243,9 @@ namespace chronotext
             {
                 for (auto &texture : textures)
                 {
-                    if (!texture->isLoaded())
+                    if (!texture->id)
                     {
-                        GlyphData glyphData(ftFace, texture->codepoint, useMipmap, padding);
-                        
-                        if (glyphData.isValid())
-                        {
-                            texture->upload(glyphData);
-                        }
+                        texture->upload(GlyphData(ftFace, texture->codepoint, useMipmap, padding));
                     }
                 }
             }
@@ -323,20 +318,6 @@ namespace chronotext
                 else
                 {
                     glyph = entry->second.get();
-                    
-                    /*
-                     * IN CASE A PREVIOUSLY-LOADED TEXTURE HAVE BEEN
-                     * DISCARDED, E.G. AFTER SOME OPENGL CONTEXT-LOSS
-                     */
-                    if (glyph->texture && !glyph->texture->isLoaded())
-                    {
-                        GlyphData glyphData(ftFace, codepoint, useMipmap, padding);
-                        
-                        if (glyphData.isValid())
-                        {
-                            glyph->texture->upload(glyphData);
-                        }
-                    }
                 }
             }
             
@@ -364,12 +345,7 @@ namespace chronotext
             
             if (loaded)
             {
-                GlyphData glyphData(ftFace, texture->codepoint, useMipmap, padding);
-                
-                if (glyphData.isValid())
-                {
-                    texture->upload(glyphData);
-                }
+                texture->upload(GlyphData(ftFace, texture->codepoint, useMipmap, padding));
             }
         }
     }

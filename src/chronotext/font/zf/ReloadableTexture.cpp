@@ -33,7 +33,7 @@ namespace chronotext
         
         void ReloadableTexture::upload(const GlyphData &glyphData)
         {
-            if (!id)
+            if (!id && glyphData.isValid())
             {
                 useMipmap = glyphData.useMipmap;
                 auto buffer = glyphData.getBuffer();
@@ -101,11 +101,6 @@ namespace chronotext
             {
                 font->reloadTexture(this);
             }
-        }
-        
-        bool ReloadableTexture::isLoaded() const
-        {
-            return (id != 0);
         }
         
         void ReloadableTexture::bind()

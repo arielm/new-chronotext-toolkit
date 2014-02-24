@@ -67,7 +67,7 @@ namespace chronotext
             {
                 for (auto &it : map)
                 {
-                    it.first->bind();
+                    it.first->bind(); // RELOADS THE TEXTURE, IF NECESSARY
 
                     if (anisotropy)
                     {

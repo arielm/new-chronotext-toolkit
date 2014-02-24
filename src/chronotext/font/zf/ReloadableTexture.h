@@ -37,8 +37,6 @@ namespace chronotext
             void upload(const GlyphData &glyphData);
             void discard();
             void reload();
-            
-            bool isLoaded() const;
             void bind();
             
             size_t getMemoryUsage() const;
