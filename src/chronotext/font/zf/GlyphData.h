@@ -33,7 +33,7 @@ namespace chronotext
             ci::Vec2f offset;
             ci::Vec2f size;
             
-            GlyphData(FT_Face ftFace, uint32_t codepoint, bool useMipmap, int padding)
+            GlyphData(FT_Face ftFace, FT_UInt codepoint, bool useMipmap, int padding)
             :
             useMipmap(useMipmap),
             padding(padding),

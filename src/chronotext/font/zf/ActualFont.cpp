@@ -292,7 +292,7 @@ namespace chronotext
             return nullptr;
         }
         
-        ActualFont::Glyph* ActualFont::getGlyph(uint32_t codepoint)
+        ActualFont::Glyph* ActualFont::getGlyph(hb_codepoint_t codepoint)
         {
             Glyph *glyph = nullptr;
             
@@ -329,7 +329,7 @@ namespace chronotext
             return glyph;
         }
         
-        ActualFont::Glyph* ActualFont::createGlyph(uint32_t codepoint)
+        ActualFont::Glyph* ActualFont::createGlyph(hb_codepoint_t codepoint)
         {
             GlyphData glyphData(ftFace, codepoint, useMipmap, padding);
             

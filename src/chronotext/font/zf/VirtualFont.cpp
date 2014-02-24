@@ -188,7 +188,7 @@ namespace chronotext
         {
             auto layout = new LineLayout(this, line.langHint, line.overallDirection);
             
-            map<uint32_t, Cluster> clusterMap;
+            map<hb_codepoint_t, Cluster> clusterMap;
             auto buffer = hb_buffer_create();
             
             for (auto &run : line.runs)

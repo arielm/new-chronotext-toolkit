@@ -144,7 +144,7 @@ namespace chronotext
             FT_Face ftFace;
             hb_font_t *hbFont;
             
-            std::map<uint32_t, std::unique_ptr<Glyph>> glyphs;
+            std::map<hb_codepoint_t, std::unique_ptr<Glyph>> glyphs;
             std::vector<std::unique_ptr<ReloadableTexture>> textures;
             std::set<hb_codepoint_t> spaceSeparators;
             
@@ -157,8 +157,8 @@ namespace chronotext
             size_t getTextureMemoryUsage() const;
             
             Glyph* fillQuad(GlyphQuad &quad, const Shape &shape, const ci::Vec2f &position, float sizeRatio);
-            Glyph* getGlyph(uint32_t codepoint);
-            Glyph* createGlyph(uint32_t codepoint);
+            Glyph* getGlyph(hb_codepoint_t codepoint);
+            Glyph* createGlyph(hb_codepoint_t codepoint);
             void reloadTexture(ReloadableTexture *texture);
             
             friend class FontManager;
