@@ -334,14 +334,10 @@ namespace chronotext
                     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
                 }
             }
-            
-            began++;
         }
         
         void Font::end(bool useColor)
         {
-            began--;
-            
             if (began == 0)
             {
                 glDisable(GL_TEXTURE_2D);
@@ -358,44 +354,54 @@ namespace chronotext
         
         void Font::beginSequence(FontSequence *sequence, bool useColor)
         {
-            sequenceUseColor = useColor;
-
-            if (!batch)
+            if (began == 0)
             {
-                batch = unique_ptr<GlyphBatch>(new GlyphBatch);
-            }
-            else
-            {
-                batch->clear();
+                sequenceUseColor = useColor;
+                
+                if (!batch)
+                {
+                    batch = unique_ptr<GlyphBatch>(new GlyphBatch);
+                }
+                else
+                {
+                    batch->clear();
+                }
+                
+                if (sequence)
+                {
+                    this->sequence = sequence;
+                    sequence->begin(useColor);
+                }
+                else
+                {
+                    begin(useColor);
+                }
+                
+                clearClip();
             }
             
-            if (sequence)
-            {
-                this->sequence = sequence;
-                sequence->begin(useColor);
-            }
-            else
-            {
-                begin(useColor);
-            }
-            
-            clearClip();
+            began++;
         }
         
         void Font::endSequence()
         {
-            if (sequence)
+            began--;
+            
+            if (began == 0)
             {
-                batch->pack();
-                sequence->addBatch(move(batch));
-                
-                sequence->end();
-                sequence = nullptr;
-            }
-            else
-            {
-                batch->flush(getIndices(), sequenceUseColor);
-                end(sequenceUseColor);
+                if (sequence)
+                {
+                    batch->pack();
+                    sequence->addBatch(move(batch));
+                    
+                    sequence->end();
+                    sequence = nullptr;
+                }
+                else
+                {
+                    batch->flush(getIndices(), sequenceUseColor);
+                    end(sequenceUseColor);
+                }
             }
         }
         

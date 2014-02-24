@@ -120,7 +120,7 @@ namespace chronotext
             
             /*
              * - WILL LOAD THE GLYPH TEXTURES IMMEDIATELY (I.E. INSTEAD OF "JUST BEFORE DRAWING")
-             * - WILL SAVE ONE std::map LOOKUP AT EACH addCluster() OR addTransformedCluster()
+             * - WILL SAVE ONE std::map<uint32_t> LOOKUP PER addCluster() OR addTransformedCluster()
              */
             void preload(LineLayout &layout);
             
@@ -134,9 +134,6 @@ namespace chronotext
             
             FontMatrix* getMatrix();
             const GLushort* getIndices() const;
-            
-            void begin(bool useColor = false);
-            void end(bool useColor = false);
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
@@ -179,6 +176,9 @@ namespace chronotext
             
             bool addActualFont(const std::string &lang, ActualFont *font);
             const FontSet& getFontSet(const std::string &lang) const;
+            
+            void begin(bool useColor = false);
+            void end(bool useColor = false);
             
             void incrementSequence(GlyphBatch *batch);
             bool clipQuad(GlyphQuad &quad, ReloadableTexture *texture) const;

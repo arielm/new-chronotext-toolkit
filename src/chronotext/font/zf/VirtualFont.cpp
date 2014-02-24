@@ -365,14 +365,10 @@ namespace chronotext
                 glEnableClientState(GL_VERTEX_ARRAY);
                 glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             }
-            
-            began++;
         }
         
         void VirtualFont::end(bool useColor)
         {
-            began--;
-            
             if (began == 0)
             {
                 glDisable(GL_TEXTURE_2D);
@@ -389,44 +385,54 @@ namespace chronotext
         
         void VirtualFont::beginSequence(FontSequence *sequence, bool useColor)
         {
-            sequenceUseColor = useColor;
+            if (began == 0)
+            {
+                sequenceUseColor = useColor;
+                
+                if (!batchMap)
+                {
+                    batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
+                }
+                else
+                {
+                    batchMap->clear();
+                }
+                
+                if (sequence)
+                {
+                    this->sequence = sequence;
+                    sequence->begin(useColor, anisotropy);
+                }
+                else
+                {
+                    begin(useColor);
+                }
+                
+                clearClip();
+            }
             
-            if (!batchMap)
-            {
-                batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
-            }
-            else
-            {
-                batchMap->clear();
-            }
-            
-            if (sequence)
-            {
-                this->sequence = sequence;
-                sequence->begin(useColor, anisotropy);
-            }
-            else
-            {
-                begin(useColor);
-            }
-            
-            clearClip();
+            began++;
         }
         
         void VirtualFont::endSequence()
         {
-            if (sequence)
+            began--;
+            
+            if (began == 0)
             {
-                batchMap->pack();
-                sequence->addMap(move(batchMap));
-                
-                sequence->end();
-                sequence = nullptr;
-            }
-            else
-            {
-                batchMap->flush(getIndices(), sequenceUseColor, anisotropy);
-                end(sequenceUseColor);
+                if (sequence)
+                {
+                    batchMap->pack();
+                    sequence->addMap(move(batchMap));
+                    
+                    sequence->end();
+                    sequence = nullptr;
+                }
+                else
+                {
+                    batchMap->flush(getIndices(), sequenceUseColor, anisotropy);
+                    end(sequenceUseColor);
+                }
             }
         }
         
