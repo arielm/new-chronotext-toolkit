@@ -502,7 +502,7 @@ namespace chronotext
         {
             GlyphQuad quad;
             
-            if (fillQuad(quad, glyphIndex, x, y));
+            if (fillQuad(quad, glyphIndex, x, y))
             {
                 if (!hasClip || clipQuad(quad))
                 {
@@ -516,7 +516,7 @@ namespace chronotext
         {
             GlyphQuad quad;
             
-            if (fillQuad(quad, glyphIndex, x, y));
+            if (fillQuad(quad, glyphIndex, x, y))
             {
                 if (!hasClip || clipQuad(quad))
                 {
