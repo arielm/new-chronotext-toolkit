@@ -71,6 +71,7 @@ namespace chronotext
             void reload();
             void bind();
             
+            size_t getMemoryUsage() const;
             inline ci::Vec2i getSize() const { return ci::Vec2i(width, height); }
         };
         
@@ -85,6 +86,13 @@ namespace chronotext
             
             void discardTextures();
             void reloadTextures();
+            
+            /*
+             * RETURNS THE MEMORY USED BY ALL THE GLYPH TEXTURE-ATLASES
+             * CURRENTLY: "ALPHA" TEXTURES ARE USED (ONE BYTE PER PIXEL)
+             * NOTE THAT THE GPU MAY DECIDE TO USE MORE MEMORY INTERNALLY
+             */
+            size_t getTextureMemoryUsage() const;
             
             friend class Font;
             friend class FontTexture;

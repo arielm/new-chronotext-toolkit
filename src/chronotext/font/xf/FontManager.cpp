@@ -161,6 +161,18 @@ namespace chronotext
             glBindTexture(GL_TEXTURE_2D, id);
         }
         
+        size_t FontTexture::getMemoryUsage() const
+        {
+            if (id)
+            {
+                return size_t(width * height * 1.333f);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        
         // ---
         
         std::shared_ptr<Font> FontManager::getCachedFont(InputSourceRef inputSource, const Font::Properties &properties)
@@ -267,6 +279,18 @@ namespace chronotext
             {
                 texture->reload();
             }
+        }
+        
+        size_t FontManager::getTextureMemoryUsage() const
+        {
+            size_t total = 0;
+            
+            for (auto &it : fontDataAndTextures)
+            {
+                total += it.second.second->getMemoryUsage();
+            }
+            
+            return total;
         }
         
         void FontManager::discardUnusedTextures()
