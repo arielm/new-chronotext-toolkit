@@ -35,18 +35,22 @@ namespace chronotext
         {
             if (!id && glyphData.isValid())
             {
-                useMipmap = glyphData.useMipmap;
+                auto glyphWidth = glyphData.width;
+                auto glyphHeight = glyphData.height;
+                auto glyphPadding = glyphData.padding;
                 auto buffer = glyphData.getBuffer();
                 
-                width = nextPowerOfTwo(glyphData.width + glyphData.padding * 2);
-                height = nextPowerOfTwo(glyphData.height + glyphData.padding * 2);
-                auto textureData = new unsigned char[width * height](); // ZERO-FILLED
+                useMipmap = glyphData.useMipmap;
+                width = nextPowerOfTwo(glyphWidth + glyphPadding * 2);
+                height = nextPowerOfTwo(glyphHeight + glyphPadding * 2);
                 
-                for (int y = 0; y < glyphData.height; y++)
+                auto data = new unsigned char[width * height](); // ZERO-FILLED
+                
+                for (int y = 0; y < glyphHeight; y++)
                 {
-                    for (int x = 0; x < glyphData.width; x++)
+                    for (int x = 0; x < glyphWidth; x++)
                     {
-                        textureData[(y + glyphData.padding) * width + (x + glyphData.padding)] = buffer[y * glyphData.width + x];
+                        data[(y + glyphPadding) * width + (x + glyphPadding)] = buffer[y * glyphWidth + x];
                     }
                 }
                 
@@ -74,7 +78,7 @@ namespace chronotext
                     glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
                 }
                 
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, textureData);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, data);
                 
                 if (useMipmap)
                 {
@@ -82,7 +86,7 @@ namespace chronotext
                 }
                 
                 glBindTexture(GL_TEXTURE_2D, 0);
-                delete[] textureData;
+                delete[] data;
             }
         }
         
