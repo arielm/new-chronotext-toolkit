@@ -19,9 +19,9 @@ namespace chronotext
         {
         public:
             static void drawText(Font &font, const std::wstring &text, float x = 0, float y = 0);
-            static inline void drawText(Font &font, const std::wstring &text, const ci::Vec2f &position = ci::Vec2f::zero()) { drawText(font, text, position.x, position.y); }
+            static inline void drawText(Font &font, const std::wstring &text, const ci::Vec2f &position) { drawText(font, text, position.x, position.y); }
             
-            static void drawAlignedText(Font &font, const std::wstring &text, const ci::Vec2f &position = ci::Vec2f::zero(), Font::Alignment alignX = Font::ALIGN_MIDDLE, Font::Alignment alignY = Font::ALIGN_MIDDLE);
+            static void drawAlignedText(Font &font, const std::wstring &text, const ci::Vec2f &position, Font::Alignment alignX, Font::Alignment alignY);
             static inline void drawAlignedText(Font &font, const std::wstring &text, float x = 0, float y = 0, Font::Alignment alignX = Font::ALIGN_MIDDLE, Font::Alignment alignY = Font::ALIGN_MIDDLE) { drawAlignedText(font, text, ci::Vec2f(x, y), alignX, alignY); }
             
             static void drawTextInRect(Font &font, const std::wstring &text, const ci::Rectf &rect);

@@ -36,7 +36,7 @@ namespace chronotext
         
         void TextHelper::drawTextInRect(Font &font, const wstring &text, const Rectf &rect)
         {
-            drawAlignedText(font, text, rect.getCenter());
+            drawAlignedText(font, text, rect.getCenter(), Font::ALIGN_MIDDLE, Font::ALIGN_MIDDLE);
         }
         
         float TextHelper::drawTextOnPath(Font &font, const wstring &text, const FollowablePath &path, float offsetX, float offsetY)
