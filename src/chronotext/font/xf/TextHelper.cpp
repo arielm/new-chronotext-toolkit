@@ -39,7 +39,7 @@ namespace chronotext
             drawAlignedText(font, text, rect.getCenter(), Font::ALIGN_MIDDLE, Font::ALIGN_MIDDLE);
         }
         
-        void TextHelper::drawTransformedText(Font &font, const std::wstring &text, float offsetY)
+        void TextHelper::drawTransformedText(Font &font, const std::wstring &text, float x, float y)
         {
             float direction = font.getDirection();
             auto matrix = font.getMatrix();
@@ -49,7 +49,7 @@ namespace chronotext
             for (auto c : text)
             {
                 auto glyphIndex = font.getGlyphIndex(c);
-                font.addTransformedGlyph(glyphIndex, 0, offsetY);
+                font.addTransformedGlyph(glyphIndex, x, y);
                 matrix->translate(font.getGlyphAdvance(glyphIndex) * direction, 0);
             }
             
