@@ -39,6 +39,23 @@ namespace chronotext
             drawAlignedText(font, text, rect.getCenter(), Font::ALIGN_MIDDLE, Font::ALIGN_MIDDLE);
         }
         
+        void TextHelper::drawTransformedText(Font &font, const std::wstring &text, float offsetY)
+        {
+            float direction = font.getDirection();
+            auto matrix = font.getMatrix();
+            
+            font.beginSequence();
+            
+            for (auto c : text)
+            {
+                auto glyphIndex = font.getGlyphIndex(c);
+                font.addTransformedGlyph(glyphIndex, 0, offsetY);
+                matrix->translate(font.getGlyphAdvance(glyphIndex) * direction, 0);
+            }
+            
+            font.endSequence();
+        }
+        
         float TextHelper::drawTextOnPath(Font &font, const wstring &text, const FollowablePath &path, float offsetX, float offsetY)
         {
             float sampleSize = 0.5f * font.getSize();

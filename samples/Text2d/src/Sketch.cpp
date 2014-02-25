@@ -1,6 +1,7 @@
 #include "Sketch.h"
 
 #include "chronotext/utils/GLUtils.h"
+#include "chronotext/utils/MathUtils.h"
 #include "chronotext/font/xf/TextHelper.h"
 
 using namespace std;
@@ -9,6 +10,7 @@ using namespace chr;
 using namespace chr::xf;
 
 const float SCALE = 768;
+const float TEXT_SIZE = 24;
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -43,8 +45,24 @@ void Sketch::draw()
     
     // ---
     
-    font->setSize(24);
+    auto matrix = font->getMatrix();
+    
+    font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 1);
     
-    TextHelper::drawText(*font, L"which way to the station?");
+    font->beginSequence();
+    
+    matrix->setToIdentity();
+    TextHelper::drawTransformedText(*font, L"2d text ");
+    
+    matrix->rotateZ(9 * D2R);
+    TextHelper::drawTransformedText(*font, L"is not really ");
+    
+    matrix->rotateZ(30 * D2R);
+    TextHelper::drawTransformedText(*font, L"suited to ");
+    
+    matrix->rotateZ(-9 * D2R);
+    TextHelper::drawTransformedText(*font, L"text trees");
+    
+    font->endSequence();
 }
