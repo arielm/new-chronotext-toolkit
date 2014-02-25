@@ -9,17 +9,16 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderSketchComplex.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/cinder/CinderApp.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/FileSystem.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/InputSource.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/FontManager.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/FontMatrix.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/XFont.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/XFontSequence.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/FontManager.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/Font.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/FontSequence.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/TextHelper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Handler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/SuperHandler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/ASPC.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/FollowablePath.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/SplinePath.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/text/TextHelper.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/text/WordWrapper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/PVRHelper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/Sprite.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/Texture.cpp
@@ -34,6 +33,19 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/Utils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlas.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasAnimation.cpp
 
+ifdef CHR_USE_ZFONT
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/ActualFont.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/FontManager.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/FontSequence.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/FontTexture.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/LangHelper.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/LayoutCache.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/LineLayout.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/scrptrun.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/TextItemizer.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/VirtualFont.cpp
+endif
+
 ifdef CHR_USE_INCUBATOR_UI
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Button.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Container.cpp
@@ -47,4 +59,5 @@ ifdef CHR_USE_INCUBATOR_UI
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/TouchableLink.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/TouchGroup.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/VerticalLayout.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/WordWrapper.cpp
 endif

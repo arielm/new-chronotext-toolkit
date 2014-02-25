@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/XFont.h"
+#include "chronotext/font/xf/Font.h"
 
 #include <vector>
 

@@ -12,7 +12,7 @@
 #include "chronotext/incubator/ui/Icon.h"
 #include "chronotext/incubator/ui/Touchable.h"
 
-#include "chronotext/font/XFont.h"
+#include "chronotext/font/xf/Font.h"
 
 #include <map>
 

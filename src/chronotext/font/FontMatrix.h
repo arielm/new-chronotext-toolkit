@@ -8,23 +8,12 @@
 
 #pragma once
 
+#include "chronotext/font/GlyphBatch.h"
+
 #include "cinder/Matrix44.h"
 
 namespace chronotext
 {
-    struct GlyphQuad
-    {
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        
-        float u1;
-        float v1;
-        float u2;
-        float v2;
-    };
-    
     class FontMatrix
     {
         union
@@ -49,24 +38,23 @@ namespace chronotext
         void setToIdentity();
 
         inline void setTranslation(const ci::Vec2f &t) { setTranslation(t.x, t.y, 0); }
-        void setTranslation(float x, float y, float z);
+        inline void setTranslation(const ci::Vec3f &t) { setTranslation(t.x, t.y, t.z); }
+        void setTranslation(float x, float y, float z = 0);
 
         inline void translate(const ci::Vec2f &t) { translate(t.x, t.y, 0); }
-        void translate(float x, float y, float z);
+        inline void translate(const ci::Vec3f &t) { translate(t.x, t.y, t.z); }
+        void translate(float x, float y, float z = 0);
         
         inline void scale(float s) { scale(s, s, s); }
-        void scale(float x, float y, float z);
+        void scale(float x, float y, float z = 1);
         
         void rotateX(float a);
         void rotateY(float a);
         void rotateZ(float a);
         void rotateXY(float sx, float sy);
         
-        ci::Vec3f transform3D(float x, float y) const;
-        ci::Vec2f transform2D(float x, float y) const;
-        
-        int addTransformedQuad3D(const GlyphQuad &quad, float *vertices) const;
-        int addTransformedQuad2D(const GlyphQuad &quad, float *vertices) const;
+        ci::Vec3f transform(float x, float y) const;
+        void addTransformedQuad(const GlyphQuad &quad, std::vector<Vertex> &vertices) const;
     };
 }
 

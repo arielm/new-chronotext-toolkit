@@ -18,7 +18,12 @@ namespace chronotext
         int length;
         std::string url;
         
-        ExtractedLink(int offset, int length, std::string url) : offset(offset), length(length), url(url) {}
+        ExtractedLink(int offset, int length, std::string url)
+        :
+        offset(offset),
+        length(length),
+        url(url)
+        {}
     };
     
     class LinkExtractor

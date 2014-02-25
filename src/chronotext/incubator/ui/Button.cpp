@@ -7,11 +7,12 @@
  */
 
 #include "chronotext/incubator/ui/Button.h"
-#include "chronotext/text/TextHelper.h"
+#include "chronotext/font/xf/TextHelper.h"
 #include "chronotext/utils/GLUtils.h"
 
 using namespace std;
 using namespace ci;
+using namespace chr::xf;
 
 namespace chronotext
 {

@@ -242,7 +242,7 @@ namespace chronotext
         switch (textAlignX)
         {
             case XFont::ALIGN_MIDDLE :
-                ox += (width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end)) / 2;
+                ox += 0.5f * (width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end));
                 break;
                 
             case XFont::ALIGN_RIGHT :
@@ -250,8 +250,10 @@ namespace chronotext
                 break;
                 
             default:
-                return ox;
+                break;
         }
+        
+        return ox;
     }
     
     float TextBox::getOffsetY()
@@ -261,7 +263,7 @@ namespace chronotext
         switch (textAlignY)
         {
             case XFont::ALIGN_MIDDLE :
-                oy += (height - paddingTop - paddingBottom - contentHeight) / 2;
+                oy += 0.5f * (height - paddingTop - paddingBottom - contentHeight);
                 break;
                 
             case XFont::ALIGN_BOTTOM :
@@ -269,8 +271,10 @@ namespace chronotext
                 break;
                 
             default:
-                return oy;
+                break;
         }
+        
+        return oy;
     }
     
     float TextBox::getLineTop(int index)
@@ -344,7 +348,7 @@ namespace chronotext
         float limitBottom = limitTop + innerHeight;
         float yy = limitTop + getOffsetY();
         
-        font->beginSequence(NULL, 2);
+        font->beginSequence();
         
         for (int i = 0; i < wrapper.size && yy < limitBottom; i++)
         {

@@ -6,10 +6,11 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/text/WordWrapper.h"
+#include "chronotext/incubator/ui/WordWrapper.h"
 
 using namespace std;
 using namespace ci;
+using namespace chr::xf;
 
 namespace chronotext
 {

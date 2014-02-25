@@ -9,7 +9,7 @@
 #pragma once
 
 #include "chronotext/incubator/ui/Shape.h"
-#include "chronotext/text/WordWrapper.h"
+#include "chronotext/incubator/ui/WordWrapper.h"
 
 namespace chronotext
 {
