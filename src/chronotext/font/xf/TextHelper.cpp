@@ -39,18 +39,18 @@ namespace chronotext
             drawAlignedText(font, text, rect.getCenter());
         }
         
-        float TextHelper::drawTextOnPath(Font &font, const wstring &text, const FollowablePath &path, float offsetX)
+        float TextHelper::drawTextOnPath(Font &font, const wstring &text, const FollowablePath &path, float offsetX, float offsetY)
         {
-            float offsetY = font.getStrikethroughOffset();
-            float sampleSize = font.getSize() * 0.5f;
-            
+            float sampleSize = 0.5f * font.getSize();
+            float direction = font.getDirection();
             auto matrix = font.getMatrix();
+            
             font.beginSequence();
             
             for (auto c : text)
             {
                 auto glyphIndex = font.getGlyphIndex(c);
-                float half = 0.5f * font.getGlyphAdvance(glyphIndex);
+                float half = 0.5f * font.getGlyphAdvance(glyphIndex) * direction;
                 offsetX += half;
                 
                 if (glyphIndex >= 0)
