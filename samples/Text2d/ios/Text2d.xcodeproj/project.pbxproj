@@ -13,12 +13,14 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
-		A81B2499189C195400EA0A4B /* animations.xml in Resources */ = {isa = PBXBuildFile; fileRef = A81B2495189C195400EA0A4B /* animations.xml */; };
-		A81B249A189C195400EA0A4B /* MonocleMan.png in Resources */ = {isa = PBXBuildFile; fileRef = A81B2496189C195400EA0A4B /* MonocleMan.png */; };
-		A81B249B189C195400EA0A4B /* MonocleMan.xml in Resources */ = {isa = PBXBuildFile; fileRef = A81B2497189C195400EA0A4B /* MonocleMan.xml */; };
-		A81B249C189C195400EA0A4B /* sheets.xml in Resources */ = {isa = PBXBuildFile; fileRef = A81B2498189C195400EA0A4B /* sheets.xml */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
+		A84D7E3018BD4BA900D7D933 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A84D7E2F18BD4BA900D7D933 /* Georgia_Regular_64.fnt */; };
+		A84D7E5918BD4BC100D7D933 /* FontMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */; };
+		A84D7E5A18BD4BC100D7D933 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3718BD4BC100D7D933 /* Font.cpp */; };
+		A84D7E5B18BD4BC100D7D933 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3918BD4BC100D7D933 /* FontManager.cpp */; };
+		A84D7E5C18BD4BC100D7D933 /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3B18BD4BC100D7D933 /* FontSequence.cpp */; };
+		A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3D18BD4BC100D7D933 /* TextHelper.cpp */; };
 		A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFDA18116D42006C2085 /* FileSystem.cpp */; };
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
@@ -54,12 +56,21 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		A81B2495189C195400EA0A4B /* animations.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = animations.xml; path = ../resources/animations.xml; sourceTree = "<group>"; };
-		A81B2496189C195400EA0A4B /* MonocleMan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MonocleMan.png; path = ../resources/MonocleMan.png; sourceTree = "<group>"; };
-		A81B2497189C195400EA0A4B /* MonocleMan.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = MonocleMan.xml; path = ../resources/MonocleMan.xml; sourceTree = "<group>"; };
-		A81B2498189C195400EA0A4B /* sheets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = sheets.xml; path = ../resources/sheets.xml; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		A84D7E2F18BD4BA900D7D933 /* Georgia_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = Georgia_Regular_64.fnt; path = ../resources/Georgia_Regular_64.fnt; sourceTree = "<group>"; };
+		A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontMatrix.cpp; sourceTree = "<group>"; };
+		A84D7E3318BD4BC100D7D933 /* FontMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontMatrix.h; sourceTree = "<group>"; };
+		A84D7E3418BD4BC100D7D933 /* GlyphBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphBatch.h; sourceTree = "<group>"; };
+		A84D7E3518BD4BC100D7D933 /* GlyphQuad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphQuad.h; sourceTree = "<group>"; };
+		A84D7E3718BD4BC100D7D933 /* Font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Font.cpp; sourceTree = "<group>"; };
+		A84D7E3818BD4BC100D7D933 /* Font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = "<group>"; };
+		A84D7E3918BD4BC100D7D933 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
+		A84D7E3A18BD4BC100D7D933 /* FontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontManager.h; sourceTree = "<group>"; };
+		A84D7E3B18BD4BC100D7D933 /* FontSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontSequence.cpp; sourceTree = "<group>"; };
+		A84D7E3C18BD4BC100D7D933 /* FontSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSequence.h; sourceTree = "<group>"; };
+		A84D7E3D18BD4BC100D7D933 /* TextHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextHelper.cpp; sourceTree = "<group>"; };
+		A84D7E3E18BD4BC100D7D933 /* TextHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextHelper.h; sourceTree = "<group>"; };
 		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFDB18116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87207FE18081CDE0055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
@@ -182,10 +193,7 @@
 		00692BD914FF149000D0FFFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A81B2495189C195400EA0A4B /* animations.xml */,
-				A81B2496189C195400EA0A4B /* MonocleMan.png */,
-				A81B2497189C195400EA0A4B /* MonocleMan.xml */,
-				A81B2498189C195400EA0A4B /* sheets.xml */,
+				A84D7E2F18BD4BA900D7D933 /* Georgia_Regular_64.fnt */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -208,6 +216,33 @@
 				A82C900816DF91D300FF519C /* Default-568h@2x.png */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		A84D7E3118BD4BC100D7D933 /* font */ = {
+			isa = PBXGroup;
+			children = (
+				A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */,
+				A84D7E3318BD4BC100D7D933 /* FontMatrix.h */,
+				A84D7E3418BD4BC100D7D933 /* GlyphBatch.h */,
+				A84D7E3518BD4BC100D7D933 /* GlyphQuad.h */,
+				A84D7E3618BD4BC100D7D933 /* xf */,
+			);
+			path = font;
+			sourceTree = "<group>";
+		};
+		A84D7E3618BD4BC100D7D933 /* xf */ = {
+			isa = PBXGroup;
+			children = (
+				A84D7E3718BD4BC100D7D933 /* Font.cpp */,
+				A84D7E3818BD4BC100D7D933 /* Font.h */,
+				A84D7E3918BD4BC100D7D933 /* FontManager.cpp */,
+				A84D7E3A18BD4BC100D7D933 /* FontManager.h */,
+				A84D7E3B18BD4BC100D7D933 /* FontSequence.cpp */,
+				A84D7E3C18BD4BC100D7D933 /* FontSequence.h */,
+				A84D7E3D18BD4BC100D7D933 /* TextHelper.cpp */,
+				A84D7E3E18BD4BC100D7D933 /* TextHelper.h */,
+			);
+			path = xf;
 			sourceTree = "<group>";
 		};
 		A8F2E302189D3F47002D5D75 /* stb */ = {
@@ -238,6 +273,7 @@
 				A8FA3BBE16E3AB8000367F97 /* InputSource.h */,
 				A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */,
 				A8FA3B9316E3AB8000367F97 /* cinder */,
+				A84D7E3118BD4BC100D7D933 /* font */,
 				A8FA3BBF16E3AB8000367F97 /* ios */,
 				A8FA3BCC16E3AB8000367F97 /* os */,
 				A8FA3BF916E3AB8000367F97 /* utils */,
@@ -365,12 +401,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A84D7E3018BD4BA900D7D933 /* Georgia_Regular_64.fnt in Resources */,
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */,
-				A81B249A189C195400EA0A4B /* MonocleMan.png in Resources */,
-				A81B249C189C195400EA0A4B /* sheets.xml in Resources */,
-				A81B2499189C195400EA0A4B /* animations.xml in Resources */,
-				A81B249B189C195400EA0A4B /* MonocleMan.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,19 +414,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A84D7E5A18BD4BC100D7D933 /* Font.cpp in Sources */,
 				A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */,
 				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
+				A84D7E5918BD4BC100D7D933 /* FontMatrix.cpp in Sources */,
 				A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */,
 				A8FA3C0816E3AB8000367F97 /* CinderSketchSimple.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */,
+				A84D7E5C18BD4BC100D7D933 /* FontSequence.cpp in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
 				A8FA3C1C16E3AB8000367F97 /* Handler.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
+				A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
+				A84D7E5B18BD4BC100D7D933 /* FontManager.cpp in Sources */,
 				A8F2E308189D3F47002D5D75 /* stb_image.c in Sources */,
 				A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */,
 				A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */,
