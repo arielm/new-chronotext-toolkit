@@ -1,4 +1,12 @@
 /*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
  * STUB FOR RUNNING A CinderSketch
  * ON THE DESKTOP (OSX OR WINDOW)
  */
@@ -26,10 +34,12 @@ Application::Application()
 
 void Application::prepareSettings(Settings *settings)
 {
+    settings->enableHighDensityDisplay();
+
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
 //  settings->setWindowSize(320, 480); // IPHONE
     settings->setWindowSize(640, 960); // IPHONE RETINA
-//  settings->setWindowSize(768, 1024); // IPAD-1
+//  settings->setWindowSize(768, 1024); // IPAD
 //  settings->setWindowSize(480, 800); // ANDROID WVGA800
 #endif
 }

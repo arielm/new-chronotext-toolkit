@@ -1,4 +1,12 @@
 /*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
  * PLAYING "MONOCLE MAN" ANIMATION EXPORTED FROM FLASH USING THE GRAPEFRUKT EXPORTER:
  * http://prototyprally.com/introducing-the-grapefrukt-asset-exporter
  * https://github.com/zaphire/Monocle-Engine/tree/master/Content/Flash
@@ -19,6 +27,13 @@
  *    - PRE-REQUISITE:
  *      - EITHER: HANDLING RESOURCES VIA ASSETS
  *      - OR: ADAPTING InputSource::getSubSource() FOR WINDOWS
+ *
+ *
+ * FOLLOW-UP:
+ *
+ * THIS DEMO IS PRETTY OLD. NOWADAYS, "SPINE" LOOKS LIKE THE DEFINITIVE ANSWER:
+ * http://esotericsoftware.com
+ * http://www.java-gaming.org/index.php?topic=27914.0
  */
 
 #pragma once
@@ -40,7 +55,6 @@ public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
-    void resize();
     void start(int flags);
     void stop(int flags);
     void draw();

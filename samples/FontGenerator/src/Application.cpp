@@ -1,4 +1,12 @@
 /*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
  * GENERATING A FEW FONTS (SAVED IN THE DOCUMENTS FOLDER)
  *
  *
@@ -92,6 +100,8 @@ void Application::prepareSettings(AppBasic::Settings *settings)
 {
     Area area = settings->getDisplay()->getBounds();
     settings->setWindowSize(area.getWidth(), area.getWidth() * 0.25f);
+    
+    settings->enableHighDensityDisplay();
 }
 
 void Application::draw()

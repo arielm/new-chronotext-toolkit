@@ -115,9 +115,9 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A821DF8D16ED34A800DB025D /* Application.cpp */,
 				A82C910916E02DAA00FF519C /* Sketch.h */,
 				A82C910816E02DAA00FF519C /* Sketch.cpp */,
-				A821DF8D16ED34A800DB025D /* Application.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";

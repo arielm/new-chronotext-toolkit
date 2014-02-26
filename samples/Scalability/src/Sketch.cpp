@@ -1,3 +1,11 @@
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
 #include "Sketch.h"
 
 #include "chronotext/utils/GLUtils.h"
@@ -16,7 +24,7 @@ void Sketch::setup(bool renewContext)
         /*
          *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
          */
-        textureManager.unload();
+        textureManager.discard();
         textureManager.reload();
     }
     else
@@ -40,7 +48,7 @@ void Sketch::resize()
 
 void Sketch::draw()
 {
-    gl::clear(Color(0.5f, 0.5f, 0.5f), false);
+    gl::clear(Color::gray(0.5f), false);
     gl::setMatricesWindow(getWindowSize(), true);
     
     gl::color(1, 1, 1, 0.25f);
