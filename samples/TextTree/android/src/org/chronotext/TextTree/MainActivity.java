@@ -1,5 +1,5 @@
 
-package org.chronotext.Text2d;
+package org.chronotext.TextTree;
 
 import org.chronotext.cinder.CinderDelegate;
 
@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("Text2d");
+    System.loadLibrary("TextTree");
   }
 
   CinderDelegate delegate;

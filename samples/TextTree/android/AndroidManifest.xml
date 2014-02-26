@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.chronotext.Text2d"
+    package="org.chronotext.TextTree"
     android:versionCode="1"
     android:versionName="1.0" >
     <uses-sdk
         android:minSdkVersion="10" />
     <application
-        android:label="Text2d"
+        android:label="TextTree"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
             android:name=".MainActivity"

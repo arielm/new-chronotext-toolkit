@@ -1,11 +1,11 @@
 setup()
 {
-  android update project --path . --name Text2d --target android-10
+  android update project --path . --name TextTree --target android-10
 
   echo "READY TO RUN:"
   echo "ndk-build -j 4"
   echo "ant debug"
-  echo "adb install -r bin/Text2d-debug.apk"
+  echo "adb install -r bin/TextTree-debug.apk"
 }
 
 if [ -z $NDK_MODULE_PATH ]
