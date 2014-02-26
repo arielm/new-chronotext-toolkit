@@ -15,6 +15,8 @@ class Sketch : public chr::CinderSketch
     float r1;
     float r2;
     float r3;
+    float r4;
+    float r5;
     
 public:
     Sketch(void *context, void *delegate = NULL);

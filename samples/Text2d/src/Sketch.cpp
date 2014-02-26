@@ -39,8 +39,10 @@ void Sketch::update()
 {
     double now = getElapsedSeconds();
 
-    r1 = 3 * math<float>::sin(now * 0.5f); // OSCILLATING BETWEEN -3 AND +3
-    r2 = 9 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN -9 AND +9
+    r1 = 3 * math<float>::sin(now * 0.75f); // OSCILLATING BETWEEN -3 AND +3
+    r4 = 6 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN -6 AND +6
+    r2 = 15 + 9 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN 6 AND 24
+    r5 = 30 + 9 * math<float>::sin(now * 1.25f); // OSCILLATING BETWEEN 21 AND 39
     r3 = 25 + 10 * math<float>::sin(now * 3); // OSCILLATING BETWEEN 15 AND 35
 }
 
@@ -64,15 +66,29 @@ void Sketch::draw()
     matrix->setTranslation(0, 384);
     
     matrix->rotateZ((-90 + r1) * D2R);
-    TextHelper::drawTransformedText(*font, L"2d text");
+    TextHelper::drawTransformedText(*font, L"2 dimensions");
     
+    matrix->rotateZ((r4) * D2R);
+    TextHelper::drawTransformedText(*font, L" are");
+    
+    matrix->push();
     matrix->rotateZ(+r2 * D2R);
-    TextHelper::drawTransformedText(*font, L" is not really");
+    TextHelper::drawTransformedText(*font, L" not enough");
     
     matrix->rotateZ(r3 * D2R);
-    TextHelper::drawTransformedText(*font, L" suited to");
+    TextHelper::drawTransformedText(*font, L" for");
     
     matrix->rotateZ(-r2 * D2R);
+    TextHelper::drawTransformedText(*font, L" text trees");
+    
+    matrix->pop();
+    matrix->rotateZ(-r5 * D2R);
+    TextHelper::drawTransformedText(*font, L" fine");
+    
+    matrix->rotateZ(r4 * D2R);
+    TextHelper::drawTransformedText(*font, L" for");
+    
+    matrix->rotateZ(-r3 * D2R);
     TextHelper::drawTransformedText(*font, L" text trees");
     
     font->endSequence();
