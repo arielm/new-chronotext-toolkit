@@ -80,6 +80,7 @@ namespace chronotext
             void setSize(float size);
             void setDirection(float direction);
             void setAxis(const ci::Vec2f &axis);
+            inline void setAxis(float x, float y) { setAxis(ci::Vec2f(x, y)); }
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);
             void setStrikethroughFactor(float factor);
