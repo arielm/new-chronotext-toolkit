@@ -30,10 +30,16 @@ void Application::prepareSettings(Settings *settings)
 {
     settings->enableHighDensityDisplay();
 
-//  settings->setWindowSize(480, 320); // IPHONE
-//  settings->setWindowSize(960, 640); // IPHONE RETINA
-    settings->setWindowSize(1024, 768); // IPAD-1
-//  settings->setWindowSize(800, 480); // ANDROID WVGA800
+//  settings->setWindowSize(480, 320); // IPHONE / LANDSCAPE
+//  settings->setWindowSize(960, 640); // IPHONE RETINA / LANDSCAPE
+//  settings->setWindowSize(1024, 768); // IPAD / LANDSCAPE
+//  settings->setWindowSize(800, 480); // ANDROID WVGA800 / LANDSCAPE
+    
+//  settings->setWindowSize(320, 480); // IPHONE / PORTRAIT
+    settings->setWindowSize(640, 960); // IPHONE RETINA / PORTRAIT
+//  settings->setWindowSize(768, 1024); // IPAD / PORTRAIT
+//  settings->setWindowSize(480, 800); // ANDROID WVGA800 / PORTRAIT
+
 }
 
 void Application::keyDown(KeyEvent event)

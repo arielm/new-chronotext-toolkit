@@ -9,8 +9,9 @@ using namespace ci;
 using namespace chr;
 using namespace chr::xf;
 
-const float SCALE = 768;
+const float SCALE = 960;
 const float TEXT_SIZE = 20;
+const float DOT_SCALE = 0.2f;
 const float GROW_FACTOR = 1.133f;
 
 Sketch::Sketch(void *context, void *delegate)
@@ -45,39 +46,38 @@ void Sketch::update()
 {
     double now = getElapsedSeconds();
 
-    r1 = 3 * math<float>::sin(now * 0.75f); // OSCILLATING BETWEEN -3 AND +3
-    r2 = 15 + 9 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN 6 AND 24
-    r3 = 25 + 10 * math<float>::sin(now * 3); // OSCILLATING BETWEEN 15 AND 35
-    r4 = 6 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN -6 AND +6
-    r5 = 30 + 9 * math<float>::sin(now * 1.25f); // OSCILLATING BETWEEN 21 AND 39
+    r1 = oscillate(now, -3, +3, 0.75f);
+    r2 = oscillate(now, 6, 24, 1.5f);
+    r3 = oscillate(now, 15, 35, 3);
+    r4 = oscillate(now, -6, +6, 1.5f);
+    r5 = oscillate(now, 21, 39, 1.25f);
 }
 
 void Sketch::draw()
 {
-    gl::clear(Color::gray(1.0f), false);
+    gl::clear(Color::white(), false);
     gl::setMatricesWindow(getWindowSize(), true);
     
     gl::translate(getWindowCenter());
     gl::scale(getWindowHeight() / SCALE);
     
     // ---
-    
+
     vector<FontMatrix::Values> M;
-    
     auto matrix = font->getMatrix();
     
     font->setSize(TEXT_SIZE);
-    font->setColor(0, 0, 0, 0.85f);
+    font->setColor(0, 0, 0, 0.75f);
     
     font->beginSequence();
     
     /*
-     * THE BASE OF THE TREE IS AT THE BASE OF THE SCREEN
+     * THE BASE OF THE TREE IS AT THE BOTTOM OF THE SCREEN
      */
-    matrix->setTranslation(0, 384);
+    matrix->setTranslation(0, SCALE * 0.5f);
     
     matrix->rotateZ((-90 + r1) * D2R);
-    TextHelper::drawTransformedText(*font, L"2 dimensions");
+    TextHelper::drawTransformedText(*font, L" 2 dimensions");
     
     matrix->rotateZ((r4) * D2R);
     matrix->scale(GROW_FACTOR);
@@ -95,13 +95,13 @@ void Sketch::draw()
     matrix->push();
     matrix->rotateZ(r2 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees ");
+    TextHelper::drawTransformedText(*font, L" text trees  ");
     M.push_back(matrix->m);
 
     matrix->pop();
     matrix->rotateZ(-r5 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" interaction ");
+    TextHelper::drawTransformedText(*font, L" interaction  ");
     M.push_back(matrix->m);
 
     matrix->pop();
@@ -116,13 +116,13 @@ void Sketch::draw()
     matrix->push();
     matrix->rotateZ(-r3 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees ");
+    TextHelper::drawTransformedText(*font, L" text trees  ");
     M.push_back(matrix->m);
     
     matrix->pop();
     matrix->rotateZ(+r3 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" fiction ");
+    TextHelper::drawTransformedText(*font, L" fiction  ");
     M.push_back(matrix->m);
     
     font->endSequence();
@@ -136,11 +136,18 @@ void Sketch::draw()
     {
         glPushMatrix();
         glMultMatrixf(m.data());
-        gl::scale(0.20f);
+        
+        gl::translate(0, -font->getStrikethroughOffset());
+        gl::scale(DOT_SCALE);
         
         dot->drawFromCenter();
         glPopMatrix();
     }
     
     dot->end();
+}
+
+float Sketch::oscillate(double t, float min, float max, float freq)
+{
+    return min + 0.5 * (max - min) * (1 + math<float>::sin(t * freq));
 }

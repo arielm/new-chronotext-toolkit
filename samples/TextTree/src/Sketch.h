@@ -28,4 +28,6 @@ public:
     void setup(bool renewContext);
     void update();
     void draw();
+    
+    static float oscillate(double t, float min, float max, float freq);
 };
