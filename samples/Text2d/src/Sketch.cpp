@@ -10,7 +10,8 @@ using namespace chr;
 using namespace chr::xf;
 
 const float SCALE = 768;
-const float TEXT_SIZE = 24;
+const float TEXT_SIZE = 20;
+const float GROW_FACTOR = 1.133f;
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -40,10 +41,10 @@ void Sketch::update()
     double now = getElapsedSeconds();
 
     r1 = 3 * math<float>::sin(now * 0.75f); // OSCILLATING BETWEEN -3 AND +3
-    r4 = 6 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN -6 AND +6
     r2 = 15 + 9 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN 6 AND 24
-    r5 = 30 + 9 * math<float>::sin(now * 1.25f); // OSCILLATING BETWEEN 21 AND 39
     r3 = 25 + 10 * math<float>::sin(now * 3); // OSCILLATING BETWEEN 15 AND 35
+    r4 = 6 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN -6 AND +6
+    r5 = 30 + 9 * math<float>::sin(now * 1.25f); // OSCILLATING BETWEEN 21 AND 39
 }
 
 void Sketch::draw()
@@ -63,42 +64,54 @@ void Sketch::draw()
     
     font->beginSequence();
     
+    /*
+     * THE BASE OF THE TREE IS AT THE BASE OF THE SCREEN
+     */
     matrix->setTranslation(0, 384);
     
     matrix->rotateZ((-90 + r1) * D2R);
     TextHelper::drawTransformedText(*font, L"2 dimensions");
     
     matrix->rotateZ((r4) * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" are");
     
     matrix->push();
     matrix->rotateZ(+r2 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" not enough");
     
     matrix->rotateZ(r3 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" for");
     
     matrix->push();
     matrix->rotateZ(r2 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" text trees");
 
     matrix->pop();
     matrix->rotateZ(-r5 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" interaction");
 
     matrix->pop();
     matrix->rotateZ(-r5 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" fine");
     
     matrix->rotateZ(r4 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" for");
     
     matrix->push();
     matrix->rotateZ(-r3 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" text trees");
     
     matrix->pop();
     matrix->rotateZ(+r3 * D2R);
+    matrix->scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" fiction");
     
     font->endSequence();
