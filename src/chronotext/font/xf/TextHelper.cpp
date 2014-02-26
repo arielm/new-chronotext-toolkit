@@ -44,12 +44,17 @@ namespace chronotext
             float direction = font.getDirection();
             auto matrix = font.getMatrix();
             
+            if (x != 0)
+            {
+                matrix->translate(x * direction, 0);
+            }
+            
             font.beginSequence();
             
             for (auto c : text)
             {
                 auto glyphIndex = font.getGlyphIndex(c);
-                font.addTransformedGlyph(glyphIndex, x, y);
+                font.addTransformedGlyph(glyphIndex, 0, y);
                 matrix->translate(font.getGlyphAdvance(glyphIndex) * direction, 0);
             }
             
