@@ -17,6 +17,12 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A8027DFA16E377AE00184149 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8027DF816E377AE00184149 /* icon.icns */; };
 		A821DF8E16ED34A800DB025D /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A821DF8D16ED34A800DB025D /* Application.cpp */; };
+		A822633318BE224C00D57C8C /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822632718BE224C00D57C8C /* PVRHelper.cpp */; };
+		A822633418BE224C00D57C8C /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822632918BE224C00D57C8C /* Sprite.cpp */; };
+		A822633518BE224C00D57C8C /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822632B18BE224C00D57C8C /* Texture.cpp */; };
+		A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822632E18BE224C00D57C8C /* TextureHelper.cpp */; };
+		A822633718BE224C00D57C8C /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822633018BE224C00D57C8C /* TextureManager.cpp */; };
+		A822633918BE24E800D57C8C /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A822633818BE24E800D57C8C /* dot.png */; };
 		A829870318BD00C300934642 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82986FD18BD00C300934642 /* Handler.cpp */; };
 		A829870418BD00C300934642 /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870118BD00C300934642 /* SuperHandler.cpp */; };
 		A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A829870518BD026300934642 /* Georgia_Regular_64.fnt */; };
@@ -51,6 +57,19 @@
 		A3F48157030643B0B32007F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A8027DF816E377AE00184149 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		A821DF8D16ED34A800DB025D /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../src/Application.cpp; sourceTree = "<group>"; };
+		A822632718BE224C00D57C8C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
+		A822632818BE224C00D57C8C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
+		A822632918BE224C00D57C8C /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
+		A822632A18BE224C00D57C8C /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
+		A822632B18BE224C00D57C8C /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		A822632C18BE224C00D57C8C /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		A822632D18BE224C00D57C8C /* TextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureData.h; sourceTree = "<group>"; };
+		A822632E18BE224C00D57C8C /* TextureHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureHelper.cpp; sourceTree = "<group>"; };
+		A822632F18BE224C00D57C8C /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureHelper.h; sourceTree = "<group>"; };
+		A822633018BE224C00D57C8C /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
+		A822633118BE224C00D57C8C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
+		A822633218BE224C00D57C8C /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
+		A822633818BE24E800D57C8C /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../resources/dot.png; sourceTree = "<group>"; };
 		A82986FD18BD00C300934642 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A82986FE18BD00C300934642 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
 		A82986FF18BD00C300934642 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -168,6 +187,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A822633818BE24E800D57C8C /* dot.png */,
 				A829870518BD026300934642 /* Georgia_Regular_64.fnt */,
 			);
 			name = Resources;
@@ -188,6 +208,25 @@
 				A8027DF816E377AE00184149 /* icon.icns */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		A822632618BE224C00D57C8C /* texture */ = {
+			isa = PBXGroup;
+			children = (
+				A822632718BE224C00D57C8C /* PVRHelper.cpp */,
+				A822632818BE224C00D57C8C /* PVRHelper.h */,
+				A822632918BE224C00D57C8C /* Sprite.cpp */,
+				A822632A18BE224C00D57C8C /* Sprite.h */,
+				A822632B18BE224C00D57C8C /* Texture.cpp */,
+				A822632C18BE224C00D57C8C /* Texture.h */,
+				A822632D18BE224C00D57C8C /* TextureData.h */,
+				A822632E18BE224C00D57C8C /* TextureHelper.cpp */,
+				A822632F18BE224C00D57C8C /* TextureHelper.h */,
+				A822633018BE224C00D57C8C /* TextureManager.cpp */,
+				A822633118BE224C00D57C8C /* TextureManager.h */,
+				A822633218BE224C00D57C8C /* TextureRequest.h */,
+			);
+			path = texture;
 			sourceTree = "<group>";
 		};
 		A82986FC18BD00C300934642 /* os */ = {
@@ -276,6 +315,7 @@
 				A82C909716DFA58900FF519C /* InputSource.cpp */,
 				A82C90E616E00B0400FF519C /* cinder */,
 				A829870718BD02D500934642 /* font */,
+				A822632618BE224C00D57C8C /* texture */,
 				A82986FC18BD00C300934642 /* os */,
 				A82C90F416E00B3B00FF519C /* utils */,
 			);
@@ -335,6 +375,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A822633918BE24E800D57C8C /* dot.png in Resources */,
 				A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 			);
@@ -350,19 +391,24 @@
 				A829873018BD02D500934642 /* Font.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
+				A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */,
 				A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */,
 				A829873318BD02D500934642 /* TextHelper.cpp in Sources */,
 				A829873218BD02D500934642 /* FontSequence.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
 				A829870318BD00C300934642 /* Handler.cpp in Sources */,
+				A822633418BE224C00D57C8C /* Sprite.cpp in Sources */,
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
+				A822633318BE224C00D57C8C /* PVRHelper.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
+				A822633518BE224C00D57C8C /* Texture.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
 				A829873118BD02D500934642 /* FontManager.cpp in Sources */,
 				A821DF8E16ED34A800DB025D /* Application.cpp in Sources */,
 				A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */,
 				A829872F18BD02D500934642 /* FontMatrix.cpp in Sources */,
+				A822633718BE224C00D57C8C /* TextureManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

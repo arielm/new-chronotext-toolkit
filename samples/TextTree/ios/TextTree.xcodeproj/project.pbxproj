@@ -13,6 +13,12 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		A822633B18BE2E8D00D57C8C /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A822633A18BE2E8D00D57C8C /* dot.png */; };
+		A822634918BE2EA400D57C8C /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822633D18BE2EA400D57C8C /* PVRHelper.cpp */; };
+		A822634A18BE2EA400D57C8C /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822633F18BE2EA400D57C8C /* Sprite.cpp */; };
+		A822634B18BE2EA400D57C8C /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822634118BE2EA400D57C8C /* Texture.cpp */; };
+		A822634C18BE2EA400D57C8C /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822634418BE2EA400D57C8C /* TextureHelper.cpp */; };
+		A822634D18BE2EA400D57C8C /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822634618BE2EA400D57C8C /* TextureManager.cpp */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
 		A84D7E3018BD4BA900D7D933 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A84D7E2F18BD4BA900D7D933 /* Georgia_Regular_64.fnt */; };
@@ -56,6 +62,19 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A822633A18BE2E8D00D57C8C /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../resources/dot.png; sourceTree = "<group>"; };
+		A822633D18BE2EA400D57C8C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
+		A822633E18BE2EA400D57C8C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
+		A822633F18BE2EA400D57C8C /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
+		A822634018BE2EA400D57C8C /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
+		A822634118BE2EA400D57C8C /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		A822634218BE2EA400D57C8C /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		A822634318BE2EA400D57C8C /* TextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureData.h; sourceTree = "<group>"; };
+		A822634418BE2EA400D57C8C /* TextureHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureHelper.cpp; sourceTree = "<group>"; };
+		A822634518BE2EA400D57C8C /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureHelper.h; sourceTree = "<group>"; };
+		A822634618BE2EA400D57C8C /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
+		A822634718BE2EA400D57C8C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
+		A822634818BE2EA400D57C8C /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A84D7E2F18BD4BA900D7D933 /* Georgia_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = Georgia_Regular_64.fnt; path = ../resources/Georgia_Regular_64.fnt; sourceTree = "<group>"; };
@@ -193,9 +212,29 @@
 		00692BD914FF149000D0FFFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A822633A18BE2E8D00D57C8C /* dot.png */,
 				A84D7E2F18BD4BA900D7D933 /* Georgia_Regular_64.fnt */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		A822633C18BE2EA400D57C8C /* texture */ = {
+			isa = PBXGroup;
+			children = (
+				A822633D18BE2EA400D57C8C /* PVRHelper.cpp */,
+				A822633E18BE2EA400D57C8C /* PVRHelper.h */,
+				A822633F18BE2EA400D57C8C /* Sprite.cpp */,
+				A822634018BE2EA400D57C8C /* Sprite.h */,
+				A822634118BE2EA400D57C8C /* Texture.cpp */,
+				A822634218BE2EA400D57C8C /* Texture.h */,
+				A822634318BE2EA400D57C8C /* TextureData.h */,
+				A822634418BE2EA400D57C8C /* TextureHelper.cpp */,
+				A822634518BE2EA400D57C8C /* TextureHelper.h */,
+				A822634618BE2EA400D57C8C /* TextureManager.cpp */,
+				A822634718BE2EA400D57C8C /* TextureManager.h */,
+				A822634818BE2EA400D57C8C /* TextureRequest.h */,
+			);
+			path = texture;
 			sourceTree = "<group>";
 		};
 		A82C900516DF91BF00FF519C /* iOS */ = {
@@ -276,6 +315,7 @@
 				A84D7E3118BD4BC100D7D933 /* font */,
 				A8FA3BBF16E3AB8000367F97 /* ios */,
 				A8FA3BCC16E3AB8000367F97 /* os */,
+				A822633C18BE2EA400D57C8C /* texture */,
 				A8FA3BF916E3AB8000367F97 /* utils */,
 			);
 			name = chronotext;
@@ -402,6 +442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A84D7E3018BD4BA900D7D933 /* Georgia_Regular_64.fnt in Resources */,
+				A822633B18BE2E8D00D57C8C /* dot.png in Resources */,
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */,
 			);
@@ -417,7 +458,11 @@
 				A84D7E5A18BD4BC100D7D933 /* Font.cpp in Sources */,
 				A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */,
 				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
+				A822634C18BE2EA400D57C8C /* TextureHelper.cpp in Sources */,
+				A822634A18BE2EA400D57C8C /* Sprite.cpp in Sources */,
+				A822634D18BE2EA400D57C8C /* TextureManager.cpp in Sources */,
 				A84D7E5918BD4BC100D7D933 /* FontMatrix.cpp in Sources */,
+				A822634918BE2EA400D57C8C /* PVRHelper.cpp in Sources */,
 				A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */,
 				A8FA3C0816E3AB8000367F97 /* CinderSketchSimple.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
@@ -433,6 +478,7 @@
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
 				A84D7E5B18BD4BC100D7D933 /* FontManager.cpp in Sources */,
 				A8F2E308189D3F47002D5D75 /* stb_image.c in Sources */,
+				A822634B18BE2EA400D57C8C /* Texture.cpp in Sources */,
 				A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */,
 				A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */,
 			);

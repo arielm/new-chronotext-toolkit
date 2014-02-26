@@ -22,10 +22,15 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
+        textureManager.unload();
         fontManager.discardTextures();
+        
+        textureManager.reload();
+        fontManager.reloadTextures(); // NOT MANDATORY
     }
     else
     {
+        dot = textureManager.getTexture(InputSource::getResource("dot.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
         font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     }
     
@@ -51,16 +56,18 @@ void Sketch::draw()
 {
     gl::clear(Color::gray(1.0f), false);
     gl::setMatricesWindow(getWindowSize(), true);
-
+    
     gl::translate(getWindowCenter());
     gl::scale(getWindowHeight() / SCALE);
     
     // ---
     
+    vector<FontMatrix::Values> M;
+    
     auto matrix = font->getMatrix();
     
     font->setSize(TEXT_SIZE);
-    font->setColor(0, 0, 0, 1);
+    font->setColor(0, 0, 0, 0.85f);
     
     font->beginSequence();
     
@@ -88,12 +95,14 @@ void Sketch::draw()
     matrix->push();
     matrix->rotateZ(r2 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees");
+    TextHelper::drawTransformedText(*font, L" text trees ");
+    M.push_back(matrix->m);
 
     matrix->pop();
     matrix->rotateZ(-r5 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" interaction");
+    TextHelper::drawTransformedText(*font, L" interaction ");
+    M.push_back(matrix->m);
 
     matrix->pop();
     matrix->rotateZ(-r5 * D2R);
@@ -107,12 +116,31 @@ void Sketch::draw()
     matrix->push();
     matrix->rotateZ(-r3 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees");
+    TextHelper::drawTransformedText(*font, L" text trees ");
+    M.push_back(matrix->m);
     
     matrix->pop();
     matrix->rotateZ(+r3 * D2R);
     matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" fiction");
+    TextHelper::drawTransformedText(*font, L" fiction ");
+    M.push_back(matrix->m);
     
     font->endSequence();
+    
+    // ---
+    
+    gl::color(1, 0, 0, 0.75f);
+    dot->begin();
+    
+    for (auto &m : M)
+    {
+        glPushMatrix();
+        glMultMatrixf(m.data());
+        gl::scale(0.20f);
+        
+        dot->drawFromCenter();
+        glPopMatrix();
+    }
+    
+    dot->end();
 }

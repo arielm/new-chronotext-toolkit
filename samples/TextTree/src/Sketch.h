@@ -5,10 +5,14 @@
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
 
 class Sketch : public chr::CinderSketch
 {
+    chr::TextureManager textureManager;
+    chr::TextureRef dot;
+    
     chr::xf::FontManager fontManager;
     std::shared_ptr<chr::XFont> font;
     
