@@ -75,7 +75,7 @@ namespace chronotext
             
             setSize(baseSize);
             setDirection(+1);
-            setAxis(Vec2f(+1, +1));
+            setAxis(+1, +1);
             setColor(0, 0, 0, 1);
         }
         
