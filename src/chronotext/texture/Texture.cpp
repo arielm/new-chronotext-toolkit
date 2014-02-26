@@ -35,7 +35,7 @@ namespace chronotext
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
     
-    void Texture::unload()
+    void Texture::discard()
     {
         if (target)
         {
@@ -64,12 +64,12 @@ namespace chronotext
     
     int Texture::getId() const
     {
-        return name;
+        return id;
     }
     
     void Texture::bind()
     {
-        glBindTexture(GL_TEXTURE_2D, name);
+        glBindTexture(GL_TEXTURE_2D, id);
     }
     
     void Texture::begin()
@@ -78,7 +78,7 @@ namespace chronotext
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, name);
+        glBindTexture(GL_TEXTURE_2D, id);
     }
     
     void Texture::end()
@@ -179,7 +179,7 @@ namespace chronotext
     {
         target = texture;
         
-        name = texture->getId();
+        id = texture->getId();
         width = texture->getWidth();
         height = texture->getHeight();
         maxU = texture->getMaxU();

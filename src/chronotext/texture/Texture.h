@@ -37,7 +37,7 @@ namespace chronotext
         Texture(const TextureRequest &textureRequest);
         Texture(const TextureData &textureData);
         
-        void unload();
+        void discard();
         void reload();
         
         TextureData fetchTextureData();
@@ -63,7 +63,7 @@ namespace chronotext
     protected:
         ci::gl::TextureRef target;
         
-        GLuint name;
+        GLuint id;
         int width;
         int height;
         float maxU;
