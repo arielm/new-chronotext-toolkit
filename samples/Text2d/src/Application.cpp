@@ -16,7 +16,9 @@ class Application : public CinderApp
 {
 public:
     Application();
+    
     void prepareSettings(Settings *settings);
+    void keyDown(KeyEvent event);
 };
 
 Application::Application()
@@ -32,6 +34,16 @@ void Application::prepareSettings(Settings *settings)
 //  settings->setWindowSize(960, 640); // IPHONE RETINA
     settings->setWindowSize(1024, 768); // IPAD-1
 //  settings->setWindowSize(800, 480); // ANDROID WVGA800
+}
+
+void Application::keyDown(KeyEvent event)
+{
+    switch (event.getCode())
+    {
+        case KeyEvent::KEY_ESCAPE:
+            quit();
+            break;
+    }
 }
 
 CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

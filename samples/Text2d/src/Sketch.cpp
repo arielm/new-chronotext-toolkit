@@ -35,6 +35,15 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
+void Sketch::update()
+{
+    double now = getElapsedSeconds();
+
+    r1 = 3 * math<float>::sin(now * 0.5f); // OSCILLATING BETWEEN -3 AND +3
+    r2 = 9 * math<float>::sin(now * 1.5f); // OSCILLATING BETWEEN -9 AND +9
+    r3 = 25 + 10 * math<float>::sin(now * 3); // OSCILLATING BETWEEN 15 AND 35
+}
+
 void Sketch::draw()
 {
     gl::clear(Color::gray(1.0f), false);
@@ -52,17 +61,19 @@ void Sketch::draw()
     
     font->beginSequence();
     
-    matrix->setToIdentity();
-    TextHelper::drawTransformedText(*font, L"2d text ");
+    matrix->setTranslation(0, 384);
     
-    matrix->rotateZ(9 * D2R);
-    TextHelper::drawTransformedText(*font, L"is not really ");
+    matrix->rotateZ((-90 + r1) * D2R);
+    TextHelper::drawTransformedText(*font, L"2d text");
     
-    matrix->rotateZ(30 * D2R);
-    TextHelper::drawTransformedText(*font, L"suited to ");
+    matrix->rotateZ(+r2 * D2R);
+    TextHelper::drawTransformedText(*font, L" is not really");
     
-    matrix->rotateZ(-9 * D2R);
-    TextHelper::drawTransformedText(*font, L"text trees");
+    matrix->rotateZ(r3 * D2R);
+    TextHelper::drawTransformedText(*font, L" suited to");
+    
+    matrix->rotateZ(-r2 * D2R);
+    TextHelper::drawTransformedText(*font, L" text trees");
     
     font->endSequence();
 }
