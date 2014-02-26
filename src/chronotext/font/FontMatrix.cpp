@@ -44,8 +44,11 @@ namespace chronotext
     
     void FontMatrix::pop()
     {
-        m = stack.back();
-        stack.pop_back();
+        if (!stack.empty())
+        {
+            m = stack.back();
+            stack.pop_back();
+        }
     }
     
     void FontMatrix::setTranslation(float x, float y, float z)

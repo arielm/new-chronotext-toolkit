@@ -19,9 +19,11 @@ namespace chronotext
     class FontMatrix
     {
     public:
+        typedef std::array<float, 16> Values;
+        
         union
         {
-            std::array<float, 16> m;
+            Values m;
             
             struct
             {
@@ -62,7 +64,7 @@ namespace chronotext
         void addTransformedQuad(const GlyphQuad &quad, std::vector<Vertex> &vertices) const;
         
     protected:
-        std::vector<std::array<float, 16>> stack;
+        std::vector<Values> stack;
     };
 }
 
