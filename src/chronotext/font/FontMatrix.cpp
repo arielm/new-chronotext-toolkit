@@ -8,6 +8,7 @@
 
 #include "chronotext/font/FontMatrix.h"
 
+using namespace std;
 using namespace ci;
 
 namespace chronotext
@@ -19,7 +20,7 @@ namespace chronotext
     
     void FontMatrix::load(const Matrix44f &matrix)
     {
-        memcpy(m, matrix.m, 16 * sizeof(float));
+        memcpy(&m, matrix.m, sizeof(m));
     }
     
     void FontMatrix::load(const MatrixAffine2f &matrix)
@@ -34,6 +35,17 @@ namespace chronotext
     {
         m00 = m11 = m22 = m33 = 1.0f;
         m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
+    }
+    
+    void FontMatrix::push()
+    {
+        stack.push_back(m);
+    }
+    
+    void FontMatrix::pop()
+    {
+        m = stack.back();
+        stack.pop_back();
     }
     
     void FontMatrix::setTranslation(float x, float y, float z)

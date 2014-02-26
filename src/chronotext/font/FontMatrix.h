@@ -12,13 +12,16 @@
 
 #include "cinder/Matrix44.h"
 
+#include <array>
+
 namespace chronotext
 {
     class FontMatrix
     {
+    public:
         union
         {
-            float m[16];
+            std::array<float, 16> m;
             
             struct
             {
@@ -29,13 +32,15 @@ namespace chronotext
             };
         };
         
-    public:
         FontMatrix();
 
         void load(const ci::Matrix44f &matrix);
         void load(const ci::MatrixAffine2f &matrix);
 
         void setToIdentity();
+        
+        void push();
+        void pop();
 
         inline void setTranslation(const ci::Vec2f &t) { setTranslation(t.x, t.y, 0); }
         inline void setTranslation(const ci::Vec3f &t) { setTranslation(t.x, t.y, t.z); }
@@ -55,6 +60,9 @@ namespace chronotext
         
         ci::Vec3f transform(float x, float y) const;
         void addTransformedQuad(const GlyphQuad &quad, std::vector<Vertex> &vertices) const;
+        
+    protected:
+        std::vector<std::array<float, 16>> stack;
     };
 }
 
