@@ -78,9 +78,14 @@ void Sketch::draw()
     matrix->rotateZ(r3 * D2R);
     TextHelper::drawTransformedText(*font, L" for");
     
-    matrix->rotateZ(-r2 * D2R);
+    matrix->push();
+    matrix->rotateZ(r2 * D2R);
     TextHelper::drawTransformedText(*font, L" text trees");
-    
+
+    matrix->pop();
+    matrix->rotateZ(-r5 * D2R);
+    TextHelper::drawTransformedText(*font, L" interaction");
+
     matrix->pop();
     matrix->rotateZ(-r5 * D2R);
     TextHelper::drawTransformedText(*font, L" fine");
@@ -88,8 +93,13 @@ void Sketch::draw()
     matrix->rotateZ(r4 * D2R);
     TextHelper::drawTransformedText(*font, L" for");
     
+    matrix->push();
     matrix->rotateZ(-r3 * D2R);
     TextHelper::drawTransformedText(*font, L" text trees");
+    
+    matrix->pop();
+    matrix->rotateZ(+r3 * D2R);
+    TextHelper::drawTransformedText(*font, L" fiction");
     
     font->endSequence();
 }
