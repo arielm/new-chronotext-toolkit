@@ -6,6 +6,11 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * BASED ON "Adaptive Sampling of Parametric Curves" BY Luiz Henrique de Figueiredo
+ * http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
+ */
+
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
@@ -28,6 +33,9 @@ namespace chronotext
         float tol;
         
         std::vector<ci::Vec2f> points;
+        
+        void segment(FollowablePath *path, ci::Vec2f *point);
+        void sample(FollowablePath *path, ci::Vec2f *point, float t0, const ci::Vec2f &p0, float t1, const ci::Vec2f &p1);
     };
     
     static ci::Vec2f GammaCatmullRom(float t, ci::Vec2f *in)
