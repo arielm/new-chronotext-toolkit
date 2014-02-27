@@ -37,7 +37,7 @@ namespace chronotext
     
     void ASPC::sample(float t0, float x0, float y0, float t1, float x1, float y1)
     {
-        float t = 0.45f + 0.1f * float(rand() / RAND_MAX);
+        float t = 0.45f + 0.1f * rand() / RAND_MAX;
         float rt = t0 + t * (t1 - t0);
         float rx = gamma(rt, xx);
         float ry = gamma(rt, yy);
