@@ -23,30 +23,39 @@ namespace chronotext
     class SplinePath
     {
     public:
-        SplinePath(const std::function<float (float, float*)> &gamma, float tol = 1, int capacity = 256);
+        SplinePath(const std::function<ci::Vec2f (float, ci::Vec2f*)> &gamma, float tol = 1, int capacity = 0);
         
+        void add(const ci::Vec2f &point);
         void add(float x, float y);
-        inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
 
         void clear();
         void compute(FollowablePath &path);
         
     protected:
-        std::function<float (float, float*)> gamma;
+        std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
         float tol;
         
-        std::vector<float> x;
-        std::vector<float> y;
+        std::vector<ci::Vec2f> points;
     };
     
-    static float GammaCatmullRom(float t, float *in)
+    static ci::Vec2f GammaCatmullRom(float t, ci::Vec2f *in)
     {
-        return (in[0] * ((-t + 2) * t - 1) * t + in[1] * (((3 * t - 5) * t) * t + 2) + in[2] * ((-3 * t + 4) * t + 1) * t + in[3] * ((t - 1) * t * t)) / 2;
+        float w0 = ((2 - t) * t - 1) * t;
+        float w1 = ((3 * t - 5) * t) * t + 2;
+        float w2 = ((4 - 3 * t) * t + 1) * t;
+        float w3 = (t - 1) * t * t;
+        
+        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x + w3 * in[3].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y + w3 * in[3].y) / 2;
     }
     
-    static float GammaBSpline(float t, float *in)
+    static ci::Vec2f GammaBSpline(float t, ci::Vec2f *in)
     {
-        return (in[0] * (((-t + 3) * t - 3) * t + 1) + in[1] * (((3 * t - 6) * t) * t + 4) + in[2] * (((-3 * t + 3) * t + 3) * t + 1) + in[3] * (t * t * t)) / 6;
+        float w0 = ((3 - t) * t - 3) * t + 1;
+        float w1 = ((3 * t - 6) * t) * t + 4;
+        float w2 = ((3 - 3 * t) * t + 3) * t + 1;
+        float w3 = t * t * t;
+        
+        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x + w3 * in[3].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y + w3 * in[3].y) / 6;
     }
 }
 

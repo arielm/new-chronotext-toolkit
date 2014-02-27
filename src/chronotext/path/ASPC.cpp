@@ -9,40 +9,37 @@
 #include "chronotext/path/ASPC.h"
 
 using namespace std;
+using namespace ci;
 
 namespace chronotext
 {
-    ASPC::ASPC(float tol, const function<float (float, float*)> &gamma, FollowablePath &path)
+    ASPC::ASPC(float tol, const function<Vec2f (float, Vec2f*)> &gamma, FollowablePath &path)
     :
     tol(tol),
     gamma(gamma),
     path(path)
     {}
 
-    void ASPC::segment(float *x, float *y)
+    void ASPC::segment(Vec2f *point)
     {
-        xx = x;
-        yy = y;
+        this->point = point;
         
         float pt = 0;
-        float px = gamma(pt, x);
-        float py = gamma(pt, y);
+        auto p = gamma(pt, point);
         
         float qt = 1;
-        float qx = gamma(qt, x);
-        float qy = gamma(qt, y);
+        auto q = gamma(qt, point);
         
-        sample(pt, px, py, qt, qx, qy);
+        sample(pt, p.x, p.y, qt, q.x, q.y);
     }
     
     void ASPC::sample(float t0, float x0, float y0, float t1, float x1, float y1)
     {
         float t = 0.45f + 0.1f * rand() / RAND_MAX;
         float rt = t0 + t * (t1 - t0);
-        float rx = gamma(rt, xx);
-        float ry = gamma(rt, yy);
+        auto r = gamma(rt, point);
         
-        float cross = (x0 - rx) * (y1 - ry) - (x1 - rx) * (y0 - ry);
+        float cross = (x0 - r.x) * (y1 - r.y) - (x1 - r.x) * (y0 - r.y);
         
         if (cross * cross < tol)
         {
@@ -50,8 +47,8 @@ namespace chronotext
         }
         else
         {
-            sample(t0, x0, y0, rt, rx, ry);
-            sample(rt, rx, ry, t1, x1, y1);
+            sample(t0, x0, y0, rt, r.x, r.y);
+            sample(rt, r.x, r.y, t1, x1, y1);
         }
     }
 }

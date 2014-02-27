@@ -20,17 +20,16 @@ namespace chronotext
     class ASPC
     {
     public:
-        ASPC(float tol, const std::function<float (float, float*)> &gamma, FollowablePath &path);
+        ASPC(float tol, const std::function<ci::Vec2f (float, ci::Vec2f*)> &gamma, FollowablePath &path);
         
-        void segment(float *x, float *y);
+        void segment(ci::Vec2f *point);
         
     protected:
         float tol;
-        std::function<float (float, float*)> gamma;
+        std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
         FollowablePath &path;
         
-        float *xx;
-        float *yy;
+        ci::Vec2f *point;
         
         void sample(float t0, float x0, float y0, float t1, float x1, float y1);
     };

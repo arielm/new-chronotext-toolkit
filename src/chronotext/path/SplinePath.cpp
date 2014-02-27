@@ -10,37 +10,43 @@
 #include "chronotext/path/ASPC.h"
 
 using namespace std;
+using namespace ci;
 
 namespace chronotext
 {
-    SplinePath::SplinePath(const function<float (float, float*)> &gamma, float tol, int capacity)
+    SplinePath::SplinePath(const function<Vec2f (float, Vec2f*)> &gamma, float tol, int capacity)
     :
     gamma(gamma),
     tol(tol)
     {
-        x.reserve(capacity);
-        y.reserve(capacity);
+        if (capacity > 0)
+        {
+            points.reserve(capacity);
+        }
     }
 
-    void SplinePath::add(float xx, float yy)
+    void SplinePath::add(const Vec2f &point)
     {
-        x.push_back(xx);
-        y.push_back(yy);
+        points.emplace_back(point);
+    }
+
+    void SplinePath::add(float x, float y)
+    {
+        points.emplace_back(x, y);
     }
     
     void SplinePath::clear()
     {
-        x.clear();
-        y.clear();
+        points.clear();
     }
     
     void SplinePath::compute(FollowablePath &path)
     {
         ASPC aspc(tol, gamma, path);
         
-        for (int i = 0, end = x.size() - 3; i < end; i++)
+        for (int i = 0, end = points.size() - 3; i < end; i++)
         {
-            aspc.segment(&x[i], &y[i]);
+            aspc.segment(&points[i]);
         }
         
         if (path.mode == FollowablePath::MODE_LOOP)
