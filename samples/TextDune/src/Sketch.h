@@ -22,7 +22,8 @@ class Sketch : public chr::CinderSketch
     std::shared_ptr<chr::XFont> font;
     
     std::unique_ptr<chr::FollowablePath> path;
-    chr::TexturedTriangleStrip strip;
+    chr::TexturedTriangleStrip stroke;
+    std::vector<ci::Vec2f> vertices;
     
     float scale;
     
@@ -33,4 +34,5 @@ public:
     void draw();
     
     void createDune(const ci::Vec2f &size);
+    void drawDune();
 };

@@ -18,7 +18,7 @@ using namespace ci;
 using namespace chr;
 using namespace chr::xf;
 
-const float SCALE = 768;
+const float REFERENCE_H = 768;
 const float TEXT_SIZE = 18;
 
 Sketch::Sketch(void *context, void *delegate)
@@ -44,7 +44,7 @@ void Sketch::setup(bool renewContext)
     
     // ---
     
-    scale = getWindowHeight() / SCALE;
+    scale = getWindowHeight() / REFERENCE_H;
     
     path = unique_ptr<FollowablePath>(new FollowablePath());
     createDune(Vec2f(getWindowSize()) / scale);
@@ -64,14 +64,8 @@ void Sketch::draw()
     
     gl::setMatricesWindow(getWindowSize(), true);
     gl::scale(scale);
-    
-    // ---
-    
-    gl::color(1, 0, 0, 0.5f);
-    
-    strokeTexture->begin();
-    strip.draw();
-    strokeTexture->end();
+
+    drawDune();
 }
 
 void Sketch::createDune(const Vec2f &size)
@@ -80,7 +74,7 @@ void Sketch::createDune(const Vec2f &size)
     int slotCount = sizeof(coefs) / sizeof(float);
     float slotSize = size.x / (slotCount - 1);
 
-    SplinePath spline(GammaBSpline);
+    SplinePath spline(GammaBSpline, 3);
 
     for (int n = 0, i = 0; i < (slotCount + 5); i++)
     {
@@ -105,5 +99,34 @@ void Sketch::createDune(const Vec2f &size)
     
     // ---
     
-    StrokeHelper::stroke(*path, strip, 4); // XXX
+    StrokeHelper::stroke(*path, stroke, 4); // USED FOR PSEUDO-ANTIALISING
+    
+    // ---
+    
+    vertices.clear();
+    vertices.reserve(path->size * 2);
+    
+    for (auto &point : path->points)
+    {
+        vertices.emplace_back(point);
+        vertices.emplace_back(point.x, REFERENCE_H);
+    }
+}
+
+void Sketch::drawDune()
+{
+    gl::color(1, 0, 0, 0.5f);
+    
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, vertices.data());
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size());
+    glDisableClientState(GL_VERTEX_ARRAY);
+    
+    // ---
+    
+    gl::color(1, 1, 1, 1);
+    
+    strokeTexture->begin();
+    stroke.draw();
+    strokeTexture->end();
 }
