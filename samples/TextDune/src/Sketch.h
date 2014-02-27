@@ -12,6 +12,7 @@
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
 #include "chronotext/utils/stroke/StrokeHelper.h"
+#include "chronotext/time/Clock.h"
 
 class Sketch : public chr::CinderSketch
 {
@@ -24,7 +25,9 @@ class Sketch : public chr::CinderSketch
     std::unique_ptr<chr::FollowablePath> path;
     chr::TexturedTriangleStrip stroke;
     std::vector<ci::Vec2f> vertices;
-    
+
+    chr::Clock clock;
+
     float scale;
     float offset;
     
@@ -32,8 +35,13 @@ public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
+    void start(int flags);
+    void stop(int flags);
     void update();
     void draw();
+    
+    void addTouch(int index, float x, float y);
+    void removeTouch(int index, float x, float y);
     
     void createDune(const ci::Vec2f &size);
     void drawDune();

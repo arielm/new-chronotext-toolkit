@@ -19,8 +19,8 @@ using namespace chr;
 using namespace chr::xf;
 
 const float REFERENCE_H = 768;
-const float TEXT_SIZE = 18;
-const float GAP = 6;
+const float TEXT_SIZE = 20;
+const float GAP = 7;
 
 const wstring text = L"if two dimensions are not enough for interaction, how about a single one?";
 
@@ -61,10 +61,19 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
+void Sketch::start(int flags)
+{
+    clock.start();
+}
+
+void Sketch::stop(int flags)
+{
+    clock.stop();
+}
+
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
-    offset = 550 + 325 * math<float>::sin(now * 2.0f);
+    offset = 600 + 325 * math<float>::sin(clock.getTime() * 1.75f);
 }
 
 void Sketch::draw()
@@ -84,6 +93,16 @@ void Sketch::draw()
     font->setColor(0, 0, 0, 0.85f);
     
     TextHelper::drawTextOnPath(*font, text, *path, offset, -GAP);
+}
+
+void Sketch::addTouch(int index, float x, float y)
+{
+    clock.stop();
+}
+
+void Sketch::removeTouch(int index, float x, float y)
+{
+    clock.start();
 }
 
 void Sketch::createDune(const Vec2f &size)

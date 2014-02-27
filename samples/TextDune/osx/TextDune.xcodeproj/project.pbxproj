@@ -26,6 +26,9 @@
 		A822635918BE705100D57C8C /* ASPC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635318BE705100D57C8C /* ASPC.cpp */; };
 		A822635A18BE705100D57C8C /* FollowablePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635518BE705100D57C8C /* FollowablePath.cpp */; };
 		A822635B18BE705100D57C8C /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635718BE705100D57C8C /* SplinePath.cpp */; };
+		A822637718BF54BC00D57C8C /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822636F18BF54BC00D57C8C /* Clock.cpp */; };
+		A822637818BF54BC00D57C8C /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637218BF54BC00D57C8C /* MasterClock.cpp */; };
+		A822637918BF54BC00D57C8C /* TickingClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637418BF54BC00D57C8C /* TickingClock.cpp */; };
 		A829870318BD00C300934642 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82986FD18BD00C300934642 /* Handler.cpp */; };
 		A829870418BD00C300934642 /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870118BD00C300934642 /* SuperHandler.cpp */; };
 		A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A829870518BD026300934642 /* Georgia_Regular_64.fnt */; };
@@ -81,6 +84,14 @@
 		A822635818BE705100D57C8C /* SplinePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplinePath.h; sourceTree = "<group>"; };
 		A822635D18BEC48100D57C8C /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
 		A822635E18BEC48100D57C8C /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
+		A822636F18BF54BC00D57C8C /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
+		A822637018BF54BC00D57C8C /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
+		A822637118BF54BC00D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
+		A822637218BF54BC00D57C8C /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
+		A822637318BF54BC00D57C8C /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
+		A822637418BF54BC00D57C8C /* TickingClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TickingClock.cpp; sourceTree = "<group>"; };
+		A822637518BF54BC00D57C8C /* TickingClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TickingClock.h; sourceTree = "<group>"; };
+		A822637618BF54BC00D57C8C /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A82986FD18BD00C300934642 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A82986FE18BD00C300934642 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
 		A82986FF18BD00C300934642 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -262,6 +273,21 @@
 			path = stroke;
 			sourceTree = "<group>";
 		};
+		A822636E18BF54BC00D57C8C /* time */ = {
+			isa = PBXGroup;
+			children = (
+				A822636F18BF54BC00D57C8C /* Clock.cpp */,
+				A822637018BF54BC00D57C8C /* Clock.h */,
+				A822637118BF54BC00D57C8C /* DefaultTimeBase.h */,
+				A822637218BF54BC00D57C8C /* MasterClock.cpp */,
+				A822637318BF54BC00D57C8C /* MasterClock.h */,
+				A822637418BF54BC00D57C8C /* TickingClock.cpp */,
+				A822637518BF54BC00D57C8C /* TickingClock.h */,
+				A822637618BF54BC00D57C8C /* TimeBase.h */,
+			);
+			path = time;
+			sourceTree = "<group>";
+		};
 		A82986FC18BD00C300934642 /* os */ = {
 			isa = PBXGroup;
 			children = (
@@ -352,6 +378,7 @@
 				A822632618BE224C00D57C8C /* texture */,
 				A822635218BE705100D57C8C /* path */,
 				A82986FC18BD00C300934642 /* os */,
+				A822636E18BF54BC00D57C8C /* time */,
 				A82C90F416E00B3B00FF519C /* utils */,
 			);
 			name = chronotext;
@@ -425,6 +452,8 @@
 			files = (
 				A822635A18BE705100D57C8C /* FollowablePath.cpp in Sources */,
 				A829873018BD02D500934642 /* Font.cpp in Sources */,
+				A822637818BF54BC00D57C8C /* MasterClock.cpp in Sources */,
+				A822637918BF54BC00D57C8C /* TickingClock.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */,
@@ -439,6 +468,7 @@
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
 				A822633318BE224C00D57C8C /* PVRHelper.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
+				A822637718BF54BC00D57C8C /* Clock.cpp in Sources */,
 				A822635918BE705100D57C8C /* ASPC.cpp in Sources */,
 				A822633518BE224C00D57C8C /* Texture.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
