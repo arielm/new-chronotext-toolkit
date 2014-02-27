@@ -17,7 +17,7 @@ using namespace ci;
 using namespace chr;
 using namespace chr::xf;
 
-const float SCALE = 960;
+const float REFERENCE_H = 960;
 const float TEXT_SIZE = 20;
 const float DOT_SCALE = 0.2f;
 const float GROW_FACTOR = 1.133f;
@@ -39,7 +39,7 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        dot = textureManager.getTexture(InputSource::getResource("dot.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
+        dot = textureManager.getTexture("dot.png", true, TextureRequest::FLAGS_TRANSLUCENT);
         font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     }
     
@@ -67,7 +67,7 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
     
     gl::translate(getWindowCenter());
-    gl::scale(getWindowHeight() / SCALE);
+    gl::scale(getWindowHeight() / REFERENCE_H);
     
     // ---
 
@@ -82,7 +82,7 @@ void Sketch::draw()
     /*
      * THE BASE OF THE TREE IS AT THE BOTTOM OF THE SCREEN
      */
-    matrix->setTranslation(0, SCALE * 0.5f);
+    matrix->setTranslation(0, REFERENCE_H * 0.5f);
     
     matrix->rotateZ((-90 + r1) * D2R);
     TextHelper::drawTransformedText(*font, L" 2 dimensions");

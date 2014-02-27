@@ -18,7 +18,7 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-const float SCALE = 600;
+const float REFERENCE_H = 600;
 const float FPS = 30;
 
 Sketch::Sketch(void *context, void *delegate)
@@ -74,7 +74,7 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
 
     gl::translate(getWindowCenter());
-    gl::scale(getWindowHeight() / SCALE);
+    gl::scale(getWindowHeight() / REFERENCE_H);
     
     animation.play(clock.getTime());
 }
