@@ -22,7 +22,10 @@
 		A822633518BE224C00D57C8C /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822632B18BE224C00D57C8C /* Texture.cpp */; };
 		A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822632E18BE224C00D57C8C /* TextureHelper.cpp */; };
 		A822633718BE224C00D57C8C /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822633018BE224C00D57C8C /* TextureManager.cpp */; };
-		A822633918BE24E800D57C8C /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A822633818BE24E800D57C8C /* dot.png */; };
+		A822635018BE6F5D00D57C8C /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = A822634E18BE6F5D00D57C8C /* line.png */; };
+		A822635918BE705100D57C8C /* ASPC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635318BE705100D57C8C /* ASPC.cpp */; };
+		A822635A18BE705100D57C8C /* FollowablePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635518BE705100D57C8C /* FollowablePath.cpp */; };
+		A822635B18BE705100D57C8C /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635718BE705100D57C8C /* SplinePath.cpp */; };
 		A829870318BD00C300934642 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82986FD18BD00C300934642 /* Handler.cpp */; };
 		A829870418BD00C300934642 /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870118BD00C300934642 /* SuperHandler.cpp */; };
 		A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A829870518BD026300934642 /* Georgia_Regular_64.fnt */; };
@@ -69,7 +72,15 @@
 		A822633018BE224C00D57C8C /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
 		A822633118BE224C00D57C8C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
 		A822633218BE224C00D57C8C /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
-		A822633818BE24E800D57C8C /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../resources/dot.png; sourceTree = "<group>"; };
+		A822634E18BE6F5D00D57C8C /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = line.png; path = ../resources/line.png; sourceTree = "<group>"; };
+		A822635318BE705100D57C8C /* ASPC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ASPC.cpp; sourceTree = "<group>"; };
+		A822635418BE705100D57C8C /* ASPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPC.h; sourceTree = "<group>"; };
+		A822635518BE705100D57C8C /* FollowablePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FollowablePath.cpp; sourceTree = "<group>"; };
+		A822635618BE705100D57C8C /* FollowablePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowablePath.h; sourceTree = "<group>"; };
+		A822635718BE705100D57C8C /* SplinePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SplinePath.cpp; sourceTree = "<group>"; };
+		A822635818BE705100D57C8C /* SplinePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplinePath.h; sourceTree = "<group>"; };
+		A822635D18BEC48100D57C8C /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
+		A822635E18BEC48100D57C8C /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A82986FD18BD00C300934642 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A82986FE18BD00C300934642 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
 		A82986FF18BD00C300934642 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -187,7 +198,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A822633818BE24E800D57C8C /* dot.png */,
+				A822634E18BE6F5D00D57C8C /* line.png */,
 				A829870518BD026300934642 /* Georgia_Regular_64.fnt */,
 			);
 			name = Resources;
@@ -227,6 +238,28 @@
 				A822633218BE224C00D57C8C /* TextureRequest.h */,
 			);
 			path = texture;
+			sourceTree = "<group>";
+		};
+		A822635218BE705100D57C8C /* path */ = {
+			isa = PBXGroup;
+			children = (
+				A822635318BE705100D57C8C /* ASPC.cpp */,
+				A822635418BE705100D57C8C /* ASPC.h */,
+				A822635518BE705100D57C8C /* FollowablePath.cpp */,
+				A822635618BE705100D57C8C /* FollowablePath.h */,
+				A822635718BE705100D57C8C /* SplinePath.cpp */,
+				A822635818BE705100D57C8C /* SplinePath.h */,
+			);
+			path = path;
+			sourceTree = "<group>";
+		};
+		A822635C18BEC48100D57C8C /* stroke */ = {
+			isa = PBXGroup;
+			children = (
+				A822635D18BEC48100D57C8C /* StrokeHelper.h */,
+				A822635E18BEC48100D57C8C /* TexturedTriangleStrip.h */,
+			);
+			path = stroke;
 			sourceTree = "<group>";
 		};
 		A82986FC18BD00C300934642 /* os */ = {
@@ -292,6 +325,7 @@
 				A82C90FD16E00B3B00FF519C /* MathUtils.cpp */,
 				A82C910316E00B3B00FF519C /* Utils.h */,
 				A82C910216E00B3B00FF519C /* Utils.cpp */,
+				A822635C18BEC48100D57C8C /* stroke */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -316,6 +350,7 @@
 				A82C90E616E00B0400FF519C /* cinder */,
 				A829870718BD02D500934642 /* font */,
 				A822632618BE224C00D57C8C /* texture */,
+				A822635218BE705100D57C8C /* path */,
 				A82986FC18BD00C300934642 /* os */,
 				A82C90F416E00B3B00FF519C /* utils */,
 			);
@@ -375,9 +410,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A822633918BE24E800D57C8C /* dot.png in Resources */,
 				A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
+				A822635018BE6F5D00D57C8C /* line.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,12 +423,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A822635A18BE705100D57C8C /* FollowablePath.cpp in Sources */,
 				A829873018BD02D500934642 /* Font.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */,
 				A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */,
 				A829873318BD02D500934642 /* TextHelper.cpp in Sources */,
+				A822635B18BE705100D57C8C /* SplinePath.cpp in Sources */,
 				A829873218BD02D500934642 /* FontSequence.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
 				A829870318BD00C300934642 /* Handler.cpp in Sources */,
@@ -402,6 +439,7 @@
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
 				A822633318BE224C00D57C8C /* PVRHelper.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
+				A822635918BE705100D57C8C /* ASPC.cpp in Sources */,
 				A822633518BE224C00D57C8C /* Texture.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
 				A829873118BD02D500934642 /* FontManager.cpp in Sources */,

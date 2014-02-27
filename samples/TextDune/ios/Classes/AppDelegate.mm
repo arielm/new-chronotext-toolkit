@@ -9,7 +9,7 @@
 {
     viewController = [[GLViewController alloc] initWithProperties:[NSDictionary dictionaryWithObjectsAndKeys:
         [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
-        [NSNumber numberWithInt:UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown], kGLViewControllerPropertyInterfaceOrientationMask,
+        [NSNumber numberWithInt:UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight], kGLViewControllerPropertyInterfaceOrientationMask,
         [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
         nil]];
     

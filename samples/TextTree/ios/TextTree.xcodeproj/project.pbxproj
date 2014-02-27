@@ -30,8 +30,6 @@
 		A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFDA18116D42006C2085 /* FileSystem.cpp */; };
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
-		A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */; };
-		A8F2E308189D3F47002D5D75 /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E305189D3F47002D5D75 /* stb_image.c */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
 		A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B9416E3AB8000367F97 /* CinderApp.cpp */; };
@@ -98,10 +96,6 @@
 		A8720806180833E10055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8DB3EC416E0B96C00504D27 /* Sketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sketch.cpp; path = ../src/Sketch.cpp; sourceTree = "<group>"; };
 		A8DB3EC516E0B96C00504D27 /* Sketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sketch.h; path = ../src/Sketch.h; sourceTree = "<group>"; };
-		A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSourceFileStbImage.cpp; sourceTree = "<group>"; };
-		A8F2E304189D3F47002D5D75 /* ImageSourceFileStbImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSourceFileStbImage.h; sourceTree = "<group>"; };
-		A8F2E305189D3F47002D5D75 /* stb_image.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stb_image.c; sourceTree = "<group>"; };
-		A8F2E306189D3F47002D5D75 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -284,17 +278,6 @@
 			path = xf;
 			sourceTree = "<group>";
 		};
-		A8F2E302189D3F47002D5D75 /* stb */ = {
-			isa = PBXGroup;
-			children = (
-				A8F2E304189D3F47002D5D75 /* ImageSourceFileStbImage.h */,
-				A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */,
-				A8F2E306189D3F47002D5D75 /* stb_image.h */,
-				A8F2E305189D3F47002D5D75 /* stb_image.c */,
-			);
-			path = stb;
-			sourceTree = "<group>";
-		};
 		A8FA3B8316E379B000367F97 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,7 +370,6 @@
 				A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */,
 				A8FA3C0616E3AB8000367F97 /* Utils.h */,
 				A8FA3C0516E3AB8000367F97 /* Utils.cpp */,
-				A8F2E302189D3F47002D5D75 /* stb */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -474,10 +456,8 @@
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
-				A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
 				A84D7E5B18BD4BC100D7D933 /* FontManager.cpp in Sources */,
-				A8F2E308189D3F47002D5D75 /* stb_image.c in Sources */,
 				A822634B18BE2EA400D57C8C /* Texture.cpp in Sources */,
 				A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */,
 				A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */,

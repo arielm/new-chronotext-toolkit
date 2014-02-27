@@ -11,27 +11,26 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
+#include "chronotext/utils/stroke/StrokeHelper.h"
 
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
-    chr::TextureRef dot;
+    chr::TextureRef strokeTexture;
     
     chr::xf::FontManager fontManager;
     std::shared_ptr<chr::XFont> font;
     
-    float r1;
-    float r2;
-    float r3;
-    float r4;
-    float r5;
+    std::unique_ptr<chr::FollowablePath> path;
+    chr::TexturedTriangleStrip strip;
+    
+    float scale;
     
 public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
-    void update();
     void draw();
     
-    static float oscillate(double t, float min, float max, float freq);
+    void createDune(const ci::Vec2f &size);
 };

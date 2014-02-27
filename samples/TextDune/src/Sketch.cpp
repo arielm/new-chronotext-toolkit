@@ -11,16 +11,15 @@
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/font/xf/TextHelper.h"
+#include "chronotext/path/SplinePath.h"
 
 using namespace std;
 using namespace ci;
 using namespace chr;
 using namespace chr::xf;
 
-const float SCALE = 960;
-const float TEXT_SIZE = 20;
-const float DOT_SCALE = 0.2f;
-const float GROW_FACTOR = 1.133f;
+const float SCALE = 768;
+const float TEXT_SIZE = 18;
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -39,9 +38,18 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        dot = textureManager.getTexture(InputSource::getResource("dot.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
+        strokeTexture = textureManager.getTexture("line.png", true, TextureRequest::FLAGS_TRANSLUCENT);
         font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     }
+    
+    // ---
+    
+    scale = getWindowHeight() / SCALE;
+    
+    path = unique_ptr<FollowablePath>(new FollowablePath());
+    createDune(Vec2f(getWindowSize()) / scale);
+
+    // ---
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -50,112 +58,52 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::update()
-{
-    double now = getElapsedSeconds();
-
-    r1 = oscillate(now, -3, +3, 0.75f);
-    r2 = oscillate(now, 6, 24, 1.5f);
-    r3 = oscillate(now, 15, 35, 3);
-    r4 = oscillate(now, -6, +6, 1.5f);
-    r5 = oscillate(now, 21, 39, 1.25f);
-}
-
 void Sketch::draw()
 {
     gl::clear(Color::white(), false);
+    
     gl::setMatricesWindow(getWindowSize(), true);
-    
-    gl::translate(getWindowCenter());
-    gl::scale(getWindowHeight() / SCALE);
-    
-    // ---
-
-    vector<FontMatrix::Values> M;
-    auto matrix = font->getMatrix();
-    
-    font->setSize(TEXT_SIZE);
-    font->setColor(0, 0, 0, 0.75f);
-    
-    font->beginSequence();
-    
-    /*
-     * THE BASE OF THE TREE IS AT THE BOTTOM OF THE SCREEN
-     */
-    matrix->setTranslation(0, SCALE * 0.5f);
-    
-    matrix->rotateZ((-90 + r1) * D2R);
-    TextHelper::drawTransformedText(*font, L" 2 dimensions");
-    
-    matrix->rotateZ((r4) * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" are");
-    
-    matrix->push();
-    matrix->rotateZ(+r2 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" not enough");
-    
-    matrix->rotateZ(r3 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" for");
-    
-    matrix->push();
-    matrix->rotateZ(r2 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees  ");
-    M.push_back(matrix->m);
-
-    matrix->pop();
-    matrix->rotateZ(-r5 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" interaction  ");
-    M.push_back(matrix->m);
-
-    matrix->pop();
-    matrix->rotateZ(-r5 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" fine");
-    
-    matrix->rotateZ(r4 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" for");
-    
-    matrix->push();
-    matrix->rotateZ(-r3 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees  ");
-    M.push_back(matrix->m);
-    
-    matrix->pop();
-    matrix->rotateZ(+r3 * D2R);
-    matrix->scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" fiction  ");
-    M.push_back(matrix->m);
-    
-    font->endSequence();
+    gl::scale(scale);
     
     // ---
     
-    gl::color(1, 0, 0, 0.75f);
-    dot->begin();
+    gl::color(1, 0, 0, 0.5f);
     
-    for (auto &m : M)
-    {
-        glPushMatrix();
-        glMultMatrixf(m.data());
-        
-        gl::translate(0, -font->getStrikethroughOffset());
-        gl::scale(DOT_SCALE);
-        
-        dot->drawFromCenter();
-        glPopMatrix();
-    }
-    
-    dot->end();
+    strokeTexture->begin();
+    strip.draw();
+    strokeTexture->end();
 }
 
-float Sketch::oscillate(double t, float min, float max, float freq)
+void Sketch::createDune(const Vec2f &size)
 {
-    return min + 0.5 * (max - min) * (1 + math<float>::sin(t * freq));
+    static float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
+    int slotCount = sizeof(coefs) / sizeof(float);
+    float slotSize = size.x / (slotCount - 1);
+
+    SplinePath spline(GammaBSpline);
+
+    for (int n = 0, i = 0; i < (slotCount + 5); i++)
+    {
+        if (i <= 2)
+        {
+            n = 0; // B-SPLINE: 3 TIMES THE SAME ENTRY AT THE BEGINNING
+        }
+        else if (i >= slotCount + 1)
+        {
+            n = slotCount - 1; // B-SPLINE: 4 TIMES THE SAME ENTRY AT THE END
+        }
+        else
+        {
+            n = i - 2;
+        }
+        
+        spline.add(slotSize * n, coefs[n] * size.y);
+    }
+
+    path->clear();
+    spline.compute(*path);
+    
+    // ---
+    
+    StrokeHelper::stroke(*path, strip, 4); // XXX
 }
