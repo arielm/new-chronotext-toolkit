@@ -49,10 +49,11 @@ void Sketch::resize()
 void Sketch::draw()
 {
     gl::clear(Color::gray(0.5f), false);
+    
     gl::setMatricesWindow(getWindowSize(), true);
+    gl::scale(scale);
     
     gl::color(1, 1, 1, 0.25f);
-    gl::scale(scale);
     drawGrid(Rectf(getWindowBounds()) / scale, GRID_SIZE, position);
 
     gl::color(1, 1, 1, 1);

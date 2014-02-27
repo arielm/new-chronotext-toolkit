@@ -26,11 +26,13 @@ class Sketch : public chr::CinderSketch
     std::vector<ci::Vec2f> vertices;
     
     float scale;
+    float offset;
     
 public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
+    void update();
     void draw();
     
     void createDune(const ci::Vec2f &size);

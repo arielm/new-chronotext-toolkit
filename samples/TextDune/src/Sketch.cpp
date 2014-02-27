@@ -20,6 +20,9 @@ using namespace chr::xf;
 
 const float REFERENCE_H = 768;
 const float TEXT_SIZE = 18;
+const float GAP = 6;
+
+const wstring text = L"if two dimensions are not enough for interaction, how about a single one?";
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -58,6 +61,12 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
+void Sketch::update()
+{
+    double now = getElapsedSeconds();
+    offset = 550 + 325 * math<float>::sin(now * 2.0f);
+}
+
 void Sketch::draw()
 {
     gl::clear(Color::white(), false);
@@ -65,7 +74,16 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
     gl::scale(scale);
 
+    // ---
+    
     drawDune();
+    
+    // ---
+    
+    font->setSize(TEXT_SIZE);
+    font->setColor(0, 0, 0, 0.85f);
+    
+    TextHelper::drawTextOnPath(*font, text, *path, offset, -GAP);
 }
 
 void Sketch::createDune(const Vec2f &size)
