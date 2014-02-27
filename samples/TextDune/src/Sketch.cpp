@@ -132,7 +132,7 @@ void Sketch::createDune(const Vec2f &size)
     }
 
     path->clear();
-    spline.compute(*path);
+    spline.flush(*path);
     
     // ---
     
