@@ -34,11 +34,10 @@ namespace chronotext
             {
                 int stride = sizeof(ci::Vec2f) * 2;
                 auto pointer = vertices.data();
-                int count = vertices.size() / 2;
                 
                 glVertexPointer(2, GL_FLOAT, stride, pointer);
                 glTexCoordPointer(2, GL_FLOAT, stride, pointer + 1);
-                glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size() >> 1);
             }
         }
     };
