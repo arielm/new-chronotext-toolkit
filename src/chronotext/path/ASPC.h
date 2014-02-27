@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -20,18 +20,17 @@ namespace chronotext
     class ASPC
     {
     public:
-        ASPC(float tol, const std::function<ci::Vec2f (float, ci::Vec2f*)> &gamma, FollowablePath &path);
-        
+        ASPC(FollowablePath &path, const std::function<ci::Vec2f (float, ci::Vec2f*)> &gamma, float tol);
         void segment(ci::Vec2f *point);
         
     protected:
-        float tol;
-        std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
         FollowablePath &path;
+        std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
+        float tol;
         
         ci::Vec2f *point;
         
-        void sample(float t0, float x0, float y0, float t1, float x1, float y1);
+        void sample(float t0, const ci::Vec2f &p0, float t1, const ci::Vec2f &p1);
     };
 }
 

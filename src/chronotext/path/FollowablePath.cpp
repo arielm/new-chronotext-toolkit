@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -20,30 +20,34 @@ namespace chronotext
     mode(mode),
     size(0)
     {
-        points.reserve(capacity);
-        len.reserve(capacity);
+        if (capacity > 0)
+        {
+            points.reserve(capacity);
+            len.reserve(capacity);
+        }
     }
     
     FollowablePath::FollowablePath(DataSourceRef source, int mode)
     :
-    mode(mode)
+    mode(mode),
+    size(0)
     {
         read(source->createStream());
     }
     
     FollowablePath::FollowablePath(const Buffer &buffer, int mode)
     :
-    mode(mode)
+    mode(mode),
+    size(0)
     {
         IStreamRef in = IStreamMem::create(buffer.getData(), buffer.getDataSize());
         read(in);
     }
     
-    /*
-     * ASSERTION: THIS IS CALLED AT CONSTRUCTION TIME
-     */
     void FollowablePath::read(IStreamRef in)
     {
+        assert(size == 0);
+        
         int capacity;
         in->readLittle(&capacity);
         

@@ -1,17 +1,9 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
- */
-
-/*
- * TODO:
- *
- * ADD SUPPORT FOR BEZIER CURVES:
- * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/Path2d.cpp#L653-657
- * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/Path2d.cpp#L689-697
  */
 
 #pragma once
@@ -29,7 +21,7 @@ namespace chronotext
         void add(float x, float y);
 
         void clear();
-        void compute(FollowablePath &path);
+        void flush(FollowablePath &path);
         
     protected:
         std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
