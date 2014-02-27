@@ -20,9 +20,9 @@ namespace chronotext
     class StrokeHelper
     {
     public:
-        static void stroke(FollowablePath *path, TexturedTriangleStrip &strip, float width, float ratio = 1)
+        static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float ratio = 1)
         {
-            auto size = path->size;
+            auto size = path.size;
             
             strip.clear();
             strip.vertices.reserve(size * 4);
@@ -46,14 +46,14 @@ namespace chronotext
                     o2 = 0;
                 }
                 
-                float l = path->len[i + o1] - path->len[i + o2];
-                ci::Vec2f d = (path->points[i + o1] - path->points[i + o2]) / l;
-                float textureU = ufreq * path->len[i];
+                float l = path.len[i + o1] - path.len[i + o2];
+                ci::Vec2f d = (path.points[i + o1] - path.points[i + o2]) / l;
+                float textureU = ufreq * path.len[i];
                 
-                strip.vertices.emplace_back(path->points[i] + w1 * d.yx());
+                strip.vertices.emplace_back(path.points[i] + w1 * d.yx());
                 strip.vertices.emplace_back(textureU, 0);
                 
-                strip.vertices.emplace_back(path->points[i] + w2 * d.yx());
+                strip.vertices.emplace_back(path.points[i] + w2 * d.yx());
                 strip.vertices.emplace_back(textureU, 1);
             }
         }

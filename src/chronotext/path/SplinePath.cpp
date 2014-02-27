@@ -34,7 +34,7 @@ namespace chronotext
         y.clear();
     }
     
-    void SplinePath::compute(FollowablePath *path)
+    void SplinePath::compute(FollowablePath &path)
     {
         ASPC aspc(tol, gamma, path);
         
@@ -43,9 +43,9 @@ namespace chronotext
             aspc.segment(&x[i], &y[i]);
         }
         
-        if (path->mode == FollowablePath::MODE_LOOP)
+        if (path.mode == FollowablePath::MODE_LOOP)
         {
-            path->add(path->points.front());
+            path.add(path.points.front());
         }
     }
 }

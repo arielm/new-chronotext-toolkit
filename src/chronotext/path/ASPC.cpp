@@ -12,7 +12,7 @@ using namespace std;
 
 namespace chronotext
 {
-    ASPC::ASPC(float tol, const function<float (float, float*)> &gamma, FollowablePath *path)
+    ASPC::ASPC(float tol, const function<float (float, float*)> &gamma, FollowablePath &path)
     :
     tol(tol),
     gamma(gamma),
@@ -46,7 +46,7 @@ namespace chronotext
         
         if (cross * cross < tol)
         {
-            path->add(x0, y0);
+            path.add(x0, y0);
         }
         else
         {

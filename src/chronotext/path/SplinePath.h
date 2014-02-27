@@ -29,7 +29,7 @@ namespace chronotext
         inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
 
         void clear();
-        void compute(FollowablePath *path);
+        void compute(FollowablePath &path);
         
     protected:
         std::function<float (float, float*)> gamma;
