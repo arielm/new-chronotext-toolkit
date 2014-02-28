@@ -6,11 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * BASED ON "Adaptive Sampling of Parametric Curves" BY Luiz Henrique de Figueiredo
- * http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
- */
-
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
@@ -20,44 +15,19 @@ namespace chronotext
     class SplinePath
     {
     public:
-        SplinePath(const std::function<ci::Vec2f (float, ci::Vec2f*)> &gamma, float tol = 1, int capacity = 0);
+        SplinePath(int capacity = 0);
         
         void add(const ci::Vec2f &point);
         void add(float x, float y);
 
         void clear();
-        void flush(FollowablePath &path);
+        void flush(std::function<ci::Vec2f (float, ci::Vec2f*)> gamma, FollowablePath &path, float tol = 1);
         
     protected:
-        std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
         float tol;
-        
+
         std::vector<ci::Vec2f> points;
-        
-        void segment(FollowablePath *path, ci::Vec2f *point);
-        void sample(FollowablePath *path, ci::Vec2f *point, float t0, const ci::Vec2f &p0, float t1, const ci::Vec2f &p1);
     };
-    
-    static ci::Vec2f GammaQuadraticBezier(float t, ci::Vec2f *in)
-    {
-        float nt = 1 - t;
-        float w0 = nt * nt;
-        float w1 = 2 * nt * t;
-        float w2 = t * t;
-        
-        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y);
-    }
-    
-    static ci::Vec2f GammaCubicBezier(float t, ci::Vec2f *in)
-    {
-        float nt = 1 - t;
-        float w0 = nt * nt * nt;
-        float w1 = 3 * nt * nt * t;
-        float w2 = 3 * nt * t * t;
-        float w3 = t * t * t;
-        
-        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x + w3 * in[3].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y + w3 * in[3].y);
-    }
     
     static ci::Vec2f GammaCatmullRom(float t, ci::Vec2f *in)
     {

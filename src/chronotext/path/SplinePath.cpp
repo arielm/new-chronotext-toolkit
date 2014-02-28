@@ -7,16 +7,14 @@
  */
 
 #include "chronotext/path/SplinePath.h"
+#include "chronotext/path/ASPC.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chronotext
 {
-    SplinePath::SplinePath(const function<Vec2f (float, Vec2f*)> &gamma, float tol, int capacity)
-    :
-    gamma(gamma),
-    tol(tol)
+    SplinePath::SplinePath(int capacity)
     {
         if (capacity > 0)
         {
@@ -39,48 +37,29 @@ namespace chronotext
         points.clear();
     }
     
-    void SplinePath::flush(FollowablePath &path)
+    void SplinePath::flush(function<ci::Vec2f (float, ci::Vec2f*)> gamma, FollowablePath &path, float tol)
     {
+        ASPC aspc(gamma, path, tol);
+        
+//        switch (type)
+//        {
+//            case TYPE_BSPLINE:
+//                aspc.gamma = GammaBSpline;
+//                break;
+//                
+//            case TYPE_CATMULL_ROM:
+//                aspc.gamma = GammaCatmullRom;
+//                break;
+//                
+//            default:
+//                return;
+//        }
+        
         for (int i = 0, end = points.size() - 3; i < end; i++)
         {
-            segment(&path, &points[i]);
+            aspc.segment(&points[i]);
         }
-        
-        if (path.mode == FollowablePath::MODE_LOOP)
-        {
-            path.add(path.points.front());
-        }
-        
+
         clear();
-    }
-    
-    void SplinePath::segment(FollowablePath *path, Vec2f *point)
-    {
-        float pt = 0;
-        auto p = gamma(pt, point);
-        
-        float qt = 1;
-        auto q = gamma(qt, point);
-        
-        sample(path, point, pt, p, qt, q);
-    }
-    
-    void SplinePath::sample(FollowablePath *path, Vec2f *point, float t0, const Vec2f &p0, float t1, const Vec2f &p1)
-    {
-        float t = 0.45f + 0.1f * rand() / RAND_MAX;
-        float rt = t0 + t * (t1 - t0);
-        auto r = gamma(rt, point);
-        
-        float cross = (p0 - r).cross(p1 - r);
-        
-        if (cross * cross < tol)
-        {
-            path->add(p0);
-        }
-        else
-        {
-            sample(path, point, t0, p0, rt, r);
-            sample(path, point, rt, r, t1, p1);
-        }
     }
 }
