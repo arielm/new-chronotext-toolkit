@@ -27,6 +27,23 @@ namespace chronotext
         }
     }
     
+    FollowablePath::FollowablePath(const Path2d &path, float approximationScale, int mode)
+    :
+    mode(mode),
+    size(0)
+    {
+        const auto &subdivided = path.subdivide(approximationScale);
+        
+        int capacity = subdivided.size();
+        points.reserve(capacity);
+        len.reserve(capacity);
+        
+        for (auto &point : subdivided)
+        {
+            add(point);
+        }
+    }
+    
     FollowablePath::FollowablePath(DataSourceRef source, int mode)
     :
     mode(mode),
@@ -114,18 +131,25 @@ namespace chronotext
     
     void FollowablePath::add(const ci::Vec2f &point)
     {
-        points.push_back(point);
-        
         if (size > 0)
         {
             Vec2f delta = point - points[size - 1];
-            len.push_back(len[size - 1] + delta.length());
+            
+            if (delta != Vec2f::zero())
+            {
+                len.push_back(len[size - 1] + delta.length());
+            }
+            else
+            {
+                return;
+            }
         }
         else
         {
             len.push_back(0);
         }
-        
+
+        points.push_back(point);
         size++;
     }
     
