@@ -38,6 +38,27 @@ namespace chronotext
         void sample(FollowablePath *path, ci::Vec2f *point, float t0, const ci::Vec2f &p0, float t1, const ci::Vec2f &p1);
     };
     
+    static ci::Vec2f GammaQuadraticBezier(float t, ci::Vec2f *in)
+    {
+        float nt = 1 - t;
+        float w0 = nt * nt;
+        float w1 = 2 * nt * t;
+        float w2 = t * t;
+        
+        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y);
+    }
+    
+    static ci::Vec2f GammaCubicBezier(float t, ci::Vec2f *in)
+    {
+        float nt = 1 - t;
+        float w0 = nt * nt * nt;
+        float w1 = 3 * nt * nt * t;
+        float w2 = 3 * nt * t * t;
+        float w3 = t * t * t;
+        
+        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x + w3 * in[3].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y + w3 * in[3].y);
+    }
+    
     static ci::Vec2f GammaCatmullRom(float t, ci::Vec2f *in)
     {
         float w0 = ((2 - t) * t - 1) * t;

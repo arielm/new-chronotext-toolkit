@@ -50,6 +50,8 @@ namespace chronotext
         {
             path.add(path.points.front());
         }
+        
+        clear();
     }
     
     void SplinePath::segment(FollowablePath *path, Vec2f *point)
