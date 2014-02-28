@@ -27,21 +27,12 @@ namespace chronotext
         }
     }
     
-    FollowablePath::FollowablePath(const Path2d &path, float approximationScale, int mode)
+    FollowablePath::FollowablePath(const vector<Vec2f> &points, int mode)
     :
     mode(mode),
     size(0)
     {
-        const auto &subdivided = path.subdivide(approximationScale);
-        
-        int capacity = subdivided.size();
-        points.reserve(capacity);
-        len.reserve(capacity);
-        
-        for (auto &point : subdivided)
-        {
-            add(point);
-        }
+        add(points);
     }
     
     FollowablePath::FollowablePath(DataSourceRef source, int mode)
@@ -49,83 +40,48 @@ namespace chronotext
     mode(mode),
     size(0)
     {
-        read(source->createStream());
+        read(source);
     }
     
-    FollowablePath::FollowablePath(const Buffer &buffer, int mode)
-    :
-    mode(mode),
-    size(0)
+    void FollowablePath::read(DataSourceRef source)
     {
-        IStreamRef in = IStreamMem::create(buffer.getData(), buffer.getDataSize());
-        read(in);
-    }
-    
-    void FollowablePath::read(IStreamRef in)
-    {
-        assert(size == 0);
+        auto stream = source->createStream();
         
-        int capacity;
-        in->readLittle(&capacity);
+        int size2;
+        stream->readLittle(&size2);
         
-        size = 0;
-        points.reserve(capacity);
-        len.reserve(capacity);
+        addCapacity(size2);
         
         Vec2f point;
         
-        for (int i = 0; i < capacity; i++)
+        for (int i = 0; i < size2; i++)
         {
-            in->readLittle(&point.x);
-            in->readLittle(&point.y);
+            stream->readLittle(&point.x);
+            stream->readLittle(&point.y);
             add(point);
-        }
-    }
-    
-    void FollowablePath::write(OStreamRef out)
-    {
-        out->writeLittle(size);
-        
-        for (auto &point : points)
-        {
-            out->writeLittle(point.x);
-            out->writeLittle(point.y);
         }
     }
     
     void FollowablePath::write(DataTargetRef target)
     {
-        write(target->getStream());
-    }
-    
-    Buffer FollowablePath::write()
-    {
-        int bufferSize = sizeof(int) + size * sizeof(Vec2f);
-        OStreamMemRef out = OStreamMem::create(bufferSize);
+        auto stream = target->getStream();
         
-        write(out);
+        stream->writeLittle(size);
         
-        Buffer buffer(bufferSize);
-        buffer.copyFrom(out->getBuffer(), bufferSize);
-        return buffer;
-    }
-    
-    void FollowablePath::clear()
-    {
-        size = 0;
-        points.clear();
-        len.clear();
-    }
-    
-    float FollowablePath::getLength() const
-    {
-        if (size > 0)
+        for (auto &point : points)
         {
-            return len[size - 1];
+            stream->writeLittle(point.x);
+            stream->writeLittle(point.y);
         }
-        else
+    }
+    
+    void FollowablePath::add(const vector<Vec2f> &newPoints)
+    {
+        addCapacity(newPoints.size());
+        
+        for (auto &point : newPoints)
         {
-            return 0;
+            add(point);
         }
     }
     
@@ -151,6 +107,25 @@ namespace chronotext
 
         points.push_back(point);
         size++;
+    }
+    
+    void FollowablePath::clear()
+    {
+        size = 0;
+        points.clear();
+        len.clear();
+    }
+    
+    float FollowablePath::getLength() const
+    {
+        if (size > 0)
+        {
+            return len[size - 1];
+        }
+        else
+        {
+            return 0;
+        }
     }
     
     FollowablePath::Value FollowablePath::pos2Value(float pos) const
@@ -441,5 +416,12 @@ namespace chronotext
         }
         
         return Rectf(minX, minY, maxX, maxY);
+    }
+    
+    void FollowablePath::addCapacity(int amount)
+    {
+        int newCapacity = size + amount;
+        points.reserve(newCapacity);
+        len.reserve(newCapacity);
     }
 }

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "cinder/Path2d.h"
+#include "cinder/Rect.h"
 #include "cinder/DataSource.h"
 #include "cinder/DataTarget.h"
 
@@ -18,9 +18,6 @@ namespace chronotext
     
     class FollowablePath
     {
-        void read(ci::IStreamRef in);
-        void write(ci::OStreamRef out);
-        
     public:
         struct Value
         {
@@ -51,19 +48,19 @@ namespace chronotext
         std::vector<float> len;
         
         FollowablePath(int mode = MODE_TANGENT, int capacity = 0);
-        FollowablePath(const ci::Path2d &path, float approximationScale = 1.0f, int mode = MODE_TANGENT);
+        FollowablePath(const std::vector<ci::Vec2f> &points, int mode = MODE_TANGENT);
         FollowablePath(ci::DataSourceRef source, int mode = MODE_TANGENT);
-        FollowablePath(const ci::Buffer &buffer, int mode = MODE_TANGENT);
-        
+
+        void read(ci::DataSourceRef source);
         void write(ci::DataTargetRef target);
-        ci::Buffer write();
-        
-        void clear();
-        float getLength() const;
-        
+
+        void add(const std::vector<ci::Vec2f> &points);
         void add(const ci::Vec2f &point);
         inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
-        
+
+        void clear();
+        float getLength() const;
+
         Value pos2Value(float pos) const;
         ci::Vec2f pos2Point(float pos) const;
         float pos2Angle(float pos) const;
@@ -74,6 +71,9 @@ namespace chronotext
         ClosePoint closestPointFromSegment(const ci::Vec2f &point, int segmentIndex) const;
         
         ci::Rectf getBounds() const;
+        
+    protected:
+        void addCapacity(int amount);
     };
 }
 
