@@ -14,8 +14,6 @@
 
 namespace chronotext
 {
-    typedef std::shared_ptr<class FollowablePath> FollowablePathRef;
-    
     class FollowablePath
     {
     public:
@@ -33,13 +31,14 @@ namespace chronotext
             float distance; // DISTANCE TO CLOSEST-POINT ON PATH
         };
         
-        enum
+        typedef enum
         {
             MODE_BOUNDED,
             MODE_LOOP,
             MODE_TANGENT,
             MODE_MODULO,
-        };
+        }
+        Mode;
         
         int mode;
         int size;
@@ -47,9 +46,9 @@ namespace chronotext
         std::vector<ci::Vec2f> points;
         std::vector<float> len;
         
-        FollowablePath(int mode = MODE_TANGENT, int capacity = 0);
-        FollowablePath(const std::vector<ci::Vec2f> &points, int mode = MODE_TANGENT);
-        FollowablePath(ci::DataSourceRef source, int mode = MODE_TANGENT);
+        FollowablePath(Mode mode = MODE_TANGENT, int capacity = 0);
+        FollowablePath(const std::vector<ci::Vec2f> &points, Mode mode = MODE_TANGENT);
+        FollowablePath(ci::DataSourceRef source, Mode mode = MODE_TANGENT);
 
         void read(ci::DataSourceRef source);
         void write(ci::DataTargetRef target);
@@ -73,7 +72,7 @@ namespace chronotext
         ci::Rectf getBounds() const;
         
     protected:
-        void addCapacity(int amount);
+        void extendCapacity(int amount);
     };
 }
 

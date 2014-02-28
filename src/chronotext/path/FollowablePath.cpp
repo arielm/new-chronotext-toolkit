@@ -15,7 +15,7 @@ using namespace std;
 
 namespace chronotext
 {
-    FollowablePath::FollowablePath(int mode, int capacity)
+    FollowablePath::FollowablePath(Mode mode, int capacity)
     :
     mode(mode),
     size(0)
@@ -27,7 +27,7 @@ namespace chronotext
         }
     }
     
-    FollowablePath::FollowablePath(const vector<Vec2f> &points, int mode)
+    FollowablePath::FollowablePath(const vector<Vec2f> &points, Mode mode)
     :
     mode(mode),
     size(0)
@@ -35,7 +35,7 @@ namespace chronotext
         add(points);
     }
     
-    FollowablePath::FollowablePath(DataSourceRef source, int mode)
+    FollowablePath::FollowablePath(DataSourceRef source, Mode mode)
     :
     mode(mode),
     size(0)
@@ -47,14 +47,14 @@ namespace chronotext
     {
         auto stream = source->createStream();
         
-        int size2;
-        stream->readLittle(&size2);
+        int newPointsSize;
+        stream->readLittle(&newPointsSize);
         
-        addCapacity(size2);
+        extendCapacity(newPointsSize);
         
         Vec2f point;
         
-        for (int i = 0; i < size2; i++)
+        for (int i = 0; i < newPointsSize; i++)
         {
             stream->readLittle(&point.x);
             stream->readLittle(&point.y);
@@ -77,7 +77,7 @@ namespace chronotext
     
     void FollowablePath::add(const vector<Vec2f> &newPoints)
     {
-        addCapacity(newPoints.size());
+        extendCapacity(newPoints.size());
         
         for (auto &point : newPoints)
         {
@@ -418,7 +418,7 @@ namespace chronotext
         return Rectf(minX, minY, maxX, maxY);
     }
     
-    void FollowablePath::addCapacity(int amount)
+    void FollowablePath::extendCapacity(int amount)
     {
         int newCapacity = size + amount;
         points.reserve(newCapacity);
