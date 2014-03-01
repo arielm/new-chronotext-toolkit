@@ -49,6 +49,8 @@ namespace chronotext
         
         extendCapacity(newPointsSize);
         
+        // ---
+        
         Vec2f point;
         
         for (int i = 0; i < newPointsSize; i++)
@@ -130,6 +132,36 @@ namespace chronotext
         else
         {
             return 0;
+        }
+    }
+    
+    Rectf FollowablePath::getBounds() const
+    {
+        float minX = numeric_limits<float>::max();
+        float minY = numeric_limits<float>::max();
+        float maxX = numeric_limits<float>::min();
+        float maxY = numeric_limits<float>::min();
+        
+        for (auto &point : points)
+        {
+            if (point.x < minX) minX = point.x;
+            if (point.y < minY) minY = point.y;
+            
+            if (point.x > maxX) maxX = point.x;
+            if (point.y > maxY) maxY = point.y;
+        }
+        
+        return Rectf(minX, minY, maxX, maxY);
+    }
+    
+    void FollowablePath::close()
+    {
+        if (size() > 2)
+        {
+            if (points.front() != points.back())
+            {
+                add(points.front());
+            }
         }
     }
     
@@ -403,25 +435,6 @@ namespace chronotext
         }
         
         return res;
-    }
-    
-    Rectf FollowablePath::getBounds() const
-    {
-        float minX = numeric_limits<float>::max();
-        float minY = numeric_limits<float>::max();
-        float maxX = numeric_limits<float>::min();
-        float maxY = numeric_limits<float>::min();
-        
-        for (auto &point : points)
-        {
-            if (point.x < minX) minX = point.x;
-            if (point.y < minY) minY = point.y;
-            
-            if (point.x > maxX) maxX = point.x;
-            if (point.y > maxY) maxY = point.y;
-        }
-        
-        return Rectf(minX, minY, maxX, maxY);
     }
     
     void FollowablePath::extendCapacity(int amount)

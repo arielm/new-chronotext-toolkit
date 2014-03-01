@@ -59,7 +59,11 @@ namespace chronotext
         void clear();
         int size() const;
         bool empty() const;
+        
         float getLength() const;
+        ci::Rectf getBounds() const;
+        
+        void close();
 
         Value pos2Value(float pos) const;
         ci::Vec2f pos2Point(float pos) const;
@@ -69,8 +73,6 @@ namespace chronotext
         
         bool findClosestPoint(const ci::Vec2f &point, float threshold, ClosePoint &res) const;
         ClosePoint closestPointFromSegment(const ci::Vec2f &point, int segmentIndex) const;
-        
-        ci::Rectf getBounds() const;
         
     protected:
         void extendCapacity(int amount);
