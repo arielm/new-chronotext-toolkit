@@ -119,7 +119,7 @@ void Sketch::createDune(const Vec2f &size)
     }
 
     path->clear();
-    spline.flush(GammaBSpline, *path, 3);
+    spline.flush(SplinePath::TYPE_BSPLINE, *path, 3);
     
     // ---
     

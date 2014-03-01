@@ -29,15 +29,31 @@ namespace chronotext
         points.clear();
     }
     
-    void SplinePath::flush(function<Vec2f (float, Vec2f*)> gamma, FollowablePath &path, float tol)
+    void SplinePath::flush(Type type, FollowablePath &path, float tol)
     {
+        function<Vec2f (float, Vec2f*)> gamma;
+        
+        switch (type)
+        {
+            case TYPE_BSPLINE:
+                gamma = GammaBSpline;
+                break;
+                
+            case TYPE_CATMULL_ROM:
+                gamma = GammaCatmullRom;
+                break;
+                
+            default:
+                return;
+        }
+        
         int size = points.size();
         
         if (size > 2)
         {
             ASPC aspc(gamma, path, tol);
             
-            aspc.segment(points[0], points[0], points[0], points[1]);
+            if (type == TYPE_BSPLINE) aspc.segment(points[0], points[0], points[0], points[1]);
             aspc.segment(points[0], points[0], points[1], points[2]);
             
             for (int i = 0; i < size - 3; i++)
@@ -47,7 +63,7 @@ namespace chronotext
             
             aspc.segment(points[size - 3], points[size - 2], points[size - 1], points[size - 1]);
             aspc.segment(points[size - 2], points[size - 1], points[size - 1], points[size - 1]);
-            aspc.segment(points[size - 1], points[size - 1], points[size - 1], points[size - 1]);
+            if (type == TYPE_BSPLINE) aspc.segment(points[size - 1], points[size - 1], points[size - 1], points[size - 1]);
         }
     }
 }
