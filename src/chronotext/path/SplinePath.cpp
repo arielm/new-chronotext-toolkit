@@ -14,14 +14,6 @@ using namespace ci;
 
 namespace chronotext
 {
-    SplinePath::SplinePath(int capacity)
-    {
-        if (capacity > 0)
-        {
-            points.reserve(capacity);
-        }
-    }
-
     void SplinePath::add(const Vec2f &point)
     {
         points.emplace_back(point);
@@ -37,29 +29,19 @@ namespace chronotext
         points.clear();
     }
     
-    void SplinePath::flush(function<ci::Vec2f (float, ci::Vec2f*)> gamma, FollowablePath &path, float tol)
+    void SplinePath::flush(function<Vec2f (float, Vec2f*)> gamma, FollowablePath &path, float tol)
     {
         ASPC aspc(gamma, path, tol);
         
-//        switch (type)
-//        {
-//            case TYPE_BSPLINE:
-//                aspc.gamma = GammaBSpline;
-//                break;
-//                
-//            case TYPE_CATMULL_ROM:
-//                aspc.gamma = GammaCatmullRom;
-//                break;
-//                
-//            default:
-//                return;
-//        }
-        
-        for (int i = 0, end = points.size() - 3; i < end; i++)
+        for (int i = 0; i < points.size() - 3; i++)
         {
-            aspc.segment(&points[i]);
+            int i0 = i;
+            int i1 = i + 1;
+            int i2 = i + 2;
+            int i3 = i + 3;
+            
+            aspc.segment(points[i0], points[i1], points[i2], points[i3]);
         }
 
-        clear();
     }
 }

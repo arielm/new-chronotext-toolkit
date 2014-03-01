@@ -15,8 +15,6 @@ namespace chronotext
     class SplinePath
     {
     public:
-        SplinePath(int capacity = 0);
-        
         void add(const ci::Vec2f &point);
         void add(float x, float y);
 
