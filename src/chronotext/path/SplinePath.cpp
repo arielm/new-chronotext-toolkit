@@ -14,19 +14,86 @@ using namespace ci;
 
 namespace chronotext
 {
+    SplinePath::SplinePath()
+    {}
+    
+    SplinePath::SplinePath(const vector<Vec2f> &points)
+    {
+        add(points);
+    }
+    
+    SplinePath::SplinePath(DataSourceRef source)
+    {
+        read(source);
+    }
+    
+    void SplinePath::read(DataSourceRef source)
+    {
+        auto stream = source->createStream();
+        
+        int newPointsSize;
+        stream->readLittle(&newPointsSize);
+        
+        points.reserve(size() + newPointsSize);
+        
+        // ---
+        
+        Vec2f point;
+        
+        for (int i = 0; i < newPointsSize; i++)
+        {
+            stream->readLittle(&point.x);
+            stream->readLittle(&point.y);
+            add(point);
+        }
+    }
+    
+    void SplinePath::write(DataTargetRef target)
+    {
+        auto stream = target->getStream();
+        
+        stream->writeLittle(size());
+        
+        for (auto &point : points)
+        {
+            stream->writeLittle(point.x);
+            stream->writeLittle(point.y);
+        }
+    }
+    
+    void SplinePath::add(const vector<Vec2f> &newPoints)
+    {
+        points.reserve(size() + newPoints.size());
+        
+        for (auto &point : newPoints)
+        {
+            add(point);
+        }
+    }
+    
     void SplinePath::add(const Vec2f &point)
     {
+        if (!points.empty() && point == points.back())
+        {
+            return;
+        }
+        
         points.emplace_back(point);
-    }
-
-    void SplinePath::add(float x, float y)
-    {
-        points.emplace_back(x, y);
     }
     
     void SplinePath::clear()
     {
         points.clear();
+    }
+    
+    int SplinePath::size() const
+    {
+        return points.size();
+    }
+    
+    bool SplinePath::empty() const
+    {
+        return points.empty();
     }
     
     void SplinePath::flush(Type type, FollowablePath &path, float tol)

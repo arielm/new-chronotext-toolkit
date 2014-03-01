@@ -10,6 +10,9 @@
 
 #include "chronotext/path/FollowablePath.h"
 
+#include "cinder/DataSource.h"
+#include "cinder/DataTarget.h"
+
 namespace chronotext
 {
     class SplinePath
@@ -23,11 +26,22 @@ namespace chronotext
         Type;
         
         std::vector<ci::Vec2f> points;
+        
+        SplinePath();
+        SplinePath(const std::vector<ci::Vec2f> &points);
+        SplinePath(ci::DataSourceRef source);
 
+        void add(const std::vector<ci::Vec2f> &points);
         void add(const ci::Vec2f &point);
-        void add(float x, float y);
+        inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
+        
+        void read(ci::DataSourceRef source);
+        void write(ci::DataTargetRef target);
 
         void clear();
+        int size() const;
+        bool empty() const;
+        
         void flush(Type type, FollowablePath &path, float tol = 1);
     };
     
