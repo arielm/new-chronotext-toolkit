@@ -31,17 +31,23 @@ namespace chronotext
     
     void SplinePath::flush(function<Vec2f (float, Vec2f*)> gamma, FollowablePath &path, float tol)
     {
-        ASPC aspc(gamma, path, tol);
+        int size = points.size();
         
-        for (int i = 0; i < points.size() - 3; i++)
+        if (size > 2)
         {
-            int i0 = i;
-            int i1 = i + 1;
-            int i2 = i + 2;
-            int i3 = i + 3;
+            ASPC aspc(gamma, path, tol);
             
-            aspc.segment(points[i0], points[i1], points[i2], points[i3]);
+            aspc.segment(points[0], points[0], points[0], points[1]);
+            aspc.segment(points[0], points[0], points[1], points[2]);
+            
+            for (int i = 0; i < size - 3; i++)
+            {
+                aspc.segment(points[i], points[i + 1], points[i + 2], points[i + 3]);
+            }
+            
+            aspc.segment(points[size - 3], points[size - 2], points[size - 1], points[size - 1]);
+            aspc.segment(points[size - 2], points[size - 1], points[size - 1], points[size - 1]);
+            aspc.segment(points[size - 1], points[size - 1], points[size - 1], points[size - 1]);
         }
-
     }
 }

@@ -15,16 +15,13 @@ namespace chronotext
     class SplinePath
     {
     public:
+        std::vector<ci::Vec2f> points;
+
         void add(const ci::Vec2f &point);
         void add(float x, float y);
 
         void clear();
         void flush(std::function<ci::Vec2f (float, ci::Vec2f*)> gamma, FollowablePath &path, float tol = 1);
-        
-    protected:
-        float tol;
-
-        std::vector<ci::Vec2f> points;
     };
     
     static ci::Vec2f GammaCatmullRom(float t, ci::Vec2f *in)
