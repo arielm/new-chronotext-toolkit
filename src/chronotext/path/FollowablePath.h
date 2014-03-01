@@ -41,8 +41,7 @@ namespace chronotext
         Mode;
         
         int mode;
-        int size;
-        
+
         std::vector<ci::Vec2f> points;
         std::vector<float> len;
         
@@ -58,6 +57,8 @@ namespace chronotext
         inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
 
         void clear();
+        int size() const;
+        bool empty() const;
         float getLength() const;
 
         Value pos2Value(float pos) const;

@@ -128,7 +128,7 @@ void Sketch::createDune(const Vec2f &size)
     // ---
     
     vertices.clear();
-    vertices.reserve(path->size * 2);
+    vertices.reserve(path->size() * 2);
     
     for (auto &point : path->points)
     {

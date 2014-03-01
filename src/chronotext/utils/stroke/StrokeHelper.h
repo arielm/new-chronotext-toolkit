@@ -22,7 +22,7 @@ namespace chronotext
     public:
         static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float ratio = 1)
         {
-            auto size = path.size;
+            auto size = path.size();
             
             strip.clear();
             strip.vertices.reserve(size * 4);

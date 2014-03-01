@@ -17,8 +17,7 @@ namespace chronotext
 {
     FollowablePath::FollowablePath(Mode mode, int capacity)
     :
-    mode(mode),
-    size(0)
+    mode(mode)
     {
         if (capacity > 0)
         {
@@ -29,16 +28,14 @@ namespace chronotext
     
     FollowablePath::FollowablePath(const vector<Vec2f> &points, Mode mode)
     :
-    mode(mode),
-    size(0)
+    mode(mode)
     {
         add(points);
     }
     
     FollowablePath::FollowablePath(DataSourceRef source, Mode mode)
     :
-    mode(mode),
-    size(0)
+    mode(mode)
     {
         read(source);
     }
@@ -66,7 +63,7 @@ namespace chronotext
     {
         auto stream = target->getStream();
         
-        stream->writeLittle(size);
+        stream->writeLittle(size());
         
         for (auto &point : points)
         {
@@ -87,13 +84,13 @@ namespace chronotext
     
     void FollowablePath::add(const ci::Vec2f &point)
     {
-        if (size > 0)
+        if (!points.empty())
         {
-            Vec2f delta = point - points[size - 1];
+            Vec2f delta = point - points.back();
             
             if (delta != Vec2f::zero())
             {
-                len.push_back(len[size - 1] + delta.length());
+                len.push_back(len.back() + delta.length());
             }
             else
             {
@@ -106,21 +103,29 @@ namespace chronotext
         }
 
         points.push_back(point);
-        size++;
     }
     
     void FollowablePath::clear()
     {
-        size = 0;
         points.clear();
         len.clear();
     }
     
+    int FollowablePath::size() const
+    {
+        return points.size();
+    }
+    
+    bool FollowablePath::empty() const
+    {
+        return points.empty();
+    }
+    
     float FollowablePath::getLength() const
     {
-        if (size > 0)
+        if (!points.empty())
         {
-            return len[size - 1];
+            return len.back();
         }
         else
         {
@@ -130,7 +135,7 @@ namespace chronotext
     
     FollowablePath::Value FollowablePath::pos2Value(float pos) const
     {
-        float length = len[size - 1];
+        float length = len.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -154,7 +159,7 @@ namespace chronotext
             }
         }
         
-        int index = search(len, pos, 1, size);
+        int index = search(len, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
@@ -170,7 +175,7 @@ namespace chronotext
     
     Vec2f FollowablePath::pos2Point(float pos) const
     {
-        float length = len[size - 1];
+        float length = len.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -182,19 +187,19 @@ namespace chronotext
             {
                 if (mode == MODE_BOUNDED)
                 {
-                    return points[0];
+                    return points.front();
                 }
             }
             else if (pos >= length)
             {
                 if (mode == MODE_BOUNDED)
                 {
-                    return points[size - 1];
+                    return points.back();
                 }
             }
         }
         
-        int index = search(len, pos, 1, size);
+        int index = search(len, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
@@ -204,7 +209,7 @@ namespace chronotext
     
     float FollowablePath::pos2Angle(float pos) const
     {
-        float length = len[size - 1];
+        float length = len.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -228,7 +233,7 @@ namespace chronotext
             }
         }
         
-        int index = search(len, pos, 1, size);
+        int index = search(len, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
@@ -273,14 +278,15 @@ namespace chronotext
         float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
         
         int index = -1;
+        int _size = size();
         Vec2f _point;
         float _len;
         
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < _size; i++)
         {
             int i0, i1;
             
-            if (i == size - 1)
+            if (i == _size - 1)
             {
                 i0 = i - 1;
                 i1 = i;
@@ -420,7 +426,7 @@ namespace chronotext
     
     void FollowablePath::extendCapacity(int amount)
     {
-        int newCapacity = size + amount;
+        int newCapacity = size() + amount;
         points.reserve(newCapacity);
         len.reserve(newCapacity);
     }
