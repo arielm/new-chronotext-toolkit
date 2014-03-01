@@ -95,7 +95,7 @@ namespace chronotext
             size_t getTextureMemoryUsage() const;
             
             friend class Font;
-            friend class FontTexture;
+            friend struct FontTexture;
             
         protected:
             std::map<std::pair<std::string, Font::Properties>, std::shared_ptr<Font>> fonts;

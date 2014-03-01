@@ -86,7 +86,7 @@ namespace chronotext
         
         bool Font::isValid(wchar_t c) const
         {
-            return glyphs.count(c);
+            return (glyphs.count(c) > 0);
         }
         
         int Font::getGlyphIndex(wchar_t c) const
