@@ -107,32 +107,19 @@ void Sketch::removeTouch(int index, float x, float y)
 
 void Sketch::createDune(const Vec2f &size)
 {
-    static float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
-    int slotCount = sizeof(coefs) / sizeof(float);
+    const float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
+    const int slotCount = sizeof(coefs) / sizeof(float);
+    
     float slotSize = size.x / (slotCount - 1);
+    SplinePath spline;
 
-    SplinePath spline(GammaBSpline, 3);
-
-    for (int n = 0, i = 0; i < (slotCount + 5); i++)
+    for (int i = 0; i < slotCount; i++)
     {
-        if (i <= 2)
-        {
-            n = 0; // B-SPLINE: 3 TIMES THE SAME ENTRY AT THE BEGINNING
-        }
-        else if (i >= slotCount + 1)
-        {
-            n = slotCount - 1; // B-SPLINE: 4 TIMES THE SAME ENTRY AT THE END
-        }
-        else
-        {
-            n = i - 2;
-        }
-        
-        spline.add(slotSize * n, coefs[n] * size.y);
+        spline.add(slotSize * i, coefs[i] * size.y);
     }
 
     path->clear();
-    spline.flush(*path);
+    spline.flush(GammaBSpline, *path, 3);
     
     // ---
     
