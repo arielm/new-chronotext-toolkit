@@ -9,7 +9,7 @@
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
-#include "chronotext/utils/stroke/TexturedTriangleStrip.h"
+#include "chronotext/path/TexturedTriangleStrip.h"
 
 /*
  * ASSOCIATED TEXTURES SHOULD HAVE THEIR "GL_TEXTURE_WRAP_S" SET TO "GL_REPEAT",

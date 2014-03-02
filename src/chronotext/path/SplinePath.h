@@ -13,6 +13,13 @@
  * http://www.cse.unsw.edu.au/~lambert/splines
  */
 
+/*
+ * TODO:
+ *
+ * IMPLEMENTING THE HERMITE CURVE (WITH BIAS AND TENSION) WOULD BE A MUST:
+ * http://paulbourke.net/miscellaneous/interpolation
+ */
+
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"

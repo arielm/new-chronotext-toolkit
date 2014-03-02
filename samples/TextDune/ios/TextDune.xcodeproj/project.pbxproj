@@ -82,8 +82,6 @@
 		A822636518BECBFF00D57C8C /* FollowablePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowablePath.h; sourceTree = "<group>"; };
 		A822636618BECBFF00D57C8C /* SplinePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SplinePath.cpp; sourceTree = "<group>"; };
 		A822636718BECBFF00D57C8C /* SplinePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplinePath.h; sourceTree = "<group>"; };
-		A822636C18BECC3100D57C8C /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
-		A822636D18BECC3100D57C8C /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A822637B18BF5D4900D57C8C /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
 		A822637C18BF5D4900D57C8C /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A822637D18BF5D4900D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
@@ -116,6 +114,8 @@
 		A8720806180833E10055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8DB3EC416E0B96C00504D27 /* Sketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sketch.cpp; path = ../src/Sketch.cpp; sourceTree = "<group>"; };
 		A8DB3EC516E0B96C00504D27 /* Sketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sketch.h; path = ../src/Sketch.h; sourceTree = "<group>"; };
+		A8F9FBD118C3778000C48245 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
+		A8F9FBD218C3778000C48245 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -259,17 +259,10 @@
 				A822636618BECBFF00D57C8C /* SplinePath.cpp */,
 				A822636718BECBFF00D57C8C /* SplinePath.h */,
 				A822639A18C1862800D57C8C /* ASPC.h */,
+				A8F9FBD118C3778000C48245 /* StrokeHelper.h */,
+				A8F9FBD218C3778000C48245 /* TexturedTriangleStrip.h */,
 			);
 			path = path;
-			sourceTree = "<group>";
-		};
-		A822636B18BECC3100D57C8C /* stroke */ = {
-			isa = PBXGroup;
-			children = (
-				A822636C18BECC3100D57C8C /* StrokeHelper.h */,
-				A822636D18BECC3100D57C8C /* TexturedTriangleStrip.h */,
-			);
-			path = stroke;
 			sourceTree = "<group>";
 		};
 		A822637A18BF5D4900D57C8C /* time */ = {
@@ -428,7 +421,6 @@
 				A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */,
 				A8FA3C0616E3AB8000367F97 /* Utils.h */,
 				A8FA3C0516E3AB8000367F97 /* Utils.cpp */,
-				A822636B18BECC3100D57C8C /* stroke */,
 			);
 			path = utils;
 			sourceTree = "<group>";

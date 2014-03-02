@@ -79,8 +79,6 @@
 		A822635618BE705100D57C8C /* FollowablePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowablePath.h; sourceTree = "<group>"; };
 		A822635718BE705100D57C8C /* SplinePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SplinePath.cpp; sourceTree = "<group>"; };
 		A822635818BE705100D57C8C /* SplinePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplinePath.h; sourceTree = "<group>"; };
-		A822635D18BEC48100D57C8C /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
-		A822635E18BEC48100D57C8C /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A822636F18BF54BC00D57C8C /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
 		A822637018BF54BC00D57C8C /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A822637118BF54BC00D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
@@ -128,6 +126,8 @@
 		A853DFD418116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFD518116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
+		A8F9FBC718C3754600C48245 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
+		A8F9FBC818C3754600C48245 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,17 +257,10 @@
 				A822635718BE705100D57C8C /* SplinePath.cpp */,
 				A822635818BE705100D57C8C /* SplinePath.h */,
 				A822639518C17ACC00D57C8C /* ASPC.h */,
+				A8F9FBC718C3754600C48245 /* StrokeHelper.h */,
+				A8F9FBC818C3754600C48245 /* TexturedTriangleStrip.h */,
 			);
 			path = path;
-			sourceTree = "<group>";
-		};
-		A822635C18BEC48100D57C8C /* stroke */ = {
-			isa = PBXGroup;
-			children = (
-				A822635D18BEC48100D57C8C /* StrokeHelper.h */,
-				A822635E18BEC48100D57C8C /* TexturedTriangleStrip.h */,
-			);
-			path = stroke;
 			sourceTree = "<group>";
 		};
 		A822636E18BF54BC00D57C8C /* time */ = {
@@ -348,7 +341,6 @@
 				A82C90FD16E00B3B00FF519C /* MathUtils.cpp */,
 				A82C910316E00B3B00FF519C /* Utils.h */,
 				A82C910216E00B3B00FF519C /* Utils.cpp */,
-				A822635C18BEC48100D57C8C /* stroke */,
 			);
 			path = utils;
 			sourceTree = "<group>";

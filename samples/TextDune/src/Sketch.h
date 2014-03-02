@@ -11,7 +11,7 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
-#include "chronotext/utils/stroke/StrokeHelper.h"
+#include "chronotext/path/StrokeHelper.h"
 #include "chronotext/time/Clock.h"
 
 class Sketch : public chr::CinderSketch
