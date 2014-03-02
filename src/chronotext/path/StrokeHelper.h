@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -11,16 +11,12 @@
 #include "chronotext/path/FollowablePath.h"
 #include "chronotext/path/TexturedTriangleStrip.h"
 
-/*
- * ASSOCIATED TEXTURES SHOULD HAVE THEIR "GL_TEXTURE_WRAP_S" SET TO "GL_REPEAT",
- */
-
 namespace chronotext
 {
     class StrokeHelper
     {
     public:
-        static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float uScale = 1)
+        static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
             auto size = path.size();
             const auto &points = path.getPoints();
@@ -52,7 +48,7 @@ namespace chronotext
                 
                 float l = lengths[i + o1] - lengths[i + o2];
                 ci::Vec2f d = (points[i + o1] - points[i + o2]) / l;
-                float u = uFreq * lengths[i];
+                float u = uFreq * (lengths[i] - uOffset);
                 
                 strip.vertices.emplace_back(points[i] + w1 * d.yx());
                 strip.vertices.emplace_back(u, 0);
@@ -62,7 +58,7 @@ namespace chronotext
             }
         }
         
-        static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float uScale = 1)
+        static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
             auto size = points.size();
             
@@ -76,7 +72,7 @@ namespace chronotext
                 ci::Vec2f w2(-halfWidth, +halfWidth);
 
                 float uFreq = uScale / width;
-                float u = 0;
+                float u = -uOffset * uFreq;
 
                 auto p0 = points[0];
                 auto p1 = points[1];
