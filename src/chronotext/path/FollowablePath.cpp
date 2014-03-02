@@ -21,8 +21,7 @@ namespace chronotext
     {
         if (capacity > 0)
         {
-            points.reserve(capacity);
-            len.reserve(capacity);
+            extendCapacity(capacity);
         }
     }
     
