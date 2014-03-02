@@ -14,15 +14,26 @@ using namespace ci;
 
 namespace chronotext
 {
-    SplinePath::SplinePath()
-    {}
+    SplinePath::SplinePath(int capacity)
+    :
+    closed(false)
+    {
+        if (capacity > 0)
+        {
+            points.reserve(capacity);
+        }
+    }
     
     SplinePath::SplinePath(const vector<Vec2f> &points)
+    :
+    closed(false)
     {
         add(points);
     }
     
     SplinePath::SplinePath(DataSourceRef source)
+    :
+    closed(false)
     {
         read(source);
     }
@@ -96,6 +107,19 @@ namespace chronotext
         return points.empty();
     }
     
+    void SplinePath::close()
+    {
+        if (size() > 2)
+        {
+            closed = true;
+            
+            if (points.front() == points.back())
+            {
+                points.pop_back();
+            }
+        }
+    }
+    
     void SplinePath::flush(Type type, FollowablePath &path, float tol)
     {
         function<Vec2f (float, Vec2f*)> gamma;
@@ -120,17 +144,42 @@ namespace chronotext
         {
             ASPC aspc(gamma, path, tol);
             
-            if (type == TYPE_BSPLINE) aspc.segment(points[0], points[0], points[0], points[1]);
-            aspc.segment(points[0], points[0], points[1], points[2]);
-            
+            if (closed)
+            {
+                aspc.segment(points[size - 1], points[0], points[1], points[2]);
+            }
+            else
+            {
+                if (type == TYPE_BSPLINE)
+                {
+                    aspc.segment(points[0], points[0], points[0], points[1]);
+                }
+                
+                aspc.segment(points[0], points[0], points[1], points[2]);
+            }
+
             for (int i = 0; i < size - 3; i++)
             {
                 aspc.segment(points[i], points[i + 1], points[i + 2], points[i + 3]);
             }
             
-            aspc.segment(points[size - 3], points[size - 2], points[size - 1], points[size - 1]);
-            aspc.segment(points[size - 2], points[size - 1], points[size - 1], points[size - 1]);
-            if (type == TYPE_BSPLINE) aspc.segment(points[size - 1], points[size - 1], points[size - 1], points[size - 1]);
+            if (closed)
+            {
+                aspc.segment(points[size - 3], points[size - 2], points[size - 1], points[0]);
+                aspc.segment(points[size - 2], points[size - 1], points[0], points[1]);
+                
+                path.add(path.points.front());
+            }
+            else
+            {
+                aspc.segment(points[size - 3], points[size - 2], points[size - 1], points[size - 1]);
+                aspc.segment(points[size - 2], points[size - 1], points[size - 1], points[size - 1]);
+                
+                if (type == TYPE_BSPLINE)
+                {
+                    aspc.segment(points[size - 1], points[size - 1], points[size - 1], points[size - 1]);
+                }
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ namespace chronotext
         
         std::vector<ci::Vec2f> points;
         
-        SplinePath();
+        SplinePath(int capacity = 0);
         SplinePath(const std::vector<ci::Vec2f> &points);
         SplinePath(ci::DataSourceRef source);
 
@@ -42,7 +42,11 @@ namespace chronotext
         int size() const;
         bool empty() const;
         
+        void close();
         void flush(Type type, FollowablePath &path, float tol = 1);
+        
+    protected:
+        bool closed;
     };
     
     static ci::Vec2f GammaBSpline(float t, ci::Vec2f *in)
