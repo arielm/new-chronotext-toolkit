@@ -91,7 +91,7 @@ namespace chronotext
             
             if (delta != Vec2f::zero())
             {
-                len.push_back(len.back() + delta.length());
+                lengths.push_back(lengths.back() + delta.length());
             }
             else
             {
@@ -100,16 +100,26 @@ namespace chronotext
         }
         else
         {
-            len.push_back(0);
+            lengths.push_back(0);
         }
 
         points.push_back(point);
     }
     
+    const vector<Vec2f>& FollowablePath::getPoints() const
+    {
+        return points;
+    }
+    
+    const vector<float>& FollowablePath::getLengths() const
+    {
+        return lengths;
+    }
+    
     void FollowablePath::clear()
     {
         points.clear();
-        len.clear();
+        lengths.clear();
     }
     
     int FollowablePath::size() const
@@ -126,7 +136,7 @@ namespace chronotext
     {
         if (!points.empty())
         {
-            return len.back();
+            return lengths.back();
         }
         else
         {
@@ -181,7 +191,7 @@ namespace chronotext
     
     FollowablePath::Value FollowablePath::pos2Value(float pos) const
     {
-        float length = len.back();
+        float length = lengths.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -205,11 +215,11 @@ namespace chronotext
             }
         }
         
-        int index = search(len, pos, 1, size());
+        int index = search(lengths, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
-        float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
+        float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
         
         FollowablePath::Value value;
         value.point = p0 + (p1 - p0) * ratio;
@@ -221,7 +231,7 @@ namespace chronotext
     
     Vec2f FollowablePath::pos2Point(float pos) const
     {
-        float length = len.back();
+        float length = lengths.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -245,17 +255,17 @@ namespace chronotext
             }
         }
         
-        int index = search(len, pos, 1, size());
+        int index = search(lengths, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
-        float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
+        float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
         return p0 + (p1 - p0) * ratio;
     }
     
     float FollowablePath::pos2Angle(float pos) const
     {
-        float length = len.back();
+        float length = lengths.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -279,7 +289,7 @@ namespace chronotext
             }
         }
         
-        int index = search(len, pos, 1, size());
+        int index = search(lengths, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
@@ -347,7 +357,7 @@ namespace chronotext
             auto p1 = points[i1];
             
             Vec2f delta = p1 - p0;
-            float l = len[i1] - len[i0];
+            float l = lengths[i1] - lengths[i0];
             float u = delta.dot(point - p0) / (l * l);
             
             if (u >= 0 && u <= 1)
@@ -361,7 +371,7 @@ namespace chronotext
                     index = i0;
                     
                     _point = p;
-                    _len = len[index] + u * l;
+                    _len = lengths[index] + u * l;
                 }
             }
             else
@@ -375,7 +385,7 @@ namespace chronotext
                     index = i0;
                     
                     _point = points[i0];
-                    _len = len[index];
+                    _len = lengths[index];
                 }
                 else if ((mag1 < min) && (mag1 < mag0))
                 {
@@ -383,7 +393,7 @@ namespace chronotext
                     index = i1;
                     
                     _point = points[i1];
-                    _len = len[index];
+                    _len = lengths[index];
                 }
             }
         }
@@ -417,7 +427,7 @@ namespace chronotext
         auto p1 = points[i1];
         
         Vec2f delta = p1 - p0;
-        float l = len[i1] - len[i0];
+        float l = lengths[i1] - lengths[i0];
         float u = delta.dot(point - p0) / (l * l);
         
         if (u >= 0 && u <= 1)
@@ -426,7 +436,7 @@ namespace chronotext
             float mag = (p - point).lengthSquared();
             
             res.point = p;
-            res.position = len[i0] + u * l;
+            res.position = lengths[i0] + u * l;
             res.distance = math<float>::sqrt(mag);
         }
         else
@@ -437,13 +447,13 @@ namespace chronotext
             if (mag0 < mag1)
             {
                 res.point = p0;
-                res.position = len[i0];
+                res.position = lengths[i0];
                 res.distance = math<float>::sqrt(mag0);
             }
             else
             {
                 res.point = p1;
-                res.position = len[i1];
+                res.position = lengths[i1];
                 res.distance = math<float>::sqrt(mag1);
             }
         }
@@ -455,6 +465,6 @@ namespace chronotext
     {
         int newCapacity = size() + amount;
         points.reserve(newCapacity);
-        len.reserve(newCapacity);
+        lengths.reserve(newCapacity);
     }
 }

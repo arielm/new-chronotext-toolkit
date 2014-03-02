@@ -40,9 +40,6 @@ namespace chronotext
         }
         Mode;
         
-        std::vector<ci::Vec2f> points;
-        std::vector<float> len;
-        
         FollowablePath(Mode mode = MODE_TANGENT, int capacity = 0);
         FollowablePath(const std::vector<ci::Vec2f> &points, Mode mode = MODE_TANGENT);
         FollowablePath(ci::DataSourceRef source, Mode mode = MODE_TANGENT);
@@ -54,6 +51,9 @@ namespace chronotext
         void add(const ci::Vec2f &point);
         inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
 
+        const std::vector<ci::Vec2f>& getPoints() const;
+        const std::vector<float>& getLengths() const;
+        
         void clear();
         int size() const;
         bool empty() const;
@@ -78,6 +78,9 @@ namespace chronotext
         
     protected:
         Mode mode;
+
+        std::vector<ci::Vec2f> points;
+        std::vector<float> lengths;
 
         void extendCapacity(int amount);
     };
