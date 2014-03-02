@@ -20,7 +20,7 @@ namespace chronotext
     class StrokeHelper
     {
     public:
-        static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float ratio = 1)
+        static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float uScale = 1)
         {
             auto size = path.size();
             const auto &points = path.getPoints();
@@ -29,10 +29,12 @@ namespace chronotext
             strip.clear();
             strip.vertices.reserve(size * 4);
             
-            float ufreq = ratio * 0.5f / width;
-            ci::Vec2f w1(+width, -width);
-            ci::Vec2f w2(-width, +width);
-            
+            float halfWidth = width * 0.5f;
+            ci::Vec2f w1(+halfWidth, -halfWidth);
+            ci::Vec2f w2(-halfWidth, +halfWidth);
+
+            float uFreq = uScale / width;
+
             for (int i = 0; i < size; i++)
             {
                 int o1, o2;
@@ -50,17 +52,17 @@ namespace chronotext
                 
                 float l = lengths[i + o1] - lengths[i + o2];
                 ci::Vec2f d = (points[i + o1] - points[i + o2]) / l;
-                float textureU = ufreq * lengths[i];
+                float u = uFreq * lengths[i];
                 
                 strip.vertices.emplace_back(points[i] + w1 * d.yx());
-                strip.vertices.emplace_back(textureU, 0);
+                strip.vertices.emplace_back(u, 0);
                 
                 strip.vertices.emplace_back(points[i] + w2 * d.yx());
-                strip.vertices.emplace_back(textureU, 1);
+                strip.vertices.emplace_back(u, 1);
             }
         }
         
-        static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float ratio = 1)
+        static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float uScale = 1)
         {
             auto size = points.size();
             
@@ -69,12 +71,13 @@ namespace chronotext
             
             if (size > 1)
             {
-                float textureU = 0;
-                
-                float ufreq = ratio * 0.5f / width;
-                ci::Vec2f w1(+width, -width);
-                ci::Vec2f w2(-width, +width);
-                
+                float halfWidth = width * 0.5f;
+                ci::Vec2f w1(+halfWidth, -halfWidth);
+                ci::Vec2f w2(-halfWidth, +halfWidth);
+
+                float uFreq = uScale / width;
+                float u = 0;
+
                 auto p0 = points[0];
                 auto p1 = points[1];
                 
@@ -84,13 +87,13 @@ namespace chronotext
                     float l = d.length();
                     d /= l;
 
-                    textureU += ufreq * l;
+                    u += uFreq * l;
 
                     strip.vertices.emplace_back(p0 + w1 * d.yx());
-                    strip.vertices.emplace_back(textureU, 0);
+                    strip.vertices.emplace_back(u, 0);
                     
                     strip.vertices.emplace_back(p0 + w2 * d.yx());
-                    strip.vertices.emplace_back(textureU, 1);
+                    strip.vertices.emplace_back(u, 1);
                 }
                 
                 for (int i = 1; i < size - 1; i++)
@@ -102,13 +105,13 @@ namespace chronotext
                     if (p1 != p2)
                     {
                         ci::Vec2f d = (p2 - p1).normalized();
-                        textureU += ufreq * (p1 - p0).length();
+                        u += uFreq * (p1 - p0).length();
                         
                         strip.vertices.emplace_back(p1 + w1 * d.yx());
-                        strip.vertices.emplace_back(textureU, 0);
+                        strip.vertices.emplace_back(u, 0);
                         
                         strip.vertices.emplace_back(p1 + w2 * d.yx());
-                        strip.vertices.emplace_back(textureU, 1);
+                        strip.vertices.emplace_back(u, 1);
                     }
                 }
                 
@@ -121,13 +124,13 @@ namespace chronotext
                     float l = d.length();
                     d /= l;
                     
-                    textureU += ufreq * l;
+                    u += uFreq * l;
                     
                     strip.vertices.emplace_back(p1 + w1 * d.yx());
-                    strip.vertices.emplace_back(textureU, 0);
+                    strip.vertices.emplace_back(u, 0);
                     
                     strip.vertices.emplace_back(p1 + w2 * d.yx());
-                    strip.vertices.emplace_back(textureU, 1);
+                    strip.vertices.emplace_back(u, 1);
                 }
             }
         }

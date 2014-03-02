@@ -121,7 +121,7 @@ void Sketch::createDune(const Vec2f &size)
     
     // ---
     
-    StrokeHelper::stroke(path, stroke, 4); // SEE line.png, USED FOR PSEUDO-ANTIALISING
+    StrokeHelper::stroke(path, stroke, 8); // SEE line.png, USED FOR PSEUDO-ANTIALISING
     
     // ---
     
