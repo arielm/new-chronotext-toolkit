@@ -32,6 +32,18 @@ namespace chronotext
         add(points);
     }
     
+    FollowablePath::FollowablePath(const Path2d &path, float approximationScale)
+    :
+    mode(MODE_BOUNDED)
+    {
+        add(path.subdivide(approximationScale));
+        
+        if (isClosed())
+        {
+            setMode(FollowablePath::MODE_LOOP);
+        }
+    }
+    
     FollowablePath::FollowablePath(DataSourceRef source)
     :
     mode(MODE_BOUNDED)

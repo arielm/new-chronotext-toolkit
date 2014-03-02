@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "cinder/Rect.h"
+#include "cinder/Path2d.h"
 #include "cinder/DataSource.h"
 #include "cinder/DataTarget.h"
 
@@ -42,6 +42,7 @@ namespace chronotext
         
         FollowablePath(int capacity = 0);
         FollowablePath(const std::vector<ci::Vec2f> &points);
+        FollowablePath(const ci::Path2d &path, float approximationScale = 1.0f);
         FollowablePath(ci::DataSourceRef source);
 
         void read(ci::DataSourceRef source);
