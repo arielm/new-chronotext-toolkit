@@ -45,8 +45,8 @@
 		A8F9FBDF18C3E25200C48245 /* FXGDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FBDE18C3E25200C48245 /* FXGDocument.cpp */; };
 		A8F9FBE318C3E2EA00C48245 /* spline_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBE018C3E2EA00C48245 /* spline_1.dat */; };
 		A8F9FBE418C3E2EA00C48245 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBE118C3E2EA00C48245 /* Georgia_Regular_64.fnt */; };
-		A8F9FBE518C3E2EA00C48245 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBE218C3E2EA00C48245 /* dot.png */; };
 		A8F9FBE718C3E4E300C48245 /* lys.fxg in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBE618C3E4E300C48245 /* lys.fxg */; };
+		A8F9FBF218C3F8B800C48245 /* dot2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBF118C3F8B800C48245 /* dot2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,8 +133,8 @@
 		A8F9FBDE18C3E25200C48245 /* FXGDocument.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FXGDocument.cpp; sourceTree = "<group>"; };
 		A8F9FBE018C3E2EA00C48245 /* spline_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = spline_1.dat; path = ../resources/spline_1.dat; sourceTree = "<group>"; };
 		A8F9FBE118C3E2EA00C48245 /* Georgia_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = Georgia_Regular_64.fnt; path = ../resources/Georgia_Regular_64.fnt; sourceTree = "<group>"; };
-		A8F9FBE218C3E2EA00C48245 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../resources/dot.png; sourceTree = "<group>"; };
 		A8F9FBE618C3E4E300C48245 /* lys.fxg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = lys.fxg; path = ../resources/lys.fxg; sourceTree = "<group>"; };
+		A8F9FBF118C3F8B800C48245 /* dot2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot2x.png; path = ../resources/dot2x.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,8 +214,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A8F9FBF118C3F8B800C48245 /* dot2x.png */,
 				A8F9FBE618C3E4E300C48245 /* lys.fxg */,
-				A8F9FBE218C3E2EA00C48245 /* dot.png */,
 				A8F9FBE018C3E2EA00C48245 /* spline_1.dat */,
 				A8F9FBE118C3E2EA00C48245 /* Georgia_Regular_64.fnt */,
 			);
@@ -438,8 +438,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8F9FBE418C3E2EA00C48245 /* Georgia_Regular_64.fnt in Resources */,
-				A8F9FBE518C3E2EA00C48245 /* dot.png in Resources */,
 				A8F9FBE718C3E4E300C48245 /* lys.fxg in Resources */,
+				A8F9FBF218C3F8B800C48245 /* dot2x.png in Resources */,
 				A8F9FBE318C3E2EA00C48245 /* spline_1.dat in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 			);
