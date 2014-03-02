@@ -73,7 +73,7 @@ void Sketch::stop(int flags)
 
 void Sketch::update()
 {
-    offset = 600 + 325 * math<float>::sin(clock.getTime() * 1.75f);
+    position = 600 + 325 * math<float>::sin(clock.getTime() * 1.75f);
 }
 
 void Sketch::draw()
@@ -92,7 +92,7 @@ void Sketch::draw()
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
     
-    TextHelper::drawTextOnPath(*font, text, path, offset, -GAP);
+    TextHelper::drawTextOnPath(*font, text, path, position, -GAP);
 }
 
 void Sketch::addTouch(int index, float x, float y)

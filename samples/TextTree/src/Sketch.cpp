@@ -66,7 +66,7 @@ void Sketch::draw()
     gl::clear(Color::white(), false);
     gl::setMatricesWindow(getWindowSize(), true);
     
-    gl::translate(getWindowCenter());
+    gl::translate(getWindowCenter()); // THE ORIGIN IS AT THE CENTER OF THE SCREEN
     gl::scale(getWindowHeight() / REFERENCE_H);
     
     // ---
@@ -80,7 +80,7 @@ void Sketch::draw()
     font->beginSequence();
     
     /*
-     * THE BASE OF THE TREE IS AT THE BOTTOM OF THE SCREEN
+     * BASE OF THE TREE, AT THE BOTTOM OF THE SCREEN
      */
     matrix->setTranslation(0, REFERENCE_H * 0.5f);
     
