@@ -11,6 +11,9 @@
 using namespace std;
 using namespace ci;
 
+FXGDocument::FXGDocument()
+{}
+
 FXGDocument::FXGDocument(DataSourceRef source)
 {
     XmlTree doc(source);

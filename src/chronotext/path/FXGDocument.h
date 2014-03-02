@@ -17,6 +17,7 @@ public:
     ci::Vec2f viewSize;
     std::vector<ci::Path2d> paths;
     
+    FXGDocument();
     FXGDocument(ci::DataSourceRef source);
     
 protected:
