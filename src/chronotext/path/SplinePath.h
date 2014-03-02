@@ -32,18 +32,18 @@ namespace chronotext
         }
         Type;
         
-        std::vector<ci::Vec2f> points;
-        
         SplinePath(int capacity = 0);
         SplinePath(const std::vector<ci::Vec2f> &points);
         SplinePath(ci::DataSourceRef source);
+
+        void read(ci::DataSourceRef source);
+        void write(ci::DataTargetRef target);
 
         void add(const std::vector<ci::Vec2f> &points);
         void add(const ci::Vec2f &point);
         inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
         
-        void read(ci::DataSourceRef source);
-        void write(ci::DataTargetRef target);
+        const std::vector<ci::Vec2f>& getPoints() const;
 
         void clear();
         int size() const;
@@ -55,6 +55,7 @@ namespace chronotext
         void flush(Type type, FollowablePath &path, float tol = 1);
         
     protected:
+        std::vector<ci::Vec2f> points;
         bool closed;
     };
     

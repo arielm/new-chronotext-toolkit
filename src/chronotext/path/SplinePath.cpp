@@ -92,6 +92,11 @@ namespace chronotext
         points.emplace_back(point);
     }
     
+    const vector<Vec2f>& SplinePath::getPoints() const
+    {
+        return points;
+    }
+    
     void SplinePath::clear()
     {
         points.clear();
@@ -173,7 +178,7 @@ namespace chronotext
                 aspc.segment(points[size - 3], points[size - 2], points[size - 1], points[0]);
                 aspc.segment(points[size - 2], points[size - 1], points[0], points[1]);
                 
-                path.add(path.points.front());
+                path.add(path.getPoints().front());
             }
             else
             {
