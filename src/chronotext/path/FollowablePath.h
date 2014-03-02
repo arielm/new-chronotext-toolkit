@@ -64,6 +64,7 @@ namespace chronotext
         ci::Rectf getBounds() const;
         
         void close();
+        bool isClosed() const;
 
         Value pos2Value(float pos) const;
         ci::Vec2f pos2Point(float pos) const;

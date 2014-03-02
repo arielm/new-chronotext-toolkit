@@ -164,6 +164,11 @@ namespace chronotext
         }
     }
     
+    bool FollowablePath::isClosed() const
+    {
+        return (size() > 2) && (points.front() == points.back());
+    }
+    
     FollowablePath::Value FollowablePath::pos2Value(float pos) const
     {
         float length = len.back();

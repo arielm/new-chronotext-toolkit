@@ -9,11 +9,8 @@
 /*
  * REFERENCES:
  *
- * 1) "Adaptive Sampling of Parametric Curves" BY Luiz Henrique de Figueiredo
- *    http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
- *
- * 2) "Spline Curves" BY Tim Lambert
- *    http://www.cse.unsw.edu.au/~lambert/splines
+ * "Adaptive Sampling of Parametric Curves" BY Luiz Henrique de Figueiredo
+ * http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
  */
 
 #pragma once

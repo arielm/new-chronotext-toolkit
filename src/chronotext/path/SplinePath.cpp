@@ -120,6 +120,11 @@ namespace chronotext
         }
     }
     
+    bool SplinePath::isClosed() const
+    {
+        return closed;
+    }
+    
     void SplinePath::flush(Type type, FollowablePath &path, float tol)
     {
         function<Vec2f (float, Vec2f*)> gamma;

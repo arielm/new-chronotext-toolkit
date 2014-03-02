@@ -6,6 +6,13 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * REFERENCES:
+ *
+ * "Spline Curves" BY Tim Lambert
+ * http://www.cse.unsw.edu.au/~lambert/splines
+ */
+
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
@@ -43,6 +50,8 @@ namespace chronotext
         bool empty() const;
         
         void close();
+        bool isClosed() const;
+        
         void flush(Type type, FollowablePath &path, float tol = 1);
         
     protected:
