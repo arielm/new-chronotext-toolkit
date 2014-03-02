@@ -57,7 +57,7 @@ namespace chronotext
         {
             if (textureRequest.inputSource->isFile())
             {
-                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath())); // RVO-READY
+                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath()));
             }
             else
             {
@@ -66,25 +66,25 @@ namespace chronotext
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
         {
-            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource())); // RVO-READY
+            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr"))
         {
-            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer()); // RVO-READY
+            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
         }
         else
         {
             if (textureRequest.flags & TextureRequest::FLAGS_TRANSLUCENT)
             {
-                return TextureData(fetchTranslucentTextureData(textureRequest)); // RVO-READY
+                return TextureData(fetchTranslucentTextureData(textureRequest));
             }
             else if (textureRequest.flags & TextureRequest::FLAGS_POT)
             {
-                return TextureData(fetchPowerOfTwoTextureData(textureRequest)); // RVO-READY
+                return TextureData(fetchPowerOfTwoTextureData(textureRequest));
             }
             else
             {
-                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource())); // RVO-READY
+                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
             }
         }
         
@@ -246,7 +246,7 @@ namespace chronotext
         gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
         
         LOGD <<
-        "TEXTURE UNLOADED: " <<
+        "TEXTURE DISCARDED: " <<
         texture->getId() <<
         endl;
     }
@@ -285,7 +285,7 @@ namespace chronotext
             data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
         }
         
-        return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight()); // RVO-READY
+        return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight());
     }
     
     TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &textureRequest)
@@ -324,11 +324,11 @@ namespace chronotext
             dst.copyFrom(src, Area(srcWidth - 1, 0, srcWidth, srcHeight), Vec2i(1, 0));
             dst.copyFrom(src, Area(0, srcHeight - 1, srcWidth, srcHeight), Vec2i(0, 1));
             
-            return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight)); // RVO-READY
+            return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
         }
         else
         {
-            return TextureData(textureRequest, src); // RVO-READY
+            return TextureData(textureRequest, src);
         }
     }
 }
