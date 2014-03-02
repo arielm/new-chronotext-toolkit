@@ -18,8 +18,8 @@ namespace chronotext
     class TextureManager
     {
     public:
-        TextureRef getTexture(const std::string &resourceName, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE);
-        TextureRef getTexture(InputSourceRef inputSource, bool useMipmap = false, int flags = TextureRequest::FLAGS_NONE);
+        TextureRef getTexture(const std::string &resourceName, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
+        TextureRef getTexture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         TextureRef getTexture(const TextureRequest &textureRequest);
         
         bool remove(TextureRef texture);

@@ -13,12 +13,12 @@ using namespace ci;
 
 namespace chronotext
 {
-    TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, int flags)
+    TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags)
+    TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(TextureRequest(inputSource, useMipmap, flags));
     }

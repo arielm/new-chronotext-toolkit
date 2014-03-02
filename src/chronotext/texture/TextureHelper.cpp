@@ -20,12 +20,12 @@ using namespace ci;
 
 namespace chronotext
 {
-    gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, int flags)
+    gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    gl::TextureRef TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, int flags)
+    gl::TextureRef TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(TextureRequest(inputSource, useMipmap, flags));
     }

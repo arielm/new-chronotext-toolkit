@@ -16,16 +16,17 @@ namespace chronotext
 {
     struct TextureRequest
     {
-        enum
+        typedef enum
         {
             FLAGS_NONE = 0,
             FLAGS_TRANSLUCENT = 1,
             FLAGS_POT = 2
-        };
+        }
+        Flags;
         
         InputSourceRef inputSource;
         bool useMipmap;
-        int flags;
+        Flags flags;
         GLenum wrapS;
         GLenum wrapT;
         ci::Vec2i maxSize;
@@ -33,7 +34,7 @@ namespace chronotext
         TextureRequest()
         {}
         
-        TextureRequest(InputSourceRef inputSource, bool useMipmap = false, int flags = FLAGS_NONE)
+        TextureRequest(InputSourceRef inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
         :
         inputSource(inputSource),
         useMipmap(useMipmap),
