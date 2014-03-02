@@ -15,9 +15,9 @@ using namespace std;
 
 namespace chronotext
 {
-    FollowablePath::FollowablePath(Mode mode, int capacity)
+    FollowablePath::FollowablePath(int capacity)
     :
-    mode(mode)
+    mode(MODE_BOUNDED)
     {
         if (capacity > 0)
         {
@@ -25,16 +25,16 @@ namespace chronotext
         }
     }
     
-    FollowablePath::FollowablePath(const vector<Vec2f> &points, Mode mode)
+    FollowablePath::FollowablePath(const vector<Vec2f> &points)
     :
-    mode(mode)
+    mode(MODE_BOUNDED)
     {
         add(points);
     }
     
-    FollowablePath::FollowablePath(DataSourceRef source, Mode mode)
+    FollowablePath::FollowablePath(DataSourceRef source)
     :
-    mode(mode)
+    mode(MODE_BOUNDED)
     {
         read(source);
     }

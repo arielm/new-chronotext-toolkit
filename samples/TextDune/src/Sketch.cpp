@@ -48,6 +48,8 @@ void Sketch::setup(bool renewContext)
     // ---
     
     scale = getWindowHeight() / REFERENCE_H;
+    
+    path.setMode(FollowablePath::MODE_TANGENT);
     createDune(Vec2f(getWindowSize()) / scale);
 
     // ---

@@ -40,9 +40,9 @@ namespace chronotext
         }
         Mode;
         
-        FollowablePath(Mode mode = MODE_TANGENT, int capacity = 0);
-        FollowablePath(const std::vector<ci::Vec2f> &points, Mode mode = MODE_TANGENT);
-        FollowablePath(ci::DataSourceRef source, Mode mode = MODE_TANGENT);
+        FollowablePath(int capacity = 0);
+        FollowablePath(const std::vector<ci::Vec2f> &points);
+        FollowablePath(ci::DataSourceRef source);
 
         void read(ci::DataSourceRef source);
         void write(ci::DataTargetRef target);
