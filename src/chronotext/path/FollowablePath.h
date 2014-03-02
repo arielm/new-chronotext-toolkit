@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,19 +8,14 @@
 
 #pragma once
 
-#include "cinder/Rect.h"
+#include "cinder/Path2d.h"
 #include "cinder/DataSource.h"
 #include "cinder/DataTarget.h"
 
 namespace chronotext
 {
-    typedef std::shared_ptr<class FollowablePath> FollowablePathRef;
-    
     class FollowablePath
     {
-        void read(ci::IStreamRef in);
-        void write(ci::OStreamRef out);
-        
     public:
         struct Value
         {
@@ -36,43 +31,59 @@ namespace chronotext
             float distance; // DISTANCE TO CLOSEST-POINT ON PATH
         };
         
-        enum
+        typedef enum
         {
             MODE_BOUNDED,
             MODE_LOOP,
             MODE_TANGENT,
             MODE_MODULO,
-        };
+        }
+        Mode;
         
-        int mode;
-        int size;
-        
-        std::vector<ci::Vec2f> points;
-        std::vector<float> len;
-        
-        FollowablePath(int mode = MODE_TANGENT, int capacity = 256);
-        FollowablePath(ci::DataSourceRef source, int mode = MODE_TANGENT);
-        FollowablePath(const ci::Buffer &buffer, int mode = MODE_TANGENT);
-        
+        FollowablePath(int capacity = 0);
+        FollowablePath(const std::vector<ci::Vec2f> &points);
+        FollowablePath(const ci::Path2d &path, float approximationScale = 1.0f);
+        FollowablePath(ci::DataSourceRef source);
+
+        void read(ci::DataSourceRef source);
         void write(ci::DataTargetRef target);
-        ci::Buffer write();
-        
-        void clear();
-        float getLength() const;
-        
+
+        void add(const std::vector<ci::Vec2f> &points);
         void add(const ci::Vec2f &point);
         inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
+
+        const std::vector<ci::Vec2f>& getPoints() const;
+        const std::vector<float>& getLengths() const;
         
+        void clear();
+        int size() const;
+        bool empty() const;
+        
+        float getLength() const;
+        ci::Rectf getBounds() const;
+        
+        void close();
+        bool isClosed() const;
+        
+        void setMode(Mode mode);
+        Mode getMode() const;
+
         Value pos2Value(float pos) const;
         ci::Vec2f pos2Point(float pos) const;
         float pos2Angle(float pos) const;
         float pos2SampledAngle(float pos, float sampleSize) const;
         ci::Vec2f pos2Gradient(float pos, float sampleSize) const;
         
-        bool findClosestPoint(const ci::Vec2f &point, float threshold, ClosePoint &res) const;
-        ClosePoint closestPointFromSegment(const ci::Vec2f &point, int segmentIndex) const;
+        bool findClosestPoint(const ci::Vec2f &input, float threshold, ClosePoint &output) const;
+        ClosePoint closestPointFromSegment(const ci::Vec2f &input, int segmentIndex) const;
         
-        ci::Rectf getBounds() const;
+    protected:
+        Mode mode;
+
+        std::vector<ci::Vec2f> points;
+        std::vector<float> lengths;
+
+        void extendCapacity(int amount);
     };
 }
 

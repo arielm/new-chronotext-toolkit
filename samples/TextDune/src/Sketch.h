@@ -11,7 +11,7 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
-#include "chronotext/utils/stroke/StrokeHelper.h"
+#include "chronotext/path/StrokeHelper.h"
 #include "chronotext/time/Clock.h"
 
 class Sketch : public chr::CinderSketch
@@ -22,7 +22,7 @@ class Sketch : public chr::CinderSketch
     chr::xf::FontManager fontManager;
     std::shared_ptr<chr::XFont> font;
     
-    std::unique_ptr<chr::FollowablePath> path;
+    chr::FollowablePath path;
     chr::TexturedTriangleStrip stroke;
     std::vector<ci::Vec2f> vertices;
 

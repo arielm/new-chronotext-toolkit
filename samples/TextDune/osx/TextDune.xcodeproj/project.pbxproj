@@ -23,7 +23,6 @@
 		A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822632E18BE224C00D57C8C /* TextureHelper.cpp */; };
 		A822633718BE224C00D57C8C /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822633018BE224C00D57C8C /* TextureManager.cpp */; };
 		A822635018BE6F5D00D57C8C /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = A822634E18BE6F5D00D57C8C /* line.png */; };
-		A822635918BE705100D57C8C /* ASPC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635318BE705100D57C8C /* ASPC.cpp */; };
 		A822635A18BE705100D57C8C /* FollowablePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635518BE705100D57C8C /* FollowablePath.cpp */; };
 		A822635B18BE705100D57C8C /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635718BE705100D57C8C /* SplinePath.cpp */; };
 		A822637718BF54BC00D57C8C /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822636F18BF54BC00D57C8C /* Clock.cpp */; };
@@ -76,14 +75,10 @@
 		A822633118BE224C00D57C8C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
 		A822633218BE224C00D57C8C /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
 		A822634E18BE6F5D00D57C8C /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = line.png; path = ../resources/line.png; sourceTree = "<group>"; };
-		A822635318BE705100D57C8C /* ASPC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ASPC.cpp; sourceTree = "<group>"; };
-		A822635418BE705100D57C8C /* ASPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPC.h; sourceTree = "<group>"; };
 		A822635518BE705100D57C8C /* FollowablePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FollowablePath.cpp; sourceTree = "<group>"; };
 		A822635618BE705100D57C8C /* FollowablePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowablePath.h; sourceTree = "<group>"; };
 		A822635718BE705100D57C8C /* SplinePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SplinePath.cpp; sourceTree = "<group>"; };
 		A822635818BE705100D57C8C /* SplinePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplinePath.h; sourceTree = "<group>"; };
-		A822635D18BEC48100D57C8C /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
-		A822635E18BEC48100D57C8C /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A822636F18BF54BC00D57C8C /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
 		A822637018BF54BC00D57C8C /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A822637118BF54BC00D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
@@ -92,6 +87,7 @@
 		A822637418BF54BC00D57C8C /* TickingClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TickingClock.cpp; sourceTree = "<group>"; };
 		A822637518BF54BC00D57C8C /* TickingClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TickingClock.h; sourceTree = "<group>"; };
 		A822637618BF54BC00D57C8C /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
+		A822639518C17ACC00D57C8C /* ASPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPC.h; sourceTree = "<group>"; };
 		A82986FD18BD00C300934642 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A82986FE18BD00C300934642 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
 		A82986FF18BD00C300934642 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -130,6 +126,8 @@
 		A853DFD418116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFD518116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
+		A8F9FBC718C3754600C48245 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
+		A8F9FBC818C3754600C48245 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,23 +252,15 @@
 		A822635218BE705100D57C8C /* path */ = {
 			isa = PBXGroup;
 			children = (
-				A822635318BE705100D57C8C /* ASPC.cpp */,
-				A822635418BE705100D57C8C /* ASPC.h */,
 				A822635518BE705100D57C8C /* FollowablePath.cpp */,
 				A822635618BE705100D57C8C /* FollowablePath.h */,
 				A822635718BE705100D57C8C /* SplinePath.cpp */,
 				A822635818BE705100D57C8C /* SplinePath.h */,
+				A822639518C17ACC00D57C8C /* ASPC.h */,
+				A8F9FBC718C3754600C48245 /* StrokeHelper.h */,
+				A8F9FBC818C3754600C48245 /* TexturedTriangleStrip.h */,
 			);
 			path = path;
-			sourceTree = "<group>";
-		};
-		A822635C18BEC48100D57C8C /* stroke */ = {
-			isa = PBXGroup;
-			children = (
-				A822635D18BEC48100D57C8C /* StrokeHelper.h */,
-				A822635E18BEC48100D57C8C /* TexturedTriangleStrip.h */,
-			);
-			path = stroke;
 			sourceTree = "<group>";
 		};
 		A822636E18BF54BC00D57C8C /* time */ = {
@@ -351,7 +341,6 @@
 				A82C90FD16E00B3B00FF519C /* MathUtils.cpp */,
 				A82C910316E00B3B00FF519C /* Utils.h */,
 				A82C910216E00B3B00FF519C /* Utils.cpp */,
-				A822635C18BEC48100D57C8C /* stroke */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -469,7 +458,6 @@
 				A822633318BE224C00D57C8C /* PVRHelper.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A822637718BF54BC00D57C8C /* Clock.cpp in Sources */,
-				A822635918BE705100D57C8C /* ASPC.cpp in Sources */,
 				A822633518BE224C00D57C8C /* Texture.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
 				A829873118BD02D500934642 /* FontManager.cpp in Sources */,

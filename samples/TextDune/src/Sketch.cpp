@@ -49,7 +49,7 @@ void Sketch::setup(bool renewContext)
     
     scale = getWindowHeight() / REFERENCE_H;
     
-    path = unique_ptr<FollowablePath>(new FollowablePath());
+    path.setMode(FollowablePath::MODE_TANGENT);
     createDune(Vec2f(getWindowSize()) / scale);
 
     // ---
@@ -92,7 +92,7 @@ void Sketch::draw()
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
     
-    TextHelper::drawTextOnPath(*font, text, *path, offset, -GAP);
+    TextHelper::drawTextOnPath(*font, text, path, offset, -GAP);
 }
 
 void Sketch::addTouch(int index, float x, float y)
@@ -107,43 +107,30 @@ void Sketch::removeTouch(int index, float x, float y)
 
 void Sketch::createDune(const Vec2f &size)
 {
-    static float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
-    int slotCount = sizeof(coefs) / sizeof(float);
+    const float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
+    const int slotCount = sizeof(coefs) / sizeof(float);
+    
     float slotSize = size.x / (slotCount - 1);
+    SplinePath spline;
 
-    SplinePath spline(GammaBSpline, 3);
-
-    for (int n = 0, i = 0; i < (slotCount + 5); i++)
+    for (int i = 0; i < slotCount; i++)
     {
-        if (i <= 2)
-        {
-            n = 0; // B-SPLINE: 3 TIMES THE SAME ENTRY AT THE BEGINNING
-        }
-        else if (i >= slotCount + 1)
-        {
-            n = slotCount - 1; // B-SPLINE: 4 TIMES THE SAME ENTRY AT THE END
-        }
-        else
-        {
-            n = i - 2;
-        }
-        
-        spline.add(slotSize * n, coefs[n] * size.y);
+        spline.add(slotSize * i, coefs[i] * size.y);
     }
 
-    path->clear();
-    spline.compute(*path);
+    path.clear();
+    spline.flush(SplinePath::TYPE_BSPLINE, path, 3); // USING A TOLERANCE OF 3: REDUCING POINTS WHILE PRESERVING SMOOTHNESS
     
     // ---
     
-    StrokeHelper::stroke(*path, stroke, 4); // USED FOR PSEUDO-ANTIALISING
+    StrokeHelper::stroke(path, stroke, 8); // SEE line.png, USED FOR PSEUDO-ANTIALISING
     
     // ---
     
     vertices.clear();
-    vertices.reserve(path->size * 2);
+    vertices.reserve(path.size() * 2);
     
-    for (auto &point : path->points)
+    for (auto &point : path.getPoints())
     {
         vertices.emplace_back(point);
         vertices.emplace_back(point.x, REFERENCE_H);

@@ -50,7 +50,7 @@ namespace chronotext
                 slotCapacity(slotCapacity)
                 {}
                 
-                Properties&	capacity(float slotCapacity)
+                Properties&	capacity(int slotCapacity)
 				{
                     this->slotCapacity = slotCapacity;
                     return *this;

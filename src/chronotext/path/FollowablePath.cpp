@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -15,92 +15,140 @@ using namespace std;
 
 namespace chronotext
 {
-    FollowablePath::FollowablePath(int mode, int capacity)
+    FollowablePath::FollowablePath(int capacity)
     :
-    mode(mode),
-    size(0)
+    mode(MODE_BOUNDED)
     {
-        points.reserve(capacity);
-        len.reserve(capacity);
-    }
-    
-    FollowablePath::FollowablePath(DataSourceRef source, int mode)
-    :
-    mode(mode)
-    {
-        read(source->createStream());
-    }
-    
-    FollowablePath::FollowablePath(const Buffer &buffer, int mode)
-    :
-    mode(mode)
-    {
-        IStreamRef in = IStreamMem::create(buffer.getData(), buffer.getDataSize());
-        read(in);
-    }
-    
-    /*
-     * ASSERTION: THIS IS CALLED AT CONSTRUCTION TIME
-     */
-    void FollowablePath::read(IStreamRef in)
-    {
-        int capacity;
-        in->readLittle(&capacity);
-        
-        size = 0;
-        points.reserve(capacity);
-        len.reserve(capacity);
-        
-        Vec2f point;
-        
-        for (int i = 0; i < capacity; i++)
+        if (capacity > 0)
         {
-            in->readLittle(&point.x);
-            in->readLittle(&point.y);
-            add(point);
+            extendCapacity(capacity);
         }
     }
     
-    void FollowablePath::write(OStreamRef out)
+    FollowablePath::FollowablePath(const vector<Vec2f> &points)
+    :
+    mode(MODE_BOUNDED)
     {
-        out->writeLittle(size);
+        add(points);
+    }
+    
+    FollowablePath::FollowablePath(const Path2d &path, float approximationScale)
+    :
+    mode(MODE_BOUNDED)
+    {
+        add(path.subdivide(approximationScale));
         
-        for (auto &point : points)
+        if (isClosed())
         {
-            out->writeLittle(point.x);
-            out->writeLittle(point.y);
+            setMode(FollowablePath::MODE_LOOP);
+        }
+    }
+    
+    FollowablePath::FollowablePath(DataSourceRef source)
+    :
+    mode(MODE_BOUNDED)
+    {
+        read(source);
+    }
+    
+    void FollowablePath::read(DataSourceRef source)
+    {
+        auto stream = source->createStream();
+        
+        int newPointsSize;
+        stream->readLittle(&newPointsSize);
+        
+        extendCapacity(newPointsSize);
+        
+        // ---
+        
+        Vec2f point;
+        
+        for (int i = 0; i < newPointsSize; i++)
+        {
+            stream->readLittle(&point.x);
+            stream->readLittle(&point.y);
+            add(point);
         }
     }
     
     void FollowablePath::write(DataTargetRef target)
     {
-        write(target->getStream());
+        auto stream = target->getStream();
+        
+        stream->writeLittle(size());
+        
+        for (auto &point : points)
+        {
+            stream->writeLittle(point.x);
+            stream->writeLittle(point.y);
+        }
     }
     
-    Buffer FollowablePath::write()
+    void FollowablePath::add(const vector<Vec2f> &newPoints)
     {
-        int bufferSize = sizeof(int) + size * sizeof(Vec2f);
-        OStreamMemRef out = OStreamMem::create(bufferSize);
+        extendCapacity(newPoints.size());
         
-        write(out);
-        
-        Buffer buffer(bufferSize);
-        buffer.copyFrom(out->getBuffer(), bufferSize);
-        return buffer;
+        for (auto &point : newPoints)
+        {
+            add(point);
+        }
+    }
+    
+    void FollowablePath::add(const ci::Vec2f &point)
+    {
+        if (!points.empty())
+        {
+            Vec2f delta = point - points.back();
+            
+            if (delta != Vec2f::zero())
+            {
+                lengths.push_back(lengths.back() + delta.length());
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            lengths.push_back(0);
+        }
+
+        points.push_back(point);
+    }
+    
+    const vector<Vec2f>& FollowablePath::getPoints() const
+    {
+        return points;
+    }
+    
+    const vector<float>& FollowablePath::getLengths() const
+    {
+        return lengths;
     }
     
     void FollowablePath::clear()
     {
-        size = 0;
         points.clear();
-        len.clear();
+        lengths.clear();
+    }
+    
+    int FollowablePath::size() const
+    {
+        return points.size();
+    }
+    
+    bool FollowablePath::empty() const
+    {
+        return points.empty();
     }
     
     float FollowablePath::getLength() const
     {
-        if (size > 0)
+        if (!points.empty())
         {
-            return len[size - 1];
+            return lengths.back();
         }
         else
         {
@@ -108,26 +156,54 @@ namespace chronotext
         }
     }
     
-    void FollowablePath::add(const ci::Vec2f &point)
+    Rectf FollowablePath::getBounds() const
     {
-        points.push_back(point);
+        float minX = numeric_limits<float>::max();
+        float minY = numeric_limits<float>::max();
+        float maxX = numeric_limits<float>::min();
+        float maxY = numeric_limits<float>::min();
         
-        if (size > 0)
+        for (auto &point : points)
         {
-            Vec2f delta = point - points[size - 1];
-            len.push_back(len[size - 1] + delta.length());
-        }
-        else
-        {
-            len.push_back(0);
+            if (point.x < minX) minX = point.x;
+            if (point.y < minY) minY = point.y;
+            
+            if (point.x > maxX) maxX = point.x;
+            if (point.y > maxY) maxY = point.y;
         }
         
-        size++;
+        return Rectf(minX, minY, maxX, maxY);
+    }
+    
+    void FollowablePath::close()
+    {
+        if (size() > 2)
+        {
+            if (points.front() != points.back())
+            {
+                add(points.front());
+            }
+        }
+    }
+    
+    bool FollowablePath::isClosed() const
+    {
+        return (size() > 2) && (points.front() == points.back());
+    }
+    
+    void FollowablePath::setMode(Mode mode)
+    {
+        this->mode = mode;
+    }
+    
+    FollowablePath::Mode FollowablePath::getMode() const
+    {
+        return mode;
     }
     
     FollowablePath::Value FollowablePath::pos2Value(float pos) const
     {
-        float length = len[size - 1];
+        float length = lengths.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -151,11 +227,11 @@ namespace chronotext
             }
         }
         
-        int index = search(len, pos, 1, size);
+        int index = search(lengths, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
-        float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
+        float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
         
         FollowablePath::Value value;
         value.point = p0 + (p1 - p0) * ratio;
@@ -167,7 +243,7 @@ namespace chronotext
     
     Vec2f FollowablePath::pos2Point(float pos) const
     {
-        float length = len[size - 1];
+        float length = lengths.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -179,29 +255,29 @@ namespace chronotext
             {
                 if (mode == MODE_BOUNDED)
                 {
-                    return points[0];
+                    return points.front();
                 }
             }
             else if (pos >= length)
             {
                 if (mode == MODE_BOUNDED)
                 {
-                    return points[size - 1];
+                    return points.back();
                 }
             }
         }
         
-        int index = search(len, pos, 1, size);
+        int index = search(lengths, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
-        float ratio = (pos - len[index]) / (len[index + 1] - len[index]);
+        float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
         return p0 + (p1 - p0) * ratio;
     }
     
     float FollowablePath::pos2Angle(float pos) const
     {
-        float length = len[size - 1];
+        float length = lengths.back();
         
         if (mode == MODE_LOOP || mode == MODE_MODULO)
         {
@@ -225,7 +301,7 @@ namespace chronotext
             }
         }
         
-        int index = search(len, pos, 1, size);
+        int index = search(lengths, pos, 1, size());
         auto p0 = points[index];
         auto p1 = points[index + 1];
         
@@ -263,21 +339,22 @@ namespace chronotext
      * RETURNS false IF CLOSEST POINT IS FARTHER THAN threshold DISTANCE
      *
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
-     * http://paulbourke.net/geometry/pointlineplane/
+     * http://paulbourke.net/geometry/pointlineplane
      */
-    bool FollowablePath::findClosestPoint(const Vec2f &point, float threshold, FollowablePath::ClosePoint &res) const
+    bool FollowablePath::findClosestPoint(const Vec2f &input, float threshold, FollowablePath::ClosePoint &output) const
     {
         float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
-        
+
+        int end = size();
         int index = -1;
-        Vec2f _point;
-        float _len;
-        
-        for (int i = 0; i < size; i++)
+        Vec2f point;
+        float position;
+
+        for (int i = 0; i < end; i++)
         {
             int i0, i1;
             
-            if (i == size - 1)
+            if (i == end - 1)
             {
                 i0 = i - 1;
                 i1 = i;
@@ -292,52 +369,52 @@ namespace chronotext
             auto p1 = points[i1];
             
             Vec2f delta = p1 - p0;
-            float l = len[i1] - len[i0];
-            float u = delta.dot(point - p0) / (l * l);
+            float length = lengths[i1] - lengths[i0];
+            float u = delta.dot(input - p0) / (length * length);
             
             if (u >= 0 && u <= 1)
             {
                 Vec2f p = p0 + u * delta;
-                float mag = (p - point).lengthSquared();
+                float mag = (p - input).lengthSquared();
                 
                 if (mag < min)
                 {
                     min = mag;
                     index = i0;
                     
-                    _point = p;
-                    _len = len[index] + u * l;
+                    point = p;
+                    position = lengths[index] + u * length;
                 }
             }
             else
             {
-                float mag0 = (p0 - point).lengthSquared();
-                float mag1 = (p1 - point).lengthSquared();
+                float mag0 = (p0 - input).lengthSquared();
+                float mag1 = (p1 - input).lengthSquared();
                 
                 if ((mag0 < min) && (mag0 < mag1))
                 {
                     min = mag0;
                     index = i0;
                     
-                    _point = points[i0];
-                    _len = len[index];
+                    point = points[i0];
+                    position = lengths[index];
                 }
                 else if ((mag1 < min) && (mag1 < mag0))
                 {
                     min = mag1;
                     index = i1;
                     
-                    _point = points[i1];
-                    _len = len[index];
+                    point = points[i1];
+                    position = lengths[index];
                 }
             }
         }
         
         if (index != -1)
         {
-            res.point = _point;
-            res.position = _len;
-            res.distance = math<float>::sqrt(min);
+            output.point = point;
+            output.position = position;
+            output.distance = math<float>::sqrt(min);
             
             return true;
         }
@@ -349,9 +426,9 @@ namespace chronotext
      * segmentIndex MUST BE < size
      *
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
-     * http://paulbourke.net/geometry/pointlineplane/
+     * http://paulbourke.net/geometry/pointlineplane
      */
-    FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(const Vec2f &point, int segmentIndex) const
+    FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(const Vec2f &input, int segmentIndex) const
     {
         FollowablePath::ClosePoint res;
         
@@ -362,33 +439,33 @@ namespace chronotext
         auto p1 = points[i1];
         
         Vec2f delta = p1 - p0;
-        float l = len[i1] - len[i0];
-        float u = delta.dot(point - p0) / (l * l);
+        float length = lengths[i1] - lengths[i0];
+        float u = delta.dot(input - p0) / (length * length);
         
         if (u >= 0 && u <= 1)
         {
             Vec2f p = p0 + u * delta;
-            float mag = (p - point).lengthSquared();
+            float mag = (p - input).lengthSquared();
             
             res.point = p;
-            res.position = len[i0] + u * l;
+            res.position = lengths[i0] + u * length;
             res.distance = math<float>::sqrt(mag);
         }
         else
         {
-            float mag0 = (p0 - point).lengthSquared();
-            float mag1 = (p1 - point).lengthSquared();
+            float mag0 = (p0 - input).lengthSquared();
+            float mag1 = (p1 - input).lengthSquared();
             
             if (mag0 < mag1)
             {
                 res.point = p0;
-                res.position = len[i0];
+                res.position = lengths[i0];
                 res.distance = math<float>::sqrt(mag0);
             }
             else
             {
                 res.point = p1;
-                res.position = len[i1];
+                res.position = lengths[i1];
                 res.distance = math<float>::sqrt(mag1);
             }
         }
@@ -396,22 +473,10 @@ namespace chronotext
         return res;
     }
     
-    Rectf FollowablePath::getBounds() const
+    void FollowablePath::extendCapacity(int amount)
     {
-        float minX = numeric_limits<float>::max();
-        float minY = numeric_limits<float>::max();
-        float maxX = numeric_limits<float>::min();
-        float maxY = numeric_limits<float>::min();
-        
-        for (auto &point : points)
-        {
-            if (point.x < minX) minX = point.x;
-            if (point.y < minY) minY = point.y;
-            
-            if (point.x > maxX) maxX = point.x;
-            if (point.y > maxY) maxY = point.y;
-        }
-        
-        return Rectf(minX, minY, maxX, maxY);
+        int newCapacity = size() + amount;
+        points.reserve(newCapacity);
+        lengths.reserve(newCapacity);
     }
 }
