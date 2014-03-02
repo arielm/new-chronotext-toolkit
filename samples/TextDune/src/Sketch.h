@@ -22,7 +22,7 @@ class Sketch : public chr::CinderSketch
     chr::xf::FontManager fontManager;
     std::shared_ptr<chr::XFont> font;
     
-    std::unique_ptr<chr::FollowablePath> path;
+    chr::FollowablePath path;
     chr::TexturedTriangleStrip stroke;
     std::vector<ci::Vec2f> vertices;
 

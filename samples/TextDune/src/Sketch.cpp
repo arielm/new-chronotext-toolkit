@@ -48,8 +48,6 @@ void Sketch::setup(bool renewContext)
     // ---
     
     scale = getWindowHeight() / REFERENCE_H;
-    
-    path = unique_ptr<FollowablePath>(new FollowablePath());
     createDune(Vec2f(getWindowSize()) / scale);
 
     // ---
@@ -92,7 +90,7 @@ void Sketch::draw()
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
     
-    TextHelper::drawTextOnPath(*font, text, *path, offset, -GAP);
+    TextHelper::drawTextOnPath(*font, text, path, offset, -GAP);
 }
 
 void Sketch::addTouch(int index, float x, float y)
@@ -118,19 +116,19 @@ void Sketch::createDune(const Vec2f &size)
         spline.add(slotSize * i, coefs[i] * size.y);
     }
 
-    path->clear();
-    spline.flush(SplinePath::TYPE_BSPLINE, *path, 3);
+    path.clear();
+    spline.flush(SplinePath::TYPE_BSPLINE, path, 3); // USING A TOLERANCE OF 3: REDUCING POINTS WHILE PRESERVING SMOOTHNESS
     
     // ---
     
-    StrokeHelper::stroke(*path, stroke, 4); // USED FOR PSEUDO-ANTIALISING
+    StrokeHelper::stroke(path, stroke, 4); // SEE line.png, USED FOR PSEUDO-ANTIALISING
     
     // ---
     
     vertices.clear();
-    vertices.reserve(path->size() * 2);
+    vertices.reserve(path.size() * 2);
     
-    for (auto &point : path->points)
+    for (auto &point : path.getPoints())
     {
         vertices.emplace_back(point);
         vertices.emplace_back(point.x, REFERENCE_H);
