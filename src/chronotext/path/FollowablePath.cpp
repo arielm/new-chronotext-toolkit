@@ -339,22 +339,22 @@ namespace chronotext
      * RETURNS false IF CLOSEST POINT IS FARTHER THAN threshold DISTANCE
      *
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
-     * http://paulbourke.net/geometry/pointlineplane/
+     * http://paulbourke.net/geometry/pointlineplane
      */
-    bool FollowablePath::findClosestPoint(const Vec2f &point, float threshold, FollowablePath::ClosePoint &res) const
+    bool FollowablePath::findClosestPoint(const Vec2f &input, float threshold, FollowablePath::ClosePoint &output) const
     {
         float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
-        
+
+        int end = size();
         int index = -1;
-        int _size = size();
-        Vec2f _point;
-        float _len;
-        
-        for (int i = 0; i < _size; i++)
+        Vec2f point;
+        float position;
+
+        for (int i = 0; i < end; i++)
         {
             int i0, i1;
             
-            if (i == _size - 1)
+            if (i == end - 1)
             {
                 i0 = i - 1;
                 i1 = i;
@@ -369,52 +369,52 @@ namespace chronotext
             auto p1 = points[i1];
             
             Vec2f delta = p1 - p0;
-            float l = lengths[i1] - lengths[i0];
-            float u = delta.dot(point - p0) / (l * l);
+            float length = lengths[i1] - lengths[i0];
+            float u = delta.dot(input - p0) / (length * length);
             
             if (u >= 0 && u <= 1)
             {
                 Vec2f p = p0 + u * delta;
-                float mag = (p - point).lengthSquared();
+                float mag = (p - input).lengthSquared();
                 
                 if (mag < min)
                 {
                     min = mag;
                     index = i0;
                     
-                    _point = p;
-                    _len = lengths[index] + u * l;
+                    point = p;
+                    position = lengths[index] + u * length;
                 }
             }
             else
             {
-                float mag0 = (p0 - point).lengthSquared();
-                float mag1 = (p1 - point).lengthSquared();
+                float mag0 = (p0 - input).lengthSquared();
+                float mag1 = (p1 - input).lengthSquared();
                 
                 if ((mag0 < min) && (mag0 < mag1))
                 {
                     min = mag0;
                     index = i0;
                     
-                    _point = points[i0];
-                    _len = lengths[index];
+                    point = points[i0];
+                    position = lengths[index];
                 }
                 else if ((mag1 < min) && (mag1 < mag0))
                 {
                     min = mag1;
                     index = i1;
                     
-                    _point = points[i1];
-                    _len = lengths[index];
+                    point = points[i1];
+                    position = lengths[index];
                 }
             }
         }
         
         if (index != -1)
         {
-            res.point = _point;
-            res.position = _len;
-            res.distance = math<float>::sqrt(min);
+            output.point = point;
+            output.position = position;
+            output.distance = math<float>::sqrt(min);
             
             return true;
         }
@@ -426,9 +426,9 @@ namespace chronotext
      * segmentIndex MUST BE < size
      *
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
-     * http://paulbourke.net/geometry/pointlineplane/
+     * http://paulbourke.net/geometry/pointlineplane
      */
-    FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(const Vec2f &point, int segmentIndex) const
+    FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(const Vec2f &input, int segmentIndex) const
     {
         FollowablePath::ClosePoint res;
         
@@ -439,22 +439,22 @@ namespace chronotext
         auto p1 = points[i1];
         
         Vec2f delta = p1 - p0;
-        float l = lengths[i1] - lengths[i0];
-        float u = delta.dot(point - p0) / (l * l);
+        float length = lengths[i1] - lengths[i0];
+        float u = delta.dot(input - p0) / (length * length);
         
         if (u >= 0 && u <= 1)
         {
             Vec2f p = p0 + u * delta;
-            float mag = (p - point).lengthSquared();
+            float mag = (p - input).lengthSquared();
             
             res.point = p;
-            res.position = lengths[i0] + u * l;
+            res.position = lengths[i0] + u * length;
             res.distance = math<float>::sqrt(mag);
         }
         else
         {
-            float mag0 = (p0 - point).lengthSquared();
-            float mag1 = (p1 - point).lengthSquared();
+            float mag0 = (p0 - input).lengthSquared();
+            float mag1 = (p1 - input).lengthSquared();
             
             if (mag0 < mag1)
             {
