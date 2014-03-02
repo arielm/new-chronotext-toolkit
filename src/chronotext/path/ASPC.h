@@ -7,37 +7,37 @@
  */
 
 /*
- * BASED ON "Adaptive Sampling of Parametric Curves" BY Luiz Henrique de Figueiredo
- * http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
+ * REFERENCES:
+ *
+ * 1) "Adaptive Sampling of Parametric Curves" BY Luiz Henrique de Figueiredo
+ *    http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
+ *
+ * 2) "Spline Curves" BY Tim Lambert
+ *    http://www.cse.unsw.edu.au/~lambert/splines
  */
 
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
 
+#include <array>
+
 class ASPC
 {
 public:
-    ASPC(std::function<ci::Vec2f (float, ci::Vec2f*)> gamma, chr::FollowablePath &path, float tol)
+    ASPC(std::function<ci::Vec2f (float, ci::Vec2f*)> gamma, chr::FollowablePath &path, float tol = 1)
     :
     gamma(gamma),
     path(path),
     tol(tol)
-    {
-        in.reserve(4);
-    }
-    
-    std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
-    chr::FollowablePath &path;
-    float tol;
+    {}
     
     void segment(const ci::Vec2f &p0, const ci::Vec2f &p1, const ci::Vec2f &p2, const ci::Vec2f &p3)
     {
-        in.clear();
-        in.push_back(p0);
-        in.push_back(p1);
-        in.push_back(p2);
-        in.push_back(p3);
+        in[0] = p0;
+        in[1] = p1;
+        in[2] = p2;
+        in[3] = p3;
         
         float pt = 0;
         auto p = gamma(pt, in.data());
@@ -49,7 +49,11 @@ public:
     }
     
 protected:
-    std::vector<ci::Vec2f> in;
+    std::function<ci::Vec2f (float, ci::Vec2f*)> gamma;
+    chr::FollowablePath &path;
+    float tol;
+
+    std::array<ci::Vec2f, 4> in;
     
     void sample(float t0, const ci::Vec2f &p0, float t1, const ci::Vec2f &p1)
     {
