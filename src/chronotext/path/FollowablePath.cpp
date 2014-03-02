@@ -169,6 +169,16 @@ namespace chronotext
         return (size() > 2) && (points.front() == points.back());
     }
     
+    void FollowablePath::setMode(Mode mode)
+    {
+        this->mode = mode;
+    }
+    
+    FollowablePath::Mode FollowablePath::getMode() const
+    {
+        return mode;
+    }
+    
     FollowablePath::Value FollowablePath::pos2Value(float pos) const
     {
         float length = len.back();

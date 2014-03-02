@@ -40,8 +40,6 @@ namespace chronotext
         }
         Mode;
         
-        int mode;
-
         std::vector<ci::Vec2f> points;
         std::vector<float> len;
         
@@ -65,6 +63,9 @@ namespace chronotext
         
         void close();
         bool isClosed() const;
+        
+        void setMode(Mode mode);
+        Mode getMode() const;
 
         Value pos2Value(float pos) const;
         ci::Vec2f pos2Point(float pos) const;
@@ -76,6 +77,8 @@ namespace chronotext
         ClosePoint closestPointFromSegment(const ci::Vec2f &point, int segmentIndex) const;
         
     protected:
+        Mode mode;
+
         void extendCapacity(int amount);
     };
 }
