@@ -34,6 +34,7 @@ namespace chronotext
         float getWindowAspectRatio() const { return context->getWindowAspectRatio(); }
         ci::Area getWindowBounds() const { return context->getWindowBounds(); }
         float getWindowContentScale() const { return context->getWindowContentScale(); }
+        bool isHighDensity() const { return (getWindowContentScale() > 1); }
         
         void sendMessageToDelegate(int what, const std::string &body = "");
         

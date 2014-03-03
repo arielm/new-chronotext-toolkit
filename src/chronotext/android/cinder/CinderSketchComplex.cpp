@@ -72,6 +72,11 @@ namespace chronotext
         return context->getWindowBounds();
     }
     
+    bool CinderSketchComplex::isHighDensity() const
+    {
+        return false; // TODO: RETURN RESULT BASED ON SCREEN-DENSITY
+    }
+    
     ostream& CinderSketchComplex::console()
     {
         return context->console();

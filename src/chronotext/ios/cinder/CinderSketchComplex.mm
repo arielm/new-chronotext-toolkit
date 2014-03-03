@@ -121,6 +121,11 @@ namespace chronotext
         return ((CinderDelegate*)context).contentScale;
     }
     
+    bool CinderSketchComplex::isHighDensity() const
+    {
+        return (getWindowContentScale() > 1);
+    }
+    
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)

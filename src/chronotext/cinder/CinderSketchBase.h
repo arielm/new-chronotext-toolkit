@@ -70,6 +70,7 @@ namespace chronotext
         virtual float getWindowAspectRatio() const = 0;
         virtual ci::Area getWindowBounds() const = 0;
         virtual float getWindowContentScale() const = 0;
+        virtual bool isHighDensity() const = 0;
         
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
     };
