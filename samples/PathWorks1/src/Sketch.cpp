@@ -52,7 +52,7 @@ void Sketch::setup(bool renewContext)
         // ---
         
         spline1 = SplinePath(InputSource::loadResource("spline_1.dat"));
-        spline1.flush(SplinePath::TYPE_BSPLINE, path1, 3);
+        spline1.flush(SplinePath::TYPE_BSPLINE, path1);
         
         // ---
         
@@ -66,8 +66,7 @@ void Sketch::setup(bool renewContext)
         spline2.add(-200,    0);
         spline2.close();
         
-        spline2.flush(SplinePath::TYPE_BSPLINE, path2, 3);
-        path2.setMode(FollowablePath::MODE_LOOP);
+        spline2.flush(SplinePath::TYPE_BSPLINE, path2);
         
         // ---
         
