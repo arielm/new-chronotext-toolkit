@@ -98,22 +98,22 @@ namespace chronotext
     
     Vec2f CinderSketchComplex::getWindowCenter() const
     {
-        return Vec2i(((CinderDelegate*)context).width * 0.5f, ((CinderDelegate*)context).height * 0.5f);
+        return getWindowSize() * 0.5f;
     }
     
     Vec2i CinderSketchComplex::getWindowSize() const
     {
-        return Vec2i(((CinderDelegate*)context).width, ((CinderDelegate*)context).height);
+        return Vec2i(getWindowWidth(), getWindowHeight());
     }
     
     float CinderSketchComplex::getWindowAspectRatio() const
     {
-        return ((CinderDelegate*)context).width / (float)((CinderDelegate*)context).height;
+        return getWindowWidth() / (float)getWindowHeight();
     }
     
     Area CinderSketchComplex::getWindowBounds() const
     {
-        return Area(0, 0, ((CinderDelegate*)context).width, ((CinderDelegate*)context).height);
+        return Area(0, 0, getWindowWidth(), getWindowHeight());
     }
     
     float CinderSketchComplex::getWindowContentScale() const
