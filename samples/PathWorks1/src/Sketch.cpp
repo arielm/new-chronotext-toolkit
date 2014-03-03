@@ -161,7 +161,7 @@ void Sketch::drawDots(const SplinePath &spline)
     {
         glPushMatrix();
         gl::translate(point);
-        gl::scale(0.5f);
+        gl::scale(0.5f / scale); // DIVIDING BY SCALE KEEPS THE RADIUS CONSISTENT
         dotTexture->drawFromCenter();
         glPopMatrix();
     }

@@ -37,61 +37,41 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        InputSourceRef lineSource;
-        InputSourceRef dashedLineSource;
-        
-        /*
-         * INSTEAD, WE SHOULD CHECK IF THE SCREEN IS "HIGH-DENSITY":
-         * - WOULD BE TRUE FOR iOS / OSX RETINA SCREENS
-         * - WE WOULD NEED TO QUERY SCREEN-DENSITY ON ANDROID
-         */
-        if (getWindowContentScale() > 1)
-        {
-            lineSource = InputSource::getResource("line_dense.png");
-            dashedLineSource = InputSource::getResource("dashed_line_dense.png");
-        }
-        else
-        {
-            lineSource = InputSource::getResource("line.png");
-            dashedLineSource = InputSource::getResource("dashed_line.png");
-        }
-        
-        lineTexture = textureManager.getTexture(lineSource, false, TextureRequest::FLAGS_TRANSLUCENT);
-        dashedLineTexture = textureManager.getTexture(TextureRequest(dashedLineSource, false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-        
         roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
         
         // ---
+
+        SplinePath roadSpline = SplinePath(InputSource::loadResource("spline_1.dat"));
         
-        SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
+        roadSpline.flush(SplinePath::TYPE_BSPLINE, roadPath);
+        roadPath.setMode(FollowablePath::MODE_MODULO);
         
-        spline.flush(SplinePath::TYPE_BSPLINE, path1, 3); // TOLERANCE (CHRONOTEXT CONCEPT) TWEAK (LOWER VALUES MEANS: MORE SEGMENTS)
-        StrokeHelper::stroke(path1, strip1, 64);
-        
-        path1.setMode(FollowablePath::MODE_MODULO);
+        StrokeHelper::stroke(roadPath, roadStrip, 64);
         
         // ---
         
-        spline2.add(-100, -100);
-        spline2.add(   0,  -25);
-        spline2.add( 100, -100);
-        spline2.add( 200,    0);
-        spline2.add( 100,  100);
-        spline2.add(   0,   25);
-        spline2.add(-100,  100);
-        spline2.add(-200,    0);
-        spline2.close();
+        peanutSpline.add(-100, -100);
+        peanutSpline.add(   0,  -25);
+        peanutSpline.add( 100, -100);
+        peanutSpline.add( 200,    0);
+        peanutSpline.add( 100,  100);
+        peanutSpline.add(   0,   25);
+        peanutSpline.add(-100,  100);
+        peanutSpline.add(-200,    0);
+        peanutSpline.close();
         
-        spline2.flush(SplinePath::TYPE_BSPLINE, path2, 3);
+        peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
+        
+        peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED, isHighDensity());
         
         // ---
         
         FXGDocument document(InputSource::loadResource("lys.fxg"));
         
-        for (auto &path2d : document.paths)
+        for (auto &path : document.paths)
         {
-            paths.emplace_back(path2d, 0.75f); // APPROXIMATION-SCALE (CINDER CONCEPT) TWEAK (HIGHER VALUES MEANS: MORE SEGMENTS)
+            lys.emplace_back(make_pair(FollowablePath(path), Hairline(textureManager, Hairline::TYPE_NORMAL, isHighDensity())));
         }
         
         offset = document.viewSize * 0.5f;
@@ -111,15 +91,13 @@ void Sketch::resize()
     // ---
     
     /*
-     * REGENERATING THE LYS' STROKES UPON SCREEN-SIZE CHANGE
-     * NECESSARY BECAUSE WE WANT TO KEEP THE STROKE-WIDTH "HAIRLINE"
+     * RE-STROKING THE LYS' HAIRLINES UPON SCREEN-SIZE CHANGE:
+     * NECESSARY IN ORDER TO KEEP THE STROKE-WIDTH "HAIRLINE"
      */
-    strips.clear();
     
-    for (auto &path : paths)
+    for (auto &it : lys)
     {
-        strips.emplace_back(TexturedTriangleStrip());
-        StrokeHelper::stroke(path, strips.back(), 4 / scale);
+        it.second.stroke(it.first, scale);
     }
 }
 
@@ -145,10 +123,10 @@ void Sketch::draw()
     gl::translate(-REFERENCE_W * 0.5f, -REFERENCE_H * 0.5f);
     
     roadTexture->begin();
-    strip1.draw();
+    roadStrip.draw();
     roadTexture->end();
     
-    drawDotOnPath(path1);
+    drawDotOnPath(roadPath);
     glPopMatrix();
     
     
@@ -158,15 +136,14 @@ void Sketch::draw()
     
     glPushMatrix();
     gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
+
+    peanutHairline.stroke(peanutPath, scale, position); // RE-STROKING IS NECESSARY BOTH IN TERM OF SCALING AND IN TERM OF MOTION
+
+    peanutHairline.beginTexture();
+    peanutHairline.draw();
+    peanutHairline.endTexture();
     
-    TexturedTriangleStrip strip;
-    StrokeHelper::stroke(path2, strip, 4 / scale, 0.5f, position); // DIVIDING BY scale KEEPS THE STROKE-WIDTH "HAIRLINE"
-    
-    dashedLineTexture->begin();
-    strip.draw();
-    dashedLineTexture->end();
-    
-    drawDotOnPath(path2);
+    drawDotOnPath(peanutPath);
     glPopMatrix();
     
     // ---
@@ -176,20 +153,13 @@ void Sketch::draw()
     glPushMatrix();
     gl::translate(-offset); // DRAWING THE LYS FROM ITS CENTER
     
-    lineTexture->begin();
-    
-    for (auto &strip : strips)
+    for (auto &it : lys)
     {
-        strip.draw();
-    }
-    
-    lineTexture->end();
-    
-    //
-    
-    for (auto &path : paths)
-    {
-        drawDotOnPath(path);
+        it.second.beginTexture();
+        it.second.draw();
+        it.second.endTexture();
+        
+        drawDotOnPath(it.first);
     }
     
     glPopMatrix();
@@ -206,5 +176,14 @@ void Sketch::drawDotOnPath(const FollowablePath &path)
     glPopMatrix();
     
     dotTexture->end();
-    
+}
+
+/*
+ * TODO:
+ * - THIS SHOULD BE PART OF THE API
+ * - ON ANDROID, WE SHOULD QUERY THE SCREEN-DENSITY
+ */
+bool Sketch::isHighDensity() const
+{
+    return (getWindowContentScale() > 1);
 }

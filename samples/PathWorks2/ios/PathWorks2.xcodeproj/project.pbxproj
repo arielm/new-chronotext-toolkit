@@ -37,11 +37,12 @@
 		A8F9FBEE18C3F6D400C48245 /* spline_1.dat in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBEB18C3F6D400C48245 /* spline_1.dat */; };
 		A8F9FBEF18C3F6D400C48245 /* lys.fxg in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBEC18C3F6D400C48245 /* lys.fxg */; };
 		A8F9FBF418C3F90400C48245 /* dot2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBF318C3F90400C48245 /* dot2x.png */; };
-		A8F9FC0018C41E3200C48245 /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBFD18C41E3200C48245 /* line.png */; };
 		A8F9FC0218C41E3200C48245 /* asphalt_128_alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBFF18C41E3200C48245 /* asphalt_128_alpha.png */; };
-		A8F9FC0418C4247900C48245 /* dashed_line.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC0318C4247900C48245 /* dashed_line.png */; };
-		A8F9FC0718C42D7100C48245 /* line_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC0518C42D7100C48245 /* line_dense.png */; };
-		A8F9FC0818C42D7100C48245 /* dashed_line_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC0618C42D7100C48245 /* dashed_line_dense.png */; };
+		A8F9FC1418C4CA4100C48245 /* hairline.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC1018C4CA4100C48245 /* hairline.png */; };
+		A8F9FC1518C4CA4100C48245 /* hairline_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC1118C4CA4100C48245 /* hairline_dense.png */; };
+		A8F9FC1618C4CA4100C48245 /* hairline_dashed.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC1218C4CA4100C48245 /* hairline_dashed.png */; };
+		A8F9FC1718C4CA4100C48245 /* hairline_dashed_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC1318C4CA4100C48245 /* hairline_dashed_dense.png */; };
+		A8F9FC1A18C4CA5000C48245 /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC1918C4CA5000C48245 /* Hairline.cpp */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
 		A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B9416E3AB8000367F97 /* CinderApp.cpp */; };
@@ -126,11 +127,13 @@
 		A8F9FBEB18C3F6D400C48245 /* spline_1.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = spline_1.dat; path = ../resources/spline_1.dat; sourceTree = "<group>"; };
 		A8F9FBEC18C3F6D400C48245 /* lys.fxg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = lys.fxg; path = ../resources/lys.fxg; sourceTree = "<group>"; };
 		A8F9FBF318C3F90400C48245 /* dot2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot2x.png; path = ../resources/dot2x.png; sourceTree = "<group>"; };
-		A8F9FBFD18C41E3200C48245 /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = line.png; path = ../resources/line.png; sourceTree = "<group>"; };
 		A8F9FBFF18C41E3200C48245 /* asphalt_128_alpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = asphalt_128_alpha.png; path = ../resources/asphalt_128_alpha.png; sourceTree = "<group>"; };
-		A8F9FC0318C4247900C48245 /* dashed_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dashed_line.png; path = ../resources/dashed_line.png; sourceTree = "<group>"; };
-		A8F9FC0518C42D7100C48245 /* line_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = line_dense.png; path = ../resources/line_dense.png; sourceTree = "<group>"; };
-		A8F9FC0618C42D7100C48245 /* dashed_line_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dashed_line_dense.png; path = ../resources/dashed_line_dense.png; sourceTree = "<group>"; };
+		A8F9FC1018C4CA4100C48245 /* hairline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline.png; path = ../resources/hairline.png; sourceTree = "<group>"; };
+		A8F9FC1118C4CA4100C48245 /* hairline_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dense.png; path = ../resources/hairline_dense.png; sourceTree = "<group>"; };
+		A8F9FC1218C4CA4100C48245 /* hairline_dashed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dashed.png; path = ../resources/hairline_dashed.png; sourceTree = "<group>"; };
+		A8F9FC1318C4CA4100C48245 /* hairline_dashed_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dashed_dense.png; path = ../resources/hairline_dashed_dense.png; sourceTree = "<group>"; };
+		A8F9FC1818C4CA5000C48245 /* Hairline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hairline.h; path = ../src/Hairline.h; sourceTree = "<group>"; };
+		A8F9FC1918C4CA5000C48245 /* Hairline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Hairline.cpp; path = ../src/Hairline.cpp; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -234,6 +237,8 @@
 			children = (
 				A8DB3EC516E0B96C00504D27 /* Sketch.h */,
 				A8DB3EC416E0B96C00504D27 /* Sketch.cpp */,
+				A8F9FC1818C4CA5000C48245 /* Hairline.h */,
+				A8F9FC1918C4CA5000C48245 /* Hairline.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -241,10 +246,10 @@
 		00692BD914FF149000D0FFFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A8F9FBFD18C41E3200C48245 /* line.png */,
-				A8F9FC0518C42D7100C48245 /* line_dense.png */,
-				A8F9FC0318C4247900C48245 /* dashed_line.png */,
-				A8F9FC0618C42D7100C48245 /* dashed_line_dense.png */,
+				A8F9FC1018C4CA4100C48245 /* hairline.png */,
+				A8F9FC1118C4CA4100C48245 /* hairline_dense.png */,
+				A8F9FC1218C4CA4100C48245 /* hairline_dashed.png */,
+				A8F9FC1318C4CA4100C48245 /* hairline_dashed_dense.png */,
 				A8F9FBF318C3F90400C48245 /* dot2x.png */,
 				A8F9FBFF18C41E3200C48245 /* asphalt_128_alpha.png */,
 				A8F9FBEB18C3F6D400C48245 /* spline_1.dat */,
@@ -497,16 +502,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8F9FC1718C4CA4100C48245 /* hairline_dashed_dense.png in Resources */,
+				A8F9FC1418C4CA4100C48245 /* hairline.png in Resources */,
 				A8F9FBF418C3F90400C48245 /* dot2x.png in Resources */,
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
-				A8F9FC0418C4247900C48245 /* dashed_line.png in Resources */,
 				A8F9FBEF18C3F6D400C48245 /* lys.fxg in Resources */,
 				A8F9FBEE18C3F6D400C48245 /* spline_1.dat in Resources */,
 				A8F9FC0218C41E3200C48245 /* asphalt_128_alpha.png in Resources */,
-				A8F9FC0818C42D7100C48245 /* dashed_line_dense.png in Resources */,
-				A8F9FC0718C42D7100C48245 /* line_dense.png in Resources */,
+				A8F9FC1618C4CA4100C48245 /* hairline_dashed.png in Resources */,
 				A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */,
-				A8F9FC0018C41E3200C48245 /* line.png in Resources */,
+				A8F9FC1518C4CA4100C48245 /* hairline_dense.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +547,7 @@
 				A8F9FBEA18C3F6C600C48245 /* FXGDocument.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
+				A8F9FC1A18C4CA5000C48245 /* Hairline.cpp in Sources */,
 				A84D7E5B18BD4BC100D7D933 /* FontManager.cpp in Sources */,
 				A822634B18BE2EA400D57C8C /* Texture.cpp in Sources */,
 				A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */,

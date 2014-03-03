@@ -11,25 +11,24 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/path/SplinePath.h"
-#include "chronotext/path/StrokeHelper.h"
+
+#include "Hairline.h"
 
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
 
-    chr::TextureRef lineTexture;
-    chr::TextureRef dashedLineTexture;
     chr::TextureRef roadTexture;
     chr::TextureRef dotTexture;
     
-    chr::FollowablePath path1;
-    chr::TexturedTriangleStrip strip1;
+    chr::FollowablePath roadPath;
+    chr::TexturedTriangleStrip roadStrip;
     
-    chr::SplinePath spline2;
-    chr::FollowablePath path2;
+    chr::SplinePath peanutSpline;
+    chr::FollowablePath peanutPath;
+    Hairline peanutHairline;
     
-    std::vector<chr::FollowablePath> paths;
-    std::vector<chr::TexturedTriangleStrip> strips;
+    std::vector<std::pair<chr::FollowablePath, Hairline>> lys;
     ci::Vec2f offset;
     
     float scale;
@@ -44,4 +43,5 @@ public:
     void draw();
     
     void drawDotOnPath(const chr::FollowablePath &path);
+    bool isHighDensity() const;
 };
