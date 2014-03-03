@@ -16,9 +16,10 @@
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
-    
-    chr::TextureRef strokeTexture;
+
     chr::TextureRef dotTexture;
+    chr::TextureRef lineTexture;
+    chr::TextureRef dashedLineTexture;
     chr::TextureRef roadTexture;
     
     chr::FollowablePath path1;
@@ -26,6 +27,10 @@ class Sketch : public chr::CinderSketch
     
     chr::SplinePath spline2;
     chr::FollowablePath path2;
+    
+    std::vector<chr::FollowablePath> paths;
+    std::vector<chr::TexturedTriangleStrip> strips;
+    ci::Vec2f offset;
     
     float scale;
     float position;

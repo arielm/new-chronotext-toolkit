@@ -11,6 +11,7 @@
 #include "chronotext/InputSource.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/utils/GLUtils.h"
+#include "chronotext/path/FXGDocument.h"
 
 using namespace std;
 using namespace ci;
@@ -36,15 +37,16 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        strokeTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("dotted_line.png"), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+        lineTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("line.png"), false, TextureRequest::FLAGS_TRANSLUCENT));
+        dashedLineTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("dashed_line.png"), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         
         // ---
         
         SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
         
-        spline.flush(SplinePath::TYPE_BSPLINE, path1, 3);
+        spline.flush(SplinePath::TYPE_BSPLINE, path1, 3); // TOLERANCE (CHRONOTEXT) COMPROMISE (LOWER VALUES MEANS: MORE SEGMENTS)
         StrokeHelper::stroke(path1, strip1, 64);
         
         path1.setMode(FollowablePath::MODE_MODULO);
@@ -62,6 +64,17 @@ void Sketch::setup(bool renewContext)
         spline2.close();
         
         spline2.flush(SplinePath::TYPE_BSPLINE, path2, 3);
+        
+        // ---
+        
+        FXGDocument document(InputSource::loadResource("lys.fxg"));
+        
+        for (auto &path2d : document.paths)
+        {
+            paths.emplace_back(path2d, 0.75f); // APPROXIMATION-SCALE (CINDER) COMPROMISE (HIGHER VALUES MEANS: MORE SEGMENTS)
+        }
+        
+        offset = document.viewSize * 0.5f;
     }
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -74,6 +87,20 @@ void Sketch::setup(bool renewContext)
 void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
+
+    // ---
+    
+    /*
+     * REGENERATING THE LYS' STROKES EACH TIME SCREEN-SIZE IS CHANGE
+     * NECESSARY BECAUSE WE WANT TO THE STROKE-WIDTH "HAIRLINE"
+     */
+    strips.clear();
+    
+    for (auto &path : paths)
+    {
+        strips.emplace_back(TexturedTriangleStrip());
+        StrokeHelper::stroke(path, strips.back(), 4 / scale);
+    }
 }
 
 void Sketch::update()
@@ -107,7 +134,7 @@ void Sketch::draw()
     
     // ---
     
-    gl::color(0, 0, 1, 0.5f);
+    gl::color(1, 0, 0, 0.5f);
     
     glPushMatrix();
     gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
@@ -115,11 +142,36 @@ void Sketch::draw()
     TexturedTriangleStrip strip;
     StrokeHelper::stroke(path2, strip, 4 / scale, 0.5f, position); // DIVIDING BY scale KEEPS THE STROKE-WIDTH "HAIRLINE"
     
-    strokeTexture->begin();
+    dashedLineTexture->begin();
     strip.draw();
-    strokeTexture->end();
+    dashedLineTexture->end();
     
     drawDotOnPath(path2);
+    glPopMatrix();
+    
+    // ---
+    
+    gl::color(0, 0, 1, 0.5f);
+    
+    glPushMatrix();
+    gl::translate(-offset); // DRAWING THE LYS FROM ITS CENTER
+    
+    lineTexture->begin();
+    
+    for (auto &strip : strips)
+    {
+        strip.draw();
+    }
+    
+    lineTexture->end();
+    
+    //
+    
+    for (auto &path : paths)
+    {
+        drawDotOnPath(path);
+    }
+    
     glPopMatrix();
 }
 
