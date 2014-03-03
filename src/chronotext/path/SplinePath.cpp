@@ -178,7 +178,8 @@ namespace chronotext
                 aspc.segment(points[size - 3], points[size - 2], points[size - 1], points[0]);
                 aspc.segment(points[size - 2], points[size - 1], points[0], points[1]);
                 
-                path.add(path.getPoints().front());
+                path.close();
+                path.setMode(FollowablePath::MODE_LOOP);
             }
             else
             {
