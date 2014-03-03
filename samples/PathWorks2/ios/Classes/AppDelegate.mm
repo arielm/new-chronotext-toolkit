@@ -11,7 +11,6 @@
         [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
         [NSNumber numberWithInt:UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight], kGLViewControllerPropertyInterfaceOrientationMask,
         [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
-        [NSNumber numberWithInt:GLKViewDrawableMultisample4X], kGLViewControllerPropertyMultisample,
         nil]];
     
     viewController.cinderDelegate = self;

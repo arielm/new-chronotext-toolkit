@@ -10,29 +10,25 @@
 
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
-#include "chronotext/font/xf/FontManager.h"
 #include "chronotext/path/SplinePath.h"
-#include "chronotext/path/FXGDocument.h"
+#include "chronotext/path/StrokeHelper.h"
 
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
+    
+    chr::TextureRef strokeTexture;
     chr::TextureRef dotTexture;
+    chr::TextureRef roadTexture;
     
-    chr::xf::FontManager fontManager;
-    std::shared_ptr<chr::XFont> font;
-    
-    chr::SplinePath spline1;
     chr::FollowablePath path1;
+    chr::TexturedTriangleStrip strip1;
     
     chr::SplinePath spline2;
     chr::FollowablePath path2;
     
-    FXGDocument document;
-
     float scale;
-    float position1;
-    float position2;
+    float position;
     
 public:
     Sketch(void *context, void *delegate = NULL);
@@ -42,5 +38,5 @@ public:
     void update();
     void draw();
     
-    void drawDots(const chr::SplinePath &spline);
+    void drawDotOnPath(const chr::FollowablePath &path);
 };

@@ -59,4 +59,4 @@ void Application::keyDown(KeyEvent event)
     }
 }
 
-CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_MSAA_4))
+CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

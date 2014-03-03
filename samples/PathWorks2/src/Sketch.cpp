@@ -11,14 +11,10 @@
 #include "chronotext/InputSource.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/utils/GLUtils.h"
-#include "chronotext/font/xf/TextHelper.h"
 
 using namespace std;
 using namespace ci;
 using namespace chr;
-using namespace chr::xf;
-
-const float TEXT_SIZE = 18;
 
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
@@ -28,9 +24,6 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-const wstring text1 = L"followable-paths were born for motion";
-const wstring text2 = L"this peanut is a B-spline with 8 points";
-
 void Sketch::setup(bool renewContext)
 {
     if (renewContext)
@@ -39,20 +32,22 @@ void Sketch::setup(bool renewContext)
          *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
          */
         textureManager.discard();
-        fontManager.discardTextures();
-        
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
+        textureManager.reload();
     }
     else
     {
+        strokeTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("dotted_line.png"), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
+        roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         
         // ---
         
-        spline1 = SplinePath(InputSource::loadResource("spline_1.dat"));
-        spline1.flush(SplinePath::TYPE_BSPLINE, path1, 3);
+        SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
+        
+        spline.flush(SplinePath::TYPE_BSPLINE, path1, 3);
+        StrokeHelper::stroke(path1, strip1, 64);
+        
+        path1.setMode(FollowablePath::MODE_MODULO);
         
         // ---
         
@@ -67,11 +62,6 @@ void Sketch::setup(bool renewContext)
         spline2.close();
         
         spline2.flush(SplinePath::TYPE_BSPLINE, path2, 3);
-        path2.setMode(FollowablePath::MODE_LOOP);
-        
-        // ---
-        
-        document = FXGDocument(InputSource::loadResource("lys.fxg"));
     }
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -89,9 +79,7 @@ void Sketch::resize()
 void Sketch::update()
 {
     double now = getElapsedSeconds();
-    
-    position1 = 300 + 250 * math<float>::sin(now * 1.25f);
-    position2 = now * 60;
+    position = now * 40;
 }
 
 void Sketch::draw()
@@ -104,67 +92,47 @@ void Sketch::draw()
     
     // ---
     
-    gl::color(0, 0, 0, 0.33f);
-
+    gl::color(1, 1, 1, 1);
+    
     glPushMatrix();
     gl::translate(-REFERENCE_W * 0.5f, -REFERENCE_H * 0.5f);
-
-    gl::draw(path1.getPoints());
-    drawDots(spline1);
     
-    //
+    roadTexture->begin();
+    strip1.draw();
+    roadTexture->end();
     
-    font->setSize(TEXT_SIZE);
-    font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text1, path1, position1, -6);
-
+    drawDotOnPath(path1);
     glPopMatrix();
-
-    // ---
-
-    gl::color(1, 0, 0, 0.5f);
     
-    glPushMatrix();
-    gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
-    
-    gl::draw(path2.getPoints());
-    drawDots(spline2);
-    
-    //
-    
-    font->setSize(TEXT_SIZE);
-    font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text2, path2, position2, font->getOffsetY(XFont::ALIGN_MIDDLE));
-    
-    glPopMatrix();
     
     // ---
     
     gl::color(0, 0, 1, 0.5f);
     
     glPushMatrix();
-    gl::translate(-document.viewSize * 0.5f); // DRAWING THE LYS FROM ITS CENTER
+    gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
     
-    for (auto &path : document.paths)
-    {
-        gl::draw(path); // XXX: SUB-OPTIMAL (THE SUB-DIVIDED POINTS COULD BE CACHED)
-    }
+    TexturedTriangleStrip strip;
+    StrokeHelper::stroke(path2, strip, 4 / scale, 0.5f, position); // DIVIDING BY scale KEEPS THE STROKE-WIDTH "HAIRLINE"
     
+    strokeTexture->begin();
+    strip.draw();
+    strokeTexture->end();
+    
+    drawDotOnPath(path2);
     glPopMatrix();
 }
 
-void Sketch::drawDots(const SplinePath &spline)
+void Sketch::drawDotOnPath(const FollowablePath &path)
 {
     dotTexture->begin();
     
-    for (auto &point : spline.getPoints())
-    {
-        glPushMatrix();
-        gl::translate(point);
-        gl::scale(0.5f);
-        dotTexture->drawFromCenter();
-        glPopMatrix();
-    }
+    glPushMatrix();
+    gl::translate(path.pos2Point(position));
+    gl::scale(0.5f / scale); // DIVIDING BY SCALE KEEPS THE RADIUS CONSISTENT
+    dotTexture->drawFromCenter();
+    glPopMatrix();
     
     dotTexture->end();
+    
 }
