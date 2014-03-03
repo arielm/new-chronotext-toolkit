@@ -51,7 +51,7 @@
 		A8F9FBFC18C41D3C00C48245 /* hairline_dashed.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBFB18C41D3C00C48245 /* hairline_dashed.png */; };
 		A8F9FC0B18C42EC400C48245 /* hairline_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC0918C42EC400C48245 /* hairline_dense.png */; };
 		A8F9FC0C18C42EC400C48245 /* hairline_dashed_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC0A18C42EC400C48245 /* hairline_dashed_dense.png */; };
-		A8F9FC0F18C4AD2D00C48245 /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC0D18C4AD2D00C48245 /* Hairline.cpp */; };
+		A8F9FC2E18C4DE8A00C48245 /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC2D18C4DE8A00C48245 /* Hairline.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -144,8 +144,8 @@
 		A8F9FBFB18C41D3C00C48245 /* hairline_dashed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dashed.png; path = ../resources/hairline_dashed.png; sourceTree = "<group>"; };
 		A8F9FC0918C42EC400C48245 /* hairline_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dense.png; path = ../resources/hairline_dense.png; sourceTree = "<group>"; };
 		A8F9FC0A18C42EC400C48245 /* hairline_dashed_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dashed_dense.png; path = ../resources/hairline_dashed_dense.png; sourceTree = "<group>"; };
-		A8F9FC0D18C4AD2D00C48245 /* Hairline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Hairline.cpp; path = ../src/Hairline.cpp; sourceTree = "<group>"; };
-		A8F9FC0E18C4AD2D00C48245 /* Hairline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hairline.h; path = ../src/Hairline.h; sourceTree = "<group>"; };
+		A8F9FC2C18C4DE8A00C48245 /* Hairline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hairline.h; sourceTree = "<group>"; };
+		A8F9FC2D18C4DE8A00C48245 /* Hairline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hairline.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,8 +173,6 @@
 				A821DF8D16ED34A800DB025D /* Application.cpp */,
 				A82C910916E02DAA00FF519C /* Sketch.h */,
 				A82C910816E02DAA00FF519C /* Sketch.cpp */,
-				A8F9FC0E18C4AD2D00C48245 /* Hairline.h */,
-				A8F9FC0D18C4AD2D00C48245 /* Hairline.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -278,6 +276,8 @@
 		A822635218BE705100D57C8C /* path */ = {
 			isa = PBXGroup;
 			children = (
+				A8F9FC2C18C4DE8A00C48245 /* Hairline.h */,
+				A8F9FC2D18C4DE8A00C48245 /* Hairline.cpp */,
 				A822635518BE705100D57C8C /* FollowablePath.cpp */,
 				A822635618BE705100D57C8C /* FollowablePath.h */,
 				A822635718BE705100D57C8C /* SplinePath.cpp */,
@@ -480,7 +480,6 @@
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */,
-				A8F9FC0F18C4AD2D00C48245 /* Hairline.cpp in Sources */,
 				A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */,
 				A829873318BD02D500934642 /* TextHelper.cpp in Sources */,
 				A822635B18BE705100D57C8C /* SplinePath.cpp in Sources */,
@@ -491,6 +490,7 @@
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
 				A822633318BE224C00D57C8C /* PVRHelper.cpp in Sources */,
+				A8F9FC2E18C4DE8A00C48245 /* Hairline.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A822637718BF54BC00D57C8C /* Clock.cpp in Sources */,
 				A822633518BE224C00D57C8C /* Texture.cpp in Sources */,

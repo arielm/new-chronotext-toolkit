@@ -42,9 +42,9 @@ void Sketch::setup(bool renewContext)
         
         // ---
 
-        SplinePath roadSpline = SplinePath(InputSource::loadResource("spline_1.dat"));
+        SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
         
-        roadSpline.flush(SplinePath::TYPE_BSPLINE, roadPath);
+        spline.flush(SplinePath::TYPE_BSPLINE, roadPath);
         roadPath.setMode(FollowablePath::MODE_MODULO);
         
         StrokeHelper::stroke(roadPath, roadStrip, 64);
@@ -90,13 +90,10 @@ void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
 
-    // ---
-    
     /*
      * RE-STROKING THE LYS' HAIRLINES UPON SCREEN-SIZE CHANGE:
      * NECESSARY IN ORDER TO KEEP THE STROKE-WIDTH "HAIRLINE"
      */
-    
     for (auto &it : lys)
     {
         it.second.stroke(it.first, scale);
@@ -140,10 +137,7 @@ void Sketch::draw()
     gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
 
     peanutHairline.stroke(peanutPath, scale, position); // RE-STROKING IS NECESSARY BOTH IN TERM OF SCALING AND IN TERM OF MOTION
-
-    peanutHairline.beginTexture();
     peanutHairline.draw();
-    peanutHairline.endTexture();
     
     drawDotOnPath(peanutPath);
     glPopMatrix();
@@ -157,10 +151,7 @@ void Sketch::draw()
     
     for (auto &it : lys)
     {
-        it.second.beginTexture();
         it.second.draw();
-        it.second.endTexture();
-        
         drawDotOnPath(it.first);
     }
     

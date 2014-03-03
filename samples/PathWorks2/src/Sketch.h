@@ -11,8 +11,7 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/path/SplinePath.h"
-
-#include "Hairline.h"
+#include "chronotext/path/Hairline.h"
 
 class Sketch : public chr::CinderSketch
 {
@@ -26,9 +25,9 @@ class Sketch : public chr::CinderSketch
     
     chr::SplinePath peanutSpline;
     chr::FollowablePath peanutPath;
-    Hairline peanutHairline;
+    chr::Hairline peanutHairline;
     
-    std::vector<std::pair<chr::FollowablePath, Hairline>> lys;
+    std::vector<std::pair<chr::FollowablePath, chr::Hairline>> lys;
     ci::Vec2f offset;
     
     float scale;

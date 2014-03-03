@@ -11,19 +11,18 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
-#include "chronotext/path/StrokeHelper.h"
+#include "chronotext/path/Hairline.h"
 #include "chronotext/time/Clock.h"
 
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
-    chr::TextureRef strokeTexture;
-    
     chr::xf::FontManager fontManager;
+    
     std::shared_ptr<chr::XFont> font;
     
     chr::FollowablePath path;
-    chr::TexturedTriangleStrip stroke;
+    chr::Hairline hairline;
     std::vector<ci::Vec2f> vertices;
 
     chr::Clock clock;
@@ -44,6 +43,6 @@ public:
     void addTouch(int index, float x, float y);
     void removeTouch(int index, float x, float y);
     
-    void createDune(const ci::Vec2f &size);
+    void updateDune();
     void drawDune();
 };

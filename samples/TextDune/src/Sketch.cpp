@@ -44,7 +44,7 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        strokeTexture = textureManager.getTexture("line.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+        hairline = Hairline(textureManager, Hairline::TYPE_NORMAL, isHighDensity());
         font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     }
     
@@ -60,7 +60,7 @@ void Sketch::setup(bool renewContext)
 void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
-    createDune(Vec2f(getWindowSize()) / scale);
+    updateDune();
 }
 
 void Sketch::start(int flags)
@@ -89,11 +89,8 @@ void Sketch::draw()
     
     drawDune();
     
-    // ---
-    
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
-    
     TextHelper::drawTextOnPath(*font, text, path, position, -GAP);
 }
 
@@ -107,12 +104,14 @@ void Sketch::removeTouch(int index, float x, float y)
     clock.start();
 }
 
-void Sketch::createDune(const Vec2f &size)
+void Sketch::updateDune()
 {
     const float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
     const int slotCount = sizeof(coefs) / sizeof(float);
-    
+
+    Vec2f size = Vec2f(getWindowSize()) / scale;
     float slotSize = size.x / (slotCount - 1);
+    
     SplinePath spline;
 
     for (int i = 0; i < slotCount; i++)
@@ -125,7 +124,7 @@ void Sketch::createDune(const Vec2f &size)
     
     // ---
     
-    StrokeHelper::stroke(path, stroke, 8); // SEE line.png, USED FOR PSEUDO-ANTIALISING
+    hairline.stroke(path, scale); // USED FOR PSEUDO-ANTIALISING
     
     // ---
     
@@ -151,8 +150,5 @@ void Sketch::drawDune()
     // ---
     
     gl::color(1, 1, 1, 1);
-    
-    strokeTexture->begin();
-    stroke.draw();
-    strokeTexture->end();
+    hairline.draw();
 }
