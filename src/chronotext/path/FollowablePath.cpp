@@ -17,7 +17,7 @@ namespace chronotext
 {
     FollowablePath::FollowablePath(int capacity)
     :
-    mode(MODE_BOUNDED)
+    mode(MODE_TANGENT)
     {
         if (capacity > 0)
         {
@@ -27,14 +27,14 @@ namespace chronotext
     
     FollowablePath::FollowablePath(const vector<Vec2f> &points)
     :
-    mode(MODE_BOUNDED)
+    mode(MODE_TANGENT)
     {
         add(points);
     }
     
     FollowablePath::FollowablePath(const Path2d &path, float approximationScale)
     :
-    mode(MODE_BOUNDED)
+    mode(MODE_TANGENT)
     {
         add(path.subdivide(approximationScale));
         
@@ -46,7 +46,7 @@ namespace chronotext
     
     FollowablePath::FollowablePath(DataSourceRef source)
     :
-    mode(MODE_BOUNDED)
+    mode(MODE_TANGENT)
     {
         read(source);
     }
