@@ -31,11 +31,14 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
+        /*
+         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
+         */
         textureManager.discard();
         fontManager.discardTextures();
         
-        textureManager.reload();
-        fontManager.reloadTextures(); // NOT MANDATORY
+        textureManager.reload(); // MANDATORY
+        fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
     }
     else
     {
@@ -145,7 +148,7 @@ void Sketch::draw()
         glPushMatrix();
         glMultMatrixf(m.data());
         
-        gl::translate(0, -font->getStrikethroughOffset());
+        gl::translate(0, -font->getOffsetY(XFont::ALIGN_MIDDLE));
         gl::scale(DOT_SCALE);
         
         dot->drawFromCenter();

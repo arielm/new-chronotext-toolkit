@@ -12,11 +12,14 @@
 #include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/utils/GLUtils.h"
+#include "chronotext/font/xf/TextHelper.h"
 
 using namespace std;
 using namespace ci;
-using namespace app;
 using namespace chr;
+using namespace chr::xf;
+
+const float TEXT_SIZE = 18;
 
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
@@ -26,16 +29,26 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
+const wstring text1 = L"followable-paths were born for motion";
+const wstring text2 = L"this peanut is a b-spline with 8 points";
+
 void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
+        /*
+         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
+         */
         textureManager.discard();
-        textureManager.reload();
+        fontManager.discardTextures();
+        
+        textureManager.reload(); // MANDATORY
+        fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
     }
     else
     {
         dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+        font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
         
         // ---
         
@@ -55,12 +68,12 @@ void Sketch::setup(bool renewContext)
         spline2.close();
         
         spline2.flush(SplinePath::TYPE_BSPLINE, path2, 3);
+        path2.setMode(FollowablePath::MODE_LOOP);
         
         // ---
         
         document = FXGDocument(InputSource::loadResource("lys.fxg"));
     }
-
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -74,6 +87,14 @@ void Sketch::resize()
     scale = getWindowHeight() / REFERENCE_H;
 }
 
+void Sketch::update()
+{
+    double now = getElapsedSeconds();
+    
+    position1 = 300 + 250 * math<float>::sin(now * 1.25f);
+    position2 = now * 60;
+}
+
 void Sketch::draw()
 {
     gl::clear(Color::white(), false);
@@ -84,7 +105,7 @@ void Sketch::draw()
     
     // ---
     
-    gl::color(0, 0, 0, 0.5f);
+    gl::color(0, 0, 0, 0.33f);
 
     glPushMatrix();
     gl::translate(-REFERENCE_W * 0.5f, -REFERENCE_H * 0.5f);
@@ -92,17 +113,29 @@ void Sketch::draw()
     gl::draw(path1.getPoints());
     drawDots(spline1);
     
-    glPopMatrix();
+    //
     
+    font->setSize(TEXT_SIZE);
+    font->setColor(0, 0, 0, 0.85f);
+    TextHelper::drawTextOnPath(*font, text1, path1, position1, -6);
+
+    glPopMatrix();
+
     // ---
 
-    gl::color(1, 0, 0, 0.75f);
+    gl::color(1, 0, 0, 0.5f);
     
     glPushMatrix();
     gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
     
     gl::draw(path2.getPoints());
     drawDots(spline2);
+    
+    //
+    
+    font->setSize(TEXT_SIZE);
+    font->setColor(0, 0, 0, 0.85f);
+    TextHelper::drawTextOnPath(*font, text2, path2, position2, font->getOffsetY(XFont::ALIGN_MIDDLE));
     
     glPopMatrix();
     

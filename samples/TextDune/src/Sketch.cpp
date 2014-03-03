@@ -33,11 +33,14 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
+        /*
+         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
+         */
         textureManager.discard();
         fontManager.discardTextures();
         
-        textureManager.reload();
-        fontManager.reloadTextures(); // NOT MANDATORY
+        textureManager.reload(); // MANDATORY
+        fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
     }
     else
     {
@@ -48,8 +51,6 @@ void Sketch::setup(bool renewContext)
     // ---
     
     scale = getWindowHeight() / REFERENCE_H;
-    
-    path.setMode(FollowablePath::MODE_TANGENT);
     createDune(Vec2f(getWindowSize()) / scale);
 
     // ---
