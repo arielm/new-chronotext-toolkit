@@ -17,10 +17,10 @@ class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
 
-    chr::TextureRef dotTexture;
     chr::TextureRef lineTexture;
     chr::TextureRef dashedLineTexture;
     chr::TextureRef roadTexture;
+    chr::TextureRef dotTexture;
     
     chr::FollowablePath path1;
     chr::TexturedTriangleStrip strip1;

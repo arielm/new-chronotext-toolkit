@@ -37,16 +37,36 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        lineTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("line.png"), false, TextureRequest::FLAGS_TRANSLUCENT));
-        dashedLineTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("dashed_line.png"), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+        InputSourceRef lineSource;
+        InputSourceRef dashedLineSource;
+        
+        /*
+         * INSTEAD, WE SHOULD CHECK IF THE SCREEN IS "HIGH-DENSITY":
+         * - WOULD BE TRUE FOR iOS / OSX RETINA SCREENS
+         * - WE WOULD NEED TO QUERY SCREEN-DENSITY ON ANDROID
+         */
+        if (getWindowContentScale() > 1)
+        {
+            lineSource = InputSource::getResource("line_dense.png");
+            dashedLineSource = InputSource::getResource("dashed_line_dense.png");
+        }
+        else
+        {
+            lineSource = InputSource::getResource("line.png");
+            dashedLineSource = InputSource::getResource("dashed_line.png");
+        }
+        
+        lineTexture = textureManager.getTexture(lineSource, false, TextureRequest::FLAGS_TRANSLUCENT);
+        dashedLineTexture = textureManager.getTexture(TextureRequest(dashedLineSource, false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+        
         roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+        dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
         
         // ---
         
         SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
         
-        spline.flush(SplinePath::TYPE_BSPLINE, path1, 3); // TOLERANCE (CHRONOTEXT) COMPROMISE (LOWER VALUES MEANS: MORE SEGMENTS)
+        spline.flush(SplinePath::TYPE_BSPLINE, path1, 3); // TOLERANCE (CHRONOTEXT CONCEPT) TWEAK (LOWER VALUES MEANS: MORE SEGMENTS)
         StrokeHelper::stroke(path1, strip1, 64);
         
         path1.setMode(FollowablePath::MODE_MODULO);
@@ -71,7 +91,7 @@ void Sketch::setup(bool renewContext)
         
         for (auto &path2d : document.paths)
         {
-            paths.emplace_back(path2d, 0.75f); // APPROXIMATION-SCALE (CINDER) COMPROMISE (HIGHER VALUES MEANS: MORE SEGMENTS)
+            paths.emplace_back(path2d, 0.75f); // APPROXIMATION-SCALE (CINDER CONCEPT) TWEAK (HIGHER VALUES MEANS: MORE SEGMENTS)
         }
         
         offset = document.viewSize * 0.5f;
@@ -91,8 +111,8 @@ void Sketch::resize()
     // ---
     
     /*
-     * REGENERATING THE LYS' STROKES EACH TIME SCREEN-SIZE IS CHANGE
-     * NECESSARY BECAUSE WE WANT TO THE STROKE-WIDTH "HAIRLINE"
+     * REGENERATING THE LYS' STROKES UPON SCREEN-SIZE CHANGE
+     * NECESSARY BECAUSE WE WANT TO KEEP THE STROKE-WIDTH "HAIRLINE"
      */
     strips.clear();
     
