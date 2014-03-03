@@ -50,16 +50,17 @@ void Sketch::setup(bool renewContext)
     
     // ---
     
-    scale = getWindowHeight() / REFERENCE_H;
-    createDune(Vec2f(getWindowSize()) / scale);
-
-    // ---
-    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
+}
+
+void Sketch::resize()
+{
+    scale = getWindowHeight() / REFERENCE_H;
+    createDune(Vec2f(getWindowSize()) / scale);
 }
 
 void Sketch::start(int flags)

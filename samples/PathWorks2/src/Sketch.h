@@ -43,5 +43,4 @@ public:
     void draw();
     
     void drawDotOnPath(const chr::FollowablePath &path);
-    bool isHighDensity() const;
 };

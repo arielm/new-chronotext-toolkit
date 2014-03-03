@@ -73,6 +73,8 @@ void Sketch::setup(bool renewContext)
         document = FXGDocument(InputSource::loadResource("lys.fxg"));
     }
     
+    // ---
+    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     

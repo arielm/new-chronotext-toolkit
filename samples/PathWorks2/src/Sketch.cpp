@@ -77,6 +77,8 @@ void Sketch::setup(bool renewContext)
         offset = document.viewSize * 0.5f;
     }
     
+    // ---
+    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     
@@ -176,14 +178,4 @@ void Sketch::drawDotOnPath(const FollowablePath &path)
     glPopMatrix();
     
     dotTexture->end();
-}
-
-/*
- * TODO:
- * - THIS SHOULD BE PART OF THE API
- * - ON ANDROID, WE SHOULD QUERY THE SCREEN-DENSITY
- */
-bool Sketch::isHighDensity() const
-{
-    return (getWindowContentScale() > 1);
 }
