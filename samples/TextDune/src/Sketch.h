@@ -6,6 +6,13 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * REFERENCES:
+ *
+ * THE TextDune APP WAS ORIGINALLY PUBLISHED IN 2010:
+ * https://vimeo.com/14476015
+ */
+
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"

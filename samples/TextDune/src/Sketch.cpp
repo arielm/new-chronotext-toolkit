@@ -22,7 +22,7 @@ const float REFERENCE_H = 768;
 const float TEXT_SIZE = 20;
 const float GAP = 7;
 
-const wstring text = L"if two dimensions are not enough for interaction, how about a single one?";
+const wstring text = L"hell with sinus, text should move under the influence of physical forces!";
 
 Sketch::Sketch(void *context, void *delegate)
 :
