@@ -18,6 +18,8 @@ class Sketch : public chr::CinderSketch
     
     float scale;
     
+    std::map<std::string, std::vector<std::string>> lines;
+    
 public:
     Sketch(void *context, void *delegate = NULL);
     

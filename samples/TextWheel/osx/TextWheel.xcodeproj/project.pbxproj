@@ -42,6 +42,7 @@
 		A8F9FC5218C5683B00C48245 /* scrptrun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4318C5683B00C48245 /* scrptrun.cpp */; };
 		A8F9FC5318C5683B00C48245 /* TextItemizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4518C5683B00C48245 /* TextItemizer.cpp */; };
 		A8F9FC5418C5683B00C48245 /* VirtualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4918C5683B00C48245 /* VirtualFont.cpp */; };
+		A8F9FC5618C56F0700C48245 /* fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5518C56F0700C48245 /* fr.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,6 +124,7 @@
 		A8F9FC4818C5683B00C48245 /* TextRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextRun.h; sourceTree = "<group>"; };
 		A8F9FC4918C5683B00C48245 /* VirtualFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualFont.cpp; sourceTree = "<group>"; };
 		A8F9FC4A18C5683B00C48245 /* VirtualFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualFont.h; sourceTree = "<group>"; };
+		A8F9FC5518C56F0700C48245 /* fr.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fr.txt; path = ../resources/fr.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +204,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A8F9FC5518C56F0700C48245 /* fr.txt */,
 				A8F9FC2F18C5681600C48245 /* babel_osx.xml */,
 			);
 			name = Resources;
@@ -404,6 +407,7 @@
 			files = (
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 				A8F9FC3018C5681600C48245 /* babel_osx.xml in Resources */,
+				A8F9FC5618C56F0700C48245 /* fr.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

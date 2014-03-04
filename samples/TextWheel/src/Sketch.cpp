@@ -8,8 +8,8 @@
 
 #include "Sketch.h"
 
+#include "chronotext/utils/Utils.h"
 #include "chronotext/utils/GLUtils.h"
-#include "chronotext/utils/MathUtils.h"
 
 using namespace std;
 using namespace ci;
@@ -17,7 +17,7 @@ using namespace chr;
 using namespace chr::zf;
 
 const float REFERENCE_H = 768;
-const float TEXT_SIZE = 24;
+const float TEXT_SIZE = 20;
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -37,6 +37,8 @@ void Sketch::setup(bool renewContext)
     else
     {
         font = fontManager.getCachedFont(InputSource::getResource("babel_osx.xml"), ZFont::Properties2d(48));
+        
+        lines["fr"] = readLines<string>(InputSource::getResource("fr.txt"));
     }
     
     // ---
@@ -63,7 +65,7 @@ void Sketch::draw()
 
     // ---
     
-    auto layout = font->getCachedLineLayout("bachi bouzouk!");
+    auto layout = font->getCachedLineLayout(lines["fr"][0]);
     auto offset = font->getOffset(*layout, ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);
