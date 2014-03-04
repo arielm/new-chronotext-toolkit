@@ -64,13 +64,13 @@ namespace chronotext
                 slotCapacity(slotCapacity)
                 {}
                 
-                Properties&	capacity(float slotCapacity)
+                Properties& setCapacity(float slotCapacity)
 				{
                     this->slotCapacity = slotCapacity;
                     return *this;
                 }
                 
-                Properties&	crisp()
+                Properties& setCrisp()
 				{
                     useMipmap = false;
                     return *this;

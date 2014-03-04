@@ -50,7 +50,7 @@ namespace chronotext
                 slotCapacity(slotCapacity)
                 {}
                 
-                Properties&	capacity(int slotCapacity)
+                Properties& setCapacity(int slotCapacity)
 				{
                     this->slotCapacity = slotCapacity;
                     return *this;
@@ -64,7 +64,7 @@ namespace chronotext
             
             static Properties Properties2d()
             {
-                return Properties(false, 1024);
+                return Properties(false, 4096);
             }
             
             static Properties Properties3d()
