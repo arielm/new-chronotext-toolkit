@@ -14,8 +14,8 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
+const float FRAME_SCALE = 464 / 512.0f; // RATIO BETWEEN THE FRAME'S INTERIOR AND THE PICTURE'S WIDTH
 const float GRID_SIZE = 32;
-const float FRAME_SCALE = 464 / 512.0f;
 
 void Sketch::setup(bool renewContext)
 {
@@ -29,8 +29,8 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT);
-        picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true);
+        frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT); // FORCING SIZE FROM 656x1024 TO 1024x1024 (NECESSARY ON iOS AND ANDROID)
+        picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true); // ALREADY POWER-OF-TWO (512x1024)
     }
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -42,7 +42,20 @@ void Sketch::setup(bool renewContext)
 
 void Sketch::resize()
 {
-    scale = getWindowHeight() / (float)frame->getHeight();
+    Vec2f targetSize = frame->getCleanSize();
+    float aspectRatio = targetSize.x / targetSize.y;
+    
+    if (getWindowAspectRatio() < aspectRatio)
+    {
+        scale = getWindowWidth() / targetSize.x;
+    }
+    else
+    {
+        scale = getWindowHeight() / targetSize.y;
+    }
+    
+    // ---
+    
     position = getWindowCenter() / scale;
 }
 
