@@ -38,11 +38,11 @@ void Sketch::setup(bool renewContext)
     {
         font = fontManager.getCachedFont(InputSource::getResource("babel_osx.xml"), ZFont::Properties2d(48));
         
-        lines["he"] = readLines<string>(InputSource::getResource("he.txt"));
-        lines["fr"] = readLines<string>(InputSource::getResource("fr.txt"));
-        lines["da"] = readLines<string>(InputSource::getResource("da.txt"));
-        lines["ru"] = readLines<string>(InputSource::getResource("ru.txt"));
-        lines["el"] = readLines<string>(InputSource::getResource("el.txt"));
+        addVersion("he");
+        addVersion("fr");
+        addVersion("da");
+        addVersion("ru");
+        addVersion("el");
     }
     
     // ---
@@ -69,7 +69,7 @@ void Sketch::draw()
 
     // ---
     
-    auto layout = font->getCachedLineLayout(lines["ru"][0]);
+    auto &layout = lines["ru"][0];
     auto offset = font->getOffset(*layout, ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);
@@ -84,4 +84,14 @@ void Sketch::draw()
     }
     
     font->endSequence();
+}
+
+void Sketch::addVersion(const string &lang)
+{
+    auto version = readLines<string>(InputSource::getResource(lang + ".txt"));
+    
+    for (auto &textLine : version)
+    {
+        lines[lang].emplace_back(unique_ptr<LineLayout>(font->createLineLayout(textLine, lang)));
+    }
 }

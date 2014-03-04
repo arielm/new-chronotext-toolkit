@@ -18,7 +18,7 @@ class Sketch : public chr::CinderSketch
     
     float scale;
     
-    std::map<std::string, std::vector<std::string>> lines;
+    std::map<std::string, std::vector<std::unique_ptr<chr::zf::LineLayout>>> lines;
     
 public:
     Sketch(void *context, void *delegate = NULL);
@@ -26,4 +26,6 @@ public:
     void setup(bool renewContext);
     void resize();
     void draw();
+    
+    void addVersion(const std::string &lang);
 };
