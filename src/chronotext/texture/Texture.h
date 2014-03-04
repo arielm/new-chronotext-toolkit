@@ -56,9 +56,14 @@ namespace chronotext
         int getWidth() const;
         int getHeight() const;
         ci::Vec2i getSize() const;
-        
+
+        int getCleanWidth() const;
+        int getCleanHeight() const;
+        ci::Vec2i getCleanSize() const;
+
         float getMaxU() const;
         float getMaxV() const;
+        ci::Vec2f getMaxUV() const;
         
     protected:
         ci::gl::TextureRef target;

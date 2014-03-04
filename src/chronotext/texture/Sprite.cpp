@@ -27,8 +27,8 @@ namespace chronotext
     u2(texture->getMaxU()),
     v2(texture->getMaxV())
     {
-        w = ow = texture->getWidth() * texture->getMaxU();
-        h = oh = texture->getHeight() * texture->getMaxV();
+        w = ow = texture->getCleanWidth();
+        h = oh = texture->getCleanHeight();
     }
     
     Sprite::Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2)

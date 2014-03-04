@@ -165,6 +165,21 @@ namespace chronotext
         return Vec2i(width, height);
     }
     
+    int Texture::getCleanWidth() const
+    {
+        return int(width * maxU);
+    }
+    
+    int Texture::getCleanHeight() const
+    {
+        return int(height * maxV);
+    }
+    
+    Vec2i Texture::getCleanSize() const
+    {
+        return Vec2i(width * maxU, height * maxV);
+    }
+    
     float Texture::getMaxU() const
     {
         return maxU;
@@ -173,6 +188,11 @@ namespace chronotext
     float Texture::getMaxV() const
     {
         return maxV;
+    }
+    
+    Vec2f Texture::getMaxUV() const
+    {
+        return Vec2f(maxU, maxV);
     }
     
     void Texture::setTarget(ci::gl::TextureRef texture)
