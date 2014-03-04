@@ -29,7 +29,7 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        frame = textureManager.getTexture("frame rococo - 1024.png", true);
+        frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT);
         picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true);
     }
 
