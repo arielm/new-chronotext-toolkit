@@ -62,12 +62,12 @@ namespace chronotext
             {
                 if (langHint.empty())
                 {
-                    line.langHint = line.runs[0].language;
+                    line.langHint = line.runs.front().language;
                 }
                 
                 if (overallDirection == HB_DIRECTION_INVALID)
                 {
-                    line.overallDirection = line.runs[0].direction;
+                    line.overallDirection = line.runs.front().direction;
                 }
             }
             
