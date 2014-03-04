@@ -230,12 +230,12 @@ namespace chronotext
             }
             
             int index = search(lengths, pos, 1, size());
-            auto p0 = points[index];
-            auto p1 = points[index + 1];
+            auto &p0 = points[index];
+            auto &p1 = points[index + 1];
             
             float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
             
-            FollowablePath::Value value;
+            Value value;
             value.point = p0 + (p1 - p0) * ratio;
             value.angle = math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
             value.position = pos;
@@ -277,8 +277,8 @@ namespace chronotext
             }
             
             int index = search(lengths, pos, 1, size());
-            auto p0 = points[index];
-            auto p1 = points[index + 1];
+            auto &p0 = points[index];
+            auto &p1 = points[index + 1];
             
             float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
             return p0 + (p1 - p0) * ratio;
@@ -318,8 +318,8 @@ namespace chronotext
             }
             
             int index = search(lengths, pos, 1, size());
-            auto p0 = points[index];
-            auto p1 = points[index + 1];
+            auto &p0 = points[index];
+            auto &p1 = points[index + 1];
             
             return math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
         }
@@ -386,8 +386,8 @@ namespace chronotext
                 i1 = i + 1;
             }
             
-            auto p0 = points[i0];
-            auto p1 = points[i1];
+            auto &p0 = points[i0];
+            auto &p1 = points[i1];
             
             Vec2f delta = p1 - p0;
             float length = lengths[i1] - lengths[i0];
@@ -456,8 +456,8 @@ namespace chronotext
             int i0 = segmentIndex;
             int i1 = segmentIndex + 1;
             
-            auto p0 = points[i0];
-            auto p1 = points[i1];
+            auto &p0 = points[i0];
+            auto &p1 = points[i1];
             
             Vec2f delta = p1 - p0;
             float length = lengths[i1] - lengths[i0];
