@@ -26,7 +26,6 @@ namespace chronotext
         sequence(nullptr)
         {
             assert(properties.slotCapacity > 0);
-            assert(properties.slotCapacity <= 8192);
 
             // ---
             
