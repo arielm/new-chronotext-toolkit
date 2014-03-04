@@ -7,8 +7,7 @@
  */
 
 /*
- * STUB FOR RUNNING A CinderSketch
- * ON THE DESKTOP (OSX OR WINDOW)
+ * STUB FOR RUNNING A CinderSketch ON THE DESKTOP (OSX OR WINDOW)
  */
 
 #include "chronotext/cinder/CinderApp.h"
@@ -24,7 +23,9 @@ class Application : public CinderApp
 {
 public:
     Application();
+    
     void prepareSettings(Settings *settings);
+    void keyDown(KeyEvent event);
 };
 
 Application::Application()
@@ -34,14 +35,28 @@ Application::Application()
 
 void Application::prepareSettings(Settings *settings)
 {
+    settings->disableFrameRate();
     settings->enableHighDensityDisplay();
+    
+//  settings->setWindowSize(480, 320); // IPHONE / LANDSCAPE
+//  settings->setWindowSize(960, 640); // IPHONE RETINA / LANDSCAPE
+//  settings->setWindowSize(1024, 768); // IPAD / LANDSCAPE
+//  settings->setWindowSize(800, 480); // ANDROID WVGA800 / LANDSCAPE
+    
+//  settings->setWindowSize(320, 480); // IPHONE / PORTRAIT
+    settings->setWindowSize(640, 1136); // IPHONE RETINA / PORTRAIT
+//  settings->setWindowSize(768, 1024); // IPAD / PORTRAIT
+//  settings->setWindowSize(480, 800); // ANDROID WVGA800 / PORTRAIT
+}
 
-#if defined(CINDER_MAC) || defined(CINDER_MSW)
-//  settings->setWindowSize(320, 480); // IPHONE
-    settings->setWindowSize(640, 960); // IPHONE RETINA
-//  settings->setWindowSize(768, 1024); // IPAD
-//  settings->setWindowSize(480, 800); // ANDROID WVGA800
-#endif
+void Application::keyDown(KeyEvent event)
+{
+    switch (event.getCode())
+    {
+        case KeyEvent::KEY_ESCAPE:
+            quit();
+            break;
+    }
 }
 
 CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

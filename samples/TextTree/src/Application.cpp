@@ -7,8 +7,7 @@
  */
 
 /*
- * STUB FOR RUNNING A CinderSketch
- * ON THE DESKTOP (OSX OR WINDOW)
+ * STUB FOR RUNNING A CinderSketch ON THE DESKTOP (OSX OR WINDOW)
  */
 
 #include "chronotext/cinder/CinderApp.h"
@@ -48,7 +47,6 @@ void Application::prepareSettings(Settings *settings)
     settings->setWindowSize(640, 960); // IPHONE RETINA / PORTRAIT
 //  settings->setWindowSize(768, 1024); // IPAD / PORTRAIT
 //  settings->setWindowSize(480, 800); // ANDROID WVGA800 / PORTRAIT
-
 }
 
 void Application::keyDown(KeyEvent event)

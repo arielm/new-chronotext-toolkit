@@ -23,7 +23,9 @@
  *      - OR: USING THE "CINDER_RESOURCE" MACRO
  *
  *
- * CREDITS: http://commons.wikimedia.org/wiki/File:Louis_XIV_of_France.jpg
+ * REFERENCES:
+ *
+ * http://commons.wikimedia.org/wiki/File:Louis_XIV_of_France.jpg
  */
 
 #pragma once
