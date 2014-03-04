@@ -71,7 +71,7 @@ void Sketch::draw()
 
     // ---
     
-    auto &layout = getNextLine(); // lines["ru"][0];
+    auto &layout = lines["ru"][0];
     auto offset = font->getOffset(*layout, ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);
@@ -90,7 +90,7 @@ void Sketch::draw()
 
 void Sketch::addVersion(const string &lang)
 {
-    languages.push_back(lang);
+    languages.push_back(lang); // WE CAN'T USE A std::set BECAUSE ORDER OF INSERTION MATTERS
     
     auto version = readLines<string>(InputSource::getResource(lang + ".txt"));
     
