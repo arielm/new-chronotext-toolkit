@@ -180,14 +180,14 @@ namespace chronotext
      */
     void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
     {
-        float tx = texture->getMaxU();
-        float ty = texture->getMaxV();
+        float u = texture->getMaxU();
+        float v = texture->getMaxV();
         
         float x1 = -rx;
         float y1 = -ry;
         
-        float x2 = x1 + texture->getWidth() * tx;
-        float y2 = y1 + texture->getHeight() * ty;
+        float x2 = x1 + texture->getWidth() * u;
+        float y2 = y1 + texture->getHeight() * v;
         
         const float vertices[] =
         {
@@ -200,9 +200,9 @@ namespace chronotext
         const float coords[] =
         {
             0, 0,
-            tx, 0,
-            tx, ty,
-            0, ty
+            u, 0,
+            u, v,
+            0, v
         };
         
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
@@ -223,17 +223,17 @@ namespace chronotext
             rect.x1, rect.y2
         };
         
-        float tx1 = (rect.x1 - ox) / texture->getWidth();
-        float ty1 = (rect.y1 - oy) / texture->getHeight();
-        float tx2 = (rect.x2 - ox) / texture->getWidth();
-        float ty2 = (rect.y2 - oy) / texture->getHeight();
+        float u1 = (rect.x1 - ox) / texture->getWidth();
+        float v1 = (rect.y1 - oy) / texture->getHeight();
+        float u2 = (rect.x2 - ox) / texture->getWidth();
+        float v2 = (rect.y2 - oy) / texture->getHeight();
         
         const float coords[] =
         {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
+            u1, v1,
+            u2, v1,
+            u2, v2,
+            u1, v2
         };
         
         glTexCoordPointer(2, GL_FLOAT, 0, coords);

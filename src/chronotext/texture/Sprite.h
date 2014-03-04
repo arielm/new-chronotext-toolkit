@@ -27,14 +27,14 @@ namespace chronotext
         float oh;
         bool rotated;
         
-        float tx1;
-        float ty1;
-        float tx2;
-        float ty2;
+        float u1;
+        float v1;
+        float u2;
+        float v2;
         
-        Sprite() {}
+        Sprite();
         Sprite(TextureRef texture); // IMAGE-BASED
-        Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float tx1, float ty1, float tx2, float ty2); // ATLAS-BASED
+        Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2); // ATLAS-BASED
         
         ci::Vec2f getSize() const;
         float getWidth() const;

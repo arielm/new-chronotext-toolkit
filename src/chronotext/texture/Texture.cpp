@@ -132,17 +132,17 @@ namespace chronotext
             rect.x1, rect.y2
         };
         
-        float tx1 = (rect.x1 - ox) / width;
-        float ty1 = (rect.y1 - oy) / height;
-        float tx2 = (rect.x2 - ox) / width;
-        float ty2 = (rect.y2 - oy) / height;
+        float u1 = (rect.x1 - ox) / width;
+        float v1 = (rect.y1 - oy) / height;
+        float u2 = (rect.x2 - ox) / width;
+        float v2 = (rect.y2 - oy) / height;
         
         const float coords[] =
         {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
+            u1, v1,
+            u2, v1,
+            u2, v2,
+            u1, v2
         };
         
         glTexCoordPointer(2, GL_FLOAT, 0, coords);

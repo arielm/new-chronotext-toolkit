@@ -13,22 +13,25 @@ using namespace ci;
 
 namespace chronotext
 {
+    Sprite::Sprite()
+    {}
+    
     Sprite::Sprite(TextureRef texture)
     :
     texture(texture),
     ox(0),
     oy(0),
     rotated(false),
-    tx1(0),
-    ty1(0),
-    tx2(texture->getMaxU()),
-    ty2(texture->getMaxV())
+    u1(0),
+    v1(0),
+    u2(texture->getMaxU()),
+    v2(texture->getMaxV())
     {
         w = ow = texture->getWidth() * texture->getMaxU();
         h = oh = texture->getHeight() * texture->getMaxV();
     }
     
-    Sprite::Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float tx1, float ty1, float tx2, float ty2)
+    Sprite::Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2)
     :
     texture(texture),
     w(w),
@@ -38,10 +41,10 @@ namespace chronotext
     ow(ow),
     oh(oh),
     rotated(rotated),
-    tx1(tx1),
-    ty1(ty1),
-    tx2(tx2),
-    ty2(ty2)
+    u1(u1),
+    v1(v1),
+    u2(u2),
+    v2(v2)
     {}
     
     Vec2f Sprite::getSize() const
@@ -102,10 +105,10 @@ namespace chronotext
             vertices[2][0] = y2; vertices[2][1] = x1;
             vertices[3][0] = y1; vertices[3][1] = x1;
             
-            coords[0][0] = tx1; coords[0][1] = ty1;
-            coords[1][0] = tx1; coords[1][1] = ty2;
-            coords[2][0] = tx2; coords[2][1] = ty2;
-            coords[3][0] = tx2; coords[3][1] = ty1;
+            coords[0][0] = u1; coords[0][1] = v1;
+            coords[1][0] = u1; coords[1][1] = v2;
+            coords[2][0] = u2; coords[2][1] = v2;
+            coords[3][0] = u2; coords[3][1] = v1;
         }
         else
         {
@@ -114,10 +117,10 @@ namespace chronotext
             vertices[2][0] = x2; vertices[2][1] = y2;
             vertices[3][0] = x1; vertices[3][1] = y2;
             
-            coords[0][0] = tx1; coords[0][1] = ty1;
-            coords[1][0] = tx2; coords[1][1] = ty1;
-            coords[2][0] = tx2; coords[2][1] = ty2;
-            coords[3][0] = tx1; coords[3][1] = ty2;
+            coords[0][0] = u1; coords[0][1] = v1;
+            coords[1][0] = u2; coords[1][1] = v1;
+            coords[2][0] = u2; coords[2][1] = v2;
+            coords[3][0] = u1; coords[3][1] = v2;
         }
         
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
