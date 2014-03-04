@@ -38,7 +38,11 @@ void Sketch::setup(bool renewContext)
     {
         font = fontManager.getCachedFont(InputSource::getResource("babel_osx.xml"), ZFont::Properties2d(48));
         
+        lines["he"] = readLines<string>(InputSource::getResource("he.txt"));
         lines["fr"] = readLines<string>(InputSource::getResource("fr.txt"));
+        lines["da"] = readLines<string>(InputSource::getResource("da.txt"));
+        lines["ru"] = readLines<string>(InputSource::getResource("ru.txt"));
+        lines["el"] = readLines<string>(InputSource::getResource("el.txt"));
     }
     
     // ---
@@ -65,7 +69,7 @@ void Sketch::draw()
 
     // ---
     
-    auto layout = font->getCachedLineLayout(lines["fr"][0]);
+    auto layout = font->getCachedLineLayout(lines["ru"][0]);
     auto offset = font->getOffset(*layout, ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);

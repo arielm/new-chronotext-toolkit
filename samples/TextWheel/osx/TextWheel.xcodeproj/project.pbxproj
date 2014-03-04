@@ -43,6 +43,10 @@
 		A8F9FC5318C5683B00C48245 /* TextItemizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4518C5683B00C48245 /* TextItemizer.cpp */; };
 		A8F9FC5418C5683B00C48245 /* VirtualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4918C5683B00C48245 /* VirtualFont.cpp */; };
 		A8F9FC5618C56F0700C48245 /* fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5518C56F0700C48245 /* fr.txt */; };
+		A8F9FC5818C573E800C48245 /* he.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5718C573E800C48245 /* he.txt */; };
+		A8F9FC5A18C5776400C48245 /* da.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5918C5776400C48245 /* da.txt */; };
+		A8F9FC5C18C578A200C48245 /* ru.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5B18C578A200C48245 /* ru.txt */; };
+		A8F9FC5E18C57E6F00C48245 /* el.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5D18C57E6F00C48245 /* el.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +129,10 @@
 		A8F9FC4918C5683B00C48245 /* VirtualFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualFont.cpp; sourceTree = "<group>"; };
 		A8F9FC4A18C5683B00C48245 /* VirtualFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualFont.h; sourceTree = "<group>"; };
 		A8F9FC5518C56F0700C48245 /* fr.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fr.txt; path = ../resources/fr.txt; sourceTree = "<group>"; };
+		A8F9FC5718C573E800C48245 /* he.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = he.txt; path = ../resources/he.txt; sourceTree = "<group>"; };
+		A8F9FC5918C5776400C48245 /* da.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = da.txt; path = ../resources/da.txt; sourceTree = "<group>"; };
+		A8F9FC5B18C578A200C48245 /* ru.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ru.txt; path = ../resources/ru.txt; sourceTree = "<group>"; };
+		A8F9FC5D18C57E6F00C48245 /* el.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = el.txt; path = ../resources/el.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +212,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A8F9FC5D18C57E6F00C48245 /* el.txt */,
+				A8F9FC5B18C578A200C48245 /* ru.txt */,
+				A8F9FC5918C5776400C48245 /* da.txt */,
+				A8F9FC5718C573E800C48245 /* he.txt */,
 				A8F9FC5518C56F0700C48245 /* fr.txt */,
 				A8F9FC2F18C5681600C48245 /* babel_osx.xml */,
 			);
@@ -405,7 +417,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8F9FC5A18C5776400C48245 /* da.txt in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
+				A8F9FC5818C573E800C48245 /* he.txt in Resources */,
+				A8F9FC5C18C578A200C48245 /* ru.txt in Resources */,
+				A8F9FC5E18C57E6F00C48245 /* el.txt in Resources */,
 				A8F9FC3018C5681600C48245 /* babel_osx.xml in Resources */,
 				A8F9FC5618C56F0700C48245 /* fr.txt in Resources */,
 			);

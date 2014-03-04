@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Reference: http://en.wikipedia.org/wiki/List_of_typefaces_included_with_OS_X -->
 <VirtualFont>
+    <!-- Undefined -->
     <Set>
-        <Ref uri="file:///Library/Fonts/Georgia.ttf" />
+        <Ref uri="file:///Library/Fonts/ACaslonPro-Regular.otf" />
+    </Set>
+    <!-- Hebrew -->
+    <Set lang="he">
+        <Ref uri="file:///Library/Fonts/AdobeHebrew-Regular.otf" />
+    </Set>
+    <!-- Russian -->
+    <Set lang="ru">
+        <Group>
+            <Ref uri="file:///Library/Fonts/Georgia.ttf" />
+            <Ref uri="file:///Library/Fonts/Times New Roman.ttf" />
+            <Ref uri="file:///Library/Fonts/Hoefler Text.ttc" />
+        </Group>
+    </Set>
+    <!-- Greek (Monotonic) -->
+    <Set lang="el">
+        <Group>
+            <Ref uri="file:///Library/Fonts/Georgia.ttf" />
+            <Ref uri="file:///Library/Fonts/Times New Roman.ttf" />
+        </Group>
     </Set>
 </VirtualFont>
