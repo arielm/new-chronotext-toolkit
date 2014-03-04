@@ -203,109 +203,130 @@ namespace chronotext
     
     FollowablePath::Value FollowablePath::pos2Value(float pos) const
     {
-        float length = lengths.back();
+        float length = getLength();
         
-        if (mode == MODE_LOOP || mode == MODE_MODULO)
+        if (length > 0)
         {
-            pos = boundf(pos, length);
+            if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
+            {
+                pos = boundf(pos, length);
+            }
+            else
+            {
+                if (pos <= 0)
+                {
+                    if (mode == MODE_BOUNDED)
+                    {
+                        pos = 0;
+                    }
+                }
+                else if (pos >= length)
+                {
+                    if (mode == MODE_BOUNDED)
+                    {
+                        pos = length;
+                    }
+                }
+            }
+            
+            int index = search(lengths, pos, 1, size());
+            auto p0 = points[index];
+            auto p1 = points[index + 1];
+            
+            float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
+            
+            FollowablePath::Value value;
+            value.point = p0 + (p1 - p0) * ratio;
+            value.angle = math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
+            value.position = pos;
+            
+            return value;
         }
         else
         {
-            if (pos <= 0)
-            {
-                if (mode == MODE_BOUNDED)
-                {
-                    pos = 0;
-                }
-            }
-            else if (pos >= length)
-            {
-                if (mode == MODE_BOUNDED)
-                {
-                    pos = length;
-                }
-            }
+            return Value();
         }
-        
-        int index = search(lengths, pos, 1, size());
-        auto p0 = points[index];
-        auto p1 = points[index + 1];
-        
-        float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
-        
-        FollowablePath::Value value;
-        value.point = p0 + (p1 - p0) * ratio;
-        value.angle = math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
-        value.position = pos;
-        
-        return value;
     }
     
     Vec2f FollowablePath::pos2Point(float pos) const
     {
-        float length = lengths.back();
+        float length = getLength();
         
-        if (mode == MODE_LOOP || mode == MODE_MODULO)
+        if (length > 0)
         {
-            pos = boundf(pos, length);
+            if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
+            {
+                pos = boundf(pos, length);
+            }
+            else
+            {
+                if (pos <= 0)
+                {
+                    if (mode == MODE_BOUNDED)
+                    {
+                        return points.front();
+                    }
+                }
+                else if (pos >= length)
+                {
+                    if (mode == MODE_BOUNDED)
+                    {
+                        return points.back();
+                    }
+                }
+            }
+            
+            int index = search(lengths, pos, 1, size());
+            auto p0 = points[index];
+            auto p1 = points[index + 1];
+            
+            float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
+            return p0 + (p1 - p0) * ratio;
         }
         else
         {
-            if (pos <= 0)
-            {
-                if (mode == MODE_BOUNDED)
-                {
-                    return points.front();
-                }
-            }
-            else if (pos >= length)
-            {
-                if (mode == MODE_BOUNDED)
-                {
-                    return points.back();
-                }
-            }
+            return Vec2f::zero();
         }
-        
-        int index = search(lengths, pos, 1, size());
-        auto p0 = points[index];
-        auto p1 = points[index + 1];
-        
-        float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
-        return p0 + (p1 - p0) * ratio;
     }
     
     float FollowablePath::pos2Angle(float pos) const
     {
-        float length = lengths.back();
+        float length = getLength();
         
-        if (mode == MODE_LOOP || mode == MODE_MODULO)
+        if (length > 0)
         {
-            pos = boundf(pos, length);
+            if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
+            {
+                pos = boundf(pos, length);
+            }
+            else
+            {
+                if (pos <= 0)
+                {
+                    if (mode == MODE_BOUNDED)
+                    {
+                        pos = 0;
+                    }
+                }
+                else if (pos >= length)
+                {
+                    if (mode == MODE_BOUNDED)
+                    {
+                        pos = length;
+                    }
+                }
+            }
+            
+            int index = search(lengths, pos, 1, size());
+            auto p0 = points[index];
+            auto p1 = points[index + 1];
+            
+            return math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
         }
         else
         {
-            if (pos <= 0)
-            {
-                if (mode == MODE_BOUNDED)
-                {
-                    pos = 0;
-                }
-            }
-            else if (pos >= length)
-            {
-                if (mode == MODE_BOUNDED)
-                {
-                    pos = length;
-                }
-            }
+            return 0;
         }
-        
-        int index = search(lengths, pos, 1, size());
-        auto p0 = points[index];
-        auto p1 = points[index + 1];
-        
-        return math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
     }
     
     float FollowablePath::pos2SampledAngle(float pos, float sampleSize) const
@@ -423,54 +444,59 @@ namespace chronotext
     }
     
     /*
-     * segmentIndex MUST BE < size
-     *
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
      * http://paulbourke.net/geometry/pointlineplane
      */
     FollowablePath::ClosePoint FollowablePath::closestPointFromSegment(const Vec2f &input, int segmentIndex) const
     {
-        FollowablePath::ClosePoint res;
+        FollowablePath::ClosePoint output;
         
-        int i0 = segmentIndex;
-        int i1 = segmentIndex + 1;
-        
-        auto p0 = points[i0];
-        auto p1 = points[i1];
-        
-        Vec2f delta = p1 - p0;
-        float length = lengths[i1] - lengths[i0];
-        float u = delta.dot(input - p0) / (length * length);
-        
-        if (u >= 0 && u <= 1)
+        if ((segmentIndex >= 0) && (segmentIndex + 1 < size()))
         {
-            Vec2f p = p0 + u * delta;
-            float mag = (p - input).lengthSquared();
+            int i0 = segmentIndex;
+            int i1 = segmentIndex + 1;
             
-            res.point = p;
-            res.position = lengths[i0] + u * length;
-            res.distance = math<float>::sqrt(mag);
-        }
-        else
-        {
-            float mag0 = (p0 - input).lengthSquared();
-            float mag1 = (p1 - input).lengthSquared();
+            auto p0 = points[i0];
+            auto p1 = points[i1];
             
-            if (mag0 < mag1)
+            Vec2f delta = p1 - p0;
+            float length = lengths[i1] - lengths[i0];
+            float u = delta.dot(input - p0) / (length * length);
+            
+            if (u >= 0 && u <= 1)
             {
-                res.point = p0;
-                res.position = lengths[i0];
-                res.distance = math<float>::sqrt(mag0);
+                Vec2f p = p0 + u * delta;
+                float mag = (p - input).lengthSquared();
+                
+                output.point = p;
+                output.position = lengths[i0] + u * length;
+                output.distance = math<float>::sqrt(mag);
             }
             else
             {
-                res.point = p1;
-                res.position = lengths[i1];
-                res.distance = math<float>::sqrt(mag1);
+                float mag0 = (p0 - input).lengthSquared();
+                float mag1 = (p1 - input).lengthSquared();
+                
+                if (mag0 < mag1)
+                {
+                    output.point = p0;
+                    output.position = lengths[i0];
+                    output.distance = math<float>::sqrt(mag0);
+                }
+                else
+                {
+                    output.point = p1;
+                    output.position = lengths[i1];
+                    output.distance = math<float>::sqrt(mag1);
+                }
             }
         }
+        else
+        {
+            output.distance = numeric_limits<float>::max();
+        }
         
-        return res;
+        return output;
     }
     
     void FollowablePath::extendCapacity(int amount)
