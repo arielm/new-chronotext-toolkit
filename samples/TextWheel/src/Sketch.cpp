@@ -21,7 +21,9 @@ const float TEXT_SIZE = 20;
 
 Sketch::Sketch(void *context, void *delegate)
 :
-CinderSketch(context, delegate)
+CinderSketch(context, delegate),
+currentLangIndex(0),
+currentLineIndex(0)
 {}
 
 void Sketch::setup(bool renewContext)
@@ -69,7 +71,7 @@ void Sketch::draw()
 
     // ---
     
-    auto &layout = lines["ru"][0];
+    auto &layout = getNextLine(); // lines["ru"][0];
     auto offset = font->getOffset(*layout, ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);
@@ -88,10 +90,27 @@ void Sketch::draw()
 
 void Sketch::addVersion(const string &lang)
 {
+    languages.push_back(lang);
+    
     auto version = readLines<string>(InputSource::getResource(lang + ".txt"));
     
     for (auto &textLine : version)
     {
         lines[lang].emplace_back(unique_ptr<LineLayout>(font->createLineLayout(textLine, lang)));
     }
+}
+
+unique_ptr<LineLayout>& Sketch::getNextLine()
+{
+    auto &version = lines[languages[currentLangIndex]];
+    auto &line = version[currentLineIndex];
+    
+    currentLineIndex = (currentLineIndex + 1) % version.size();
+    
+    if (currentLineIndex == 0)
+    {
+        currentLangIndex = (currentLangIndex + 1) % languages.size();
+    }
+    
+    return line;
 }

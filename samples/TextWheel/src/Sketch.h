@@ -14,11 +14,15 @@
 class Sketch : public chr::CinderSketch
 {
     chr::zf::FontManager fontManager;
-    std::shared_ptr<chr::ZFont> font;
-    
+
     float scale;
-    
+
+    std::shared_ptr<chr::ZFont> font;
+    std::vector<std::string> languages;
     std::map<std::string, std::vector<std::unique_ptr<chr::zf::LineLayout>>> lines;
+    
+    int currentLangIndex;
+    int currentLineIndex;
     
 public:
     Sketch(void *context, void *delegate = NULL);
@@ -28,4 +32,5 @@ public:
     void draw();
     
     void addVersion(const std::string &lang);
+    std::unique_ptr<chr::zf::LineLayout>& getNextLine();
 };
