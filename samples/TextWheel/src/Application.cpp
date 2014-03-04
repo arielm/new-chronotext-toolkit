@@ -35,8 +35,6 @@ Application::Application()
 
 void Application::prepareSettings(Settings *settings)
 {
-    settings->setResizable(false);
-
     settings->disableFrameRate();
     settings->enableHighDensityDisplay();
 

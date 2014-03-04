@@ -141,6 +141,7 @@ namespace chronotext
             void replaySequence(FontSequence *sequence);
             
             void addCluster(const Cluster &cluster, const ci::Vec3f &position);
+            inline void addCluster(const Cluster &cluster, const ci::Vec2f &position) { addCluster(cluster, ci::Vec3f(position)); }
             inline void addCluster(const Cluster &cluster, float x, float y, float z = 0) { addCluster(cluster, ci::Vec3f(x, y, z)); }
             void addTransformedCluster(const Cluster &cluster, const ci::Vec2f &position);
             inline void addTransformedCluster(const Cluster &cluster, float x, float y) { addTransformedCluster(cluster, ci::Vec2f(x, y)); }
