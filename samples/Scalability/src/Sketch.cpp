@@ -14,8 +14,11 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-const float FRAME_SCALE = 464 / 512.0f; // RATIO BETWEEN THE FRAME'S INTERIOR AND THE PICTURE'S WIDTH
-const float GRID_SIZE = 32;
+const float PADDING1 = 0; // IN IMAGE SPACE
+const float PADDING2 = 12; // IN SCREEN SPACE
+
+const float FRAME_INTERIOR_WIDTH = 464; // IN IMAGE SPACE
+const float GRID_SIZE = 48; // IN SCREEN SPACE
 
 void Sketch::setup(bool renewContext)
 {
@@ -29,10 +32,12 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT); // FORCING SIZE FROM 656x1024 TO 1024x1024 (NECESSARY ON iOS AND ANDROID)
-        picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true); // ALREADY POWER-OF-TWO (512x1024)
+        frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT);
+        picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true, TextureRequest::FLAGS_POT);
     }
 
+    // ---
+    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
@@ -42,44 +47,46 @@ void Sketch::setup(bool renewContext)
 
 void Sketch::resize()
 {
-    Vec2f targetSize = frame->getCleanSize();
+    Vec2f targetSize = frame->getCleanSize() + Vec2f(PADDING1, PADDING1) * 2;
     float aspectRatio = targetSize.x / targetSize.y;
     
     if (getWindowAspectRatio() < aspectRatio)
     {
         scale = getWindowWidth() / targetSize.x;
+        scale *= getWindowWidth() / (getWindowWidth() + PADDING2 * 2);
     }
     else
     {
         scale = getWindowHeight() / targetSize.y;
+        scale *= getWindowHeight() / (getWindowHeight() + PADDING2 * 2);
     }
     
     // ---
     
-    position = getWindowCenter() / scale;
+    position = Vec2f::zero();
 }
 
 void Sketch::draw()
 {
     gl::clear(Color::gray(0.5f), false);
-    
     gl::setMatricesWindow(getWindowSize(), true);
-    gl::scale(scale);
-    
+
     gl::color(1, 1, 1, 0.25f);
-    drawGrid(Rectf(getWindowBounds()) / scale, GRID_SIZE, position);
+    drawGrid(getWindowBounds(), GRID_SIZE * scale, position * scale);
+
+    gl::translate(getWindowCenter()); // THE ORIGIN IS AT THE CENTER OF THE SCREEN
+    gl::scale(scale);
 
     gl::color(1, 1, 1, 1);
 
     glPushMatrix();
     gl::translate(position);
-    gl::scale(FRAME_SCALE);
+    gl::scale(FRAME_INTERIOR_WIDTH / picture->getCleanWidth());
     picture->begin();
     picture->drawFromCenter();
     picture->end();
     glPopMatrix();
     
-    gl::translate(getWindowCenter() / scale);
     frame->begin();
     frame->drawFromCenter();
     frame->end();

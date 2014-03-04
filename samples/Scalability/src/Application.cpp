@@ -44,9 +44,9 @@ void Application::prepareSettings(Settings *settings)
 //  settings->setWindowSize(800, 480); // ANDROID WVGA800 / LANDSCAPE
     
 //  settings->setWindowSize(320, 480); // IPHONE / PORTRAIT
-    settings->setWindowSize(640, 1136); // IPHONE RETINA / PORTRAIT
+//    settings->setWindowSize(640, 1136); // IPHONE RETINA / PORTRAIT
 //  settings->setWindowSize(768, 1024); // IPAD / PORTRAIT
-//  settings->setWindowSize(480, 800); // ANDROID WVGA800 / PORTRAIT
+  settings->setWindowSize(480, 800); // ANDROID WVGA800 / PORTRAIT
 }
 
 void Application::keyDown(KeyEvent event)
