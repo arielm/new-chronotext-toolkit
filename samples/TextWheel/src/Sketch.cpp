@@ -43,7 +43,19 @@ void Sketch::setup(bool renewContext)
         addVersion("ru");
         addVersion("el");
         
+        // ---
+        
         spiral.update(0, 0, 67, 500, 17, 0.5f, 50);
+        
+        font->setSize(TEXT_SIZE);
+        font->setColor(0, 0, 0, 0.85f);
+        
+        auto &layout = getVersion("fr");
+        float offsetY = font->getOffsetY(layout, ZFont::ALIGN_MIDDLE);
+        
+        font->beginSequence(sequence);
+        spiral.drawText(*font, layout, 3000, offsetY);
+        font->endSequence();
     }
     
     // ---
@@ -79,7 +91,7 @@ void Sketch::resize()
 void Sketch::update()
 {
     double now = getElapsedSeconds();
-    rotation = now * D2R;
+    rotation = -now * 0.1f;
 }
 
 void Sketch::draw()
@@ -92,26 +104,16 @@ void Sketch::draw()
 
     // ---
     
+    glRotatef(rotation * R2D, 0, 0, 1);
+    
     gl::color(1, 0, 0, 0.125f);
     spiral.drawWire();
     
-    // ---
-    
-    auto &layout = getVersion("fr");
-    float offsetY = font->getOffsetY(layout, ZFont::ALIGN_MIDDLE);
-    
-    font->setSize(TEXT_SIZE);
-    font->setColor(0, 0, 0, 0.85f);
-    
-    font->beginSequence();
-    spiral.drawText(*font, layout, 3000, offsetY);
-    font->endSequence();
+    font->replaySequence(sequence);
 }
 
 void Sketch::addVersion(const string &lang)
 {
-    languages.push_back(lang); // WE CAN'T USE A std::set BECAUSE ORDER OF INSERTION MATTERS
-    
     auto version = readLines<string>(InputSource::getResource(lang + ".txt"));
     string buffer;
     

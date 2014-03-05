@@ -21,10 +21,9 @@ class Sketch : public chr::CinderSketch
     float rotation;
 
     std::shared_ptr<chr::ZFont> font;
+    chr::zf::FontSequence sequence;
     TextSpiral spiral;
     
-    std::vector<std::string> languages;
-    std::map<std::string, std::vector<std::string>> lines;
     std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> versions;
     
 public:
