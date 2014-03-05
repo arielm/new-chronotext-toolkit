@@ -30,10 +30,6 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
-        /*
-         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
-         */
-        fontManager.discardTextures();
         fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
     }
     else
@@ -56,6 +52,16 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
+void Sketch::event(int id)
+{
+    switch (id)
+    {
+        case EVENT_CONTEXT_LOST:
+            fontManager.discardTextures();
+            break;
+    }
+}
+
 void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
@@ -67,7 +73,7 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
     
     gl::translate(getWindowCenter()); // THE ORIGIN IS AT THE CENTER OF THE SCREEN
-    gl::scale(getWindowHeight() / REFERENCE_H);
+    gl::scale(scale);
 
     // ---
     

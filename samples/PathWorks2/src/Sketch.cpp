@@ -29,10 +29,6 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
-        /*
-         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
-         */
-        textureManager.discard();
         textureManager.reload();
     }
     else
@@ -62,7 +58,6 @@ void Sketch::setup(bool renewContext)
         peanutSpline.close();
         
         peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
-        
         peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED, isHighDensity());
         
         // ---
@@ -74,7 +69,7 @@ void Sketch::setup(bool renewContext)
             lys.emplace_back(make_pair(FollowablePath(path), Hairline(textureManager, Hairline::TYPE_NORMAL, isHighDensity())));
         }
         
-        offset = document.viewSize * 0.5f;
+        lysOffset = document.viewSize * 0.5f;
     }
     
     // ---
@@ -84,6 +79,16 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
+}
+
+void Sketch::event(int id)
+{
+    switch (id)
+    {
+        case EVENT_CONTEXT_LOST:
+            textureManager.discard();
+            break;
+    }
 }
 
 void Sketch::resize()
@@ -147,7 +152,7 @@ void Sketch::draw()
     gl::color(0, 0, 1, 0.5f);
     
     glPushMatrix();
-    gl::translate(-offset); // DRAWING THE LYS FROM ITS CENTER
+    gl::translate(-lysOffset); // DRAWING THE LYS FROM ITS CENTER
     
     for (auto &it : lys)
     {

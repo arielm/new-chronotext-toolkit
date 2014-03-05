@@ -35,12 +35,6 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
-        /*
-         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
-         */
-        textureManager.discard();
-        fontManager.discardTextures();
-        
         textureManager.reload(); // MANDATORY
         fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
     }
@@ -80,6 +74,17 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
+}
+
+void Sketch::event(int id)
+{
+    switch (id)
+    {
+        case EVENT_CONTEXT_LOST:
+            textureManager.discard();
+            fontManager.discardTextures();
+            break;
+    }
 }
 
 void Sketch::resize()

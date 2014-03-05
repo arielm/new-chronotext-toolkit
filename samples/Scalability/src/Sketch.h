@@ -25,7 +25,7 @@
  *
  *
  * REFERENCES:
- *
+ * 
  * http://commons.wikimedia.org/wiki/File:Louis_XIV_of_France.jpg
  */
 
@@ -49,6 +49,7 @@ public:
     Sketch(void *context, void *delegate = NULL) : chr::CinderSketch(context, delegate) {}
 
     void setup(bool renewContext);
+    void event(int id);
     void resize();
     void draw();
     

@@ -41,9 +41,10 @@ public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
-    void resize();
+    void event(int id);
     void start(int flags);
     void stop(int flags);
+    void resize();
     void update();
     void draw();
     

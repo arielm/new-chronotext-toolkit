@@ -24,10 +24,6 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
-        /*
-         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
-         */
-        textureManager.discard();
         textureManager.reload();
     }
     else
@@ -43,6 +39,16 @@ void Sketch::setup(bool renewContext)
 
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
+}
+
+void Sketch::event(int id)
+{
+    switch (id)
+    {
+        case EVENT_CONTEXT_LOST:
+            textureManager.discard();
+            break;
+    }
 }
 
 void Sketch::resize()

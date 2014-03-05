@@ -33,12 +33,6 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
-        /*
-         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
-         */
-        textureManager.discard();
-        fontManager.discardTextures();
-        
         textureManager.reload(); // MANDATORY
         fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
     }
@@ -57,10 +51,15 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::resize()
+void Sketch::event(int id)
 {
-    scale = getWindowHeight() / REFERENCE_H;
-    updateDune();
+    switch (id)
+    {
+        case EVENT_CONTEXT_LOST:
+            textureManager.discard();
+            fontManager.discardTextures();
+            break;
+    }
 }
 
 void Sketch::start(int flags)
@@ -71,6 +70,12 @@ void Sketch::start(int flags)
 void Sketch::stop(int flags)
 {
     clock.stop();
+}
+
+void Sketch::resize()
+{
+    scale = getWindowHeight() / REFERENCE_H;
+    updateDune();
 }
 
 void Sketch::update()
@@ -120,7 +125,7 @@ void Sketch::updateDune()
     }
 
     path.clear();
-    spline.flush(SplinePath::TYPE_BSPLINE, path, 3); // USING A TOLERANCE OF 3: REDUCING POINTS WHILE PRESERVING SMOOTHNESS
+    spline.flush(SplinePath::TYPE_BSPLINE, path, 3); // USING A TOLERANCE OF 3: REDUCING SEGMENTS WHILE PRESERVING SMOOTHNESS
     
     // ---
     

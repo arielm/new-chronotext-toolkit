@@ -28,7 +28,7 @@ class Sketch : public chr::CinderSketch
     chr::Hairline peanutHairline;
     
     std::vector<std::pair<chr::FollowablePath, chr::Hairline>> lys;
-    ci::Vec2f offset;
+    ci::Vec2f lysOffset;
     
     float scale;
     float position;
@@ -37,6 +37,7 @@ public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
+    void event(int id);
     void resize();
     void update();
     void draw();
