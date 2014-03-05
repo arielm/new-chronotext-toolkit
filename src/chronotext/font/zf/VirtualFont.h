@@ -136,9 +136,11 @@ namespace chronotext
             const GLushort* getIndices() const;
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
+            inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }
             inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
             void endSequence();
             void replaySequence(FontSequence *sequence);
+            inline void replaySequence(FontSequence &sequence) { replaySequence(&sequence); }
             
             void addCluster(const Cluster &cluster, const ci::Vec3f &position);
             inline void addCluster(const Cluster &cluster, const ci::Vec2f &position) { addCluster(cluster, ci::Vec3f(position)); }

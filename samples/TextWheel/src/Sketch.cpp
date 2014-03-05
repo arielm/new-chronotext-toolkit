@@ -10,6 +10,7 @@
 
 #include "chronotext/utils/Utils.h"
 #include "chronotext/utils/GLUtils.h"
+#include "chronotext/utils/MathUtils.h"
 
 using namespace std;
 using namespace ci;
@@ -21,9 +22,7 @@ const float TEXT_SIZE = 20;
 
 Sketch::Sketch(void *context, void *delegate)
 :
-CinderSketch(context, delegate),
-currentLangIndex(0),
-currentLineIndex(0)
+CinderSketch(context, delegate)
 {}
 
 void Sketch::setup(bool renewContext)
@@ -43,8 +42,6 @@ void Sketch::setup(bool renewContext)
         addVersion("da");
         addVersion("ru");
         addVersion("el");
-        
-        // ---
         
         spiral.update(0, 0, 67, 500, 17, 0.5f, 50);
     }
@@ -82,7 +79,7 @@ void Sketch::resize()
 void Sketch::update()
 {
     double now = getElapsedSeconds();
-    position = 7000 - now * 40;
+    rotation = now * D2R;
 }
 
 void Sketch::draw()
@@ -100,14 +97,14 @@ void Sketch::draw()
     
     // ---
     
-    auto &layout = getVersion("ru");
+    auto &layout = getVersion("fr");
     float offsetY = font->getOffsetY(layout, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
     
     font->beginSequence();
-    spiral.drawText(*font, layout, position, offsetY);
+    spiral.drawText(*font, layout, 3000, offsetY);
     font->endSequence();
 }
 

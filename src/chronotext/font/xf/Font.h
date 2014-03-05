@@ -113,9 +113,11 @@ namespace chronotext
             const GLushort* getIndices() const;
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
+            inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }
             inline void beginSequence(bool useColor = false) { beginSequence(nullptr, useColor); }
             void endSequence();
             void replaySequence(FontSequence *sequence);
+            inline void replaySequence(FontSequence &sequence) { replaySequence(&sequence); }
             
             void addGlyph(int glyphIndex, float x, float y, float z = 0);
             void addTransformedGlyph(int glyphIndex, float x = 0, float y = 0);

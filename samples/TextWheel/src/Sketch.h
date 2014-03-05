@@ -18,18 +18,14 @@ class Sketch : public chr::CinderSketch
     chr::zf::FontManager fontManager;
 
     float scale;
-    float position;
+    float rotation;
 
     std::shared_ptr<chr::ZFont> font;
+    TextSpiral spiral;
     
     std::vector<std::string> languages;
     std::map<std::string, std::vector<std::string>> lines;
     std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> versions;
-    
-    int currentLangIndex;
-    int currentLineIndex;
-    
-    TextSpiral spiral;
     
 public:
     Sketch(void *context, void *delegate = NULL);
