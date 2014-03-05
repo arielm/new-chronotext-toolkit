@@ -36,11 +36,17 @@ void Sketch::setup(bool renewContext)
     {
         font = fontManager.getCachedFont(InputSource::getResource("babel_osx.xml"), ZFont::Properties2d(48));
         
+        // ---
+        
         addVersion("he");
         addVersion("fr");
         addVersion("da");
         addVersion("ru");
         addVersion("el");
+        
+        // ---
+        
+        spiral.update(0, 0, 25, 500, 20, 0.5f, 50);
     }
     
     // ---
@@ -75,6 +81,11 @@ void Sketch::draw()
     gl::translate(getWindowCenter()); // THE ORIGIN IS AT THE CENTER OF THE SCREEN
     gl::scale(scale);
 
+    // ---
+    
+    gl::color(1, 0, 0, 0.5f);
+    spiral.drawWire();
+    
     // ---
     
     auto &layout = lines["ru"][0];

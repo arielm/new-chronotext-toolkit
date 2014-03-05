@@ -11,6 +11,8 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/font/zf/FontManager.h"
 
+#include "TextSpiral.h"
+
 class Sketch : public chr::CinderSketch
 {
     chr::zf::FontManager fontManager;
@@ -23,6 +25,8 @@ class Sketch : public chr::CinderSketch
     
     int currentLangIndex;
     int currentLineIndex;
+    
+    TextSpiral spiral;
     
 public:
     Sketch(void *context, void *delegate = NULL);
