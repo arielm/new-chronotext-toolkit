@@ -23,8 +23,7 @@ Sketch::Sketch(void *context, void *delegate)
 :
 CinderSketch(context, delegate),
 currentLangIndex(0),
-currentLineIndex(0),
-position(0)
+currentLineIndex(0)
 {}
 
 void Sketch::setup(bool renewContext)
@@ -57,6 +56,12 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
+    
+    if (true) // FIXME: ONLY IF ANTIALIASING < 4
+    {
+        glEnable(GL_LINE_SMOOTH);
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    }
 }
 
 void Sketch::event(int id)
@@ -77,7 +82,7 @@ void Sketch::resize()
 void Sketch::update()
 {
     double now = getElapsedSeconds();
-    position = now * 40;
+    position = 7000 - now * 40;
 }
 
 void Sketch::draw()
@@ -90,19 +95,19 @@ void Sketch::draw()
 
     // ---
     
-    gl::color(1, 0, 0, 0.5f);
+    gl::color(1, 0, 0, 0.125f);
     spiral.drawWire();
     
     // ---
     
-    auto &layout = lines["fr"][0];
-    float offsetY = font->getOffsetY(*layout, ZFont::ALIGN_MIDDLE);
+    auto &layout = getVersion("ru");
+    float offsetY = font->getOffsetY(layout, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
     
     font->beginSequence();
-    spiral.drawText(*font, *layout, position, offsetY);
+    spiral.drawText(*font, layout, position, offsetY);
     font->endSequence();
 }
 
@@ -111,24 +116,18 @@ void Sketch::addVersion(const string &lang)
     languages.push_back(lang); // WE CAN'T USE A std::set BECAUSE ORDER OF INSERTION MATTERS
     
     auto version = readLines<string>(InputSource::getResource(lang + ".txt"));
+    string buffer;
     
-    for (auto &textLine : version)
+    for (auto &line : version)
     {
-        lines[lang].emplace_back(unique_ptr<LineLayout>(font->createLineLayout(textLine, lang)));
+        buffer += line;
+        buffer += " ";
     }
+    
+    versions[lang]= unique_ptr<LineLayout>(font->createLineLayout(buffer, lang));
 }
 
-unique_ptr<LineLayout>& Sketch::getNextLine()
+LineLayout& Sketch::getVersion(const std::string &lang)
 {
-    auto &version = lines[languages[currentLangIndex]];
-    auto &line = version[currentLineIndex];
-    
-    currentLineIndex = (currentLineIndex + 1) % version.size();
-    
-    if (currentLineIndex == 0)
-    {
-        currentLangIndex = (currentLangIndex + 1) % languages.size();
-    }
-    
-    return line;
+    return *versions[lang];
 }
