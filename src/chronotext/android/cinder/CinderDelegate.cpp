@@ -188,11 +188,7 @@ namespace chronotext
                 mFrameCount = 0;
                 mTimer.start();
                 
-                /*
-                 * ASSERTIONS: THE GL CONTEXT HAS JUST BEEN RE-CREATED, WITH THE SAME DIMENSIONS AS BEFORE
-                 */
-                sketch->setup(true);
-                
+                sketch->setup(true); // ASSERTIONS: THE GL CONTEXT WAS JUST RE-CREATED, WITH THE SAME DIMENSIONS AS BEFORE
                 sketch->start(CinderSketch::FLAG_APP_RESUMED);
                 break;
                 
@@ -204,6 +200,8 @@ namespace chronotext
                 
             case EVENT_PAUSED:
                 mTimer.stop();
+                
+                sketch->event(CinderSketch::EVENT_CONTEXT_LOST); // ASSERTION: THE GL CONTEXT IS ABOUT TO BE LOST
                 sketch->stop(CinderSketch::FLAG_APP_PAUSED);
                 break;
                 

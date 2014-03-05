@@ -127,16 +127,13 @@ namespace chronotext
     
     void CinderApp::resume(bool renewContext)
     {
-        if (renewContext)
-        {
-            sketch->setup(true);
-        }
-        
+        sketch->setup(true);
         sketch->start(CinderSketch::FLAG_APP_RESUMED);
     }
     
     void CinderApp::pause()
     {
+        sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
         sketch->stop(CinderSketch::FLAG_APP_PAUSED);
     }
     
