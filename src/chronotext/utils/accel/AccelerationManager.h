@@ -18,12 +18,12 @@
 
 #if defined(CINDER_COCOA_TOUCH)
 
-#include "AccelerationManagerImplCocoaTouch.h"
+#include "chronotext/ios/utils/accel/AccelerationManagerImplCocoaTouch.h"
 typedef AccelerationManagerImplCocoaTouch AccelerationManager;
 
 #else
 
-#include "AccelEvent.h"
+#include "chronotext/utils/accel/AccelEvent.h"
 
 class AccelerationDelegate
 {
