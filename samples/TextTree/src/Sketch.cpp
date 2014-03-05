@@ -37,7 +37,7 @@ void Sketch::setup(bool renewContext)
     else
     {
         dot = textureManager.getTexture("dot.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
+        font = fontManager.getCachedFont(InputSource::getResource("American Typewriter_Regular_64.fnt"), XFont::Properties2d());
     }
     
     // ---

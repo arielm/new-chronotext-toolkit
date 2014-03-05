@@ -64,6 +64,7 @@ void Application::setup()
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Georgia ON OSX
      */
     createFontSafely(FontDescriptor("/Library/Fonts/Georgia.ttf"), 64, ISO_8859_15, XParams(3, 2));
+    createFontSafely(FontDescriptor("/Library/Fonts/AmericanTypewriter.ttc"), 64, ISO_8859_15, XParams(3, 2));
     
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
@@ -84,6 +85,7 @@ void Application::setup()
      */
     
     loadFontSafely("Georgia_Regular_64.fnt");
+    loadFontSafely("American Typewriter_Regular_64.fnt");
     loadFontSafely("Roboto_Regular_64.fnt");
     loadFontSafely("FrankRuehl_Regular_64.fnt", -1);
     

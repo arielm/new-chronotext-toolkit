@@ -25,7 +25,6 @@
 		A822633918BE24E800D57C8C /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A822633818BE24E800D57C8C /* dot.png */; };
 		A829870318BD00C300934642 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82986FD18BD00C300934642 /* Handler.cpp */; };
 		A829870418BD00C300934642 /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870118BD00C300934642 /* SuperHandler.cpp */; };
-		A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A829870518BD026300934642 /* Georgia_Regular_64.fnt */; };
 		A829872F18BD02D500934642 /* FontMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870818BD02D500934642 /* FontMatrix.cpp */; };
 		A829873018BD02D500934642 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870D18BD02D500934642 /* Font.cpp */; };
 		A829873118BD02D500934642 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870F18BD02D500934642 /* FontManager.cpp */; };
@@ -39,6 +38,7 @@
 		A82C910716E00B3B00FF519C /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910216E00B3B00FF519C /* Utils.cpp */; };
 		A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910816E02DAA00FF519C /* Sketch.cpp */; };
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
+		A8A883F618C77D3300BC0BDB /* American Typewriter_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A8A883F518C77D3300BC0BDB /* American Typewriter_Regular_64.fnt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,7 +76,6 @@
 		A829870018BD00C300934642 /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
 		A829870118BD00C300934642 /* SuperHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SuperHandler.cpp; sourceTree = "<group>"; };
 		A829870218BD00C300934642 /* SuperHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperHandler.h; sourceTree = "<group>"; };
-		A829870518BD026300934642 /* Georgia_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = Georgia_Regular_64.fnt; path = ../resources/Georgia_Regular_64.fnt; sourceTree = "<group>"; };
 		A829870818BD02D500934642 /* FontMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontMatrix.cpp; sourceTree = "<group>"; };
 		A829870918BD02D500934642 /* FontMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontMatrix.h; sourceTree = "<group>"; };
 		A829870A18BD02D500934642 /* GlyphBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphBatch.h; sourceTree = "<group>"; };
@@ -108,6 +107,7 @@
 		A853DFD418116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFD518116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
+		A8A883F518C77D3300BC0BDB /* American Typewriter_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "American Typewriter_Regular_64.fnt"; path = "../resources/American Typewriter_Regular_64.fnt"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,8 +187,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A8A883F518C77D3300BC0BDB /* American Typewriter_Regular_64.fnt */,
 				A822633818BE24E800D57C8C /* dot.png */,
-				A829870518BD026300934642 /* Georgia_Regular_64.fnt */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -376,7 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A822633918BE24E800D57C8C /* dot.png in Resources */,
-				A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */,
+				A8A883F618C77D3300BC0BDB /* American Typewriter_Regular_64.fnt in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
