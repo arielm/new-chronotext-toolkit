@@ -14,11 +14,11 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-const float PADDING1 = 0; // IN IMAGE SPACE
-const float PADDING2 = 12; // IN SCREEN SPACE
+const float PADDING1 = 0; // IN FRAME-IMAGE SPACE
+const float PADDING2 = 12; // IN ABSOLUTE SCREEN SPACE
 
-const float FRAME_INTERIOR_WIDTH = 464; // IN IMAGE SPACE
-const float GRID_SIZE = 48; // IN SCREEN SPACE
+const float FRAME_INTERIOR_WIDTH = 464; // IN FRAME-IMAGE SPACE
+const float GRID_SIZE = 32; // IN FRAME-IMAGE SPACE
 
 void Sketch::setup(bool renewContext)
 {
@@ -33,7 +33,7 @@ void Sketch::setup(bool renewContext)
     else
     {
         frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT);
-        picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true, TextureRequest::FLAGS_POT);
+        picture = textureManager.getTexture("Louis XIV of France - 512.png", true, TextureRequest::FLAGS_POT);
     }
 
     // ---
