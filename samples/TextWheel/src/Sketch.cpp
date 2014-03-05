@@ -23,7 +23,8 @@ Sketch::Sketch(void *context, void *delegate)
 :
 CinderSketch(context, delegate),
 currentLangIndex(0),
-currentLineIndex(0)
+currentLineIndex(0),
+position(0)
 {}
 
 void Sketch::setup(bool renewContext)
@@ -46,7 +47,7 @@ void Sketch::setup(bool renewContext)
         
         // ---
         
-        spiral.update(0, 0, 25, 500, 20, 0.5f, 50);
+        spiral.update(0, 0, 67, 500, 17, 0.5f, 50);
     }
     
     // ---
@@ -73,6 +74,12 @@ void Sketch::resize()
     scale = getWindowHeight() / REFERENCE_H;
 }
 
+void Sketch::update()
+{
+    double now = getElapsedSeconds();
+    position = now * 40;
+}
+
 void Sketch::draw()
 {
     gl::clear(Color::white(), false);
@@ -88,20 +95,14 @@ void Sketch::draw()
     
     // ---
     
-    auto &layout = lines["ru"][0];
-    auto offset = font->getOffset(*layout, ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
+    auto &layout = lines["fr"][0];
+    float offsetY = font->getOffsetY(*layout, ZFont::ALIGN_MIDDLE);
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
     
     font->beginSequence();
-    
-    for (auto &cluster : layout->clusters)
-    {
-        font->addCluster(cluster, offset);
-        offset.x += font->getAdvance(cluster);
-    }
-    
+    spiral.drawText(*font, *layout, position, offsetY);
     font->endSequence();
 }
 

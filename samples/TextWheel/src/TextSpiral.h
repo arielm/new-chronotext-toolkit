@@ -8,15 +8,20 @@
 
 #pragma once
 
-#include "cinder/Vector.h"
-
-#include <vector>
+#include "chronotext/font/zf/VirtualFont.h"
 
 class TextSpiral
 {
 public:
+    float ox;
+    float oy;
+    float r1;
+    float r2;
+    float turns;
+    
     std::vector<ci::Vec2f> vertices;
     
     void update(float ox, float oy, float r1, float r2, float turns, float DD1, float DD2);
     void drawWire();
+    void drawText(chr::ZFont &font, const chr::zf::LineLayout &layout, float offsetX = 0, float offsetY = 0);
 };

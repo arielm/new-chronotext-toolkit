@@ -18,6 +18,7 @@ class Sketch : public chr::CinderSketch
     chr::zf::FontManager fontManager;
 
     float scale;
+    float position;
 
     std::shared_ptr<chr::ZFont> font;
     std::vector<std::string> languages;
@@ -34,6 +35,7 @@ public:
     void setup(bool renewContext);
     void event(int id);
     void resize();
+    void update();
     void draw();
     
     void addVersion(const std::string &lang);
