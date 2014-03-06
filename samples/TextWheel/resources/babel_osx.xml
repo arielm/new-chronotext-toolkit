@@ -3,10 +3,7 @@
 <VirtualFont>
     <!-- Undefined -->
     <Set>
-        <Group>
-            <Ref uri="file:///Library/Fonts/Georgia.ttf" />
-            <Ref uri="file:///Library/Fonts/Times New Roman.ttf" />
-        </Group>
+        <Ref uri="file:///Library/Fonts/Georgia.ttf" />
     </Set>
     <!-- Arabic -->
     <Set lang="ar">
@@ -18,10 +15,7 @@
     </Set>
     <!-- Greek (Monotonic) -->
     <Set lang="el">
-        <Group>
-            <Ref uri="file:///Library/Fonts/Georgia.ttf" />
-            <Ref uri="file:///Library/Fonts/Times New Roman.ttf" />
-        </Group>
+        <Ref uri="file:///Library/Fonts/Georgia.ttf" />
     </Set>
     <!-- Hebrew -->
     <Set lang="he">
@@ -35,16 +29,12 @@
     <Set lang="ja">
         <Ref uri="file:///System/Library/Fonts/ヒラギノ明朝 ProN W3.otf" />
     </Set>
-    <!-- Russian, Ukrainian -->
-    <Set lang="ru:uk">
-        <Group>
-            <Ref uri="file:///Library/Fonts/Georgia.ttf" />
-            <Ref uri="file:///Library/Fonts/Times New Roman.ttf" />
-            <Ref uri="file:///Library/Fonts/Hoefler Text.ttc" />
-        </Group>
+    <!-- Korean -->
+    <Set lang="ko">
+        <Ref uri="file:///Library/Fonts/AdobeMyungjoStd-Medium.otf" />
     </Set>
-    <!-- Thai -->
-    <Set lang="th">
-        <Ref uri="file:///System/Library/Fonts/Thonburi.ttf" />
+    <!-- Russian -->
+    <Set lang="ru">
+        <Ref uri="file:///Library/Fonts/Georgia.ttf" />
     </Set>
 </VirtualFont>

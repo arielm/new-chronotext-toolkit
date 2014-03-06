@@ -33,7 +33,7 @@
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
 		A8A883F418C6C0D200BC0BDB /* TextSpiral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */; };
 		A8A8840718C8CBBE00BC0BDB /* ja.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840418C8CBBE00BC0BDB /* ja.txt */; };
-		A8A8840818C8CBBE00BC0BDB /* th.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840518C8CBBE00BC0BDB /* th.txt */; };
+		A8A8840818C8CBBE00BC0BDB /* ko.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840518C8CBBE00BC0BDB /* ko.txt */; };
 		A8A8840918C8CBBE00BC0BDB /* ar.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840618C8CBBE00BC0BDB /* ar.txt */; };
 		A8A8840B18C8D6D400BC0BDB /* zh-tw.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840A18C8D6D400BC0BDB /* zh-tw.txt */; };
 		A8A8840F18C8DB8800BC0BDB /* hi.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840C18C8DB8800BC0BDB /* hi.txt */; };
@@ -52,7 +52,7 @@
 		A8F9FC5418C5683B00C48245 /* VirtualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4918C5683B00C48245 /* VirtualFont.cpp */; };
 		A8F9FC5618C56F0700C48245 /* fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5518C56F0700C48245 /* fr.txt */; };
 		A8F9FC5818C573E800C48245 /* he.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5718C573E800C48245 /* he.txt */; };
-		A8F9FC5A18C5776400C48245 /* da.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5918C5776400C48245 /* da.txt */; };
+		A8F9FC5A18C5776400C48245 /* de.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5918C5776400C48245 /* de.txt */; };
 		A8F9FC5C18C578A200C48245 /* ru.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5B18C578A200C48245 /* ru.txt */; };
 		A8F9FC5E18C57E6F00C48245 /* el.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5D18C57E6F00C48245 /* el.txt */; };
 /* End PBXBuildFile section */
@@ -113,7 +113,7 @@
 		A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextSpiral.cpp; path = ../src/TextSpiral.cpp; sourceTree = "<group>"; };
 		A8A883F318C6C0D200BC0BDB /* TextSpiral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSpiral.h; path = ../src/TextSpiral.h; sourceTree = "<group>"; };
 		A8A8840418C8CBBE00BC0BDB /* ja.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ja.txt; path = ../resources/ja.txt; sourceTree = "<group>"; };
-		A8A8840518C8CBBE00BC0BDB /* th.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = th.txt; path = ../resources/th.txt; sourceTree = "<group>"; };
+		A8A8840518C8CBBE00BC0BDB /* ko.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ko.txt; path = ../resources/ko.txt; sourceTree = "<group>"; };
 		A8A8840618C8CBBE00BC0BDB /* ar.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ar.txt; path = ../resources/ar.txt; sourceTree = "<group>"; };
 		A8A8840A18C8D6D400BC0BDB /* zh-tw.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "zh-tw.txt"; path = "../resources/zh-tw.txt"; sourceTree = "<group>"; };
 		A8A8840C18C8DB8800BC0BDB /* hi.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hi.txt; path = ../resources/hi.txt; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 		A8F9FC4A18C5683B00C48245 /* VirtualFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualFont.h; sourceTree = "<group>"; };
 		A8F9FC5518C56F0700C48245 /* fr.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fr.txt; path = ../resources/fr.txt; sourceTree = "<group>"; };
 		A8F9FC5718C573E800C48245 /* he.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = he.txt; path = ../resources/he.txt; sourceTree = "<group>"; };
-		A8F9FC5918C5776400C48245 /* da.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = da.txt; path = ../resources/da.txt; sourceTree = "<group>"; };
+		A8F9FC5918C5776400C48245 /* de.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = de.txt; path = ../resources/de.txt; sourceTree = "<group>"; };
 		A8F9FC5B18C578A200C48245 /* ru.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ru.txt; path = ../resources/ru.txt; sourceTree = "<group>"; };
 		A8F9FC5D18C57E6F00C48245 /* el.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = el.txt; path = ../resources/el.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -236,11 +236,11 @@
 				A8A8840E18C8DB8800BC0BDB /* en.txt */,
 				A8A8840A18C8D6D400BC0BDB /* zh-tw.txt */,
 				A8A8840418C8CBBE00BC0BDB /* ja.txt */,
-				A8A8840518C8CBBE00BC0BDB /* th.txt */,
+				A8A8840518C8CBBE00BC0BDB /* ko.txt */,
 				A8A8840618C8CBBE00BC0BDB /* ar.txt */,
 				A8F9FC5D18C57E6F00C48245 /* el.txt */,
 				A8F9FC5B18C578A200C48245 /* ru.txt */,
-				A8F9FC5918C5776400C48245 /* da.txt */,
+				A8F9FC5918C5776400C48245 /* de.txt */,
 				A8F9FC5718C573E800C48245 /* he.txt */,
 				A8F9FC5518C56F0700C48245 /* fr.txt */,
 				A8F9FC2F18C5681600C48245 /* babel_osx.xml */,
@@ -444,7 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8A8841018C8DB8800BC0BDB /* es.txt in Resources */,
-				A8F9FC5A18C5776400C48245 /* da.txt in Resources */,
+				A8F9FC5A18C5776400C48245 /* de.txt in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 				A8F9FC5818C573E800C48245 /* he.txt in Resources */,
 				A8A8840B18C8D6D400BC0BDB /* zh-tw.txt in Resources */,
@@ -456,7 +456,7 @@
 				A8F9FC3018C5681600C48245 /* babel_osx.xml in Resources */,
 				A8F9FC5618C56F0700C48245 /* fr.txt in Resources */,
 				A8A8840718C8CBBE00BC0BDB /* ja.txt in Resources */,
-				A8A8840818C8CBBE00BC0BDB /* th.txt in Resources */,
+				A8A8840818C8CBBE00BC0BDB /* ko.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

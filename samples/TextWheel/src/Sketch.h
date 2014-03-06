@@ -22,13 +22,9 @@
  *
  * TODO:
  *
- * 1) ROTATE IN THE INVERSE DIRECTION WHEN HEBREW OR ARABIC ARE SHOWN
+ * 1) TWEAK THE FONT-SIZES SO THAT ALL OF THEM SHARE A "SIMILAR" HEIGHT
  *
- * 2) ADD MORE LANGUAGES
- *
- * 3) TWEAK THE FONT-SIZES SO THAT ALL OF THEM SHARE A "SIMILAR" HEIGHT
- *
- * 4) ADAPT TO iOS AND ANDROID:
+ * 2) ADAPT TO iOS AND ANDROID:
  *    ONLY A MATTER OF PICKING THE RIGHT SET OF FONTS
  *
  *
@@ -43,7 +39,9 @@
  *
  * REFERENCES:
  *
- * https://github.com/arielm/Unicode
+ * 1) https://github.com/arielm/Unicode
+ *
+ * 2) http://www.wordproject.org/bibles
  */
 
 #pragma once
@@ -61,7 +59,7 @@ class Sketch : public chr::CinderSketch
     TextSpiral spiral;
 
     std::vector<std::string> languages;
-    std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> versions;
+    std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> layouts;
     std::map<std::string, chr::zf::FontSequence> sequences;
 
     float scale;

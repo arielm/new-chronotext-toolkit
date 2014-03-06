@@ -12,6 +12,8 @@
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/MathUtils.h"
 
+#include "cinder/Rand.h"
+
 using namespace std;
 using namespace ci;
 using namespace chr;
@@ -22,37 +24,33 @@ const float TEXT_SIZE = 20;
 
 Sketch::Sketch(void *context, void *delegate)
 :
-CinderSketch(context, delegate),
-currentLangIndex(0)
+CinderSketch(context, delegate)
 {}
 
 void Sketch::setup(bool renewContext)
 {
-    if (renewContext)
-    {
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
+    if (!renewContext)
     {
         font = fontManager.getCachedFont(InputSource::getResource("babel_osx.xml"), ZFont::Properties2d(48));
-        
         font->setSize(TEXT_SIZE);
         font->setColor(0, 0, 0, 0.85f);
         
         spiral.update(0, 0, 67, 500, 17, 1, 40);
-        
-        addVersion("hi");
-        addVersion("es");
+
+        addVersion("he");
         addVersion("en");
         addVersion("zh-tw");
-        addVersion("ja");
-        addVersion("th");
-        addVersion("ar");
         addVersion("fr");
-        addVersion("he");
-        addVersion("da");
         addVersion("ru");
+        addVersion("ko");
+        addVersion("de");
+        addVersion("hi");
+        addVersion("es");
+        addVersion("ja");
+        addVersion("ar");
         addVersion("el");
+        
+        currentLangIndex = Rand::randInt(0, languages.size() - 1);
     }
     
     // ---
@@ -89,7 +87,7 @@ void Sketch::update()
 {
     double now = getElapsedSeconds();
     
-    float direction = (versions[languages[currentLangIndex]]->overallDirection == HB_DIRECTION_RTL) ? -1 : +1;
+    float direction = (layouts[languages[currentLangIndex]]->overallDirection == HB_DIRECTION_RTL) ? -1 : +1;
     rotation = direction * now * 0.1f;
 }
 
@@ -114,27 +112,29 @@ void Sketch::draw()
 void Sketch::addVersion(const string &lang)
 {
     languages.push_back(lang);
+
+    // ---
     
-    auto version = readLines<string>(InputSource::getResource(lang + ".txt"));
     string buffer;
     
-    for (auto &line : version)
+    for (auto &line : readLines<string>(InputSource::getResource(lang + ".txt")))
     {
         buffer += line;
         buffer += " ";
     }
  
-    versions[lang] = unique_ptr<LineLayout>(font->createLineLayout(buffer, lang));
+    auto layout = font->createLineLayout(buffer, lang);
+    layouts[lang] = unique_ptr<LineLayout>(layout);
     
     // ---
     
     sequences[lang] = FontSequence();
     
     float offsetX = 3000; // XXX
-    float offsetY = font->getOffsetY(*versions[lang], ZFont::ALIGN_MIDDLE);
+    float offsetY = font->getOffsetY(*layout, ZFont::ALIGN_MIDDLE);
     
     font->beginSequence(sequences[lang]);
-    spiral.drawText(*font, *versions[lang], offsetX, offsetY);
+    spiral.drawText(*font, *layout, offsetX, offsetY);
     font->endSequence();
 }
 
