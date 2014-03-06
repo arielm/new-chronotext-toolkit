@@ -45,16 +45,18 @@ void Sketch::setup(bool renewContext)
         
         // ---
         
-        spiral.update(0, 0, 67, 500, 17, 0.5f, 50);
+        spiral.update(0, 0, 67, 500, 17, 1, 40);
         
         font->setSize(TEXT_SIZE);
         font->setColor(0, 0, 0, 0.85f);
         
         auto &layout = getVersion("fr");
+
+        float offsetX = 3000;
         float offsetY = font->getOffsetY(layout, ZFont::ALIGN_MIDDLE);
         
         font->beginSequence(sequence);
-        spiral.drawText(*font, layout, 3000, offsetY);
+        spiral.drawText(*font, layout, offsetX, offsetY);
         font->endSequence();
     }
     
@@ -91,7 +93,7 @@ void Sketch::resize()
 void Sketch::update()
 {
     double now = getElapsedSeconds();
-    rotation = -now * 0.1f;
+    rotation = now * 0.1f;
 }
 
 void Sketch::draw()

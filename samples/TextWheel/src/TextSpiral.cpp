@@ -17,6 +17,11 @@ using namespace ci;
 using namespace chr;
 using namespace chr::zf;
 
+float TextSpiral::getLength() const
+{
+    return (PI * turns * (r1 + r2));
+}
+
 void TextSpiral::update(float ox, float oy, float r1, float r2, float turns, float DD1, float DD2)
 {
     this->ox = ox;

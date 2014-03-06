@@ -3,7 +3,10 @@
 <VirtualFont>
     <!-- Undefined -->
     <Set>
-        <Ref uri="file:///Library/Fonts/ACaslonPro-Regular.otf" />
+        <Group>
+            <Ref uri="file:///Library/Fonts/Hoefler Text.ttc" />
+            <Ref uri="file:///Library/Fonts/ACaslonPro-Regular.otf" />
+        </Group>
     </Set>
     <!-- Hebrew -->
     <Set lang="he">
