@@ -37,18 +37,18 @@ void Sketch::setup(bool renewContext)
         
         spiral.update(0, 0, 67, 500, 17, 1, 40);
 
-        addVersion("he");
-        addVersion("en");
-        addVersion("zh-tw");
-        addVersion("fr");
-        addVersion("ru");
-        addVersion("ko");
-        addVersion("de");
-        addVersion("hi");
-        addVersion("es");
-        addVersion("ja");
-        addVersion("ar");
-        addVersion("el");
+        addVersion("he"); // HEBREW
+        addVersion("en"); // ENGLISH
+        addVersion("zh-tw"); // CHINESE (TRADITIONAL)
+        addVersion("fr"); // FRENCH
+        addVersion("ru"); // RUSSIAN
+        addVersion("ko"); // KOREAN
+        addVersion("de"); // GERMAN
+        addVersion("hi"); // HINDI
+        addVersion("es"); // SPANISH
+        addVersion("ja"); // JAPANESE
+        addVersion("ar"); // ARABIC
+        addVersion("el"); // GREEK
         
         currentLangIndex = Rand::randInt(0, languages.size() - 1);
     }
@@ -115,15 +115,15 @@ void Sketch::addVersion(const string &lang)
 
     // ---
     
-    string buffer;
+    string version;
     
     for (auto &line : readLines<string>(InputSource::getResource(lang + ".txt")))
     {
-        buffer += line;
-        buffer += " ";
+        version += line;
+        version += " ";
     }
  
-    auto layout = font->createLineLayout(buffer, lang);
+    auto layout = font->createLineLayout(version, lang);
     layouts[lang] = unique_ptr<LineLayout>(layout);
     
     // ---
