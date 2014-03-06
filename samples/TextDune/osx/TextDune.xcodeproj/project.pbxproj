@@ -45,7 +45,6 @@
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
 		A8F9FC1D18C4D97700C48245 /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC1C18C4D97700C48245 /* Hairline.cpp */; };
 		A8F9FC2018C4DAFC00C48245 /* hairline.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC1E18C4DAFC00C48245 /* hairline.png */; };
-		A8F9FC2118C4DAFC00C48245 /* hairline_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC1F18C4DAFC00C48245 /* hairline_dense.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -132,7 +131,6 @@
 		A8F9FC1B18C4D97700C48245 /* Hairline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hairline.h; sourceTree = "<group>"; };
 		A8F9FC1C18C4D97700C48245 /* Hairline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hairline.cpp; sourceTree = "<group>"; };
 		A8F9FC1E18C4DAFC00C48245 /* hairline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline.png; path = ../resources/hairline.png; sourceTree = "<group>"; };
-		A8F9FC1F18C4DAFC00C48245 /* hairline_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dense.png; path = ../resources/hairline_dense.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,7 +211,6 @@
 			isa = PBXGroup;
 			children = (
 				A8F9FC1E18C4DAFC00C48245 /* hairline.png */,
-				A8F9FC1F18C4DAFC00C48245 /* hairline_dense.png */,
 				A829870518BD026300934642 /* Georgia_Regular_64.fnt */,
 			);
 			name = Resources;
@@ -437,7 +434,6 @@
 				A8F9FC2018C4DAFC00C48245 /* hairline.png in Resources */,
 				A829870618BD026300934642 /* Georgia_Regular_64.fnt in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
-				A8F9FC2118C4DAFC00C48245 /* hairline_dense.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -135,13 +135,13 @@ namespace chronotext
     {
         if (delegate)
         {
-            if (body.size() > 0)
+            if (body.empty())
             {
-                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
+                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:nil];
             }
             else
             {
-                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:nil];
+                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
             }
         }
     }

@@ -35,7 +35,6 @@
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
 		A8F9FC2418C4DD4600C48245 /* hairline.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2218C4DD4600C48245 /* hairline.png */; };
-		A8F9FC2518C4DD4600C48245 /* hairline_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2318C4DD4600C48245 /* hairline_dense.png */; };
 		A8F9FC2818C4DD5100C48245 /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC2718C4DD5100C48245 /* Hairline.cpp */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
@@ -118,7 +117,6 @@
 		A8F9FBD118C3778000C48245 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
 		A8F9FBD218C3778000C48245 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A8F9FC2218C4DD4600C48245 /* hairline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline.png; path = ../resources/hairline.png; sourceTree = "<group>"; };
-		A8F9FC2318C4DD4600C48245 /* hairline_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dense.png; path = ../resources/hairline_dense.png; sourceTree = "<group>"; };
 		A8F9FC2618C4DD5100C48245 /* Hairline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hairline.h; sourceTree = "<group>"; };
 		A8F9FC2718C4DD5100C48245 /* Hairline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hairline.cpp; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -232,7 +230,6 @@
 			isa = PBXGroup;
 			children = (
 				A8F9FC2218C4DD4600C48245 /* hairline.png */,
-				A8F9FC2318C4DD4600C48245 /* hairline_dense.png */,
 				A84D7E2F18BD4BA900D7D933 /* Georgia_Regular_64.fnt */,
 			);
 			name = Resources;
@@ -482,7 +479,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8F9FC2518C4DD4600C48245 /* hairline_dense.png in Resources */,
 				A84D7E3018BD4BA900D7D933 /* Georgia_Regular_64.fnt in Resources */,
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */,
