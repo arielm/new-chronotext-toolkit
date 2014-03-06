@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "chronotext/cinder/WindowInfo.h"
 #include "chronotext/os/SuperHandler.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
@@ -71,7 +72,19 @@ namespace chronotext
         virtual float getWindowAspectRatio() const = 0;
         virtual ci::Area getWindowBounds() const = 0;
         virtual float getWindowContentScale() const = 0;
-        virtual bool isHighDensity() const = 0;
+        virtual float getWindowDensity() const = 0;
+        virtual int getWindowAALevel() const = 0;
+        
+        WindowInfo getWindowInfo() const
+        {
+            return WindowInfo
+            {
+                getWindowSize(),
+                getWindowContentScale(),
+                getWindowDensity(),
+                getWindowAALevel()
+            };
+        }
         
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
     };

@@ -49,8 +49,6 @@
 		A8F9FBF818C413E900C48245 /* hairline.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBF518C413E900C48245 /* hairline.png */; };
 		A8F9FBFA18C413E900C48245 /* asphalt_128_alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBF718C413E900C48245 /* asphalt_128_alpha.png */; };
 		A8F9FBFC18C41D3C00C48245 /* hairline_dashed.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBFB18C41D3C00C48245 /* hairline_dashed.png */; };
-		A8F9FC0B18C42EC400C48245 /* hairline_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC0918C42EC400C48245 /* hairline_dense.png */; };
-		A8F9FC0C18C42EC400C48245 /* hairline_dashed_dense.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC0A18C42EC400C48245 /* hairline_dashed_dense.png */; };
 		A8F9FC2E18C4DE8A00C48245 /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC2D18C4DE8A00C48245 /* Hairline.cpp */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +130,7 @@
 		A853DFD418116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFD518116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
+		A8A8840218C79AFE00BC0BDB /* WindowInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
 		A8F9FBC718C3754600C48245 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
 		A8F9FBC818C3754600C48245 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A8F9FBDD18C3E25200C48245 /* FXGDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXGDocument.h; sourceTree = "<group>"; };
@@ -142,8 +141,6 @@
 		A8F9FBF518C413E900C48245 /* hairline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline.png; path = ../resources/hairline.png; sourceTree = "<group>"; };
 		A8F9FBF718C413E900C48245 /* asphalt_128_alpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = asphalt_128_alpha.png; path = ../resources/asphalt_128_alpha.png; sourceTree = "<group>"; };
 		A8F9FBFB18C41D3C00C48245 /* hairline_dashed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dashed.png; path = ../resources/hairline_dashed.png; sourceTree = "<group>"; };
-		A8F9FC0918C42EC400C48245 /* hairline_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dense.png; path = ../resources/hairline_dense.png; sourceTree = "<group>"; };
-		A8F9FC0A18C42EC400C48245 /* hairline_dashed_dense.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dashed_dense.png; path = ../resources/hairline_dashed_dense.png; sourceTree = "<group>"; };
 		A8F9FC2C18C4DE8A00C48245 /* Hairline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hairline.h; sourceTree = "<group>"; };
 		A8F9FC2D18C4DE8A00C48245 /* Hairline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hairline.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -226,9 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				A8F9FBF518C413E900C48245 /* hairline.png */,
-				A8F9FC0918C42EC400C48245 /* hairline_dense.png */,
 				A8F9FBFB18C41D3C00C48245 /* hairline_dashed.png */,
-				A8F9FC0A18C42EC400C48245 /* hairline_dashed_dense.png */,
 				A8F9FBF118C3F8B800C48245 /* dot2x.png */,
 				A8F9FBF718C413E900C48245 /* asphalt_128_alpha.png */,
 				A8F9FBE618C3E4E300C48245 /* lys.fxg */,
@@ -355,6 +350,7 @@
 				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A82C90EB16E00B0500FF519C /* CinderSketchSimple.h */,
 				A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */,
+				A8A8840218C79AFE00BC0BDB /* WindowInfo.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -461,8 +457,6 @@
 				A8F9FBE318C3E2EA00C48245 /* spline_1.dat in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 				A8F9FBFC18C41D3C00C48245 /* hairline_dashed.png in Resources */,
-				A8F9FC0B18C42EC400C48245 /* hairline_dense.png in Resources */,
-				A8F9FC0C18C42EC400C48245 /* hairline_dashed_dense.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

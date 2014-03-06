@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -88,12 +88,12 @@ namespace chronotext
     
     int CinderSketchComplex::getWindowWidth() const
     {
-        return ((CinderDelegate*)context).width;
+        return ((CinderDelegate*)context).windowInfo.size.x;
     }
     
     int CinderSketchComplex::getWindowHeight() const
     {
-        return ((CinderDelegate*)context).height;
+        return ((CinderDelegate*)context).windowInfo.size.y;
     }
     
     Vec2f CinderSketchComplex::getWindowCenter() const
@@ -118,12 +118,17 @@ namespace chronotext
     
     float CinderSketchComplex::getWindowContentScale() const
     {
-        return ((CinderDelegate*)context).contentScale;
+        return ((CinderDelegate*)context).windowInfo.contentScale;
     }
     
-    bool CinderSketchComplex::isHighDensity() const
+    float CinderSketchComplex::getWindowDensity() const
     {
-        return (getWindowContentScale() > 1);
+        return ((CinderDelegate*)context).windowInfo.density;
+    }
+    
+    int CinderSketchComplex::getWindowAALevel() const
+    {
+        return ((CinderDelegate*)context).windowInfo.aaLevel;
     }
     
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)

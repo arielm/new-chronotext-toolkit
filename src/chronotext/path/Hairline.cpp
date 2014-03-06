@@ -7,20 +7,21 @@ namespace chronotext
     Hairline::Hairline()
     {}
     
-    Hairline::Hairline(TextureManager &textureManager, Type type, bool highDensity)
+    Hairline::Hairline(TextureManager &textureManager, Type type, const WindowInfo &windowInfo)
     :
-    type(type)
+    type(type),
+    contentScale(windowInfo.contentScale)
     {
         string resourceName;
         
         switch (type)
         {
             case TYPE_NORMAL:
-                resourceName = highDensity ? "hairline_dense.png" : "hairline.png";
+                resourceName = "hairline.png";
                 break;
                 
             case TYPE_DASHED:
-                resourceName = highDensity ? "hairline_dashed_dense.png" : "hairline_dashed.png";
+                resourceName = "hairline_dashed.png";
                 break;
                 
             default:
@@ -32,7 +33,7 @@ namespace chronotext
     
     void Hairline::stroke(const chr::FollowablePath &path, float scale, float position)
     {
-        StrokeHelper::stroke(path, strip, 4 / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, position);
+        StrokeHelper::stroke(path, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, position);
     }
     
     void Hairline::draw()

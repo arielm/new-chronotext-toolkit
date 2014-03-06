@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -34,7 +34,8 @@ namespace chronotext
         float getWindowAspectRatio() const { return context->getWindowAspectRatio(); }
         ci::Area getWindowBounds() const { return context->getWindowBounds(); }
         float getWindowContentScale() const { return context->getWindowContentScale(); }
-        bool isHighDensity() const { return (getWindowContentScale() > 1); }
+        float getWindowDensity() const;
+        int getWindowAALevel() const;
         
         void sendMessageToDelegate(int what, const std::string &body = "");
         

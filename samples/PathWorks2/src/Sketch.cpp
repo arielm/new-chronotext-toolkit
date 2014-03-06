@@ -58,7 +58,7 @@ void Sketch::setup(bool renewContext)
         peanutSpline.close();
         
         peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
-        peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED, isHighDensity());
+        peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED, getWindowInfo());
         
         // ---
         
@@ -66,7 +66,7 @@ void Sketch::setup(bool renewContext)
         
         for (auto &path : document.paths)
         {
-            lys.emplace_back(make_pair(FollowablePath(path), Hairline(textureManager, Hairline::TYPE_NORMAL, isHighDensity())));
+            lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL, getWindowInfo())));
         }
         
         lysOffset = document.viewSize * 0.5f;

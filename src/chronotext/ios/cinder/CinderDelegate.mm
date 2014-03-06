@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -28,9 +28,7 @@ using namespace chr;
 @synthesize sketch;
 @synthesize accelFilterFactor;
 @synthesize io;
-@synthesize width;
-@synthesize height;
-@synthesize contentScale;
+@synthesize windowInfo;
 @synthesize initialized;
 @synthesize active;
 
@@ -113,10 +111,25 @@ using namespace chr;
     int frameWidth = view.frame.size.width;
     int frameHeight = view.frame.size.height;
     
-    width = mx * frameWidth + my * frameHeight;
-    height = mx * frameHeight + my * frameWidth;
+    windowInfo.size.x = mx * frameWidth + my * frameHeight;
+    windowInfo.size.y = mx * frameHeight + my * frameWidth;
     
-    contentScale = view.contentScaleFactor;
+    windowInfo.contentScale = view.contentScaleFactor;
+    
+    // ---
+    
+    switch (view.drawableMultisample)
+    {
+        case GLKViewDrawableMultisampleNone:
+            windowInfo.aaLevel = 0;
+            break;
+            
+        case GLKViewDrawableMultisample4X:
+            windowInfo.aaLevel = 4;
+            break;
+    }
+    
+    windowInfo.density = 0; // TODO
     
     // ---
     

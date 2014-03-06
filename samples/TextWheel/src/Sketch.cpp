@@ -66,7 +66,7 @@ void Sketch::setup(bool renewContext)
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
     
-    if (true) // FIXME: ONLY IF ANTIALIASING < 4
+    if (getWindowAALevel() < 4)
     {
         glEnable(GL_LINE_SMOOTH);
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);

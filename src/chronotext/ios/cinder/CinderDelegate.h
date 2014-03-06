@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -42,9 +42,7 @@ enum
     std::shared_ptr<boost::asio::io_service> io;
     std::shared_ptr<boost::asio::io_service::work> ioWork;
     
-    int width;
-    int height;
-    float contentScale;
+    chr::WindowInfo windowInfo;
     
     ci::Timer timer;
     uint32_t frameCount;
@@ -58,9 +56,7 @@ enum
 @property (nonatomic, assign) chr::CinderSketch *sketch;
 @property (nonatomic, assign) float accelFilterFactor;
 @property (nonatomic, readonly) std::shared_ptr<boost::asio::io_service> &io;
-@property (nonatomic, readonly) int width;
-@property (nonatomic, readonly) int height;
-@property (nonatomic, readonly) float contentScale;
+@property (nonatomic, readonly) chr::WindowInfo windowInfo;
 @property (nonatomic, readonly) double elapsedSeconds;
 @property (nonatomic, readonly) uint32_t elapsedFrames;
 @property (nonatomic, readonly) BOOL initialized;
