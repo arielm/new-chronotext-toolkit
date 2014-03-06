@@ -9,8 +9,9 @@
 /*
  * REFERENCES:
  *
- * THE TextDune APP WAS ORIGINALLY PUBLISHED IN 2010:
- * https://vimeo.com/14476015
+ * 1) https://vimeo.com/14476015
+ * 2) https://vimeo.com/3352337
+ * 3) http://chronotext.org/bookOfSand
  */
 
 #pragma once
@@ -48,9 +49,9 @@ public:
     void update();
     void draw();
     
-    void addTouch(int index, float x, float y);
-    void removeTouch(int index, float x, float y);
-    
     void updateDune();
     void drawDune();
+    
+    void addTouch(int index, float x, float y);
+    void removeTouch(int index, float x, float y);
 };

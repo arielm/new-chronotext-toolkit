@@ -38,7 +38,7 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        hairline = Hairline(textureManager, Hairline::TYPE_NORMAL, isHighDensity());
+        hairline = Hairline(textureManager, Hairline::TYPE_NORMAL, getWindowInfo());
         font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     }
     
@@ -99,16 +99,6 @@ void Sketch::draw()
     TextHelper::drawTextOnPath(*font, text, path, position, -GAP);
 }
 
-void Sketch::addTouch(int index, float x, float y)
-{
-    clock.stop();
-}
-
-void Sketch::removeTouch(int index, float x, float y)
-{
-    clock.start();
-}
-
 void Sketch::updateDune()
 {
     const float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
@@ -156,4 +146,14 @@ void Sketch::drawDune()
     
     gl::color(1, 1, 1, 1);
     hairline.draw();
+}
+
+void Sketch::addTouch(int index, float x, float y)
+{
+    clock.stop();
+}
+
+void Sketch::removeTouch(int index, float x, float y)
+{
+    clock.start();
 }
