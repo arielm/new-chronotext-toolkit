@@ -32,6 +32,13 @@
 		A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910816E02DAA00FF519C /* Sketch.cpp */; };
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
 		A8A883F418C6C0D200BC0BDB /* TextSpiral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */; };
+		A8A8840718C8CBBE00BC0BDB /* ja.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840418C8CBBE00BC0BDB /* ja.txt */; };
+		A8A8840818C8CBBE00BC0BDB /* th.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840518C8CBBE00BC0BDB /* th.txt */; };
+		A8A8840918C8CBBE00BC0BDB /* ar.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840618C8CBBE00BC0BDB /* ar.txt */; };
+		A8A8840B18C8D6D400BC0BDB /* zh-tw.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840A18C8D6D400BC0BDB /* zh-tw.txt */; };
+		A8A8840F18C8DB8800BC0BDB /* hi.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840C18C8DB8800BC0BDB /* hi.txt */; };
+		A8A8841018C8DB8800BC0BDB /* es.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840D18C8DB8800BC0BDB /* es.txt */; };
+		A8A8841118C8DB8800BC0BDB /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840E18C8DB8800BC0BDB /* en.txt */; };
 		A8F9FC3018C5681600C48245 /* babel_osx.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2F18C5681600C48245 /* babel_osx.xml */; };
 		A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3218C5683B00C48245 /* ActualFont.cpp */; };
 		A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3418C5683B00C48245 /* FontManager.cpp */; };
@@ -105,6 +112,13 @@
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextSpiral.cpp; path = ../src/TextSpiral.cpp; sourceTree = "<group>"; };
 		A8A883F318C6C0D200BC0BDB /* TextSpiral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSpiral.h; path = ../src/TextSpiral.h; sourceTree = "<group>"; };
+		A8A8840418C8CBBE00BC0BDB /* ja.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ja.txt; path = ../resources/ja.txt; sourceTree = "<group>"; };
+		A8A8840518C8CBBE00BC0BDB /* th.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = th.txt; path = ../resources/th.txt; sourceTree = "<group>"; };
+		A8A8840618C8CBBE00BC0BDB /* ar.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ar.txt; path = ../resources/ar.txt; sourceTree = "<group>"; };
+		A8A8840A18C8D6D400BC0BDB /* zh-tw.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "zh-tw.txt"; path = "../resources/zh-tw.txt"; sourceTree = "<group>"; };
+		A8A8840C18C8DB8800BC0BDB /* hi.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hi.txt; path = ../resources/hi.txt; sourceTree = "<group>"; };
+		A8A8840D18C8DB8800BC0BDB /* es.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = es.txt; path = ../resources/es.txt; sourceTree = "<group>"; };
+		A8A8840E18C8DB8800BC0BDB /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = en.txt; path = ../resources/en.txt; sourceTree = "<group>"; };
 		A8F9FC2F18C5681600C48245 /* babel_osx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = babel_osx.xml; path = ../resources/babel_osx.xml; sourceTree = "<group>"; };
 		A8F9FC3218C5683B00C48245 /* ActualFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActualFont.cpp; sourceTree = "<group>"; };
 		A8F9FC3318C5683B00C48245 /* ActualFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActualFont.h; sourceTree = "<group>"; };
@@ -217,6 +231,13 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A8A8840C18C8DB8800BC0BDB /* hi.txt */,
+				A8A8840D18C8DB8800BC0BDB /* es.txt */,
+				A8A8840E18C8DB8800BC0BDB /* en.txt */,
+				A8A8840A18C8D6D400BC0BDB /* zh-tw.txt */,
+				A8A8840418C8CBBE00BC0BDB /* ja.txt */,
+				A8A8840518C8CBBE00BC0BDB /* th.txt */,
+				A8A8840618C8CBBE00BC0BDB /* ar.txt */,
 				A8F9FC5D18C57E6F00C48245 /* el.txt */,
 				A8F9FC5B18C578A200C48245 /* ru.txt */,
 				A8F9FC5918C5776400C48245 /* da.txt */,
@@ -422,13 +443,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8A8841018C8DB8800BC0BDB /* es.txt in Resources */,
 				A8F9FC5A18C5776400C48245 /* da.txt in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 				A8F9FC5818C573E800C48245 /* he.txt in Resources */,
+				A8A8840B18C8D6D400BC0BDB /* zh-tw.txt in Resources */,
+				A8A8841118C8DB8800BC0BDB /* en.txt in Resources */,
 				A8F9FC5C18C578A200C48245 /* ru.txt in Resources */,
+				A8A8840F18C8DB8800BC0BDB /* hi.txt in Resources */,
 				A8F9FC5E18C57E6F00C48245 /* el.txt in Resources */,
+				A8A8840918C8CBBE00BC0BDB /* ar.txt in Resources */,
 				A8F9FC3018C5681600C48245 /* babel_osx.xml in Resources */,
 				A8F9FC5618C56F0700C48245 /* fr.txt in Resources */,
+				A8A8840718C8CBBE00BC0BDB /* ja.txt in Resources */,
+				A8A8840818C8CBBE00BC0BDB /* th.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

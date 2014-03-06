@@ -66,6 +66,7 @@ class Sketch : public chr::CinderSketch
 
     float scale;
     float rotation;
+    float direction;
     int currentLangIndex;
 
 public:

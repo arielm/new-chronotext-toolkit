@@ -41,6 +41,13 @@ void Sketch::setup(bool renewContext)
         
         spiral.update(0, 0, 67, 500, 17, 1, 40);
         
+        addVersion("hi");
+        addVersion("es");
+        addVersion("en");
+        addVersion("zh-tw");
+        addVersion("ja");
+        addVersion("th");
+        addVersion("ar");
         addVersion("fr");
         addVersion("he");
         addVersion("da");
@@ -81,7 +88,9 @@ void Sketch::resize()
 void Sketch::update()
 {
     double now = getElapsedSeconds();
-    rotation = now * 0.1f;
+    
+    float direction = (versions[languages[currentLangIndex]]->overallDirection == HB_DIRECTION_RTL) ? -1 : +1;
+    rotation = direction * now * 0.1f;
 }
 
 void Sketch::draw()
