@@ -22,7 +22,8 @@ const float TEXT_SIZE = 20;
 
 Sketch::Sketch(void *context, void *delegate)
 :
-CinderSketch(context, delegate)
+CinderSketch(context, delegate),
+currentLangIndex(0)
 {}
 
 void Sketch::setup(bool renewContext)
@@ -35,29 +36,16 @@ void Sketch::setup(bool renewContext)
     {
         font = fontManager.getCachedFont(InputSource::getResource("babel_osx.xml"), ZFont::Properties2d(48));
         
-        // ---
-        
-        addVersion("he");
-        addVersion("fr");
-        addVersion("da");
-        addVersion("ru");
-        addVersion("el");
-        
-        // ---
-        
-        spiral.update(0, 0, 67, 500, 17, 1, 40);
-        
         font->setSize(TEXT_SIZE);
         font->setColor(0, 0, 0, 0.85f);
         
-        auto &layout = getVersion("fr");
-
-        float offsetX = 3000;
-        float offsetY = font->getOffsetY(layout, ZFont::ALIGN_MIDDLE);
+        spiral.update(0, 0, 67, 500, 17, 1, 40);
         
-        font->beginSequence(sequence);
-        spiral.drawText(*font, layout, offsetX, offsetY);
-        font->endSequence();
+        addVersion("fr");
+        addVersion("he");
+        addVersion("da");
+        addVersion("ru");
+        addVersion("el");
     }
     
     // ---
@@ -111,11 +99,13 @@ void Sketch::draw()
     gl::color(1, 0, 0, 0.125f);
     spiral.drawWire();
     
-    font->replaySequence(sequence);
+    font->replaySequence(sequences[languages[currentLangIndex]]);
 }
 
 void Sketch::addVersion(const string &lang)
 {
+    languages.push_back(lang);
+    
     auto version = readLines<string>(InputSource::getResource(lang + ".txt"));
     string buffer;
     
@@ -124,11 +114,27 @@ void Sketch::addVersion(const string &lang)
         buffer += line;
         buffer += " ";
     }
+ 
+    versions[lang] = unique_ptr<LineLayout>(font->createLineLayout(buffer, lang));
     
-    versions[lang]= unique_ptr<LineLayout>(font->createLineLayout(buffer, lang));
+    // ---
+    
+    sequences[lang] = FontSequence();
+    
+    float offsetX = 3000; // XXX
+    float offsetY = font->getOffsetY(*versions[lang], ZFont::ALIGN_MIDDLE);
+    
+    font->beginSequence(sequences[lang]);
+    spiral.drawText(*font, *versions[lang], offsetX, offsetY);
+    font->endSequence();
 }
 
-LineLayout& Sketch::getVersion(const std::string &lang)
+void Sketch::nextVersion()
 {
-    return *versions[lang];
+    currentLangIndex = bound(currentLangIndex + 1, languages.size());
+}
+
+void Sketch::previousVersion()
+{
+    currentLangIndex = bound(currentLangIndex - 1, languages.size());
 }

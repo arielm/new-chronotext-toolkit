@@ -21,6 +21,8 @@ using namespace chr;
 
 class Application : public CinderApp
 {
+    Sketch *target;
+    
 public:
     Application();
     
@@ -30,7 +32,7 @@ public:
 
 Application::Application()
 {
-    sketch = new Sketch(this);
+    sketch = target = new Sketch(this);
 }
 
 void Application::prepareSettings(Settings *settings)
@@ -53,6 +55,14 @@ void Application::keyDown(KeyEvent event)
     {
         case KeyEvent::KEY_ESCAPE:
             quit();
+            break;
+            
+        case KeyEvent::KEY_RIGHT:
+            target->nextVersion();
+            break;
+            
+        case KeyEvent::KEY_LEFT:
+            target->previousVersion();
             break;
     }
 }

@@ -6,6 +6,46 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * FEATURES:
+ *
+ * 1) WORKS ON OSX
+ * 2) DEMONSTRATES HOW TO WORK WITH THE ZFont SYSTEM (UNICODE TEXT RENDERING)
+ * 3) WRITING ON A SPIRAL
+ * 4) USING A FontSequence (OPTIMAL FOR STATIC TEXT)
+ *
+ *
+ * INSTRUCTIONS:
+ *
+ * PRESS RIGHT OR LEFT TO SWITCH BETWEEN LANGUAGES
+ *
+ *
+ * TODO:
+ *
+ * 1) ROTATE IN THE INVERSE DIRECTION WHEN HEBREW OR ARABIC ARE SHOWN
+ *
+ * 2) ADD MORE LANGUAGES
+ *
+ * 3) TWEAK THE FONT-SIZES SO THAT ALL OF THEM SHARE A "SIMILAR" HEIGHT
+ *
+ * 4) ADAPT TO iOS AND ANDROID:
+ *    ONLY A MATTER OF PICKING THE RIGHT SET OF FONTS
+ *
+ *
+ * ADDITIONAL REQUIREMENTS:
+ *
+ * 1) hb-icu BLOCK
+ *    https://github.com/arielm/hb-icu
+ *
+ * 2) Freetype BLOCK:
+ *    https://github.com/arielm/Freetype
+ *
+ *
+ * REFERENCES:
+ *
+ * https://github.com/arielm/Unicode
+ */
+
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
@@ -17,15 +57,17 @@ class Sketch : public chr::CinderSketch
 {
     chr::zf::FontManager fontManager;
 
+    std::shared_ptr<chr::ZFont> font;
+    TextSpiral spiral;
+
+    std::vector<std::string> languages;
+    std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> versions;
+    std::map<std::string, chr::zf::FontSequence> sequences;
+
     float scale;
     float rotation;
+    int currentLangIndex;
 
-    std::shared_ptr<chr::ZFont> font;
-    chr::zf::FontSequence sequence;
-    TextSpiral spiral;
-    
-    std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> versions;
-    
 public:
     Sketch(void *context, void *delegate = NULL);
     
@@ -36,5 +78,6 @@ public:
     void draw();
     
     void addVersion(const std::string &lang);
-    chr::zf::LineLayout& getVersion(const std::string &lang);
+    void nextVersion();
+    void previousVersion();
 };
