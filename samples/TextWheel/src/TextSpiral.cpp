@@ -17,11 +17,6 @@ using namespace ci;
 using namespace chr;
 using namespace chr::zf;
 
-float TextSpiral::getLength() const
-{
-    return (PI * turns * (r1 + r2));
-}
-
 void TextSpiral::update(float ox, float oy, float r1, float r2, float turns, float DD1, float DD2)
 {
     this->ox = ox;
@@ -36,7 +31,6 @@ void TextSpiral::update(float ox, float oy, float r1, float r2, float turns, flo
     float L = PI * turns * (r1 + r2);
     float dr = (r2 - r1) / l;
     float DD = (DD2 - DD1) / l;
-    
     float D = 0;
     
     do
@@ -62,7 +56,6 @@ void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, 
 {
     float l = TWO_PI * turns;
     float dr = (r2 - r1) / l;
-    
     float D = offsetX;
     
     auto matrix = font.getMatrix();

@@ -39,7 +39,8 @@
 		A8A8840F18C8DB8800BC0BDB /* hi.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840C18C8DB8800BC0BDB /* hi.txt */; };
 		A8A8841018C8DB8800BC0BDB /* es.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840D18C8DB8800BC0BDB /* es.txt */; };
 		A8A8841118C8DB8800BC0BDB /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840E18C8DB8800BC0BDB /* en.txt */; };
-		A8F9FC3018C5681600C48245 /* babel_osx.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2F18C5681600C48245 /* babel_osx.xml */; };
+		A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8A8841218C9329B00BC0BDB /* font-config.xml */; };
+		A8F9FC3018C5681600C48245 /* babel_serif_osx.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2F18C5681600C48245 /* babel_serif_osx.xml */; };
 		A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3218C5683B00C48245 /* ActualFont.cpp */; };
 		A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3418C5683B00C48245 /* FontManager.cpp */; };
 		A8F9FC4D18C5683B00C48245 /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3618C5683B00C48245 /* FontSequence.cpp */; };
@@ -119,7 +120,8 @@
 		A8A8840C18C8DB8800BC0BDB /* hi.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hi.txt; path = ../resources/hi.txt; sourceTree = "<group>"; };
 		A8A8840D18C8DB8800BC0BDB /* es.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = es.txt; path = ../resources/es.txt; sourceTree = "<group>"; };
 		A8A8840E18C8DB8800BC0BDB /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = en.txt; path = ../resources/en.txt; sourceTree = "<group>"; };
-		A8F9FC2F18C5681600C48245 /* babel_osx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = babel_osx.xml; path = ../resources/babel_osx.xml; sourceTree = "<group>"; };
+		A8A8841218C9329B00BC0BDB /* font-config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "font-config.xml"; path = "../resources/font-config.xml"; sourceTree = "<group>"; };
+		A8F9FC2F18C5681600C48245 /* babel_serif_osx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = babel_serif_osx.xml; path = ../resources/babel_serif_osx.xml; sourceTree = "<group>"; };
 		A8F9FC3218C5683B00C48245 /* ActualFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActualFont.cpp; sourceTree = "<group>"; };
 		A8F9FC3318C5683B00C48245 /* ActualFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActualFont.h; sourceTree = "<group>"; };
 		A8F9FC3418C5683B00C48245 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
@@ -243,7 +245,8 @@
 				A8F9FC5918C5776400C48245 /* de.txt */,
 				A8F9FC5718C573E800C48245 /* he.txt */,
 				A8F9FC5518C56F0700C48245 /* fr.txt */,
-				A8F9FC2F18C5681600C48245 /* babel_osx.xml */,
+				A8A8841218C9329B00BC0BDB /* font-config.xml */,
+				A8F9FC2F18C5681600C48245 /* babel_serif_osx.xml */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -453,7 +456,8 @@
 				A8A8840F18C8DB8800BC0BDB /* hi.txt in Resources */,
 				A8F9FC5E18C57E6F00C48245 /* el.txt in Resources */,
 				A8A8840918C8CBBE00BC0BDB /* ar.txt in Resources */,
-				A8F9FC3018C5681600C48245 /* babel_osx.xml in Resources */,
+				A8F9FC3018C5681600C48245 /* babel_serif_osx.xml in Resources */,
+				A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */,
 				A8F9FC5618C56F0700C48245 /* fr.txt in Resources */,
 				A8A8840718C8CBBE00BC0BDB /* ja.txt in Resources */,
 				A8A8840818C8CBBE00BC0BDB /* ko.txt in Resources */,

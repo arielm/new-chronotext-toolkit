@@ -31,7 +31,9 @@ void Sketch::setup(bool renewContext)
 {
     if (!renewContext)
     {
-        font = fontManager.getCachedFont(InputSource::getResource("babel_osx.xml"), ZFont::Properties2d(48));
+        fontManager.loadConfig(InputSource::getResource("font-config.xml"));
+
+        font = fontManager.getCachedFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
         font->setSize(TEXT_SIZE);
         font->setColor(0, 0, 0, 0.85f);
         
@@ -85,10 +87,8 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
-    
     float direction = (layouts[languages[currentLangIndex]]->overallDirection == HB_DIRECTION_RTL) ? -1 : +1;
-    rotation = direction * now * 0.1f;
+    rotation = direction * getElapsedSeconds() * 0.1f;
 }
 
 void Sketch::draw()
