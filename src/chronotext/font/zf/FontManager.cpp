@@ -153,11 +153,6 @@ namespace chronotext
                     baseSize = it3->second.second;
                 }
                 
-                if (baseSize == 0)
-                {
-                    throw invalid_argument("UNDEFINED FONT-SIZE");
-                }
-                
                 auto uri = it3->second.first;
                 auto font = getCachedFont(InputSource::get(uri), VirtualFont::Properties(baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity)); // CAN THROW
                 
