@@ -130,7 +130,7 @@ namespace chronotext
         return closed;
     }
     
-    void SplinePath::flush(Type type, FollowablePath &path, float tol)
+    void SplinePath::flush(Type type, FollowablePath &path, float tol) const
     {
         function<Vec2f (float, Vec2f*)> gamma;
         
