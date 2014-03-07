@@ -35,10 +35,6 @@ public class CinderRenderer extends GLRenderer
   public static final int EVENT_BACKGROUND = 7;
   public static final int EVENT_FOREGROUND = 8;
 
-  public static final int ACCELEROMETER_ROTATION_DEFAULT = 0;
-  public static final int ACCELEROMETER_ROTATION_PORTRAIT = 1;
-  public static final int ACCELEROMETER_ROTATION_LANDSCAPE = 2;
-
   protected Context mContext;
   protected Object mListener;
 
@@ -51,27 +47,14 @@ public class CinderRenderer extends GLRenderer
   }
 
   /*
-   * BASED ON CODE FROM Cocos2dxAccelerometer.java
-   * Copyright (c) 2010-2011 cocos2d-x.org 
-   * http://www.cocos2d-x.org
+   * REFERENCES:
+   * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
+   * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
    */
-  protected int getAccelerometerRotation()
+  protected int getDisplayRotation()
   {
-    int orientation = mContext.getResources().getConfiguration().orientation;
-
     Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-    int naturalOrientation = display.getOrientation();
-
-    if ((orientation == Configuration.ORIENTATION_LANDSCAPE) && (naturalOrientation != Surface.ROTATION_0))
-    {
-      return ACCELEROMETER_ROTATION_LANDSCAPE;
-    }
-    else if ((orientation == Configuration.ORIENTATION_PORTRAIT) && (naturalOrientation != Surface.ROTATION_0))
-    {
-      return ACCELEROMETER_ROTATION_PORTRAIT;
-    }
-
-    return ACCELEROMETER_ROTATION_DEFAULT;
+    return display.getRotation();
   }
 
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
@@ -83,7 +66,7 @@ public class CinderRenderer extends GLRenderer
 
   public void setup(GL10 gl, int width, int height)
   {
-    setup(width, height, getAccelerometerRotation());
+    setup(width, height, getDisplayRotation());
     initialized = true;
   }
 
@@ -146,7 +129,7 @@ public class CinderRenderer extends GLRenderer
 
   public native void launch(Context context, Object listener);
 
-  public native void setup(int width, int height, int accelerometerRotation);
+  public native void setup(int width, int height, int displayRotation);
 
   public native void shutdown();
 

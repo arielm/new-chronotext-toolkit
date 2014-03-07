@@ -84,6 +84,36 @@ namespace chronotext
         mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, NULL, NULL/*sensorEventCallback, this*/); // WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
     }
     
+    /*
+     * REFERENCES:
+     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
+     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
+     */
+    static void canonicalToWorld(int displayRotation, float *canVec, ci::Vec3f &worldVec)
+    {
+        struct AxisSwap
+        {
+            float negateX;
+            float negateY;
+            float xSrc;
+            float ySrc;
+        };
+        
+        static const AxisSwap axisSwap[] =
+        {
+            { 1,  1, 0, 1 }, // ROTATION_0
+            {-1,  1, 1, 0 }, // ROTATION_90
+            {-1, -1, 0, 1 }, // ROTATION_180
+            { 1, -1, 1, 0 }  // ROTATION_270
+        };
+        
+        const AxisSwap &as = axisSwap[displayRotation];
+        
+        worldVec.x = as.negateX * canVec[as.xSrc];
+        worldVec.y = as.negateY * canVec[as.ySrc];
+        worldVec.z = canVec[2];
+    }
+    
     void CinderDelegate::processSensorEvents()
     {
         ASensorEvent event;
@@ -92,34 +122,13 @@ namespace chronotext
         {
             if (event.type == ASENSOR_TYPE_ACCELEROMETER)
             {
-                float x = event.acceleration.x;
-                float y = event.acceleration.y;
-                float z = event.acceleration.z;
+                Vec3f transformed;
+                canonicalToWorld(mDisplayRotation, (float*)&event.acceleration.v, transformed);
                 
                 /*
-                 * APPLYING THE EVENTUAL ORIENTATION FIX
+                 * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
                  */
-                if (mAccelerometerRotation == ACCELEROMETER_ROTATION_LANDSCAPE)
-                {
-                    float tmp = x;
-                    x = -y;
-                    y = +tmp;
-                }
-                else if (mAccelerometerRotation == ACCELEROMETER_ROTATION_PORTRAIT)
-                {
-                    float tmp = x;
-                    x = +y;
-                    y = -tmp;
-                }
-                
-                /*
-                 * FOR CONSISTENCY WITH iOS
-                 */
-                x /= -GRAVITY_EARTH;
-                y /= +GRAVITY_EARTH;
-                z /= +GRAVITY_EARTH;
-                
-                accelerated(x, y, z);
+                accelerated(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
             }
         }
     }
@@ -136,11 +145,11 @@ namespace chronotext
         mLastRawAccel = acceleration;
     }
     
-    void CinderDelegate::setup(int width, int height, int accelerometerRotation)
+    void CinderDelegate::setup(int width, int height, int displayRotation)
     {
         mWidth = width;
         mHeight = height;
-        mAccelerometerRotation = accelerometerRotation;
+        mDisplayRotation = displayRotation;
         
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);

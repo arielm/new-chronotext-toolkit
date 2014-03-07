@@ -23,7 +23,7 @@ namespace chronotext
         
         int mWidth;
         int mHeight;
-        int mAccelerometerRotation;
+        int mDisplayRotation;
         
         ci::Timer mTimer;
         uint32_t mFrameCount;
@@ -88,7 +88,7 @@ namespace chronotext
         
         void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
         
-        void setup(int width, int height, int accelerometerRotation);
+        void setup(int width, int height, int displayRotation);
         void shutdown();
         
         void draw();

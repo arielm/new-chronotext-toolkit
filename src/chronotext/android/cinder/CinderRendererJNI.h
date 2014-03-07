@@ -68,9 +68,9 @@ void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, 
     gDelegate->launch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener));
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jint accelerometerRotation)
+void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jint displayRotation)
 {
-    gDelegate->setup(width, height, accelerometerRotation);
+    gDelegate->setup(width, height, displayRotation);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
