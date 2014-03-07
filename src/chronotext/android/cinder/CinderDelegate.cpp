@@ -93,10 +93,10 @@ namespace chronotext
     {
         struct AxisSwap
         {
-            float negateX;
-            float negateY;
-            float xSrc;
-            float ySrc;
+            int negateX;
+            int negateY;
+            int xSrc;
+            int ySrc;
         };
         
         static const AxisSwap axisSwap[] =
