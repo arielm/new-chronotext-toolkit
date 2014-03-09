@@ -126,8 +126,9 @@ public class GLView extends GLSurfaceView
     {
       case MotionEvent.ACTION_DOWN :
       {
+        int index = 0;
         final Vector<Touch> touches = new Vector<Touch>();
-        touches.add(new Touch(0, event.getX(0), event.getY(0)));
+        touches.add(new Touch(event.getPointerId(index), event.getX(index), event.getY(index)));
 
         queueEvent(new Runnable()
         {
@@ -142,9 +143,8 @@ public class GLView extends GLSurfaceView
       case MotionEvent.ACTION_POINTER_DOWN :
       {
         int index = event.getActionIndex();
-
         final Vector<Touch> touches = new Vector<Touch>();
-        touches.add(new Touch(index, event.getX(index), event.getY(index)));
+        touches.add(new Touch(event.getPointerId(index), event.getX(index), event.getY(index)));
 
         queueEvent(new Runnable()
         {
@@ -158,8 +158,9 @@ public class GLView extends GLSurfaceView
 
       case MotionEvent.ACTION_UP :
       {
+        int index = 0;
         final Vector<Touch> touches = new Vector<Touch>();
-        touches.add(new Touch(0, event.getX(0), event.getY(0)));
+        touches.add(new Touch(event.getPointerId(index), event.getX(index), event.getY(index)));
 
         queueEvent(new Runnable()
         {
@@ -174,9 +175,8 @@ public class GLView extends GLSurfaceView
       case MotionEvent.ACTION_POINTER_UP :
       {
         int index = event.getActionIndex();
-          
         final Vector<Touch> touches = new Vector<Touch>();
-        touches.add(new Touch(index, event.getX(index), event.getY(index)));
+        touches.add(new Touch(event.getPointerId(index), event.getX(index), event.getY(index)));
 
         queueEvent(new Runnable()
         {
@@ -195,7 +195,7 @@ public class GLView extends GLSurfaceView
           
         for (int i = 0; i < event.getPointerCount(); i++)
         {
-          touches.add(new Touch(i, event.getX(i), event.getY(i)));
+          touches.add(new Touch(event.getPointerId(i), event.getX(i), event.getY(i)));
         }
 
         queueEvent(new Runnable()
