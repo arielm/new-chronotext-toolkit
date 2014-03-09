@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,9 +8,12 @@
 
 package org.chronotext.cinder;
 
+import java.util.Vector;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import org.chronotext.gl.GLRenderer;
+import org.chronotext.gl.Touch;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -121,6 +124,30 @@ public class CinderRenderer extends GLRenderer
   {
     event(EVENT_HIDDEN);
     hidden = true;
+  }
+    
+  public void addTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      addTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void updateTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      updateTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void removeTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      removeTouch(touch.index, touch.x, touch.y);
+    }
   }
 
   // ---------------------------------------- JNI ----------------------------------------
