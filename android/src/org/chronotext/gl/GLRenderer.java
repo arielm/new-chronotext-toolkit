@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,8 +8,12 @@
 
 package org.chronotext.gl;
 
+import java.util.Vector;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import org.chronotext.gl.Touch;
 
 import android.opengl.GLSurfaceView;
 import android.view.View;
@@ -201,11 +205,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public abstract void hidden();
 
-  public abstract void addTouch(int index, float x, float y);
+  public abstract void addTouches(Vector<Touch> touches);
 
-  public abstract void updateTouch(int index, float x, float y);
+  public abstract void updateTouches(Vector<Touch> touches);
 
-  public abstract void removeTouch(int index, float x, float y);
+  public abstract void removeTouches(Vector<Touch> touches);
 
   public abstract void sendMessage(int what, String body);
 }

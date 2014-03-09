@@ -1,12 +1,16 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 package org.chronotext.gl;
+
+import java.util.Vector;
+
+import org.chronotext.gl.Touch;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -122,14 +126,14 @@ public class GLView extends GLSurfaceView
     {
       case MotionEvent.ACTION_DOWN :
       {
-        final float x = event.getX(0);
-        final float y = event.getY(0);
+        final Vector<Touch> touches = new Vector<Touch>();
+        touches.add(new Touch(0, event.getX(0), event.getY(0)));
 
         queueEvent(new Runnable()
         {
           public void run()
           {
-            renderer.addTouch(0, x, y);
+            renderer.addTouches(touches);
           }
         });
         break;
@@ -137,15 +141,16 @@ public class GLView extends GLSurfaceView
 
       case MotionEvent.ACTION_POINTER_DOWN :
       {
-        final int index = event.getActionIndex();
-        final float x = event.getX(index);
-        final float y = event.getY(index);
+        int index = event.getActionIndex();
+
+        final Vector<Touch> touches = new Vector<Touch>();
+        touches.add(new Touch(index, event.getX(index), event.getY(index)));
 
         queueEvent(new Runnable()
         {
           public void run()
           {
-            renderer.addTouch(index, x, y);
+            renderer.addTouches(touches);
           }
         });
         break;
@@ -153,14 +158,14 @@ public class GLView extends GLSurfaceView
 
       case MotionEvent.ACTION_UP :
       {
-        final float x = event.getX(0);
-        final float y = event.getY(0);
+        final Vector<Touch> touches = new Vector<Touch>();
+        touches.add(new Touch(0, event.getX(0), event.getY(0)));
 
         queueEvent(new Runnable()
         {
           public void run()
           {
-            renderer.removeTouch(0, x, y);
+            renderer.removeTouches(touches);
           }
         });
         break;
@@ -168,15 +173,16 @@ public class GLView extends GLSurfaceView
 
       case MotionEvent.ACTION_POINTER_UP :
       {
-        final int index = event.getActionIndex();
-        final float x = event.getX(index);
-        final float y = event.getY(index);
+        int index = event.getActionIndex();
+          
+        final Vector<Touch> touches = new Vector<Touch>();
+        touches.add(new Touch(index, event.getX(index), event.getY(index)));
 
         queueEvent(new Runnable()
         {
           public void run()
           {
-            renderer.removeTouch(index, x, y);
+            renderer.removeTouches(touches);
           }
         });
         break;
@@ -185,20 +191,20 @@ public class GLView extends GLSurfaceView
 
       case MotionEvent.ACTION_MOVE :
       {
+        final Vector<Touch> touches = new Vector<Touch>();
+          
         for (int i = 0; i < event.getPointerCount(); i++)
         {
-          final int index = i;
-          final float x = event.getX(index);
-          final float y = event.getY(index);
-
-          queueEvent(new Runnable()
-          {
-            public void run()
-            {
-              renderer.updateTouch(index, x, y);
-            }
-          });
+          touches.add(new Touch(i, event.getX(i), event.getY(i)));
         }
+
+        queueEvent(new Runnable()
+        {
+          public void run()
+          {
+            renderer.updateTouches(touches);
+          }
+        });
         break;
       }
     }
