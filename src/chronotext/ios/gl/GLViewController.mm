@@ -34,9 +34,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     if (self = [super init])
     {
         NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES2], kGLViewControllerPropertyRenderingAPI,
+                                  [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
                                   [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
-                                  [NSNumber numberWithBool:NO], kGLViewControllerPropertyMultipleTouchEnabled,
+                                  [NSNumber numberWithBool:YES], kGLViewControllerPropertyMultipleTouchEnabled,
                                   [NSNumber numberWithInt:UIInterfaceOrientationMaskPortrait], kGLViewControllerPropertyInterfaceOrientationMask,
                                   [NSNumber numberWithInt:GLKViewDrawableColorFormatRGBA8888], kGLViewControllerPropertyColorFormat,
                                   [NSNumber numberWithInt:GLKViewDrawableDepthFormat24], kGLViewControllerPropertyDepthFormat,
