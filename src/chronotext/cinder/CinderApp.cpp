@@ -68,7 +68,7 @@ namespace chronotext
     {
         if (updateCount == 0)
         {
-            update();
+            update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
         
         sketch->draw();
