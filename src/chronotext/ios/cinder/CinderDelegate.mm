@@ -152,6 +152,11 @@ using namespace chr;
 
 - (void) draw
 {
+    if (frameCount == 0)
+    {
+        [self update]; // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
+    }
+    
     sketch->draw();
 }
 
