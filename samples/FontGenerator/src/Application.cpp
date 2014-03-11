@@ -35,7 +35,8 @@ using namespace app;
 using namespace chr;
 using namespace xf;
 
-const std::wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";
+const wstring ISO_8859_15_EXTENDED = ISO_8859_15 + L"\u2013\u2014"; // ADDING "N" AND "M" DASHES
+const wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";
 
 class Application : public AppNative
 {
@@ -63,14 +64,14 @@ void Application::setup()
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD FONTS LIKE Georgia ON OSX
      */
-    createFontSafely(FontDescriptor("/Library/Fonts/Georgia.ttf"), 64, ISO_8859_15, XParams(3, 2));
-    createFontSafely(FontDescriptor("/Library/Fonts/AmericanTypewriter.ttc"), 64, ISO_8859_15, XParams(3, 2));
+    createFontSafely(FontDescriptor("/Library/Fonts/Georgia.ttf"), 64, ISO_8859_15_EXTENDED, XParams(3, 2));
+    createFontSafely(FontDescriptor("/Library/Fonts/AmericanTypewriter.ttc"), 64, ISO_8859_15_EXTENDED, XParams(3, 2));
     
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
      * - DEMONSTRATES HOW TO LOAD A CUSTOM FONT FROM THE RESOURCE-BUNDLE
      */
-    createFontSafely(FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15, XParams(3, 2));
+    createFontSafely(FontDescriptor(getResourcePath("Roboto-Regular.ttf")), 64, ISO_8859_15_EXTENDED, XParams(3, 2));
 
     /*
      * - PROVIDING ENOUGH MARGIN AND PADDING, TO ALLOW FOR MIPMAPPING WITHOUT BLEEDING EDGES
