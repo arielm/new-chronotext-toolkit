@@ -185,6 +185,14 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     [cinderDelegate draw];
 }
 
+/*
+ * FOR iOS 7+
+ */
+- (BOOL) prefersStatusBarHidden
+{
+    return YES;
+}
+
 #pragma mark ---------------------------------------- ORIENTATION ----------------------------------------
 
 /*
