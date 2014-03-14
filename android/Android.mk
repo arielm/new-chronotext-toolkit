@@ -62,3 +62,8 @@ ifdef CHR_USE_INCUBATOR_UI
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/VerticalLayout.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/WordWrapper.cpp
 endif
+
+ifdef CHR_USE_INCUBATOR_SOUND
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/sound/Effect.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/sound/SoundEngine.cpp
+endif

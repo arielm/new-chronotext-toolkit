@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Effect.h"
+#include "chronotext/incubator/sound/Effect.h"
 
 #include <map>
 
@@ -19,8 +19,8 @@ public:
     {
         EVENT_UNDEFINED,
         EVENT_STARTED,
-        EVENT_STOPPED,
-        EVENT_INTERRUPTED,
+        EVENT_STOPPED, // EFFECT STOPPED BY USER
+        EVENT_INTERRUPTED, // EFFECT AUTOMATICALLY STOPPED IN FAVOR OF A NEW EFFECT (I.E. WHEN NO FREE CHANNEL REMAIN)
         EVENT_COMPLETED
     };
     
