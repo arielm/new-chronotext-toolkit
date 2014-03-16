@@ -19,6 +19,9 @@ namespace chronotext
         public:
             bool useColor;
             float anisotropy;
+            
+            FontSequence() {}
+            FontSequence(const FontSequence &that) = delete; // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
 
         protected:
             std::vector<std::unique_ptr<GlyphBatchMap>> maps;

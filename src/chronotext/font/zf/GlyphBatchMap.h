@@ -23,6 +23,9 @@ namespace chronotext
         public:
             std::map<FontTexture*, std::unique_ptr<GlyphBatch>> map;
             
+            GlyphBatchMap() {}
+            GlyphBatchMap(const GlyphBatchMap &that) = delete; // MAKES IT EXPLICIT: GlyphBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
+            
             void clear()
             {
                 for (auto &it : map)
