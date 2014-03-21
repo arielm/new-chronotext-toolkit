@@ -19,15 +19,15 @@ namespace chronotext
     public:
         struct Value
         {
-            ci::Vec2f point;
+            ci::Vec2f position;
             float angle;
-            float position;
+            float offset;
         };
         
         struct ClosePoint
         {
-            ci::Vec2f point; // CLOSEST-POINT ON PATH
-            float position; // POSITION OF CLOSEST-POINT ON PATH
+            ci::Vec2f position; // POSITION CLOSEST-POINT ON PATH
+            float offset; // OFFSET OF CLOSEST-POINT ON PATH
             float distance; // DISTANCE TO CLOSEST-POINT ON PATH
         };
         
@@ -68,11 +68,11 @@ namespace chronotext
         void setMode(Mode mode);
         Mode getMode() const;
 
-        Value pos2Value(float pos) const;
-        ci::Vec2f pos2Point(float pos) const;
-        float pos2Angle(float pos) const;
-        float pos2SampledAngle(float pos, float sampleSize) const;
-        ci::Vec2f pos2Gradient(float pos, float sampleSize) const;
+        Value offset2Value(float offset) const;
+        ci::Vec2f offset2Position(float offset) const;
+        float offset2Angle(float offset) const;
+        float offset2SampledAngle(float offset, float sampleSize) const;
+        ci::Vec2f offset2Gradient(float offset, float sampleSize) const;
         
         bool findClosestPoint(const ci::Vec2f &input, float threshold, ClosePoint &output) const;
         ClosePoint closestPointFromSegment(const ci::Vec2f &input, int segmentIndex) const;

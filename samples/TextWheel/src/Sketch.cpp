@@ -128,7 +128,7 @@ void Sketch::addVersion(const string &lang)
     
     // ---
     
-    sequences[lang] = FontSequence();
+    sequences.emplace(lang); // CONSTRUCTS A NEW FontSequence INTO THE MAP
     
     float offsetX = 3000; // XXX
     float offsetY = font->getOffsetY(*layout, ZFont::ALIGN_MIDDLE);

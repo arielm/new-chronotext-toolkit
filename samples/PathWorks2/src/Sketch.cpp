@@ -168,7 +168,7 @@ void Sketch::drawDotOnPath(const FollowablePath &path)
     dotTexture->begin();
     
     glPushMatrix();
-    gl::translate(path.pos2Point(offset));
+    gl::translate(path.offset2Position(offset));
     gl::scale(0.5f / scale); // DIVIDING BY SCALE KEEPS THE RADIUS CONSISTENT
     dotTexture->drawFromCenter();
     glPopMatrix();

@@ -201,7 +201,7 @@ namespace chronotext
         return mode;
     }
     
-    FollowablePath::Value FollowablePath::pos2Value(float pos) const
+    FollowablePath::Value FollowablePath::offset2Value(float offset) const
     {
         float length = getLength();
         
@@ -209,36 +209,36 @@ namespace chronotext
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                pos = boundf(pos, length);
+                offset = boundf(offset, length);
             }
             else
             {
-                if (pos <= 0)
+                if (offset <= 0)
                 {
                     if (mode == MODE_BOUNDED)
                     {
-                        pos = 0;
+                        offset = 0;
                     }
                 }
-                else if (pos >= length)
+                else if (offset >= length)
                 {
                     if (mode == MODE_BOUNDED)
                     {
-                        pos = length;
+                        offset = length;
                     }
                 }
             }
             
-            int index = search(lengths, pos, 1, size());
+            int index = search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             
-            float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
+            float ratio = (offset - lengths[index]) / (lengths[index + 1] - lengths[index]);
             
             Value value;
-            value.point = p0 + (p1 - p0) * ratio;
+            value.position = p0 + (p1 - p0) * ratio;
             value.angle = math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
-            value.position = pos;
+            value.offset = offset;
             
             return value;
         }
@@ -248,7 +248,7 @@ namespace chronotext
         }
     }
     
-    Vec2f FollowablePath::pos2Point(float pos) const
+    Vec2f FollowablePath::offset2Position(float offset) const
     {
         float length = getLength();
         
@@ -256,18 +256,18 @@ namespace chronotext
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                pos = boundf(pos, length);
+                offset = boundf(offset, length);
             }
             else
             {
-                if (pos <= 0)
+                if (offset <= 0)
                 {
                     if (mode == MODE_BOUNDED)
                     {
                         return points.front();
                     }
                 }
-                else if (pos >= length)
+                else if (offset >= length)
                 {
                     if (mode == MODE_BOUNDED)
                     {
@@ -276,11 +276,11 @@ namespace chronotext
                 }
             }
             
-            int index = search(lengths, pos, 1, size());
+            int index = search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             
-            float ratio = (pos - lengths[index]) / (lengths[index + 1] - lengths[index]);
+            float ratio = (offset - lengths[index]) / (lengths[index + 1] - lengths[index]);
             return p0 + (p1 - p0) * ratio;
         }
         else
@@ -289,7 +289,7 @@ namespace chronotext
         }
     }
     
-    float FollowablePath::pos2Angle(float pos) const
+    float FollowablePath::offset2Angle(float offset) const
     {
         float length = getLength();
         
@@ -297,27 +297,27 @@ namespace chronotext
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                pos = boundf(pos, length);
+                offset = boundf(offset, length);
             }
             else
             {
-                if (pos <= 0)
+                if (offset <= 0)
                 {
                     if (mode == MODE_BOUNDED)
                     {
-                        pos = 0;
+                        offset = 0;
                     }
                 }
-                else if (pos >= length)
+                else if (offset >= length)
                 {
                     if (mode == MODE_BOUNDED)
                     {
-                        pos = length;
+                        offset = length;
                     }
                 }
             }
             
-            int index = search(lengths, pos, 1, size());
+            int index = search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             
@@ -329,35 +329,35 @@ namespace chronotext
         }
     }
     
-    float FollowablePath::pos2SampledAngle(float pos, float sampleSize) const
+    float FollowablePath::offset2SampledAngle(float offset, float sampleSize) const
     {
-        Vec2f gradient = pos2Gradient(pos, sampleSize);
+        Vec2f gradient = offset2Gradient(offset, sampleSize);
         
         /*
          * WE USE AN EPSILON VALUE TO AVOID
          * DEGENERATED RESULTS IN SOME EXTREME CASES
          * (E.G. CLOSE TO 180 DEGREE DIFF. BETWEEN TWO SEGMENTS)
          */
-        if (gradient.lengthSquared() > 1.0)
+        if (gradient.lengthSquared() > 1)
         {
             return math<float>::atan2(gradient.y, gradient.x);
         }
         else
         {
-            return pos2Angle(pos);
+            return offset2Angle(offset);
         }
     }
     
-    Vec2f FollowablePath::pos2Gradient(float pos, float sampleSize) const
+    Vec2f FollowablePath::offset2Gradient(float offset, float sampleSize) const
     {
-        Vec2f pm = pos2Point(pos - sampleSize * 0.5f);
-        Vec2f pp = pos2Point(pos + sampleSize * 0.5f);
+        Vec2f pm = offset2Position(offset - sampleSize * 0.5f);
+        Vec2f pp = offset2Position(offset + sampleSize * 0.5f);
         
         return (pp - pm) * 0.5f;
     }
     
     /*
-     * RETURNS false IF CLOSEST POINT IS FARTHER THAN threshold DISTANCE
+     * RETURNS false IF CLOSEST-POINT IS FARTHER THAN threshold DISTANCE
      *
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
      * http://paulbourke.net/geometry/pointlineplane
@@ -368,8 +368,8 @@ namespace chronotext
 
         int end = size();
         int index = -1;
-        Vec2f point;
-        float position;
+        Vec2f position;
+        float offset;
 
         for (int i = 0; i < end; i++)
         {
@@ -403,8 +403,8 @@ namespace chronotext
                     min = mag;
                     index = i0;
                     
-                    point = p;
-                    position = lengths[index] + u * length;
+                    position = p;
+                    offset = lengths[index] + u * length;
                 }
             }
             else
@@ -417,24 +417,24 @@ namespace chronotext
                     min = mag0;
                     index = i0;
                     
-                    point = points[i0];
-                    position = lengths[index];
+                    position = points[i0];
+                    offset = lengths[index];
                 }
                 else if ((mag1 < min) && (mag1 < mag0))
                 {
                     min = mag1;
                     index = i1;
                     
-                    point = points[i1];
-                    position = lengths[index];
+                    position = points[i1];
+                    offset = lengths[index];
                 }
             }
         }
         
         if (index != -1)
         {
-            output.point = point;
             output.position = position;
+            output.offset = offset;
             output.distance = math<float>::sqrt(min);
             
             return true;
@@ -468,8 +468,8 @@ namespace chronotext
                 Vec2f p = p0 + u * delta;
                 float mag = (p - input).lengthSquared();
                 
-                output.point = p;
-                output.position = lengths[i0] + u * length;
+                output.position = p;
+                output.offset = lengths[i0] + u * length;
                 output.distance = math<float>::sqrt(mag);
             }
             else
@@ -479,14 +479,14 @@ namespace chronotext
                 
                 if (mag0 < mag1)
                 {
-                    output.point = p0;
-                    output.position = lengths[i0];
+                    output.position = p0;
+                    output.offset = lengths[i0];
                     output.distance = math<float>::sqrt(mag0);
                 }
                 else
                 {
-                    output.point = p1;
-                    output.position = lengths[i1];
+                    output.position = p1;
+                    output.offset = lengths[i1];
                     output.distance = math<float>::sqrt(mag1);
                 }
             }

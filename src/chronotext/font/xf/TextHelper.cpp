@@ -77,8 +77,8 @@ namespace chronotext
                 
                 if (glyphIndex >= 0)
                 {
-                    matrix->setTranslation(path.pos2Point(offsetX));
-                    matrix->rotateZ(path.pos2SampledAngle(offsetX, sampleSize));
+                    matrix->setTranslation(path.offset2Position(offsetX));
+                    matrix->rotateZ(path.offset2SampledAngle(offsetX, sampleSize));
                     font.addTransformedGlyph(glyphIndex, -half, offsetY);
                 }
                 
