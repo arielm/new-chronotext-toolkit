@@ -505,7 +505,7 @@ namespace chronotext
             {
                 if (!hasClip || clipQuad(quad))
                 {
-                    batch->addQuad(quad);
+                    batch->addQuad(quad, z);
                     incrementSequence();
                 }
             }
