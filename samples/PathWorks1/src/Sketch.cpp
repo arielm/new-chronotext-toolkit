@@ -102,8 +102,8 @@ void Sketch::update()
 {
     double now = getElapsedSeconds();
     
-    position1 = 300 + 250 * math<float>::sin(now * 1.25f);
-    position2 = now * 60;
+    offset1 = 300 + 250 * math<float>::sin(now * 1.25f);
+    offset2 = now * 60;
 }
 
 void Sketch::draw()
@@ -128,7 +128,7 @@ void Sketch::draw()
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text1, path1, position1, -6);
+    TextHelper::drawTextOnPath(*font, text1, path1, offset1, -6);
 
     glPopMatrix();
 
@@ -146,7 +146,7 @@ void Sketch::draw()
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text2, path2, position2, font->getOffsetY(XFont::ALIGN_MIDDLE));
+    TextHelper::drawTextOnPath(*font, text2, path2, offset2, font->getOffsetY(XFont::ALIGN_MIDDLE));
     
     glPopMatrix();
     

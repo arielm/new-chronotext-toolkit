@@ -31,9 +31,9 @@ namespace chronotext
         texture = textureManager.getTexture(TextureRequest(InputSource::getResource(resourceName), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
     }
     
-    void Hairline::stroke(const chr::FollowablePath &path, float scale, float position)
+    void Hairline::stroke(const chr::FollowablePath &path, float scale, float offset)
     {
-        StrokeHelper::stroke(path, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, position);
+        StrokeHelper::stroke(path, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, offset);
     }
     
     void Hairline::draw()

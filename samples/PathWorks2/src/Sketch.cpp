@@ -108,7 +108,7 @@ void Sketch::resize()
 void Sketch::update()
 {
     double now = getElapsedSeconds();
-    position = now * 40;
+    offset = now * 40;
 }
 
 void Sketch::draw()
@@ -141,7 +141,7 @@ void Sketch::draw()
     glPushMatrix();
     gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
 
-    peanutHairline.stroke(peanutPath, scale, position); // RE-STROKING IS NECESSARY BOTH IN TERM OF SCALING AND IN TERM OF MOTION
+    peanutHairline.stroke(peanutPath, scale, offset); // RE-STROKING IS NECESSARY BOTH IN TERM OF SCALING AND IN TERM OF MOTION
     peanutHairline.draw();
     
     drawDotOnPath(peanutPath);
@@ -168,7 +168,7 @@ void Sketch::drawDotOnPath(const FollowablePath &path)
     dotTexture->begin();
     
     glPushMatrix();
-    gl::translate(path.pos2Point(position));
+    gl::translate(path.pos2Point(offset));
     gl::scale(0.5f / scale); // DIVIDING BY SCALE KEEPS THE RADIUS CONSISTENT
     dotTexture->drawFromCenter();
     glPopMatrix();

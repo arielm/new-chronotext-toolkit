@@ -36,7 +36,7 @@ class Sketch : public chr::CinderSketch
     chr::Clock clock;
 
     float scale;
-    float position;
+    float offset;
     
 public:
     Sketch(void *context, void *delegate = NULL);

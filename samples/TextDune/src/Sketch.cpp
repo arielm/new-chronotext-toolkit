@@ -80,7 +80,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    position = 600 + 325 * math<float>::sin(clock.getTime() * 1.75f);
+    offset = 600 + 325 * math<float>::sin(clock.getTime() * 1.75f);
 }
 
 void Sketch::draw()
@@ -96,7 +96,7 @@ void Sketch::draw()
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text, path, position, -GAP);
+    TextHelper::drawTextOnPath(*font, text, path, offset, -GAP);
 }
 
 void Sketch::updateDune()

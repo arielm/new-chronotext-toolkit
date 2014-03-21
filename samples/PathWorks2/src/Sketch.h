@@ -31,7 +31,7 @@ class Sketch : public chr::CinderSketch
     ci::Vec2f lysOffset;
     
     float scale;
-    float position;
+    float offset;
     
 public:
     Sketch(void *context, void *delegate = NULL);

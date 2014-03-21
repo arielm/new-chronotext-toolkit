@@ -31,8 +31,8 @@ class Sketch : public chr::CinderSketch
     FXGDocument document;
 
     float scale;
-    float position1;
-    float position2;
+    float offset1;
+    float offset2;
     
 public:
     Sketch(void *context, void *delegate = NULL);

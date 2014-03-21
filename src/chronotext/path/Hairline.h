@@ -19,7 +19,7 @@ namespace chronotext
         Hairline();
         Hairline(TextureManager &textureManager, Type type, const WindowInfo &windowInfo);
         
-        void stroke(const FollowablePath &path, float scale = 1, float position = 0);
+        void stroke(const FollowablePath &path, float scale = 1, float offset = 0);
         void draw();
         
     protected:
