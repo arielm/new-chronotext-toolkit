@@ -62,6 +62,65 @@ namespace chronotext
             }
         }
         
+        static void stroke(const FollowablePath &path, float offsetStart, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
+        {
+            auto size = path.size();
+            
+            strip.clear();
+            strip.vertices.reserve(size * 4);
+            
+            if (size > 1)
+            {
+                const auto &points = path.getPoints();
+                const auto &lengths = path.getLengths();
+                
+                float halfWidth = width * 0.5f;
+                ci::Vec2f w1(+halfWidth, -halfWidth);
+                ci::Vec2f w2(-halfWidth, +halfWidth);
+                
+                float uFreq = uScale / width;
+                
+                auto valueStart = path.offset2Value(offsetStart);
+                auto valueEnd = path.offset2Value(offsetEnd);
+                
+                int iStart = valueStart.index + 1;
+                int iEnd = valueEnd.index;
+                
+                float length = lengths[iStart] - valueStart.offset;
+                ci::Vec2f delta = (points[iStart] - valueStart.position) / length;
+                float u = uFreq * (valueStart.offset - uOffset);
+                
+                strip.vertices.emplace_back(valueStart.position + w1 * delta.yx());
+                strip.vertices.emplace_back(u, 0);
+                
+                strip.vertices.emplace_back(valueStart.position + w2 * delta.yx());
+                strip.vertices.emplace_back(u, 1);
+                
+                for (int i = iStart; i < iEnd; i++)
+                {
+                    float length = lengths[i + 1] - lengths[i];
+                    ci::Vec2f delta = (points[i + 1] - points[i]) / length;
+                    float u = uFreq * (lengths[i] - uOffset);
+                    
+                    strip.vertices.emplace_back(points[i] + w1 * delta.yx());
+                    strip.vertices.emplace_back(u, 0);
+                    
+                    strip.vertices.emplace_back(points[i] + w2 * delta.yx());
+                    strip.vertices.emplace_back(u, 1);
+                }
+
+                length = lengths[iEnd] - valueEnd.offset;
+                delta = (points[iEnd] - valueEnd.position) / length;
+                u = uFreq * (valueEnd.offset - uOffset);
+                
+                strip.vertices.emplace_back(valueEnd.position + w1 * delta.yx());
+                strip.vertices.emplace_back(u, 0);
+                
+                strip.vertices.emplace_back(valueEnd.position + w2 * delta.yx());
+                strip.vertices.emplace_back(u, 1);
+            }
+        }
+        
         static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
             auto size = points.size();

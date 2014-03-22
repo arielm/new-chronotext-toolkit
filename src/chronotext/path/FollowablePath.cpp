@@ -239,6 +239,7 @@ namespace chronotext
             value.position = p0 + (p1 - p0) * ratio;
             value.angle = math<float>::atan2(p1.y - p0.y, p1.x - p0.x);
             value.offset = offset;
+            value.index = index;
             
             return value;
         }

@@ -22,6 +22,7 @@ namespace chronotext
             ci::Vec2f position;
             float angle;
             float offset;
+            int index;
         };
         
         struct ClosePoint
