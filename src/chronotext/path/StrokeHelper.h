@@ -10,12 +10,18 @@
 
 #include "chronotext/path/FollowablePath.h"
 #include "chronotext/path/TexturedTriangleStrip.h"
+#include "chronotext/utils/Utils.h"
 
 namespace chronotext
 {
     class StrokeHelper
     {
     public:
+        /*
+         * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
+         * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
+         * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
+         */
         static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
             auto size = path.size();
@@ -62,12 +68,17 @@ namespace chronotext
             }
         }
         
+        /*
+         * offsetStart: DISTANCE BETWEEN THE START OF THE PATH AND THE START OF THE STROKE, IN PIXELS
+         * offsetEnd: DISTANCE BETWEEN THE START OF THE PATH AND THE END OF THE STROKE, IN PIXELS
+         * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
+         * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
+         * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
+         */
         static void stroke(const FollowablePath &path, float offsetStart, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
             auto size = path.size();
-            
             strip.clear();
-            strip.vertices.reserve(size * 4);
             
             if (size > 1)
             {
@@ -80,14 +91,11 @@ namespace chronotext
                 
                 float uFreq = uScale / width;
                 
-                auto valueStart = path.offset2Value(offsetStart);
-                auto valueEnd = path.offset2Value(offsetEnd);
+                auto valueStart = offset2Value(path, offsetStart);
+                auto valueEnd = offset2Value(path, offsetEnd);
                 
-                int iStart = valueStart.index + 1;
-                int iEnd = valueEnd.index;
-                
-                float length = lengths[iStart] - valueStart.offset;
-                ci::Vec2f delta = (points[iStart] - valueStart.position) / length;
+                float length = lengths[valueStart.index + 1] - valueStart.offset;
+                ci::Vec2f delta = (points[valueStart.index + 1] - valueStart.position) / length;
                 float u = uFreq * (valueStart.offset - uOffset);
                 
                 strip.vertices.emplace_back(valueStart.position + w1 * delta.yx());
@@ -96,7 +104,7 @@ namespace chronotext
                 strip.vertices.emplace_back(valueStart.position + w2 * delta.yx());
                 strip.vertices.emplace_back(u, 1);
                 
-                for (int i = iStart; i < iEnd; i++)
+                for (int i = valueStart.index + 1; i < valueEnd.index; i++)
                 {
                     float length = lengths[i + 1] - lengths[i];
                     ci::Vec2f delta = (points[i + 1] - points[i]) / length;
@@ -109,8 +117,8 @@ namespace chronotext
                     strip.vertices.emplace_back(u, 1);
                 }
 
-                length = lengths[iEnd] - valueEnd.offset;
-                delta = (points[iEnd] - valueEnd.position) / length;
+                length = lengths[valueEnd.index] - valueEnd.offset;
+                delta = (points[valueEnd.index] - valueEnd.position) / length;
                 u = uFreq * (valueEnd.offset - uOffset);
                 
                 strip.vertices.emplace_back(valueEnd.position + w1 * delta.yx());
@@ -121,6 +129,11 @@ namespace chronotext
             }
         }
         
+        /*
+         * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
+         * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
+         * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
+         */
         static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
             auto size = points.size();
@@ -192,6 +205,36 @@ namespace chronotext
                     strip.vertices.emplace_back(u, 1);
                 }
             }
+        }
+        
+    protected:
+        static FollowablePath::Value offset2Value(const FollowablePath &path, float offset)
+        {
+            const auto &points = path.getPoints();
+            const auto &lengths = path.getLengths();
+            float length = path.getLength();
+            
+            if (offset < 0)
+            {
+                offset = 0;
+            }
+            else if (offset > length)
+            {
+                offset = length;
+            }
+            
+            int index = search(lengths, offset, 1, lengths.size());
+            auto &p0 = points[index];
+            auto &p1 = points[index + 1];
+            
+            float ratio = (offset - lengths[index]) / (lengths[index + 1] - lengths[index]);
+            
+            FollowablePath::Value value;
+            value.position = p0 + (p1 - p0) * ratio;
+            value.offset = offset;
+            value.index = index;
+            
+            return value;
         }
     };
 }
