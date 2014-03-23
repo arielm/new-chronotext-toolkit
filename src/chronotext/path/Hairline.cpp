@@ -31,12 +31,12 @@ namespace chronotext
         texture = textureManager.getTexture(TextureRequest(InputSource::getResource(resourceName), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
     }
     
-    void Hairline::stroke(const chr::FollowablePath &path, float scale, float uOffset)
+    void Hairline::stroke(const FollowablePath &path, float scale, float uOffset)
     {
         StrokeHelper::stroke(path, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
     }
     
-    void Hairline::stroke(const chr::FollowablePath &path, const vector<float> &offsets, float scale, float uOffset)
+    void Hairline::stroke(const FollowablePath &path, const vector<float> &offsets, float scale, float uOffset)
     {
         int size = offsets.size();
         
