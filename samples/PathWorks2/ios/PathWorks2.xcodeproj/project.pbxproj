@@ -31,6 +31,7 @@
 		A84D7E5C18BD4BC100D7D933 /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3B18BD4BC100D7D933 /* FontSequence.cpp */; };
 		A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3D18BD4BC100D7D933 /* TextHelper.cpp */; };
 		A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFDA18116D42006C2085 /* FileSystem.cpp */; };
+		A865057F18DE73BE00581895 /* checker_128.png in Resources */ = {isa = PBXBuildFile; fileRef = A865057E18DE73BE00581895 /* checker_128.png */; };
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
 		A8F9FBEA18C3F6C600C48245 /* FXGDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FBE918C3F6C600C48245 /* FXGDocument.cpp */; };
@@ -112,6 +113,7 @@
 		A84D7E3E18BD4BC100D7D933 /* TextHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextHelper.h; sourceTree = "<group>"; };
 		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFDB18116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
+		A865057E18DE73BE00581895 /* checker_128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checker_128.png; path = ../resources/checker_128.png; sourceTree = "<group>"; };
 		A87207FE18081CDE0055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
 		A87207FF18081CDE0055F0BA /* SuperHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SuperHandler.cpp; sourceTree = "<group>"; };
 		A872080018081CDE0055F0BA /* SuperHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperHandler.h; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				A8F9FC1218C4CA4100C48245 /* hairline_dashed.png */,
 				A8F9FBF318C3F90400C48245 /* dot2x.png */,
 				A8F9FBFF18C41E3200C48245 /* asphalt_128_alpha.png */,
+				A865057E18DE73BE00581895 /* checker_128.png */,
 				A8F9FBEB18C3F6D400C48245 /* spline_1.dat */,
 				A8F9FBEC18C3F6D400C48245 /* lys.fxg */,
 			);
@@ -500,6 +503,7 @@
 			files = (
 				A8F9FC1418C4CA4100C48245 /* hairline.png in Resources */,
 				A8F9FBF418C3F90400C48245 /* dot2x.png in Resources */,
+				A865057F18DE73BE00581895 /* checker_128.png in Resources */,
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A8F9FBEF18C3F6D400C48245 /* lys.fxg in Resources */,
 				A8F9FBEE18C3F6D400C48245 /* spline_1.dat in Resources */,
