@@ -18,10 +18,12 @@ class Sketch : public chr::CinderSketch
     chr::TextureManager textureManager;
 
     chr::TextureRef roadTexture;
+    chr::TextureRef checkerTexture;
     chr::TextureRef dotTexture;
     
     chr::FollowablePath roadPath;
     chr::TexturedTriangleStrip roadStrip;
+    chr::TexturedTriangleStrip checkerStrip;
     
     chr::SplinePath peanutSpline;
     chr::FollowablePath peanutPath;

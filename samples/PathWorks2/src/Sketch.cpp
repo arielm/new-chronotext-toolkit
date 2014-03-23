@@ -34,6 +34,7 @@ void Sketch::setup(bool renewContext)
     else
     {
         roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+        checkerTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
         
         // ---
@@ -41,9 +42,14 @@ void Sketch::setup(bool renewContext)
         SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
         
         spline.flush(SplinePath::TYPE_BSPLINE, roadPath);
-        roadPath.setMode(FollowablePath::MODE_MODULO);
+        float length = roadPath.getLength();
+        roadPath.setMode(FollowablePath::MODE_MODULO); // NECESSARY, FOR THE DOT TO COME-BACK TO THE START OF THE PATH ONCE THE END IS REACHED
         
         StrokeHelper::stroke(roadPath, roadStrip, 64);
+        
+        checkerStrip.clear();
+        StrokeHelper::stroke(roadPath, 0, 32, checkerStrip, 64, 2);
+        StrokeHelper::stroke(roadPath, length - 32, length, checkerStrip, 64, 2, length - 32);
         
         // ---
         
@@ -121,15 +127,20 @@ void Sketch::draw()
     
     // ---
     
-    gl::color(1, 1, 1, 1);
-    
     glPushMatrix();
     gl::translate(-REFERENCE_W * 0.5f, -REFERENCE_H * 0.5f);
-    
+
+    gl::color(1, 1, 1, 1);
     roadTexture->begin();
     roadStrip.draw();
     roadTexture->end();
-    
+
+    gl::color(1, 1, 1, 0.75f);
+    checkerTexture->begin();
+    checkerStrip.draw();
+    checkerTexture->end();
+
+    gl::color(1, 1, 1, 1);
     drawDotOnPath(roadPath);
     glPopMatrix();
     
