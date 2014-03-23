@@ -77,11 +77,20 @@ namespace chronotext
          */
         static void stroke(const FollowablePath &path, float offsetStart, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
-            auto size = path.size();
-            strip.clear();
+            auto valueStart = offset2Value(path, offsetStart);
+            auto valueEnd = offset2Value(path, offsetEnd);
             
-            if (size > 1)
+            if (valueEnd.offset > valueStart.offset)
             {
+                /*
+                 * WHEN THE STRIP IS NOT EMPTY: A DEGENERATED TRIANGLE IS REQUIRED (1/2)
+                 */
+                if (!strip.empty())
+                {
+                    strip.vertices.emplace_back(strip.vertices[strip.vertices.size() - 2]);
+                    strip.vertices.emplace_back(0, 0);
+                }
+                
                 const auto &points = path.getPoints();
                 const auto &lengths = path.getLengths();
                 
@@ -91,15 +100,18 @@ namespace chronotext
                 
                 float uFreq = uScale / width;
                 
-                auto valueStart = offset2Value(path, offsetStart);
-                auto valueEnd = offset2Value(path, offsetEnd);
-                
                 float length = lengths[valueStart.index + 1] - valueStart.offset;
                 ci::Vec2f delta = (points[valueStart.index + 1] - valueStart.position) / length;
                 float u = uFreq * (valueStart.offset - uOffset);
                 
-                strip.vertices.emplace_back(valueStart.position + w1 * delta.yx());
-                strip.vertices.emplace_back(u, 0);
+                /*
+                 * WHEN THE STRIP IS NOT EMPTY: A DEGENERATED TRIANGLE IS REQUIRED (2/2)
+                 */
+                for (int j = 0; j < (strip.empty() ? 1 : 2); j++)
+                {
+                    strip.vertices.emplace_back(valueStart.position + w1 * delta.yx());
+                    strip.vertices.emplace_back(u, 0);
+                }
                 
                 strip.vertices.emplace_back(valueStart.position + w2 * delta.yx());
                 strip.vertices.emplace_back(u, 1);

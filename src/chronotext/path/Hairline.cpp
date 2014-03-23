@@ -38,6 +38,7 @@ namespace chronotext
     
     void Hairline::stroke(const chr::FollowablePath &path, float offsetStart, float offsetEnd, float scale, float uOffset)
     {
+        strip.clear();
         StrokeHelper::stroke(path, offsetStart, offsetEnd, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
     }
     

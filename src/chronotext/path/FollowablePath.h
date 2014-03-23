@@ -27,7 +27,7 @@ namespace chronotext
         
         struct ClosePoint
         {
-            ci::Vec2f position; // POSITION CLOSEST-POINT ON PATH
+            ci::Vec2f position; // POSITION OF CLOSEST-POINT ON PATH
             float offset; // OFFSET OF CLOSEST-POINT ON PATH
             float distance; // DISTANCE TO CLOSEST-POINT ON PATH
         };
