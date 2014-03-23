@@ -77,12 +77,15 @@ namespace chronotext
          * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
          * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
          * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
+         * discontinuous: IF TRUE, ZERO-AREA TRIANGLES WILL BE INSERTED BETWEEN PORTIONS
          *
          * POSSIBILITY TO CREATE A MULTI-PORTION STRIP:
          * THE TexturedTriangleStrip SHOULD THEREFORE BE CLEARED MANUALLY
          */
-        static void stroke(const FollowablePath &path, float offsetStart, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
+        static int stroke(const FollowablePath &path, float offsetStart, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0, bool discontinuous = true)
         {
+            int originalSize = strip.vertices.size();
+            
             auto valueStart = offset2Value(path, offsetStart);
             auto valueEnd = offset2Value(path, offsetEnd);
             
@@ -101,17 +104,13 @@ namespace chronotext
                 ci::Vec2f delta = (points[valueStart.index + 1] - valueStart.position) / length;
                 float u = uFreq * (valueStart.offset - uOffset);
                 
-                /*
-                 * WHEN THE STRIP IS NOT EMPTY: A DEGENERATED TRIANGLE IS REQUIRED
-                 */
-                
-                if (!strip.empty())
+                if (discontinuous && !strip.empty())
                 {
                     strip.vertices.emplace_back(strip.vertices[strip.vertices.size() - 2]);
                     strip.vertices.emplace_back(0, 0);
                 }
                 
-                for (int j = 0; j < (strip.empty() ? 1 : 2); j++)
+                for (int j = 0; j < ((discontinuous && !strip.empty()) ? 2 : 1); j++)
                 {
                     strip.vertices.emplace_back(valueStart.position + w1 * delta.yx());
                     strip.vertices.emplace_back(u, 0);
@@ -143,6 +142,8 @@ namespace chronotext
                 strip.vertices.emplace_back(valueEnd.position + w2 * delta.yx());
                 strip.vertices.emplace_back(u, 1);
             }
+            
+            return (strip.vertices.size() - originalSize) >> 1;
         }
         
         /*
