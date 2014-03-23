@@ -72,24 +72,24 @@ namespace chronotext
         }
         
         /*
-         * offsetStart: DISTANCE BETWEEN THE START OF THE PATH AND THE START OF THE STROKE, IN PIXELS
-         * offsetEnd: DISTANCE BETWEEN THE START OF THE PATH AND THE END OF THE STROKE, IN PIXELS
+         * offsetBegin: DISTANCE BETWEEN THE BEGINNING OF THE PATH AND THE BEGINNING OF THE STROKE, IN PIXELS
+         * offsetEnd: DISTANCE BETWEEN THE BEGINNING OF THE PATH AND THE END OF THE STROKE, IN PIXELS
          * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
          * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
          * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
-         * discontinuous: IF TRUE, ZERO-AREA TRIANGLES WILL BE INSERTED BETWEEN PORTIONS
+         * discontinuous: IF TRUE, THE STRIP WILL BE DEGENERATED (I.E. ZERO-AREA TRIANGLES WILL BE INSERTED BETWEEN PORTIONS)
          *
          * POSSIBILITY TO CREATE A MULTI-PORTION STRIP:
          * THE TexturedTriangleStrip SHOULD THEREFORE BE CLEARED MANUALLY
          */
-        static int stroke(const FollowablePath &path, float offsetStart, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0, bool discontinuous = true)
+        static int stroke(const FollowablePath &path, float offsetBegin, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0, bool discontinuous = true)
         {
             int originalSize = strip.vertices.size();
             
-            auto valueStart = offset2Value(path, offsetStart);
+            auto valueBegin = offset2Value(path, offsetBegin);
             auto valueEnd = offset2Value(path, offsetEnd);
             
-            if (valueEnd.offset > valueStart.offset)
+            if (valueEnd.offset > valueBegin.offset)
             {
                 const auto &points = path.getPoints();
                 const auto &lengths = path.getLengths();
@@ -100,9 +100,9 @@ namespace chronotext
                 
                 float uFreq = uScale / width;
                 
-                float length = lengths[valueStart.index + 1] - valueStart.offset;
-                ci::Vec2f delta = (points[valueStart.index + 1] - valueStart.position) / length;
-                float u = uFreq * (valueStart.offset - uOffset);
+                float length = lengths[valueBegin.index + 1] - valueBegin.offset;
+                ci::Vec2f delta = (points[valueBegin.index + 1] - valueBegin.position) / length;
+                float u = uFreq * (valueBegin.offset - uOffset);
                 
                 if (discontinuous && !strip.empty())
                 {
@@ -112,14 +112,14 @@ namespace chronotext
                 
                 for (int j = 0; j < ((discontinuous && !strip.empty()) ? 2 : 1); j++)
                 {
-                    strip.vertices.emplace_back(valueStart.position + w1 * delta.yx());
+                    strip.vertices.emplace_back(valueBegin.position + w1 * delta.yx());
                     strip.vertices.emplace_back(u, 0);
                 }
                 
-                strip.vertices.emplace_back(valueStart.position + w2 * delta.yx());
+                strip.vertices.emplace_back(valueBegin.position + w2 * delta.yx());
                 strip.vertices.emplace_back(u, 1);
                 
-                for (int i = valueStart.index + 1; i < valueEnd.index; i++)
+                for (int i = valueBegin.index + 1; i < valueEnd.index; i++)
                 {
                     float length = lengths[i + 1] - lengths[i];
                     ci::Vec2f delta = (points[i + 1] - points[i]) / length;

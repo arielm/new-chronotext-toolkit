@@ -46,10 +46,10 @@ namespace chronotext
             
             for (int i = 0; i < size / 2; i++)
             {
-                float offsetStart = offsets[i * 2];
+                float offsetBegin = offsets[i * 2];
                 float offsetEnd = offsets[i * 2 + 1];
                 
-                StrokeHelper::stroke(path, offsetStart, offsetEnd, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
+                StrokeHelper::stroke(path, offsetBegin, offsetEnd, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
             }
         }
     }
