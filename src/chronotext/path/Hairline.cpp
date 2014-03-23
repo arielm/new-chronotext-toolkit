@@ -36,6 +36,24 @@ namespace chronotext
         StrokeHelper::stroke(path, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
     }
     
+    void Hairline::stroke(const chr::FollowablePath &path, const vector<float> &offsets, float scale, float uOffset)
+    {
+        int size = offsets.size();
+        
+        if (size % 2 == 0)
+        {
+            strip.clear();
+            
+            for (int i = 0; i < size / 2; i++)
+            {
+                float offsetStart = offsets[i * 2];
+                float offsetEnd = offsets[i * 2 + 1];
+                
+                StrokeHelper::stroke(path, offsetStart, offsetEnd, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
+            }
+        }
+    }
+
     void Hairline::draw()
     {
         texture->begin();

@@ -20,6 +20,8 @@ namespace chronotext
         Hairline(TextureManager &textureManager, Type type, const WindowInfo &windowInfo);
         
         void stroke(const FollowablePath &path, float scale = 1, float uOffset = 0);
+        void stroke(const FollowablePath &path, const std::vector<float> &offsets, float scale = 1, float uOffset = 0);
+        
         void draw();
         
     protected:
