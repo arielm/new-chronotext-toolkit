@@ -21,6 +21,9 @@ namespace chronotext
          * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
          * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
          * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
+         *
+         * CREATES A SINGLE-PORTION STRIP:
+         * THE TexturedTriangleStrip IS AUTOMATICALLY CLEARED
          */
         static void stroke(const FollowablePath &path, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
@@ -74,6 +77,9 @@ namespace chronotext
          * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
          * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
          * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
+         *
+         * POSSIBILITY TO CREATE A MULTI-PORTION STRIP:
+         * THE TexturedTriangleStrip SHOULD THEREFORE BE CLEARED MANUALLY
          */
         static void stroke(const FollowablePath &path, float offsetStart, float offsetEnd, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
@@ -82,15 +88,6 @@ namespace chronotext
             
             if (valueEnd.offset > valueStart.offset)
             {
-                /*
-                 * WHEN THE STRIP IS NOT EMPTY: A DEGENERATED TRIANGLE IS REQUIRED (1/2)
-                 */
-                if (!strip.empty())
-                {
-                    strip.vertices.emplace_back(strip.vertices[strip.vertices.size() - 2]);
-                    strip.vertices.emplace_back(0, 0);
-                }
-                
                 const auto &points = path.getPoints();
                 const auto &lengths = path.getLengths();
                 
@@ -105,8 +102,15 @@ namespace chronotext
                 float u = uFreq * (valueStart.offset - uOffset);
                 
                 /*
-                 * WHEN THE STRIP IS NOT EMPTY: A DEGENERATED TRIANGLE IS REQUIRED (2/2)
+                 * WHEN THE STRIP IS NOT EMPTY: A DEGENERATED TRIANGLE IS REQUIRED
                  */
+                
+                if (!strip.empty())
+                {
+                    strip.vertices.emplace_back(strip.vertices[strip.vertices.size() - 2]);
+                    strip.vertices.emplace_back(0, 0);
+                }
+                
                 for (int j = 0; j < (strip.empty() ? 1 : 2); j++)
                 {
                     strip.vertices.emplace_back(valueStart.position + w1 * delta.yx());
@@ -145,6 +149,9 @@ namespace chronotext
          * width: WIDTH OF THE STROKE (MAPPED TO THE HEIGHT OF THE TEXTURE)
          * uScale: RATIO BETWEEN THE HEIGHT AND WIDTH OF THE TEXTURE
          * uOffset: HORIZONTAL SHIFT OF THE TEXTURE, IN PIXELS
+         *
+         * CREATES A SINGLE-PORTION STRIP:
+         * THE TexturedTriangleStrip IS AUTOMATICALLY CLEARED
          */
         static void stroke(const std::vector<ci::Vec2f> &points, TexturedTriangleStrip &strip, float width, float uScale = 1, float uOffset = 0)
         {
