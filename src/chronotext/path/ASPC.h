@@ -27,7 +27,17 @@ public:
     gamma(gamma),
     path(path),
     tol(tol)
-    {}
+    {
+        /*
+         * THE ORIGINAL ALGORITHM REQUIRES RANDOMNESS, BUT WE WANT TO AVOID THE NOISE
+         * INTRODUCED BY THE SAME RANDOMNESS WHEN SUCCESSIVELY SAMPLING THE SAME POINTS
+         *
+         * REQUIREMENTS:
+         * - MULTIPLE ASPC INSTANCES SHOULD NOT BE PROCESSED CONCURENTLY
+         * - SAMPLING SHOULD TAKE PLACE RIGHT AFTER ASPC IS CREATED
+         */
+        srand(1);
+    }
     
     void segment(const ci::Vec2f &p0, const ci::Vec2f &p1, const ci::Vec2f &p2, const ci::Vec2f &p3)
     {
