@@ -145,10 +145,12 @@ namespace chronotext
         mLastRawAccel = acceleration;
     }
     
-    void CinderDelegate::setup(int width, int height, int displayRotation)
+    void CinderDelegate::setup(int width, int height, float diagonal, float density, int displayRotation)
     {
-        mWidth = width;
-        mHeight = height;
+        mWindowInfo.size = Vec2i(width, height);
+        mWindowInfo.contentScale = 1;
+        mWindowInfo.diagonal = diagonal;
+        mWindowInfo.density = density;
         mDisplayRotation = displayRotation;
         
         io = make_shared<boost::asio::io_service>();
@@ -287,37 +289,42 @@ namespace chronotext
     
     int CinderDelegate::getWindowWidth() const
     {
-        return mWidth;
+        return mWindowInfo.size.x;
     }
     
     int CinderDelegate::getWindowHeight() const
     {
-        return mHeight;
+        return mWindowInfo.size.y;
     }
     
     Vec2f CinderDelegate::getWindowCenter() const
     {
-        return Vec2f(mWidth * 0.5f, mHeight * 0.5f);
+        return mWindowInfo.size * 0.5f;
     }
     
     Vec2i CinderDelegate::getWindowSize() const
     {
-        return Vec2i(mWidth, mHeight);
+        return mWindowInfo.size;
     }
     
     float CinderDelegate::getWindowAspectRatio() const
     {
-        return mWidth / (float)mHeight;
+        return mWindowInfo.size.x / (float)mWindowInfo.size.y;
     }
     
     Area CinderDelegate::getWindowBounds() const
     {
-        return Area(0, 0, mWidth, mHeight);
+        return Area(0, 0, mWindowInfo.size.x, mWindowInfo.size.y);
+    }
+
+    float CinderDelegate::getWindowContentScale() const
+    {
+        return mWindowInfo.contentScale;
     }
     
-    float CinderDelegate::getWindowDensity() const
+    WindowInfo CinderDelegate::getWindowInfo() const
     {
-        return 0; // TODO
+        return mWindowInfo;
     }
     
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)

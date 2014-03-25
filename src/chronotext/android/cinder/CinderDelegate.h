@@ -21,8 +21,7 @@ namespace chronotext
     {
         std::shared_ptr<ci::android::dostream> mOutputStream;
         
-        int mWidth;
-        int mHeight;
+        WindowInfo mWindowInfo;
         int mDisplayRotation;
         
         ci::Timer mTimer;
@@ -88,7 +87,7 @@ namespace chronotext
         
         void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
         
-        void setup(int width, int height, int displayRotation);
+        void setup(int width, int height, float diagonal, float density, int displayRotation);
         void shutdown();
         
         void draw();
@@ -113,7 +112,8 @@ namespace chronotext
         ci::Vec2i getWindowSize() const;
         float getWindowAspectRatio() const;
         ci::Area getWindowBounds() const;
-        float getWindowDensity() const;
+        float getWindowContentScale() const;
+        WindowInfo getWindowInfo() const;
         
         virtual void receiveMessageFromSketch(int what, const std::string &body);
         virtual void sendMessageToSketch(int what, const std::string &body);

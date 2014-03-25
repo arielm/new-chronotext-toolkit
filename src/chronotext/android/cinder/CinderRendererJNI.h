@@ -22,7 +22,7 @@ extern "C"
     void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener);
 
-    void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jint accelerometerRotation);
+    void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jfloat diagonal, jfloat density, jint displayRotation);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
 
     void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id);
@@ -68,9 +68,9 @@ void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, 
     gDelegate->launch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener));
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jint displayRotation)
+void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jfloat diagonal, jfloat density, jint displayRotation)
 {
-    gDelegate->setup(width, height, displayRotation);
+    gDelegate->setup(width, height, diagonal, density, displayRotation);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)

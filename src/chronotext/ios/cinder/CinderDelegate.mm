@@ -129,7 +129,11 @@ using namespace chr;
             break;
     }
     
-    windowInfo.density = 0; // TODO
+    /*
+     * TODO
+     */
+    windowInfo.diagonal = 0;
+    windowInfo.density = 0;
     
     // ---
     

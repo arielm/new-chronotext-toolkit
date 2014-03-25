@@ -16,7 +16,8 @@ namespace chronotext
     {
         ci::Vec2i size;
         float contentScale;
-        float density;
+        float diagonal; // INCHES
+        float density; // PIXEL/INCH
         int aaLevel;
     };
 }

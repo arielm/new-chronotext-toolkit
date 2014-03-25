@@ -22,39 +22,51 @@ namespace chronotext
     delegate(static_cast<CinderApp*>(delegate))
     {}
     
-    float CinderSketchSimple::getWindowDensity() const
+    WindowInfo CinderSketchSimple::getWindowInfo() const
     {
-        return 0; // TODO, SEE: http://en.wikipedia.org/wiki/List_of_displays_by_pixel_density
-    }
-    
-    int CinderSketchSimple::getWindowAALevel() const
-    {
-        auto aa = static_pointer_cast<RendererGl>(context->getRenderer())->getAntiAliasing();
+        WindowInfo info;
         
-        switch (aa)
+        info.size = getWindowSize(),
+        info.contentScale = getWindowContentScale(),
+        
+        /*
+         * TODO:
+         */
+        info.diagonal = 0;
+        info.density=  0;
+        
+        switch (static_pointer_cast<RendererGl>(context->getRenderer())->getAntiAliasing())
         {
-            default:
             case RendererGl::AA_NONE:
-                return 0;
+                info.aaLevel = 0;
+                break;
                 
             case RendererGl::AA_MSAA_2:
-                return 2;
+                info.aaLevel = 2;
+                break;
                 
             case RendererGl::AA_MSAA_4:
-                return 4;
+                info.aaLevel = 4;
+                break;
                 
             case RendererGl::AA_MSAA_6:
-                return 6;
+                info.aaLevel = 6;
+                break;
                 
             case RendererGl::AA_MSAA_8:
-                return 8;
+                info.aaLevel = 8;
+                break;
                 
             case RendererGl::AA_MSAA_16:
-                return 16;
+                info.aaLevel = 16;
+                break;
                 
             case RendererGl::AA_MSAA_32:
-                return 32;
+                info.aaLevel = 32;
+                break;
         }
+        
+        return info;
     }
     
     void CinderSketchSimple::sendMessageToDelegate(int what, const string &body)

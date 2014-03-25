@@ -121,14 +121,9 @@ namespace chronotext
         return ((CinderDelegate*)context).windowInfo.contentScale;
     }
     
-    float CinderSketchComplex::getWindowDensity() const
+    WindowInfo CinderSketchComplex::getWindowInfo() const
     {
-        return ((CinderDelegate*)context).windowInfo.density;
-    }
-    
-    int CinderSketchComplex::getWindowAALevel() const
-    {
-        return ((CinderDelegate*)context).windowInfo.aaLevel;
+        return ((CinderDelegate*)context).windowInfo;
     }
     
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
