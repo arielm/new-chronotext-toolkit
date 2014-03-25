@@ -20,6 +20,7 @@ import android.content.res.Configuration;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.util.DisplayMetrics;
 
 /*
  * WARNING: BE SURE TO DEFINE android:screenOrientation IN THE MANIFEST
@@ -49,17 +50,11 @@ public class CinderRenderer extends GLRenderer
     prelaunch();
   }
 
-  /*
-   * REFERENCES:
-   * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
-   * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
-   */
-  protected int getDisplayRotation()
+  protected WindowManager getWindowManager()
   {
-    Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-    return display.getRotation();
+    return (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
   }
-
+    
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
 
   public void launch()
@@ -69,7 +64,27 @@ public class CinderRenderer extends GLRenderer
 
   public void setup(GL10 gl, int width, int height)
   {
-    setup(width, height, getDisplayRotation());
+    Display display = getWindowManager().getDefaultDisplay();
+    DisplayMetrics dm = new DisplayMetrics();
+    display.getMetrics(dm);
+
+    float widthInches = (float) dm.widthPixels / dm.xdpi;
+    float heightInches = (float) dm.heightPixels / dm.ydpi;
+    float diagonal = (float) Math.sqrt(widthInches * widthInches + heightInches * heightInches);
+
+    /*
+     * MORE RELIABLE THAN dm.densityDpi
+     */
+    float density = (float) Math.sqrt(dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels) / diagonal;
+
+    /*
+     * REFERENCES:
+     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
+     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
+     */
+    int displayRotation = display.getRotation();
+      
+    setup(width, height, diagonal, density, displayRotation);
     initialized = true;
   }
 
@@ -156,7 +171,7 @@ public class CinderRenderer extends GLRenderer
 
   public native void launch(Context context, Object listener);
 
-  public native void setup(int width, int height, int displayRotation);
+  public native void setup(int width, int height, float diagonal, float density, int displayRotation);
 
   public native void shutdown();
 
