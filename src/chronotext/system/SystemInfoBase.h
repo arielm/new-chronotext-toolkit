@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "cinder/Cinder.h"
 #include "cinder/System.h"
 #include "cinder/Utilities.h"
 
@@ -28,12 +29,22 @@ namespace chronotext
             KIND_IPAD_SIMULATOR,
             KIND_ANDROID
         };
-
+        
+        virtual int getKind() = 0;
+        virtual std::string getModel() = 0;
+        virtual std::string getManufacturer() = 0;
+        virtual std::string getPlatform() = 0;
+        
 #if defined(ANDROID)
-        virtual std::string getIPAddress(bool maskForBroadcast = false) = 0;
-        virtual std::string getVersion() = 0;
+        virtual std::string getOsVersion() = 0;
+        virtual std::string getIpAddress(bool maskForBroadcast = false) = 0;
 #else
-        virtual std::string getIPAddress(bool maskForBroadcast = false)
+        virtual std::string getOsVersion()
+        {
+            return ci::toString(ci::System::getOsMajorVersion()) + "." + ci::toString(ci::System::getOsMinorVersion()) + "." + ci::toString(ci::System::getOsBugFixVersion());
+        }
+        
+        virtual std::string getIpAddress(bool maskForBroadcast = false)
         {
             std::string host = ci::System::getIpAddress();
             
@@ -47,17 +58,7 @@ namespace chronotext
             
             return host;
         }
-        
-        virtual std::string getVersion()
-        {
-            return ci::toString(ci::System::getOsMajorVersion()) + "." + ci::toString(ci::System::getOsMinorVersion()) + "." + ci::toString(ci::System::getOsBugFixVersion());
-        }
 #endif
-        
-        virtual int getKind() = 0;
-        virtual std::string getModel() = 0;
-        virtual std::string getManufacturer() = 0;
-        virtual std::string getPlatform() = 0;
     };
 }
 
