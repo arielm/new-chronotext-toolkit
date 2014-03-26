@@ -16,7 +16,7 @@ namespace chronotext
     class SystemInfoImplAndroid : public SystemInfoBase
     {
     public:
-        int getKind();
+        int getSizeFactor();
         std::string getModel();
         std::string getManufacturer();
         std::string getPlatform();

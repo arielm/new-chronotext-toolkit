@@ -26,26 +26,26 @@ namespace chronotext
         return string(tmp, len);
     }
     
-    int SystemInfoImplAndroid::getKind()
+    int SystemInfoImplAndroid::getSizeFactor()
     {
         if (gWindowInfo.diagonal < 3.5f)
         {
-            return KIND_ANDROID_PHONE_MINI;
+            return SIZE_ANDROID_PHONE_MINI;
         }
         if (gWindowInfo.diagonal < 6.5f)
         {
-            return KIND_ANDROID_PHONE;
+            return SIZE_ANDROID_PHONE;
         }
-        if (gWindowInfo.diagonal < 9.5f)
+        if (gWindowInfo.diagonal < 9)
         {
-            return KIND_ANDROID_TABLET_MINI;
+            return SIZE_ANDROID_TABLET_MINI;
         }
         if (gWindowInfo.diagonal < 11.5f)
         {
-            return KIND_ANDROID_TABLET;
+            return SIZE_ANDROID_TABLET;
         }
         
-        return KIND_ANDROID_TABLET_HUGE;
+        return SIZE_ANDROID_TABLET_HUGE;
     }
     
     string SystemInfoImplAndroid::getModel()

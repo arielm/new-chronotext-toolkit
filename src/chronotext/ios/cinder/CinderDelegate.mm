@@ -119,11 +119,9 @@ using namespace chr;
 
     // ---
     
-    switch (SystemInfo().getKind())
+    switch (SystemInfo().getSizeFactor())
     {
-        case SystemInfo::KIND_IPOD_TOUCH:
-        case SystemInfo::KIND_IPHONE:
-        case SystemInfo::KIND_IPHONE_SIMULATOR:
+        case SystemInfo::SIZE_IPHONE:
             if (windowInfo.contentScale == 2)
             {
                 if (windowInfo.size.x == 568)
@@ -144,8 +142,7 @@ using namespace chr;
             }
             break;
             
-        case SystemInfo::KIND_IPAD:
-        case SystemInfo::KIND_IPAD_SIMULATOR:
+        case SystemInfo::SIZE_IPAD:
             if (windowInfo.contentScale == 2)
             {
                 windowInfo.diagonal = 9.7f;
@@ -158,7 +155,7 @@ using namespace chr;
             }
             break;
             
-        case SystemInfo::KIND_IPAD_MINI:
+        case SystemInfo::SIZE_IPAD_MINI:
             if (windowInfo.contentScale == 2)
             {
                 windowInfo.diagonal = 7.9f;

@@ -15,7 +15,7 @@ namespace chronotext
     class SystemInfoImplCocoaTouch : public SystemInfoBase
     {
     public:
-        int getKind();
+        int getSizeFactor();
         std::string getModel();
         std::string getManufacturer();
         std::string getPlatform();

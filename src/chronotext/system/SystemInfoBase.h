@@ -19,22 +19,19 @@ namespace chronotext
     public:
         enum
         {
-            KIND_UNDEFINED,
-            KIND_DESKTOP,
-            KIND_IPHONE,
-            KIND_IPOD_TOUCH,
-            KIND_IPAD,
-            KIND_IPAD_MINI,
-            KIND_IPHONE_SIMULATOR,
-            KIND_IPAD_SIMULATOR,
-            KIND_ANDROID_PHONE,
-            KIND_ANDROID_PHONE_MINI,
-            KIND_ANDROID_TABLET,
-            KIND_ANDROID_TABLET_MINI,
-            KIND_ANDROID_TABLET_HUGE,
+            SIZE_UNDEFINED,
+            SIZE_DESKTOP,
+            SIZE_IPHONE,
+            SIZE_IPAD_MINI,
+            SIZE_IPAD,
+            SIZE_ANDROID_PHONE_MINI,
+            SIZE_ANDROID_PHONE,
+            SIZE_ANDROID_TABLET_MINI,
+            SIZE_ANDROID_TABLET,
+            SIZE_ANDROID_TABLET_HUGE,
         };
         
-        virtual int getKind() = 0;
+        virtual int getSizeFactor() = 0;
         virtual std::string getModel() = 0;
         virtual std::string getManufacturer() = 0;
         virtual std::string getPlatform() = 0;

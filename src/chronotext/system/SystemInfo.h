@@ -30,9 +30,9 @@ namespace chronotext
     {
     public:
         
-        int getKind()
+        int getSizeFactor()
         {
-            return KIND_DESKTOP;
+            return SIZE_DESKTOP;
         }
         
         std::string getModel()

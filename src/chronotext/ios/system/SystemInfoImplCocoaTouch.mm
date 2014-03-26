@@ -16,36 +16,24 @@ using namespace std;
 
 namespace chronotext
 {
-    int SystemInfoImplCocoaTouch::getKind()
+    int SystemInfoImplCocoaTouch::getSizeFactor()
     {
         auto model = getModel();
         
-        if (boost::starts_with(model, "iPhone"))
+        if (boost::starts_with(model, "iPhone") || boost::starts_with(model, "iPod Touch") || (model == "iPhone (Simulator)"))
         {
-            return KIND_IPHONE;
-        }
-        if (boost::starts_with(model, "iPod Touch"))
-        {
-            return KIND_IPOD_TOUCH;
+            return SIZE_IPHONE;
         }
         if (boost::starts_with(model, "iPad mini"))
         {
-            return KIND_IPAD_MINI;
+            return SIZE_IPAD_MINI;
         }
-        if (boost::starts_with(model, "iPad"))
+        if (boost::starts_with(model, "iPad") || (model == "iPad (Simulator)"))
         {
-            return KIND_IPAD;
-        }
-        if (model == "iPhone (Simulator)")
-        {
-            return KIND_IPHONE_SIMULATOR;
-        }
-        if (model == "iPad (Simulator)")
-        {
-            return KIND_IPAD_SIMULATOR;
+            return SIZE_IPAD;
         }
         
-        return KIND_UNDEFINED;
+        return SIZE_UNDEFINED;
     }
     
     /*
