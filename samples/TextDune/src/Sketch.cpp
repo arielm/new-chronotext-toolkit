@@ -26,7 +26,8 @@ const wstring text = L"hell with sinus, text should move under the influence of 
 
 Sketch::Sketch(void *context, void *delegate)
 :
-CinderSketch(context, delegate)
+CinderSketch(context, delegate),
+slaveClock(clock().shared_from_this())
 {}
 
 void Sketch::setup(bool renewContext)
@@ -62,16 +63,6 @@ void Sketch::event(int id)
     }
 }
 
-void Sketch::start(int flags)
-{
-    clock.start();
-}
-
-void Sketch::stop(int flags)
-{
-    clock.stop();
-}
-
 void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
@@ -80,7 +71,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    offset = 600 + 325 * math<float>::sin(clock.getTime() * 1.75f);
+    offset = 600 + 325 * math<float>::sin(slaveClock.getTime() * 1.75f);
 }
 
 void Sketch::draw()
@@ -150,10 +141,10 @@ void Sketch::drawDune()
 
 void Sketch::addTouch(int index, float x, float y)
 {
-    clock.stop();
+    slaveClock.stop();
 }
 
 void Sketch::removeTouch(int index, float x, float y)
 {
-    clock.start();
+    slaveClock.start();
 }

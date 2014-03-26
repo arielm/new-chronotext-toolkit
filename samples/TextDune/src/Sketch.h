@@ -20,7 +20,6 @@
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
 #include "chronotext/path/Hairline.h"
-#include "chronotext/time/Clock.h"
 
 class Sketch : public chr::CinderSketch
 {
@@ -33,8 +32,7 @@ class Sketch : public chr::CinderSketch
     chr::Hairline hairline;
     std::vector<ci::Vec2f> vertices;
 
-    chr::Clock clock;
-
+    chr::Clock slaveClock;
     float scale;
     float offset;
     
@@ -43,8 +41,6 @@ public:
     
     void setup(bool renewContext);
     void event(int id);
-    void start(int flags);
-    void stop(int flags);
     void resize();
     void update();
     void draw();
