@@ -39,7 +39,6 @@
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
-#include "chronotext/time/Clock.h"
 
 #include "Animation.h"
 
@@ -47,16 +46,12 @@ class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
     Animation animation;
-    
     float scale;
-    chr::Clock clock;
 
 public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
     void event(int id);
-    void start(int flags);
-    void stop(int flags);
     void draw();
 };

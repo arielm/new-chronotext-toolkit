@@ -66,16 +66,6 @@ void Sketch::event(int id)
     }
 }
 
-void Sketch::start(int flags)
-{
-    clock.start();
-}
-
-void Sketch::stop(int flags)
-{
-    clock.stop();
-}
-
 void Sketch::draw()
 {
     gl::clear(Color::gray(1.0f), false);
@@ -84,5 +74,5 @@ void Sketch::draw()
     gl::translate(getWindowCenter());
     gl::scale(getWindowHeight() / REFERENCE_H);
     
-    animation.play(clock.getTime());
+    animation.play(clock().getTime());
 }
