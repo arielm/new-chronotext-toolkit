@@ -9,6 +9,7 @@
 #pragma once
 
 #include "chronotext/system/SystemInfoBase.h"
+#include "chronotext/cinder/WindowInfo.h"
 
 namespace chronotext
 {
@@ -20,9 +21,12 @@ namespace chronotext
         std::string getManufacturer();
         std::string getPlatform();
         std::string getOsVersion();
-        
         std::string getIpAddress(bool maskForBroadcast = false);
+
+        static void setWindowInfo(const WindowInfo &windowInfo);
     };
+    
+    static WindowInfo gWindowInfo;
 }
 
 namespace chr = chronotext;

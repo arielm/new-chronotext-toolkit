@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
+#include "chronotext/android/system/SystemInfoImplAndroid.h"
 #include "chronotext/FileSystem.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
@@ -152,6 +153,11 @@ namespace chronotext
         mWindowInfo.diagonal = diagonal;
         mWindowInfo.density = density;
         mDisplayRotation = displayRotation;
+        
+        /*
+         * IDEALLY, THIS INFO SHOULD BE ACCESSIBLE AS-SOON-AS THE "PRELAUNCH" STAGE...
+         */
+        SystemInfoImplAndroid::setWindowInfo(mWindowInfo);
         
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);

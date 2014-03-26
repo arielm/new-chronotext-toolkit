@@ -27,7 +27,11 @@ namespace chronotext
             KIND_IPAD_MINI,
             KIND_IPHONE_SIMULATOR,
             KIND_IPAD_SIMULATOR,
-            KIND_ANDROID
+            KIND_ANDROID_PHONE,
+            KIND_ANDROID_PHONE_MINI,
+            KIND_ANDROID_TABLET,
+            KIND_ANDROID_TABLET_MINI,
+            KIND_ANDROID_TABLET_HUGE,
         };
         
         virtual int getKind() = 0;

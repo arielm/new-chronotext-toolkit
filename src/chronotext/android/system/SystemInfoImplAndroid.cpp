@@ -28,7 +28,24 @@ namespace chronotext
     
     int SystemInfoImplAndroid::getKind()
     {
-        return KIND_ANDROID;
+        if (gWindowInfo.diagonal < 3.5f)
+        {
+            return KIND_ANDROID_PHONE_MINI;
+        }
+        if (gWindowInfo.diagonal < 6.5f)
+        {
+            return KIND_ANDROID_PHONE;
+        }
+        if (gWindowInfo.diagonal < 9.5f)
+        {
+            return KIND_ANDROID_TABLET_MINI;
+        }
+        if (gWindowInfo.diagonal < 11.5f)
+        {
+            return KIND_ANDROID_TABLET;
+        }
+        
+        return KIND_ANDROID_TABLET_HUGE;
     }
     
     string SystemInfoImplAndroid::getModel()
@@ -54,5 +71,10 @@ namespace chronotext
     string SystemInfoImplAndroid::getIpAddress(bool maskForBroadcast)
     {
         return ""; // TODO
+    }
+    
+    void SystemInfoImplAndroid::setWindowInfo(const WindowInfo &windowInfo)
+    {
+        gWindowInfo = windowInfo;
     }
 }
