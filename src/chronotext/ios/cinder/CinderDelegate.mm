@@ -15,6 +15,7 @@
 #import "GLViewController.h"
 
 #include "chronotext/utils/accel/AccelEvent.h"
+#include "chronotext/system/SystemInfo.h"
 
 using namespace std;
 using namespace ci;
@@ -115,6 +116,61 @@ using namespace chr;
     windowInfo.size.y = mx * frameHeight + my * frameWidth;
     
     windowInfo.contentScale = view.contentScaleFactor;
+
+    // ---
+    
+    switch (SystemInfo().getKind())
+    {
+        case SystemInfo::KIND_IPOD_TOUCH:
+        case SystemInfo::KIND_IPHONE:
+        case SystemInfo::KIND_IPHONE_SIMULATOR:
+            if (windowInfo.contentScale == 2)
+            {
+                if (windowInfo.size.x == 568)
+                {
+                    windowInfo.diagonal = 4;
+                    windowInfo.density = 326;
+                }
+                else
+                {
+                    windowInfo.diagonal = 3.5f;
+                    windowInfo.density = 326;
+                }
+            }
+            else
+            {
+                windowInfo.diagonal = 3.5f;
+                windowInfo.density = 163;
+            }
+            break;
+            
+        case SystemInfo::KIND_IPAD:
+        case SystemInfo::KIND_IPAD_SIMULATOR:
+            if (windowInfo.contentScale == 2)
+            {
+                windowInfo.diagonal = 9.7f;
+                windowInfo.density = 264;
+            }
+            else
+            {
+                windowInfo.diagonal = 9.7f;
+                windowInfo.density = 132;
+            }
+            break;
+            
+        case SystemInfo::KIND_IPAD_MINI:
+            if (windowInfo.contentScale == 2)
+            {
+                windowInfo.diagonal = 7.9f;
+                windowInfo.density = 326;
+            }
+            else
+            {
+                windowInfo.diagonal = 7.9f;
+                windowInfo.density = 163;
+            }
+            break;
+    }
     
     // ---
     
@@ -128,12 +184,6 @@ using namespace chr;
             windowInfo.aaLevel = 4;
             break;
     }
-    
-    /*
-     * TODO
-     */
-    windowInfo.diagonal = 0;
-    windowInfo.density = 0;
     
     // ---
     
