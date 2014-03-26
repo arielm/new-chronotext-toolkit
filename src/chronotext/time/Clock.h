@@ -21,17 +21,6 @@ namespace chronotext
 
     class Clock : public TimeBase
     {
-    protected:
-        double mst;
-        double rate;
-        int state;
-        double tbst;
-
-        TimeBase *timeBase;
-        bool timeBaseIsOwned;
-        
-        std::shared_ptr<MasterClock> master;
-        
     public:
         enum
         {
@@ -52,6 +41,17 @@ namespace chronotext
         virtual int getState();
         virtual void setRate(double factor);
         virtual void restart();
+        
+    protected:
+        double mst;
+        double rate;
+        int state;
+        double tbst;
+        
+        TimeBase *timeBase;
+        bool timeBaseIsOwned;
+        
+        std::shared_ptr<MasterClock> master;
     };
 }
 

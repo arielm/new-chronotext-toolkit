@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -12,13 +12,23 @@ using namespace std;
 
 namespace chronotext
 {
+    MasterClock::MasterClock()
+    :
+    Clock()
+    {}
+    
+    MasterClock::MasterClock(TimeBase *timeBase)
+    :
+    Clock(timeBase)
+    {}
+
     void MasterClock::start()
     {
         Clock::start();
         
-        for (list<Clock*>::const_iterator it = slaves.begin(); it != slaves.end(); ++it)
+        for (auto &slave : slaves)
         {
-            (*it)->start();
+            slave->start();
         }
     }
     
@@ -26,9 +36,9 @@ namespace chronotext
     {
         Clock::stop();
         
-        for (list<Clock*>::const_iterator it = slaves.begin(); it != slaves.end(); ++it)
+        for (auto &slave : slaves)
         {
-            (*it)->stop();
+            slave->stop();
         }
     }
     
