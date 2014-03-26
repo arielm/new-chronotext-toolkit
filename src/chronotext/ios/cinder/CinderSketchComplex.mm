@@ -21,7 +21,9 @@ namespace chronotext
     CinderSketchBase(),
     context(context),
     delegate(delegate)
-    {}
+    {
+        mClock = make_shared<FrameClock>();
+    }
     
     void CinderSketchComplex::touchesBegan(TouchEvent event)
     {

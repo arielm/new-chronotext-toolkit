@@ -39,11 +39,15 @@ namespace chronotext
         float getWindowContentScale() const;
         WindowInfo getWindowInfo() const;
         
+        chr::FrameClock& clock() const { return *mClock; }
+        
         void sendMessageToDelegate(int what, const std::string &body = "");
         
     protected:
         CinderDelegate *context;
         CinderDelegate *delegate;
+        
+        std::shared_ptr<chr::FrameClock> mClock;
     };
 }
 

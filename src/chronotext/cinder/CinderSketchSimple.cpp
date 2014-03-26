@@ -20,7 +20,9 @@ namespace chronotext
     CinderSketchBase(),
     context(static_cast<AppNative*>(context)),
     delegate(static_cast<CinderApp*>(delegate))
-    {}
+    {
+        mClock = make_shared<FrameClock>();
+    }
     
     WindowInfo CinderSketchSimple::getWindowInfo() const
     {

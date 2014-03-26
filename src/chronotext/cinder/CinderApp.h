@@ -19,11 +19,7 @@ namespace chronotext
     public:
         CinderSketch *sketch;
         
-        CinderApp()
-        :
-        startCount(0),
-        updateCount(0)
-        {}
+        CinderApp();
         
         void setup();
         void shutdown();

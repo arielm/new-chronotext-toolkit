@@ -15,6 +15,13 @@ using namespace app;
 
 namespace chronotext
 {
+    CinderApp::CinderApp()
+    :
+    startCount(0),
+    updateCount(0),
+    ticks(0)
+    {}
+
     void CinderApp::setup()
     {
         sketch->setIOService(io_service());
@@ -28,7 +35,7 @@ namespace chronotext
     
     void CinderApp::shutdown()
     {
-        stop(); // XXX: CURRENTLY ONLY USED FOR FPS-COUNTER
+        stop();
         sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
         sketch->shutdown();
         delete sketch;
@@ -40,7 +47,7 @@ namespace chronotext
         
         if (startCount == 0)
         {
-            start(); // XXX: CURRENTLY ONLY USED FOR FPS-COUNTER
+            start();
             sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
             startCount++;
         }
@@ -60,7 +67,22 @@ namespace chronotext
         
         // ---
         
+        /*
+         * AT THIS STAGE, FUNCTIONS "POSTED" DURING THE PREVIOUS UPDATE
+         * HAVE BEEN CALLED WITHIN ci::App::update
+         */
+        
+        /*
+         * MUST BE CALLED BEFORE Sketch::update
+         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+         *
+         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
+         * WITHIN ONE OF THE "POSTED" FUNCTIONS MENTIONED EARLIER
+         */
+        sketch->clock().getTime();
+        
         sketch->update();
+        sketch->clock().update(); // MUST BE INVOKED AFTER Sketch::update
         updateCount++;
     }
     
@@ -142,10 +164,12 @@ namespace chronotext
     void CinderApp::start()
     {
         ticks = 0;
+        sketch->clock().start();
     }
     
     void CinderApp::stop()
     {
+        sketch->clock().stop();
         LOGI << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
     }
 }

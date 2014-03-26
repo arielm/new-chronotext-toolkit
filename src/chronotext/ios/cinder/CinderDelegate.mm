@@ -61,7 +61,9 @@ using namespace chr;
 - (void) startWithReason:(int)reason
 {
     frameCount = 0;
-    timer.start();
+
+    timer.stop();
+    sketch->clock().start();
     
     if (reason == REASON_VIEW_WILL_APPEAR)
     {
@@ -76,7 +78,8 @@ using namespace chr;
 
 - (void) stopWithReason:(int)reason
 {
-    timer.stop();
+    timer.start();
+    sketch->clock().stop();
 
     if (reason == REASON_VIEW_WILL_DISAPPEAR)
     {
@@ -197,7 +200,18 @@ using namespace chr;
 - (void) update
 {
     io->poll();
+    
+    /*
+     * MUST BE CALLED BEFORE Sketch::update
+     * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+     *
+     * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
+     * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
+     */
+    sketch->clock().getTime();
+    
     sketch->update();
+    sketch->clock().update(); // MUST BE INVOKED AFTER Sketch::update
     frameCount++;
 }
 
@@ -213,7 +227,7 @@ using namespace chr;
 
 - (double) elapsedSeconds
 {
-    return timer.getSeconds();
+    return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
 }
 
 - (uint32_t) elapsedFrames

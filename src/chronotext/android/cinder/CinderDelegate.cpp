@@ -184,7 +184,18 @@ namespace chronotext
         processSensorEvents();
         
         io->poll();
+        
+        /*
+         * MUST BE CALLED BEFORE Sketch::update
+         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+         *
+         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
+         * WITHIN ONE OF THE "POSTED" FUNCTIONS MENTIONED EARLIER
+         */
+        sketch->clock().getTime();
+        
         sketch->update();
+        sketch->clock().update(); // MUST BE INVOKED AFTER Sketch::update
         mFrameCount++;
 
         sketch->draw();
@@ -197,13 +208,18 @@ namespace chronotext
             case EVENT_ATTACHED:
             case EVENT_SHOWN:
                 mFrameCount = 0;
+                
                 mTimer.start();
+                sketch->clock().start();
+                
                 sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
                 break;
                 
             case EVENT_RESUMED:
                 mFrameCount = 0;
+                
                 mTimer.start();
+                sketch->clock().start();
                 
                 sketch->setup(true); // ASSERTIONS: THE GL CONTEXT WAS JUST RE-CREATED, WITH THE SAME DIMENSIONS AS BEFORE
                 sketch->start(CinderSketch::FLAG_APP_RESUMED);
@@ -212,11 +228,14 @@ namespace chronotext
             case EVENT_DETACHED:
             case EVENT_HIDDEN:
                 mTimer.stop();
+                sketch->clock().stop();
+                
                 sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
                 break;
                 
             case EVENT_PAUSED:
                 mTimer.stop();
+                sketch->clock().stop();
                 
                 sketch->event(CinderSketch::EVENT_CONTEXT_LOST); // ASSERTION: THE GL CONTEXT IS ABOUT TO BE LOST
                 sketch->stop(CinderSketch::FLAG_APP_PAUSED);
@@ -285,7 +304,7 @@ namespace chronotext
     
     double CinderDelegate::getElapsedSeconds() const
     {
-        return mTimer.getSeconds();
+        return mTimer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
     }
     
     uint32_t CinderDelegate::getElapsedFrames() const
