@@ -38,13 +38,13 @@ void Application::prepareSettings(Settings *settings)
     settings->disableFrameRate();
     settings->enableHighDensityDisplay();
 
-//  settings->setWindowSize(960, 640); // IPHONE RETINA / LANDSCAPE
-    settings->setWindowSize(1024, 768); // IPAD / LANDSCAPE
-//  settings->setWindowSize(800, 480); // ANDROID WVGA800 / LANDSCAPE
-    
-//  settings->setWindowSize(640, 960); // IPHONE RETINA / PORTRAIT
-//  settings->setWindowSize(768, 1024); // IPAD / PORTRAIT
-//  settings->setWindowSize(480, 800); // ANDROID WVGA800 / PORTRAIT
+//  emulate(settings, DEVICE_IPHONE_4_PORTRAIT.rotate());
+//  emulate(settings, DEVICE_IPHONE_5_PORTRAIT.rotate());
+    emulate(settings, DEVICE_IPAD_1_PORTRAIT.rotate());
+//  emulate(settings, DEVICE_GALAXY_S_PORTRAIT.rotate());
+//  emulate(settings, DEVICE_GALAXY_S4_PORTRAIT.rotate());
+//  emulate(settings, DEVICE_NEXUS_7_2012_PORTRAIT.rotate());
+//  emulate(settings, DEVICE_XOOM_1_PORTRAIT.rotate());
 }
 
 void Application::keyDown(KeyEvent event)
