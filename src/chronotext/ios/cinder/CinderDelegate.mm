@@ -200,6 +200,7 @@ using namespace chr;
 
 - (void) update
 {
+    sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
     io->poll();
     
     /*
@@ -213,7 +214,6 @@ using namespace chr;
     
     sketch->update();
     sketch->timeline().stepTo(now);
-    sketch->clock().update(); // MUST BE CALLED AT THE END OF THE FRAME
     frameCount++;
 }
 

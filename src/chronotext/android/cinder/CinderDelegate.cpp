@@ -182,7 +182,8 @@ namespace chronotext
          * WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
          */
         processSensorEvents();
-        
+
+        sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
         io->poll();
         
         /*
@@ -196,7 +197,6 @@ namespace chronotext
         
         sketch->update();
         sketch->timeline().stepTo(now);
-        sketch->clock().update(); // MUST BE CALLED AT THE END OF THE FRAME
         mFrameCount++;
 
         sketch->draw();

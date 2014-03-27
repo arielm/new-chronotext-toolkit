@@ -24,6 +24,11 @@ namespace chronotext
 
     void CinderApp::setup()
     {
+        /*
+         * App::privateUpdate__ HACKING: SEE COMMENT IN CinderApp::update
+         */
+        io_service().post([this]{ sketch->clock().update(); });
+        
         sketch->setIOService(io_service());
         sketch->timeline().stepTo(0);
         sketch->setup(false);
@@ -67,24 +72,26 @@ namespace chronotext
         elapsed = now - t0;
         
         // ---
-        
+       
         /*
-         * AT THIS STAGE, FUNCTIONS "POSTED" DURING THE PREVIOUS UPDATE
-         * HAVE BEEN CALLED WITHIN ci::App::update
+         * App::privateUpdate__ HACKING:
+         * WE MUST UPDATE THE CLOCK AT THE BEGINNING OF THE FRAME,
+         * AND WE NEED THIS TO TAKE PLACE BEFORE THE FUNCTIONS
+         * "POSTED" DURING CinderSketch::update ARE "POLLED"
          */
+        io_service().post([this]{ sketch->clock().update(); });
         
         /*
          * MUST BE CALLED BEFORE Sketch::update
          * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
          *
          * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE "POSTED" FUNCTIONS MENTIONED EARLIER
+         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
          */
         now = sketch->clock().getTime();
         
         sketch->update();
-        sketch->timeline().stepTo(now);
-        sketch->clock().update(); // MUST BE CALLED AT THE END OF THE FRAME
+        sketch->timeline().stepTo(now); // WE OBVIOUSLY CAN'T USE THE APP'S TIMELINE...
         updateCount++;
     }
     
