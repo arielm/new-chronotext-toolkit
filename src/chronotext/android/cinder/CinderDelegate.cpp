@@ -190,12 +190,13 @@ namespace chronotext
          * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
          *
          * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE "POSTED" FUNCTIONS MENTIONED EARLIER
+         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
          */
-        sketch->clock().getTime();
+        double now = sketch->clock().getTime();
         
         sketch->update();
-        sketch->clock().update(); // MUST BE INVOKED AFTER Sketch::update
+        sketch->timeline().stepTo(now);
+        sketch->clock().update(); // MUST BE CALLED AT THE END OF THE FRAME
         mFrameCount++;
 
         sketch->draw();

@@ -19,10 +19,10 @@ namespace chronotext
     :
     CinderSketchBase(),
     context(static_cast<AppNative*>(context)),
-    delegate(static_cast<CinderApp*>(delegate))
-    {
-        mClock = make_shared<FrameClock>();
-    }
+    delegate(static_cast<CinderApp*>(delegate)),
+    mClock(new FrameClock()),
+    mTimeline(Timeline::create())
+    {}
     
     WindowInfo CinderSketchSimple::getWindowInfo() const
     {
@@ -32,7 +32,7 @@ namespace chronotext
         info.contentScale = getWindowContentScale(),
         
         /*
-         * TODO:
+         * TODO
          */
         info.diagonal = 0;
         info.density=  0;

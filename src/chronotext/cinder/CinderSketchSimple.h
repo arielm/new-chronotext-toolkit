@@ -37,6 +37,7 @@ namespace chronotext
         WindowInfo getWindowInfo() const;
         
         chr::FrameClock& clock() const { return *mClock; }
+        ci::Timeline& timeline() const { return *mTimeline; }
         
         void sendMessageToDelegate(int what, const std::string &body = "");
         
@@ -45,6 +46,7 @@ namespace chronotext
         CinderApp *delegate;
         
         std::shared_ptr<chr::FrameClock> mClock;
+        ci::TimelineRef mTimeline;
     };
 }
 

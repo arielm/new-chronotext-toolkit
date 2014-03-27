@@ -10,8 +10,10 @@
 
 #include "chronotext/cinder/WindowInfo.h"
 #include "chronotext/os/SuperHandler.h"
-#include "chronotext/utils/accel/AccelEvent.h"
 #include "chronotext/time/FrameClock.h"
+#include "chronotext/utils/accel/AccelEvent.h"
+
+#include "cinder/Timeline.h"
 
 #include <boost/asio.hpp>
 
@@ -76,6 +78,7 @@ namespace chronotext
         virtual WindowInfo getWindowInfo() const = 0;
         
         virtual chr::FrameClock& clock() const = 0;
+        virtual ci::Timeline& timeline() const = 0;
         
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
     };

@@ -191,6 +191,7 @@ using namespace chr;
     ioWork = make_shared<boost::asio::io_service::work>(*io);
 
     sketch->setIOService(*io);
+    sketch->timeline().stepTo(0);
     sketch->setup(false);
     sketch->resize();
     
@@ -208,10 +209,11 @@ using namespace chr;
      * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
      * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
      */
-    sketch->clock().getTime();
+    double now = sketch->clock().getTime();
     
     sketch->update();
-    sketch->clock().update(); // MUST BE INVOKED AFTER Sketch::update
+    sketch->timeline().stepTo(now);
+    sketch->clock().update(); // MUST BE CALLED AT THE END OF THE FRAME
     frameCount++;
 }
 

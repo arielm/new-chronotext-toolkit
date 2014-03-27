@@ -20,10 +20,10 @@ namespace chronotext
     :
     CinderSketchBase(),
     context(context),
-    delegate(delegate)
-    {
-        mClock = make_shared<FrameClock>();
-    }
+    delegate(delegate),
+    mClock(new FrameClock()),
+    mTimeline(Timeline::create())
+    {}
     
     void CinderSketchComplex::touchesBegan(TouchEvent event)
     {

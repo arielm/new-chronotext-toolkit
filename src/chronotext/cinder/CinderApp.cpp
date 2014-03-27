@@ -25,6 +25,7 @@ namespace chronotext
     void CinderApp::setup()
     {
         sketch->setIOService(io_service());
+        sketch->timeline().stepTo(0);
         sketch->setup(false);
         
 #if defined(CINDER_COCOA_TOUCH)
@@ -79,10 +80,11 @@ namespace chronotext
          * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
          * WITHIN ONE OF THE "POSTED" FUNCTIONS MENTIONED EARLIER
          */
-        sketch->clock().getTime();
+        now = sketch->clock().getTime();
         
         sketch->update();
-        sketch->clock().update(); // MUST BE INVOKED AFTER Sketch::update
+        sketch->timeline().stepTo(now);
+        sketch->clock().update(); // MUST BE CALLED AT THE END OF THE FRAME
         updateCount++;
     }
     
