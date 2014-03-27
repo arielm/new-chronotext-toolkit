@@ -7,8 +7,8 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/android/system/SystemInfoImplAndroid.h"
 #include "chronotext/FileSystem.h"
+#include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
 #include <android/asset_manager.h>
@@ -157,7 +157,7 @@ namespace chronotext
         /*
          * IDEALLY, THIS INFO SHOULD BE ACCESSIBLE AS-SOON-AS THE "PRELAUNCH" STAGE...
          */
-        SystemInfoImplAndroid::setWindowInfo(mWindowInfo);
+        SystemInfo::instance().setWindowInfo(mWindowInfo);
         
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);

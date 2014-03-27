@@ -28,19 +28,19 @@ namespace chronotext
     
     int SystemInfoImplAndroid::getSizeFactor()
     {
-        if (gWindowInfo.diagonal < 3.5f)
+        if (mWindowInfo.diagonal < 3.5f)
         {
             return SIZE_ANDROID_PHONE_MINI;
         }
-        if (gWindowInfo.diagonal < 6.5f)
+        if (mWindowInfo.diagonal < 6.5f)
         {
             return SIZE_ANDROID_PHONE;
         }
-        if (gWindowInfo.diagonal < 9)
+        if (mWindowInfo.diagonal < 9)
         {
             return SIZE_ANDROID_TABLET_MINI;
         }
-        if (gWindowInfo.diagonal < 11.5f)
+        if (mWindowInfo.diagonal < 11.5f)
         {
             return SIZE_ANDROID_TABLET;
         }
@@ -71,10 +71,5 @@ namespace chronotext
     string SystemInfoImplAndroid::getIpAddress(bool maskForBroadcast)
     {
         return ""; // TODO
-    }
-    
-    void SystemInfoImplAndroid::setWindowInfo(const WindowInfo &windowInfo)
-    {
-        gWindowInfo = windowInfo;
     }
 }

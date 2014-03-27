@@ -122,7 +122,7 @@ using namespace chr;
 
     // ---
     
-    switch (SystemInfo().getSizeFactor())
+    switch (SystemInfo::instance().getSizeFactor())
     {
         case SystemInfo::SIZE_IPHONE:
             if (windowInfo.contentScale == 2)

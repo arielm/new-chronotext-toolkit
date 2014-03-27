@@ -154,6 +154,28 @@ namespace chronotext
         sketch->sendMessage(Message(what, body));
     }
     
+    void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
+    {
+        settings->setWindowSize(device.size);
+
+        /*
+         * HIGH-DENSITY AND ANTI-ALIASING ARE NOT HANDLED AT THIS LEVEL.
+         *
+         * HIGH-DENSITY IS ENABLED IF THE SCREEN IS RETINA, BUT CAN ALSO BE TESTED ON A REGULAR SCREEN:
+         * https://forum.libcinder.org/topic/rfc-retina-high-density-display-support
+         *
+         * ANTI-ALIASING SHOULD BE DEFINED VIA THE "CINDER_APP_NATIVE" MACRO
+         */
+        
+        WindowInfo windowInfo;
+        windowInfo.size = device.size;
+        windowInfo.diagonal = device.diagonal;
+        windowInfo.density = (device.diagonal == 0) ? 0: (device.size.length() / device.diagonal);
+        
+        SystemInfo::instance().setWindowInfo(windowInfo);
+        SystemInfo::instance().setSizeFactor(device.sizeFactor);
+    }
+    
 #if defined(CINDER_ANDROID)
     
     void CinderApp::resume(bool renewContext)

@@ -11,6 +11,7 @@
 #include "cinder/app/AppNative.h"
 
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/system/EmulatedDevice.h"
 
 namespace chronotext
 {
@@ -40,6 +41,8 @@ namespace chronotext
         
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         void sendMessageToSketch(int what, const std::string &body);
+        
+        void emulate(Settings *settings, const EmulatedDevice &device);
         
 #if defined(CINDER_ANDROID)
         void pause();

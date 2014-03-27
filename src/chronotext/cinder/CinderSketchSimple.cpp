@@ -26,16 +26,10 @@ namespace chronotext
     
     WindowInfo CinderSketchSimple::getWindowInfo() const
     {
-        WindowInfo info;
+        WindowInfo info = SystemInfo::instance().getWindowInfo(); // ONLY USED FOR DIAGONAL AND DENSITY (WHICH ARE NOT NECESSARILY DEFINED)
         
         info.size = getWindowSize(),
-        info.contentScale = getWindowContentScale(),
-        
-        /*
-         * TODO
-         */
-        info.diagonal = 0;
-        info.density=  0;
+        info.contentScale = getWindowContentScale();
         
         switch (static_pointer_cast<RendererGl>(context->getRenderer())->getAntiAliasing())
         {

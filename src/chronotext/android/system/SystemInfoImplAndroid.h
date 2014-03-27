@@ -9,24 +9,28 @@
 #pragma once
 
 #include "chronotext/system/SystemInfoBase.h"
-#include "chronotext/cinder/WindowInfo.h"
 
 namespace chronotext
 {
     class SystemInfoImplAndroid : public SystemInfoBase
     {
+    private:
+        SystemInfoImplAndroid() {}
+        
     public:
+        static SystemInfoImplAndroid& instance()
+        {
+            static SystemInfoImplAndroid instance;
+            return instance;
+        }
+        
         int getSizeFactor();
         std::string getModel();
         std::string getManufacturer();
         std::string getPlatform();
         std::string getOsVersion();
         std::string getIpAddress(bool maskForBroadcast = false);
-
-        static void setWindowInfo(const WindowInfo &windowInfo);
     };
-    
-    static WindowInfo gWindowInfo;
 }
 
 namespace chr = chronotext;

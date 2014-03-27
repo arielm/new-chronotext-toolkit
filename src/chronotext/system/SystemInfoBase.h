@@ -12,6 +12,8 @@
 #include "cinder/System.h"
 #include "cinder/Utilities.h"
 
+#include "chronotext/cinder/WindowInfo.h"
+
 namespace chronotext
 {
     class SystemInfoBase
@@ -20,7 +22,6 @@ namespace chronotext
         enum
         {
             SIZE_UNDEFINED,
-            SIZE_DESKTOP,
             SIZE_IPHONE,
             SIZE_IPAD_MINI,
             SIZE_IPAD,
@@ -31,6 +32,21 @@ namespace chronotext
             SIZE_ANDROID_TABLET_HUGE,
         };
         
+        void setWindowInfo(const WindowInfo &windowInfo)
+        {
+            mWindowInfo = windowInfo;
+        }
+        
+        WindowInfo getWindowInfo() const
+        {
+            return mWindowInfo;
+        }
+
+        void setSizeFactor(int sizeFactor)
+        {
+            mSizeFactor = sizeFactor;
+        }
+
         virtual int getSizeFactor() = 0;
         virtual std::string getModel() = 0;
         virtual std::string getManufacturer() = 0;
@@ -60,6 +76,10 @@ namespace chronotext
             return host;
         }
 #endif
+        
+    protected:
+        WindowInfo mWindowInfo;
+        int mSizeFactor;
     };
 }
 

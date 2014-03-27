@@ -28,11 +28,19 @@ namespace chronotext
 {
     class SystemInfo : public SystemInfoBase
     {
+    private:
+        SystemInfo() {}
+        
     public:
+        static SystemInfo& instance()
+        {
+            static SystemInfo instance;
+            return instance;
+        }
         
         int getSizeFactor()
         {
-            return SIZE_DESKTOP;
+            return mSizeFactor;
         }
         
         std::string getModel()
