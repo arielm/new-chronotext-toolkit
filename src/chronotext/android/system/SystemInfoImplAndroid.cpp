@@ -26,28 +26,6 @@ namespace chronotext
         return string(tmp, len);
     }
     
-    int SystemInfoImplAndroid::getSizeFactor()
-    {
-        if (mWindowInfo.diagonal < 3.5f)
-        {
-            return SIZE_ANDROID_PHONE_MINI;
-        }
-        if (mWindowInfo.diagonal < 6.5f)
-        {
-            return SIZE_ANDROID_PHONE;
-        }
-        if (mWindowInfo.diagonal < 9)
-        {
-            return SIZE_ANDROID_TABLET_MINI;
-        }
-        if (mWindowInfo.diagonal < 11.5f)
-        {
-            return SIZE_ANDROID_TABLET;
-        }
-        
-        return SIZE_ANDROID_TABLET_HUGE;
-    }
-    
     string SystemInfoImplAndroid::getModel()
     {
         return getSystemProperty("ro.product.model");

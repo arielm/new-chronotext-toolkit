@@ -24,7 +24,6 @@ namespace chronotext
             return instance;
         }
         
-        int getSizeFactor();
         std::string getModel();
         std::string getManufacturer();
         std::string getPlatform();

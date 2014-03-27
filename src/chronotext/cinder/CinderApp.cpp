@@ -173,7 +173,6 @@ namespace chronotext
         windowInfo.density = (device.diagonal == 0) ? 0: (device.size.length() / device.diagonal);
         
         SystemInfo::instance().setWindowInfo(windowInfo);
-        SystemInfo::instance().setSizeFactor(device.sizeFactor);
     }
     
 #if defined(CINDER_ANDROID)

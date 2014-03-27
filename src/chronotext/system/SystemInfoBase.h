@@ -21,15 +21,13 @@ namespace chronotext
     public:
         enum
         {
-            SIZE_UNDEFINED,
-            SIZE_IPHONE,
-            SIZE_IPAD_MINI,
-            SIZE_IPAD,
-            SIZE_ANDROID_PHONE_MINI,
-            SIZE_ANDROID_PHONE,
-            SIZE_ANDROID_TABLET_MINI,
-            SIZE_ANDROID_TABLET,
-            SIZE_ANDROID_TABLET_HUGE,
+            SIZE_FACTOR_UNDEFINED,
+            SIZE_FACTOR_PHONE_MINI,
+            SIZE_FACTOR_PHONE,
+            SIZE_FACTOR_PHONE_BIG,
+            SIZE_FACTOR_TABLET_MINI,
+            SIZE_FACTOR_TABLET,
+            SIZE_FACTOR_TABLET_BIG,
         };
         
         void setWindowInfo(const WindowInfo &windowInfo)
@@ -37,17 +35,37 @@ namespace chronotext
             mWindowInfo = windowInfo;
         }
         
-        WindowInfo getWindowInfo() const
+        virtual WindowInfo getWindowInfo()
         {
             return mWindowInfo;
         }
 
-        void setSizeFactor(int sizeFactor)
+        virtual int getSizeFactor()
         {
-            mSizeFactor = sizeFactor;
+            if (mWindowInfo.diagonal < 3.33f)
+            {
+                return SIZE_FACTOR_PHONE_MINI;
+            }
+            if (mWindowInfo.diagonal < 4.5f)
+            {
+                return SIZE_FACTOR_PHONE;
+            }
+            if (mWindowInfo.diagonal < 6.5f)
+            {
+                return SIZE_FACTOR_PHONE_BIG;
+            }
+            if (mWindowInfo.diagonal < 9)
+            {
+                return SIZE_FACTOR_TABLET_MINI;
+            }
+            if (mWindowInfo.diagonal < 11.5f)
+            {
+                return SIZE_FACTOR_TABLET;
+            }
+            
+            return SIZE_FACTOR_TABLET_BIG;
         }
-
-        virtual int getSizeFactor() = 0;
+        
         virtual std::string getModel() = 0;
         virtual std::string getManufacturer() = 0;
         virtual std::string getPlatform() = 0;
@@ -79,7 +97,6 @@ namespace chronotext
         
     protected:
         WindowInfo mWindowInfo;
-        int mSizeFactor;
     };
 }
 

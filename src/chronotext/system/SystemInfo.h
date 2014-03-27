@@ -38,11 +38,6 @@ namespace chronotext
             return instance;
         }
         
-        int getSizeFactor()
-        {
-            return mSizeFactor;
-        }
-        
         std::string getModel()
         {
             return "?";

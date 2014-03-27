@@ -124,7 +124,7 @@ using namespace chr;
     
     switch (SystemInfo::instance().getSizeFactor())
     {
-        case SystemInfo::SIZE_IPHONE:
+        case SystemInfo::SIZE_FACTOR_PHONE:
             if (windowInfo.contentScale == 2)
             {
                 if (windowInfo.size.x == 568)
@@ -145,7 +145,7 @@ using namespace chr;
             }
             break;
             
-        case SystemInfo::SIZE_IPAD:
+        case SystemInfo::SIZE_FACTOR_TABLET:
             if (windowInfo.contentScale == 2)
             {
                 windowInfo.diagonal = 9.7f;
@@ -158,7 +158,7 @@ using namespace chr;
             }
             break;
             
-        case SystemInfo::SIZE_IPAD_MINI:
+        case SystemInfo::SIZE_FACTOR_TABLET_MINI:
             if (windowInfo.contentScale == 2)
             {
                 windowInfo.diagonal = 7.9f;

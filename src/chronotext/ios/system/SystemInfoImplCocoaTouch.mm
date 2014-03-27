@@ -22,18 +22,18 @@ namespace chronotext
         
         if (boost::starts_with(model, "iPhone") || boost::starts_with(model, "iPod Touch") || (model == "iPhone (Simulator)"))
         {
-            return SIZE_IPHONE;
+            return SIZE_FACTOR_PHONE;
         }
         if (boost::starts_with(model, "iPad mini"))
         {
-            return SIZE_IPAD_MINI;
+            return SIZE_FACTOR_TABLET_MINI;
         }
         if (boost::starts_with(model, "iPad") || (model == "iPad (Simulator)"))
         {
-            return SIZE_IPAD;
+            return SIZE_FACTOR_TABLET;
         }
         
-        return SIZE_UNDEFINED;
+        return SIZE_FACTOR_UNDEFINED;
     }
     
     /*
