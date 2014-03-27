@@ -42,6 +42,10 @@
 		A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */; };
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
+		A8FBC45E18E36AB600F5BBEF /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45618E36AB600F5BBEF /* Clock.cpp */; };
+		A8FBC45F18E36AB600F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45918E36AB600F5BBEF /* FrameClock.cpp */; };
+		A8FBC46018E36AB600F5BBEF /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45B18E36AB600F5BBEF /* MasterClock.cpp */; };
+		A8FBC46418E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC46318E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
@@ -122,6 +126,16 @@
 		A8FA3C0116E3AB8000367F97 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		A8FA3C0516E3AB8000367F97 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		A8FA3C0616E3AB8000367F97 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		A8FBC45618E36AB600F5BBEF /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
+		A8FBC45718E36AB600F5BBEF /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
+		A8FBC45818E36AB600F5BBEF /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
+		A8FBC45918E36AB600F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
+		A8FBC45A18E36AB600F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
+		A8FBC45B18E36AB600F5BBEF /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
+		A8FBC45C18E36AB600F5BBEF /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
+		A8FBC45D18E36AB600F5BBEF /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
+		A8FBC46218E36AC300F5BBEF /* SystemInfoImplCocoaTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoImplCocoaTouch.h; sourceTree = "<group>"; };
+		A8FBC46318E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemInfoImplCocoaTouch.mm; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -299,6 +313,7 @@
 				A8FA3BBF16E3AB8000367F97 /* ios */,
 				A8FA3BCC16E3AB8000367F97 /* os */,
 				A822633C18BE2EA400D57C8C /* texture */,
+				A8FBC45518E36AB600F5BBEF /* time */,
 				A8FA3BF916E3AB8000367F97 /* utils */,
 			);
 			name = chronotext;
@@ -323,6 +338,7 @@
 			children = (
 				A8FA3BC016E3AB8000367F97 /* cinder */,
 				A8FA3BC516E3AB8000367F97 /* gl */,
+				A8FBC46118E36AC300F5BBEF /* system */,
 			);
 			path = ios;
 			sourceTree = "<group>";
@@ -372,6 +388,30 @@
 				A8FA3C0516E3AB8000367F97 /* Utils.cpp */,
 			);
 			path = utils;
+			sourceTree = "<group>";
+		};
+		A8FBC45518E36AB600F5BBEF /* time */ = {
+			isa = PBXGroup;
+			children = (
+				A8FBC45618E36AB600F5BBEF /* Clock.cpp */,
+				A8FBC45718E36AB600F5BBEF /* Clock.h */,
+				A8FBC45818E36AB600F5BBEF /* DefaultTimeBase.h */,
+				A8FBC45918E36AB600F5BBEF /* FrameClock.cpp */,
+				A8FBC45A18E36AB600F5BBEF /* FrameClock.h */,
+				A8FBC45B18E36AB600F5BBEF /* MasterClock.cpp */,
+				A8FBC45C18E36AB600F5BBEF /* MasterClock.h */,
+				A8FBC45D18E36AB600F5BBEF /* TimeBase.h */,
+			);
+			path = time;
+			sourceTree = "<group>";
+		};
+		A8FBC46118E36AC300F5BBEF /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A8FBC46218E36AC300F5BBEF /* SystemInfoImplCocoaTouch.h */,
+				A8FBC46318E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm */,
+			);
+			path = system;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -441,7 +481,9 @@
 				A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */,
 				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
 				A822634C18BE2EA400D57C8C /* TextureHelper.cpp in Sources */,
+				A8FBC45F18E36AB600F5BBEF /* FrameClock.cpp in Sources */,
 				A822634A18BE2EA400D57C8C /* Sprite.cpp in Sources */,
+				A8FBC46418E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */,
 				A822634D18BE2EA400D57C8C /* TextureManager.cpp in Sources */,
 				A84D7E5918BD4BC100D7D933 /* FontMatrix.cpp in Sources */,
 				A822634918BE2EA400D57C8C /* PVRHelper.cpp in Sources */,
@@ -450,9 +492,11 @@
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */,
+				A8FBC46018E36AB600F5BBEF /* MasterClock.cpp in Sources */,
 				A84D7E5C18BD4BC100D7D933 /* FontSequence.cpp in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
 				A8FA3C1C16E3AB8000367F97 /* Handler.cpp in Sources */,
+				A8FBC45E18E36AB600F5BBEF /* Clock.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,

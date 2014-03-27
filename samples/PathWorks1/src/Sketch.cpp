@@ -36,7 +36,7 @@ void Sketch::setup(bool renewContext)
     if (renewContext)
     {
         textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPHS TEXTURE ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
+        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
     }
     else
     {

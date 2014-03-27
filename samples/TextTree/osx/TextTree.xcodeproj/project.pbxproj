@@ -39,6 +39,9 @@
 		A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910816E02DAA00FF519C /* Sketch.cpp */; };
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
 		A8A883F618C77D3300BC0BDB /* American Typewriter_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A8A883F518C77D3300BC0BDB /* American Typewriter_Regular_64.fnt */; };
+		A8FBC47818E39D3D00F5BBEF /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC47018E39D3D00F5BBEF /* Clock.cpp */; };
+		A8FBC47918E39D3D00F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC47318E39D3D00F5BBEF /* FrameClock.cpp */; };
+		A8FBC47A18E39D3D00F5BBEF /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC47518E39D3D00F5BBEF /* MasterClock.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +111,14 @@
 		A853DFD518116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8A883F518C77D3300BC0BDB /* American Typewriter_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "American Typewriter_Regular_64.fnt"; path = "../resources/American Typewriter_Regular_64.fnt"; sourceTree = "<group>"; };
+		A8FBC47018E39D3D00F5BBEF /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
+		A8FBC47118E39D3D00F5BBEF /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
+		A8FBC47218E39D3D00F5BBEF /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
+		A8FBC47318E39D3D00F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
+		A8FBC47418E39D3D00F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
+		A8FBC47518E39D3D00F5BBEF /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
+		A8FBC47618E39D3D00F5BBEF /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
+		A8FBC47718E39D3D00F5BBEF /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,10 +328,26 @@
 				A829870718BD02D500934642 /* font */,
 				A822632618BE224C00D57C8C /* texture */,
 				A82986FC18BD00C300934642 /* os */,
+				A8FBC46F18E39D3D00F5BBEF /* time */,
 				A82C90F416E00B3B00FF519C /* utils */,
 			);
 			name = chronotext;
 			path = ../../../src/chronotext;
+			sourceTree = "<group>";
+		};
+		A8FBC46F18E39D3D00F5BBEF /* time */ = {
+			isa = PBXGroup;
+			children = (
+				A8FBC47018E39D3D00F5BBEF /* Clock.cpp */,
+				A8FBC47118E39D3D00F5BBEF /* Clock.h */,
+				A8FBC47218E39D3D00F5BBEF /* DefaultTimeBase.h */,
+				A8FBC47318E39D3D00F5BBEF /* FrameClock.cpp */,
+				A8FBC47418E39D3D00F5BBEF /* FrameClock.h */,
+				A8FBC47518E39D3D00F5BBEF /* MasterClock.cpp */,
+				A8FBC47618E39D3D00F5BBEF /* MasterClock.h */,
+				A8FBC47718E39D3D00F5BBEF /* TimeBase.h */,
+			);
+			path = time;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -396,12 +423,15 @@
 				A829873318BD02D500934642 /* TextHelper.cpp in Sources */,
 				A829873218BD02D500934642 /* FontSequence.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
+				A8FBC47A18E39D3D00F5BBEF /* MasterClock.cpp in Sources */,
 				A829870318BD00C300934642 /* Handler.cpp in Sources */,
 				A822633418BE224C00D57C8C /* Sprite.cpp in Sources */,
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
 				A822633318BE224C00D57C8C /* PVRHelper.cpp in Sources */,
+				A8FBC47918E39D3D00F5BBEF /* FrameClock.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
+				A8FBC47818E39D3D00F5BBEF /* Clock.cpp in Sources */,
 				A822633518BE224C00D57C8C /* Texture.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
 				A829873118BD02D500934642 /* FontManager.cpp in Sources */,

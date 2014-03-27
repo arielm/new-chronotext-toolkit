@@ -19,7 +19,6 @@
 		A821DF8E16ED34A800DB025D /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A821DF8D16ED34A800DB025D /* Application.cpp */; };
 		A822637718BF54BC00D57C8C /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822636F18BF54BC00D57C8C /* Clock.cpp */; };
 		A822637818BF54BC00D57C8C /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637218BF54BC00D57C8C /* MasterClock.cpp */; };
-		A822637918BF54BC00D57C8C /* TickingClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637418BF54BC00D57C8C /* TickingClock.cpp */; };
 		A829870318BD00C300934642 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82986FD18BD00C300934642 /* Handler.cpp */; };
 		A829870418BD00C300934642 /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870118BD00C300934642 /* SuperHandler.cpp */; };
 		A829872F18BD02D500934642 /* FontMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870818BD02D500934642 /* FontMatrix.cpp */; };
@@ -56,6 +55,7 @@
 		A8F9FC5A18C5776400C48245 /* de.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5918C5776400C48245 /* de.txt */; };
 		A8F9FC5C18C578A200C48245 /* ru.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5B18C578A200C48245 /* ru.txt */; };
 		A8F9FC5E18C57E6F00C48245 /* el.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC5D18C57E6F00C48245 /* el.txt */; };
+		A8FBC4AD18E3B1A800F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC4AB18E3B1A800F5BBEF /* FrameClock.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,8 +79,6 @@
 		A822637118BF54BC00D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A822637218BF54BC00D57C8C /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
 		A822637318BF54BC00D57C8C /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
-		A822637418BF54BC00D57C8C /* TickingClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TickingClock.cpp; sourceTree = "<group>"; };
-		A822637518BF54BC00D57C8C /* TickingClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TickingClock.h; sourceTree = "<group>"; };
 		A822637618BF54BC00D57C8C /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A82986FD18BD00C300934642 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A82986FE18BD00C300934642 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
@@ -152,6 +150,8 @@
 		A8F9FC5918C5776400C48245 /* de.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = de.txt; path = ../resources/de.txt; sourceTree = "<group>"; };
 		A8F9FC5B18C578A200C48245 /* ru.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ru.txt; path = ../resources/ru.txt; sourceTree = "<group>"; };
 		A8F9FC5D18C57E6F00C48245 /* el.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = el.txt; path = ../resources/el.txt; sourceTree = "<group>"; };
+		A8FBC4AB18E3B1A800F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
+		A8FBC4AC18E3B1A800F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,13 +271,13 @@
 		A822636E18BF54BC00D57C8C /* time */ = {
 			isa = PBXGroup;
 			children = (
+				A8FBC4AB18E3B1A800F5BBEF /* FrameClock.cpp */,
+				A8FBC4AC18E3B1A800F5BBEF /* FrameClock.h */,
 				A822636F18BF54BC00D57C8C /* Clock.cpp */,
 				A822637018BF54BC00D57C8C /* Clock.h */,
 				A822637118BF54BC00D57C8C /* DefaultTimeBase.h */,
 				A822637218BF54BC00D57C8C /* MasterClock.cpp */,
 				A822637318BF54BC00D57C8C /* MasterClock.h */,
-				A822637418BF54BC00D57C8C /* TickingClock.cpp */,
-				A822637518BF54BC00D57C8C /* TickingClock.h */,
 				A822637618BF54BC00D57C8C /* TimeBase.h */,
 			);
 			path = time;
@@ -475,10 +475,10 @@
 				A8F9FC4D18C5683B00C48245 /* FontSequence.cpp in Sources */,
 				A8F9FC5018C5683B00C48245 /* LayoutCache.cpp in Sources */,
 				A8F9FC4E18C5683B00C48245 /* FontTexture.cpp in Sources */,
+				A8FBC4AD18E3B1A800F5BBEF /* FrameClock.cpp in Sources */,
 				A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */,
 				A8F9FC5118C5683B00C48245 /* LineLayout.cpp in Sources */,
 				A822637818BF54BC00D57C8C /* MasterClock.cpp in Sources */,
-				A822637918BF54BC00D57C8C /* TickingClock.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */,

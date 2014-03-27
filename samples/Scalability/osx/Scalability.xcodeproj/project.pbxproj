@@ -34,6 +34,9 @@
 		A848D0DA17FED47F009C7AC2 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A848D0D817FED47F009C7AC2 /* Sprite.cpp */; };
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
 		A87207F918081C460055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207F718081C460055F0BA /* SuperHandler.cpp */; };
+		A8FBC4A818E3B0C200F5BBEF /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC4A018E3B0C200F5BBEF /* Clock.cpp */; };
+		A8FBC4A918E3B0C200F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC4A318E3B0C200F5BBEF /* FrameClock.cpp */; };
+		A8FBC4AA18E3B0C200F5BBEF /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC4A518E3B0C200F5BBEF /* MasterClock.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +94,14 @@
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8EC39CC178584A000837298 /* TextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureData.h; sourceTree = "<group>"; };
 		A8EC39CD178584A000837298 /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
+		A8FBC4A018E3B0C200F5BBEF /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
+		A8FBC4A118E3B0C200F5BBEF /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
+		A8FBC4A218E3B0C200F5BBEF /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
+		A8FBC4A318E3B0C200F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
+		A8FBC4A418E3B0C200F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
+		A8FBC4A518E3B0C200F5BBEF /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
+		A8FBC4A618E3B0C200F5BBEF /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
+		A8FBC4A718E3B0C200F5BBEF /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +264,7 @@
 				A82C90E616E00B0400FF519C /* cinder */,
 				A82C90DB16E00AAD00FF519C /* os */,
 				A8985B7616DA4EB300448A41 /* texture */,
+				A8FBC49F18E3B0C200F5BBEF /* time */,
 				A82C90F416E00B3B00FF519C /* utils */,
 			);
 			name = chronotext;
@@ -276,6 +288,21 @@
 				A8EC39CD178584A000837298 /* TextureRequest.h */,
 			);
 			path = texture;
+			sourceTree = "<group>";
+		};
+		A8FBC49F18E3B0C200F5BBEF /* time */ = {
+			isa = PBXGroup;
+			children = (
+				A8FBC4A018E3B0C200F5BBEF /* Clock.cpp */,
+				A8FBC4A118E3B0C200F5BBEF /* Clock.h */,
+				A8FBC4A218E3B0C200F5BBEF /* DefaultTimeBase.h */,
+				A8FBC4A318E3B0C200F5BBEF /* FrameClock.cpp */,
+				A8FBC4A418E3B0C200F5BBEF /* FrameClock.h */,
+				A8FBC4A518E3B0C200F5BBEF /* MasterClock.cpp */,
+				A8FBC4A618E3B0C200F5BBEF /* MasterClock.h */,
+				A8FBC4A718E3B0C200F5BBEF /* TimeBase.h */,
+			);
+			path = time;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,6 +331,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Scalability" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -347,14 +376,17 @@
 				A82C909516DFA3B100FF519C /* TextureManager.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A82C90E316E00AAD00FF519C /* Handler.cpp in Sources */,
+				A8FBC4A818E3B0C200F5BBEF /* Clock.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
+				A8FBC4A918E3B0C200F5BBEF /* FrameClock.cpp in Sources */,
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
 				A821DF8E16ED34A800DB025D /* Application.cpp in Sources */,
 				A848D0DA17FED47F009C7AC2 /* Sprite.cpp in Sources */,
+				A8FBC4AA18E3B0C200F5BBEF /* MasterClock.cpp in Sources */,
 				A87207F918081C460055F0BA /* SuperHandler.cpp in Sources */,
 				A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */,
 			);

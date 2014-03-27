@@ -22,7 +22,6 @@
 		A822636A18BECBFF00D57C8C /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822636618BECBFF00D57C8C /* SplinePath.cpp */; };
 		A822638318BF5D4900D57C8C /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637B18BF5D4900D57C8C /* Clock.cpp */; };
 		A822638418BF5D4900D57C8C /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637E18BF5D4900D57C8C /* MasterClock.cpp */; };
-		A822638518BF5D4900D57C8C /* TickingClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822638018BF5D4900D57C8C /* TickingClock.cpp */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
 		A84D7E5918BD4BC100D7D933 /* FontMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */; };
@@ -54,6 +53,8 @@
 		A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */; };
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
+		A8FBC48818E3AEFD00F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC48718E3AEFD00F5BBEF /* SystemInfoImplCocoaTouch.mm */; };
+		A8FBC48B18E3AF1300F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC48918E3AF1300F5BBEF /* FrameClock.cpp */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
@@ -93,8 +94,6 @@
 		A822637D18BF5D4900D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A822637E18BF5D4900D57C8C /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
 		A822637F18BF5D4900D57C8C /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
-		A822638018BF5D4900D57C8C /* TickingClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TickingClock.cpp; sourceTree = "<group>"; };
-		A822638118BF5D4900D57C8C /* TickingClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TickingClock.h; sourceTree = "<group>"; };
 		A822638218BF5D4900D57C8C /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A822639A18C1862800D57C8C /* ASPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPC.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
@@ -159,6 +158,10 @@
 		A8FA3C0116E3AB8000367F97 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		A8FA3C0516E3AB8000367F97 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		A8FA3C0616E3AB8000367F97 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		A8FBC48618E3AEFD00F5BBEF /* SystemInfoImplCocoaTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoImplCocoaTouch.h; sourceTree = "<group>"; };
+		A8FBC48718E3AEFD00F5BBEF /* SystemInfoImplCocoaTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemInfoImplCocoaTouch.mm; sourceTree = "<group>"; };
+		A8FBC48918E3AF1300F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
+		A8FBC48A18E3AF1300F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -294,13 +297,13 @@
 		A822637A18BF5D4900D57C8C /* time */ = {
 			isa = PBXGroup;
 			children = (
+				A8FBC48918E3AF1300F5BBEF /* FrameClock.cpp */,
+				A8FBC48A18E3AF1300F5BBEF /* FrameClock.h */,
 				A822637B18BF5D4900D57C8C /* Clock.cpp */,
 				A822637C18BF5D4900D57C8C /* Clock.h */,
 				A822637D18BF5D4900D57C8C /* DefaultTimeBase.h */,
 				A822637E18BF5D4900D57C8C /* MasterClock.cpp */,
 				A822637F18BF5D4900D57C8C /* MasterClock.h */,
-				A822638018BF5D4900D57C8C /* TickingClock.cpp */,
-				A822638118BF5D4900D57C8C /* TickingClock.h */,
 				A822638218BF5D4900D57C8C /* TimeBase.h */,
 			);
 			path = time;
@@ -401,6 +404,7 @@
 			children = (
 				A8FA3BC016E3AB8000367F97 /* cinder */,
 				A8FA3BC516E3AB8000367F97 /* gl */,
+				A8FBC48518E3AEFD00F5BBEF /* system */,
 			);
 			path = ios;
 			sourceTree = "<group>";
@@ -450,6 +454,15 @@
 				A8FA3C0516E3AB8000367F97 /* Utils.cpp */,
 			);
 			path = utils;
+			sourceTree = "<group>";
+		};
+		A8FBC48518E3AEFD00F5BBEF /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A8FBC48618E3AEFD00F5BBEF /* SystemInfoImplCocoaTouch.h */,
+				A8FBC48718E3AEFD00F5BBEF /* SystemInfoImplCocoaTouch.mm */,
+			);
+			path = system;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -531,9 +544,9 @@
 				A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */,
 				A8FA3C0816E3AB8000367F97 /* CinderSketchSimple.cpp in Sources */,
 				A822638418BF5D4900D57C8C /* MasterClock.cpp in Sources */,
-				A822638518BF5D4900D57C8C /* TickingClock.cpp in Sources */,
 				A822636A18BECBFF00D57C8C /* SplinePath.cpp in Sources */,
 				A822636918BECBFF00D57C8C /* FollowablePath.cpp in Sources */,
+				A8FBC48818E3AEFD00F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */,
@@ -542,6 +555,7 @@
 				A8FA3C1C16E3AB8000367F97 /* Handler.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */,
+				A8FBC48B18E3AF1300F5BBEF /* FrameClock.cpp in Sources */,
 				A8F9FBEA18C3F6C600C48245 /* FXGDocument.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,

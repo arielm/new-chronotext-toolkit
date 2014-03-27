@@ -26,7 +26,6 @@
 		A822635B18BE705100D57C8C /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822635718BE705100D57C8C /* SplinePath.cpp */; };
 		A822637718BF54BC00D57C8C /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822636F18BF54BC00D57C8C /* Clock.cpp */; };
 		A822637818BF54BC00D57C8C /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637218BF54BC00D57C8C /* MasterClock.cpp */; };
-		A822637918BF54BC00D57C8C /* TickingClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822637418BF54BC00D57C8C /* TickingClock.cpp */; };
 		A829870318BD00C300934642 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82986FD18BD00C300934642 /* Handler.cpp */; };
 		A829870418BD00C300934642 /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870118BD00C300934642 /* SuperHandler.cpp */; };
 		A829872F18BD02D500934642 /* FontMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A829870818BD02D500934642 /* FontMatrix.cpp */; };
@@ -51,6 +50,7 @@
 		A8F9FBFA18C413E900C48245 /* asphalt_128_alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBF718C413E900C48245 /* asphalt_128_alpha.png */; };
 		A8F9FBFC18C41D3C00C48245 /* hairline_dashed.png in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FBFB18C41D3C00C48245 /* hairline_dashed.png */; };
 		A8F9FC2E18C4DE8A00C48245 /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC2D18C4DE8A00C48245 /* Hairline.cpp */; };
+		A8FBC49E18E3B08D00F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC49C18E3B08D00F5BBEF /* FrameClock.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,8 +90,6 @@
 		A822637118BF54BC00D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A822637218BF54BC00D57C8C /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
 		A822637318BF54BC00D57C8C /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
-		A822637418BF54BC00D57C8C /* TickingClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TickingClock.cpp; sourceTree = "<group>"; };
-		A822637518BF54BC00D57C8C /* TickingClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TickingClock.h; sourceTree = "<group>"; };
 		A822637618BF54BC00D57C8C /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A822639518C17ACC00D57C8C /* ASPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPC.h; sourceTree = "<group>"; };
 		A82986FD18BD00C300934642 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
@@ -145,6 +143,8 @@
 		A8F9FBFB18C41D3C00C48245 /* hairline_dashed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline_dashed.png; path = ../resources/hairline_dashed.png; sourceTree = "<group>"; };
 		A8F9FC2C18C4DE8A00C48245 /* Hairline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hairline.h; sourceTree = "<group>"; };
 		A8F9FC2D18C4DE8A00C48245 /* Hairline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hairline.cpp; sourceTree = "<group>"; };
+		A8FBC49C18E3B08D00F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
+		A8FBC49D18E3B08D00F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,13 +292,13 @@
 		A822636E18BF54BC00D57C8C /* time */ = {
 			isa = PBXGroup;
 			children = (
+				A8FBC49C18E3B08D00F5BBEF /* FrameClock.cpp */,
+				A8FBC49D18E3B08D00F5BBEF /* FrameClock.h */,
 				A822636F18BF54BC00D57C8C /* Clock.cpp */,
 				A822637018BF54BC00D57C8C /* Clock.h */,
 				A822637118BF54BC00D57C8C /* DefaultTimeBase.h */,
 				A822637218BF54BC00D57C8C /* MasterClock.cpp */,
 				A822637318BF54BC00D57C8C /* MasterClock.h */,
-				A822637418BF54BC00D57C8C /* TickingClock.cpp */,
-				A822637518BF54BC00D57C8C /* TickingClock.h */,
 				A822637618BF54BC00D57C8C /* TimeBase.h */,
 			);
 			path = time;
@@ -474,7 +474,6 @@
 				A822635A18BE705100D57C8C /* FollowablePath.cpp in Sources */,
 				A829873018BD02D500934642 /* Font.cpp in Sources */,
 				A822637818BF54BC00D57C8C /* MasterClock.cpp in Sources */,
-				A822637918BF54BC00D57C8C /* TickingClock.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A822633618BE224C00D57C8C /* TextureHelper.cpp in Sources */,
@@ -482,6 +481,7 @@
 				A829873318BD02D500934642 /* TextHelper.cpp in Sources */,
 				A822635B18BE705100D57C8C /* SplinePath.cpp in Sources */,
 				A829873218BD02D500934642 /* FontSequence.cpp in Sources */,
+				A8FBC49E18E3B08D00F5BBEF /* FrameClock.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
 				A829870318BD00C300934642 /* Handler.cpp in Sources */,
 				A822633418BE224C00D57C8C /* Sprite.cpp in Sources */,
