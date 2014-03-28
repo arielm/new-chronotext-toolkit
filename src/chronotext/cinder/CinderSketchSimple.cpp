@@ -68,12 +68,12 @@ namespace chronotext
         
         if (info.size == Vec2i::zero())
         {
-            info.size = getWindowSize();
+            info.size = context->getWindowSize();
         }
         
         if (info.contentScale == 0)
         {
-            info.contentScale = getWindowContentScale();
+            info.contentScale = context->getWindowContentScale();
         }
         
         switch (static_pointer_cast<RendererGl>(context->getRenderer())->getAntiAliasing())
