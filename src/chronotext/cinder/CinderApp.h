@@ -53,10 +53,6 @@ namespace chronotext
         int startCount;
         int updateCount;
         
-        int ticks;
-        double t0;
-        double elapsed;
-        
         void start();
         void stop();
         

@@ -18,8 +18,7 @@ namespace chronotext
     CinderApp::CinderApp()
     :
     startCount(0),
-    updateCount(0),
-    ticks(0)
+    updateCount(0)
     {}
 
     void CinderApp::setup()
@@ -61,18 +60,6 @@ namespace chronotext
     
     void CinderApp::update()
     {
-        double now = getElapsedSeconds();
-        
-        if (ticks == 0)
-        {
-            t0 = now;
-        }
-        
-        ticks++;
-        elapsed = now - t0;
-        
-        // ---
-       
         /*
          * App::privateUpdate__ HACKING:
          * WE MUST UPDATE THE CLOCK AT THE BEGINNING OF THE FRAME,
@@ -88,10 +75,10 @@ namespace chronotext
          * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
          * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
          */
-        now = sketch->clock().getTime();
+        double now = sketch->clock().getTime();
         
         sketch->update();
-        sketch->timeline().stepTo(now); // WE OBVIOUSLY CAN'T USE THE APP'S TIMELINE...
+        sketch->timeline().stepTo(now); // WE CAN'T CONTROL THE APP'S TIMELINE SO WE NEED OUR OWN
         updateCount++;
     }
     
@@ -194,14 +181,13 @@ namespace chronotext
     
     void CinderApp::start()
     {
-        ticks = 0;
         sketch->clock().start();
     }
     
     void CinderApp::stop()
     {
         sketch->clock().stop();
-        LOGI << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
+        LOGI << "AVERAGE FRAME-RATE: " << getAverageFps() << " FPS" << endl;
     }
     
     void CinderApp::addTouch(int index, const Vec2f &position)
