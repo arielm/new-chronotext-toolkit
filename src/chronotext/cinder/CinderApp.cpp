@@ -107,40 +107,40 @@ namespace chronotext
     
     void CinderApp::mouseDown(MouseEvent event)
     {
-        sketch->addTouch(0, event.getX(), event.getY());
+        addTouch(0, event.getPos());
     }
     
     void CinderApp::mouseDrag(MouseEvent event)
     {
-        sketch->updateTouch(0, event.getX(), event.getY());
+        updateTouch(0, event.getPos());
     }
     
     void CinderApp::mouseUp(MouseEvent event)
     {
-        sketch->removeTouch(0, event.getX(), event.getY());
+        removeTouch(0, event.getPos());
     }
     
     void CinderApp::touchesBegan(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt)
+        for (auto &touch : event.getTouches())
         {
-            sketch->addTouch(touchIt->getId() - 1, touchIt->getPos().x, touchIt->getPos().y);
+            addTouch(touch.getId() - 1, touch.getPos());
         }
     }
     
     void CinderApp::touchesMoved(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt)
+        for (auto &touch : event.getTouches())
         {
-            sketch->updateTouch(touchIt->getId() - 1, touchIt->getPos().x, touchIt->getPos().y);
+            updateTouch(touch.getId() - 1, touch.getPos());
         }
     }
     
     void CinderApp::touchesEnded(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt)
+        for (auto &touch : event.getTouches())
         {
-            sketch->removeTouch(touchIt->getId() - 1, touchIt->getPos().x, touchIt->getPos().y);
+            removeTouch(touch.getId() - 1, touch.getPos());
         }
     }
     
@@ -156,19 +156,19 @@ namespace chronotext
     
     void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
     {
-        settings->setWindowSize(device.size);
-
         /*
-         * HIGH-DENSITY AND ANTI-ALIASING ARE NOT HANDLED AT THIS LEVEL.
-         *
-         * HIGH-DENSITY IS ENABLED IF THE SCREEN IS RETINA, BUT CAN ALSO BE TESTED ON A REGULAR SCREEN:
-         * https://forum.libcinder.org/topic/rfc-retina-high-density-display-support
-         *
-         * ANTI-ALIASING SHOULD BE DEFINED VIA THE "CINDER_APP_NATIVE" MACRO
+         * HACK TO OVERCOME MALFUNCTION IN 0.8.5
+         * OTHERWISE, WE'D USE settings->getDisplay()->getContentScale()
          */
+        stringstream tmp;
+        tmp << *settings->getDisplay();
+        float realContentScale = (tmp.str().back() == '2') ? 2 : 1;
         
+        settings->setWindowSize(device.size * device.contentScale / realContentScale);
+
         WindowInfo windowInfo;
         windowInfo.size = device.size;
+        windowInfo.contentScale = device.contentScale;
         windowInfo.diagonal = device.diagonal;
         windowInfo.density = (device.diagonal == 0) ? 0: (device.size.length() / device.diagonal);
         
@@ -201,5 +201,23 @@ namespace chronotext
     {
         sketch->clock().stop();
         LOGI << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
+    }
+    
+    void CinderApp::addTouch(int index, const Vec2f &position)
+    {
+        auto scale = sketch->getWindowInfo().contentScale / getWindowContentScale();
+        sketch->addTouch(0, position.x / scale, position.y / scale);
+    }
+    
+    void CinderApp::updateTouch(int index, const Vec2f &position)
+    {
+        auto scale = sketch->getWindowInfo().contentScale / getWindowContentScale();
+        sketch->updateTouch(0, position.x / scale, position.y / scale);
+    }
+    
+    void CinderApp::removeTouch(int index, const Vec2f &position)
+    {
+        auto scale = sketch->getWindowInfo().contentScale / getWindowContentScale();
+        sketch->removeTouch(0, position.x / scale, position.y / scale);
     }
 }

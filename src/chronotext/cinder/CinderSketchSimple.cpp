@@ -24,12 +24,57 @@ namespace chronotext
     mTimeline(Timeline::create())
     {}
     
+    int CinderSketchSimple::getWindowWidth() const
+    {
+        return getWindowInfo().size.x;
+    }
+    
+    int CinderSketchSimple::getWindowHeight() const
+    {
+        return getWindowInfo().size.y;
+    }
+    
+    Vec2f CinderSketchSimple::getWindowCenter() const
+    {
+        const auto &size = getWindowInfo().size;
+        return size * 0.5f;
+    }
+    
+    Vec2i CinderSketchSimple::getWindowSize() const
+    {
+        return getWindowInfo().size;
+    }
+    
+    float CinderSketchSimple::getWindowAspectRatio() const
+    {
+        const auto &size = getWindowInfo().size;
+        return size.x / (float)size.y;
+    }
+    
+    Area CinderSketchSimple::getWindowBounds() const
+    {
+        const auto &size = getWindowInfo().size;
+        return Area(0, 0, size.x, size.y);
+    }
+    
+    float CinderSketchSimple::getWindowContentScale() const
+    {
+        return getWindowInfo().contentScale;
+    }
+    
     WindowInfo CinderSketchSimple::getWindowInfo() const
     {
-        WindowInfo info = SystemInfo::instance().getWindowInfo(); // ONLY USED FOR DIAGONAL AND DENSITY (WHICH ARE NOT NECESSARILY DEFINED)
+        WindowInfo info = SystemInfo::instance().getWindowInfo();
         
-        info.size = getWindowSize(),
-        info.contentScale = getWindowContentScale();
+        if (info.size == Vec2i::zero())
+        {
+            info.size = getWindowSize();
+        }
+        
+        if (info.contentScale == 0)
+        {
+            info.contentScale = getWindowContentScale();
+        }
         
         switch (static_pointer_cast<RendererGl>(context->getRenderer())->getAntiAliasing())
         {
