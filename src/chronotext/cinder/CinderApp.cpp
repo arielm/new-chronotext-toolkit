@@ -164,7 +164,8 @@ namespace chronotext
         tmp << *settings->getDisplay();
         float realContentScale = (tmp.str().back() == '2') ? 2 : 1;
         
-        settings->setWindowSize(device.size * device.contentScale / realContentScale);
+        float scale = device.contentScale / realContentScale;
+        settings->setWindowSize(device.size * scale);
 
         WindowInfo windowInfo;
         windowInfo.size = device.size;
@@ -205,19 +206,19 @@ namespace chronotext
     
     void CinderApp::addTouch(int index, const Vec2f &position)
     {
-        auto scale = sketch->getWindowInfo().contentScale / getWindowContentScale();
+        auto scale = sketch->getWindowContentScale() / getWindowContentScale();
         sketch->addTouch(0, position.x / scale, position.y / scale);
     }
     
     void CinderApp::updateTouch(int index, const Vec2f &position)
     {
-        auto scale = sketch->getWindowInfo().contentScale / getWindowContentScale();
+        auto scale = sketch->getWindowContentScale() / getWindowContentScale();
         sketch->updateTouch(0, position.x / scale, position.y / scale);
     }
     
     void CinderApp::removeTouch(int index, const Vec2f &position)
     {
-        auto scale = sketch->getWindowInfo().contentScale / getWindowContentScale();
+        auto scale = sketch->getWindowContentScale() / getWindowContentScale();
         sketch->removeTouch(0, position.x / scale, position.y / scale);
     }
 }
