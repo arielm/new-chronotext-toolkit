@@ -171,7 +171,7 @@ namespace chronotext
         windowInfo.size = device.size;
         windowInfo.contentScale = device.contentScale;
         windowInfo.diagonal = device.diagonal;
-        windowInfo.density = (device.diagonal == 0) ? 0: (device.size.length() / device.diagonal);
+        windowInfo.density = (device.diagonal == 0) ? 0 : (device.contentScale * device.size.length() / device.diagonal);
         
         SystemInfo::instance().setWindowInfo(windowInfo);
     }
