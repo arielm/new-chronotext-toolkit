@@ -144,6 +144,12 @@ namespace chronotext
     void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
     {
         /*
+         * POINTLESS TO ALLOW RESIZE WHEN EMULATING
+         * (IT WOULD ALSO MAKE THE CODE MORE COMPLEX...)
+         */
+        settings->setResizable(false);
+
+        /*
          * HACK TO OVERCOME MALFUNCTION IN 0.8.5
          * OTHERWISE, WE'D USE settings->getDisplay()->getContentScale()
          */
