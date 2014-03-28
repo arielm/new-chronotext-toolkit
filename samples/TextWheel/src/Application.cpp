@@ -37,7 +37,7 @@ Application::Application()
 
 void Application::prepareSettings(Settings *settings)
 {
-    settings->disableFrameRate();
+    settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL SYNC IS ALLOWED BY DEFAULT)
     settings->enableHighDensityDisplay();
     
     settings->setWindowSize(1024, 768);

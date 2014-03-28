@@ -35,18 +35,10 @@ Application::Application()
 
 void Application::prepareSettings(Settings *settings)
 {
-    settings->disableFrameRate();
+    settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL SYNC IS ALLOWED BY DEFAULT)
     settings->enableHighDensityDisplay();
     
-//  emulate(settings, DEVICE_IPHONE_4_PORTRAIT);
-//  emulate(settings, DEVICE_IPHONE_5_PORTRAIT);
-//  emulate(settings, DEVICE_IPAD_1_PORTRAIT);
-    emulate(settings, DEVICE_GALAXY_S_PORTRAIT);
-    
-//  emulate(settings, DEVICE_IPHONE_4_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_IPHONE_5_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_IPAD_1_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_GALAXY_S_PORTRAIT.rotate());
+    settings->setWindowSize(480, 800);
 }
 
 void Application::keyDown(KeyEvent event)

@@ -35,9 +35,7 @@ Application::Application()
 
 void Application::prepareSettings(Settings *settings)
 {
-    settings->setResizable(false);
-
-    settings->disableFrameRate();
+    settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL SYNC IS ALLOWED BY DEFAULT)
     settings->enableHighDensityDisplay();
 
 //  emulate(settings, DEVICE_IPHONE_4_PORTRAIT.rotate());
