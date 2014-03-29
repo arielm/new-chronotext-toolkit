@@ -149,16 +149,7 @@ namespace chronotext
          */
         settings->setResizable(false);
 
-        /*
-         * HACK TO OVERCOME MALFUNCTION IN 0.8.5
-         * OTHERWISE, WE'D USE settings->getDisplay()->getContentScale()
-         */
-        stringstream tmp;
-        tmp << *settings->getDisplay();
-        float realContentScale = (tmp.str().back() == '2') ? 2 : 1;
-        
-        float scale = device.contentScale / realContentScale;
-        settings->setWindowSize(device.size * scale);
+        settings->setWindowSize(device.size);
 
         WindowInfo windowInfo;
         windowInfo.size = device.size;
@@ -198,19 +189,16 @@ namespace chronotext
     
     void CinderApp::addTouch(int index, const Vec2f &position)
     {
-        auto scale = sketch->getWindowContentScale() / getWindowContentScale();
-        sketch->addTouch(0, position.x / scale, position.y / scale);
+        sketch->addTouch(0, position.x, position.y);
     }
     
     void CinderApp::updateTouch(int index, const Vec2f &position)
     {
-        auto scale = sketch->getWindowContentScale() / getWindowContentScale();
-        sketch->updateTouch(0, position.x / scale, position.y / scale);
+        sketch->updateTouch(0, position.x, position.y);
     }
     
     void CinderApp::removeTouch(int index, const Vec2f &position)
     {
-        auto scale = sketch->getWindowContentScale() / getWindowContentScale();
-        sketch->removeTouch(0, position.x / scale, position.y / scale);
+        sketch->removeTouch(0, position.x, position.y);
     }
 }

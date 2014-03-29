@@ -35,8 +35,8 @@ namespace chronotext
     };
 
     static EmulatedDevice DEVICE_IPHONE_3GS_PORTRAIT = EmulatedDevice(320, 480, 1, 3.54f);
-    static EmulatedDevice DEVICE_IPHONE_4_PORTRAIT = EmulatedDevice(320, 480, 2, 3.54f);
-    static EmulatedDevice DEVICE_IPHONE_5_PORTRAIT = EmulatedDevice(320, 568, 2, 4.0f);
+    static EmulatedDevice DEVICE_IPHONE_4_PORTRAIT = EmulatedDevice(640, 960, 2, 3.54f);
+    static EmulatedDevice DEVICE_IPHONE_5_PORTRAIT = EmulatedDevice(640, 1136, 2, 4.0f);
     
     static EmulatedDevice DEVICE_IPAD_1_PORTRAIT = EmulatedDevice(768, 1024, 1, 9.7f);
     static EmulatedDevice DEVICE_IPAD_MINI_1_PORTRAIT = EmulatedDevice(768, 1024, 1, 7.9f);
