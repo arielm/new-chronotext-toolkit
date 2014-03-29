@@ -234,7 +234,7 @@ namespace chronotext
                                     if (!properties.useMipmap)
                                     {
                                         offset.x = math<float>::floor(offset.x + 0.5f);
-                                        offset.y = math<float>::floor(offset.x + 0.5f);
+                                        offset.y = math<float>::floor(offset.y + 0.5f);
                                         advance = math<float>::floor(advance + 0.5f);
                                     }
                                     
