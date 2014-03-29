@@ -94,24 +94,24 @@ namespace chronotext
     
     void CinderApp::mouseDown(MouseEvent event)
     {
-        addTouch(0, event.getPos());
+        sketch->addTouch(0, event.getX(), event.getY());
     }
     
     void CinderApp::mouseDrag(MouseEvent event)
     {
-        updateTouch(0, event.getPos());
+        sketch->updateTouch(0, event.getX(), event.getY());
     }
     
     void CinderApp::mouseUp(MouseEvent event)
     {
-        removeTouch(0, event.getPos());
+        sketch->removeTouch(0, event.getX(), event.getY());
     }
     
     void CinderApp::touchesBegan(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
         {
-            addTouch(touch.getId() - 1, touch.getPos());
+            sketch->addTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
@@ -119,7 +119,7 @@ namespace chronotext
     {
         for (auto &touch : event.getTouches())
         {
-            updateTouch(touch.getId() - 1, touch.getPos());
+            sketch->updateTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
@@ -127,7 +127,7 @@ namespace chronotext
     {
         for (auto &touch : event.getTouches())
         {
-            removeTouch(touch.getId() - 1, touch.getPos());
+            sketch->removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
@@ -185,20 +185,5 @@ namespace chronotext
     {
         sketch->clock().stop();
         LOGI << "AVERAGE FRAME-RATE: " << getAverageFps() << " FPS" << endl;
-    }
-    
-    void CinderApp::addTouch(int index, const Vec2f &position)
-    {
-        sketch->addTouch(0, position.x, position.y);
-    }
-    
-    void CinderApp::updateTouch(int index, const Vec2f &position)
-    {
-        sketch->updateTouch(0, position.x, position.y);
-    }
-    
-    void CinderApp::removeTouch(int index, const Vec2f &position)
-    {
-        sketch->removeTouch(0, position.x, position.y);
     }
 }

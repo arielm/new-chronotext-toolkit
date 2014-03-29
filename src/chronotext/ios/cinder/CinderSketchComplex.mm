@@ -27,31 +27,25 @@ namespace chronotext
     
     void CinderSketchComplex::touchesBegan(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator it = event.getTouches().begin(); it != event.getTouches().end(); ++it)
+        for (auto &touch : event.getTouches())
         {
-            float x = it->getX();
-            float y = it->getY();
-            addTouch(it->getId() - 1, x, y);
+            addTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
     void CinderSketchComplex::touchesMoved(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator it = event.getTouches().begin(); it != event.getTouches().end(); ++it)
+        for (auto &touch : event.getTouches())
         {
-            float x = it->getX();
-            float y = it->getY();
-            updateTouch(it->getId() - 1, x, y);
+            updateTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
     void CinderSketchComplex::touchesEnded(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator it = event.getTouches().begin(); it != event.getTouches().end(); ++it)
+        for (auto &touch : event.getTouches())
         {
-            float x = it->getX();
-            float y = it->getY();
-            removeTouch(it->getId() - 1, x, y);
+            removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     

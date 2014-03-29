@@ -55,10 +55,6 @@ namespace chronotext
         
         void start();
         void stop();
-        
-        void addTouch(int index, const ci::Vec2f &position);
-        void updateTouch(int index, const ci::Vec2f &position);
-        void removeTouch(int index, const ci::Vec2f &position);
     };
 }
 

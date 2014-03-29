@@ -7,8 +7,8 @@
  */
 
 /*
- * "TOUCH MAPPING" CODE FROM CINDER:
- * https://github.com/cinder/Cinder/blob/c894b2a81eb4d859070b177f989f60b470e92b8c/src/cinder/app/CinderViewCocoaTouch.mm
+ * "TOUCH MAPPING" BASED ON CINDER:
+ * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/app/CinderViewCocoaTouch.mm
  */
 
 #import "CinderDelegate.h"
@@ -117,7 +117,7 @@ using namespace chr;
     switch (SystemInfo::instance().getSizeFactor())
     {
         case SystemInfo::SIZE_FACTOR_PHONE:
-            if (windowInfo.size.x == 568)
+            if (windowInfo.size.x == 1136)
             {
                 windowInfo.diagonal = 4;
             }
@@ -244,13 +244,15 @@ using namespace chr;
 {
     uint32_t candidateId = 0;
     bool found = true;
+    
     while (found)
     {
         candidateId++;
         found = false;
-        for (map<UITouch*,uint32_t>::const_iterator mapIt = touchIdMap.begin(); mapIt != touchIdMap.end(); ++mapIt)
+        
+        for (auto &it : touchIdMap)
         {
-            if (mapIt->second == candidateId)
+            if (it.second == candidateId)
             {
                 found = true;
                 break;
@@ -264,7 +266,8 @@ using namespace chr;
 
 - (void) removeTouchFromMap:(UITouch*)touch
 {
-    map<UITouch*,uint32_t>::iterator found(touchIdMap.find(touch));
+    auto found = touchIdMap.find(touch);
+    
     if (found != touchIdMap.end())
     {
         touchIdMap.erase(found);
@@ -273,7 +276,8 @@ using namespace chr;
 
 - (uint32_t) findTouchInMap:(UITouch*)touch
 {
-    map<UITouch*,uint32_t>::const_iterator found(touchIdMap.find(touch));
+    auto found = touchIdMap.find(touch);
+    
     if (found != touchIdMap.end())
     {
         return found->second;
@@ -284,27 +288,27 @@ using namespace chr;
 
 - (void) updateActiveTouches
 {
-    const float scale = 1;
-    
+    float scale = view.contentScaleFactor;;
     vector<TouchEvent::Touch> activeTouches;
-    for (map<UITouch*,uint32_t>::const_iterator touchIt = touchIdMap.begin(); touchIt != touchIdMap.end(); ++touchIt)
+    
+    for (auto &it : touchIdMap)
     {
-        CGPoint pt = [touchIt->first locationInView:view];
-        CGPoint prevPt = [touchIt->first previousLocationInView:view];
-        activeTouches.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, touchIt->second, [touchIt->first timestamp], touchIt->first));
+        CGPoint pt = [it.first locationInView:view];
+        CGPoint prevPt = [it.first previousLocationInView:view];
+        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, it.second, [it.first timestamp], it.first);
     }
 }
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = view.contentScaleFactor;
-    
+    float scale = view.contentScaleFactor;
     vector<TouchEvent::Touch> touchList;
+    
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch));
+        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch);
     }
     
     [self updateActiveTouches];
@@ -316,17 +320,18 @@ using namespace chr;
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = view.contentScaleFactor;
-    
+    float scale = view.contentScaleFactor;
     vector<TouchEvent::Touch> touchList;
+    
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];            
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch));
+        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
     }
     
     [self updateActiveTouches];
+    
     if (!touchList.empty())
     {
         sketch->touchesMoved(TouchEvent(WindowRef(), touchList));
@@ -336,17 +341,19 @@ using namespace chr;
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
     const float scale = view.contentScaleFactor;
-    
     vector<TouchEvent::Touch> touchList;
+    
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch));
+        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
+        
         [self removeTouchFromMap:touch];
     }
     
     [self updateActiveTouches];
+    
     if (!touchList.empty())
     {
         sketch->touchesEnded(TouchEvent(WindowRef(), touchList));

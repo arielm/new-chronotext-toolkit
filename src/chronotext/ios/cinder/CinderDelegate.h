@@ -7,8 +7,8 @@
  */
 
 /*
- * "TOUCH MAPPING" CODE FROM CINDER:
- * https://github.com/cinder/Cinder/blob/c894b2a81eb4d859070b177f989f60b470e92b8c/include/cinder/app/CinderViewCocoaTouch.h
+ * "TOUCH MAPPING" BASED ON CINDER:
+ * https://github.com/cinder/Cinder/blob/v0.8.5/include/cinder/app/CinderViewCocoaTouch.h
  */
 
 #include "chronotext/cinder/CinderSketch.h"
