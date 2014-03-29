@@ -231,6 +231,13 @@ namespace chronotext
                                     auto offset = Vec2f(glyphPositions[i].x_offset, -glyphPositions[i].y_offset) * font->scale;
                                     float advance = glyphPositions[i].x_advance * font->scale.x;
                                     
+                                    if (!properties.useMipmap)
+                                    {
+                                        offset.x = math<float>::floor(offset.x + 0.5f);
+                                        offset.y = math<float>::floor(offset.x + 0.5f);
+                                        advance = math<float>::floor(advance + 0.5f);
+                                    }
+                                    
                                     if (clusterFound)
                                     {
                                         it->second.addShape(codepoint, offset, advance);
@@ -480,8 +487,16 @@ namespace chronotext
         {
             for (auto &shape : cluster.shapes)
             {
+                Vec2f p = position.xy();
+                
+                if (!properties.useMipmap)
+                {
+                    p.x = math<float>::floor(p.x + 0.5f);
+                    p.y = math<float>::floor(p.y + 0.5f);
+                }
+                
                 GlyphQuad quad;
-                auto glyph = cluster.font->fillQuad(quad, shape, position.xy(), sizeRatio);
+                auto glyph = cluster.font->fillQuad(quad, shape, p, sizeRatio);
                 
                 if (glyph)
                 {
