@@ -34,8 +34,8 @@ namespace chronotext
         }
     };
 
-    static EmulatedDevice DEVICE_IPHONE_3GS_PORTRAIT = EmulatedDevice(320, 480, 1, 3.5f);
-    static EmulatedDevice DEVICE_IPHONE_4_PORTRAIT = EmulatedDevice(320, 480, 2, 3.5f);
+    static EmulatedDevice DEVICE_IPHONE_3GS_PORTRAIT = EmulatedDevice(320, 480, 1, 3.54f);
+    static EmulatedDevice DEVICE_IPHONE_4_PORTRAIT = EmulatedDevice(320, 480, 2, 3.54f);
     static EmulatedDevice DEVICE_IPHONE_5_PORTRAIT = EmulatedDevice(320, 568, 2, 4.0f);
     
     static EmulatedDevice DEVICE_IPAD_1_PORTRAIT = EmulatedDevice(768, 1024, 1, 9.7f);
@@ -50,7 +50,7 @@ namespace chronotext
     static EmulatedDevice DEVICE_NEXUS_7_2013_PORTRAIT = EmulatedDevice(1104, 1920, 1, 6.89f);
 
     static EmulatedDevice DEVICE_GALAXY_TAB_10_PORTRAIT = EmulatedDevice(800, 1280, 1, 10.1f);
-    static EmulatedDevice DEVICE_XOOM_1_PORTRAIT = EmulatedDevice(752, 1280, 1, 10.1f);
+    static EmulatedDevice DEVICE_XOOM_1_PORTRAIT = EmulatedDevice(752, 1280, 1, 10.08f);
 }
 
 namespace chr = chronotext;

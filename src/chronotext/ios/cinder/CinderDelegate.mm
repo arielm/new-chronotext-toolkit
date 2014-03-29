@@ -125,52 +125,26 @@ using namespace chr;
     switch (SystemInfo::instance().getSizeFactor())
     {
         case SystemInfo::SIZE_FACTOR_PHONE:
-            if (windowInfo.contentScale == 2)
+            if (windowInfo.size.x == 568)
             {
-                if (windowInfo.size.x == 568)
-                {
-                    windowInfo.diagonal = 4;
-                    windowInfo.density = 326;
-                }
-                else
-                {
-                    windowInfo.diagonal = 3.5f;
-                    windowInfo.density = 326;
-                }
+                windowInfo.diagonal = 4;
             }
             else
             {
-                windowInfo.diagonal = 3.5f;
-                windowInfo.density = 163;
+                windowInfo.diagonal = 3.54f;
             }
             break;
             
         case SystemInfo::SIZE_FACTOR_TABLET:
-            if (windowInfo.contentScale == 2)
-            {
-                windowInfo.diagonal = 9.7f;
-                windowInfo.density = 264;
-            }
-            else
-            {
-                windowInfo.diagonal = 9.7f;
-                windowInfo.density = 132;
-            }
+            windowInfo.diagonal = 9.7f;
             break;
             
         case SystemInfo::SIZE_FACTOR_TABLET_MINI:
-            if (windowInfo.contentScale == 2)
-            {
-                windowInfo.diagonal = 7.9f;
-                windowInfo.density = 326;
-            }
-            else
-            {
-                windowInfo.diagonal = 7.9f;
-                windowInfo.density = 163;
-            }
+            windowInfo.diagonal = 7.9f;
             break;
     }
+    
+    windowInfo.density = windowInfo.contentScale * windowInfo.size.length() / windowInfo.diagonal;
     
     // ---
     
