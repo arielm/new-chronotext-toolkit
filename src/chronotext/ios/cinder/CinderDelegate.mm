@@ -94,30 +94,22 @@ using namespace chr;
 
 - (void) setup
 {
-    int mx;
-    int my;
-    
     switch (viewController.interfaceOrientation)
     {
         case UIInterfaceOrientationLandscapeLeft:
         case UIInterfaceOrientationLandscapeRight:
-            mx = 0;
-            my = 1;
+            windowInfo.size.x = view.frame.size.height;
+            windowInfo.size.y = view.frame.size.width;
             break;
             
         case UIInterfaceOrientationPortrait:
         case UIInterfaceOrientationPortraitUpsideDown:
-            mx = 1;
-            my = 0;
+            windowInfo.size.x = view.frame.size.width;
+            windowInfo.size.y = view.frame.size.height;
             break;
     }
     
-    int frameWidth = view.frame.size.width;
-    int frameHeight = view.frame.size.height;
-    
-    windowInfo.size.x = mx * frameWidth + my * frameHeight;
-    windowInfo.size.y = mx * frameHeight + my * frameWidth;
-    
+    windowInfo.size *= view.contentScaleFactor;
     windowInfo.contentScale = view.contentScaleFactor;
 
     // ---
@@ -144,7 +136,7 @@ using namespace chr;
             break;
     }
     
-    windowInfo.density = windowInfo.contentScale * windowInfo.size.length() / windowInfo.diagonal;
+    windowInfo.density = windowInfo.size.length() / windowInfo.diagonal;
     
     // ---
     
@@ -305,7 +297,7 @@ using namespace chr;
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = 1;
+    const float scale = view.contentScaleFactor;
     
     vector<TouchEvent::Touch> touchList;
     for (UITouch *touch in touches)
@@ -324,7 +316,7 @@ using namespace chr;
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = 1;
+    const float scale = view.contentScaleFactor;
     
     vector<TouchEvent::Touch> touchList;
     for (UITouch *touch in touches)
@@ -343,7 +335,7 @@ using namespace chr;
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = 1;
+    const float scale = view.contentScaleFactor;
     
     vector<TouchEvent::Touch> touchList;
     for (UITouch *touch in touches)
