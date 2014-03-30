@@ -150,6 +150,7 @@ namespace chronotext
             
             static Style styleStringToEnum(const std::string &style);
             static std::string styleEnumToString(Style style);
+            static float snap(float value);
             
             friend class FontManager;
             

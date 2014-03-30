@@ -233,9 +233,9 @@ namespace chronotext
                                     
                                     if (!properties.useMipmap)
                                     {
-                                        offset.x = math<float>::floor(offset.x + 0.5f);
-                                        offset.y = math<float>::floor(offset.y + 0.5f);
-                                        advance = math<float>::floor(advance + 0.5f);
+                                        offset.x = snap(offset.x);
+                                        offset.y = snap(offset.y);
+                                        advance = snap(advance);
                                     }
                                     
                                     if (clusterFound)
@@ -487,13 +487,7 @@ namespace chronotext
         {
             for (auto &shape : cluster.shapes)
             {
-                Vec2f p = position.xy();
-                
-                if (!properties.useMipmap)
-                {
-                    p.x = math<float>::floor(p.x + 0.5f);
-                    p.y = math<float>::floor(p.y + 0.5f);
-                }
+                Vec2f p = properties.useMipmap ? position.xy() : Vec2f(snap(position.x), snap(position.y));
                 
                 GlyphQuad quad;
                 auto glyph = cluster.font->fillQuad(quad, shape, p, sizeRatio);
@@ -554,6 +548,18 @@ namespace chronotext
                 default:
                 case VirtualFont::STYLE_REGULAR:
                     return "regular";
+            }
+        }
+        
+        float VirtualFont::snap(float value)
+        {
+            if (value < 0)
+            {
+                return math<float>::ceil(value - 0.5f);
+            }
+            else
+            {
+                return math<float>::floor(value + 0.5f);
             }
         }
     }
