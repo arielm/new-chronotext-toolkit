@@ -354,38 +354,32 @@ namespace chronotext
         
         void VirtualFont::begin(bool useColor)
         {
-            if (began == 0)
+            glEnable(GL_TEXTURE_2D);
+            
+            if (useColor)
             {
-                glEnable(GL_TEXTURE_2D);
-                
-                if (useColor)
-                {
-                    glEnableClientState(GL_COLOR_ARRAY);
-                }
-                else
-                {
-                    gl::color(color);
-                }
-                
-                glEnableClientState(GL_VERTEX_ARRAY);
-                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                glEnableClientState(GL_COLOR_ARRAY);
             }
+            else
+            {
+                gl::color(color);
+            }
+            
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         }
         
         void VirtualFont::end(bool useColor)
         {
-            if (began == 0)
+            glDisable(GL_TEXTURE_2D);
+            
+            if (useColor)
             {
-                glDisable(GL_TEXTURE_2D);
-                
-                if (useColor)
-                {
-                    glDisableClientState(GL_COLOR_ARRAY);
-                }
-                
-                glDisableClientState(GL_VERTEX_ARRAY);
-                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+                glDisableClientState(GL_COLOR_ARRAY);
             }
+            
+            glDisableClientState(GL_VERTEX_ARRAY);
+            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         }
         
         void VirtualFont::beginSequence(FontSequence *sequence, bool useColor)
@@ -407,10 +401,6 @@ namespace chronotext
                 {
                     this->sequence = sequence;
                     sequence->begin(useColor, anisotropy);
-                }
-                else
-                {
-                    begin(useColor);
                 }
                 
                 clearClip();
@@ -435,6 +425,7 @@ namespace chronotext
                 }
                 else
                 {
+                    begin(sequenceUseColor);
                     batchMap->flush(getIndices(), sequenceUseColor, anisotropy);
                     end(sequenceUseColor);
                 }
@@ -464,7 +455,9 @@ namespace chronotext
                 }
                 else
                 {
+                    begin(sequenceUseColor);
                     batchMap->flush(getIndices(), sequenceUseColor, anisotropy);
+                    end(sequenceUseColor);
                 }
                 
                 if (!batchMap)
