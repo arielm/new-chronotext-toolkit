@@ -16,8 +16,8 @@ using namespace ci;
 using namespace chr;
 using namespace zf;
 
-const float FONT_SIZE = 22; // SIZE IN PIXELS, CORRESPONDS TO 0.1375 INCHES (AT 160 DPI)
-const string TEXT = "Stately, plump Buck Mulligan came from the stairhead, bearing a bowl of"; // FIRST SENTENCE IN JAMES JOYCE'S ULYSSES
+const float FONT_SIZE = 24; // SIZE IN PIXELS (CORRESPONDS TO 0.15 INCHES AT 160 DPI)
+const string TEXT = "Spouse and helpmate of אָדָם קַדְמוֹן: Heva, naked Eve"; // FROM JAMES JOYCE'S ULYSSES, WITH "ADAM KADMON" IN HEBREW
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -29,9 +29,7 @@ void Sketch::setup(bool renewContext)
     if (!renewContext)
     {
         auto windowInfo = getWindowInfo();
-        scale = windowInfo.density / 160;
-        
-        // ---
+        float scale = windowInfo.density / 160;
         
         fontManager.loadConfig(InputSource::getResource("font-config.xml"));
         font = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(scale * FONT_SIZE).setCrisp());
@@ -64,7 +62,6 @@ void Sketch::draw()
     // ---
     
     font->setColor(0, 0, 0, 0.85f);
-    font->setSize(scale * FONT_SIZE);
     drawAlignedText(*font, TEXT, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
 }
 

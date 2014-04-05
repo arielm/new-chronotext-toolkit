@@ -11,7 +11,7 @@
  *
  * 1) DEMONSTRATES HOW TO DRAW CRISP TEXT
  *
- * 2) DEMONSTRATES HOW TO DRAW KEEP THE SAME PHYSICAL SIZE FOR TEXT ACROSS DEVICES
+ * 2) DEMONSTRATES HOW TO KEEP THE SAME PHYSICAL FONT-SIZE ACROSS DEVICES
  */
 
 #pragma once
@@ -23,8 +23,6 @@ class Sketch : public chr::CinderSketch
 {
     chr::zf::FontManager fontManager;
     std::shared_ptr<chr::ZFont> font;
-    
-    float scale;
 
 public:
     Sketch(void *context, void *delegate = NULL);
