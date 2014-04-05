@@ -60,20 +60,25 @@ void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, 
     
     auto matrix = font.getMatrix();
     
-    for (auto &cluster : layout.clusters)
+    bool reverse = (layout.overallDirection == HB_DIRECTION_RTL);
+    auto begin = reverse ? (layout.clusters.cend() - 1) : layout.clusters.cbegin();
+    auto end = reverse ? (layout.clusters.cbegin() - 1) : layout.clusters.cend();
+    int inc = reverse ? -1 : +1;
+    
+    for (auto cluster = begin; cluster != end; cluster += inc)
     {
-        float half = 0.5f * font.getAdvance(cluster);
+        float half = 0.5f * font.getAdvance(*cluster);
         D += half;
         
-        if (!cluster.isSpace)
+        if (!cluster->isSpace)
         {
             float r = math<float>::sqrt(r1 * r1 + 2 * dr * D);
             float d = (r - r1) / dr;
             
             matrix->setTranslation(ox - math<float>::cos(d) * r, oy + math<float>::sin(d) * r);
-            matrix->rotateZ(HALF_PI - d);
+            matrix->rotateZ(inc * HALF_PI - d);
             
-            font.addTransformedCluster(cluster, -half, offsetY);
+            font.addTransformedCluster(*cluster, -half, offsetY);
         }
         
         D += half;

@@ -87,8 +87,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    float direction = (layouts[languages[currentLangIndex]]->overallDirection == HB_DIRECTION_RTL) ? -1 : +1;
-    rotation = direction * getElapsedSeconds() * 0.1f;
+    rotation = getElapsedSeconds() * 0.1f;
 }
 
 void Sketch::draw()
