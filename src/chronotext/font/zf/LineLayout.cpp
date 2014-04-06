@@ -22,9 +22,10 @@ namespace chronotext
         glyph(NULL)
         {}
         
-        Cluster::Cluster(ActualFont *font, hb_codepoint_t codepoint, const Vec2f &offset, float advance)
+        Cluster::Cluster(ActualFont *font, int tag, hb_codepoint_t codepoint, const Vec2f &offset, float advance)
         :
         font(font),
+        tag(tag),
         combinedAdvance(advance)
         {
             shapes.emplace_back(codepoint, offset);

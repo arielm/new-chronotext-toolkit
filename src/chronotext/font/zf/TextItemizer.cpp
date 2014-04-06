@@ -46,37 +46,40 @@ namespace chronotext
         langHelper(langHelper)
         {}
         
-        TextLine TextItemizer::processLine(const string &input, const string &langHint, hb_direction_t overallDirection)
+        void TextItemizer::processLine(TextLine &line) const
         {
-            TextLine line(input, langHint, overallDirection);
+            if (line.scriptAndLanguageItems.empty())
+            {
+                itemizeScriptAndLanguage(line);
+            }
+            if (line.directionItems.empty())
+            {
+                itemizeDirection(line);
+            }
+            if (line.tagItems.empty())
+            {
+                line.tagItems.emplace_back(0, line.text.length(), 0);
+            }
             
-            vector<ScriptAndLanguageItem> scriptAndLanguageItems;
-            itemizeScriptAndLanguage(line.text, langHint, scriptAndLanguageItems);
-            
-            vector<DirectionItem> directionItems;
-            itemizeDirection(line.text, overallDirection, directionItems);
-            
-            mergeItems(scriptAndLanguageItems, directionItems, line.runs);
+            mergeItems(line);
             
             if (!line.runs.empty())
             {
-                if (langHint.empty())
+                if (line.langHint.empty())
                 {
                     line.langHint = line.runs.front().language;
                 }
                 
-                if (overallDirection == HB_DIRECTION_INVALID)
+                if (line.overallDirection == HB_DIRECTION_INVALID)
                 {
                     line.overallDirection = line.runs.front().direction;
                 }
             }
-            
-            return line;
         }
         
-        void TextItemizer::itemizeScriptAndLanguage(const UnicodeString &text, const string &langHint, vector<ScriptAndLanguageItem> &items)
+        void TextItemizer::itemizeScriptAndLanguage(TextLine &line) const
         {
-            ScriptRun scriptRun(text.getBuffer(), text.length());
+            ScriptRun scriptRun(line.text.getBuffer(), line.text.length());
             
             while (scriptRun.next())
             {
@@ -85,31 +88,31 @@ namespace chronotext
                 auto code = scriptRun.getScriptCode();
                 
                 auto script = icuScriptToHB(code);
-                auto language = langHelper.detectLanguage(script, langHint);
+                auto language = langHelper.detectLanguage(script, line.langHint);
                 
-                items.emplace_back(start, end, make_pair(script, language));
+                line.scriptAndLanguageItems.emplace_back(start, end, make_pair(script, language));
             }
         }
         
-        void TextItemizer::itemizeDirection(const UnicodeString &text, hb_direction_t overallDirection, vector<DirectionItem> &items)
+        void TextItemizer::itemizeDirection(TextLine &line) const
         {
             /*
              * IF overallDirection IS UNDEFINED: THE PARAGRAPH-LEVEL WILL BE DETERMINED FROM THE TEXT
              *
              * SEE: http://www.icu-project.org/apiref/icu4c/ubidi_8h.html#abdfe9e113a19dd8521d3b7ac8220fe11
              */
-            UBiDiLevel paraLevel = (overallDirection == HB_DIRECTION_INVALID) ? UBIDI_DEFAULT_LTR : ((overallDirection == HB_DIRECTION_RTL) ? 1 : 0);
+            UBiDiLevel paraLevel = (line.overallDirection == HB_DIRECTION_INVALID) ? UBIDI_DEFAULT_LTR : ((line.overallDirection == HB_DIRECTION_RTL) ? 1 : 0);
             
-            auto length = text.length();
+            auto length = line.text.length();
             UErrorCode error = U_ZERO_ERROR;
             UBiDi *bidi = ubidi_openSized(length, 0, &error);
             
-            ubidi_setPara(bidi, text.getBuffer(), length, paraLevel, 0, &error);
+            ubidi_setPara(bidi, line.text.getBuffer(), length, paraLevel, 0, &error);
             auto direction = ubidi_getDirection(bidi);
             
             if (direction != UBIDI_MIXED)
             {
-                items.emplace_back(0, length, icuDirectionToHB(direction));
+                line.directionItems.emplace_back(0, length, icuDirectionToHB(direction));
             }
             else
             {
@@ -119,39 +122,41 @@ namespace chronotext
                 {
                     int32_t start, length;
                     direction = ubidi_getVisualRun(bidi, i, &start, &length);
-                    items.emplace_back(start, start + length, icuDirectionToHB(direction));
+                    line.directionItems.emplace_back(start, start + length, icuDirectionToHB(direction));
                 }
             }
             
             ubidi_close(bidi);
         }
         
-        void TextItemizer::mergeItems(const vector<ScriptAndLanguageItem> &scriptAndLanguageItems, const vector<DirectionItem> &directionItems, vector<TextRun> &runs)
+        void TextItemizer::mergeItems(TextLine &line) const
         {
-            for (auto &directionItem : directionItems)
+            for (auto &directionItem : line.directionItems)
             {
                 auto position = directionItem.start;
                 auto end = directionItem.end;
-                auto rtlInsertionPoint = runs.end();
+                auto rtlInsertionPoint = line.runs.end();
                 
-                auto scriptAndLanguageIterator = findItem(scriptAndLanguageItems, position);
+                auto scriptAndLanguageIterator = findItem(line.scriptAndLanguageItems, position);
+                auto tagIterator = findItem(line.tagItems, position);
                 
                 while (position < end)
                 {
                     TextRun run;
                     run.start = position;
-                    run.end = std::min(scriptAndLanguageIterator->end, end);
+                    run.end = std::min(scriptAndLanguageIterator->end, std::min(tagIterator->end, end));
                     run.script = scriptAndLanguageIterator->data.first;
                     run.language = scriptAndLanguageIterator->data.second;
+                    run.tag = tagIterator->data;
                     run.direction = directionItem.data;
                     
                     if (directionItem.data == HB_DIRECTION_LTR)
                     {
-                        runs.push_back(run);
+                        line.runs.push_back(run);
                     }
                     else
                     {
-                        rtlInsertionPoint = runs.insert(rtlInsertionPoint, run);
+                        rtlInsertionPoint = line.runs.insert(rtlInsertionPoint, run);
                     }
                     
                     position = run.end;
@@ -160,12 +165,16 @@ namespace chronotext
                     {
                         ++scriptAndLanguageIterator;
                     }
+                    if (tagIterator->end == position)
+                    {
+                        ++tagIterator;
+                    }
                 }
             }
         }
         
         template <typename T>
-        typename T::const_iterator TextItemizer::findItem(const T &items, int32_t position)
+        typename T::const_iterator TextItemizer::findItem(const T &items, int32_t position) const
         {
             for (auto it = items.begin(); it != items.end(); ++it)
             {
