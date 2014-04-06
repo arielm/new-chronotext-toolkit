@@ -167,6 +167,40 @@ namespace chronotext
     // ---
     
     uint64_t millisSinceEpoch();
+    
+    // ---
+    
+    /*
+     * REFERENCE: http://stackoverflow.com/a/14920606/50335
+     */
+    
+    template <typename T> struct Iterator
+    {
+        T& container;
+        bool reverse;
+        
+        typedef decltype(container.begin()) I;
+        
+        struct InnerIterator
+        {
+            I i;
+            bool reverse;
+            
+            InnerIterator(I i, bool reverse) : i(i), reverse(reverse) {}
+            I operator*() { return i; }
+            I operator++() { return (reverse ? --i : ++i); }
+            bool operator!=(const InnerIterator& o) { return i != o.i; }
+        };
+        
+        Iterator(T& container, bool reverse) : container(container), reverse(reverse) {}
+        InnerIterator begin() { return InnerIterator(reverse ? container.end() : container.begin(), reverse); }
+        InnerIterator end() { return InnerIterator(reverse ? container.begin() : container.end(), reverse); }
+    };
+    
+    template <typename T> Iterator<T> DirectionalIterator(T& container, bool reverse)
+    {
+        return Iterator<T>(container, reverse);
+    }
 }
 
 namespace chr = chronotext;
