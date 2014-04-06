@@ -18,7 +18,9 @@
 class Sketch : public chr::CinderSketch
 {
     chr::zf::FontManager fontManager;
+    
     std::shared_ptr<chr::ZFont> font;
+    std::unique_ptr<chr::zf::LineLayout> layout;
 
 public:
     Sketch(void *context, void *delegate = NULL);
@@ -27,5 +29,5 @@ public:
     void event(int id);
     void draw();
     
-    void drawAlignedText(chr::ZFont &font, const std::string &text, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
+    void drawAlignedText(chr::ZFont &font, const chr::zf::LineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
 };

@@ -33,6 +33,27 @@ void Sketch::setup(bool renewContext)
         
         fontManager.loadConfig(InputSource::getResource("font-config.xml"));
         font = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(scale * FONT_SIZE).setCrisp());
+
+        // ---
+        
+        TextLine line;
+        line.addChunk("Spouse and ", 0);
+        line.addChunk("helpmate", 1);
+        line.addChunk(" of אָדָם קַדְמוֹן: Heva, ", 0);
+        line.addChunk("naked", 2);
+        line.addChunk(" Eve", 0);
+        
+        fontManager.itemizer.processLine(line);
+        
+        for (auto &run : line.runs)
+        {
+            std::string tmp;
+            line.text.tempSubString(run.start, run.end - run.start).toUTF8String(tmp);
+            
+            cout << run.tag << " [" << tmp << "]" << endl;
+        }
+        
+        layout = unique_ptr<LineLayout>(font->createLineLayout(TEXT));
     }
     
     // ---
@@ -62,17 +83,16 @@ void Sketch::draw()
     // ---
     
     font->setColor(0, 0, 0, 0.85f);
-    drawAlignedText(*font, TEXT, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
+    drawAlignedText(*font, *layout, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
 }
 
-void Sketch::drawAlignedText(ZFont &font, const string &text, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)
+void Sketch::drawAlignedText(ZFont &font, const LineLayout &layout, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)
 {
-    auto layout = font.getCachedLineLayout(text);
-    Vec2f p = position + font.getOffset(*layout, alignX, alignY);
+    Vec2f p = position + font.getOffset(layout, alignX, alignY);
     
     font.beginSequence();
     
-    for (auto &cluster : layout->clusters)
+    for (auto &cluster : layout.clusters)
     {
         font.addCluster(cluster, p);
         p.x += font.getAdvance(cluster);
