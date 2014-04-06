@@ -187,8 +187,8 @@ namespace chronotext
             bool reverse;
             
             InnerIterator(I i, bool reverse) : i(i), reverse(reverse) {}
-            I operator*() { return i; }
-            I operator++() { return (reverse ? --i : ++i); }
+            I& operator*() { return i; }
+            I& operator++() { return (reverse ? --i : ++i); }
             bool operator!=(const InnerIterator& o) { return i != o.i; }
         };
         

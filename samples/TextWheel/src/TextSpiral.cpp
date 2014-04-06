@@ -63,7 +63,7 @@ void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, 
     
     auto matrix = font.getMatrix();
     
-    for (auto cluster : DirectionalIterator(layout.clusters, reverse))
+    for (auto &cluster : DirectionalIterator(layout.clusters, reverse))
     {
         float half = 0.5f * font.getAdvance(*cluster);
         D += half;
