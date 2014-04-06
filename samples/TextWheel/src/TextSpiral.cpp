@@ -8,6 +8,7 @@
 
 #include "TextSpiral.h"
 
+#include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
 
 #include "cinder/gl/gl.h"
@@ -54,18 +55,15 @@ void TextSpiral::drawWire()
 
 void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, float offsetY)
 {
+    bool reverse = (layout.overallDirection == HB_DIRECTION_RTL);
+
     float l = TWO_PI * turns;
     float dr = (r2 - r1) / l;
     float D = offsetX;
     
     auto matrix = font.getMatrix();
     
-    bool reverse = (layout.overallDirection == HB_DIRECTION_RTL);
-    auto begin = reverse ? (layout.clusters.cend() - 1) : layout.clusters.cbegin();
-    auto end = reverse ? (layout.clusters.cbegin() - 1) : layout.clusters.cend();
-    int inc = reverse ? -1 : +1;
-    
-    for (auto cluster = begin; cluster != end; cluster += inc)
+    for (auto cluster : DirectionalIterator(layout.clusters, reverse))
     {
         float half = 0.5f * font.getAdvance(*cluster);
         D += half;
@@ -76,7 +74,7 @@ void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, 
             float d = (r - r1) / dr;
             
             matrix->setTranslation(ox - math<float>::cos(d) * r, oy + math<float>::sin(d) * r);
-            matrix->rotateZ(inc * HALF_PI - d);
+            matrix->rotateZ((reverse ? -1 : +1) * HALF_PI - d);
             
             font.addTransformedCluster(*cluster, -half, offsetY);
         }
