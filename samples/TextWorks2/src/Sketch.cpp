@@ -17,7 +17,6 @@ using namespace chr;
 using namespace zf;
 
 const float FONT_SIZE = 24; // SIZE IN PIXELS (CORRESPONDS TO 0.15 INCHES AT 160 DPI)
-const string TEXT = "Spouse and helpmate of אָדָם קַדְמוֹן: Heva, naked Eve"; // FROM JAMES JOYCE'S ULYSSES, WITH "ADAM KADMON" IN HEBREW
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -28,12 +27,18 @@ void Sketch::setup(bool renewContext)
 {
     if (!renewContext)
     {
-        auto windowInfo = getWindowInfo();
-        float scale = windowInfo.density / 160;
+        float scale = getWindowInfo().density / 160;
+        fontSize = scale * FONT_SIZE;
         
         fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-        font = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(scale * FONT_SIZE).setCrisp());
-
+        
+        font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(fontSize).setCrisp());
+        font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(fontSize).setCrisp());
+        
+        styleSheet[0] = ChunkStyle(font1, ColorA(0, 0, 0, 0.85f));
+        styleSheet[1] = ChunkStyle(font2, ColorA(0, 0, 0, 0.85f));
+        styleSheet[2] = ChunkStyle(font1, ColorA(1, 0, 0, 0.75f));
+                              
         // ---
         
         TextLine line;
@@ -44,16 +49,7 @@ void Sketch::setup(bool renewContext)
         line.addChunk(" Eve", 0);
         
         fontManager.itemizer.processLine(line);
-        
-        for (auto &run : line.runs)
-        {
-            std::string tmp;
-            line.text.tempSubString(run.start, run.end - run.start).toUTF8String(tmp);
-            
-            cout << run.tag << " [" << tmp << "]" << endl;
-        }
-        
-        layout = unique_ptr<LineLayout>(font->createLineLayout(TEXT));
+        layout = StyledLineLayout(line, styleSheet);
     }
     
     // ---
@@ -82,8 +78,8 @@ void Sketch::draw()
 
     // ---
     
-    font->setColor(0, 0, 0, 0.85f);
-    drawAlignedText(*font, *layout, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
+//    font->setColor(0, 0, 0, 0.85f);
+//    drawAlignedText(*font, *layout, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
 }
 
 void Sketch::drawAlignedText(ZFont &font, const LineLayout &layout, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)

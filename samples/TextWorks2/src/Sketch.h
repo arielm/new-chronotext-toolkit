@@ -15,12 +15,18 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/font/zf/FontManager.h"
 
+#include "StyledLineLayout.h"
+
 class Sketch : public chr::CinderSketch
 {
     chr::zf::FontManager fontManager;
     
-    std::shared_ptr<chr::ZFont> font;
-    std::unique_ptr<chr::zf::LineLayout> layout;
+    std::shared_ptr<chr::ZFont> font1;
+    std::shared_ptr<chr::ZFont> font2;
+    
+    float fontSize;
+    std::map<int, ChunkStyle> styleSheet;
+    StyledLineLayout layout;
 
 public:
     Sketch(void *context, void *delegate = NULL);

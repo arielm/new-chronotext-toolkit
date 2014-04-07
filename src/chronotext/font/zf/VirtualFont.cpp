@@ -181,10 +181,10 @@ namespace chronotext
         {
             TextLine line(text, langHint, overallDirection);
             itemizer.processLine(line);
-            return createLineLayout(line, line.runs.begin(), line.runs.end());
+            return createLineLayout(line, line.runs.cbegin(), line.runs.cend());
         }
         
-        LineLayout* VirtualFont::createLineLayout(const TextLine &line, vector<TextRun>::iterator begin, vector<TextRun>::iterator end)
+        LineLayout* VirtualFont::createLineLayout(const TextLine &line, vector<TextRun>::const_iterator begin, vector<TextRun>::const_iterator end)
         {
             auto layout = new LineLayout(this, line.langHint, line.overallDirection);
             
