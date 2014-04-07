@@ -29,12 +29,13 @@ namespace chronotext
         struct Cluster
         {
             ActualFont *font;
+            int tag;
             
             float combinedAdvance;
             std::vector<Shape> shapes;
             bool isSpace;
             
-            Cluster(ActualFont *font, hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance);
+            Cluster(ActualFont *font, int tag, hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance);
             void addShape(hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance);
         };
         

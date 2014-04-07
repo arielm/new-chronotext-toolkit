@@ -31,6 +31,8 @@
 		A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C910816E02DAA00FF519C /* Sketch.cpp */; };
 		A853DFD618116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD418116D42006C2085 /* FileSystem.cpp */; };
 		A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8A8841218C9329B00BC0BDB /* font-config.xml */; };
+		A8E02B4D18F216DE00905EEF /* StyledLineLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8E02B4C18F216DE00905EEF /* StyledLineLayout.cpp */; };
+		A8F9121B18F1D68E00DF1EF6 /* serif_bold_osx.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8F9121A18F1D68E00DF1EF6 /* serif_bold_osx.xml */; };
 		A8F9FC3018C5681600C48245 /* serif_regular_osx.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2F18C5681600C48245 /* serif_regular_osx.xml */; };
 		A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3218C5683B00C48245 /* ActualFont.cpp */; };
 		A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3418C5683B00C48245 /* FontManager.cpp */; };
@@ -97,6 +99,9 @@
 		A853DFD518116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8A8841218C9329B00BC0BDB /* font-config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "font-config.xml"; path = "../resources/font-config.xml"; sourceTree = "<group>"; };
+		A8E02B4B18F216DE00905EEF /* StyledLineLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StyledLineLayout.h; path = ../src/StyledLineLayout.h; sourceTree = "<group>"; };
+		A8E02B4C18F216DE00905EEF /* StyledLineLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StyledLineLayout.cpp; path = ../src/StyledLineLayout.cpp; sourceTree = "<group>"; };
+		A8F9121A18F1D68E00DF1EF6 /* serif_bold_osx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = serif_bold_osx.xml; path = ../resources/serif_bold_osx.xml; sourceTree = "<group>"; };
 		A8F9FC2F18C5681600C48245 /* serif_regular_osx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = serif_regular_osx.xml; path = ../resources/serif_regular_osx.xml; sourceTree = "<group>"; };
 		A8F9FC3218C5683B00C48245 /* ActualFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActualFont.cpp; sourceTree = "<group>"; };
 		A8F9FC3318C5683B00C48245 /* ActualFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActualFont.h; sourceTree = "<group>"; };
@@ -152,6 +157,8 @@
 				A821DF8D16ED34A800DB025D /* Application.cpp */,
 				A82C910916E02DAA00FF519C /* Sketch.h */,
 				A82C910816E02DAA00FF519C /* Sketch.cpp */,
+				A8E02B4B18F216DE00905EEF /* StyledLineLayout.h */,
+				A8E02B4C18F216DE00905EEF /* StyledLineLayout.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -206,6 +213,7 @@
 			children = (
 				A8A8841218C9329B00BC0BDB /* font-config.xml */,
 				A8F9FC2F18C5681600C48245 /* serif_regular_osx.xml */,
+				A8F9121A18F1D68E00DF1EF6 /* serif_bold_osx.xml */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -408,6 +416,7 @@
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 				A8F9FC3018C5681600C48245 /* serif_regular_osx.xml in Resources */,
 				A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */,
+				A8F9121B18F1D68E00DF1EF6 /* serif_bold_osx.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +444,7 @@
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
 				A8F9FC5318C5683B00C48245 /* TextItemizer.cpp in Sources */,
 				A8F9FC5418C5683B00C48245 /* VirtualFont.cpp in Sources */,
+				A8E02B4D18F216DE00905EEF /* StyledLineLayout.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A8F9FC5218C5683B00C48245 /* scrptrun.cpp in Sources */,
 				A822637718BF54BC00D57C8C /* Clock.cpp in Sources */,

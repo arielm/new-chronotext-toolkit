@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FontConfig>
     <VirtualFonts>
-        <VirtualFont name="serif">
+        <VirtualFont name="serif" style="regular">
             <Ref os="osx" uri="res://serif_regular_osx.xml" />
+        </VirtualFont>
+        <VirtualFont name="serif" style="bold">
+            <Ref os="osx" uri="res://serif_bold_osx.xml" />
         </VirtualFont>
     </VirtualFonts>
 </FontConfig>

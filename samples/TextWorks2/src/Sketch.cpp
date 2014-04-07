@@ -16,8 +16,7 @@ using namespace ci;
 using namespace chr;
 using namespace zf;
 
-const float FONT_SIZE = 24; // SIZE IN PIXELS (CORRESPONDS TO 0.15 INCHES AT 160 DPI)
-const string TEXT = "Spouse and helpmate of אָדָם קַדְמוֹן: Heva, naked Eve"; // FROM JAMES JOYCE'S ULYSSES, WITH "ADAM KADMON" IN HEBREW
+const float FONT_SIZE = 64; // THE MAXIMAL FONT-SIZE
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -28,11 +27,26 @@ void Sketch::setup(bool renewContext)
 {
     if (!renewContext)
     {
-        auto windowInfo = getWindowInfo();
-        float scale = windowInfo.density / 160;
-        
         fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-        font = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(scale * FONT_SIZE).setCrisp());
+        
+        font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
+        font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
+        
+        styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
+        styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));
+        styleSheet[2] = StyledLineLayout::Style(font1, ColorA(1, 0, 0, 0.75f));
+                              
+        // ---
+        
+        TextLine line;
+        line.addChunk("Spouse and ", 0);
+        line.addChunk("helpmate", 1);
+        line.addChunk(" of אָדָם קַדְמוֹן: Heva, ", 0);
+        line.addChunk("naked", 2);
+        line.addChunk(" Eve", 0);
+        
+        fontManager.itemizer.processLine(line);
+        layout = StyledLineLayout(line, styleSheet);
     }
     
     // ---
@@ -54,6 +68,22 @@ void Sketch::event(int id)
     }
 }
 
+void Sketch::resize()
+{
+    /*
+     * COMPUTING THE FONT-SIZE SO THAT:
+     * - TEXT IS AT MOST AS WIDE AS 85% OF THE SCREEN
+     * - THE MAXIMAL FONT-SIZE IS NOT EXCEEDED
+     */
+    
+    layout.setSize(FONT_SIZE);
+    float width = layout.getAdvance();
+    float availableWidth = getWindowWidth() * 0.85f;
+    
+    fontSize = std::min(FONT_SIZE, FONT_SIZE * availableWidth / width);
+    layout.setSize(fontSize);
+}
+
 void Sketch::draw()
 {
     gl::clear(Color::white(), false);
@@ -61,22 +91,25 @@ void Sketch::draw()
 
     // ---
     
-    font->setColor(0, 0, 0, 0.85f);
-    drawAlignedText(*font, TEXT, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
+    drawAlignedText(layout, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
 }
 
-void Sketch::drawAlignedText(ZFont &font, const string &text, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)
+void Sketch::drawAlignedText(const StyledLineLayout &layout, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)
 {
-    auto layout = font.getCachedLineLayout(text);
-    Vec2f p = position + font.getOffset(*layout, alignX, alignY);
+    Vec2f p = position + layout.getOffset(alignX, alignY);
     
-    font.beginSequence();
+    layout.beginSequence();
     
-    for (auto &cluster : layout->clusters)
+    for (auto &chunk : layout.chunks)
     {
-        font.addCluster(cluster, p);
-        p.x += font.getAdvance(cluster);
+        chunk.font->setColor(chunk.color);
+        
+        for (auto &cluster : chunk.clusters)
+        {
+            chunk.font->addCluster(*cluster, p);
+            p.x += chunk.font->getAdvance(*cluster);
+        }
     }
     
-    font.endSequence();
+    layout.endSequence();
 }

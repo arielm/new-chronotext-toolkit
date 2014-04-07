@@ -26,17 +26,19 @@ namespace chronotext
             hb_script_t script;
             std::string language;
             hb_direction_t direction;
+            int tag;
             
             TextRun()
             {}
             
-            TextRun(int32_t start, int32_t end, hb_script_t script, const std::string &language, hb_direction_t direction)
+            TextRun(int32_t start, int32_t end, hb_script_t script, const std::string &language, hb_direction_t direction, int tag)
             :
             start(start),
             end(end),
             script(script),
             language(language),
-            direction(direction)
+            direction(direction),
+            tag(tag)
             {}
             
             void apply(const UnicodeString &text, hb_buffer_t *buffer) const

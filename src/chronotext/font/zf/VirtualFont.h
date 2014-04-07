@@ -114,7 +114,7 @@ namespace chronotext
              * THE RETURNED INSTANCES ARE NOT MANAGED AND SHOULD BE DELETED BY THE CALLER
              */
             LineLayout* createLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
-            LineLayout* createLineLayout(const TextLine &line);
+            LineLayout* createLineLayout(const TextLine &line, std::vector<TextRun>::const_iterator begin, std::vector<TextRun>::const_iterator end);
             
             std::shared_ptr<LineLayout> getCachedLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             
