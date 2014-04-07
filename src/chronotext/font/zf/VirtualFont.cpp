@@ -114,6 +114,16 @@ namespace chronotext
             }
         }
         
+        float VirtualFont::getHeight(const LineLayout &layout) const
+        {
+            return layout.maxHeight * sizeRatio;
+        }
+        
+        float VirtualFont::getAscent(const LineLayout &layout) const
+        {
+            return layout.maxAscent * sizeRatio;
+        }
+        
         float VirtualFont::getDescent(const LineLayout &layout) const
         {
             return layout.maxDescent * sizeRatio;
@@ -165,16 +175,6 @@ namespace chronotext
         float VirtualFont::getAdvance(const Cluster &cluster) const
         {
             return cluster.combinedAdvance * sizeRatio;
-        }
-        
-        float VirtualFont::getHeight(const LineLayout &layout) const
-        {
-            return layout.maxHeight * sizeRatio;
-        }
-        
-        float VirtualFont::getAscent(const LineLayout &layout) const
-        {
-            return layout.maxAscent * sizeRatio;
         }
         
         LineLayout* VirtualFont::createLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
