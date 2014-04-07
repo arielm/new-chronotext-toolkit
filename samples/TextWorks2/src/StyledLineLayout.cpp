@@ -46,7 +46,6 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
     
     for (auto &lineLayout : lineLayouts)
     {
-        currentFont = lineLayout->font;
         int currentTag = -1;
         
         for (auto &cluster : lineLayout->clusters)
@@ -54,7 +53,7 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
             if (cluster.tag != currentTag)
             {
                 currentTag = cluster.tag;
-                chunks.emplace_back(currentTag, currentFont, styleSheet[currentTag].color);
+                chunks.emplace_back(currentTag, styleSheet[currentTag]);
             }
             
             chunks.back().clusters.push_back(&cluster);

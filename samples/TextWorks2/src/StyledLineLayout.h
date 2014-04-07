@@ -13,22 +13,6 @@
 class StyledLineLayout
 {
 public:
-    struct Chunk
-    {
-        int tag;
-        chr::ZFont *font;
-        ci::ColorA color;
-        
-        std::vector<chr::zf::Cluster*> clusters;
-        
-        Chunk(int tag, chr::ZFont *font, const ci::ColorA &color)
-        :
-        tag(tag),
-        font(font),
-        color(color)
-        {}
-    };
-    
     struct Style
     {
         chr::ZFont *font;
@@ -41,6 +25,22 @@ public:
         :
         font(font.get()),
         color(color)
+        {}
+    };
+    
+    struct Chunk
+    {
+        int tag;
+        chr::ZFont *font;
+        ci::ColorA color;
+        
+        std::vector<chr::zf::Cluster*> clusters;
+        
+        Chunk(int tag, const Style &style)
+        :
+        tag(tag),
+        font(style.font),
+        color(style.color)
         {}
     };
     
