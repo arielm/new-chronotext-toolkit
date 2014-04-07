@@ -13,48 +13,34 @@ using namespace ci;
 using namespace chr;
 using namespace zf;
 
-static void printRun(const TextLine &line, vector<TextRun>::const_iterator run)
-{
-    std::string tmp;
-    line.text.tempSubString(run->start, run->end - run->start).toUTF8String(tmp);
-    cout << run->tag << " [" << tmp << "]" << endl;
-}
-
-static void printRuns(const TextLine &line, vector<TextRun>::const_iterator begin, vector<TextRun>::const_iterator end)
-{
-    for (auto run = begin; run != end; ++run)
-    {
-        printRun(line, run);
-    }
-    
-    cout << "-----" << endl;
-}
-
 StyledLineLayout::StyledLineLayout()
 {}
 
-StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, ChunkStyle> &styleSheet)
+StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleSheet)
 {
     ZFont *currentFont = nullptr;
     auto currentBegin = line.runs.cbegin();
     
     for (auto run = line.runs.cbegin(); run != line.runs.cend(); ++run)
     {
-        ZFont *font = styleSheet[run->tag].font;
+        auto font = styleSheet[run->tag].font;
         
         if (font != currentFont)
         {
             if (currentFont)
             {
-                printRuns(line, currentBegin, run);
+                lineLayouts.emplace_back(unique_ptr<LineLayout>(currentFont->createLineLayout(line, currentBegin, run)));
                 currentBegin = run;
             }
             
             currentFont = font;
         }
     }
-    
-    printRuns(line, currentBegin, line.runs.cend());
+
+    if (currentFont)
+    {
+        lineLayouts.emplace_back(unique_ptr<LineLayout>(currentFont->createLineLayout(line, currentBegin, line.runs.cend())));
+    }
 }
 
 float StyledLineLayout::getAdvance() const
@@ -69,7 +55,51 @@ float StyledLineLayout::getAdvance() const
     return advance;
 }
 
-void StyledLineLayout::setSize(float size)
+float StyledLineLayout::getOffsetX(ZFont::Alignment align) const
+{
+    switch (align)
+    {
+        case ZFont::ALIGN_MIDDLE:
+            return -0.5f * getAdvance();
+            
+        case ZFont::ALIGN_RIGHT:
+            return -getAdvance();
+            
+        default:
+            return 0;
+    }
+}
+
+float StyledLineLayout::getOffsetY(ZFont::Alignment align) const
+{
+    float maxAscent = 0;
+    float maxDescent = 0;
+    
+    for (auto &lineLayout : lineLayouts)
+    {
+        maxAscent = std::max(maxAscent, lineLayout->font->getAscent(*lineLayout));
+        maxDescent = std::max(maxDescent, lineLayout->font->getDescent(*lineLayout));
+    }
+    
+    // ---
+    
+    switch (align)
+    {
+        case ZFont::ALIGN_MIDDLE:
+            return 0.5f * (maxAscent - maxDescent);
+            
+        case ZFont::ALIGN_TOP:
+            return +maxAscent;
+            
+        case ZFont::ALIGN_BOTTOM:
+            return -maxDescent;
+            
+        default:
+            return 0;
+    }
+}
+
+void StyledLineLayout::setSize(float size) const
 {
     for (auto &lineLayout : lineLayouts)
     {
@@ -77,7 +107,7 @@ void StyledLineLayout::setSize(float size)
     }
 }
 
-void StyledLineLayout::beginSequence()
+void StyledLineLayout::beginSequence() const
 {
     for (auto &lineLayout : lineLayouts)
     {
@@ -85,7 +115,7 @@ void StyledLineLayout::beginSequence()
     }
 }
 
-void StyledLineLayout::endSequence()
+void StyledLineLayout::endSequence() const
 {
     for (auto &lineLayout : lineLayouts)
     {

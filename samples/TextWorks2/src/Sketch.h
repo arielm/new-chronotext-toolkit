@@ -25,7 +25,7 @@ class Sketch : public chr::CinderSketch
     std::shared_ptr<chr::ZFont> font2;
     
     float fontSize;
-    std::map<int, ChunkStyle> styleSheet;
+    std::map<int, StyledLineLayout::Style> styleSheet;
     StyledLineLayout layout;
 
 public:
@@ -35,5 +35,5 @@ public:
     void event(int id);
     void draw();
     
-    void drawAlignedText(chr::ZFont &font, const chr::zf::LineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
+    void drawAlignedText(const StyledLineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
 };

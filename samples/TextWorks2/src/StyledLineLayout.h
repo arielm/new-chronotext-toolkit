@@ -39,15 +39,15 @@ public:
         }
     };
     
-    struct ChunkStyle
+    struct Style
     {
         chr::ZFont *font;
         ci::ColorA color;
         
-        ChunkStyle()
+        Style()
         {}
         
-        ChunkStyle(std::shared_ptr<chr::ZFont> font, const ci::ColorA &color)
+        Style(std::shared_ptr<chr::ZFont> font, const ci::ColorA &color)
         :
         font(font.get()),
         color(color)
@@ -58,11 +58,15 @@ public:
     std::vector<Chunk> chunks;
     
     StyledLineLayout();
-    StyledLineLayout(const chr::zf::TextLine &line, std::map<int, ChunkStyle> &styleSheet);
+    StyledLineLayout(const chr::zf::TextLine &line, std::map<int, Style> &styleSheet);
     
     float getAdvance() const;
-
-    void setSize(float size);
-    void beginSequence();
-    void endSequence();
+    float getOffsetX(chr::ZFont::Alignment align) const;
+    float getOffsetY(chr::ZFont::Alignment align) const;
+    inline ci::Vec2f getOffset(chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY) const { return ci::Vec2f(getOffsetX(alignX), getOffsetY(alignY)); }
+    
+    void setSize(float size) const;
+    
+    void beginSequence() const;
+    void endSequence() const;
 };

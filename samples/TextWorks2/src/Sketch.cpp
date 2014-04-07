@@ -35,9 +35,9 @@ void Sketch::setup(bool renewContext)
         font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(fontSize).setCrisp());
         font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(fontSize).setCrisp());
         
-        styleSheet[0] = ChunkStyle(font1, ColorA(0, 0, 0, 0.85f));
-        styleSheet[1] = ChunkStyle(font2, ColorA(0, 0, 0, 0.85f));
-        styleSheet[2] = ChunkStyle(font1, ColorA(1, 0, 0, 0.75f));
+        styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
+        styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));
+        styleSheet[2] = StyledLineLayout::Style(font1, ColorA(1, 0, 0, 0.75f));
                               
         // ---
         
@@ -78,21 +78,24 @@ void Sketch::draw()
 
     // ---
     
-//    font->setColor(0, 0, 0, 0.85f);
-//    drawAlignedText(*font, *layout, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
+    layout.setSize(fontSize);
+    drawAlignedText(layout, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
 }
 
-void Sketch::drawAlignedText(ZFont &font, const LineLayout &layout, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)
+void Sketch::drawAlignedText(const StyledLineLayout &layout, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)
 {
-    Vec2f p = position + font.getOffset(layout, alignX, alignY);
+    Vec2f p = position + layout.getOffset(alignX, alignY);
     
-    font.beginSequence();
+    layout.beginSequence();
     
-    for (auto &cluster : layout.clusters)
+    for (auto &lineLayout : layout.lineLayouts)
     {
-        font.addCluster(cluster, p);
-        p.x += font.getAdvance(cluster);
+        for (auto &cluster : lineLayout->clusters)
+        {
+            lineLayout->font->addCluster(cluster, p);
+            p.x += lineLayout->font->getAdvance(cluster);
+        }
     }
     
-    font.endSequence();
+    layout.endSequence();
 }
