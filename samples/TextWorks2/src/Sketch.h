@@ -41,6 +41,7 @@ public:
     
     void setup(bool renewContext);
     void event(int id);
+    void resize();
     void draw();
     
     void drawAlignedText(const StyledLineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);

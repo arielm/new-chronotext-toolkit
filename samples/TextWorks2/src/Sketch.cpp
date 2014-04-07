@@ -16,7 +16,7 @@ using namespace ci;
 using namespace chr;
 using namespace zf;
 
-const float FONT_SIZE = 24; // SIZE IN PIXELS (CORRESPONDS TO 0.15 INCHES AT 160 DPI)
+const float FONT_SIZE = 64; // THE MAXIMAL FONT-SIZE
 
 Sketch::Sketch(void *context, void *delegate)
 :
@@ -27,13 +27,10 @@ void Sketch::setup(bool renewContext)
 {
     if (!renewContext)
     {
-        float scale = getWindowInfo().density / 160;
-        fontSize = scale * FONT_SIZE;
-        
         fontManager.loadConfig(InputSource::getResource("font-config.xml"));
         
-        font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(fontSize).setCrisp());
-        font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(fontSize).setCrisp());
+        font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
+        font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
         
         styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
         styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));
@@ -71,6 +68,22 @@ void Sketch::event(int id)
     }
 }
 
+void Sketch::resize()
+{
+    /*
+     * COMPUTING THE FONT-SIZE SO THAT:
+     * - TEXT IS AT MOST AS WIDE AS 85% OF THE SCREEN
+     * - THE MAXIMAL FONT-SIZE IS NOT EXCEEDED
+     */
+    
+    layout.setSize(FONT_SIZE);
+    float width = layout.getAdvance();
+    float availableWidth = getWindowWidth() * 0.85f;
+    
+    fontSize = std::min(FONT_SIZE, FONT_SIZE * availableWidth / width);
+    layout.setSize(fontSize);
+}
+
 void Sketch::draw()
 {
     gl::clear(Color::white(), false);
@@ -78,7 +91,6 @@ void Sketch::draw()
 
     // ---
     
-    layout.setSize(fontSize);
     drawAlignedText(layout, getWindowCenter(), ZFont::ALIGN_MIDDLE, ZFont::ALIGN_MIDDLE);
 }
 
