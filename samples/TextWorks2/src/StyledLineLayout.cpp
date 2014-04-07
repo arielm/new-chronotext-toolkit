@@ -41,6 +41,25 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
     {
         lineLayouts.emplace_back(unique_ptr<LineLayout>(currentFont->createLineLayout(line, currentBegin, line.runs.cend())));
     }
+    
+    // ---
+    
+    for (auto &lineLayout : lineLayouts)
+    {
+        currentFont = lineLayout->font;
+        int currentTag = -1;
+        
+        for (auto &cluster : lineLayout->clusters)
+        {
+            if (cluster.tag != currentTag)
+            {
+                currentTag = cluster.tag;
+                chunks.emplace_back(currentTag, currentFont, styleSheet[currentTag].color);
+            }
+            
+            chunks.back().clusters.push_back(&cluster);
+        }
+    }
 }
 
 float StyledLineLayout::getAdvance() const
@@ -111,7 +130,7 @@ void StyledLineLayout::beginSequence() const
 {
     for (auto &lineLayout : lineLayouts)
     {
-        lineLayout->font->beginSequence();
+        lineLayout->font->beginSequence(true);
     }
 }
 

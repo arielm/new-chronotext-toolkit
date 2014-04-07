@@ -17,26 +17,16 @@ public:
     {
         int tag;
         chr::ZFont *font;
+        ci::ColorA color;
         
         std::vector<chr::zf::Cluster*> clusters;
         
-        Chunk(int tag, chr::ZFont *font)
+        Chunk(int tag, chr::ZFont *font, const ci::ColorA &color)
         :
         tag(tag),
-        font(font)
+        font(font),
+        color(color)
         {}
-        
-        float getAdvance() const
-        {
-            float advance = 0;
-            
-            for (auto &cluster : clusters)
-            {
-                advance += font->getAdvance(*cluster);
-            }
-            
-            return advance;
-        }
     };
     
     struct Style
