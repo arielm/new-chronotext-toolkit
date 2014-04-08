@@ -116,7 +116,7 @@ void Sketch::addVersion(const string &lang)
     
     string version;
     
-    for (auto &line : readLines<string>(InputSource::getResource(lang + ".txt")))
+    for (auto &line : readLines(InputSource::getResource(lang + ".txt")))
     {
         version += line;
         version += " ";
