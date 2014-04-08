@@ -31,14 +31,15 @@ public:
     struct Chunk
     {
         int tag;
+        boost::iterator_range<std::vector<chr::zf::Cluster>::const_iterator> range;
+
         chr::ZFont *font;
         ci::ColorA color;
         
-        std::vector<chr::zf::Cluster*> clusters;
-        
-        Chunk(int tag, const Style &style)
+        Chunk(int tag, const Style &style, boost::iterator_range<std::vector<chr::zf::Cluster>::const_iterator> range)
         :
         tag(tag),
+        range(range),
         font(style.font),
         color(style.color)
         {}

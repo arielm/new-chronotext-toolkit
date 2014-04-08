@@ -29,7 +29,7 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
         {
             if (currentFont)
             {
-                lineLayouts.emplace_back(unique_ptr<LineLayout>(currentFont->createLineLayout(line, currentBegin, run)));
+                lineLayouts.emplace_back(unique_ptr<LineLayout>(currentFont->createLineLayout(line, boost::make_iterator_range(currentBegin, run))));
                 currentBegin = run;
             }
             
@@ -39,7 +39,7 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
 
     if (currentFont)
     {
-        lineLayouts.emplace_back(unique_ptr<LineLayout>(currentFont->createLineLayout(line, currentBegin, line.runs.cend())));
+        lineLayouts.emplace_back(unique_ptr<LineLayout>(currentFont->createLineLayout(line, boost::make_iterator_range(currentBegin, line.runs.cend()))));
     }
     
     // ---
@@ -47,16 +47,25 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
     for (auto &lineLayout : lineLayouts)
     {
         int currentTag = -1;
+        auto currentBegin = lineLayout->clusters.cbegin();
         
-        for (auto &cluster : lineLayout->clusters)
+        for (auto cluster = lineLayout->clusters.cbegin(); cluster != lineLayout->clusters.cend(); ++cluster)
         {
-            if (cluster.tag != currentTag)
+            if (cluster->tag != currentTag)
             {
-                currentTag = cluster.tag;
-                chunks.emplace_back(currentTag, styleSheet[currentTag]);
+                if (currentTag != -1)
+                {
+                    chunks.emplace_back(currentTag, styleSheet[currentTag], boost::make_iterator_range(currentBegin, cluster));
+                    currentBegin = cluster;
+                }
+                
+                currentTag = cluster->tag;
             }
-            
-            chunks.back().clusters.push_back(&cluster);
+        }
+        
+        if (currentTag != -1)
+        {
+            chunks.emplace_back(currentTag, styleSheet[currentTag], boost::make_iterator_range(currentBegin, lineLayout->clusters.cend()));
         }
     }
 }

@@ -104,10 +104,10 @@ void Sketch::drawAlignedText(const StyledLineLayout &layout, const Vec2f &positi
     {
         chunk.font->setColor(chunk.color);
         
-        for (auto &cluster : chunk.clusters)
+        for (auto &cluster : chunk.range)
         {
-            chunk.font->addCluster(*cluster, p);
-            p.x += chunk.font->getAdvance(*cluster);
+            chunk.font->addCluster(cluster, p);
+            p.x += chunk.font->getAdvance(cluster);
         }
     }
     
