@@ -29,7 +29,7 @@ namespace chronotext
         
         EmulatedDevice& rotate()
         {
-            this->size = this->size.yx();
+            size = size.yx();
             return *this;
         }
     };

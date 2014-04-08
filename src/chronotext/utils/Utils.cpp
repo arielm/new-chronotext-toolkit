@@ -86,16 +86,15 @@ namespace chronotext
     
     vector<string> readInstructions(InputSourceRef source)
     {
-        vector<string> lines = readLines<string>(source);
         vector<string> instructions;
         
-        for (auto &line : lines)
+        for (auto &line : readLines(source))
         {
             boost::algorithm::trim(line);
             
             if (!line.empty() && !boost::starts_with(line, "#"))
             {
-                instructions.emplace_back(line);
+                instructions.emplace_back(move(line));
             }
         }
         
