@@ -14,6 +14,8 @@
 #include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/font/zf/FontSequence.h"
 
+#include <boost/range/iterator_range.hpp>
+
 #include <set>
 #include <map>
 
@@ -114,7 +116,7 @@ namespace chronotext
              * THE RETURNED INSTANCES ARE NOT MANAGED AND SHOULD BE DELETED BY THE CALLER
              */
             LineLayout* createLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
-            LineLayout* createLineLayout(const TextLine &line, std::vector<TextRun>::const_iterator begin, std::vector<TextRun>::const_iterator end);
+            LineLayout* createLineLayout(const TextLine &line, boost::iterator_range<std::vector<TextRun>::const_iterator> range);
             
             std::shared_ptr<LineLayout> getCachedLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             

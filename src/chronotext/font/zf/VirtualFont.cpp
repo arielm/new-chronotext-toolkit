@@ -181,21 +181,21 @@ namespace chronotext
         {
             TextLine line(text, langHint, overallDirection);
             itemizer.processLine(line);
-            return createLineLayout(line, line.runs.cbegin(), line.runs.cend());
+            return createLineLayout(line, boost::make_iterator_range(line.runs));
         }
         
-        LineLayout* VirtualFont::createLineLayout(const TextLine &line, vector<TextRun>::const_iterator begin, vector<TextRun>::const_iterator end)
+        LineLayout* VirtualFont::createLineLayout(const TextLine &line, boost::iterator_range<vector<TextRun>::const_iterator> range)
         {
             auto layout = new LineLayout(this, line.langHint, line.overallDirection);
             
             map<hb_codepoint_t, Cluster> clusterMap;
             auto buffer = hb_buffer_create();
             
-            for (auto run = begin; run != end; ++run)
+            for (auto &run : range)
             {
                 clusterMap.clear();
                 
-                for (auto &font : getFontSet(run->language))
+                for (auto &font : getFontSet(run.language))
                 {
                     font->reload();
                     
@@ -205,7 +205,7 @@ namespace chronotext
                         layout->maxAscent = std::max(layout->maxAscent, font->metrics.ascent);
                         layout->maxDescent = std::max(layout->maxDescent, font->metrics.descent);
                         
-                        run->apply(line.text, buffer);
+                        run.apply(line.text, buffer);
                         hb_shape(font->hbFont, buffer, NULL, 0);
                         
                         auto glyphCount = hb_buffer_get_length(buffer);
@@ -246,7 +246,7 @@ namespace chronotext
                                     }
                                     else
                                     {
-                                        clusterMap.insert(make_pair(cluster, Cluster(font, run->tag, codepoint, offset, advance)));
+                                        clusterMap.insert(make_pair(cluster, Cluster(font, run.tag, codepoint, offset, advance)));
                                     }
                                 }
                             }
@@ -263,7 +263,7 @@ namespace chronotext
                     }
                 }
                 
-                if (run->direction == HB_DIRECTION_RTL)
+                if (run.direction == HB_DIRECTION_RTL)
                 {
                     for (auto it = clusterMap.rbegin(); it != clusterMap.rend(); ++it)
                     {
