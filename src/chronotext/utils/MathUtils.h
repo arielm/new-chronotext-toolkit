@@ -74,7 +74,7 @@ namespace chronotext
 	}
     
     /*
-     * REFERENCE FOR THE 4 FOLLOWING 4 FUNCTIONS:
+     * REFERENCE FOR THE 4 FOLLOWING FUNCTIONS:
      * http://stackoverflow.com/a/253874/50335
      */
     

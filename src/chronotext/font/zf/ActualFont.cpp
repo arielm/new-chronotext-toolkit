@@ -89,6 +89,18 @@ namespace chronotext
             return spaceSeparators.count(codepoint);
         }
         
+        hb_codepoint_t ActualFont::getCodepoint(FT_ULong charCode) const
+        {
+            if (ftFace)
+            {
+                return (hb_codepoint_t)FT_Get_Char_Index(ftFace, charCode);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        
         string ActualFont::getFullName() const
         {
             if (ftFace)

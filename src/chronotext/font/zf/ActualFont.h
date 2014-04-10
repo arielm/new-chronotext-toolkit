@@ -126,6 +126,7 @@ namespace chronotext
             ~ActualFont(); // MUST BE PUBLIC BECAUSE OF unique_ptr
 
             bool isSpace(hb_codepoint_t codepoint) const;
+            hb_codepoint_t getCodepoint(FT_ULong charCode) const;
             std::string getFullName() const;
 
         protected:
