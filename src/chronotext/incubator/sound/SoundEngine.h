@@ -92,8 +92,19 @@ public:
             
     void setListener(Listener *listener);
     
+    /*
+     * NO NEED TO CALL THESE ON MOBILE DEVICES UPON
+     * FOREGROUND/BACKGROUND SWITCHES
+     * (THIS IS HANDLED BY FMOD AUTOMATICALLY...)
+     */
     void pause();
     void resume();
+    
+    /*
+     * IT IS MANDATORY TO CALL UPDATE UPON EACH FRAME
+     * OTHERWISE (AND AMONG OTHER THINGS):
+     * CHANNELS WON'T BE FREED UPON COMPLETION
+     */
     void update();
     
     EffectRef preloadEffect(chr::InputSourceRef inputSource);
