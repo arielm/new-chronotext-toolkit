@@ -73,6 +73,9 @@
 		A822633118BE224C00D57C8C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
 		A822633218BE224C00D57C8C /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
 		A822633818BE24E800D57C8C /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../resources/dot.png; sourceTree = "<group>"; };
+		A824C4581905F850003C4B84 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
+		A824C4591905F850003C4B84 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		A824C45A1905F850003C4B84 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A82986FD18BD00C300934642 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A82986FE18BD00C300934642 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
 		A82986FF18BD00C300934642 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -240,6 +243,16 @@
 			path = texture;
 			sourceTree = "<group>";
 		};
+		A824C4571905F850003C4B84 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A824C4581905F850003C4B84 /* EmulatedDevice.h */,
+				A824C4591905F850003C4B84 /* SystemInfo.h */,
+				A824C45A1905F850003C4B84 /* SystemInfoBase.h */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
 		A82986FC18BD00C300934642 /* os */ = {
 			isa = PBXGroup;
 			children = (
@@ -326,6 +339,7 @@
 				A82C909716DFA58900FF519C /* InputSource.cpp */,
 				A82C90E616E00B0400FF519C /* cinder */,
 				A829870718BD02D500934642 /* font */,
+				A824C4571905F850003C4B84 /* system */,
 				A822632618BE224C00D57C8C /* texture */,
 				A82986FC18BD00C300934642 /* os */,
 				A8FBC46F18E39D3D00F5BBEF /* time */,

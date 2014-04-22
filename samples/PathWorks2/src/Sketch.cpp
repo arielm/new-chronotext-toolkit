@@ -33,6 +33,10 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
+        /*
+         * THESE ARE MIPMAPPED TEXTURES:
+         * SOME EMPTY-SPACE MUST BE LEFT AT THE EDGES IN ORDER TO AVOID ARTIFACTS WHEN SCALING-DOWN
+         */
         roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         checkerTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
         dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
@@ -45,8 +49,14 @@ void Sketch::setup(bool renewContext)
         float length = roadPath.getLength();
         roadPath.setMode(FollowablePath::MODE_MODULO); // NECESSARY, FOR THE DOT TO COME-BACK TO THE START OF THE PATH ONCE THE END IS REACHED
         
+        /*
+         * SINGLE-PORTION TRIANGLE-STRIP
+         */
         StrokeHelper::stroke(roadPath, roadStrip, 64);
         
+        /*
+         * MULTI-PORTION TRIANGLE-STRIP
+         */
         checkerStrip.clear();
         StrokeHelper::stroke(roadPath, 0, 32, checkerStrip, 64, 2);
         StrokeHelper::stroke(roadPath, length - 32, length, checkerStrip, 64, 2, length - 32);
@@ -64,7 +74,7 @@ void Sketch::setup(bool renewContext)
         peanutSpline.close();
         
         peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
-        peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED, getWindowInfo());
+        peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED);
         
         // ---
         
@@ -72,7 +82,7 @@ void Sketch::setup(bool renewContext)
         
         for (auto &path : document.paths)
         {
-            lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL, getWindowInfo())));
+            lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL)));
         }
         
         lysOffset = document.viewSize * 0.5f;
@@ -107,7 +117,7 @@ void Sketch::resize()
      */
     for (auto &it : lys)
     {
-        it.second.stroke(it.first, scale);
+        it.second.stroke(it.first, scale * getWindowContentScale()); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
     }
 }
 
@@ -144,7 +154,6 @@ void Sketch::draw()
     drawDotOnPath(roadPath);
     glPopMatrix();
     
-    
     // ---
     
     gl::color(1, 0, 0, 0.5f);
@@ -152,7 +161,10 @@ void Sketch::draw()
     glPushMatrix();
     gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
 
-    peanutHairline.stroke(peanutPath, scale, offset); // RE-STROKING IS NECESSARY BOTH IN TERM OF SCALING AND IN TERM OF MOTION
+    /*
+     * RE-STROKING IS NECESSARY BOTH IN TERM OF POTENTIAL SCREEN-SIZE CHANGE AND IN TERM OF DASHED-LINE-OFFSET MOTION
+     */
+    peanutHairline.stroke(peanutPath, scale * getWindowContentScale(), offset); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
     peanutHairline.draw();
     
     drawDotOnPath(peanutPath);

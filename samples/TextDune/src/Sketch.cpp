@@ -39,7 +39,7 @@ void Sketch::setup(bool renewContext)
     }
     else
     {
-        hairline = Hairline(textureManager, Hairline::TYPE_NORMAL, getWindowInfo());
+        hairline = Hairline(textureManager, Hairline::TYPE_NORMAL);
         font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     }
     

@@ -68,6 +68,9 @@
 		A81B248D189BFE8900EA0A4B /* MonocleMan.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = MonocleMan.xml; path = ../resources/MonocleMan.xml; sourceTree = "<group>"; };
 		A81B248E189BFE8900EA0A4B /* sheets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = sheets.xml; path = ../resources/sheets.xml; sourceTree = "<group>"; };
 		A821DF8D16ED34A800DB025D /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../src/Application.cpp; sourceTree = "<group>"; };
+		A824C4541905F830003C4B84 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
+		A824C4551905F830003C4B84 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		A824C4561905F830003C4B84 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A82C908A16DFA3B100FF519C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A82C908B16DFA3B100FF519C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
 		A82C908C16DFA3B100FF519C /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
@@ -232,6 +235,16 @@
 			path = atlas;
 			sourceTree = "<group>";
 		};
+		A824C4531905F830003C4B84 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A824C4541905F830003C4B84 /* EmulatedDevice.h */,
+				A824C4551905F830003C4B84 /* SystemInfo.h */,
+				A824C4561905F830003C4B84 /* SystemInfoBase.h */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
 		A82C90DB16E00AAD00FF519C /* os */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,6 +305,7 @@
 				A81B2481189BFA3200EA0A4B /* atlas */,
 				A82C90E616E00B0400FF519C /* cinder */,
 				A82C90DB16E00AAD00FF519C /* os */,
+				A824C4531905F830003C4B84 /* system */,
 				A8985B7616DA4EB300448A41 /* texture */,
 				A8F2E309189E4FDE002D5D75 /* time */,
 				A82C90F416E00B3B00FF519C /* utils */,

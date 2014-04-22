@@ -77,6 +77,9 @@
 		A822634618BE2EA400D57C8C /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
 		A822634718BE2EA400D57C8C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
 		A822634818BE2EA400D57C8C /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
+		A824C46C190608C8003C4B84 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
+		A824C46D190608C8003C4B84 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		A824C46E190608C8003C4B84 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontMatrix.cpp; sourceTree = "<group>"; };
@@ -245,6 +248,16 @@
 			path = texture;
 			sourceTree = "<group>";
 		};
+		A824C46B190608C8003C4B84 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A824C46C190608C8003C4B84 /* EmulatedDevice.h */,
+				A824C46D190608C8003C4B84 /* SystemInfo.h */,
+				A824C46E190608C8003C4B84 /* SystemInfoBase.h */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
 		A82C900516DF91BF00FF519C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -312,6 +325,7 @@
 				A84D7E3118BD4BC100D7D933 /* font */,
 				A8FA3BBF16E3AB8000367F97 /* ios */,
 				A8FA3BCC16E3AB8000367F97 /* os */,
+				A824C46B190608C8003C4B84 /* system */,
 				A822633C18BE2EA400D57C8C /* texture */,
 				A8FBC45518E36AB600F5BBEF /* time */,
 				A8FA3BF916E3AB8000367F97 /* utils */,

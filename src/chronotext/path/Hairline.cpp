@@ -7,10 +7,9 @@ namespace chronotext
     Hairline::Hairline()
     {}
     
-    Hairline::Hairline(TextureManager &textureManager, Type type, const WindowInfo &windowInfo)
+    Hairline::Hairline(TextureManager &textureManager, Type type)
     :
-    type(type),
-    contentScale(windowInfo.contentScale)
+    type(type)
     {
         string resourceName;
         
@@ -33,7 +32,7 @@ namespace chronotext
     
     void Hairline::stroke(const FollowablePath &path, float scale, float uOffset)
     {
-        StrokeHelper::stroke(path, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
+        StrokeHelper::stroke(path, strip, 4 / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
     }
     
     void Hairline::stroke(const FollowablePath &path, const vector<float> &offsets, float scale, float uOffset)
@@ -49,7 +48,7 @@ namespace chronotext
                 float offsetBegin = offsets[i * 2];
                 float offsetEnd = offsets[i * 2 + 1];
                 
-                StrokeHelper::stroke(path, offsetBegin, offsetEnd, strip, 4 / contentScale / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
+                StrokeHelper::stroke(path, offsetBegin, offsetEnd, strip, 4 / scale, (type == TYPE_NORMAL) ? 1 : 0.5f, uOffset);
             }
         }
     }

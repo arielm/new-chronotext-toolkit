@@ -1,6 +1,5 @@
 #pragma once
 
-#include "chronotext/cinder/WindowInfo.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/path/StrokeHelper.h"
 
@@ -17,7 +16,7 @@ namespace chronotext
         Type;
         
         Hairline();
-        Hairline(TextureManager &textureManager, Type type, const WindowInfo &windowInfo);
+        Hairline(TextureManager &textureManager, Type type);
         
         void stroke(const FollowablePath &path, float scale = 1, float uOffset = 0);
         void stroke(const FollowablePath &path, const std::vector<float> &offsets, float scale = 1, float uOffset = 0);
@@ -26,7 +25,6 @@ namespace chronotext
         
     protected:
         Type type;
-        float contentScale;
         
         TextureRef texture;
         TexturedTriangleStrip strip;

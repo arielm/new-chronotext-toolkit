@@ -61,6 +61,9 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A821DF9016ED362800DB025D /* frame rococo - 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "frame rococo - 1024.png"; path = "../resources/frame rococo - 1024.png"; sourceTree = "<group>"; };
+		A824C47419060908003C4B84 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
+		A824C47519060908003C4B84 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		A824C47619060908003C4B84 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A841962D18C6A59800D1FA61 /* Louis XIV of France - 512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Louis XIV of France - 512.png"; path = "../resources/Louis XIV of France - 512.png"; sourceTree = "<group>"; };
@@ -212,6 +215,16 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		A824C47319060908003C4B84 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A824C47419060908003C4B84 /* EmulatedDevice.h */,
+				A824C47519060908003C4B84 /* SystemInfo.h */,
+				A824C47619060908003C4B84 /* SystemInfoBase.h */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
 		A82C900516DF91BF00FF519C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -260,6 +273,7 @@
 				A8FA3B9316E3AB8000367F97 /* cinder */,
 				A8FA3BBF16E3AB8000367F97 /* ios */,
 				A8FA3BCC16E3AB8000367F97 /* os */,
+				A824C47319060908003C4B84 /* system */,
 				A8FA3BE916E3AB8000367F97 /* texture */,
 				A8FBC49018E3AFC000F5BBEF /* time */,
 				A8FA3BF916E3AB8000367F97 /* utils */,
