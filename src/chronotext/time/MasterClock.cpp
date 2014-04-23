@@ -21,34 +21,14 @@ namespace chronotext
     :
     Clock(timeBase)
     {}
-
-    void MasterClock::start()
-    {
-        Clock::start();
-        
-        for (auto &slave : slaves)
-        {
-            slave->start();
-        }
-    }
-    
-    void MasterClock::stop()
-    {
-        Clock::stop();
-        
-        for (auto &slave : slaves)
-        {
-            slave->stop();
-        }
-    }
     
     void MasterClock::add(Clock *slave)
     {
-        slaves.push_back(slave);
+        slaves.insert(slave);
     }
     
     void MasterClock::remove(Clock *slave)
     {
-        slaves.remove(slave);
+        slaves.erase(slave);
     }
 }

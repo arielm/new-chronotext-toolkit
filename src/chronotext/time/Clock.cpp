@@ -39,7 +39,7 @@ namespace chronotext
     
     Clock::Clock(shared_ptr<MasterClock> master)
     :
-    timeBase(master->timeBase),
+    timeBase(master.get()),
     timeBaseIsOwned(false),
     master(master),
     mst(0),

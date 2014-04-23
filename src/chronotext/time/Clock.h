@@ -40,7 +40,8 @@ namespace chronotext
         virtual void setTime(double now);
         virtual int getState();
         virtual void setRate(double factor);
-        virtual void restart();
+        
+        void restart();
         
     protected:
         double mst;
@@ -52,6 +53,8 @@ namespace chronotext
         bool timeBaseIsOwned;
         
         std::shared_ptr<MasterClock> master;
+        
+        double getInnerTime();
     };
 }
 

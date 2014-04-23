@@ -10,7 +10,7 @@
 
 #include "chronotext/time/Clock.h"
 
-#include <list>
+#include <set>
 #include <memory>
 
 namespace chronotext
@@ -20,15 +20,14 @@ namespace chronotext
     public:
         MasterClock();
         MasterClock(TimeBase *timeBase);
+
+        friend class Clock;
         
-        virtual void start();
-        virtual void stop();
+    protected:
+        std::set<Clock*> slaves;
         
         void add(Clock *slave);
         void remove(Clock *slave);
-        
-    protected:
-        std::list<Clock*> slaves;
     };
 }
 
