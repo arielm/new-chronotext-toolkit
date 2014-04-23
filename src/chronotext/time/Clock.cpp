@@ -47,6 +47,7 @@ namespace chronotext
     state(STOPPED)
     {
         master->add(this);
+        start();
     }
     
     Clock::~Clock()
