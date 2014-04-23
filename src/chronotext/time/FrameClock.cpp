@@ -14,14 +14,14 @@ namespace chronotext
 {
     FrameClock::FrameClock()
     :
-    MasterClock(),
+    Clock(),
     shouldSample(true),
     frameTime(0)
     {}
     
     FrameClock::FrameClock(TimeBase *timeBase)
     :
-    MasterClock(timeBase),
+    Clock(timeBase),
     shouldSample(true),
     frameTime(0)
     {}
@@ -30,7 +30,7 @@ namespace chronotext
     {
         if (shouldSample)
         {
-            frameTime = MasterClock::getTime();
+            frameTime = Clock::getTime();
             shouldSample = false;
         }
         
@@ -39,7 +39,7 @@ namespace chronotext
     
     void FrameClock::setTime(double now)
     {
-        MasterClock::setTime(now);
+        Clock::setTime(now);
         frameTime = now;
     }
     

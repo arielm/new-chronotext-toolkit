@@ -44,7 +44,6 @@
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
 		A8FBC45E18E36AB600F5BBEF /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45618E36AB600F5BBEF /* Clock.cpp */; };
 		A8FBC45F18E36AB600F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45918E36AB600F5BBEF /* FrameClock.cpp */; };
-		A8FBC46018E36AB600F5BBEF /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45B18E36AB600F5BBEF /* MasterClock.cpp */; };
 		A8FBC46418E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC46318E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -134,8 +133,6 @@
 		A8FBC45818E36AB600F5BBEF /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A8FBC45918E36AB600F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
 		A8FBC45A18E36AB600F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
-		A8FBC45B18E36AB600F5BBEF /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
-		A8FBC45C18E36AB600F5BBEF /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
 		A8FBC45D18E36AB600F5BBEF /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A8FBC46218E36AC300F5BBEF /* SystemInfoImplCocoaTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoImplCocoaTouch.h; sourceTree = "<group>"; };
 		A8FBC46318E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemInfoImplCocoaTouch.mm; sourceTree = "<group>"; };
@@ -412,8 +409,6 @@
 				A8FBC45818E36AB600F5BBEF /* DefaultTimeBase.h */,
 				A8FBC45918E36AB600F5BBEF /* FrameClock.cpp */,
 				A8FBC45A18E36AB600F5BBEF /* FrameClock.h */,
-				A8FBC45B18E36AB600F5BBEF /* MasterClock.cpp */,
-				A8FBC45C18E36AB600F5BBEF /* MasterClock.h */,
 				A8FBC45D18E36AB600F5BBEF /* TimeBase.h */,
 			);
 			path = time;
@@ -506,7 +501,6 @@
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */,
-				A8FBC46018E36AB600F5BBEF /* MasterClock.cpp in Sources */,
 				A84D7E5C18BD4BC100D7D933 /* FontSequence.cpp in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
 				A8FA3C1C16E3AB8000367F97 /* Handler.cpp in Sources */,

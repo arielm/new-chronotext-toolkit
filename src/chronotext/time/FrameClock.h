@@ -8,11 +8,11 @@
 
 #pragma once
 
-#include "chronotext/time/MasterClock.h"
+#include "chronotext/time/Clock.h"
 
 namespace chronotext
 {
-    class FrameClock : public MasterClock
+    class FrameClock : public Clock
     {
     public:
         FrameClock();

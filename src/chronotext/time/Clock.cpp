@@ -12,7 +12,6 @@
  */
 
 #include "chronotext/time/Clock.h"
-#include "chronotext/time/MasterClock.h"
 
 using namespace std;
 
@@ -37,7 +36,7 @@ namespace chronotext
     state(STOPPED)
     {}
     
-    Clock::Clock(shared_ptr<MasterClock> master)
+    Clock::Clock(shared_ptr<Clock> master)
     :
     timeBase(master.get()),
     timeBaseIsOwned(false),
@@ -46,7 +45,6 @@ namespace chronotext
     rate(1),
     state(STOPPED)
     {
-        master->add(this);
         start();
     }
     
@@ -55,11 +53,6 @@ namespace chronotext
         if (timeBaseIsOwned)
         {
             delete timeBase;
-        }
-        
-        if (master)
-        {
-            master->remove(this);
         }
     }
     

@@ -41,7 +41,6 @@
 		A8A883F618C77D3300BC0BDB /* American Typewriter_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A8A883F518C77D3300BC0BDB /* American Typewriter_Regular_64.fnt */; };
 		A8FBC47818E39D3D00F5BBEF /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC47018E39D3D00F5BBEF /* Clock.cpp */; };
 		A8FBC47918E39D3D00F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC47318E39D3D00F5BBEF /* FrameClock.cpp */; };
-		A8FBC47A18E39D3D00F5BBEF /* MasterClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC47518E39D3D00F5BBEF /* MasterClock.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,8 +118,6 @@
 		A8FBC47218E39D3D00F5BBEF /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A8FBC47318E39D3D00F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
 		A8FBC47418E39D3D00F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
-		A8FBC47518E39D3D00F5BBEF /* MasterClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterClock.cpp; sourceTree = "<group>"; };
-		A8FBC47618E39D3D00F5BBEF /* MasterClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterClock.h; sourceTree = "<group>"; };
 		A8FBC47718E39D3D00F5BBEF /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -357,8 +354,6 @@
 				A8FBC47218E39D3D00F5BBEF /* DefaultTimeBase.h */,
 				A8FBC47318E39D3D00F5BBEF /* FrameClock.cpp */,
 				A8FBC47418E39D3D00F5BBEF /* FrameClock.h */,
-				A8FBC47518E39D3D00F5BBEF /* MasterClock.cpp */,
-				A8FBC47618E39D3D00F5BBEF /* MasterClock.h */,
 				A8FBC47718E39D3D00F5BBEF /* TimeBase.h */,
 			);
 			path = time;
@@ -437,7 +432,6 @@
 				A829873318BD02D500934642 /* TextHelper.cpp in Sources */,
 				A829873218BD02D500934642 /* FontSequence.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
-				A8FBC47A18E39D3D00F5BBEF /* MasterClock.cpp in Sources */,
 				A829870318BD00C300934642 /* Handler.cpp in Sources */,
 				A822633418BE224C00D57C8C /* Sprite.cpp in Sources */,
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
