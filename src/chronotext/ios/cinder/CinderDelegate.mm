@@ -62,7 +62,7 @@ using namespace chr;
 {
     frameCount = 0;
 
-    timer.stop();
+    timer.start();
     sketch->clock().start();
     
     if (reason == REASON_VIEW_WILL_APPEAR)
@@ -78,7 +78,7 @@ using namespace chr;
 
 - (void) stopWithReason:(int)reason
 {
-    timer.start();
+    timer.stop();
     sketch->clock().stop();
 
     if (reason == REASON_VIEW_WILL_DISAPPEAR)
