@@ -262,7 +262,7 @@ EffectRef SoundEngine::loadEffect(InputSourceRef inputSource)
     }
     else
     {
-        const auto &buffer = inputSource->loadDataSource()->getBuffer();
+        auto buffer = inputSource->loadDataSource()->getBuffer();
         
         FMOD_CREATESOUNDEXINFO exinfo;
         memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
