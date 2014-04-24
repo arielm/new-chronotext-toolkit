@@ -99,9 +99,12 @@ public:
      */
     void pause();
     void resume();
-    
+
+    void setMute(bool mute);
+    void setVolume(float volume);
+
     /*
-     * IT IS MANDATORY TO CALL UPDATE UPON EACH FRAME
+     * IT IS MANDATORY TO CALL UPDATE EACH FRAME,
      * OTHERWISE (AND AMONG OTHER THINGS):
      * CHANNELS WON'T BE FREED UPON COMPLETION
      */
@@ -114,9 +117,8 @@ public:
     bool stopEffect(int playingId);
     bool stopEffects(EffectRef effect);
     bool stopAllEffects();
-
-    void setMute(bool mute);
-    void setVolume(float volume);
+    bool pauseEffect(int playingId);
+    bool resumeEffect(int playingId);
     
 protected:
     FMOD::System *system;

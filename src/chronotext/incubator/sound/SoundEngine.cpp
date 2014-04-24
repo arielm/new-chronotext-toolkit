@@ -47,6 +47,16 @@ void SoundEngine::resume()
     masterGroup->setPaused(false);
 }
 
+void SoundEngine::setMute(bool mute)
+{
+    masterGroup->setMute(mute);
+}
+
+void SoundEngine::setVolume(float volume)
+{
+    masterGroup->setVolume(volume);
+}
+
 void SoundEngine::update()
 {
     system->update();
@@ -209,14 +219,36 @@ bool SoundEngine::stopAllEffects()
     return (!playingIdsToStop.empty());
 }
 
-void SoundEngine::setMute(bool mute)
+bool SoundEngine::pauseEffect(int playingId)
 {
-    masterGroup->setMute(mute);
+    auto it = playingEffects.find(playingId);
+    
+    if (it != playingEffects.end())
+    {
+        FMOD::Channel *channel;
+        system->getChannel(it->second.first, &channel);
+        channel->setPaused(true);
+        
+        return true;
+    }
+    
+    return false;
 }
 
-void SoundEngine::setVolume(float volume)
+bool SoundEngine::resumeEffect(int playingId)
 {
-    masterGroup->setVolume(volume);
+    auto it = playingEffects.find(playingId);
+    
+    if (it != playingEffects.end())
+    {
+        FMOD::Channel *channel;
+        system->getChannel(it->second.first, &channel);
+        channel->setPaused(false);
+        
+        return true;
+    }
+    
+    return false;
 }
 
 EffectRef SoundEngine::loadEffect(InputSourceRef inputSource)
@@ -230,7 +262,7 @@ EffectRef SoundEngine::loadEffect(InputSourceRef inputSource)
     }
     else
     {
-        Buffer buffer = inputSource->loadDataSource()->getBuffer();
+        const auto &buffer = inputSource->loadDataSource()->getBuffer();
         
         FMOD_CREATESOUNDEXINFO exinfo;
         memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
