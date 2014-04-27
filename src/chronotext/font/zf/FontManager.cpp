@@ -369,10 +369,11 @@ namespace chronotext
             auto uri = element.getAttributeValue<string>("uri", "");
             auto faceIndex = element.getAttributeValue<int>("face-index", 0);
             auto scale = element.getAttributeValue<float>("scale", 1);
+            bool forceMemoryLoad = element.getAttributeValue<bool>("force-memory-load", false);
             
             if (!uri.empty())
             {
-                return ActualFont::Descriptor(InputSource::get(uri), faceIndex, scale);
+                return ActualFont::Descriptor(InputSource::get(uri), faceIndex, scale, forceMemoryLoad);
             }
             else
             {
