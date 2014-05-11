@@ -36,7 +36,7 @@ namespace chronotext
             {
                 const auto &points = path.getPoints();
                 const auto &lengths = path.getLengths();
-
+                
                 float halfWidth = width * 0.5f;
                 ci::Vec2f w1(+halfWidth, -halfWidth);
                 ci::Vec2f w2(-halfWidth, +halfWidth);
@@ -131,7 +131,7 @@ namespace chronotext
                     strip.vertices.emplace_back(points[i] + w2 * delta.yx());
                     strip.vertices.emplace_back(u, 1);
                 }
-
+                
                 length = lengths[valueEnd.index] - valueEnd.offset;
                 delta = (points[valueEnd.index] - valueEnd.position) / length;
                 u = uFreq * (valueEnd.offset - uOffset);
@@ -258,3 +258,5 @@ namespace chronotext
         }
     };
 }
+
+namespace chr = chronotext;

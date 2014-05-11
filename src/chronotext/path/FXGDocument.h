@@ -11,17 +11,25 @@
 #include "cinder/Path2d.h"
 #include "cinder/Xml.h"
 
-class FXGDocument
+namespace chronotext
 {
-public:
-    ci::Vec2f viewSize;
-    std::vector<ci::Path2d> paths;
-    
-    FXGDocument();
-    FXGDocument(ci::DataSourceRef source);
-    
-protected:
-    void parseGroup(const ci::XmlTree &groupElement);
-    static ci::Path2d parsePath(const std::string &data, float ox, float oy);
-    static double nextDouble(const std::string &input, std::string::const_iterator &it);
-};
+    class FXGDocument
+    {
+    public:
+        FXGDocument();
+        FXGDocument(ci::DataSourceRef source);
+        
+        ci::Vec2f getViewSize() const;
+        const std::vector<ci::Path2d>& getPaths() const;
+        
+    protected:
+        ci::Vec2f viewSize;
+        std::vector<ci::Path2d> paths;
+
+        void parseGroup(const ci::XmlTree &groupElement);
+        static ci::Path2d parsePath(const std::string &data, float ox, float oy);
+        static double nextDouble(const std::string &input, std::string::const_iterator &it);
+    };
+}
+
+namespace chr = chronotext;
