@@ -80,12 +80,12 @@ void Sketch::setup(bool renewContext)
         
         FXGDocument document(InputSource::loadResource("lys.fxg"));
         
-        for (auto &path : document.paths)
+        for (auto &path : document.getPaths())
         {
             lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL)));
         }
         
-        lysOffset = document.viewSize * 0.5f;
+        lysOffset = -document.getViewSize() * 0.5f;
     }
     
     // ---
@@ -175,7 +175,7 @@ void Sketch::draw()
     gl::color(0, 0, 1, 0.5f);
     
     glPushMatrix();
-    gl::translate(-lysOffset); // DRAWING THE LYS FROM ITS CENTER
+    gl::translate(lysOffset); // DRAWING THE LYS FROM ITS CENTER
     
     for (auto &it : lys)
     {

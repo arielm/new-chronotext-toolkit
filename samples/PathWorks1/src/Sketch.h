@@ -12,7 +12,7 @@
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/font/xf/FontManager.h"
 #include "chronotext/path/SplinePath.h"
-#include "chronotext/path/FXGDocument.h"
+#include "chronotext/path/ShapeTesselator.h"
 
 class Sketch : public chr::CinderSketch
 {
@@ -22,13 +22,14 @@ class Sketch : public chr::CinderSketch
     chr::xf::FontManager fontManager;
     std::shared_ptr<chr::XFont> font;
     
-    chr::SplinePath spline1;
-    chr::FollowablePath path1;
+    chr::SplinePath spline;
+    chr::FollowablePath path;
     
-    chr::SplinePath spline2;
-    chr::FollowablePath path2;
+    chr::SplinePath peanutSpline;
+    chr::FollowablePath peanutPath;
     
-    FXGDocument document;
+    std::shared_ptr<chr::ShapeMesh> lys;
+    ci::Vec2f lysOffset;
 
     float scale;
     float offset1;

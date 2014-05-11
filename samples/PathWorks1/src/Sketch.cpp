@@ -45,26 +45,32 @@ void Sketch::setup(bool renewContext)
         
         // ---
         
-        spline1 = SplinePath(InputSource::loadResource("spline_1.dat"));
-        spline1.flush(SplinePath::TYPE_BSPLINE, path1);
+        spline = SplinePath(InputSource::loadResource("spline_1.dat"));
+        spline.flush(SplinePath::TYPE_BSPLINE, path);
         
         // ---
         
-        spline2.add(-100, -100);
-        spline2.add(   0,  -25);
-        spline2.add( 100, -100);
-        spline2.add( 200,    0);
-        spline2.add( 100,  100);
-        spline2.add(   0,   25);
-        spline2.add(-100,  100);
-        spline2.add(-200,    0);
-        spline2.close();
+        peanutSpline.add(-100, -100);
+        peanutSpline.add(   0,  -25);
+        peanutSpline.add( 100, -100);
+        peanutSpline.add( 200,    0);
+        peanutSpline.add( 100,  100);
+        peanutSpline.add(   0,   25);
+        peanutSpline.add(-100,  100);
+        peanutSpline.add(-200,    0);
+        peanutSpline.close();
         
-        spline2.flush(SplinePath::TYPE_BSPLINE, path2);
+        peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
         
         // ---
         
-        document = FXGDocument(InputSource::loadResource("lys.fxg"));
+        auto document = FXGDocument(InputSource::loadResource("lys.fxg"));
+        
+        ShapeTesselator tesselator;
+        tesselator.add(document);
+        lys = shared_ptr<ShapeMesh>(tesselator.createMesh());
+        
+        lysOffset = -document.getViewSize() * 0.5f;
     }
     
     // ---
@@ -121,14 +127,14 @@ void Sketch::draw()
     glPushMatrix();
     gl::translate(-REFERENCE_W * 0.5f, -REFERENCE_H * 0.5f);
 
-    gl::draw(path1.getPoints());
-    drawDots(spline1);
+    gl::draw(path.getPoints());
+    drawDots(spline);
     
     //
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text1, path1, offset1, -6);
+    TextHelper::drawTextOnPath(*font, text1, path, offset1, -6);
 
     glPopMatrix();
 
@@ -139,29 +145,24 @@ void Sketch::draw()
     glPushMatrix();
     gl::translate(+REFERENCE_W * 0.25f, +REFERENCE_H * 0.25f);
     
-    gl::draw(path2.getPoints());
-    drawDots(spline2);
+    gl::draw(peanutPath.getPoints());
+    drawDots(peanutSpline);
     
     //
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text2, path2, offset2, font->getOffsetY(XFont::ALIGN_MIDDLE));
+    TextHelper::drawTextOnPath(*font, text2, peanutPath, offset2, font->getOffsetY(XFont::ALIGN_MIDDLE));
     
     glPopMatrix();
     
     // ---
     
-    gl::color(0, 0, 1, 0.5f);
+    gl::color(0, 0.33f, 1, 0.67f);
     
     glPushMatrix();
-    gl::translate(-document.viewSize * 0.5f); // DRAWING THE LYS FROM ITS CENTER
-    
-    for (auto &path : document.paths)
-    {
-        gl::draw(path); // XXX: SUB-OPTIMAL (THE SUB-DIVIDED POINTS COULD BE CACHED)
-    }
-    
+    gl::translate(lysOffset); // DRAWING THE LYS FROM ITS CENTER
+    lys->draw();
     glPopMatrix();
 }
 
