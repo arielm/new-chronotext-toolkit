@@ -11,6 +11,7 @@
 #include "chronotext/incubator/sound/Effect.h"
 
 #include <map>
+#include <set>
 
 class SoundEngine
 {
@@ -90,7 +91,8 @@ public:
     void setup(int maxChannels = 32);
     void shutdown();
             
-    void setListener(Listener *listener);
+    void addListener(Listener *listener);
+    void removeListener(Listener *listener);
     
     /*
      * NO NEED TO CALL THESE ON MOBILE DEVICES UPON
@@ -128,7 +130,7 @@ protected:
     std::map<int, std::pair<int, EffectRef>> playingEffects;
     
     int playCount;
-    Listener *listener;
+    std::set<Listener*> listeners;
     
     EffectRef loadEffect(chr::InputSourceRef inputSource);
     int nextPlayingId(EffectRef effect);

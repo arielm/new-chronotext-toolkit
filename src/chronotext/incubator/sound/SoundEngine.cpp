@@ -15,8 +15,7 @@ using namespace chr;
 
 SoundEngine::SoundEngine()
 :
-playCount(0),
-listener(nullptr)
+playCount(0)
 {}
 
 void SoundEngine::setup(int maxChannels)
@@ -32,9 +31,14 @@ void SoundEngine::shutdown()
     system->release();
 }
 
-void SoundEngine::setListener(Listener *listener)
+void SoundEngine::addListener(Listener *listener)
 {
-    this->listener = listener;
+    listeners.insert(listener);
+}
+
+void SoundEngine::removeListener(Listener *listener)
+{
+    listeners.erase(listener);
 }
 
 void SoundEngine::pause()
@@ -308,7 +312,7 @@ bool SoundEngine::interruptChannel(int channelId)
 
 void SoundEngine::processEvent(const Event &event)
 {
-    if (listener)
+    for (auto listener : listeners)
     {
         listener->handleEvent(event);
     }
