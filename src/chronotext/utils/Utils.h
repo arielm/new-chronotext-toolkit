@@ -12,12 +12,12 @@
 
 #include "cinder/app/App.h"
 #include "cinder/Utilities.h"
+#include "cinder/Xml.h"
 
 #include <fstream>
 #include <set>
 
 #include <boost/algorithm/string.hpp>
-#include "boost/format.hpp"
 
 #if defined(CINDER_MSW)
 #include "cinder/msw/OutputDebugStringStream.h"
@@ -157,6 +157,11 @@ namespace chronotext
     template<typename T = std::string> std::vector<T> readLines(chr::InputSourceRef source);
     
     std::vector<std::string> readInstructions(chr::InputSourceRef source);
+    
+    std::string readTextFile(const ci::fs::path &filePath);
+    void writeTextFile(const ci::fs::path &filePath, const std::string &text);
+    
+    void writeXmlFile(const ci::fs::path &filePath, const ci::XmlTree &tree);
     
     // ---
     

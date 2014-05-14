@@ -8,6 +8,8 @@
 
 #include "chronotext/utils/Utils.h"
 
+#include "rapidxml/rapidxml_print.hpp"
+
 #include "utf8.h"
 
 #include "boost/date_time/local_time/local_time.hpp"
@@ -99,6 +101,28 @@ namespace chronotext
         }
         
         return instructions;
+    }
+    
+    string readTextFile(const fs::path &filePath)
+    {
+        fs::ifstream in(filePath);
+        return string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
+    }
+    
+    void writeTextFile(const fs::path &filePath, const string &text)
+    {
+        fs::ofstream out(filePath);
+        out << text;
+        out.close();
+    }
+    
+    void writeXmlFile(const fs::path &filePath, const XmlTree &tree)
+    {
+        auto doc = tree.createRapidXmlDoc(true);
+        std::ostringstream ss;
+        ss << *doc;
+        
+        writeTextFile(filePath, ss.str());
     }
     
     // ---
