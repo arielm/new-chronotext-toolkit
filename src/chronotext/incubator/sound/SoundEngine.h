@@ -85,6 +85,9 @@ public:
     public:
         virtual void handleEvent(const Event &event) = 0;
     };
+    
+    FMOD::System *system;
+    FMOD::ChannelGroup *masterGroup;
   
     SoundEngine();
     
@@ -123,9 +126,6 @@ public:
     bool resumeEffect(int playingId);
     
 protected:
-    FMOD::System *system;
-    FMOD::ChannelGroup *masterGroup;
-    
     std::map<std::string, EffectRef> effects;
     std::map<int, std::pair<int, EffectRef>> playingEffects;
     
