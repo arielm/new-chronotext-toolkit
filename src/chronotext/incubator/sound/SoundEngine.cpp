@@ -15,62 +15,79 @@ using namespace chr;
 
 SoundEngine::SoundEngine()
 :
+system(nullptr),
 playCount(0)
 {}
 
 void SoundEngine::setup(int maxChannels)
 {
-    FMOD::System_Create(&system);
-    system->init(maxChannels, FMOD_INIT_NORMAL, NULL);
-    system->getMasterChannelGroup(&masterGroup);
+    if (!system)
+    {
+        FMOD::System_Create(&system);
+        system->init(maxChannels, FMOD_INIT_NORMAL, NULL);
+        system->getMasterChannelGroup(&masterGroup);
+    }
 }
 
 void SoundEngine::shutdown()
 {
-    system->close();
-    system->release();
+    if (system)
+    {
+        system->close();
+        system->release();
+        system = nullptr;
+    }
 }
 
 void SoundEngine::pause()
 {
-    masterGroup->setPaused(true);
+    if (system)
+    {
+        masterGroup->setPaused(true);
+    }
 }
 
 void SoundEngine::resume()
 {
-    masterGroup->setPaused(false);
+    if (system)
+    {
+        masterGroup->setPaused(false);
+    }
 }
 
 void SoundEngine::update()
 {
-    system->update();
-    
-    // ---
-    
-    vector<Event> completedEvents;
-    
-    for (auto &it : playingEffects)
+    if (system)
     {
-        int playingId = it.first;
-        int channelId = it.second.first;
-        EffectRef effect = it.second.second;
+        system->update();
         
-        FMOD::Channel *channel;
-        system->getChannel(channelId, &channel);
+        // ---
         
-        bool playing;
-        channel->isPlaying(&playing);
+        vector<Event> completedEvents;
         
-        if (!playing)
+        for (auto &it : playingEffects)
         {
-            completedEvents.push_back(Event(EVENT_COMPLETED, effect, channelId, playingId));
+            int playingId = it.first;
+            int channelId = it.second.first;
+            EffectRef effect = it.second.second;
+            
+            FMOD::Channel *channel;
+            system->getChannel(channelId, &channel);
+            
+            bool playing;
+            channel->isPlaying(&playing);
+            
+            if (!playing)
+            {
+                completedEvents.emplace_back(EVENT_COMPLETED, effect, channelId, playingId);
+            }
         }
-    }
-    
-    for (auto event : completedEvents)
-    {
-        playingEffects.erase(event.playingId);
-        processEvent(event);
+        
+        for (auto event : completedEvents)
+        {
+            playingEffects.erase(event.playingId);
+            processEvent(event);
+        }
     }
 }
 
