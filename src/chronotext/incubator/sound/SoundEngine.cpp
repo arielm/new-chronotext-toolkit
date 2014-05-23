@@ -31,16 +31,6 @@ void SoundEngine::shutdown()
     system->release();
 }
 
-void SoundEngine::addListener(Listener *listener)
-{
-    listeners.insert(listener);
-}
-
-void SoundEngine::removeListener(Listener *listener)
-{
-    listeners.erase(listener);
-}
-
 void SoundEngine::pause()
 {
     masterGroup->setPaused(true);
@@ -49,16 +39,6 @@ void SoundEngine::pause()
 void SoundEngine::resume()
 {
     masterGroup->setPaused(false);
-}
-
-void SoundEngine::setMute(bool mute)
-{
-    masterGroup->setMute(mute);
-}
-
-void SoundEngine::setVolume(float volume)
-{
-    masterGroup->setVolume(volume);
 }
 
 void SoundEngine::update()
@@ -92,6 +72,26 @@ void SoundEngine::update()
         playingEffects.erase(event.playingId);
         processEvent(event);
     }
+}
+
+void SoundEngine::addListener(Listener *listener)
+{
+    listeners.insert(listener);
+}
+
+void SoundEngine::removeListener(Listener *listener)
+{
+    listeners.erase(listener);
+}
+
+void SoundEngine::setMute(bool mute)
+{
+    masterGroup->setMute(mute);
+}
+
+void SoundEngine::setVolume(float volume)
+{
+    masterGroup->setVolume(volume);
 }
 
 EffectRef SoundEngine::preloadEffect(InputSourceRef inputSource)

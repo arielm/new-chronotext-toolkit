@@ -93,20 +93,13 @@ public:
     
     void setup(int maxChannels = 32);
     void shutdown();
-            
-    void addListener(Listener *listener);
-    void removeListener(Listener *listener);
-    
+
     /*
-     * NO NEED TO CALL THESE ON MOBILE DEVICES UPON
-     * FOREGROUND/BACKGROUND SWITCHES
-     * (THIS IS HANDLED BY FMOD AUTOMATICALLY...)
+     * ON ANDROID (UNLIKE iOS):
+     * IT IS NECESSARY TO CALL THESE UPON FOREGROUND/BACKGROUND SWITCHES
      */
     void pause();
     void resume();
-
-    void setMute(bool mute);
-    void setVolume(float volume);
 
     /*
      * IT IS MANDATORY TO CALL UPDATE EACH FRAME,
@@ -114,6 +107,12 @@ public:
      * CHANNELS WON'T BE FREED UPON COMPLETION
      */
     void update();
+    
+    void addListener(Listener *listener);
+    void removeListener(Listener *listener);
+
+    void setMute(bool mute);
+    void setVolume(float volume);
     
     EffectRef preloadEffect(chr::InputSourceRef inputSource);
     void unloadEffect(EffectRef effect);
