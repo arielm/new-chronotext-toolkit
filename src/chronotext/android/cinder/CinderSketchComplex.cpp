@@ -93,7 +93,15 @@ namespace chronotext
     {
         return context->io_service();
     }
-    
+   
+    void CinderSketchComplex::action(int actionId)
+    {
+        if (delegate)
+        {
+            delegate->action(actionId);
+        }
+    }
+
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)

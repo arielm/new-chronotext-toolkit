@@ -110,6 +110,14 @@ namespace chronotext
         return info;
     }
     
+    void CinderSketchSimple::action(int actionId)
+    {
+        if (delegate)
+        {
+            delegate->action(actionId);
+        }
+    }
+    
     void CinderSketchSimple::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)

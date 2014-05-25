@@ -39,6 +39,7 @@ namespace chronotext
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
         
+        void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");
         
     protected:

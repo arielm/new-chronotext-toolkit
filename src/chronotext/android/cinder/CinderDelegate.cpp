@@ -202,9 +202,9 @@ namespace chronotext
         sketch->draw();
     }
     
-    void CinderDelegate::event(int id)
+    void CinderDelegate::event(int eventId)
     {
-        switch (id)
+        switch (eventId)
         {
             case EVENT_ATTACHED:
             case EVENT_SHOWN:
@@ -248,6 +248,10 @@ namespace chronotext
                 
             case EVENT_FOREGROUND:
                 sketch->event(CinderSketch::EVENT_FOREGROUND);
+                break;
+                
+            case EVENT_BACK_KEY:
+                sketch->event(CinderSketch::EVENT_BACK_KEY);
                 break;
         }
     }
@@ -353,6 +357,11 @@ namespace chronotext
         return mWindowInfo;
     }
     
+    void CinderDelegate::action(int actionId)
+    {
+        callVoidMethodOnJavaListener("action", "(I)V", actionId);
+    }
+
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
 #ifdef DEBUG_MESSAGES

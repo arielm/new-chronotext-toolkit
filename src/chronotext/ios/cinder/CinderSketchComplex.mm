@@ -122,6 +122,14 @@ namespace chronotext
         return ((CinderDelegate*)context).windowInfo;
     }
     
+    void CinderSketchComplex::action(int actionId)
+    {
+        if (delegate)
+        {
+            [(CinderDelegate*)delegate action:actionId];
+        }
+    }
+    
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)

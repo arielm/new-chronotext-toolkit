@@ -38,6 +38,7 @@ public class CinderRenderer extends GLRenderer
   public static final int EVENT_HIDDEN = 6;
   public static final int EVENT_BACKGROUND = 7;
   public static final int EVENT_FOREGROUND = 8;
+  public static final int EVENT_BACK_KEY = 9;
 
   protected Context mContext;
   protected Object mListener;

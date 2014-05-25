@@ -39,6 +39,7 @@ namespace chronotext
         
         void accelerated(AccelEvent event);
         
+        virtual void action(int actionId) {}
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         void sendMessageToSketch(int what, const std::string &body);
         

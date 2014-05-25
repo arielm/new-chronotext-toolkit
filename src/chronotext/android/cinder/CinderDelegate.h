@@ -64,7 +64,8 @@ namespace chronotext
             EVENT_SHOWN,
             EVENT_HIDDEN,
             EVENT_BACKGROUND,
-            EVENT_FOREGROUND
+            EVENT_FOREGROUND,
+            EVENT_BACK_KEY
         };
         
     public:
@@ -91,7 +92,7 @@ namespace chronotext
         void shutdown();
         
         void draw();
-        void event(int id);
+        void event(int eventId);
         
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
@@ -115,6 +116,7 @@ namespace chronotext
         float getWindowContentScale() const;
         WindowInfo getWindowInfo() const;
         
+        virtual void action(int actionId);
         virtual void receiveMessageFromSketch(int what, const std::string &body);
         virtual void sendMessageToSketch(int what, const std::string &body);
         

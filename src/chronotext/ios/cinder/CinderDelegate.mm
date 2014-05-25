@@ -203,6 +203,12 @@ using namespace chr;
     return frameCount;
 }
 
+- (void) action:(int)actionId
+{}
+
+- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
+{}
+
 - (void) sendMessageToSketch:(int)what
 {
     sketch->sendMessage(Message(what));
@@ -220,9 +226,6 @@ using namespace chr;
 {
     sketch->sendMessage(Message(what, [body UTF8String]));
 }
-
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
-{}
 
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
 

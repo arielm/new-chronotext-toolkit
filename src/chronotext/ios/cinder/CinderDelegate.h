@@ -79,9 +79,10 @@ enum
 - (uint32_t) findTouchInMap:(UITouch*)touch;
 - (void) updateActiveTouches;
 
+- (void) action:(int)actionId;
+- (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 
 @end

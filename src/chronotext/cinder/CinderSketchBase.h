@@ -27,9 +27,7 @@ namespace chronotext
             FLAG_FOCUS_GAINED,
             FLAG_FOCUS_LOST,
             FLAG_APP_RESUMED,
-            FLAG_APP_PAUSED,
-            FLAG_SCREEN_ENTERED,
-            FLAG_SCREEN_LEFT
+            FLAG_APP_PAUSED
         };
         
         enum
@@ -37,7 +35,14 @@ namespace chronotext
             EVENT_FOREGROUND,
             EVENT_BACKGROUND,
             EVENT_MEMORY_WARNING,
-            EVENT_CONTEXT_LOST
+            EVENT_CONTEXT_LOST,
+            EVENT_BACK_KEY
+        };
+        
+        enum
+        {
+            ACTION_CAPTURE_BACK_KEY = 1,
+            ACTION_RELEASE_BACK_KEY
         };
         
         CinderSketchBase() : SuperHandler() {}
@@ -52,7 +57,7 @@ namespace chronotext
         
         virtual void start(int flags) {}
         virtual void stop(int flags) {}
-        virtual void event(int id) {}
+        virtual void event(int eventId) {}
         
         virtual void addTouch(int index, float x, float y) {}
         virtual void updateTouch(int index, float x, float y) {}
@@ -80,6 +85,7 @@ namespace chronotext
         virtual chr::FrameClock& clock() const = 0;
         virtual ci::Timeline& timeline() const = 0;
         
+        virtual void action(int actionId) = 0;
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
     };
 }
