@@ -22,7 +22,6 @@ namespace chronotext
             bool useColor;
             
             FontSequence() {}
-            FontSequence(const FontSequence &that) = delete; // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
             
         protected:
             std::vector<std::unique_ptr<GlyphBatch>> batches;
@@ -34,6 +33,9 @@ namespace chronotext
             void replay(const GLushort *indices);
             
             friend class Font;
+            
+		private:
+            FontSequence(const FontSequence &that); // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
         };
     }
 }

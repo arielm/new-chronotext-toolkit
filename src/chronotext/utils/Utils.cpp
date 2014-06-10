@@ -90,7 +90,7 @@ namespace chronotext
     {
         vector<string> instructions;
         
-        for (auto &line : readLines(source))
+        for (auto &line : readLines<string>(source))
         {
             boost::algorithm::trim(line);
             
