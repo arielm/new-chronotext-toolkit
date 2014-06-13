@@ -21,12 +21,12 @@
 		A822634D18BE2EA400D57C8C /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822634618BE2EA400D57C8C /* TextureManager.cpp */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
-		A84D7E5918BD4BC100D7D933 /* FontMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */; };
 		A84D7E5A18BD4BC100D7D933 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3718BD4BC100D7D933 /* Font.cpp */; };
 		A84D7E5B18BD4BC100D7D933 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3918BD4BC100D7D933 /* FontManager.cpp */; };
 		A84D7E5C18BD4BC100D7D933 /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3B18BD4BC100D7D933 /* FontSequence.cpp */; };
 		A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A84D7E3D18BD4BC100D7D933 /* TextHelper.cpp */; };
 		A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFDA18116D42006C2085 /* FileSystem.cpp */; };
+		A867ABC2194BB66A008EF66E /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A867ABC0194BB66A008EF66E /* QuadMatrix.cpp */; };
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A8A883F818C77EAC00BC0BDB /* American Typewriter_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A8A883F718C77EAC00BC0BDB /* American Typewriter_Regular_64.fnt */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
@@ -81,10 +81,6 @@
 		A824C46E190608C8003C4B84 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontMatrix.cpp; sourceTree = "<group>"; };
-		A84D7E3318BD4BC100D7D933 /* FontMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontMatrix.h; sourceTree = "<group>"; };
-		A84D7E3418BD4BC100D7D933 /* GlyphBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphBatch.h; sourceTree = "<group>"; };
-		A84D7E3518BD4BC100D7D933 /* GlyphQuad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphQuad.h; sourceTree = "<group>"; };
 		A84D7E3718BD4BC100D7D933 /* Font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Font.cpp; sourceTree = "<group>"; };
 		A84D7E3818BD4BC100D7D933 /* Font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = "<group>"; };
 		A84D7E3918BD4BC100D7D933 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
@@ -95,6 +91,11 @@
 		A84D7E3E18BD4BC100D7D933 /* TextHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextHelper.h; sourceTree = "<group>"; };
 		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFDB18116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
+		A867ABBD194BB66A008EF66E /* Quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quad.h; sourceTree = "<group>"; };
+		A867ABBE194BB66A008EF66E /* QuadBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatch.h; sourceTree = "<group>"; };
+		A867ABBF194BB66A008EF66E /* QuadBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatchMap.h; sourceTree = "<group>"; };
+		A867ABC0194BB66A008EF66E /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
+		A867ABC1194BB66A008EF66E /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
 		A87207FE18081CDE0055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
 		A87207FF18081CDE0055F0BA /* SuperHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SuperHandler.cpp; sourceTree = "<group>"; };
 		A872080018081CDE0055F0BA /* SuperHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperHandler.h; sourceTree = "<group>"; };
@@ -278,10 +279,6 @@
 		A84D7E3118BD4BC100D7D933 /* font */ = {
 			isa = PBXGroup;
 			children = (
-				A84D7E3218BD4BC100D7D933 /* FontMatrix.cpp */,
-				A84D7E3318BD4BC100D7D933 /* FontMatrix.h */,
-				A84D7E3418BD4BC100D7D933 /* GlyphBatch.h */,
-				A84D7E3518BD4BC100D7D933 /* GlyphQuad.h */,
 				A84D7E3618BD4BC100D7D933 /* xf */,
 			);
 			path = font;
@@ -300,6 +297,18 @@
 				A84D7E3E18BD4BC100D7D933 /* TextHelper.h */,
 			);
 			path = xf;
+			sourceTree = "<group>";
+		};
+		A867ABBC194BB66A008EF66E /* quad */ = {
+			isa = PBXGroup;
+			children = (
+				A867ABBD194BB66A008EF66E /* Quad.h */,
+				A867ABBE194BB66A008EF66E /* QuadBatch.h */,
+				A867ABBF194BB66A008EF66E /* QuadBatchMap.h */,
+				A867ABC0194BB66A008EF66E /* QuadMatrix.cpp */,
+				A867ABC1194BB66A008EF66E /* QuadMatrix.h */,
+			);
+			path = quad;
 			sourceTree = "<group>";
 		};
 		A8FA3B8316E379B000367F97 /* Classes */ = {
@@ -322,6 +331,7 @@
 				A84D7E3118BD4BC100D7D933 /* font */,
 				A8FA3BBF16E3AB8000367F97 /* ios */,
 				A8FA3BCC16E3AB8000367F97 /* os */,
+				A867ABBC194BB66A008EF66E /* quad */,
 				A824C46B190608C8003C4B84 /* system */,
 				A822633C18BE2EA400D57C8C /* texture */,
 				A8FBC45518E36AB600F5BBEF /* time */,
@@ -494,7 +504,6 @@
 				A822634A18BE2EA400D57C8C /* Sprite.cpp in Sources */,
 				A8FBC46418E36AC300F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */,
 				A822634D18BE2EA400D57C8C /* TextureManager.cpp in Sources */,
-				A84D7E5918BD4BC100D7D933 /* FontMatrix.cpp in Sources */,
 				A822634918BE2EA400D57C8C /* PVRHelper.cpp in Sources */,
 				A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */,
 				A8FA3C0816E3AB8000367F97 /* CinderSketchSimple.cpp in Sources */,
@@ -506,6 +515,7 @@
 				A8FA3C1C16E3AB8000367F97 /* Handler.cpp in Sources */,
 				A8FBC45E18E36AB600F5BBEF /* Clock.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
+				A867ABC2194BB66A008EF66E /* QuadMatrix.cpp in Sources */,
 				A84D7E5D18BD4BC100D7D933 /* TextHelper.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
