@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/GlyphQuad.h"
+#include "chronotext/quad/GlyphQuad.h"
 
 #include "cinder/gl/gl.h"
 

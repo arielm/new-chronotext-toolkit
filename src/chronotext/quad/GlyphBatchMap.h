@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/GlyphBatch.h"
+#include "chronotext/quad/GlyphBatch.h"
 
 #include <map>
 #include <memory>

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/FontMatrix.h"
+#include "chronotext/quad/FontMatrix.h"
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"

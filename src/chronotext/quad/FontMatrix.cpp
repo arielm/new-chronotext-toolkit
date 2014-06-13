@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/font/FontMatrix.h"
+#include "chronotext/quad/FontMatrix.h"
 
 using namespace std;
 using namespace ci;

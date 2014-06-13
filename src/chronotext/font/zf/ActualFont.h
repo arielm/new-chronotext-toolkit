@@ -10,7 +10,7 @@
 
 #include "chronotext/font/zf/GlyphData.h"
 #include "chronotext/font/zf/FontTexture.h"
-#include "chronotext/font/FontMatrix.h"
+#include "chronotext/quad/FontMatrix.h"
 #include "chronotext/InputSource.h"
 
 #include "hb.h"

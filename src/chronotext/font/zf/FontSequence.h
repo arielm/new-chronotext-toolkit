@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/zf/GlyphBatchMap.h"
+#include "chronotext/quad/GlyphBatchMap.h"
 #include "chronotext/font/zf/FontTexture.h"
 
 namespace chronotext
