@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/quad/GlyphBatch.h"
+#include "chronotext/quad/QuadBatch.h"
 
 #include <map>
 #include <memory>
@@ -17,12 +17,12 @@ namespace chronotext
 {
     namespace zf
     {
-        template<typename T> class GlyphBatchMap
+        template<typename T> class QuadBatchMap
         {
         public:
-            std::map<T*, std::unique_ptr<GlyphBatch>> map;
+            std::map<T*, std::unique_ptr<QuadBatch>> map;
             
-            GlyphBatchMap() {}
+            QuadBatchMap() {}
             
             void clear()
             {
@@ -48,14 +48,14 @@ namespace chronotext
                 }
             }
             
-            GlyphBatch* getBatch(T *texture)
+            QuadBatch* getBatch(T *texture)
             {
                 auto it = map.find(texture);
                 
                 if (it == map.end())
                 {
-                    auto batch = new GlyphBatch;
-                    map[texture] = std::unique_ptr<GlyphBatch>(batch);
+                    auto batch = new QuadBatch;
+                    map[texture] = std::unique_ptr<QuadBatch>(batch);
                     return batch;
                 }
                 else
@@ -80,7 +80,7 @@ namespace chronotext
             }
             
         private:
-            GlyphBatchMap(const GlyphBatchMap &that); // MAKES IT EXPLICIT: GlyphBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
+            QuadBatchMap(const QuadBatchMap &that); // MAKES IT EXPLICIT: QuadBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
         };
     }
 }

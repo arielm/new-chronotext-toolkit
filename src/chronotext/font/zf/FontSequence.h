@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/quad/GlyphBatchMap.h"
+#include "chronotext/quad/QuadBatchMap.h"
 #include "chronotext/font/zf/FontTexture.h"
 
 namespace chronotext
@@ -24,12 +24,12 @@ namespace chronotext
             FontSequence() {}
             
         protected:
-            std::vector<std::unique_ptr<GlyphBatchMap<FontTexture>>> maps;
+            std::vector<std::unique_ptr<QuadBatchMap<FontTexture>>> maps;
             
             void begin(bool useColor = false, float anisotropy = 0);
             void end();
             
-            void addMap(std::unique_ptr<GlyphBatchMap<FontTexture>> &&map);
+            void addMap(std::unique_ptr<QuadBatchMap<FontTexture>> &&map);
             void replay(const GLushort *indices);
             
             friend class VirtualFont;

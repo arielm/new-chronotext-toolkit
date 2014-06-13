@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/quad/FontMatrix.h"
+#include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
@@ -134,7 +134,7 @@ namespace chronotext
             void setClip(float x1, float y1, float x2, float y2);
             void clearClip();
             
-            FontMatrix* getMatrix();
+            QuadMatrix* getMatrix();
             const GLushort* getIndices() const;
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
@@ -166,14 +166,14 @@ namespace chronotext
 
             Properties properties;
             const std::vector<GLushort> &indices;
-            FontMatrix matrix;
+            QuadMatrix matrix;
             
             float anisotropy;
             
             int began;
             bool sequenceUseColor;
             FontSequence *sequence;
-            std::unique_ptr<GlyphBatchMap<FontTexture>> batchMap;
+            std::unique_ptr<QuadBatchMap<FontTexture>> batchMap;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
@@ -186,8 +186,8 @@ namespace chronotext
             void begin(bool useColor = false);
             void end(bool useColor = false);
             
-            void incrementSequence(GlyphBatch *batch);
-            bool clipQuad(GlyphQuad &quad, FontTexture *texture) const;
+            void incrementSequence(QuadBatch *batch);
+            bool clipQuad(Quad &quad, FontTexture *texture) const;
         };
     }
 }

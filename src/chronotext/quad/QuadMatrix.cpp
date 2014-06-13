@@ -6,24 +6,24 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/quad/FontMatrix.h"
+#include "chronotext/quad/QuadMatrix.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chronotext
 {
-    FontMatrix::FontMatrix()
+    QuadMatrix::QuadMatrix()
     {
         setToIdentity();
     }
     
-    void FontMatrix::load(const Matrix44f &matrix)
+    void QuadMatrix::load(const Matrix44f &matrix)
     {
         memcpy(&m, matrix.m, sizeof(m));
     }
     
-    void FontMatrix::load(const MatrixAffine2f &matrix)
+    void QuadMatrix::load(const MatrixAffine2f &matrix)
     {
         m[ 0] = matrix.m[0]; m[ 4] = matrix.m[2]; m[ 8] = 0.0f; m[12] = matrix.m[4];
         m[ 1] = matrix.m[1]; m[ 5] = matrix.m[3]; m[ 9] = 0.0f; m[13] = matrix.m[5];
@@ -31,18 +31,18 @@ namespace chronotext
         m[ 3] = 0.0f;        m[ 7] = 0.0f;        m[11] = 0.0f; m[15] = 1.0f;
     }
 
-    void FontMatrix::setToIdentity()
+    void QuadMatrix::setToIdentity()
     {
         m00 = m11 = m22 = m33 = 1.0f;
         m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
     }
     
-    void FontMatrix::push()
+    void QuadMatrix::push()
     {
         stack.push_back(m);
     }
     
-    void FontMatrix::pop()
+    void QuadMatrix::pop()
     {
         if (!stack.empty())
         {
@@ -51,7 +51,7 @@ namespace chronotext
         }
     }
     
-    void FontMatrix::setTranslation(float x, float y, float z)
+    void QuadMatrix::setTranslation(float x, float y, float z)
     {
         m00 = m11 = m22 = m33 = 1.0f;
         m01 = m02 = m10 = m12 = m20 = m21 = m30 = m31 = m32 = 0.0f;
@@ -61,7 +61,7 @@ namespace chronotext
         m23 = z;
     }
     
-    void FontMatrix::translate(float x, float y, float z)
+    void QuadMatrix::translate(float x, float y, float z)
     {
         m03 += x * m00 + y * m01 + z * m02;
         m13 += x * m10 + y * m11 + z * m12;
@@ -69,7 +69,7 @@ namespace chronotext
         m33 += x * m30 + y * m31 + z * m32;
     }
     
-    void FontMatrix::scale(float x, float y, float z)
+    void QuadMatrix::scale(float x, float y, float z)
     {
         m00 *= x;
         m10 *= x;
@@ -87,7 +87,7 @@ namespace chronotext
         m32 *= z;
     }
     
-    void FontMatrix::rotateX(float a)
+    void QuadMatrix::rotateX(float a)
     {
         float c = math<float>::cos(a);
         float s = math<float>::sin(a);
@@ -114,7 +114,7 @@ namespace chronotext
         m32 = r32;
     }
     
-    void FontMatrix::rotateY(float a)
+    void QuadMatrix::rotateY(float a)
     {
         float c = math<float>::cos(a);
         float s = math<float>::sin(a);
@@ -141,7 +141,7 @@ namespace chronotext
         m32 = r32;
     }
     
-    void FontMatrix::rotateZ(float a)
+    void QuadMatrix::rotateZ(float a)
     {
         float c = math<float>::cos(a);
         float s = math<float>::sin(a);
@@ -168,7 +168,7 @@ namespace chronotext
         m31 = r31;
     }
     
-    void FontMatrix::rotateXY(float sx, float sy)
+    void QuadMatrix::rotateXY(float sx, float sy)
     {
         float cx = math<float>::sqrt(1.0f - sx * sx);
         float cy = math<float>::sqrt(1.0f - sy * sy);
@@ -205,7 +205,7 @@ namespace chronotext
         m32 = r32;
     }
     
-    Vec3f FontMatrix::transform(float x, float y) const
+    Vec3f QuadMatrix::transform(float x, float y) const
     {
         float x00 = x * m00;
         float x10 = x * m10;
@@ -218,7 +218,7 @@ namespace chronotext
         return Vec3f(x00 + y01 + m03, x10 + y11 + m13, x20 + y21 + m23);
     }
     
-    void FontMatrix::addTransformedQuad(const GlyphQuad &quad, std::vector<Vertex> &vertices) const
+    void QuadMatrix::addTransformedQuad(const Quad &quad, std::vector<Vertex> &vertices) const
     {
         float x100 = quad.x1 * m00;
         float x110 = quad.x1 * m10;

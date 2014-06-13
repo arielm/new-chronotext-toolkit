@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/quad/GlyphQuad.h"
+#include "chronotext/quad/Quad.h"
 
 #include "cinder/gl/gl.h"
 
@@ -33,7 +33,7 @@ namespace chronotext
         {}
     };
     
-    class GlyphBatch
+    class QuadBatch
     {
     public:
         static const int stride = sizeof(float) * (3 + 2);
@@ -58,7 +58,7 @@ namespace chronotext
             return vertices.size() >> 2;
         }
 
-        inline void addQuad(const GlyphQuad &quad, float z = 0)
+        inline void addQuad(const Quad &quad, float z = 0)
         {
             vertices.emplace_back(quad.x1, quad.y1, z, quad.u1, quad.v1);
             vertices.emplace_back(quad.x2, quad.y1, z, quad.u2, quad.v1);
