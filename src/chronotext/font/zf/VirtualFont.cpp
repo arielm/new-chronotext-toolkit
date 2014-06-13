@@ -392,7 +392,7 @@ namespace chronotext
                 
                 if (!batchMap)
                 {
-                    batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
+                    batchMap = unique_ptr<GlyphBatchMap<FontTexture>>(new GlyphBatchMap<FontTexture>);
                 }
                 else
                 {
@@ -464,7 +464,7 @@ namespace chronotext
                 
                 if (!batchMap)
                 {
-                    batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
+                    batchMap = unique_ptr<GlyphBatchMap<FontTexture>>(new GlyphBatchMap<FontTexture>);
                 }
                 else
                 {

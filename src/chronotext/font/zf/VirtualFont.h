@@ -173,7 +173,7 @@ namespace chronotext
             int began;
             bool sequenceUseColor;
             FontSequence *sequence;
-            std::unique_ptr<GlyphBatchMap> batchMap;
+            std::unique_ptr<GlyphBatchMap<FontTexture>> batchMap;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
             std::map<std::string, FontSet> fontSetMap;
