@@ -108,7 +108,6 @@
 		A8F9FC3818C5683B00C48245 /* FontTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontTexture.cpp; sourceTree = "<group>"; };
 		A8F9FC3918C5683B00C48245 /* FontTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontTexture.h; sourceTree = "<group>"; };
 		A8F9FC3A18C5683B00C48245 /* FreetypeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreetypeHelper.h; sourceTree = "<group>"; };
-		A8F9FC3B18C5683B00C48245 /* GlyphBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphBatchMap.h; sourceTree = "<group>"; };
 		A8F9FC3C18C5683B00C48245 /* GlyphData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphData.h; sourceTree = "<group>"; };
 		A8F9FC3D18C5683B00C48245 /* LangHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LangHelper.cpp; sourceTree = "<group>"; };
 		A8F9FC3E18C5683B00C48245 /* LangHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LangHelper.h; sourceTree = "<group>"; };
@@ -352,7 +351,6 @@
 				A8F9FC3818C5683B00C48245 /* FontTexture.cpp */,
 				A8F9FC3918C5683B00C48245 /* FontTexture.h */,
 				A8F9FC3A18C5683B00C48245 /* FreetypeHelper.h */,
-				A8F9FC3B18C5683B00C48245 /* GlyphBatchMap.h */,
 				A8F9FC3C18C5683B00C48245 /* GlyphData.h */,
 				A8F9FC3D18C5683B00C48245 /* LangHelper.cpp */,
 				A8F9FC3E18C5683B00C48245 /* LangHelper.h */,
