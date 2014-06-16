@@ -296,7 +296,7 @@ namespace chronotext
             }
         }
         
-        FontMatrix* Font::getMatrix()
+        QuadMatrix* Font::getMatrix()
         {
             return &matrix;
         }
@@ -353,7 +353,7 @@ namespace chronotext
                 
                 if (!batch)
                 {
-                    batch = unique_ptr<GlyphBatch>(new GlyphBatch);
+                    batch = unique_ptr<QuadBatch>(new QuadBatch);
                 }
                 else
                 {
@@ -425,7 +425,7 @@ namespace chronotext
                 
                 if (!batch)
                 {
-                    batch = unique_ptr<GlyphBatch>(new GlyphBatch);
+                    batch = unique_ptr<QuadBatch>(new QuadBatch);
                 }
                 else
                 {
@@ -434,7 +434,7 @@ namespace chronotext
             }
         }
         
-        bool Font::fillQuad(GlyphQuad &quad, int glyphIndex, float x, float y) const
+        bool Font::fillQuad(Quad &quad, int glyphIndex, float x, float y) const
         {
             if (glyphIndex < 0)
             {
@@ -485,14 +485,14 @@ namespace chronotext
             }
         }
         
-        bool Font::clipQuad(GlyphQuad &quad) const
+        bool Font::clipQuad(Quad &quad) const
         {
             return quad.clip(clipRect, texture->getSize() * sizeRatio / axis);
         }
 
         void Font::addGlyph(int glyphIndex, float x, float y, float z)
         {
-            GlyphQuad quad;
+            Quad quad;
             
             if (fillQuad(quad, glyphIndex, x, y))
             {
@@ -506,7 +506,7 @@ namespace chronotext
         
         void Font::addTransformedGlyph(int glyphIndex, float x, float y)
         {
-            GlyphQuad quad;
+            Quad quad;
             
             if (fillQuad(quad, glyphIndex, x, y))
             {

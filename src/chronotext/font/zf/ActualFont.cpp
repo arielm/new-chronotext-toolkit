@@ -275,7 +275,7 @@ namespace chronotext
             return total;
         }
         
-        ActualFont::Glyph* ActualFont::fillQuad(GlyphQuad &quad, const Shape &shape, const Vec2f &position, float sizeRatio)
+        ActualFont::Glyph* ActualFont::fillQuad(Quad &quad, const Shape &shape, const Vec2f &position, float sizeRatio)
         {
             auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout HAVE BEEN PREVIOUSLY PRELOADED
             

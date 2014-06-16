@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/GlyphBatch.h"
+#include "chronotext/quad/QuadBatch.h"
 
 #include "cinder/Matrix44.h"
 
@@ -16,7 +16,7 @@
 
 namespace chronotext
 {
-    class FontMatrix
+    class QuadMatrix
     {
     public:
         typedef std::array<float, 16> Values;
@@ -34,7 +34,7 @@ namespace chronotext
             };
         };
         
-        FontMatrix();
+        QuadMatrix();
 
         void load(const ci::Matrix44f &matrix);
         void load(const ci::MatrixAffine2f &matrix);
@@ -61,7 +61,7 @@ namespace chronotext
         void rotateXY(float sx, float sy);
         
         ci::Vec3f transform(float x, float y) const;
-        void addTransformedQuad(const GlyphQuad &quad, std::vector<Vertex> &vertices) const;
+        void addTransformedQuad(const Quad &quad, std::vector<Vertex> &vertices) const;
         
     protected:
         std::vector<Values> stack;

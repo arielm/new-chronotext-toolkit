@@ -81,7 +81,7 @@ void Sketch::draw()
     
     // ---
 
-    vector<FontMatrix::Values> M;
+    vector<QuadMatrix::Values> M;
     auto matrix = font->getMatrix();
     
     font->setSize(TEXT_SIZE);

@@ -8,7 +8,8 @@
 
 #pragma once
 
-#include "chronotext/font/zf/GlyphBatchMap.h"
+#include "chronotext/quad/QuadBatchMap.h"
+#include "chronotext/font/zf/FontTexture.h"
 
 namespace chronotext
 {
@@ -21,18 +22,20 @@ namespace chronotext
             float anisotropy;
             
             FontSequence() {}
-            FontSequence(const FontSequence &that) = delete; // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
-
+            
         protected:
-            std::vector<std::unique_ptr<GlyphBatchMap>> maps;
+            std::vector<std::unique_ptr<QuadBatchMap<FontTexture>>> maps;
             
             void begin(bool useColor = false, float anisotropy = 0);
             void end();
             
-            void addMap(std::unique_ptr<GlyphBatchMap> &&map);
+            void addMap(std::unique_ptr<QuadBatchMap<FontTexture>> &&map);
             void replay(const GLushort *indices);
             
             friend class VirtualFont;
+            
+        private:
+            FontSequence(const FontSequence &that); // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
         };
     }
 }

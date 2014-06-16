@@ -25,9 +25,9 @@ namespace chronotext
         void FontSequence::end()
         {}
         
-        void FontSequence::addMap(unique_ptr<GlyphBatchMap> &&map)
+        void FontSequence::addMap(unique_ptr<QuadBatchMap<FontTexture>> &&map)
         {
-            maps.emplace_back(forward<unique_ptr<GlyphBatchMap>>(map));
+            maps.emplace_back(forward<unique_ptr<QuadBatchMap<FontTexture>>>(map));
         }
         
         void FontSequence::replay(const GLushort *indices)

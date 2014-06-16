@@ -23,9 +23,9 @@ namespace chronotext
         void FontSequence::end()
         {}
         
-        void FontSequence::addBatch(unique_ptr<GlyphBatch> &&batch)
+        void FontSequence::addBatch(unique_ptr<QuadBatch> &&batch)
         {
-            batches.emplace_back(forward<unique_ptr<GlyphBatch>>(batch));
+            batches.emplace_back(forward<unique_ptr<QuadBatch>>(batch));
         }
         
         void FontSequence::replay(const GLushort *indices)

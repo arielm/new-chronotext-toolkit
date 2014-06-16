@@ -12,7 +12,7 @@
 
 namespace chronotext
 {
-    struct GlyphQuad
+    struct Quad
     {
         float x1;
         float y1;

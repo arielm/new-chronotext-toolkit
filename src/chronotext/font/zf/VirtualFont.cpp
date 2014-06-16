@@ -344,7 +344,7 @@ namespace chronotext
             hasClip = false;
         }
         
-        FontMatrix* VirtualFont::getMatrix()
+        QuadMatrix* VirtualFont::getMatrix()
         {
             return &matrix;
         }
@@ -392,7 +392,7 @@ namespace chronotext
                 
                 if (!batchMap)
                 {
-                    batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
+                    batchMap = unique_ptr<QuadBatchMap<FontTexture>>(new QuadBatchMap<FontTexture>);
                 }
                 else
                 {
@@ -441,7 +441,7 @@ namespace chronotext
             end(sequence->useColor);
         }
         
-        void VirtualFont::incrementSequence(GlyphBatch *batch)
+        void VirtualFont::incrementSequence(QuadBatch *batch)
         {
             if (sequenceUseColor)
             {
@@ -464,7 +464,7 @@ namespace chronotext
                 
                 if (!batchMap)
                 {
-                    batchMap = unique_ptr<GlyphBatchMap>(new GlyphBatchMap);
+                    batchMap = unique_ptr<QuadBatchMap<FontTexture>>(new QuadBatchMap<FontTexture>);
                 }
                 else
                 {
@@ -473,7 +473,7 @@ namespace chronotext
             }
         }
         
-        bool VirtualFont::clipQuad(GlyphQuad &quad, FontTexture *texture) const
+        bool VirtualFont::clipQuad(Quad &quad, FontTexture *texture) const
         {
             return quad.clip(clipRect, texture->getSize() * sizeRatio);
         }
@@ -484,7 +484,7 @@ namespace chronotext
             {
                 Vec2f p = properties.useMipmap ? position.xy() : Vec2f(snap(position.x), snap(position.y));
                 
-                GlyphQuad quad;
+                Quad quad;
                 auto glyph = cluster.font->fillQuad(quad, shape, p, sizeRatio);
                 
                 if (glyph)
@@ -503,7 +503,7 @@ namespace chronotext
         {
             for (auto &shape : cluster.shapes)
             {
-                GlyphQuad quad;
+                Quad quad;
                 auto glyph = cluster.font->fillQuad(quad, shape, position, sizeRatio);
                 
                 if (glyph)

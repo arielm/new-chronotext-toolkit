@@ -8,8 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/GlyphBatch.h"
-#include "chronotext/font/zf/FontTexture.h"
+#include "chronotext/quad/QuadBatch.h"
 
 #include <map>
 #include <memory>
@@ -18,13 +17,12 @@ namespace chronotext
 {
     namespace zf
     {
-        class GlyphBatchMap
+        template<typename T> class QuadBatchMap
         {
         public:
-            std::map<FontTexture*, std::unique_ptr<GlyphBatch>> map;
+            std::map<T*, std::unique_ptr<QuadBatch>> map;
             
-            GlyphBatchMap() {}
-            GlyphBatchMap(const GlyphBatchMap &that) = delete; // MAKES IT EXPLICIT: GlyphBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
+            QuadBatchMap() {}
             
             void clear()
             {
@@ -38,7 +36,7 @@ namespace chronotext
             {
                 for (auto it = map.begin(); it != map.end();)
                 {
-                    if (it->second->size() == 0)
+                    if (it->second->empty())
                     {
                         it = map.erase(it);
                     }
@@ -50,14 +48,14 @@ namespace chronotext
                 }
             }
             
-            GlyphBatch* getBatch(FontTexture *texture)
+            QuadBatch* getBatch(T *texture)
             {
                 auto it = map.find(texture);
                 
                 if (it == map.end())
                 {
-                    auto batch = new GlyphBatch;
-                    map[texture] = std::unique_ptr<GlyphBatch>(batch);
+                    auto batch = new QuadBatch;
+                    map[texture] = std::unique_ptr<QuadBatch>(batch);
                     return batch;
                 }
                 else
@@ -80,6 +78,9 @@ namespace chronotext
                     it.second->flush(indices, useColor);
                 }
             }
+            
+        private:
+            QuadBatchMap(const QuadBatchMap &that); // MAKES IT EXPLICIT: QuadBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
         };
     }
 }

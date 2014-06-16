@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/font/FontMatrix.h"
+#include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/font/xf/FontSequence.h"
 
 #include "cinder/gl/gl.h"
@@ -109,7 +109,7 @@ namespace chronotext
             float getOffsetY(Alignment align) const;
             inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
             
-            FontMatrix* getMatrix();
+            QuadMatrix* getMatrix();
             const GLushort* getIndices() const;
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
@@ -152,7 +152,7 @@ namespace chronotext
             
             Properties properties;
             const std::vector<GLushort> &indices;
-            FontMatrix matrix;
+            QuadMatrix matrix;
             
             float anisotropy;
             
@@ -168,7 +168,7 @@ namespace chronotext
             int began;
             bool sequenceUseColor;
             FontSequence *sequence;
-            std::unique_ptr<GlyphBatch> batch;
+            std::unique_ptr<QuadBatch> batch;
             
             Font(FontManager &fontManager, FontData *data, FontTexture *texture, const Properties &properties);
             
@@ -176,8 +176,8 @@ namespace chronotext
             void end(bool useColor = false);
 
             void incrementSequence();
-            bool fillQuad(GlyphQuad &quad, int glyphIndex, float x, float y) const;
-            bool clipQuad(GlyphQuad &quad) const;
+            bool fillQuad(Quad &quad, int glyphIndex, float x, float y) const;
+            bool clipQuad(Quad &quad) const;
         };
     }
 }
