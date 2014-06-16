@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -15,9 +15,21 @@ using namespace app;
 
 namespace chronotext
 {
+    CinderApp::CinderApp()
+    :
+    startCount(0),
+    updateCount(0)
+    {}
+
     void CinderApp::setup()
     {
+        /*
+         * App::privateUpdate__ HACKING: SEE COMMENT IN CinderApp::update
+         */
+        io_service().post([this]{ sketch->clock().update(); });
+        
         sketch->setIOService(io_service());
+        sketch->timeline().stepTo(0);
         sketch->setup(false);
         
 #if defined(CINDER_COCOA_TOUCH)
@@ -28,7 +40,7 @@ namespace chronotext
     
     void CinderApp::shutdown()
     {
-        stop(); // XXX: CURRENTLY ONLY USED FOR FPS-COUNTER
+        stop();
         sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
         sketch->shutdown();
         delete sketch;
@@ -40,7 +52,7 @@ namespace chronotext
         
         if (startCount == 0)
         {
-            start(); // XXX: CURRENTLY ONLY USED FOR FPS-COUNTER
+            start();
             sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
             startCount++;
         }
@@ -48,19 +60,25 @@ namespace chronotext
     
     void CinderApp::update()
     {
-        double now = getElapsedSeconds();
+        /*
+         * App::privateUpdate__ HACKING:
+         * WE MUST UPDATE THE CLOCK AT THE BEGINNING OF THE FRAME,
+         * AND WE NEED THIS TO TAKE PLACE BEFORE THE FUNCTIONS
+         * "POSTED" DURING CinderSketch::update ARE "POLLED"
+         */
+        io_service().post([this]{ sketch->clock().update(); });
         
-        if (ticks == 0)
-        {
-            t0 = now;
-        }
-        
-        ticks++;
-        elapsed = now - t0;
-        
-        // ---
+        /*
+         * MUST BE CALLED BEFORE Sketch::update
+         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+         *
+         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
+         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
+         */
+        double now = sketch->clock().getTime();
         
         sketch->update();
+        sketch->timeline().stepTo(now); // WE CAN'T CONTROL THE APP'S TIMELINE SO WE NEED OUR OWN
         updateCount++;
     }
     
@@ -68,7 +86,7 @@ namespace chronotext
     {
         if (updateCount == 0)
         {
-            update();
+            update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
         
         sketch->draw();
@@ -91,25 +109,25 @@ namespace chronotext
     
     void CinderApp::touchesBegan(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt)
+        for (auto &touch : event.getTouches())
         {
-            sketch->addTouch(touchIt->getId() - 1, touchIt->getPos().x, touchIt->getPos().y);
+            sketch->addTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
     void CinderApp::touchesMoved(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt)
+        for (auto &touch : event.getTouches())
         {
-            sketch->updateTouch(touchIt->getId() - 1, touchIt->getPos().x, touchIt->getPos().y);
+            sketch->updateTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
     void CinderApp::touchesEnded(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt)
+        for (auto &touch : event.getTouches())
         {
-            sketch->removeTouch(touchIt->getId() - 1, touchIt->getPos().x, touchIt->getPos().y);
+            sketch->removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
@@ -123,20 +141,36 @@ namespace chronotext
         sketch->sendMessage(Message(what, body));
     }
     
+    void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
+    {
+        /*
+         * POINTLESS TO ALLOW RESIZE WHEN EMULATING
+         * (IT WOULD ALSO MAKE THE CODE MORE COMPLEX...)
+         */
+        settings->setResizable(false);
+
+        settings->setWindowSize(device.size);
+
+        WindowInfo windowInfo;
+        windowInfo.size = device.size;
+        windowInfo.contentScale = device.contentScale;
+        windowInfo.diagonal = device.diagonal;
+        windowInfo.density = (device.diagonal == 0) ? 0 : (device.size.length() / device.diagonal);
+        
+        SystemInfo::instance().setWindowInfo(windowInfo);
+    }
+    
 #if defined(CINDER_ANDROID)
     
     void CinderApp::resume(bool renewContext)
     {
-        if (renewContext)
-        {
-            sketch->setup(true);
-        }
-        
+        sketch->setup(true);
         sketch->start(CinderSketch::FLAG_APP_RESUMED);
     }
     
     void CinderApp::pause()
     {
+        sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
         sketch->stop(CinderSketch::FLAG_APP_PAUSED);
     }
     
@@ -144,11 +178,12 @@ namespace chronotext
     
     void CinderApp::start()
     {
-        ticks = 0;
+        sketch->clock().start();
     }
     
     void CinderApp::stop()
     {
-        LOGI << "AVERAGE FRAME-RATE: " << ticks / elapsed << " FPS" << endl;
+        sketch->clock().stop();
+        LOGI << "AVERAGE FRAME-RATE: " << getAverageFps() << " FPS" << endl;
     }
 }

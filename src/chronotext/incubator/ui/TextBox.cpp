@@ -23,7 +23,6 @@ namespace chronotext
     TextBox::TextBox(shared_ptr<Style> style)
     :
     Shape(style),
-    font(NULL),
     fontSize(0),
     wrap(false),
     lineHeight(0),
@@ -54,7 +53,7 @@ namespace chronotext
         }
     }
     
-    void TextBox::setFont(XFont *font)
+    void TextBox::setFont(std::shared_ptr<XFont> font)
     {
         if (font != this->font)
         {
@@ -146,7 +145,7 @@ namespace chronotext
         Shape::setPadding(left, top, right, bottom);
     }
     
-    void TextBox::setTextAlign(int x, int y)
+    void TextBox::setTextAlign(XFont::Alignment x, XFont::Alignment y)
     {
         textAlignX = x;
         textAlignY = y;
@@ -230,7 +229,7 @@ namespace chronotext
             index = end;
         }
         
-        float xx = x + paddingLeft + getOffsetX(start, end) + font->getSubStringWidth(text, start, index);
+        float xx = x + paddingLeft + getOffsetX(start, end) + font->getSubStringAdvance(text, start, index);
         float yy = y + paddingTop + getOffsetY() + line * lineHeight;
         
         return Vec2f(xx, yy);
@@ -242,12 +241,15 @@ namespace chronotext
         
         switch (textAlignX)
         {
-            case ALIGN_MIDDLE :
-                ox += (width - paddingLeft - paddingRight - font->getSubStringWidth(text, start, end)) / 2;
+            case XFont::ALIGN_MIDDLE :
+                ox += 0.5f * (width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end));
                 break;
                 
-            case ALIGN_RIGHT :
-                ox += width - paddingLeft - paddingRight - font->getSubStringWidth(text, start, end);
+            case XFont::ALIGN_RIGHT :
+                ox += width - paddingLeft - paddingRight - font->getSubStringAdvance(text, start, end);
+                break;
+                
+            default:
                 break;
         }
         
@@ -260,12 +262,15 @@ namespace chronotext
         
         switch (textAlignY)
         {
-            case ALIGN_MIDDLE :
-                oy += (height - paddingTop - paddingBottom - contentHeight) / 2;
+            case XFont::ALIGN_MIDDLE :
+                oy += 0.5f * (height - paddingTop - paddingBottom - contentHeight);
                 break;
                 
-            case ALIGN_BOTTOM :
+            case XFont::ALIGN_BOTTOM :
                 oy += height - paddingTop - paddingBottom - contentHeight;
+                break;
+                
+            default:
                 break;
         }
         
@@ -298,11 +303,11 @@ namespace chronotext
         {
             if (wrap && !autoWidth)
             {
-                wrapper.wrap(font, text, width - paddingLeft - paddingRight);
+                wrapper.wrap(*font, text, width - paddingLeft - paddingRight);
             }
             else
             {
-                contentWidth = wrapper.wrap(font, text);
+                contentWidth = wrapper.wrap(*font, text);
             }
         }
         
@@ -334,7 +339,7 @@ namespace chronotext
     
     void TextBox::drawText()
     {
-        gl::color(textColor);
+        font->setColor(textColor);
         
         float innerWidth = width - paddingLeft - paddingRight;
         float innerHeight = height - paddingTop - paddingBottom;
@@ -343,7 +348,7 @@ namespace chronotext
         float limitBottom = limitTop + innerHeight;
         float yy = limitTop + getOffsetY();
         
-        font->beginSequence(NULL, 2);
+        font->beginSequence();
         
         for (int i = 0; i < wrapper.size && yy < limitBottom; i++)
         {
@@ -369,12 +374,12 @@ namespace chronotext
     {
         while (start < end && xx < limitRight)
         {
-            int cc = font->lookup(text[start++]);
-            float ww = font->getGlyphWidth(cc);
+            int glyphIndex = font->getGlyphIndex(text[start++]);
+            float ww = font->getGlyphAdvance(glyphIndex);
             
             if (xx + ww > limitLeft)
             {
-                font->addGlyph(cc, xx, yy);
+                font->addGlyph(glyphIndex, xx, yy);
             }
             
             xx += ww;

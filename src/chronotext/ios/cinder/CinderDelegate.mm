@@ -1,20 +1,21 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
- * "TOUCH MAPPING" CODE FROM CINDER:
- * https://github.com/cinder/Cinder/blob/c894b2a81eb4d859070b177f989f60b470e92b8c/src/cinder/app/CinderViewCocoaTouch.mm
+ * "TOUCH MAPPING" BASED ON CINDER:
+ * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/app/CinderViewCocoaTouch.mm
  */
 
 #import "CinderDelegate.h"
 #import "GLViewController.h"
 
 #include "chronotext/utils/accel/AccelEvent.h"
+#include "chronotext/system/SystemInfo.h"
 
 using namespace std;
 using namespace ci;
@@ -28,9 +29,7 @@ using namespace chr;
 @synthesize sketch;
 @synthesize accelFilterFactor;
 @synthesize io;
-@synthesize width;
-@synthesize height;
-@synthesize contentScale;
+@synthesize windowInfo;
 @synthesize initialized;
 @synthesize active;
 
@@ -62,7 +61,9 @@ using namespace chr;
 - (void) startWithReason:(int)reason
 {
     frameCount = 0;
+
     timer.start();
+    sketch->clock().start();
     
     if (reason == REASON_VIEW_WILL_APPEAR)
     {
@@ -78,6 +79,7 @@ using namespace chr;
 - (void) stopWithReason:(int)reason
 {
     timer.stop();
+    sketch->clock().stop();
 
     if (reason == REASON_VIEW_WILL_DISAPPEAR)
     {
@@ -92,31 +94,62 @@ using namespace chr;
 
 - (void) setup
 {
-    int mx;
-    int my;
-    
     switch (viewController.interfaceOrientation)
     {
         case UIInterfaceOrientationLandscapeLeft:
         case UIInterfaceOrientationLandscapeRight:
-            mx = 0;
-            my = 1;
+            windowInfo.size.x = view.frame.size.height;
+            windowInfo.size.y = view.frame.size.width;
             break;
             
         case UIInterfaceOrientationPortrait:
         case UIInterfaceOrientationPortraitUpsideDown:
-            mx = 1;
-            my = 0;
+            windowInfo.size.x = view.frame.size.width;
+            windowInfo.size.y = view.frame.size.height;
             break;
     }
     
-    int frameWidth = view.frame.size.width;
-    int frameHeight = view.frame.size.height;
+    windowInfo.size *= view.contentScaleFactor;
+    windowInfo.contentScale = view.contentScaleFactor;
+
+    // ---
     
-    width = mx * frameWidth + my * frameHeight;
-    height = mx * frameHeight + my * frameWidth;
+    switch (SystemInfo::instance().getSizeFactor())
+    {
+        case SystemInfo::SIZE_FACTOR_PHONE:
+            if (windowInfo.size.x == 1136)
+            {
+                windowInfo.diagonal = 4;
+            }
+            else
+            {
+                windowInfo.diagonal = 3.54f;
+            }
+            break;
+            
+        case SystemInfo::SIZE_FACTOR_TABLET:
+            windowInfo.diagonal = 9.7f;
+            break;
+            
+        case SystemInfo::SIZE_FACTOR_TABLET_MINI:
+            windowInfo.diagonal = 7.9f;
+            break;
+    }
     
-    contentScale = view.contentScaleFactor;
+    windowInfo.density = windowInfo.size.length() / windowInfo.diagonal;
+    
+    // ---
+    
+    switch (view.drawableMultisample)
+    {
+        case GLKViewDrawableMultisampleNone:
+            windowInfo.aaLevel = 0;
+            break;
+            
+        case GLKViewDrawableMultisample4X:
+            windowInfo.aaLevel = 4;
+            break;
+    }
     
     // ---
     
@@ -124,6 +157,7 @@ using namespace chr;
     ioWork = make_shared<boost::asio::io_service::work>(*io);
 
     sketch->setIOService(*io);
+    sketch->timeline().stepTo(0);
     sketch->setup(false);
     sketch->resize();
     
@@ -132,25 +166,48 @@ using namespace chr;
 
 - (void) update
 {
+    sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
     io->poll();
+    
+    /*
+     * MUST BE CALLED BEFORE Sketch::update
+     * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+     *
+     * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
+     * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
+     */
+    double now = sketch->clock().getTime();
+    
     sketch->update();
+    sketch->timeline().stepTo(now);
     frameCount++;
 }
 
 - (void) draw
 {
+    if (frameCount == 0)
+    {
+        [self update]; // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
+    }
+    
     sketch->draw();
 }
 
 - (double) elapsedSeconds
 {
-    return timer.getSeconds();
+    return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
 }
 
 - (uint32_t) elapsedFrames
 {
     return frameCount;
 }
+
+- (void) action:(int)actionId
+{}
+
+- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
+{}
 
 - (void) sendMessageToSketch:(int)what
 {
@@ -169,9 +226,6 @@ using namespace chr;
 {
     sketch->sendMessage(Message(what, [body UTF8String]));
 }
-
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
-{}
 
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
 
@@ -193,13 +247,15 @@ using namespace chr;
 {
     uint32_t candidateId = 0;
     bool found = true;
+    
     while (found)
     {
         candidateId++;
         found = false;
-        for (map<UITouch*,uint32_t>::const_iterator mapIt = touchIdMap.begin(); mapIt != touchIdMap.end(); ++mapIt)
+        
+        for (auto &it : touchIdMap)
         {
-            if (mapIt->second == candidateId)
+            if (it.second == candidateId)
             {
                 found = true;
                 break;
@@ -213,7 +269,8 @@ using namespace chr;
 
 - (void) removeTouchFromMap:(UITouch*)touch
 {
-    map<UITouch*,uint32_t>::iterator found(touchIdMap.find(touch));
+    auto found = touchIdMap.find(touch);
+    
     if (found != touchIdMap.end())
     {
         touchIdMap.erase(found);
@@ -222,7 +279,8 @@ using namespace chr;
 
 - (uint32_t) findTouchInMap:(UITouch*)touch
 {
-    map<UITouch*,uint32_t>::const_iterator found(touchIdMap.find(touch));
+    auto found = touchIdMap.find(touch);
+    
     if (found != touchIdMap.end())
     {
         return found->second;
@@ -233,27 +291,27 @@ using namespace chr;
 
 - (void) updateActiveTouches
 {
-    const float scale = 1;
-    
+    float scale = view.contentScaleFactor;;
     vector<TouchEvent::Touch> activeTouches;
-    for (map<UITouch*,uint32_t>::const_iterator touchIt = touchIdMap.begin(); touchIt != touchIdMap.end(); ++touchIt)
+    
+    for (auto &it : touchIdMap)
     {
-        CGPoint pt = [touchIt->first locationInView:view];
-        CGPoint prevPt = [touchIt->first previousLocationInView:view];
-        activeTouches.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, touchIt->second, [touchIt->first timestamp], touchIt->first));
+        CGPoint pt = [it.first locationInView:view];
+        CGPoint prevPt = [it.first previousLocationInView:view];
+        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, it.second, [it.first timestamp], it.first);
     }
 }
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = 1;
-    
+    float scale = view.contentScaleFactor;
     vector<TouchEvent::Touch> touchList;
+    
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch));
+        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch);
     }
     
     [self updateActiveTouches];
@@ -265,17 +323,18 @@ using namespace chr;
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = 1;
-    
+    float scale = view.contentScaleFactor;
     vector<TouchEvent::Touch> touchList;
+    
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];            
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch));
+        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
     }
     
     [self updateActiveTouches];
+    
     if (!touchList.empty())
     {
         sketch->touchesMoved(TouchEvent(WindowRef(), touchList));
@@ -284,18 +343,20 @@ using namespace chr;
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = 1;
-    
+    const float scale = view.contentScaleFactor;
     vector<TouchEvent::Touch> touchList;
+    
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
         CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.push_back(TouchEvent::Touch(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch));
+        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
+        
         [self removeTouchFromMap:touch];
     }
     
     [self updateActiveTouches];
+    
     if (!touchList.empty())
     {
         sketch->touchesEnded(TouchEvent(WindowRef(), touchList));

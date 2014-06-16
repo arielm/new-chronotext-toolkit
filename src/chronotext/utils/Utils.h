@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -12,12 +12,12 @@
 
 #include "cinder/app/App.h"
 #include "cinder/Utilities.h"
+#include "cinder/Xml.h"
 
 #include <fstream>
 #include <set>
 
 #include <boost/algorithm/string.hpp>
-#include "boost/format.hpp"
 
 #if defined(CINDER_MSW)
 #include "cinder/msw/OutputDebugStringStream.h"
@@ -158,6 +158,11 @@ namespace chronotext
     
     std::vector<std::string> readInstructions(chr::InputSourceRef source);
     
+    std::string readTextFile(const ci::fs::path &filePath);
+    void writeTextFile(const ci::fs::path &filePath, const std::string &text);
+    
+    void writeXmlFile(const ci::fs::path &filePath, const ci::XmlTree &tree);
+    
     // ---
     
     std::string hexDump(const char *data, int size);
@@ -167,6 +172,40 @@ namespace chronotext
     // ---
     
     uint64_t millisSinceEpoch();
+    
+    // ---
+    
+    /*
+     * REFERENCE: http://stackoverflow.com/a/14920606/50335
+     */
+    
+    template <typename T> struct Iterator
+    {
+        T& container;
+        bool reverse;
+        
+        typedef decltype(container.begin()) I;
+        
+        struct InnerIterator
+        {
+            I i;
+            bool reverse;
+            
+            InnerIterator(I i, bool reverse) : i(i), reverse(reverse) {}
+            I& operator*() { return i; }
+            I& operator++() { return (reverse ? --i : ++i); }
+            bool operator!=(const InnerIterator& o) { return i != o.i; }
+        };
+        
+        Iterator(T& container, bool reverse) : container(container), reverse(reverse) {}
+        InnerIterator begin() { return InnerIterator(reverse ? container.end() : container.begin(), reverse); }
+        InnerIterator end() { return InnerIterator(reverse ? container.begin() : container.end(), reverse); }
+    };
+    
+    template <typename T> Iterator<T> DirectionalIterator(T& container, bool reverse)
+    {
+        return Iterator<T>(container, reverse);
+    }
 }
 
 namespace chr = chronotext;

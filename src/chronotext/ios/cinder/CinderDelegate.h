@@ -1,14 +1,14 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
- * "TOUCH MAPPING" CODE FROM CINDER:
- * https://github.com/cinder/Cinder/blob/c894b2a81eb4d859070b177f989f60b470e92b8c/include/cinder/app/CinderViewCocoaTouch.h
+ * "TOUCH MAPPING" BASED ON CINDER:
+ * https://github.com/cinder/Cinder/blob/v0.8.5/include/cinder/app/CinderViewCocoaTouch.h
  */
 
 #include "chronotext/cinder/CinderSketch.h"
@@ -42,9 +42,7 @@ enum
     std::shared_ptr<boost::asio::io_service> io;
     std::shared_ptr<boost::asio::io_service::work> ioWork;
     
-    int width;
-    int height;
-    float contentScale;
+    chr::WindowInfo windowInfo;
     
     ci::Timer timer;
     uint32_t frameCount;
@@ -58,9 +56,7 @@ enum
 @property (nonatomic, assign) chr::CinderSketch *sketch;
 @property (nonatomic, assign) float accelFilterFactor;
 @property (nonatomic, readonly) std::shared_ptr<boost::asio::io_service> &io;
-@property (nonatomic, readonly) int width;
-@property (nonatomic, readonly) int height;
-@property (nonatomic, readonly) float contentScale;
+@property (nonatomic, readonly) chr::WindowInfo windowInfo;
 @property (nonatomic, readonly) double elapsedSeconds;
 @property (nonatomic, readonly) uint32_t elapsedFrames;
 @property (nonatomic, readonly) BOOL initialized;
@@ -83,9 +79,10 @@ enum
 - (uint32_t) findTouchInMap:(UITouch*)touch;
 - (void) updateActiveTouches;
 
+- (void) action:(int)actionId;
+- (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 
 @end

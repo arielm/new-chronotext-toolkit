@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -19,7 +19,9 @@ namespace chronotext
     :
     CinderSketchBase(),
     context(static_cast<CinderDelegate*>(context)),
-    delegate(static_cast<CinderDelegate*>(delegate))
+    delegate(static_cast<CinderDelegate*>(delegate)),
+    mClock(new FrameClock()),
+    mTimeline(Timeline::create())
     {}
     
     void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
@@ -72,6 +74,16 @@ namespace chronotext
         return context->getWindowBounds();
     }
     
+    float CinderSketchComplex::getWindowContentScale() const
+    {
+        return context->getWindowContentScale();
+    }
+    
+    WindowInfo CinderSketchComplex::getWindowInfo() const
+    {
+        return context->getWindowInfo();
+    }
+    
     ostream& CinderSketchComplex::console()
     {
         return context->console();
@@ -81,7 +93,15 @@ namespace chronotext
     {
         return context->io_service();
     }
-    
+   
+    void CinderSketchComplex::action(int actionId)
+    {
+        if (delegate)
+        {
+            delegate->action(actionId);
+        }
+    }
+
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)

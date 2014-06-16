@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Reference: http://en.wikipedia.org/wiki/List_of_typefaces_included_with_OS_X -->
+<VirtualFont>
+    <!-- Undefined -->
+    <Set>
+        <Ref uri="file:///Library/Fonts/Georgia.ttf" />
+    </Set>
+    <!-- Arabic -->
+    <Set lang="ar">
+        <Ref uri="file:///Library/Fonts/AdobeNaskh-Medium.otf" scale="1.25 " />
+    </Set>
+    <!-- Chinese (Traditional) -->
+    <Set lang="zh-hk:zh-mo:zh-tw">
+        <Ref uri="file:///Library/Fonts/AdobeSongStd-Light.otf" />
+    </Set>
+    <!-- Greek (Monotonic) -->
+    <Set lang="el">
+        <Ref uri="file:///Library/Fonts/Georgia.ttf" />
+    </Set>
+    <!-- Hebrew -->
+    <Set lang="he">
+        <Ref uri="file:///Library/Fonts/AdobeHebrew-Regular.otf" scale="1.25" />
+    </Set>
+    <!-- Hindi -->
+    <Set lang="hi">
+        <Ref uri="file:///Library/Fonts/AdobeDevanagari-Regular.otf" scale="1.2" />
+    </Set>
+    <!-- Japanese -->
+    <Set lang="ja">
+        <Ref uri="file:///System/Library/Fonts/ヒラギノ明朝 ProN W3.otf" scale="0.9" />
+    </Set>
+    <!-- Korean -->
+    <Set lang="ko">
+        <Ref uri="file:///Library/Fonts/AdobeMyungjoStd-Medium.otf" scale="0.85" />
+    </Set>
+    <!-- Russian -->
+    <Set lang="ru">
+        <Ref uri="file:///Library/Fonts/Georgia.ttf" />
+    </Set>
+</VirtualFont>

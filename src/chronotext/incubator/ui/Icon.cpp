@@ -17,8 +17,8 @@ namespace chronotext
     texture(texture),
     scale(scale)
     {
-        this->width = (width < 0) ? texture->getWidth() : width;
-        this->height = (height < 0) ? width = texture->getHeight() : height;
+        this->width = (width < 0) ? texture->getCleanWidth() : width;
+        this->height = (height < 0) ? width = texture->getCleanHeight() : height;
     }
     
     float Icon::getWidth()

@@ -205,7 +205,7 @@ namespace chronotext
     
     void HyperTextBox::drawText()
     {
-        gl::color(textColor);
+        font->setColor(textColor);
         
         float innerWidth = width - paddingLeft - paddingRight;
         float innerHeight = height - paddingTop - paddingBottom;
@@ -214,7 +214,7 @@ namespace chronotext
         float limitBottom = limitTop + innerHeight;
         float yy = limitTop + getOffsetY();
         
-        font->beginSequence(NULL, 2);
+        font->beginSequence();
         
         for (int i = 0; i < wrapper.size && yy < limitBottom; i++)
         {
@@ -247,7 +247,7 @@ namespace chronotext
                         
                         if (i == linkSpan.endLine)
                         {
-                            xx += font->getSubStringWidth(text, start, linkSpan.endIndex);
+                            xx += font->getSubStringAdvance(text, start, linkSpan.endIndex);
                             drawTextSpan(xx, yy, linkSpan.endIndex, end, limitLeft, limitRight);
                             skip = true;
                         }
@@ -272,7 +272,7 @@ namespace chronotext
         {
             const LinkSpan &linkSpan = linkSpans[selectedLinkIndex];
             
-            gl::color(style->selectedLinkTextColor);
+            font->setColor(style->selectedLinkTextColor);
             
             float innerWidth = width - paddingLeft - paddingRight;
             float innerHeight = height - paddingTop - paddingBottom;
@@ -283,7 +283,7 @@ namespace chronotext
             
             if ((yy < limitBottom) && (yy + lineHeight > limitTop))
             {
-                font->beginSequence(NULL, 2);
+                font->beginSequence();
                 
                 for (int i = linkSpan.startLine; i <= linkSpan.endLine; i++)
                 {
@@ -296,7 +296,7 @@ namespace chronotext
                     
                     if (i == linkSpan.startLine)
                     {
-                        xx += font->getSubStringWidth(text, start, linkSpan.startIndex);
+                        xx += font->getSubStringAdvance(text, start, linkSpan.startIndex);
                         start = linkSpan.startIndex;
                     }
                     

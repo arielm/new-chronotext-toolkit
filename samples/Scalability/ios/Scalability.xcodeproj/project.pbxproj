@@ -13,10 +13,10 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
-		A821DF9116ED362800DB025D /* Louis XIV of France - 1024.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A821DF8F16ED362800DB025D /* Louis XIV of France - 1024.jpg */; };
 		A821DF9216ED362800DB025D /* frame rococo - 1024.png in Resources */ = {isa = PBXBuildFile; fileRef = A821DF9016ED362800DB025D /* frame rococo - 1024.png */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
+		A841962E18C6A59800D1FA61 /* Louis XIV of France - 512.png in Resources */ = {isa = PBXBuildFile; fileRef = A841962D18C6A59800D1FA61 /* Louis XIV of France - 512.png */; };
 		A853DFDC18116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFDA18116D42006C2085 /* FileSystem.cpp */; };
 		A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87207FF18081CDE0055F0BA /* SuperHandler.cpp */; };
 		A872080E18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A872080D18085A240055F0BA /* AccelerationManagerImplCocoaTouch.mm */; };
@@ -38,6 +38,9 @@
 		A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */; };
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
+		A8FBC48F18E3AFAE00F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC48E18E3AFAE00F5BBEF /* SystemInfoImplCocoaTouch.mm */; };
+		A8FBC49918E3AFC000F5BBEF /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC49118E3AFC000F5BBEF /* Clock.cpp */; };
+		A8FBC49A18E3AFC000F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC49418E3AFC000F5BBEF /* FrameClock.cpp */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
@@ -56,10 +59,13 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		A821DF8F16ED362800DB025D /* Louis XIV of France - 1024.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Louis XIV of France - 1024.jpg"; path = "../resources/Louis XIV of France - 1024.jpg"; sourceTree = "<group>"; };
 		A821DF9016ED362800DB025D /* frame rococo - 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "frame rococo - 1024.png"; path = "../resources/frame rococo - 1024.png"; sourceTree = "<group>"; };
+		A824C47419060908003C4B84 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
+		A824C47519060908003C4B84 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		A824C47619060908003C4B84 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		A841962D18C6A59800D1FA61 /* Louis XIV of France - 512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Louis XIV of France - 512.png"; path = "../resources/Louis XIV of France - 512.png"; sourceTree = "<group>"; };
 		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFDB18116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A87207FE18081CDE0055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
@@ -108,6 +114,14 @@
 		A8FA3C0116E3AB8000367F97 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		A8FA3C0516E3AB8000367F97 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		A8FA3C0616E3AB8000367F97 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		A8FBC48D18E3AFAE00F5BBEF /* SystemInfoImplCocoaTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoImplCocoaTouch.h; sourceTree = "<group>"; };
+		A8FBC48E18E3AFAE00F5BBEF /* SystemInfoImplCocoaTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemInfoImplCocoaTouch.mm; sourceTree = "<group>"; };
+		A8FBC49118E3AFC000F5BBEF /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
+		A8FBC49218E3AFC000F5BBEF /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
+		A8FBC49318E3AFC000F5BBEF /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
+		A8FBC49418E3AFC000F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
+		A8FBC49518E3AFC000F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
+		A8FBC49818E3AFC000F5BBEF /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -192,10 +206,20 @@
 		00692BD914FF149000D0FFFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A821DF8F16ED362800DB025D /* Louis XIV of France - 1024.jpg */,
+				A841962D18C6A59800D1FA61 /* Louis XIV of France - 512.png */,
 				A821DF9016ED362800DB025D /* frame rococo - 1024.png */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		A824C47319060908003C4B84 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A824C47419060908003C4B84 /* EmulatedDevice.h */,
+				A824C47519060908003C4B84 /* SystemInfo.h */,
+				A824C47619060908003C4B84 /* SystemInfoBase.h */,
+			);
+			path = system;
 			sourceTree = "<group>";
 		};
 		A82C900516DF91BF00FF519C /* iOS */ = {
@@ -246,7 +270,9 @@
 				A8FA3B9316E3AB8000367F97 /* cinder */,
 				A8FA3BBF16E3AB8000367F97 /* ios */,
 				A8FA3BCC16E3AB8000367F97 /* os */,
+				A824C47319060908003C4B84 /* system */,
 				A8FA3BE916E3AB8000367F97 /* texture */,
+				A8FBC49018E3AFC000F5BBEF /* time */,
 				A8FA3BF916E3AB8000367F97 /* utils */,
 			);
 			name = chronotext;
@@ -271,6 +297,7 @@
 			children = (
 				A8FA3BC016E3AB8000367F97 /* cinder */,
 				A8FA3BC516E3AB8000367F97 /* gl */,
+				A8FBC48C18E3AFAE00F5BBEF /* system */,
 				A8FA3BC816E3AB8000367F97 /* utils */,
 			);
 			path = ios;
@@ -350,6 +377,28 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
+		A8FBC48C18E3AFAE00F5BBEF /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A8FBC48D18E3AFAE00F5BBEF /* SystemInfoImplCocoaTouch.h */,
+				A8FBC48E18E3AFAE00F5BBEF /* SystemInfoImplCocoaTouch.mm */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
+		A8FBC49018E3AFC000F5BBEF /* time */ = {
+			isa = PBXGroup;
+			children = (
+				A8FBC49118E3AFC000F5BBEF /* Clock.cpp */,
+				A8FBC49218E3AFC000F5BBEF /* Clock.h */,
+				A8FBC49318E3AFC000F5BBEF /* DefaultTimeBase.h */,
+				A8FBC49418E3AFC000F5BBEF /* FrameClock.cpp */,
+				A8FBC49518E3AFC000F5BBEF /* FrameClock.h */,
+				A8FBC49818E3AFC000F5BBEF /* TimeBase.h */,
+			);
+			path = time;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -401,8 +450,8 @@
 			files = (
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */,
-				A821DF9116ED362800DB025D /* Louis XIV of France - 1024.jpg in Resources */,
 				A821DF9216ED362800DB025D /* frame rococo - 1024.png in Resources */,
+				A841962E18C6A59800D1FA61 /* Louis XIV of France - 512.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +475,9 @@
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
 				A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */,
+				A8FBC49A18E3AFC000F5BBEF /* FrameClock.cpp in Sources */,
+				A8FBC48F18E3AFAE00F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */,
+				A8FBC49918E3AFC000F5BBEF /* Clock.cpp in Sources */,
 				A87CE0E516E75A3700F27EDE /* Sprite.cpp in Sources */,
 				A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */,
 				A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */,

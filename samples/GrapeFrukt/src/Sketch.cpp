@@ -1,3 +1,11 @@
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
 #include "Sketch.h"
 
 #include "chronotext/utils/GLUtils.h"
@@ -10,7 +18,7 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-const float SCALE = 600;
+const float REFERENCE_H = 600;
 const float FPS = 30;
 
 Sketch::Sketch(void *context, void *delegate)
@@ -22,10 +30,6 @@ void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
-        /*
-         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
-         */
-        textureManager.unload();
         textureManager.reload();
     }
     else
@@ -43,6 +47,8 @@ void Sketch::setup(bool renewContext)
         animation = Animation(atlas, InputSource::getResource("sheets.xml"), InputSource::getResource("animations.xml"), FPS);
     }
     
+    // ---
+    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     
@@ -50,19 +56,14 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::resize()
+void Sketch::event(int id)
 {
-    scale = getWindowHeight() / SCALE;
-}
-
-void Sketch::start(int flags)
-{
-    clock.start();
-}
-
-void Sketch::stop(int flags)
-{
-    clock.stop();
+    switch (id)
+    {
+        case EVENT_CONTEXT_LOST:
+            textureManager.discard();
+            break;
+    }
 }
 
 void Sketch::draw()
@@ -71,7 +72,7 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
 
     gl::translate(getWindowCenter());
-    gl::scale(scale);
+    gl::scale(getWindowHeight() / REFERENCE_H);
     
-    animation.play(clock.getTime());
+    animation.play(clock().getTime());
 }

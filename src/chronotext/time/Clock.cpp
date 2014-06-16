@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -12,7 +12,6 @@
  */
 
 #include "chronotext/time/Clock.h"
-#include "chronotext/time/MasterClock.h"
 
 using namespace std;
 
@@ -37,16 +36,16 @@ namespace chronotext
     state(STOPPED)
     {}
     
-    Clock::Clock(shared_ptr<MasterClock> master)
+    Clock::Clock(shared_ptr<Clock> master)
     :
-    timeBase(master->timeBase),
+    timeBase(master.get()),
     timeBaseIsOwned(false),
     master(master),
     mst(0),
     rate(1),
     state(STOPPED)
     {
-        master->add(this);
+        start();
     }
     
     Clock::~Clock()
@@ -54,11 +53,6 @@ namespace chronotext
         if (timeBaseIsOwned)
         {
             delete timeBase;
-        }
-        
-        if (master)
-        {
-            master->remove(this);
         }
     }
     
@@ -82,7 +76,7 @@ namespace chronotext
         return mst + ((state == STOPPED) ? 0 : (timeBase->getTime() - tbst) * rate);
     }
     
-    void Clock::setTime(int now)
+    void Clock::setTime(double now)
     {
         if (state == STOPPED)
         {

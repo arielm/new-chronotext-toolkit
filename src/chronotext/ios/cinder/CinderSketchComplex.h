@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -39,12 +39,20 @@ namespace chronotext
         float getWindowAspectRatio() const;
         ci::Area getWindowBounds() const;
         float getWindowContentScale() const;
+        WindowInfo getWindowInfo() const;
         
+        chr::FrameClock& clock() const { return *mClock; }
+        ci::Timeline& timeline() const { return *mTimeline; }
+        
+        void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");
         
     protected:
         void *context;
         void *delegate;
+        
+        std::shared_ptr<chr::FrameClock> mClock;
+        ci::TimelineRef mTimeline;
     };
 }
 

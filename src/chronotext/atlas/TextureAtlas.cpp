@@ -70,13 +70,13 @@ namespace chronotext
                 oh = spriteElement->getAttributeValue<float>("oH", h);
             }
             
-            float tx1 = x / width;
-            float ty1 = y / height;
+            float u1 = x / width;
+            float v1 = y / height;
             
-            float tx2 = (x + w) / width;
-            float ty2 = (y + h) / height;
+            float u2 = (x + w) / width;
+            float v2 = (y + h) / height;
             
-            sprites[spritePath] = make_shared<Sprite>(texture, w, h, ox, oy, ow, oh, rotated, tx1, ty1, tx2, ty2);
+            sprites[spritePath] = make_shared<Sprite>(texture, w, h, ox, oy, ow, oh, rotated, u1, v1, u2, v2);
         }
     }
     

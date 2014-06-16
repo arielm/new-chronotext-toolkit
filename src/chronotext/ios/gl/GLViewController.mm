@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -34,9 +34,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     if (self = [super init])
     {
         NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES2], kGLViewControllerPropertyRenderingAPI,
+                                  [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
                                   [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
-                                  [NSNumber numberWithBool:NO], kGLViewControllerPropertyMultipleTouchEnabled,
+                                  [NSNumber numberWithBool:YES], kGLViewControllerPropertyMultipleTouchEnabled,
                                   [NSNumber numberWithInt:UIInterfaceOrientationMaskPortrait], kGLViewControllerPropertyInterfaceOrientationMask,
                                   [NSNumber numberWithInt:GLKViewDrawableColorFormatRGBA8888], kGLViewControllerPropertyColorFormat,
                                   [NSNumber numberWithInt:GLKViewDrawableDepthFormat24], kGLViewControllerPropertyDepthFormat,
@@ -183,6 +183,14 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 - (void) glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
     [cinderDelegate draw];
+}
+
+/*
+ * FOR iOS 7+
+ */
+- (BOOL) prefersStatusBarHidden
+{
+    return YES;
 }
 
 #pragma mark ---------------------------------------- ORIENTATION ----------------------------------------

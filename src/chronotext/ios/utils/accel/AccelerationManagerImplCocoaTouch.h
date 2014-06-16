@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "AccelEvent.h"
+#include "chronotext/utils/accel/AccelEvent.h"
 
 #if defined(__OBJC__)
 @class CocoaProxy;

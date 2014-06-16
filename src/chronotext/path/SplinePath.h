@@ -1,52 +1,90 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
+ * REFERENCES:
+ *
+ * "Spline Curves" BY Tim Lambert
+ * http://www.cse.unsw.edu.au/~lambert/splines
+ */
+
+/*
  * TODO:
  *
- * ADD SUPPORT FOR BEZIER CURVES:
- * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/Path2d.cpp#L653-657
- * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/Path2d.cpp#L689-697
+ * IMPLEMENTING THE HERMITE CURVE (WITH BIAS AND TENSION) WOULD BE A MUST:
+ * http://paulbourke.net/miscellaneous/interpolation
  */
 
 #pragma once
 
 #include "chronotext/path/FollowablePath.h"
 
+#include "cinder/DataSource.h"
+#include "cinder/DataTarget.h"
+
 namespace chronotext
 {
     class SplinePath
     {
     public:
-        SplinePath(const std::function<float (float, float*)> &gamma, float tol = 1, int capacity = 256);
+        typedef enum
+        {
+            TYPE_BSPLINE,
+            TYPE_CATMULL_ROM
+        }
+        Type;
         
-        void add(float x, float y);
-        inline void add(const ci::Vec2f &point) { add(point.x, point.y); }
+        SplinePath(int capacity = 0);
+        SplinePath(const std::vector<ci::Vec2f> &points);
+        SplinePath(ci::DataSourceRef source);
+
+        void read(ci::DataSourceRef source);
+        void write(ci::DataTargetRef target);
+
+        void add(const std::vector<ci::Vec2f> &points);
+        void add(const ci::Vec2f &point);
+        inline void add(float x, float y) { add(ci::Vec2f(x, y)); }
+        
+        const std::vector<ci::Vec2f>& getPoints() const;
 
         void clear();
-        void compute(FollowablePath *path);
+        int size() const;
+        bool empty() const;
+        
+        void close();
+        bool isClosed() const;
+        
+        void flush(Type type, FollowablePath &path, float tol = 1) const;
+        inline FollowablePath flush(Type type, float tol = 1)  const { FollowablePath path; flush(type, path, tol); return path; }
         
     protected:
-        std::function<float (float, float*)> gamma;
-        float tol;
-        
-        std::vector<float> x;
-        std::vector<float> y;
+        std::vector<ci::Vec2f> points;
+        bool closed;
     };
     
-    static float GammaCatmullRom(float t, float *in)
+    static ci::Vec2f GammaBSpline(float t, ci::Vec2f *in)
     {
-        return (in[0] * ((-t + 2) * t - 1) * t + in[1] * (((3 * t - 5) * t) * t + 2) + in[2] * ((-3 * t + 4) * t + 1) * t + in[3] * ((t - 1) * t * t)) / 2;
+        float w0 = ((3 - t) * t - 3) * t + 1;
+        float w1 = ((3 * t - 6) * t) * t + 4;
+        float w2 = ((3 - 3 * t) * t + 3) * t + 1;
+        float w3 = t * t * t;
+        
+        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x + w3 * in[3].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y + w3 * in[3].y) / 6;
     }
-    
-    static float GammaBSpline(float t, float *in)
+
+    static ci::Vec2f GammaCatmullRom(float t, ci::Vec2f *in)
     {
-        return (in[0] * (((-t + 3) * t - 3) * t + 1) + in[1] * (((3 * t - 6) * t) * t + 4) + in[2] * (((-3 * t + 3) * t + 3) * t + 1) + in[3] * (t * t * t)) / 6;
+        float w0 = ((2 - t) * t - 1) * t;
+        float w1 = ((3 * t - 5) * t) * t + 2;
+        float w2 = ((4 - 3 * t) * t + 1) * t;
+        float w3 = (t - 1) * t * t;
+        
+        return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x + w3 * in[3].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y + w3 * in[3].y) / 2;
     }
 }
 

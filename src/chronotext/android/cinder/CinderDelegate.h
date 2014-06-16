@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -21,9 +21,8 @@ namespace chronotext
     {
         std::shared_ptr<ci::android::dostream> mOutputStream;
         
-        int mWidth;
-        int mHeight;
-        int mAccelerometerRotation;
+        WindowInfo mWindowInfo;
+        int mDisplayRotation;
         
         ci::Timer mTimer;
         uint32_t mFrameCount;
@@ -65,7 +64,8 @@ namespace chronotext
             EVENT_SHOWN,
             EVENT_HIDDEN,
             EVENT_BACKGROUND,
-            EVENT_FOREGROUND
+            EVENT_FOREGROUND,
+            EVENT_BACK_KEY
         };
         
     public:
@@ -88,11 +88,11 @@ namespace chronotext
         
         void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
         
-        void setup(int width, int height, int accelerometerRotation);
+        void setup(int width, int height, float diagonal, float density, int displayRotation);
         void shutdown();
         
         void draw();
-        void event(int id);
+        void event(int eventId);
         
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
@@ -113,7 +113,10 @@ namespace chronotext
         ci::Vec2i getWindowSize() const;
         float getWindowAspectRatio() const;
         ci::Area getWindowBounds() const;
+        float getWindowContentScale() const;
+        WindowInfo getWindowInfo() const;
         
+        virtual void action(int actionId);
         virtual void receiveMessageFromSketch(int what, const std::string &body);
         virtual void sendMessageToSketch(int what, const std::string &body);
         

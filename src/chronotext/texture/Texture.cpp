@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -14,7 +14,7 @@ using namespace ci;
 
 namespace chronotext
 {
-    Texture::Texture(InputSourceRef inputSource, bool useMipmap, int flags)
+    Texture::Texture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
     :
     request(TextureRequest(inputSource, useMipmap, flags))
     {
@@ -35,7 +35,7 @@ namespace chronotext
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
     
-    void Texture::unload()
+    void Texture::discard()
     {
         if (target)
         {
@@ -64,12 +64,12 @@ namespace chronotext
     
     int Texture::getId() const
     {
-        return name;
+        return id;
     }
     
     void Texture::bind()
     {
-        glBindTexture(GL_TEXTURE_2D, name);
+        glBindTexture(GL_TEXTURE_2D, id);
     }
     
     void Texture::begin()
@@ -78,7 +78,7 @@ namespace chronotext
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, name);
+        glBindTexture(GL_TEXTURE_2D, id);
     }
     
     void Texture::end()
@@ -132,17 +132,17 @@ namespace chronotext
             rect.x1, rect.y2
         };
         
-        float tx1 = (rect.x1 - ox) / width;
-        float ty1 = (rect.y1 - oy) / height;
-        float tx2 = (rect.x2 - ox) / width;
-        float ty2 = (rect.y2 - oy) / height;
+        float u1 = (rect.x1 - ox) / width;
+        float v1 = (rect.y1 - oy) / height;
+        float u2 = (rect.x2 - ox) / width;
+        float v2 = (rect.y2 - oy) / height;
         
         const float coords[] =
         {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
+            u1, v1,
+            u2, v1,
+            u2, v2,
+            u1, v2
         };
         
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
@@ -165,6 +165,21 @@ namespace chronotext
         return Vec2i(width, height);
     }
     
+    int Texture::getCleanWidth() const
+    {
+        return int(width * maxU);
+    }
+    
+    int Texture::getCleanHeight() const
+    {
+        return int(height * maxV);
+    }
+    
+    Vec2i Texture::getCleanSize() const
+    {
+        return Vec2i(width * maxU, height * maxV);
+    }
+    
     float Texture::getMaxU() const
     {
         return maxU;
@@ -175,11 +190,16 @@ namespace chronotext
         return maxV;
     }
     
+    Vec2f Texture::getMaxUV() const
+    {
+        return Vec2f(maxU, maxV);
+    }
+    
     void Texture::setTarget(ci::gl::TextureRef texture)
     {
         target = texture;
         
-        name = texture->getId();
+        id = texture->getId();
         width = texture->getWidth();
         height = texture->getHeight();
         maxU = texture->getMaxU();

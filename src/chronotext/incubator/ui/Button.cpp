@@ -7,11 +7,12 @@
  */
 
 #include "chronotext/incubator/ui/Button.h"
-#include "chronotext/text/TextHelper.h"
+#include "chronotext/font/xf/TextHelper.h"
 #include "chronotext/utils/GLUtils.h"
 
 using namespace std;
 using namespace ci;
+using namespace chr::xf;
 
 namespace chronotext
 {
@@ -96,14 +97,14 @@ namespace chronotext
         }
         else if (style->font)
         {
-            gl::color(*style->color[state]);
-            
+            style->font->setColor(*style->color[state]);
             style->font->setSize(style->fontSize);
-            TextHelper::drawTextInRect(style->font, NULL, text, bounds, style->snap);
+            TextHelper::drawTextInRect(*style->font, text, bounds);
             
             if (style->strikethrough[state])
             {
-                TextHelper::drawStrikethroughInRect(style->font, text, bounds, style->snap);
+                gl::color(*style->color[state]);
+                drawStrikethroughInRect(*style->font, text, bounds);
             }
         }
     }
@@ -135,7 +136,7 @@ namespace chronotext
         else if (style->font)
         {
             style->font->setSize(style->fontSize);
-            return TextHelper::getStringWidth(style->font, text, style->snap);
+            return style->font->getStringAdvance(text);
         }
         else
         {
@@ -158,5 +159,25 @@ namespace chronotext
         {
             return 0;
         }
+    }
+    
+    void Button::drawStrikethroughInRect(XFont &font, const wstring &text, const Rectf &rect)
+    {
+        float w = font.getStringAdvance(text);
+        float x3 = rect.x1 + (rect.getWidth() - w) * 0.5f;
+        float x4 = x3 + w;
+        
+        float y3 = rect.y1 + rect.getHeight() * 0.5f;
+        
+        const float vertices[] =
+        {
+            x3, y3,
+            x4, y3
+        };
+        
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(2, GL_FLOAT, 0, vertices);
+        glDrawArrays(GL_LINES, 0, 2);
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,6 +8,7 @@
 
 #include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/FileSystem.h"
+#include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
 #include <android/asset_manager.h>
@@ -84,6 +85,36 @@ namespace chronotext
         mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, NULL, NULL/*sensorEventCallback, this*/); // WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
     }
     
+    /*
+     * REFERENCES:
+     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
+     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
+     */
+    static void canonicalToWorld(int displayRotation, float *canVec, ci::Vec3f &worldVec)
+    {
+        struct AxisSwap
+        {
+            int negateX;
+            int negateY;
+            int xSrc;
+            int ySrc;
+        };
+        
+        static const AxisSwap axisSwap[] =
+        {
+            { 1,  1, 0, 1 }, // ROTATION_0
+            {-1,  1, 1, 0 }, // ROTATION_90
+            {-1, -1, 0, 1 }, // ROTATION_180
+            { 1, -1, 1, 0 }  // ROTATION_270
+        };
+        
+        const AxisSwap &as = axisSwap[displayRotation];
+        
+        worldVec.x = as.negateX * canVec[as.xSrc];
+        worldVec.y = as.negateY * canVec[as.ySrc];
+        worldVec.z = canVec[2];
+    }
+    
     void CinderDelegate::processSensorEvents()
     {
         ASensorEvent event;
@@ -92,34 +123,13 @@ namespace chronotext
         {
             if (event.type == ASENSOR_TYPE_ACCELEROMETER)
             {
-                float x = event.acceleration.x;
-                float y = event.acceleration.y;
-                float z = event.acceleration.z;
+                Vec3f transformed;
+                canonicalToWorld(mDisplayRotation, (float*)&event.acceleration.v, transformed);
                 
                 /*
-                 * APPLYING THE EVENTUAL ORIENTATION FIX
+                 * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
                  */
-                if (mAccelerometerRotation == ACCELEROMETER_ROTATION_LANDSCAPE)
-                {
-                    float tmp = x;
-                    x = -y;
-                    y = +tmp;
-                }
-                else if (mAccelerometerRotation == ACCELEROMETER_ROTATION_PORTRAIT)
-                {
-                    float tmp = x;
-                    x = +y;
-                    y = -tmp;
-                }
-                
-                /*
-                 * FOR CONSISTENCY WITH iOS
-                 */
-                x /= -GRAVITY_EARTH;
-                y /= +GRAVITY_EARTH;
-                z /= +GRAVITY_EARTH;
-                
-                accelerated(x, y, z);
+                accelerated(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
             }
         }
     }
@@ -136,11 +146,18 @@ namespace chronotext
         mLastRawAccel = acceleration;
     }
     
-    void CinderDelegate::setup(int width, int height, int accelerometerRotation)
+    void CinderDelegate::setup(int width, int height, float diagonal, float density, int displayRotation)
     {
-        mWidth = width;
-        mHeight = height;
-        mAccelerometerRotation = accelerometerRotation;
+        mWindowInfo.size = Vec2i(width, height);
+        mWindowInfo.contentScale = 1;
+        mWindowInfo.diagonal = diagonal;
+        mWindowInfo.density = density;
+        mDisplayRotation = displayRotation;
+        
+        /*
+         * IDEALLY, THIS INFO SHOULD BE ACCESSIBLE AS-SOON-AS THE "PRELAUNCH" STAGE...
+         */
+        SystemInfo::instance().setWindowInfo(mWindowInfo);
         
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);
@@ -165,45 +182,63 @@ namespace chronotext
          * WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
          */
         processSensorEvents();
-        
+
+        sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
         io->poll();
+        
+        /*
+         * MUST BE CALLED BEFORE Sketch::update
+         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+         *
+         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
+         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
+         */
+        double now = sketch->clock().getTime();
+        
         sketch->update();
+        sketch->timeline().stepTo(now);
         mFrameCount++;
 
         sketch->draw();
     }
     
-    void CinderDelegate::event(int id)
+    void CinderDelegate::event(int eventId)
     {
-        switch (id)
+        switch (eventId)
         {
             case EVENT_ATTACHED:
             case EVENT_SHOWN:
                 mFrameCount = 0;
+                
                 mTimer.start();
+                sketch->clock().start();
+                
                 sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
                 break;
                 
             case EVENT_RESUMED:
                 mFrameCount = 0;
+                
                 mTimer.start();
+                sketch->clock().start();
                 
-                /*
-                 * ASSERTIONS: THE GL CONTEXT HAS JUST BEEN RE-CREATED, WITH THE SAME DIMENSIONS AS BEFORE
-                 */
-                sketch->setup(true);
-                
+                sketch->setup(true); // ASSERTIONS: THE GL CONTEXT WAS JUST RE-CREATED, WITH THE SAME DIMENSIONS AS BEFORE
                 sketch->start(CinderSketch::FLAG_APP_RESUMED);
                 break;
                 
             case EVENT_DETACHED:
             case EVENT_HIDDEN:
                 mTimer.stop();
+                sketch->clock().stop();
+                
                 sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
                 break;
                 
             case EVENT_PAUSED:
                 mTimer.stop();
+                sketch->clock().stop();
+                
+                sketch->event(CinderSketch::EVENT_CONTEXT_LOST); // ASSERTION: THE GL CONTEXT IS ABOUT TO BE LOST
                 sketch->stop(CinderSketch::FLAG_APP_PAUSED);
                 break;
                 
@@ -213,6 +248,10 @@ namespace chronotext
                 
             case EVENT_FOREGROUND:
                 sketch->event(CinderSketch::EVENT_FOREGROUND);
+                break;
+                
+            case EVENT_BACK_KEY:
+                sketch->event(CinderSketch::EVENT_BACK_KEY);
                 break;
         }
     }
@@ -270,7 +309,7 @@ namespace chronotext
     
     double CinderDelegate::getElapsedSeconds() const
     {
-        return mTimer.getSeconds();
+        return mTimer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
     }
     
     uint32_t CinderDelegate::getElapsedFrames() const
@@ -280,34 +319,49 @@ namespace chronotext
     
     int CinderDelegate::getWindowWidth() const
     {
-        return mWidth;
+        return mWindowInfo.size.x;
     }
     
     int CinderDelegate::getWindowHeight() const
     {
-        return mHeight;
+        return mWindowInfo.size.y;
     }
     
     Vec2f CinderDelegate::getWindowCenter() const
     {
-        return Vec2f(mWidth * 0.5f, mHeight * 0.5f);
+        return mWindowInfo.size * 0.5f;
     }
     
     Vec2i CinderDelegate::getWindowSize() const
     {
-        return Vec2i(mWidth, mHeight);
+        return mWindowInfo.size;
     }
     
     float CinderDelegate::getWindowAspectRatio() const
     {
-        return mWidth / (float)mHeight;
+        return mWindowInfo.size.x / (float)mWindowInfo.size.y;
     }
     
     Area CinderDelegate::getWindowBounds() const
     {
-        return Area(0, 0, mWidth, mHeight);
+        return Area(0, 0, mWindowInfo.size.x, mWindowInfo.size.y);
+    }
+
+    float CinderDelegate::getWindowContentScale() const
+    {
+        return mWindowInfo.contentScale;
     }
     
+    WindowInfo CinderDelegate::getWindowInfo() const
+    {
+        return mWindowInfo;
+    }
+    
+    void CinderDelegate::action(int actionId)
+    {
+        callVoidMethodOnJavaListener("action", "(I)V", actionId);
+    }
+
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
 #ifdef DEBUG_MESSAGES

@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -13,33 +13,28 @@ using namespace ci;
 
 namespace chronotext
 {
-    TextureManager::TextureManager()
-    :
-    unloaded(false)
-    {}
-    
-    TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, int flags)
+    TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, int flags)
+    TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(TextureRequest(inputSource, useMipmap, flags));
     }
     
     TextureRef TextureManager::getTexture(const TextureRequest &textureRequest)
     {
-        auto it = cache.find(textureRequest);
+        auto it = textures.find(textureRequest);
         
-        if (it != cache.end())
+        if (it != textures.end())
         {
             return it->second;
         }
         else
         {
             auto texture = make_shared<Texture>(textureRequest);
-            cache[textureRequest] = texture;
+            textures[textureRequest] = texture;
             
             return texture;
         }
@@ -47,11 +42,11 @@ namespace chronotext
     
     bool TextureManager::remove(TextureRef texture)
     {
-        for (auto it = cache.begin(); it != cache.end(); ++it)
+        for (auto it = textures.begin(); it != textures.end(); ++it)
         {
             if (it->second == texture)
             {
-                cache.erase(it);
+                textures.erase(it);
                 return true;
             }
         }
@@ -61,32 +56,22 @@ namespace chronotext
     
     void TextureManager::clear()
     {
-        cache.clear();
+        textures.clear();
     }
     
-    void TextureManager::unload()
+    void TextureManager::discard()
     {
-        if (!unloaded)
+        for (auto &it : textures)
         {
-            unloaded = true;
-            
-            for (auto &it : cache)
-            {
-                it.second->unload();
-            }
+            it.second->discard();
         }
     }
     
     void TextureManager::reload()
     {
-        if (unloaded)
+        for (auto &it : textures)
         {
-            unloaded = false;
-            
-            for (auto &it : cache)
-            {
-                it.second->reload();
-            }
+            it.second->reload();
         }
     }
 }

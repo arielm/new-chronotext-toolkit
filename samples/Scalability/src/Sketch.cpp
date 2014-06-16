@@ -1,3 +1,11 @@
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
 #include "Sketch.h"
 
 #include "chronotext/utils/GLUtils.h"
@@ -6,25 +14,26 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-const float GRID_SIZE = 32;
-const float FRAME_SCALE = 464 / 512.0f;
+const float PADDING1 = 0; // IN FRAME-IMAGE SPACE
+const float PADDING2 = 12; // IN ABSOLUTE SCREEN SPACE
+
+const float FRAME_INTERIOR_WIDTH = 464; // IN FRAME-IMAGE SPACE
+const float GRID_SIZE = 32; // IN FRAME-IMAGE SPACE
 
 void Sketch::setup(bool renewContext)
 {
     if (renewContext)
     {
-        /*
-         *  NECESSARY AFTER OPEN-GL CONTEXT-LOSS (OCCURS ON ANDROID WHEN APP GOES TO BACKGROUND)
-         */
-        textureManager.unload();
         textureManager.reload();
     }
     else
     {
-        frame = textureManager.getTexture("frame rococo - 1024.png", true);
-        picture = textureManager.getTexture("Louis XIV of France - 1024.jpg", true);
+        frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT);
+        picture = textureManager.getTexture("Louis XIV of France - 512.png", true, TextureRequest::FLAGS_POT);
     }
 
+    // ---
+    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
@@ -32,32 +41,58 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
+void Sketch::event(int id)
+{
+    switch (id)
+    {
+        case EVENT_CONTEXT_LOST:
+            textureManager.discard();
+            break;
+    }
+}
+
 void Sketch::resize()
 {
-    scale = getWindowHeight() / (float)frame->getHeight();
-    position = getWindowCenter() / scale;
+    Vec2f targetSize = frame->getCleanSize() + Vec2f(PADDING1, PADDING1) * 2;
+    float aspectRatio = targetSize.x / targetSize.y;
+    
+    if (getWindowAspectRatio() < aspectRatio)
+    {
+        scale = getWindowWidth() / targetSize.x;
+        scale *= getWindowWidth() / (getWindowWidth() + PADDING2 * 2);
+    }
+    else
+    {
+        scale = getWindowHeight() / targetSize.y;
+        scale *= getWindowHeight() / (getWindowHeight() + PADDING2 * 2);
+    }
+    
+    // ---
+    
+    position = Vec2f::zero();
 }
 
 void Sketch::draw()
 {
-    gl::clear(Color(0.5f, 0.5f, 0.5f), false);
+    gl::clear(Color::gray(0.5f), false);
     gl::setMatricesWindow(getWindowSize(), true);
-    
+
     gl::color(1, 1, 1, 0.25f);
+    drawGrid(getWindowBounds(), GRID_SIZE * scale, position * scale);
+
+    gl::translate(getWindowCenter()); // THE ORIGIN IS AT THE CENTER OF THE SCREEN
     gl::scale(scale);
-    drawGrid(Rectf(getWindowBounds()) / scale, GRID_SIZE, position);
 
     gl::color(1, 1, 1, 1);
 
     glPushMatrix();
     gl::translate(position);
-    gl::scale(FRAME_SCALE);
+    gl::scale(FRAME_INTERIOR_WIDTH / picture->getCleanWidth());
     picture->begin();
     picture->drawFromCenter();
     picture->end();
     glPopMatrix();
     
-    gl::translate(getWindowCenter() / scale);
     frame->begin();
     frame->drawFromCenter();
     frame->end();

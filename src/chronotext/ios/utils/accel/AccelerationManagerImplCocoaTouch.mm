@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "AccelerationManagerImplCocoaTouch.h"
+#include "chronotext/ios/utils/accel/AccelerationManagerImplCocoaTouch.h"
 
 using namespace ci;
 

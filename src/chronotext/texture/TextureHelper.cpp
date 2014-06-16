@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -20,12 +20,12 @@ using namespace ci;
 
 namespace chronotext
 {
-    gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, int flags)
+    gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    gl::TextureRef TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, int flags)
+    gl::TextureRef TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(TextureRequest(inputSource, useMipmap, flags));
     }
@@ -57,7 +57,7 @@ namespace chronotext
         {
             if (textureRequest.inputSource->isFile())
             {
-                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath())); // RVO-READY
+                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath()));
             }
             else
             {
@@ -66,25 +66,25 @@ namespace chronotext
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
         {
-            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource())); // RVO-READY
+            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr"))
         {
-            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer()); // RVO-READY
+            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
         }
         else
         {
             if (textureRequest.flags & TextureRequest::FLAGS_TRANSLUCENT)
             {
-                return TextureData(fetchTranslucentTextureData(textureRequest)); // RVO-READY
+                return TextureData(fetchTranslucentTextureData(textureRequest));
             }
             else if (textureRequest.flags & TextureRequest::FLAGS_POT)
             {
-                return TextureData(fetchPowerOfTwoTextureData(textureRequest)); // RVO-READY
+                return TextureData(fetchPowerOfTwoTextureData(textureRequest));
             }
             else
             {
-                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource())); // RVO-READY
+                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
             }
         }
         
@@ -180,14 +180,14 @@ namespace chronotext
      */
     void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
     {
-        float tx = texture->getMaxU();
-        float ty = texture->getMaxV();
+        float u = texture->getMaxU();
+        float v = texture->getMaxV();
         
         float x1 = -rx;
         float y1 = -ry;
         
-        float x2 = x1 + texture->getWidth() * tx;
-        float y2 = y1 + texture->getHeight() * ty;
+        float x2 = x1 + texture->getWidth() * u;
+        float y2 = y1 + texture->getHeight() * v;
         
         const float vertices[] =
         {
@@ -200,9 +200,9 @@ namespace chronotext
         const float coords[] =
         {
             0, 0,
-            tx, 0,
-            tx, ty,
-            0, ty
+            u, 0,
+            u, v,
+            0, v
         };
         
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
@@ -223,17 +223,17 @@ namespace chronotext
             rect.x1, rect.y2
         };
         
-        float tx1 = (rect.x1 - ox) / texture->getWidth();
-        float ty1 = (rect.y1 - oy) / texture->getHeight();
-        float tx2 = (rect.x2 - ox) / texture->getWidth();
-        float ty2 = (rect.y2 - oy) / texture->getHeight();
+        float u1 = (rect.x1 - ox) / texture->getWidth();
+        float v1 = (rect.y1 - oy) / texture->getHeight();
+        float u2 = (rect.x2 - ox) / texture->getWidth();
+        float v2 = (rect.y2 - oy) / texture->getHeight();
         
         const float coords[] =
         {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
+            u1, v1,
+            u2, v1,
+            u2, v2,
+            u1, v2
         };
         
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
@@ -246,7 +246,7 @@ namespace chronotext
         gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
         
         LOGD <<
-        "TEXTURE UNLOADED: " <<
+        "TEXTURE DISCARDED: " <<
         texture->getId() <<
         endl;
     }
@@ -285,7 +285,7 @@ namespace chronotext
             data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
         }
         
-        return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight()); // RVO-READY
+        return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight());
     }
     
     TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &textureRequest)
@@ -324,11 +324,11 @@ namespace chronotext
             dst.copyFrom(src, Area(srcWidth - 1, 0, srcWidth, srcHeight), Vec2i(1, 0));
             dst.copyFrom(src, Area(0, srcHeight - 1, srcWidth, srcHeight), Vec2i(0, 1));
             
-            return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight)); // RVO-READY
+            return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
         }
         else
         {
-            return TextureData(textureRequest, src); // RVO-READY
+            return TextureData(textureRequest, src);
         }
     }
 }

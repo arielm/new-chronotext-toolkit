@@ -12,7 +12,7 @@
 #include "chronotext/incubator/ui/Icon.h"
 #include "chronotext/incubator/ui/Touchable.h"
 
-#include "chronotext/font/XFont.h"
+#include "chronotext/font/xf/Font.h"
 
 #include <map>
 
@@ -33,7 +33,7 @@ namespace chronotext
         class Style : public Shape::Style
         {
         public:
-            chr::XFont *font;
+            std::shared_ptr<chr::XFont> font;
             float fontSize;
             bool snap;
             
@@ -48,7 +48,6 @@ namespace chronotext
             Style()
             :
             Shape::Style(),
-            font(NULL),
             fontSize(1),
             snap(false),
             hitExtra(8)
@@ -77,6 +76,8 @@ namespace chronotext
     protected:
         float getContentWidth();
         float getContentHeight();
+        
+        static void drawStrikethroughInRect(XFont &font, const std::wstring &text, const ci::Rectf &rect);
     };
 }
 

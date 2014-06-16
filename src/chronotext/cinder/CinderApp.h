@@ -1,13 +1,9 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
- */
-
-/*
- * TODO: CHECK IF pause() AND resume() ARE STILL WORKING ON ANDROID
  */
 
 #pragma once
@@ -15,6 +11,7 @@
 #include "cinder/app/AppNative.h"
 
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/system/EmulatedDevice.h"
 
 namespace chronotext
 {
@@ -23,11 +20,7 @@ namespace chronotext
     public:
         CinderSketch *sketch;
         
-        CinderApp()
-        :
-        startCount(0),
-        updateCount(0)
-        {}
+        CinderApp();
         
         void setup();
         void shutdown();
@@ -46,8 +39,11 @@ namespace chronotext
         
         void accelerated(AccelEvent event);
         
+        virtual void action(int actionId) {}
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         void sendMessageToSketch(int what, const std::string &body);
+        
+        void emulate(Settings *settings, const EmulatedDevice &device);
         
 #if defined(CINDER_ANDROID)
         void pause();
@@ -57,10 +53,6 @@ namespace chronotext
     protected:
         int startCount;
         int updateCount;
-        
-        int ticks;
-        double t0;
-        double elapsed;
         
         void start();
         void stop();

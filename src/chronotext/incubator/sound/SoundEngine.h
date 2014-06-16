@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,9 +8,10 @@
 
 #pragma once
 
-#include "Effect.h"
+#include "chronotext/incubator/sound/Effect.h"
 
 #include <map>
+#include <set>
 
 class SoundEngine
 {
@@ -19,8 +20,8 @@ public:
     {
         EVENT_UNDEFINED,
         EVENT_STARTED,
-        EVENT_STOPPED,
-        EVENT_INTERRUPTED,
+        EVENT_STOPPED, // EFFECT STOPPED BY USER
+        EVENT_INTERRUPTED, // EFFECT AUTOMATICALLY STOPPED IN FAVOR OF A NEW EFFECT (I.E. WHEN NO FREE CHANNEL REMAIN)
         EVENT_COMPLETED
     };
     
@@ -84,17 +85,34 @@ public:
     public:
         virtual void handleEvent(const Event &event) = 0;
     };
+    
+    FMOD::System *system;
+    FMOD::ChannelGroup *masterGroup;
   
     SoundEngine();
     
     void setup(int maxChannels = 32);
     void shutdown();
-            
-    void setListener(Listener *listener);
-    
+
+    /*
+     * ON ANDROID (UNLIKE iOS):
+     * IT IS NECESSARY TO CALL THESE UPON FOREGROUND/BACKGROUND SWITCHES
+     */
     void pause();
     void resume();
+
+    /*
+     * IT IS MANDATORY TO CALL UPDATE EACH FRAME,
+     * OTHERWISE (AND AMONG OTHER THINGS):
+     * CHANNELS WON'T BE FREED UPON COMPLETION
+     */
     void update();
+    
+    void addListener(Listener *listener);
+    void removeListener(Listener *listener);
+
+    void setMute(bool mute);
+    void setVolume(float volume);
     
     EffectRef preloadEffect(chr::InputSourceRef inputSource);
     void unloadEffect(EffectRef effect);
@@ -103,19 +121,15 @@ public:
     bool stopEffect(int playingId);
     bool stopEffects(EffectRef effect);
     bool stopAllEffects();
-
-    void setMute(bool mute);
-    void setVolume(float volume);
+    bool pauseEffect(int playingId);
+    bool resumeEffect(int playingId);
     
 protected:
-    FMOD::System *system;
-    FMOD::ChannelGroup *masterGroup;
-    
     std::map<std::string, EffectRef> effects;
     std::map<int, std::pair<int, EffectRef>> playingEffects;
     
     int playCount;
-    Listener *listener;
+    std::set<Listener*> listeners;
     
     EffectRef loadEffect(chr::InputSourceRef inputSource);
     int nextPlayingId(EffectRef effect);

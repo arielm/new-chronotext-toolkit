@@ -28,7 +28,7 @@ namespace chronotext
     
     void TouchGroup::addShapes(const vector<ShapeRef> &shapes)
     {
-        for (auto shape : shapes)
+        for (auto &shape : shapes)
         {
             this->shapes.push_back(shape.get());
         }
@@ -138,13 +138,11 @@ namespace chronotext
         Touchable *closestTouchable = NULL;
         float closestDistance = numeric_limits<float>::max();
         
-        for (auto shape : shapes)
+        for (auto &shape : shapes)
         {
             if (shape->visible)
             {
-                vector<Touchable*> touchables = shape->getTouchables();
-
-                for (auto touchable : touchables)
+                for (auto &touchable : shape->getTouchables())
                 {
                     float distance;
                     if (touchable->hitTest(point, &distance))
@@ -164,11 +162,9 @@ namespace chronotext
     
     Touchable* TouchGroup::getArmedTouchableByIndex(int index)
     {
-        for (auto shape : shapes)
+        for (auto &shape : shapes)
         {
-            vector<Touchable*> touchables = shape->getTouchables();
-            
-            for (auto touchable : touchables)
+            for (auto &touchable : shape->getTouchables())
             {
                 if (touchable->armedIndex == index)
                 {

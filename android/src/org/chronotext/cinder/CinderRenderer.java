@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,15 +8,19 @@
 
 package org.chronotext.cinder;
 
+import java.util.Vector;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import org.chronotext.gl.GLRenderer;
+import org.chronotext.gl.Touch;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.util.DisplayMetrics;
 
 /*
  * WARNING: BE SURE TO DEFINE android:screenOrientation IN THE MANIFEST
@@ -34,10 +38,7 @@ public class CinderRenderer extends GLRenderer
   public static final int EVENT_HIDDEN = 6;
   public static final int EVENT_BACKGROUND = 7;
   public static final int EVENT_FOREGROUND = 8;
-
-  public static final int ACCELEROMETER_ROTATION_DEFAULT = 0;
-  public static final int ACCELEROMETER_ROTATION_PORTRAIT = 1;
-  public static final int ACCELEROMETER_ROTATION_LANDSCAPE = 2;
+  public static final int EVENT_BACK_KEY = 9;
 
   protected Context mContext;
   protected Object mListener;
@@ -50,30 +51,11 @@ public class CinderRenderer extends GLRenderer
     prelaunch();
   }
 
-  /*
-   * BASED ON CODE FROM Cocos2dxAccelerometer.java
-   * Copyright (c) 2010-2011 cocos2d-x.org 
-   * http://www.cocos2d-x.org
-   */
-  protected int getAccelerometerRotation()
+  protected WindowManager getWindowManager()
   {
-    int orientation = mContext.getResources().getConfiguration().orientation;
-
-    Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-    int naturalOrientation = display.getOrientation();
-
-    if ((orientation == Configuration.ORIENTATION_LANDSCAPE) && (naturalOrientation != Surface.ROTATION_0))
-    {
-      return ACCELEROMETER_ROTATION_LANDSCAPE;
-    }
-    else if ((orientation == Configuration.ORIENTATION_PORTRAIT) && (naturalOrientation != Surface.ROTATION_0))
-    {
-      return ACCELEROMETER_ROTATION_PORTRAIT;
-    }
-
-    return ACCELEROMETER_ROTATION_DEFAULT;
+    return (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
   }
-
+    
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
 
   public void launch()
@@ -83,7 +65,27 @@ public class CinderRenderer extends GLRenderer
 
   public void setup(GL10 gl, int width, int height)
   {
-    setup(width, height, getAccelerometerRotation());
+    Display display = getWindowManager().getDefaultDisplay();
+    DisplayMetrics dm = new DisplayMetrics();
+    display.getMetrics(dm);
+
+    float widthInches = (float) dm.widthPixels / dm.xdpi;
+    float heightInches = (float) dm.heightPixels / dm.ydpi;
+    float diagonal = (float) Math.sqrt(widthInches * widthInches + heightInches * heightInches);
+
+    /*
+     * MORE RELIABLE THAN dm.densityDpi
+     */
+    float density = (float) Math.sqrt(dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels) / diagonal;
+
+    /*
+     * REFERENCES:
+     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
+     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
+     */
+    int displayRotation = display.getRotation();
+      
+    setup(width, height, diagonal, density, displayRotation);
     initialized = true;
   }
 
@@ -139,6 +141,30 @@ public class CinderRenderer extends GLRenderer
     event(EVENT_HIDDEN);
     hidden = true;
   }
+    
+  public void addTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      addTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void updateTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      updateTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void removeTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      removeTouch(touch.index, touch.x, touch.y);
+    }
+  }
 
   // ---------------------------------------- JNI ----------------------------------------
 
@@ -146,7 +172,7 @@ public class CinderRenderer extends GLRenderer
 
   public native void launch(Context context, Object listener);
 
-  public native void setup(int width, int height, int accelerometerRotation);
+  public native void setup(int width, int height, float diagonal, float density, int displayRotation);
 
   public native void shutdown();
 

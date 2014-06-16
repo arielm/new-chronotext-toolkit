@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -20,36 +20,32 @@ namespace chronotext
     :
     CinderSketchBase(),
     context(context),
-    delegate(delegate)
+    delegate(delegate),
+    mClock(new FrameClock()),
+    mTimeline(Timeline::create())
     {}
     
     void CinderSketchComplex::touchesBegan(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator it = event.getTouches().begin(); it != event.getTouches().end(); ++it)
+        for (auto &touch : event.getTouches())
         {
-            float x = it->getX();
-            float y = it->getY();
-            addTouch(it->getId() - 1, x, y);
+            addTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
     void CinderSketchComplex::touchesMoved(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator it = event.getTouches().begin(); it != event.getTouches().end(); ++it)
+        for (auto &touch : event.getTouches())
         {
-            float x = it->getX();
-            float y = it->getY();
-            updateTouch(it->getId() - 1, x, y);
+            updateTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
     void CinderSketchComplex::touchesEnded(TouchEvent event)
     {
-        for (vector<TouchEvent::Touch>::const_iterator it = event.getTouches().begin(); it != event.getTouches().end(); ++it)
+        for (auto &touch : event.getTouches())
         {
-            float x = it->getX();
-            float y = it->getY();
-            removeTouch(it->getId() - 1, x, y);
+            removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
     }
     
@@ -88,50 +84,63 @@ namespace chronotext
     
     int CinderSketchComplex::getWindowWidth() const
     {
-        return ((CinderDelegate*)context).width;
+        return ((CinderDelegate*)context).windowInfo.size.x;
     }
     
     int CinderSketchComplex::getWindowHeight() const
     {
-        return ((CinderDelegate*)context).height;
+        return ((CinderDelegate*)context).windowInfo.size.y;
     }
     
     Vec2f CinderSketchComplex::getWindowCenter() const
     {
-        return Vec2i(((CinderDelegate*)context).width * 0.5f, ((CinderDelegate*)context).height * 0.5f);
+        return getWindowSize() * 0.5f;
     }
     
     Vec2i CinderSketchComplex::getWindowSize() const
     {
-        return Vec2i(((CinderDelegate*)context).width, ((CinderDelegate*)context).height);
+        return Vec2i(getWindowWidth(), getWindowHeight());
     }
     
     float CinderSketchComplex::getWindowAspectRatio() const
     {
-        return ((CinderDelegate*)context).width / (float)((CinderDelegate*)context).height;
+        return getWindowWidth() / (float)getWindowHeight();
     }
     
     Area CinderSketchComplex::getWindowBounds() const
     {
-        return Area(0, 0, ((CinderDelegate*)context).width, ((CinderDelegate*)context).height);
+        return Area(0, 0, getWindowWidth(), getWindowHeight());
     }
     
     float CinderSketchComplex::getWindowContentScale() const
     {
-        return ((CinderDelegate*)context).contentScale;
+        return ((CinderDelegate*)context).windowInfo.contentScale;
+    }
+    
+    WindowInfo CinderSketchComplex::getWindowInfo() const
+    {
+        return ((CinderDelegate*)context).windowInfo;
+    }
+    
+    void CinderSketchComplex::action(int actionId)
+    {
+        if (delegate)
+        {
+            [(CinderDelegate*)delegate action:actionId];
+        }
     }
     
     void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)
         {
-            if (body.size() > 0)
+            if (body.empty())
             {
-                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
+                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:nil];
             }
             else
             {
-                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:nil];
+                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
             }
         }
     }

@@ -1,12 +1,14 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/utils/Utils.h"
+
+#include "rapidxml/rapidxml_print.hpp"
 
 #include "utf8.h"
 
@@ -86,20 +88,41 @@ namespace chronotext
     
     vector<string> readInstructions(InputSourceRef source)
     {
-        vector<string> lines = readLines<string>(source);
         vector<string> instructions;
         
-        for (auto &line : lines)
+        for (auto &line : readLines<string>(source))
         {
             boost::algorithm::trim(line);
             
             if (!line.empty() && !boost::starts_with(line, "#"))
             {
-                instructions.emplace_back(line);
+                instructions.emplace_back(move(line));
             }
         }
         
         return instructions;
+    }
+    
+    string readTextFile(const fs::path &filePath)
+    {
+        fs::ifstream in(filePath);
+        return string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
+    }
+    
+    void writeTextFile(const fs::path &filePath, const string &text)
+    {
+        fs::ofstream out(filePath);
+        out << text;
+        out.close();
+    }
+    
+    void writeXmlFile(const fs::path &filePath, const XmlTree &tree)
+    {
+        auto doc = tree.createRapidXmlDoc(true);
+        std::ostringstream ss;
+        ss << *doc;
+        
+        writeTextFile(filePath, ss.str());
     }
     
     // ---

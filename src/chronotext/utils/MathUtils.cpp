@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -57,20 +57,20 @@ namespace chronotext
      * RETURNS numeric_limits<float>::max() IF CLOSEST POINT IS FARTHER THAN threshold DISTANCE
      *
      * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
-     * http://paulbourke.net/geometry/pointlineplane/
+     * http://paulbourke.net/geometry/pointlineplane
      */
     float MathUtils::getShortestDistance(const Vec2f &point, const vector<Vec2f> &polygon, bool close, float threshold)
     {
         float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
+
+        int end = polygon.size();
         bool found = false;
         
-        int size = polygon.size();
-        
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < end; i++)
         {
             int i0, i1;
             
-            if (i == size - 1)
+            if (i == end - 1)
             {
                 if (close)
                 {
