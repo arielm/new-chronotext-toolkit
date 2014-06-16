@@ -36,7 +36,7 @@ namespace chronotext
             {
                 for (auto it = map.begin(); it != map.end();)
                 {
-                    if (it->second->size() == 0)
+                    if (it->second->empty())
                     {
                         it = map.erase(it);
                     }
