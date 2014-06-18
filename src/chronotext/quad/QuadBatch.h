@@ -57,6 +57,11 @@ namespace chronotext
         {
             return vertices.size() >> 2;
         }
+        
+        bool empty() const
+        {
+            return vertices.empty();
+        }
 
         inline void addQuad(const Quad &quad, float z = 0)
         {
