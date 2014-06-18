@@ -1,8 +1,9 @@
-CHR_SRC = $(CINDER_PATH)/blocks/new-chronotext-toolkit/src
-UTF8_CPP_SRC = $(CINDER_PATH)/include/utf8-cpp
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/include/utf8-cpp
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/src/libtess2
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/blocks/Freetype/include
 
+CHR_SRC = $(CINDER_PATH)/blocks/new-chronotext-toolkit/src
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CHR_SRC)
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(UTF8_CPP_SRC)
 
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderDelegate.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderSketchComplex.cpp
