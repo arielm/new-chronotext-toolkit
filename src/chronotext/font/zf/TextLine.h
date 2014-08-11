@@ -16,26 +16,26 @@ namespace chronotext
 {
     namespace zf
     {
-        template<typename T> struct Item
-        {
-            int32_t start;
-            int32_t end;
-            T data;
-            
-            Item(int32_t start, int32_t end, T data)
-            :
-            start(start),
-            end(end),
-            data(data)
-            {}
-        };
-        
-        typedef Item<std::pair<hb_script_t, std::string>> ScriptAndLanguageItem;
-        typedef Item<hb_direction_t> DirectionItem;
-        typedef Item<int> TagItem;
-        
         struct TextLine
         {
+            template<typename T> struct Item
+            {
+                int32_t start;
+                int32_t end;
+                T data;
+                
+                Item(int32_t start, int32_t end, T data)
+                :
+                start(start),
+                end(end),
+                data(data)
+                {}
+            };
+            
+            typedef Item<std::pair<hb_script_t, std::string>> ScriptAndLanguageItem;
+            typedef Item<hb_direction_t> DirectionItem;
+            typedef Item<int> TagItem;
+            
             UnicodeString text;
             std::string langHint;
             hb_direction_t overallDirection;
