@@ -176,15 +176,23 @@ namespace chronotext
     // ---
     
     /*
-     * REFERENCE: http://stackoverflow.com/a/14920606/50335
+     * RUN-TIME DIRECTIONAL-RANGE
+     *
+     * USAGE:
+     * std::vector<string> container = {"A", "B", "C", "D"};
+     * for (auto &item : chr::DirectionalRange(container, true)) { cout << item << endl; }
+     *
+     * BASED ON: http://stackoverflow.com/a/14920606/50335
+     * ADAPTED IN ORDER TO RETURN A REFERENCE INSTEAD OF AN ITERATOR
      */
-    
+
     template <typename T> struct Iterator
     {
         T& container;
         bool reverse;
         
         typedef decltype(container.begin()) I;
+        typedef typename std::iterator_traits<I>::reference R; // WORKS FOR CONST AND NON-CONST STD CONTAINERS
         
         struct InnerIterator
         {
@@ -192,8 +200,8 @@ namespace chronotext
             bool reverse;
             
             InnerIterator(I i, bool reverse) : i(i), reverse(reverse) {}
-            I& operator*() { return i; }
-            I& operator++() { return (reverse ? --i : ++i); }
+            R operator*() { return *i; }
+            I operator++() { return (reverse ? --i : ++i); }
             bool operator!=(const InnerIterator& o) { return i != o.i; }
         };
         
@@ -202,7 +210,7 @@ namespace chronotext
         InnerIterator end() { return InnerIterator(reverse ? --container.begin() : container.end(), reverse); }
     };
     
-    template <typename T> Iterator<T> DirectionalIterator(T& container, bool reverse)
+    template <typename T> Iterator<T> DirectionalRange(T& container, bool reverse = false)
     {
         return Iterator<T>(container, reverse);
     }
