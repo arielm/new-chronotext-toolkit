@@ -198,8 +198,8 @@ namespace chronotext
         };
         
         Iterator(T& container, bool reverse) : container(container), reverse(reverse) {}
-        InnerIterator begin() { return InnerIterator(reverse ? container.end() : container.begin(), reverse); }
-        InnerIterator end() { return InnerIterator(reverse ? container.begin() : container.end(), reverse); }
+        InnerIterator begin() { return InnerIterator(reverse ? --container.end() : container.begin(), reverse); }
+        InnerIterator end() { return InnerIterator(reverse ? --container.begin() : container.end(), reverse); }
     };
     
     template <typename T> Iterator<T> DirectionalIterator(T& container, bool reverse)
