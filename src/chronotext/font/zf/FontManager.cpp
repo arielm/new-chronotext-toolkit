@@ -298,6 +298,8 @@ namespace chronotext
         
         void FontManager::unload()
         {
+            layoutCache.clear();
+            
             for (auto &it : actualFonts)
             {
                 it.second->unload();
