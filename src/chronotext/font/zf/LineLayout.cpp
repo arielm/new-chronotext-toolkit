@@ -50,7 +50,8 @@ namespace chronotext
         advance(0),
         maxHeight(0),
         maxAscent(0),
-        maxDescent(0)
+        maxDescent(0),
+        averageStrikethroughOffset(0)
         {}
         
         void LineLayout::addCluster(const Cluster &cluster)

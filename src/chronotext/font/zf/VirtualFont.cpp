@@ -19,6 +19,7 @@ namespace chronotext
         VirtualFont::VirtualFont(FontManager &fontManager, const Properties &properties)
         :
         properties(properties),
+        middleLineFactor(0),
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
         indices(fontManager.getIndices(properties.slotCapacity)),
@@ -131,7 +132,14 @@ namespace chronotext
         
         float VirtualFont::getMiddleLine(const LineLayout &layout) const
         {
-            return 0.5f * (layout.maxAscent - layout.maxDescent) * sizeRatio;
+            if (middleLineFactor == 0)
+            {
+                return layout.averageStrikethroughOffset * sizeRatio;
+            }
+            else
+            {
+              return middleLineFactor * (layout.maxAscent - layout.maxDescent) * sizeRatio;
+            }
         }
         
         float VirtualFont::getOffsetX(const LineLayout &layout, Alignment align) const
@@ -191,6 +199,9 @@ namespace chronotext
             map<hb_codepoint_t, Cluster> clusterMap;
             auto buffer = hb_buffer_create();
             
+            float accumulatedStrikethroughOffset = 0;
+            int accumulationCounter = 0;
+            
             for (auto &run : range)
             {
                 clusterMap.clear();
@@ -204,6 +215,9 @@ namespace chronotext
                         layout->maxHeight = std::max(layout->maxHeight, font->metrics.height);
                         layout->maxAscent = std::max(layout->maxAscent, font->metrics.ascent);
                         layout->maxDescent = std::max(layout->maxDescent, font->metrics.descent);
+                        
+                        accumulatedStrikethroughOffset += font->metrics.strikethroughOffset;
+                        accumulationCounter++;
                         
                         run.apply(line.text, buffer);
                         hb_shape(font->hbFont, buffer, NULL, 0);
@@ -279,6 +293,8 @@ namespace chronotext
                 }
             }
             
+            layout->averageStrikethroughOffset = accumulatedStrikethroughOffset / accumulationCounter;
+            
             hb_buffer_destroy(buffer);
             return layout;
         }
@@ -304,15 +320,20 @@ namespace chronotext
             }
         }
         
-        void VirtualFont::setSize(float newSize)
+        void VirtualFont::setSize(float size)
         {
-            size = newSize;
-            sizeRatio = newSize / properties.baseSize;
+            this->size = size;
+            sizeRatio = size / properties.baseSize;
         }
         
-        void VirtualFont::setColor(const ColorA &newColor)
+        void VirtualFont::setMiddleLineFactor(float factor)
         {
-            color = newColor;
+            middleLineFactor = factor;
+        }
+        
+        void VirtualFont::setColor(const ColorA &color)
+        {
+            this->color = color;
         }
         
         void VirtualFont::setColor(float r, float g, float b, float a)

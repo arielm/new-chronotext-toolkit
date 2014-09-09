@@ -51,6 +51,7 @@ namespace chronotext
             float maxHeight;
             float maxAscent;
             float maxDescent;
+            float averageStrikethroughOffset;
             
             LineLayout(VirtualFont *font, const std::string &langHint, hb_direction_t overallDirection);
             void addCluster(const Cluster &cluster);

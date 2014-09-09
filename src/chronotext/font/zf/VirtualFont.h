@@ -100,10 +100,14 @@ namespace chronotext
             ActualFont::Metrics getMetrics(const Cluster &cluster) const; // RETURNS THE SIZED METRICS OF THE ActualFont USED BY cluster
             ActualFont::Metrics getMetrics(const std::string &lang = "") const; // RETURNS THE SIZED METRICS OF THE FIRST ActualFont IN THE SET USED FOR lang
             
-            float getHeight(const LineLayout &layout) const;
-            float getAscent(const LineLayout &layout) const;
-            float getDescent(const LineLayout &layout) const;
-            float getMiddleLine(const LineLayout &layout) const;
+            /*
+             * FUNCTIONS TAKING A LineLayout AS PARAMETER RETURN VALUES BASED ON THE WHOLE "COMPOSITE LINE" (WHICH CAN CONTAIN SEVERAL ActualFont)
+             */
+            
+            float getHeight(const LineLayout &layout) const; // RETURNS THE MAXIMUM HEIGHT
+            float getAscent(const LineLayout &layout) const; // RETURNS THE MAXIMUM ASCENT
+            float getDescent(const LineLayout &layout) const; // RETURNS THE MAXIMUM DESCENT
+            float getMiddleLine(const LineLayout &layout) const; // IF middleLineFactor EQUALS 0: RETURNS THE AVERAGE STRIKETHROUGH-OFFSET; OTHERWISE: SEE setMiddleLineFactor()
             
             float getOffsetX(const LineLayout &layout, Alignment align) const;
             float getOffsetY(const LineLayout &layout, Alignment align) const;
@@ -127,6 +131,7 @@ namespace chronotext
             void preload(LineLayout &layout);
             
             void setSize(float size);
+            void setMiddleLineFactor(float factor); // DEFAULT-VALUE IS 0; OTHERWISE getMiddleLine() WILL RETURN middleLineFactor * (MAX-ASCENT - MAX-DESCENT)
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);
             
@@ -159,6 +164,7 @@ namespace chronotext
         protected:
             float size;
             float sizeRatio;
+            float middleLineFactor;
             ci::ColorA color;
             
             bool hasClip;
