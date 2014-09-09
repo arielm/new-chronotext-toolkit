@@ -51,6 +51,8 @@ namespace chronotext
         maxHeight(0),
         maxAscent(0),
         maxDescent(0),
+        maxUnderlineOffset(0),
+        maxLineThickness(0),
         averageStrikethroughOffset(0)
         {}
         

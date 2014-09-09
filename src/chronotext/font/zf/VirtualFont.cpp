@@ -130,18 +130,21 @@ namespace chronotext
             return layout.maxDescent * sizeRatio;
         }
         
-        float VirtualFont::getMiddleLine(const LineLayout &layout) const
+        float VirtualFont::getUnderlineOffset(const LineLayout &layout) const
         {
-            if (middleLineFactor == 0)
-            {
-                return layout.averageStrikethroughOffset * sizeRatio;
-            }
-            else
-            {
-              return middleLineFactor * (layout.maxAscent - layout.maxDescent) * sizeRatio;
-            }
+            return layout.maxUnderlineOffset * sizeRatio;
         }
         
+        float VirtualFont::getLineThickness(const LineLayout &layout) const
+        {
+            return layout.maxLineThickness * sizeRatio;
+        }
+
+        float VirtualFont::getStrikethroughOffset(const LineLayout &layout) const
+        {
+            return layout.averageStrikethroughOffset * sizeRatio;
+        }
+
         float VirtualFont::getOffsetX(const LineLayout &layout, Alignment align) const
         {
             switch (align)
@@ -162,7 +165,14 @@ namespace chronotext
             switch (align)
             {
                 case ALIGN_MIDDLE:
-                    return getMiddleLine(layout);
+                    if (middleLineFactor == 0)
+                    {
+                        return getStrikethroughOffset(layout);
+                    }
+                    else
+                    {
+                        return middleLineFactor * (layout.maxAscent - layout.maxDescent) * sizeRatio;
+                    }
                     
                 case ALIGN_TOP:
                     return +getAscent(layout);
@@ -195,12 +205,10 @@ namespace chronotext
         LineLayout* VirtualFont::createLineLayout(const TextLine &line, boost::iterator_range<vector<TextRun>::const_iterator> range)
         {
             auto layout = new LineLayout(this, line.langHint, line.overallDirection);
+            int averageCount = 0;
             
             map<hb_codepoint_t, Cluster> clusterMap;
             auto buffer = hb_buffer_create();
-            
-            float accumulatedStrikethroughOffset = 0;
-            int accumulationCounter = 0;
             
             for (auto &run : range)
             {
@@ -215,9 +223,11 @@ namespace chronotext
                         layout->maxHeight = std::max(layout->maxHeight, font->metrics.height);
                         layout->maxAscent = std::max(layout->maxAscent, font->metrics.ascent);
                         layout->maxDescent = std::max(layout->maxDescent, font->metrics.descent);
+                        layout->maxUnderlineOffset = std::max(layout->maxUnderlineOffset, font->metrics.underlineOffset);
+                        layout->maxLineThickness = std::max(layout->maxLineThickness, font->metrics.lineThickness);
                         
-                        accumulatedStrikethroughOffset += font->metrics.strikethroughOffset;
-                        accumulationCounter++;
+                        layout->averageStrikethroughOffset += font->metrics.strikethroughOffset;
+                        averageCount++;
                         
                         run.apply(line.text, buffer);
                         hb_shape(font->hbFont, buffer, NULL, 0);
@@ -292,10 +302,11 @@ namespace chronotext
                     }
                 }
             }
-            
-            layout->averageStrikethroughOffset = accumulatedStrikethroughOffset / accumulationCounter;
-            
+
+            layout->averageStrikethroughOffset /= averageCount;
+
             hb_buffer_destroy(buffer);
+
             return layout;
         }
         

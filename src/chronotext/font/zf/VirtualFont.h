@@ -101,16 +101,17 @@ namespace chronotext
             ActualFont::Metrics getMetrics(const std::string &lang = "") const; // RETURNS THE SIZED METRICS OF THE FIRST ActualFont IN THE SET USED FOR lang
             
             /*
-             * FUNCTIONS TAKING A LineLayout AS PARAMETER RETURN VALUES BASED ON THE WHOLE "COMPOSITE LINE" (WHICH CAN CONTAIN SEVERAL ActualFont)
+             * METRICS TAKE IN COUNT EVERY ActualFont INCLUDED IN THE "COMPOSITE LINE"
              */
-            
-            float getHeight(const LineLayout &layout) const; // RETURNS THE MAXIMUM HEIGHT
-            float getAscent(const LineLayout &layout) const; // RETURNS THE MAXIMUM ASCENT
-            float getDescent(const LineLayout &layout) const; // RETURNS THE MAXIMUM DESCENT
-            float getMiddleLine(const LineLayout &layout) const; // IF middleLineFactor EQUALS 0: RETURNS THE AVERAGE STRIKETHROUGH-OFFSET; OTHERWISE: SEE setMiddleLineFactor()
+            float getHeight(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getAscent(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getDescent(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getUnderlineOffset(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getLineThickness(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getStrikethroughOffset(const LineLayout &layout) const; // RETURNS THE LINE'S AVERAGE
             
             float getOffsetX(const LineLayout &layout, Alignment align) const;
-            float getOffsetY(const LineLayout &layout, Alignment align) const;
+            float getOffsetY(const LineLayout &layout, Alignment align) const; // FOR "ALIGN_MIDDLE": getStrikethroughOffset() WILL BE USED, UNLESS setMiddleLineFactor() HAS BEEN INVOKED
             inline ci::Vec2f getOffset(const LineLayout &layout, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(layout, alignX), getOffsetY(layout, alignY)); }
             
             float getAdvance(const LineLayout &layout) const;
@@ -131,7 +132,7 @@ namespace chronotext
             void preload(LineLayout &layout);
             
             void setSize(float size);
-            void setMiddleLineFactor(float factor); // DEFAULT-VALUE IS 0; OTHERWISE getMiddleLine() WILL RETURN middleLineFactor * (MAX-ASCENT - MAX-DESCENT)
+            void setMiddleLineFactor(float factor); // DEFAULT-VALUE IS 0, OTHERWISE getOffsetY() FOR "ALIGN_MIDDLE" WILL RETURN middleLineFactor * (getAscent() - getDescent())
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);
             

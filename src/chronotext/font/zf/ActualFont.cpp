@@ -183,7 +183,7 @@ namespace chronotext
                 
                 auto os2 = (TT_OS2*)FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2);
                 
-                if (os2 && (os2->version != 0xFFFF))
+                if (os2 && (os2->version != 0xFFFF) && (os2->yStrikeoutPosition != 0))
                 {
                     metrics.strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, ftFace->size->metrics.y_scale) * scale.y;
                 }
