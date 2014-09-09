@@ -130,14 +130,14 @@ namespace chronotext
             return layout.maxDescent * sizeRatio;
         }
         
-        float VirtualFont::getUnderlineOffset(const LineLayout &layout) const
-        {
-            return layout.maxUnderlineOffset * sizeRatio;
-        }
-        
         float VirtualFont::getLineThickness(const LineLayout &layout) const
         {
             return layout.maxLineThickness * sizeRatio;
+        }
+
+        float VirtualFont::getUnderlineOffset(const LineLayout &layout) const
+        {
+            return layout.maxUnderlineOffset * sizeRatio;
         }
 
         float VirtualFont::getStrikethroughOffset(const LineLayout &layout) const
@@ -165,14 +165,7 @@ namespace chronotext
             switch (align)
             {
                 case ALIGN_MIDDLE:
-                    if (middleLineFactor == 0)
-                    {
-                        return getStrikethroughOffset(layout);
-                    }
-                    else
-                    {
-                        return middleLineFactor * (layout.maxAscent - layout.maxDescent) * sizeRatio;
-                    }
+                    return (middleLineFactor != 0) ? (middleLineFactor * (layout.maxAscent - layout.maxDescent) * sizeRatio) : getStrikethroughOffset(layout);
                     
                 case ALIGN_TOP:
                     return +getAscent(layout);
@@ -223,8 +216,8 @@ namespace chronotext
                         layout->maxHeight = std::max(layout->maxHeight, font->metrics.height);
                         layout->maxAscent = std::max(layout->maxAscent, font->metrics.ascent);
                         layout->maxDescent = std::max(layout->maxDescent, font->metrics.descent);
-                        layout->maxUnderlineOffset = std::max(layout->maxUnderlineOffset, font->metrics.underlineOffset);
                         layout->maxLineThickness = std::max(layout->maxLineThickness, font->metrics.lineThickness);
+                        layout->maxUnderlineOffset = std::max(layout->maxUnderlineOffset, font->metrics.underlineOffset);
                         
                         layout->averageStrikethroughOffset += font->metrics.strikethroughOffset;
                         averageCount++;

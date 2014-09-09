@@ -98,12 +98,12 @@ public:
     float height;
     float ascent;
     float descent;
-    float spaceWidth;
-    float strikethroughFactor;
-    float underlineOffset;
     float lineThickness;
+    float underlineOffset;
+    float strikethroughOffset;
+    float spaceWidth;
     
-    float size;
+    float baseSize;
     XParams params;
     
     int atlasWidth;
@@ -112,7 +112,7 @@ public:
     std::map<wchar_t, XGlyph*> glyphs; // SORTED BY UNICODE CHARACTER (SMALLER FIRST)
     std::list<XGlyph*> ordered; // SORTED BY SIZE (LARGEST FIRST)
     
-    XFontCreator(std::shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float size, const std::wstring &characters, const XParams &params);
+    XFontCreator(std::shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float baseSize, const std::wstring &characters, const XParams &params);
     ~XFontCreator();
     
     void writeToFolder(const ci::fs::path &folderPath);

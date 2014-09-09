@@ -106,8 +106,8 @@ namespace chronotext
                 float height;
                 float ascent;
                 float descent;
-                float strikethroughOffset;
                 float underlineOffset;
+                float strikethroughOffset;
                 float lineThickness;
                 
                 Metrics& operator*(float s)
@@ -115,9 +115,9 @@ namespace chronotext
                     height *= s;
                     ascent *= s;
                     descent *= s;
-                    strikethroughOffset *= s;
-                    underlineOffset *= s;
                     lineThickness *= s;
+                    underlineOffset *= s;
+                    strikethroughOffset *= s;
                     
                     return *this;
                 }

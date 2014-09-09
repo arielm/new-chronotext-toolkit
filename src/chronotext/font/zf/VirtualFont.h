@@ -106,8 +106,8 @@ namespace chronotext
             float getHeight(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
             float getAscent(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
             float getDescent(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
-            float getUnderlineOffset(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
             float getLineThickness(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getUnderlineOffset(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
             float getStrikethroughOffset(const LineLayout &layout) const; // RETURNS THE LINE'S AVERAGE
             
             float getOffsetX(const LineLayout &layout, Alignment align) const;

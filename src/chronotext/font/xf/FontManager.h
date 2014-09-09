@@ -24,10 +24,10 @@ namespace chronotext
             float height;
             float ascent;
             float descent;
-            float spaceAdvance;
-            float strikethroughFactor;
-            float underlineOffset;
             float lineThickness;
+            float underlineOffset;
+            float strikethroughOffset;
+            float spaceAdvance;
             
             float *w;
             float *h;

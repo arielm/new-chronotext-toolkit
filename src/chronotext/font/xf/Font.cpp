@@ -36,10 +36,10 @@ namespace chronotext
             height = data->height;
             ascent = data->ascent;
             descent = data->descent;
-            spaceAdvance = data->spaceAdvance;
-            strikethroughFactor = data->strikethroughFactor;
-            underlineOffset = data->underlineOffset;
             lineThickness = data->lineThickness;
+            underlineOffset = data->underlineOffset;
+            strikethroughOffset = data->strikethroughOffset;
+            spaceAdvance = data->spaceAdvance;
             
             w = data->w;
             h = data->h;
@@ -128,6 +128,11 @@ namespace chronotext
             sizeRatio = size / baseSize;
         }
         
+        void Font::setMiddleLineFactor(float factor)
+        {
+            middleLineFactor = factor;
+        }
+        
         void Font::setDirection(float direction)
         {
             this->direction = direction;
@@ -149,11 +154,6 @@ namespace chronotext
             color.g = g;
             color.b = b;
             color.a = a;
-        }
-        
-        void Font::setStrikethroughFactor(float factor)
-        {
-            strikethroughFactor = factor;
         }
         
         void Font::setClip(const Rectf &clipRect)
@@ -244,22 +244,22 @@ namespace chronotext
         {
             return descent * sizeRatio;
         }
-        
-        float Font::getStrikethroughOffset() const
+
+        float Font::getLineThickness() const
         {
-            return strikethroughFactor * (ascent - descent) * sizeRatio;
+            return lineThickness * sizeRatio;
         }
-        
+
         float Font::getUnderlineOffset() const
         {
             return underlineOffset * sizeRatio;
         }
         
-        float Font::getLineThickness() const
+        float Font::getStrikethroughOffset() const
         {
-            return lineThickness * sizeRatio;
+            return strikethroughOffset * sizeRatio;
         }
-        
+       
         float Font::getOffsetX(const wstring &text, Alignment align) const
         {
             switch (align)
@@ -283,7 +283,7 @@ namespace chronotext
             switch (align)
             {
                 case ALIGN_MIDDLE:
-                    return getStrikethroughOffset();
+                    return (middleLineFactor != 0) ? (middleLineFactor * (ascent - descent) * sizeRatio) : getStrikethroughOffset();
                     
                 case ALIGN_TOP:
                     return +getAscent();

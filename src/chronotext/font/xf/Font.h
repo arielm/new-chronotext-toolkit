@@ -78,12 +78,12 @@ namespace chronotext
             std::wstring getCharacters() const;
             
             void setSize(float size);
+            void setMiddleLineFactor(float factor);
             void setDirection(float direction);
             void setAxis(const ci::Vec2f &axis);
             inline void setAxis(float x, float y) { setAxis(ci::Vec2f(x, y)); }
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);
-            void setStrikethroughFactor(float factor);
             
             void setClip(const ci::Rectf &clipRect);
             void setClip(float x1, float y1, float x2, float y2);
@@ -101,9 +101,9 @@ namespace chronotext
             float getHeight() const;
             float getAscent() const;
             float getDescent() const;
-            float getStrikethroughOffset() const;
-            float getUnderlineOffset() const;
             float getLineThickness() const;
+            float getUnderlineOffset() const;
+            float getStrikethroughOffset() const;
             
             float getOffsetX(const std::wstring &text, Alignment align) const;
             float getOffsetY(Alignment align) const;
@@ -133,9 +133,9 @@ namespace chronotext
             float ascent;
             float descent;
             float spaceAdvance;
-            float strikethroughFactor;
-            float underlineOffset;
             float lineThickness;
+            float underlineOffset;
+            float strikethroughOffset;
             
             float *w;
             float *h;
@@ -158,6 +158,7 @@ namespace chronotext
             
             float size;
             float sizeRatio;
+            float middleLineFactor;
             float direction;
             ci::Vec2f axis;
             ci::ColorA color;

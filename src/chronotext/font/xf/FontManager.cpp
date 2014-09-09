@@ -324,7 +324,7 @@ namespace chronotext
             string version;
             in->readFixedString(&version, 10);
             
-            if (version != "XFONT.003")
+            if (version != "XFONT.004")
             {
                 throw runtime_error("Font: WRONG FORMAT");
             }
@@ -340,10 +340,10 @@ namespace chronotext
             in->readLittle(&data->height);
             in->readLittle(&data->ascent);
             in->readLittle(&data->descent);
-            in->readLittle(&data->spaceAdvance);
-            in->readLittle(&data->strikethroughFactor);
-            in->readLittle(&data->underlineOffset);
             in->readLittle(&data->lineThickness);
+            in->readLittle(&data->underlineOffset);
+            in->readLittle(&data->strikethroughOffset);
+            in->readLittle(&data->spaceAdvance);
             
             int atlasWidth;
             int atlasHeight;

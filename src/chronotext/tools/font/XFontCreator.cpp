@@ -15,9 +15,9 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-XFontCreator::XFontCreator(shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
+XFontCreator::XFontCreator(shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float baseSize, const wstring &characters, const XParams &params)
 :
-size(size),
+baseSize(baseSize),
 params(params)
 {
     FT_Error error = FT_New_Face(ftHelper->getLib(), descriptor.filePath.string().c_str(), descriptor.faceIndex, &ftFace);
@@ -40,7 +40,7 @@ params(params)
     int dpi = 72;
     
     FT_Select_Charmap(ftFace, FT_ENCODING_UNICODE);
-    FT_Set_Char_Size(ftFace, size * 64, 0, dpi * res, dpi * res);
+    FT_Set_Char_Size(ftFace, baseSize * 64, 0, dpi * res, dpi * res);
     
     FT_Matrix matrix =
     {
@@ -58,29 +58,28 @@ params(params)
     ascent = ftFace->size->metrics.ascender / 64.0f / res;
     descent = -ftFace->size->metrics.descender / 64.0f / res;
 
-    underlineOffset = -ftFace->underline_position / 64.0f;
     lineThickness = ftFace->underline_thickness / 64.0f;
+    underlineOffset = -ftFace->underline_position / 64.0f;
+    
+    // ----
 
+    TT_OS2 *os2 = (TT_OS2*)FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2);
+    
+    if (os2 && (os2->version != 0xFFFF) && (os2->yStrikeoutPosition != 0))
+    {
+        strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, ftFace->size->metrics.y_scale) / 64.0f / res;
+    }
+    else
+    {
+        strikethroughOffset = 0.5f * (ascent - descent);
+    }
+    
     // ---
     
     FT_UInt spaceGlyphIndex = FT_Get_Char_Index(ftFace, L' ');
     FT_Load_Glyph(ftFace, spaceGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
     spaceWidth = ftFace->glyph->advance.x / 64.0f;
     
-    // ----
-
-    TT_OS2 *os2 = (TT_OS2*)FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2);
-    
-    if (os2 && (os2->version != 0xFFFF))
-    {
-        float strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, ftFace->size->metrics.y_scale) / 64.0f / res;
-        strikethroughFactor = strikethroughOffset / (ascent - descent);
-    }
-    else
-    {
-        strikethroughFactor = 0.5f;
-    }
-
     // ---
     
     for (auto c : characters)
@@ -120,7 +119,7 @@ XFontCreator::~XFontCreator()
 
 void XFontCreator::writeToFolder(const fs::path &folderPath)
 {
-    string fileName = string(ftFace->family_name) + "_" + string(ftFace->style_name) + "_" + boost::lexical_cast<string>(size) + ".fnt";
+    string fileName = string(ftFace->family_name) + "_" + string(ftFace->style_name) + "_" + boost::lexical_cast<string>(baseSize) + ".fnt";
     write(writeFile(folderPath / fileName));
     
     LOGI << "GENERATED: " << fileName << " - " << atlasWidth << "x" << atlasHeight << endl;
@@ -130,20 +129,20 @@ void XFontCreator::write(DataTargetRef target)
 {
     OStreamRef out = target->getStream();
     
-    string version = "XFONT.003";
+    string version = "XFONT.004";
     out->write(version);
     
     int glyphCount = glyphs.size();
     out->writeLittle(glyphCount);
     
-    out->writeLittle(size);
+    out->writeLittle(baseSize);
     out->writeLittle(height);
     out->writeLittle(ascent);
     out->writeLittle(descent);
-    out->writeLittle(spaceWidth);
-    out->writeLittle(strikethroughFactor);
-    out->writeLittle(underlineOffset);
     out->writeLittle(lineThickness);
+    out->writeLittle(underlineOffset);
+    out->writeLittle(strikethroughOffset);
+    out->writeLittle(spaceWidth);
     
     out->writeLittle(atlasWidth);
     out->writeLittle(atlasHeight);
