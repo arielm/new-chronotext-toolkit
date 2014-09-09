@@ -20,6 +20,7 @@ namespace chronotext
         :
         texture(texture),
         properties(properties),
+        middleLineFactor(0),
         indices(fontManager.getIndices(properties.slotCapacity)),
         began(0),
         hasClip(false),

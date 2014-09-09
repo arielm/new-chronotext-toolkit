@@ -78,7 +78,7 @@ namespace chronotext
             std::wstring getCharacters() const;
             
             void setSize(float size);
-            void setMiddleLineFactor(float factor);
+            void setMiddleLineFactor(float factor); // DEFAULT-VALUE IS 0, OTHERWISE getOffsetY() FOR "ALIGN_MIDDLE" WILL RETURN middleLineFactor * (getAscent() - getDescent())
             void setDirection(float direction);
             void setAxis(const ci::Vec2f &axis);
             inline void setAxis(float x, float y) { setAxis(ci::Vec2f(x, y)); }
@@ -106,7 +106,7 @@ namespace chronotext
             float getStrikethroughOffset() const;
             
             float getOffsetX(const std::wstring &text, Alignment align) const;
-            float getOffsetY(Alignment align) const;
+            float getOffsetY(Alignment align) const; // FOR "ALIGN_MIDDLE": getStrikethroughOffset() WILL BE USED, UNLESS setMiddleLineFactor() HAS BEEN INVOKED
             inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
             
             QuadMatrix* getMatrix();
