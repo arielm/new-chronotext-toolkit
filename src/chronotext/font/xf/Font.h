@@ -87,7 +87,7 @@ namespace chronotext
             
             void setClip(const ci::Rectf &clipRect);
             void setClip(float x1, float y1, float x2, float y2);
-            void clearClip();
+            void clearClip(); // INVOKED UPON SEQUENCE-BEGIN
             
             float getSize() const;
             float getDirection() const;
@@ -132,10 +132,10 @@ namespace chronotext
             float height;
             float ascent;
             float descent;
-            float spaceAdvance;
             float lineThickness;
             float underlineOffset;
             float strikethroughOffset;
+            float spaceAdvance;
             
             float *w;
             float *h;

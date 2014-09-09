@@ -138,7 +138,7 @@ namespace chronotext
             
             void setClip(const ci::Rectf &clipRect);
             void setClip(float x1, float y1, float x2, float y2);
-            void clearClip();
+            void clearClip(); // INVOKED UPON SEQUENCE-BEGIN
             
             QuadMatrix* getMatrix();
             const GLushort* getIndices() const;
