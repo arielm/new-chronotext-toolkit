@@ -16,6 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
 import org.chronotext.gl.Touch;
 
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.View;
 
 public abstract class GLRenderer implements GLSurfaceView.Renderer
@@ -34,29 +35,46 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
+    Log.i("CHR", "*** GLRenderer.onSurfaceCreated ***");
+
     /*
      * WE DON'T CALL setup() FROM HERE BECAUSE WE WANT TO KNOW THE SURFACE-SIZE FIRST
      */
 
-    if (initialized)
+    if (!initialized)
     {
-      resumed();
-    }
-    else
-    {
+      Log.i("CHR", "*** CinderRenderer.launch ***");
       launch();
     }
   }
 
   public void onSurfaceChanged(GL10 gl, int w, int h)
   {
-    if (!initialized)
+    Log.i("CHR", "*** GLRenderer.onSurfaceChanged: " + w + "x" + h + "***");
+
+    /*
+     * WARNING:
+     * THIS CALLBACK IS CALLED FAR TOO MUCH BY THE SYSTEM, AND WITH INCONSISTENT VALUES
+     * THE LOGIC USED HERE SEEMS TO FIX ALL THE RELATED ISSUES
+     */
+
+    if (initialized)
     {
+      if (!resumed)
+      {
+        Log.i("CHR", "*** CinderRenderer.resumed ***");
+        resumed();
+      }
+    }
+    else
+    {
+      Log.i("CHR", "*** CinderRenderer.setup: " + w + "x" + h + " ***");
       setup(gl, w, h);
     }
 
     if (!attached)
     {
+      Log.i("CHR", "*** CinderRenderer.attached ***");
       attached();
     }
   }
@@ -77,6 +95,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     
     if (showRequest)
     {
+      Log.i("CHR", "*** CinderRenderer.shown ***");
       shown();
       showRequest = false;
     }
@@ -94,6 +113,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (initialized && !resumed)
     {
+      Log.i("CHR", "*** CinderRenderer.attached ***");
       attached();
     }
   }
@@ -102,6 +122,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     if (resumed && !hidden)
     {
+      Log.i("CHR", "*** CinderRenderer.detached ***");
       detached();
     }
   }
@@ -124,6 +145,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
       case View.GONE :
       {
+        Log.i("CHR", "*** CinderRenderer.hidden ***");
         hidden();
         break;
       }
@@ -132,19 +154,22 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onResume()
   {
+    Log.i("CHR", "*** GLRenderer.onResume ***");
+
     if (attached)
     {
       ticks = 0;
 
       if (hidden)
       {
+        Log.i("CHR", "*** CinderRenderer.foreground ***");
         foreground();
       }
       else
       {
         /*
          * AT THIS STAGE, THE SURFACE HAS NOT BEEN RE-CREATED YET
-         * SO, WE DON'T CALL resumed() HERE BUT IN onSurfaceCreated()
+         * SO, WE DON'T CALL resumed() HERE BUT IN onSurfaceChanged()
          */
       }
     }
@@ -152,20 +177,24 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onPause()
   {
+    Log.i("CHR", "*** GLRenderer.onPause ***");
+
     if (attached)
     {
       if (!hidden)
       {
-        System.out.printf("AVERAGE FRAME-RATE: %f FRAMES PER SECOND\n", ticks / (elapsed / 1000f));
+        Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
 
         /*
          * AT THIS STAGE, THE SURFACE HAS BEEN ALREADY DESTROYED,
          * I.E. UNLOADING TEXTURES WILL BE A NO-OP...
          */
+        Log.i("CHR", "*** CinderRenderer.paused ***");
         paused();
       }
       else
       {
+        Log.i("CHR", "*** CinderRenderer.background ***");
         background();
       }
     }

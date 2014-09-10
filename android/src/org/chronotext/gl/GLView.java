@@ -15,11 +15,14 @@ import org.chronotext.gl.Touch;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 
 public class GLView extends GLSurfaceView
 {
-  GLRenderer renderer;
+  protected GLRenderer renderer;
+  public int definedWidth;
+  public int definedHeight;
 
   public GLView(Context context)
   {
@@ -38,8 +41,39 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
+  public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
+  {
+    System.out.println("*** GLView.surfaceChanged: " + width + "x" + height + " ***");
+
+    /*
+     * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP-MODE WITH A DIFFERENT ORIENTATION
+     * THE FOLLOWING SEEMS TO SOLVE THE ISSUE FOR SOME DEVICES (E.G. NEXUS 7 2012) BUT NOT
+     * OTHERS (E.G. XOOM 1), IN WHICH CASE WE RELY ON THE SOLUTION IN GLView.onConfigurationChanged()
+     *
+     * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
+     */
+    if (definedWidth * definedHeight == 0)
+    {
+      holder.setFixedSize(width, height);
+
+      definedWidth = width;
+      definedHeight = height;
+    }
+    
+    super.surfaceChanged(holder, format, width, height);
+  }
+
+  @Override
+  public void surfaceDestroyed(SurfaceHolder holder)
+  {
+    System.out.println("*** GLView.surfaceDestroyed ***"); // WARNING: NOT OCCURRING WHEN DEVICE GOES TO SLEEP
+    super.surfaceDestroyed(holder);
+  }
+
+  @Override
   protected void onAttachedToWindow()
   {
+    System.out.println("*** GLView.onAttachedToWindow ***");
     super.onAttachedToWindow();
 
     queueEvent(new Runnable()
@@ -54,6 +88,8 @@ public class GLView extends GLSurfaceView
   @Override
   protected void onDetachedFromWindow()
   {
+    System.out.println("*** GLView.onAttachedToWindow ***");
+
     queueEvent(new Runnable()
     {
       public void run()

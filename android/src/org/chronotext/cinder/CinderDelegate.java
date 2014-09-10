@@ -11,9 +11,12 @@ package org.chronotext.cinder;
 import org.chronotext.gl.GLView;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 
 public class CinderDelegate extends Handler
 {
@@ -106,6 +109,28 @@ public class CinderDelegate extends Handler
   public void onDestroy()
   {
     mView.onDestroy();
+  }
+
+  public void onConfigurationChanged (Configuration newConfig)
+  {
+    LayoutParams layoutParams = mView.getLayoutParams();
+    Log.i("CHR", "*** CinderDelegate.onConfigurationChanged: " + layoutParams.width + "x" + layoutParams.height + " ***");
+
+    /*
+     * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP-MODE WITH A DIFFERENT ORIENTATION
+     * REASON: THE ACTIVITY'S super.onConfigurationChanged() IS RESIZING THE VIEWS TO -1,-1
+     * IT HAPPENS ALWAYS OR ONLY SOMETIMES, DEPENDING ON THE DEVICE
+     *
+     * FIXME:
+     * WE NEED A BETTER SOLUTION, WHICH WOULD HANDLES ALL THE POSSIBLE VIEWS (I.E. NOT ONLY OUR GLView)
+     *
+     * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
+     */
+    if ((layoutParams.width != mView.definedWidth) || (layoutParams.height != mView.definedHeight))
+    {
+      layoutParams.width = mView.definedWidth;
+      layoutParams.height = mView.definedHeight;
+    }
   }
 
   public boolean onBackPressed()
