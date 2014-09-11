@@ -111,21 +111,26 @@ public class CinderDelegate extends Handler
     mView.onDestroy();
   }
 
+  public void onWindowFocusChanged(boolean hasFocus)
+  {
+    Log.i("CHR", "*** CinderDelegate.onWindowFocusChanged: " + hasFocus + " ***");
+  }
+
   public void onConfigurationChanged (Configuration newConfig)
   {
-    LayoutParams layoutParams = mView.getLayoutParams();
-    Log.i("CHR", "*** CinderDelegate.onConfigurationChanged: " + layoutParams.width + "x" + layoutParams.height + " ***");
+    Log.i("CHR", "*** CinderDelegate.onConfigurationChanged ***");
 
     /*
      * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP-MODE WITH A DIFFERENT ORIENTATION
-     * REASON: THE ACTIVITY'S super.onConfigurationChanged() IS RESIZING THE VIEWS TO -1,-1
-     * IT HAPPENS ALWAYS OR ONLY SOMETIMES, DEPENDING ON THE DEVICE
      *
-     * FIXME:
-     * WE NEED A BETTER SOLUTION, WHICH WOULD HANDLES ALL THE POSSIBLE VIEWS (I.E. NOT ONLY OUR GLView)
+     * THE FOLLOWING DIRTY HACK SEEMS TO SOLVE THE ISSUE (ASSERTION: OUR GLView IS FULL-SCREEN)
+     * LUCKILY, IT SEEMS THAT OTHER VIEWS (E.G. NATIVE WIDGET ON TOP OF OUR GLView) DO NEED REQUIRE SUCH A SPECIAL TREATMENT
      *
      * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
      */
+
+    LayoutParams layoutParams = mView.getLayoutParams();
+
     if ((layoutParams.width != mView.definedWidth) || (layoutParams.height != mView.definedHeight))
     {
       layoutParams.width = mView.definedWidth;
@@ -137,7 +142,14 @@ public class CinderDelegate extends Handler
   {
     if (mBackKeyCaptured)
     {
-      mRenderer.event(CinderRenderer.EVENT_BACK_KEY);
+      mView.queueEvent(new Runnable()
+      {
+        public void run()
+        {
+          mRenderer.event(CinderRenderer.EVENT_BACK_KEY); 
+        }
+      });
+
       return true;
     }
     else

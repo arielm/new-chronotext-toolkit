@@ -109,6 +109,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onAttachedToWindow()
   {
+    Log.i("CHR", "*** CinderRenderer.onAttachedToWindow ***");
+
     ticks = 0;
 
     if (initialized && !resumed)
@@ -120,6 +122,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onDetachedFromWindow()
   {
+    Log.i("CHR", "*** CinderRenderer.onAttachedToWindow ***");
+    
     if (resumed && !hidden)
     {
       Log.i("CHR", "*** CinderRenderer.detached ***");
@@ -129,6 +133,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onVisibilityChanged(int visibility)
   {
+    Log.i("CHR", "*** GLRenderer.onVisibilityChanged: " + visibility + " ***");
+
     switch (visibility)
     {
       case View.VISIBLE :

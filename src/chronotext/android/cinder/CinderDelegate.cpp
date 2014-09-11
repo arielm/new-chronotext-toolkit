@@ -223,7 +223,7 @@ namespace chronotext
                 sketch->clock().start();
                 
                 sketch->setup(true); // ASSERTION: THE GL CONTEXT WAS JUST RE-CREATED
-                sketch->resize(); // SIZE HAS NOT EFFECTIVELY CHANGED, BUT USERS MAY WANT TO CALL STUFF LIKE glViewport()
+                sketch->resize(); // SIZE DID NOT EFFECTIVELY CHANGED, BUT NOTIFIYING ABOUT SURFACE (RE)CREATION
                 sketch->start(CinderSketch::FLAG_APP_RESUMED);
                 break;
                 

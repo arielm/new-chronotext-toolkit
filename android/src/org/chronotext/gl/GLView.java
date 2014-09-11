@@ -14,6 +14,7 @@ import org.chronotext.gl.Touch;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -43,11 +44,11 @@ public class GLView extends GLSurfaceView
   @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
   {
-    System.out.println("*** GLView.surfaceChanged: " + width + "x" + height + " ***");
+    Log.i("CHR", "*** GLView.onSurfaceChanged: " + width + "x" + height + " ***");
 
     /*
      * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP-MODE WITH A DIFFERENT ORIENTATION
-     * THE FOLLOWING SEEMS TO SOLVE THE ISSUE FOR SOME DEVICES (E.G. NEXUS 7 2012) BUT NOT
+     * THE FOLLOWING SEEMS TO SOLVE THE ISSUE FOR SOME DEVICES (E.G. NEXUS 7 2012) BUT NOT FOR
      * OTHERS (E.G. XOOM 1), IN WHICH CASE WE RELY ON THE SOLUTION IN GLView.onConfigurationChanged()
      *
      * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
@@ -64,16 +65,16 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
-  public void surfaceDestroyed(SurfaceHolder holder)
+  public void surfaceDestroyed(SurfaceHolder holder) // OCCURS WHEN PRESSING THE HOME BUTTON BUT *NOT* WHEN DEVICE GOES TO SLEEP
   {
-    System.out.println("*** GLView.surfaceDestroyed ***"); // WARNING: NOT OCCURRING WHEN DEVICE GOES TO SLEEP
+    Log.i("CHR", "*** GLView.surfaceDestroyed ***"); 
     super.surfaceDestroyed(holder);
   }
 
   @Override
   protected void onAttachedToWindow()
   {
-    System.out.println("*** GLView.onAttachedToWindow ***");
+    Log.i("CHR", "*** GLView.onAttachedToWindow ***");
     super.onAttachedToWindow();
 
     queueEvent(new Runnable()
@@ -88,7 +89,8 @@ public class GLView extends GLSurfaceView
   @Override
   protected void onDetachedFromWindow()
   {
-    System.out.println("*** GLView.onAttachedToWindow ***");
+    super.onDetachedFromWindow();
+    Log.i("CHR", "*** GLView.onDetachedFromWindow ***");
 
     queueEvent(new Runnable()
     {
@@ -97,14 +99,13 @@ public class GLView extends GLSurfaceView
         renderer.onDetachedFromWindow();
       }
     });
-
-    super.onDetachedFromWindow();
   }
 
   @Override
   public void onResume()
   {
     super.onResume();
+    Log.i("CHR", "*** GLView.onResume ***");
 
     queueEvent(new Runnable()
     {
@@ -119,6 +120,7 @@ public class GLView extends GLSurfaceView
   public void onPause()
   {
     super.onPause();
+    Log.i("CHR", "*** GLView.onPause ***");
 
     queueEvent(new Runnable()
     {
