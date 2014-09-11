@@ -5,6 +5,7 @@ import org.chronotext.cinder.CinderDelegate;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class MainActivity extends Activity
@@ -44,5 +45,28 @@ public class MainActivity extends Activity
   {
     super.onDestroy();
     delegate.onDestroy();
+  }
+
+  @Override
+  public void onWindowFocusChanged(boolean hasFocus)
+  {
+    super.onWindowFocusChanged(hasFocus);
+    delegate.onWindowFocusChanged(hasFocus);
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig)
+  {
+    super.onConfigurationChanged(newConfig);
+    delegate.onConfigurationChanged(newConfig);
+  }
+  
+  @Override
+  public void onBackPressed()
+  {
+    if (!delegate.onBackPressed())
+    {
+      super.onBackPressed();
+    }
   }
 }
