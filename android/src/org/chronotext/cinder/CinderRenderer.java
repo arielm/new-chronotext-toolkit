@@ -17,10 +17,11 @@ import org.chronotext.gl.Touch;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
-import android.util.DisplayMetrics;
 
 /*
  * WARNING: BE SURE TO DEFINE android:screenOrientation IN THE MANIFEST
@@ -65,6 +66,8 @@ public class CinderRenderer extends GLRenderer
 
   public void setup(GL10 gl, int width, int height)
   {
+    Log.i("CHR", "*** Sketch::setup: false ***");
+
     Display display = getWindowManager().getDefaultDisplay();
     DisplayMetrics dm = new DisplayMetrics();
     display.getMetrics(dm);
@@ -115,6 +118,8 @@ public class CinderRenderer extends GLRenderer
 
   public void resumed()
   {
+    Log.i("CHR", "*** Sketch::setup: true ***");
+
     event(EVENT_RESUMED);
     resumed = true;
     hidden = false;

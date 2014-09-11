@@ -48,8 +48,8 @@ public class GLView extends GLSurfaceView
 
     /*
      * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP-MODE WITH A DIFFERENT ORIENTATION
-     * THE FOLLOWING SEEMS TO SOLVE THE ISSUE FOR SOME DEVICES (E.G. NEXUS 7 2012) BUT NOT FOR
-     * OTHERS (E.G. XOOM 1), IN WHICH CASE WE RELY ON THE SOLUTION IN GLView.onConfigurationChanged()
+     * THE FOLLOWING SEEMS TO SOLVE THE ISSUE FOR SOME DEVICES (E.G. NEXUS 7 2013, VER 4.2.2) BUT NOT FOR
+     * OTHERS (E.G. XOOM 1, VER 3.1), IN WHICH CASE WE RELY ON THE SOLUTION IN CinderDelegate.onConfigurationChanged()
      *
      * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
      */
@@ -89,8 +89,8 @@ public class GLView extends GLSurfaceView
   @Override
   protected void onDetachedFromWindow()
   {
-    super.onDetachedFromWindow();
     Log.i("CHR", "*** GLView.onDetachedFromWindow ***");
+    super.onDetachedFromWindow();
 
     queueEvent(new Runnable()
     {
@@ -104,31 +104,17 @@ public class GLView extends GLSurfaceView
   @Override
   public void onResume()
   {
-    super.onResume();
     Log.i("CHR", "*** GLView.onResume ***");
-
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        renderer.onResume();
-      }
-    });
+    super.onResume();
+    renderer.onResume();
   }
 
   @Override
   public void onPause()
   {
-    super.onPause();
     Log.i("CHR", "*** GLView.onPause ***");
-
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        renderer.onPause();
-      }
-    });
+    super.onPause();
+    renderer.onPause();
   }
 
   @Override
