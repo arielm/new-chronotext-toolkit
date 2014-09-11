@@ -1,6 +1,6 @@
 setup()
 {
-  android update project --path . --name Scalability --target android-10
+  android update project --path . --name Scalability --target android-13
 
   echo "READY TO RUN:"
   echo "ndk-build -j 4"
