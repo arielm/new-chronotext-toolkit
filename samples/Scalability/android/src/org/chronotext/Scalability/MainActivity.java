@@ -47,7 +47,7 @@ public class MainActivity extends Activity
     delegate.onDestroy();
   }
 
-    @Override
+  @Override
   public void onWindowFocusChanged(boolean hasFocus)
   {
     super.onWindowFocusChanged(hasFocus);
