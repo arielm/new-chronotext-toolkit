@@ -27,7 +27,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected long elapsed;
 
   protected boolean initialized;
-  protected boolean focused;
   protected boolean resumed;
   protected boolean attached;
   protected boolean hidden;
@@ -39,13 +38,9 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Log.i("CHR", "*** GLRenderer.onSurfaceCreated ***");
 
-    if (initialized)
+    if (!initialized)
     {
-      renewRequest = true;
-    }
-    else
-    {
-      launch(); // AT THIS STAGE, THE SURFACE-SIZE IS NOT KNOWN
+      launch(); // AT THIS STAGE, SURFACE-SIZE IS NOT KNOWN
     }
   }
 
@@ -61,43 +56,47 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (initialized)
     {
-      /*
-       * HANDLING CASES WHERE THE SURFACE IS CREATED TOO EARLY ON CERTAIN DEVICES (E.G. XOOM 1, VER 3.1)
-       * E.G. WHEN BACK-FROM SLEEP (WHILE THE LOCK SCREEN IS DISPLAYED, BEFORE THE APP IS ACTUALLY RESTARTED)
-       */
-      if (renewRequest && !resumed && focused)
+      if (!resumed)
       {
+        resumed = true;
         resumed(true);
-        renewRequest = false;
+        hidden = false; // TODO: ???
       }
     }
     else
     {
+      initialized = true;
       setup(gl, w, h);
+
+      ticks = 0;
+      attached = true;
       attached();
     }
   }
 
   public void onDrawFrame(GL10 gl)
   {
+    if (showRequest)
+    {
+      ticks = 0;
+      showRequest = false;
+      shown(); // TODO: ???
+      hidden = false; // TODO: ???
+    }
+    
+    // ---
+
     now = System.currentTimeMillis();
 
     if (ticks == 0)
     {
+      Log.i("CHR", "*** GLRenderer.onDrawFrame ***");
       t0 = now;
     }
 
     ticks++;
     elapsed = now - t0;
 
-    // ---
-    
-    if (showRequest)
-    {
-      shown(); // TODO: ???
-      showRequest = false;
-    }
-    
     // ---
 
     draw(gl);
@@ -107,23 +106,26 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onAttachedToWindow()
   {
-    Log.i("CHR", "*** CinderRenderer.onAttachedToWindow ***");
-
-    ticks = 0;
+    Log.i("CHR", "*** GLRenderer.onAttachedToWindow ***");
 
     if (initialized && !resumed)
     {
+      ticks = 0;
+      attached = true;
       attached(); // TODO: ???
+      hidden = false; // TODO: ???
     }
   }
 
   public void onDetachedFromWindow()
   {
-    Log.i("CHR", "*** CinderRenderer.onDetachedFromWindow ***");
+    Log.i("CHR", "*** GLRenderer.onDetachedFromWindow ***");
     
     if (resumed && !hidden)
     {
+      attached = false;
       detached(); // TODO: ???
+      hidden = false; // TODO: ???
     }
   }
 
@@ -135,8 +137,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     {
       case View.VISIBLE :
       {
-        ticks = 0;
-        
         /*
          * AT THIS STAGE (IN CASE THE APP WAS PREVIOUSLY IN THE BACKGROUND), THE SURFACE IS "NOT READY" YET
          * SO, WE DON'T CALL shown() HERE BUT IN onDraw()
@@ -148,6 +148,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       case View.GONE :
       {
         hidden(); // TODO: ???
+        hidden = true; // TODO: ???
         break;
       }
     }
@@ -168,8 +169,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       else
       {
         /*
-         * AT THIS STAGE, THE SURFACE HAS NOT BEEN RE-CREATED YET
-         * SO, WE DON'T CALL resumed() HERE BUT IN onSurfaceChanged()
+         * AT THIS STAGE, THE SURFACE HAS NOT BEEN (RE)CREATED YET
+         * THEREFORE resumed() IS CALLED ON onSurfaceChanged()
          */
       }
     }
@@ -186,32 +187,16 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
         Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
 
         /*
-         * AT THIS STAGE, THE SURFACE HAS BEEN ALREADY DESTROYED,
+         * AT THIS STAGE, THE SURFACE HAS ALREADY BEEN DESTROYED,
          * I.E. UNLOADING TEXTURES WILL BE A NO-OP...
          */
+        resumed = false;
         paused(true);
       }
       else
       {
         background(); // TODO: ???
       }
-    }
-  }
-
-  public void onWindowFocusChanged(boolean hasFocus)
-  {
-    Log.i("CHR", "*** GLRenderer.onWindowFocusChanged: " + hasFocus + " ***");
-
-    focused = hasFocus;
-
-    if (focused && renewRequest && !resumed)
-    {
-      /*
-       * HANDLING CASES WHERE THE SURFACE IS CREATED TOO EARLY ON CERTAIN DEVICES (E.G. XOOM 1, VER 3.1)
-       * E.G. WHEN BACK-FROM SLEEP (WHILE THE LOCK SCREEN IS DISPLAYED, BEFORE THE APP IS ACTUALLY RESTARTED)
-       */
-      resumed(true);
-      renewRequest = false;
     }
   }
 

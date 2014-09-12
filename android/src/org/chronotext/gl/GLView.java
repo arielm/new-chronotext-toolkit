@@ -170,14 +170,6 @@ public class GLView extends GLSurfaceView
   {
     Log.i("CHR", "*** GLView.onWindowFocusChanged: " + hasFocus + " ***");
     super.onWindowFocusChanged(hasFocus);
-
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        renderer.onWindowFocusChanged(hasFocus);
-      }
-    });
   }
 
   @Override

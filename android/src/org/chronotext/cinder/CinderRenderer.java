@@ -23,12 +23,6 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
 
-/*
- * WARNING: BE SURE TO DEFINE android:screenOrientation IN THE MANIFEST
- * OR TO CALL setRequestedOrientation() INSIDE Activity.onCreate()
- * BECAUSE THE CURRENT SYSTEM IS NOT HANDLING AUTO-ROTATION
- */
-
 public class CinderRenderer extends GLRenderer
 {
   public static final int EVENT_ATTACHED = 1;
@@ -90,7 +84,6 @@ public class CinderRenderer extends GLRenderer
     int displayRotation = display.getRotation();
       
     setup(width, height, diagonal, density, displayRotation);
-    initialized = true;
   }
 
   public void draw(GL10 gl)
@@ -101,16 +94,13 @@ public class CinderRenderer extends GLRenderer
   public void attached()
   {
     Log.i("CHR", "*** CinderRenderer.attached ***");
-
     event(EVENT_ATTACHED);
-    attached = true;
-    hidden = false; // TODO: ???
   }
 
   public void detached()
   {
+    Log.i("CHR", "*** CinderRenderer.detached ***");
     event(EVENT_DETACHED);
-    attached = false;
   }
 
   public void paused(boolean contextLost)
@@ -123,7 +113,6 @@ public class CinderRenderer extends GLRenderer
     }
 
     event(EVENT_PAUSED);
-    resumed = false;
   }
 
   public void resumed(boolean contextRenewed)
@@ -136,8 +125,6 @@ public class CinderRenderer extends GLRenderer
     }
       
     event(EVENT_RESUMED);
-    resumed = true;
-    hidden = false; // TODO: ???
   }
 
   public void background()
@@ -153,13 +140,11 @@ public class CinderRenderer extends GLRenderer
   public void shown()
   {
     event(EVENT_SHOWN);
-    hidden = false; // TODO: ???
   }
 
   public void hidden()
   {
     event(EVENT_HIDDEN);
-    hidden = true; // TODO: ???
   }
     
   public void addTouches(Vector<Touch> touches)
