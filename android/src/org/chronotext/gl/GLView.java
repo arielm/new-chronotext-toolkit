@@ -22,8 +22,9 @@ import android.view.View;
 public class GLView extends GLSurfaceView
 {
   protected GLRenderer renderer;
-  public int definedWidth;
-  public int definedHeight;
+
+  public int definedWidth; // FIXME
+  public int definedHeight; // FIXME
 
   public GLView(Context context)
   {
@@ -72,7 +73,7 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
-  public void surfaceDestroyed(SurfaceHolder holder) // OCCURS WHEN PRESSING THE HOME BUTTON BUT *NOT* WHEN DEVICE GOES TO SLEEP
+  public void surfaceDestroyed(SurfaceHolder holder) // OCCURS WHEN PRESSING THE "HOME" BUTTON BUT *NOT* WHEN GOING TO SLEEP
   {
     Log.i("CHR", "*** GLView.surfaceDestroyed ***"); 
     super.surfaceDestroyed(holder);
@@ -82,7 +83,7 @@ public class GLView extends GLSurfaceView
   protected void onAttachedToWindow()
   {
     Log.i("CHR", "*** GLView.onAttachedToWindow ***");
-    super.onAttachedToWindow();
+    super.onAttachedToWindow(); // WILL RESTART THE RENDERER'S THREAD
 
     queueEvent(new Runnable()
     {
@@ -97,15 +98,24 @@ public class GLView extends GLSurfaceView
   protected void onDetachedFromWindow()
   {
     Log.i("CHR", "*** GLView.onDetachedFromWindow ***");
-    super.onDetachedFromWindow();
 
     queueEvent(new Runnable()
     {
       public void run()
       {
+        /*
+         * CURRENTLY NEVER REACHED WHEN DETACHED AS A RESULT OF APPLICATION DESTRUCTION
+         * NOT SURE IF IT WORTHS TRYING TO FIND A SOLUTION...
+         */
         renderer.onDetachedFromWindow();
       }
     });
+
+    /*
+     * PURPOSELY CALLED AT THE END
+     * TODO: TEST IF renderer.onDetachedFromWindow() IS REACHED WHEN DETACHED AS A RESULT OF VIEW REMOVAL
+     */
+    super.onDetachedFromWindow(); // WILL STOP THE RENDERER'S THREAD
   }
 
   @Override
@@ -134,6 +144,21 @@ public class GLView extends GLSurfaceView
       public void run()
       {
         renderer.onPause();
+      }
+    });
+  }
+
+  @Override
+  public void onWindowFocusChanged(final boolean hasFocus)
+  {
+    Log.i("CHR", "*** GLView.onWindowFocusChanged: " + hasFocus + " ***");
+    super.onWindowFocusChanged(hasFocus);
+
+    queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        renderer.onWindowFocusChanged(hasFocus);
       }
     });
   }

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MainActivity extends Activity
 {
@@ -41,17 +42,24 @@ public class MainActivity extends Activity
   }
 
   @Override
+  protected void onStart()
+  {
+    super.onStart();
+    Log.i("CHR", "*** MainActivity.onStart ***");
+  }
+
+  @Override
+  protected void onRestart()
+  {
+    super.onRestart();
+    Log.i("CHR", "*** MainActivity.onRestart ***");
+  }
+  
+  @Override
   protected void onDestroy()
   {
     super.onDestroy();
     delegate.onDestroy();
-  }
-
-  @Override
-  public void onWindowFocusChanged(boolean hasFocus)
-  {
-    super.onWindowFocusChanged(hasFocus);
-    delegate.onWindowFocusChanged(hasFocus);
   }
 
   @Override

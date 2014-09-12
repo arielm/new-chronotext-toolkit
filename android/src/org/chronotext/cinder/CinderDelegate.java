@@ -103,7 +103,7 @@ public class CinderDelegate extends Handler
 
   public void onResume()
   {
-    mView.onResume(); // FIXME: SHOULD NOT BE CALLED SO EARLY!!!
+    mView.onResume();
   }
 
   public void onDestroy()
@@ -117,19 +117,6 @@ public class CinderDelegate extends Handler
       });
   }
 
-  public void onWindowFocusChanged(final boolean hasFocus)
-  {
-    Log.i("CHR", "*** CinderDelegate.onWindowFocusChanged: " + hasFocus + " ***");
-
-    mView.queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        mRenderer.onWindowFocusChanged(hasFocus);
-      }
-    });
-  }
-
   public void onConfigurationChanged (Configuration newConfig)
   {
     Log.i("CHR", "*** CinderDelegate.onConfigurationChanged ***");
@@ -140,11 +127,13 @@ public class CinderDelegate extends Handler
      * BUT NOT ON OTHERS (E.G. XOOM 1, VER 3.1), HENCE THE FOLLOWING HACK
      *
      * ASSERTION: OUR GLView IS FULL-SCREEN
-     * LUCKILY, OTHER VIEWS (E.G. NATIVE WIDGETS ON TOP OF OUR GLView) DO NOT REQUIRE ANY "SPECIAL TREATMENT"
+     * LUCKILY, OTHER VIEWS (E.G. NATIVE WIDGETS ON TOP OF IT) DO NOT REQUIRE ANY "SPECIAL TREATMENT"
      *
      * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
      */
 
+    // MOMENTARY DISABLING OF THE SOLUTION, FOR TESTING PURPOSES
+    //
     // LayoutParams layoutParams = mView.getLayoutParams();
 
     // if ((layoutParams.width != mView.definedWidth) || (layoutParams.height != mView.definedHeight))

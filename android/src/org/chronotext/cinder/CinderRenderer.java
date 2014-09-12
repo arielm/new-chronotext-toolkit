@@ -61,13 +61,13 @@ public class CinderRenderer extends GLRenderer
 
   public void launch()
   {
-    Log.i("CHR", "*** Sketch::launch ***");
+    Log.i("CHR", "*** CinderRenderer.launch ***");
     launch(mContext, mListener);
   }
 
   public void setup(GL10 gl, int width, int height)
   {
-    Log.i("CHR", "*** Sketch::setup ***");
+    Log.i("CHR", "*** CinderRenderer.setup ***");
 
     Display display = getWindowManager().getDefaultDisplay();
     DisplayMetrics dm = new DisplayMetrics();
@@ -100,9 +100,11 @@ public class CinderRenderer extends GLRenderer
 
   public void attached()
   {
+    Log.i("CHR", "*** CinderRenderer.attached ***");
+
     event(EVENT_ATTACHED);
     attached = true;
-    hidden = false;
+    hidden = false; // TODO: ???
   }
 
   public void detached()
@@ -111,26 +113,31 @@ public class CinderRenderer extends GLRenderer
     attached = false;
   }
 
-  public void paused()
+  public void paused(boolean contextLost)
   {
-    Log.i("CHR", "*** Sketch::contextLost ***");
+    Log.i("CHR", "*** CinderRenderer.paused: " + contextLost + " ***");
 
-    contextLost();
+    if (contextLost)
+    {
+      contextLost();  
+    }
+
     event(EVENT_PAUSED);
-
     resumed = false;
   }
 
-  public void resumed()
+  public void resumed(boolean contextRenewed)
   {
-    Log.i("CHR", "*** Sketch::contextRenewed ***");
+    Log.i("CHR", "*** CinderRenderer.resumed: " + contextRenewed + " ***");
 
-    contextRenewed();
+    if (contextRenewed)
+    {
+      contextRenewed();
+    }
+      
     event(EVENT_RESUMED);
-
-    renewRequest = false;
     resumed = true;
-    hidden = false;
+    hidden = false; // TODO: ???
   }
 
   public void background()
@@ -146,13 +153,13 @@ public class CinderRenderer extends GLRenderer
   public void shown()
   {
     event(EVENT_SHOWN);
-    hidden = false;
+    hidden = false; // TODO: ???
   }
 
   public void hidden()
   {
     event(EVENT_HIDDEN);
-    hidden = true;
+    hidden = true; // TODO: ???
   }
     
   public void addTouches(Vector<Touch> touches)

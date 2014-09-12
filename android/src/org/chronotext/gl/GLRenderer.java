@@ -27,9 +27,9 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected long elapsed;
 
   protected boolean initialized;
-  protected boolean attached;
   protected boolean focused;
   protected boolean resumed;
+  protected boolean attached;
   protected boolean hidden;
   
   protected boolean renewRequest;
@@ -56,7 +56,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     /*
      * WARNING:
      * THIS CALLBACK IS CALLED FAR TOO MUCH BY THE SYSTEM, AND WITH INCONSISTENT VALUES
-     * THE LOGIC USED HERE IS INTENDED TO AVOID ANY POTENTIALLY HARMFUL CONSEQUENCES
+     * THE LOGIC USED HERE IS INTENDED TO AVOID POTENTIALLY HARMFUL CONSEQUENCES
      */
 
     if (initialized)
@@ -67,17 +67,13 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
        */
       if (renewRequest && !resumed && focused)
       {
-        resumed();
+        resumed(true);
+        renewRequest = false;
       }
     }
     else
     {
       setup(gl, w, h);
-    }
-
-    if (!attached)
-    {
-      Log.i("CHR", "*** CinderRenderer.attached ***");
       attached();
     }
   }
@@ -98,8 +94,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     
     if (showRequest)
     {
-      Log.i("CHR", "*** CinderRenderer.shown ***");
-      shown();
+      shown(); // TODO: ???
       showRequest = false;
     }
     
@@ -118,19 +113,17 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (initialized && !resumed)
     {
-      Log.i("CHR", "*** CinderRenderer.attached ***");
-      attached();
+      attached(); // TODO: ???
     }
   }
 
   public void onDetachedFromWindow()
   {
-    Log.i("CHR", "*** CinderRenderer.onAttachedToWindow ***");
+    Log.i("CHR", "*** CinderRenderer.onDetachedFromWindow ***");
     
     if (resumed && !hidden)
     {
-      Log.i("CHR", "*** CinderRenderer.detached ***");
-      detached();
+      detached(); // TODO: ???
     }
   }
 
@@ -148,14 +141,13 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
          * AT THIS STAGE (IN CASE THE APP WAS PREVIOUSLY IN THE BACKGROUND), THE SURFACE IS "NOT READY" YET
          * SO, WE DON'T CALL shown() HERE BUT IN onDraw()
          */
-        showRequest = true;
+        showRequest = true; // TODO: ???
         break;
       }
 
       case View.GONE :
       {
-        Log.i("CHR", "*** CinderRenderer.hidden ***");
-        hidden();
+        hidden(); // TODO: ???
         break;
       }
     }
@@ -171,8 +163,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
       if (hidden)
       {
-        Log.i("CHR", "*** CinderRenderer.foreground ***");
-        foreground();
+        foreground(); // TODO: ???
       }
       else
       {
@@ -198,30 +189,29 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
          * AT THIS STAGE, THE SURFACE HAS BEEN ALREADY DESTROYED,
          * I.E. UNLOADING TEXTURES WILL BE A NO-OP...
          */
-        Log.i("CHR", "*** CinderRenderer.paused ***");
-        paused();
+        paused(true);
       }
       else
       {
-        Log.i("CHR", "*** CinderRenderer.background ***");
-        background();
+        background(); // TODO: ???
       }
     }
   }
 
   public void onWindowFocusChanged(boolean hasFocus)
   {
-    Log.i("CHR", "*** CinderRenderer.onWindowFocusChanged: " + hasFocus + " ***");
+    Log.i("CHR", "*** GLRenderer.onWindowFocusChanged: " + hasFocus + " ***");
 
     focused = hasFocus;
 
-    if (renewRequest && !resumed && focused)
+    if (focused && renewRequest && !resumed)
     {
       /*
        * HANDLING CASES WHERE THE SURFACE IS CREATED TOO EARLY ON CERTAIN DEVICES (E.G. XOOM 1, VER 3.1)
        * E.G. WHEN BACK-FROM SLEEP (WHILE THE LOCK SCREEN IS DISPLAYED, BEFORE THE APP IS ACTUALLY RESTARTED)
        */
-      resumed();
+      resumed(true);
+      renewRequest = false;
     }
   }
 
@@ -230,6 +220,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
    */
   public void onDestroy()
   {
+    Log.i("CHR", "*** GLRenderer.onDestroy ***");
     shutdown();
   }
 
@@ -244,8 +235,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public abstract void attached();
   public abstract void detached();
 
-  public abstract void paused();
-  public abstract void resumed();
+  public abstract void paused(boolean contextLost);
+  public abstract void resumed(boolean contextRenewed);
 
   public abstract void background();
   public abstract void foreground();
