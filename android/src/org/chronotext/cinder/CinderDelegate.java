@@ -114,12 +114,26 @@ public class CinderDelegate extends Handler
 
   public void onDestroy()
   {
-    mView.onDestroy();
+      mView.queueEvent(new Runnable()
+      {
+        public void run()
+        {
+          mRenderer.onDestroy();
+        }
+      });
   }
 
-  public void onWindowFocusChanged(boolean hasFocus)
+  public void onWindowFocusChanged(final boolean hasFocus)
   {
     Log.i("CHR", "*** CinderDelegate.onWindowFocusChanged: " + hasFocus + " ***");
+
+    mView.queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        mRenderer.onWindowFocusChanged(hasFocus);
+      }
+    });
   }
 
   public void onConfigurationChanged (Configuration newConfig)
@@ -137,13 +151,13 @@ public class CinderDelegate extends Handler
      * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
      */
 
-    LayoutParams layoutParams = mView.getLayoutParams();
+    // LayoutParams layoutParams = mView.getLayoutParams();
 
-    if ((layoutParams.width != mView.definedWidth) || (layoutParams.height != mView.definedHeight))
-    {
-      layoutParams.width = mView.definedWidth;
-      layoutParams.height = mView.definedHeight;
-    }
+    // if ((layoutParams.width != mView.definedWidth) || (layoutParams.height != mView.definedHeight))
+    // {
+    //   layoutParams.width = mView.definedWidth;
+    //   layoutParams.height = mView.definedHeight;
+    // }
   }
 
   public boolean onBackPressed()

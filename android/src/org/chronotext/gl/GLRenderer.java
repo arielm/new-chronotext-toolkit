@@ -206,6 +206,12 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     }
   }
 
+  public void onWindowFocusChanged(boolean hasFocus)
+  {
+    Log.i("CHR", "*** CinderRenderer.onWindowFocusChanged: " + hasFocus + " ***");
+    // TODO: SET hasFocus FLAG AND USE IT FOR "PROPERLY RESUMING" WHEN BACK-FROM-SLEEP
+  }
+
   /*
    * THIS IS RELATED TO APPLICATION-DESTRUCTION (I.E. NOT SURFACE-DESTRUCTION)
    */

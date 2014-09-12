@@ -106,7 +106,14 @@ public class GLView extends GLSurfaceView
   {
     Log.i("CHR", "*** GLView.onResume ***");
     super.onResume();
-    renderer.onResume();
+
+    queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        renderer.onResume();
+      }
+    });
   }
 
   @Override
@@ -114,7 +121,14 @@ public class GLView extends GLSurfaceView
   {
     Log.i("CHR", "*** GLView.onPause ***");
     super.onPause();
-    renderer.onPause();
+
+    queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        renderer.onPause();
+      }
+    });
   }
 
   @Override
@@ -130,17 +144,6 @@ public class GLView extends GLSurfaceView
         }
       });
     }
-  }
-
-  public void onDestroy()
-  {
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        renderer.onDestroy();
-      }
-    });
   }
 
   @Override
