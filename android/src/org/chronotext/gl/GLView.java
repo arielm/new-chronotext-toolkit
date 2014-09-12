@@ -22,6 +22,7 @@ import android.view.View;
 public class GLView extends GLSurfaceView
 {
   protected GLRenderer renderer;
+  protected boolean resumed;
 
   public int definedWidth; // FIXME
   public int definedHeight; // FIXME
@@ -118,34 +119,50 @@ public class GLView extends GLSurfaceView
     super.onDetachedFromWindow(); // WILL STOP THE RENDERER'S THREAD
   }
 
+  /*
+   * RECEIVED ON MAIN-THREAD
+   */
   @Override
   public void onResume()
   {
     Log.i("CHR", "*** GLView.onResume ***");
-    super.onResume();
 
-    queueEvent(new Runnable()
+    if (!resumed)
     {
-      public void run()
+      resumed = true;
+      super.onResume();
+
+      queueEvent(new Runnable()
       {
-        renderer.onResume();
-      }
-    });
+        public void run()
+        {
+          renderer.onResume();
+        }
+      });
+    }
   }
 
+  /*
+   * RECEIVED ON MAIN-THREAD
+   */
   @Override
   public void onPause()
   {
     Log.i("CHR", "*** GLView.onPause ***");
-    super.onPause();
 
-    queueEvent(new Runnable()
+    if (resumed)
     {
-      public void run()
+      resumed = false;
+      super.onPause();
+
+      queueEvent(new Runnable()
       {
-        renderer.onPause();
-      }
-    });
+        public void run()
+        {
+          renderer.onPause();
+        }
+      });
+    }
   }
 
   @Override
@@ -176,6 +193,13 @@ public class GLView extends GLSurfaceView
         }
       });
     }
+  }
+
+  @Override
+  protected void onSizeChanged (int w, int h, int oldw, int oldh)
+  {
+    Log.i("CHR", "*** GLView.onSizeChanged: " + w + "x" + h + " | " + oldw + "x" + oldh + " ***");
+    super.onSizeChanged(w, h, oldw, oldh);
   }
 
   @Override
