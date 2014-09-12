@@ -23,7 +23,7 @@ using namespace app;
 namespace chronotext
 {
     /*
-     * CALLED ON THE RENDERER'S THREAD FROM chronotext.android.gl.GLRenderer.onSurfaceCreated()
+     * CALLED ON THE RENDERER'S THREAD, RIGHT AFTER THE GL-SURFACE HAS BEEN CREATED
      */
     void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener)
     {

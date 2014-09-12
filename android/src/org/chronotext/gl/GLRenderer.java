@@ -31,22 +31,17 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected boolean attached;
   protected boolean hidden;
   
-  protected boolean renewRequest;
+  protected boolean resumeRequest;
   protected boolean showRequest;
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
     Log.i("CHR", "*** GLRenderer.onSurfaceCreated ***");
-
-    if (!initialized)
-    {
-      launch(); // AT THIS STAGE, SURFACE-SIZE IS NOT KNOWN
-    }
   }
 
   public void onSurfaceChanged(GL10 gl, int w, int h)
   {
-    Log.i("CHR", "*** GLRenderer.onSurfaceChanged: " + w + "x" + h + "***");
+    Log.i("CHR", "*** GLRenderer.onSurfaceChanged: " + w + "x" + h + " ***");
 
     /*
      * WARNING:
@@ -54,18 +49,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
      * THE LOGIC USED HERE IS INTENDED TO AVOID POTENTIALLY HARMFUL CONSEQUENCES
      */
 
-    if (initialized)
-    {
-      if (!resumed)
-      {
-        resumed = true;
-        resumed(true);
-        hidden = false; // TODO: ???
-      }
-    }
-    else
+    if (!initialized)
     {
       initialized = true;
+
+      launch();
       setup(gl, w, h);
 
       ticks = 0;
@@ -76,12 +64,23 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onDrawFrame(GL10 gl)
   {
+    if (resumeRequest)
+    {
+        resumeRequest = false;
+
+        ticks = 0;
+        resumed = true;
+        resumed(true);
+        hidden = false; // TODO: TEST
+    }
+
     if (showRequest)
     {
-      ticks = 0;
       showRequest = false;
-      shown(); // TODO: ???
-      hidden = false; // TODO: ???
+
+      ticks = 0;
+      shown(); // TODO: TEST
+      hidden = false; // TODO: TEST
     }
     
     // ---
@@ -112,8 +111,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     {
       ticks = 0;
       attached = true;
-      attached(); // TODO: ???
-      hidden = false; // TODO: ???
+      attached(); // TODO: TEST
+      hidden = false; // TODO: TEST
     }
   }
 
@@ -124,8 +123,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     if (resumed && !hidden)
     {
       attached = false;
-      detached(); // TODO: ???
-      hidden = false; // TODO: ???
+      detached(); // TODO: TEST
+      hidden = false; // TODO: TEST
     }
   }
 
@@ -139,16 +138,16 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       {
         /*
          * AT THIS STAGE (IN CASE THE APP WAS PREVIOUSLY IN THE BACKGROUND), THE SURFACE IS "NOT READY" YET
-         * SO, WE DON'T CALL shown() HERE BUT IN onDraw()
+         * THEREFORE shown() IS CALLED onDrawFrame()
          */
-        showRequest = true; // TODO: ???
+        showRequest = true; // TODO: TEST
         break;
       }
 
       case View.GONE :
       {
-        hidden(); // TODO: ???
-        hidden = true; // TODO: ???
+        hidden(); // TODO: TEST
+        hidden = true; // TODO: TEST
         break;
       }
     }
@@ -160,18 +159,17 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (attached)
     {
-      ticks = 0;
-
       if (hidden)
       {
-        foreground(); // TODO: ???
+        foreground(); // TODO: TEST
       }
       else
       {
         /*
-         * AT THIS STAGE, THE SURFACE HAS NOT BEEN (RE)CREATED YET
-         * THEREFORE resumed() IS CALLED ON onSurfaceChanged()
+         * AT THIS STAGE, THE SURFACE MAY NOT HAVE BEEN CREATED YET
+         * THEREFORE resumed() IS CALLED onDrawFrame()
          */
+         resumeRequest = true;
       }
     }
   }
@@ -182,7 +180,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (attached)
     {
-      if (!hidden)
+      if (hidden)
+      {
+        background(); // TODO: TEST
+      }
+      else
       {
         Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
 
@@ -192,10 +194,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
          */
         resumed = false;
         paused(true);
-      }
-      else
-      {
-        background(); // TODO: ???
       }
     }
   }

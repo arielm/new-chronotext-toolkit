@@ -13,19 +13,21 @@ import java.util.Vector;
 import org.chronotext.gl.Touch;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 
 public class GLView extends GLSurfaceView
 {
   protected GLRenderer renderer;
   protected boolean resumed;
 
-  public int definedWidth; // FIXME
-  public int definedHeight; // FIXME
+  protected int originalWidth;
+  protected int originalHeight;
 
   public GLView(Context context)
   {
@@ -56,18 +58,17 @@ public class GLView extends GLSurfaceView
     Log.i("CHR", "*** GLView.surfaceChanged: " + width + "x" + height + " ***");
 
     /*
-     * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP-MODE WITH A DIFFERENT ORIENTATION
-     * THE FOLLOWING SEEMS TO SOLVE THE ISSUE FOR SOME DEVICES (E.G. NEXUS 7 2013, VER 4.2.2) BUT NOT FOR
-     * OTHERS (E.G. XOOM 1, VER 3.1), IN WHICH CASE WE RELY ON THE SOLUTION IN CinderDelegate.onConfigurationChanged()
+     * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP AT A DIFFERENT ORIENTATION
+     * THE FOLLOWING IS A NECESSARY PRELIMINARY FOR THE WORKAROUND IN onConfigurationChanged()
      *
      * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
      */
-    if (definedWidth * definedHeight == 0)
+    if ((width == originalWidth) && (height == originalHeight))
     {
-      holder.setFixedSize(width, height);
-
-      definedWidth = width;
-      definedHeight = height;
+      /*
+       * ASSERTION: onSizeChanged() HAVE BEEN CALLED PREVIOUSLY
+       */
+      holder.setFixedSize(originalWidth, originalHeight);  
     }
     
     super.surfaceChanged(holder, format, width, height);
@@ -78,6 +79,40 @@ public class GLView extends GLSurfaceView
   {
     Log.i("CHR", "*** GLView.surfaceDestroyed ***"); 
     super.surfaceDestroyed(holder);
+  }
+
+  @Override
+  protected void onSizeChanged(int w, int h, int oldw, int oldh)
+  {
+    Log.i("CHR", "*** GLView.onSizeChanged: " + w + "x" + h + " | " + oldw + "x" + oldh + " ***");
+    super.onSizeChanged(w, h, oldw, oldh);
+
+    if (originalWidth * originalHeight == 0)
+    {
+      /*
+       * ASSERTION: THIS IS THE "ORIGINAL SIZE" OF OUR GLView
+       */
+      originalWidth = w;
+      originalHeight = h;
+    }
+  }
+
+  public void onConfigurationChanged (Configuration newConfig)
+  {
+    Log.i("CHR", "*** GLView.onConfigurationChanged ***");
+
+    /*
+     * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP AT A DIFFERENT ORIENTATION
+     *
+     * THE WORKAROUND IS ASSUMING THAT OUR GLView IS FULL-SCREEN
+     * LUCKILY, OTHER VIEWS (E.G. NATIVE WIDGETS ON TOP OF IT) DO NOT REQUIRE ANY "SPECIAL TREATMENT"
+     *
+     * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
+     */
+
+    LayoutParams layoutParams = getLayoutParams();
+    layoutParams.width = originalWidth;
+    layoutParams.height = originalHeight;
   }
 
   @Override
@@ -185,13 +220,6 @@ public class GLView extends GLSurfaceView
         }
       });
     }
-  }
-
-  @Override
-  protected void onSizeChanged (int w, int h, int oldw, int oldh)
-  {
-    Log.i("CHR", "*** GLView.onSizeChanged: " + w + "x" + h + " | " + oldw + "x" + oldh + " ***");
-    super.onSizeChanged(w, h, oldw, oldh);
   }
 
   @Override
