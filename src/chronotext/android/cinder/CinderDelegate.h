@@ -19,35 +19,6 @@ namespace chronotext
 {
     class CinderDelegate
     {
-        std::shared_ptr<ci::android::dostream> mOutputStream;
-        
-        WindowInfo mWindowInfo;
-        int mDisplayRotation;
-        
-        ci::Timer mTimer;
-        uint32_t mFrameCount;
-        
-        float mAccelFilterFactor;
-        ci::Vec3f mLastAccel, mLastRawAccel;
-        
-        ASensorManager *mSensorManager;
-        const ASensor *mAccelerometerSensor;
-        ASensorEventQueue *mSensorEventQueue;
-        
-        std::shared_ptr<boost::asio::io_service> io;
-        std::shared_ptr<boost::asio::io_service::work> ioWork;
-        
-        static int sensorEventCallback(int fd, int events, void *data)
-        {
-            CinderDelegate *instance = (CinderDelegate*)data;
-            instance->processSensorEvents();
-            
-            return 1;
-        }
-        
-        void processSensorEvents();
-        void accelerated(float x, float y, float z);
-        
         enum
         {
             ACCELEROMETER_ROTATION_DEFAULT = 0,
@@ -90,8 +61,10 @@ namespace chronotext
         
         void setup(int width, int height, float diagonal, float density, int displayRotation);
         void shutdown();
-        
         void draw();
+
+        void contextRenewed();
+        void contextLost();
         void event(int eventId);
         
         void addTouch(int index, float x, float y);
@@ -131,6 +104,36 @@ namespace chronotext
         jlong callLongMethodOnJavaListener(const char *name, const char *sig, ...);
         jfloat callFloatMethodOnJavaListener(const char *name, const char *sig, ...);
         jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
+        
+    protected:
+        std::shared_ptr<ci::android::dostream> mOutputStream;
+        
+        WindowInfo mWindowInfo;
+        int mDisplayRotation;
+        
+        ci::Timer mTimer;
+        uint32_t mFrameCount;
+        
+        float mAccelFilterFactor;
+        ci::Vec3f mLastAccel, mLastRawAccel;
+        
+        ASensorManager *mSensorManager;
+        const ASensor *mAccelerometerSensor;
+        ASensorEventQueue *mSensorEventQueue;
+        
+        std::shared_ptr<boost::asio::io_service> io;
+        std::shared_ptr<boost::asio::io_service::work> ioWork;
+        
+        static int sensorEventCallback(int fd, int events, void *data)
+        {
+            CinderDelegate *instance = (CinderDelegate*)data;
+            instance->processSensorEvents();
+            
+            return 1;
+        }
+        
+        void processSensorEvents();
+        void accelerated(float x, float y, float z);
     };
 }
 

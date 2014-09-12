@@ -219,31 +219,23 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public abstract void launch();
 
   public abstract void setup(GL10 gl, int width, int height);
-
   public abstract void shutdown();
-
   public abstract void draw(GL10 gl);
 
   public abstract void attached();
-
   public abstract void detached();
 
   public abstract void paused();
-
   public abstract void resumed();
 
   public abstract void background();
-
   public abstract void foreground();
 
   public abstract void shown();
-
   public abstract void hidden();
 
   public abstract void addTouches(Vector<Touch> touches);
-
   public abstract void updateTouches(Vector<Touch> touches);
-
   public abstract void removeTouches(Vector<Touch> touches);
 
   public abstract void sendMessage(int what, String body);

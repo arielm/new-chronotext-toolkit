@@ -16,6 +16,9 @@ using namespace std;
 
 namespace chronotext
 {
+    /*
+     * TODO: HANDLE LATEST DEVICES
+     */
     int SystemInfoImplCocoaTouch::getSizeFactor()
     {
         auto model = getModel();

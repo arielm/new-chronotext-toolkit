@@ -154,15 +154,14 @@ namespace chronotext
         mWindowInfo.density = density;
         mDisplayRotation = displayRotation;
         
-        /*
-         * IDEALLY, THIS INFO SHOULD BE ACCESSIBLE AS-SOON-AS THE "PRELAUNCH" STAGE...
-         */
         SystemInfo::instance().setWindowInfo(mWindowInfo);
         
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);
         
         sketch->setIOService(*io);
+        sketch->timeline().stepTo(0);
+        
         sketch->setup(false);
         sketch->resize();
     }
@@ -202,6 +201,17 @@ namespace chronotext
         sketch->draw();
     }
     
+    void CinderDelegate::contextRenewed()
+    {
+        sketch->setup(true);
+        sketch->resize();
+    }
+    
+    void CinderDelegate::contextLost()
+    {
+        sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
+    }
+    
     void CinderDelegate::event(int eventId)
     {
         switch (eventId)
@@ -222,8 +232,6 @@ namespace chronotext
                 mTimer.start();
                 sketch->clock().start();
                 
-                sketch->setup(true); // ASSERTION: THE GL CONTEXT WAS JUST RE-CREATED
-                sketch->resize(); // SIZE DID NOT EFFECTIVELY CHANGED, BUT NOTIFIYING ABOUT SURFACE (RE)CREATION
                 sketch->start(CinderSketch::FLAG_APP_RESUMED);
                 break;
                 
@@ -239,7 +247,6 @@ namespace chronotext
                 mTimer.stop();
                 sketch->clock().stop();
                 
-                sketch->event(CinderSketch::EVENT_CONTEXT_LOST); // ASSERTION: THE GL CONTEXT IS ABOUT TO BE LOST
                 sketch->stop(CinderSketch::FLAG_APP_PAUSED);
                 break;
                 

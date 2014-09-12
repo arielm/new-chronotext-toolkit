@@ -101,6 +101,12 @@ public class CinderDelegate extends Handler
     mView.onPause();
   }
 
+  /*
+   * THIS IS CALLED TOO EARLY WHEN BACK FROM SLEEP (WHILE THE LOCK SCREEN IS DISPLAYED,
+   * BEFORE THE APP IS ACTUALLY RESTARTED) ON CERTAIN DEVICES (E.G. XOOM 1, VER 3.1)
+   *
+   * TODO: IN SUCH CASE, WE SHOULD RELY ON onWindowFocusChanged
+   */
   public void onResume()
   {
     mView.onResume();

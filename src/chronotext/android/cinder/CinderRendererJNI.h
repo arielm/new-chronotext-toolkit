@@ -24,9 +24,11 @@ extern "C"
 
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jfloat diagonal, jfloat density, jint displayRotation);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
-
-    void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id);
     void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
+    
+    void Java_org_chronotext_cinder_CinderRenderer_contextRenewed(JNIEnv *env, jobject obj);
+    void Java_org_chronotext_cinder_CinderRenderer_contextLost(JNIEnv *env, jobject obj);
+    void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id);
     
     void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
     void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
@@ -79,14 +81,24 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
     delete gDelegate;
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id)
-{
-    gDelegate->event(id);
-}
-
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 {
     gDelegate->draw();
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_contextRenewed(JNIEnv *env, jobject obj)
+{
+    gDelegate->contextRenewed();
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_contextLost(JNIEnv *env, jobject obj)
+{
+    gDelegate->contextLost();
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id)
+{
+    gDelegate->event(id);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)

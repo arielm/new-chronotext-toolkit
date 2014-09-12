@@ -66,7 +66,7 @@ public class CinderRenderer extends GLRenderer
 
   public void setup(GL10 gl, int width, int height)
   {
-    Log.i("CHR", "*** Sketch::setup: false ***");
+    Log.i("CHR", "*** Sketch::setup ***");
 
     Display display = getWindowManager().getDefaultDisplay();
     DisplayMetrics dm = new DisplayMetrics();
@@ -112,15 +112,21 @@ public class CinderRenderer extends GLRenderer
 
   public void paused()
   {
+    Log.i("CHR", "*** Sketch::contextLost ***");
+
+    contextLost();
     event(EVENT_PAUSED);
+
     resumed = false;
   }
 
   public void resumed()
   {
-    Log.i("CHR", "*** Sketch::setup: true ***");
+    Log.i("CHR", "*** Sketch::contextRenewed ***");
 
+    contextRenewed();
     event(EVENT_RESUMED);
+
     resumed = true;
     hidden = false;
   }
@@ -174,21 +180,18 @@ public class CinderRenderer extends GLRenderer
   // ---------------------------------------- JNI ----------------------------------------
 
   public native void prelaunch();
-
   public native void launch(Context context, Object listener);
 
   public native void setup(int width, int height, float diagonal, float density, int displayRotation);
-
   public native void shutdown();
-
   public native void draw();
 
+  public native void contextRenewed();
+  public native void contextLost();
   public native void event(int id);
 
   public native void addTouch(int index, float x, float y);
-
   public native void updateTouch(int index, float x, float y);
-
   public native void removeTouch(int index, float x, float y);
 
   public native void sendMessage(int what, String body);

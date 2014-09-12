@@ -114,6 +114,9 @@ using namespace chr;
 
     // ---
     
+    /*
+     * TODO: HANDLE LATEST DEVICES
+     */
     switch (SystemInfo::instance().getSizeFactor())
     {
         case SystemInfo::SIZE_FACTOR_PHONE:
@@ -158,6 +161,7 @@ using namespace chr;
 
     sketch->setIOService(*io);
     sketch->timeline().stepTo(0);
+    
     sketch->setup(false);
     sketch->resize();
     
