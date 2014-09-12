@@ -42,9 +42,16 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
+  public void surfaceCreated(SurfaceHolder holder)
+  {
+    Log.i("CHR", "*** GLView.surfaceCreated ***"); 
+    super.surfaceCreated(holder);
+  }
+
+  @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
   {
-    Log.i("CHR", "*** GLView.onSurfaceChanged: " + width + "x" + height + " ***");
+    Log.i("CHR", "*** GLView.surfaceChanged: " + width + "x" + height + " ***");
 
     /*
      * DISPLAY CAN BE DEFORMED WHEN BACK FROM SLEEP-MODE WITH A DIFFERENT ORIENTATION

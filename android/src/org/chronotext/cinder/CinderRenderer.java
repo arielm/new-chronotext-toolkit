@@ -61,6 +61,7 @@ public class CinderRenderer extends GLRenderer
 
   public void launch()
   {
+    Log.i("CHR", "*** Sketch::launch ***");
     launch(mContext, mListener);
   }
 
@@ -127,6 +128,7 @@ public class CinderRenderer extends GLRenderer
     contextRenewed();
     event(EVENT_RESUMED);
 
+    renewRequest = false;
     resumed = true;
     hidden = false;
   }

@@ -28,23 +28,24 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   protected boolean initialized;
   protected boolean attached;
+  protected boolean focused;
   protected boolean resumed;
   protected boolean hidden;
   
+  protected boolean renewRequest;
   protected boolean showRequest;
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
     Log.i("CHR", "*** GLRenderer.onSurfaceCreated ***");
 
-    /*
-     * WE DON'T CALL setup() FROM HERE BECAUSE WE WANT TO KNOW THE SURFACE-SIZE FIRST
-     */
-
-    if (!initialized)
+    if (initialized)
     {
-      Log.i("CHR", "*** CinderRenderer.launch ***");
-      launch();
+      renewRequest = true;
+    }
+    else
+    {
+      launch(); // AT THIS STAGE, THE SURFACE-SIZE IS NOT KNOWN
     }
   }
 
@@ -55,20 +56,22 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     /*
      * WARNING:
      * THIS CALLBACK IS CALLED FAR TOO MUCH BY THE SYSTEM, AND WITH INCONSISTENT VALUES
-     * THE LOGIC USED HERE SEEMS TO FIX ALL THE RELATED ISSUES
+     * THE LOGIC USED HERE IS INTENDED TO AVOID ANY POTENTIALLY HARMFUL CONSEQUENCES
      */
 
     if (initialized)
     {
-      if (!resumed)
+      /*
+       * HANDLING CASES WHERE THE SURFACE IS CREATED TOO EARLY ON CERTAIN DEVICES (E.G. XOOM 1, VER 3.1)
+       * E.G. WHEN BACK-FROM SLEEP (WHILE THE LOCK SCREEN IS DISPLAYED, BEFORE THE APP IS ACTUALLY RESTARTED)
+       */
+      if (renewRequest && !resumed && focused)
       {
-        Log.i("CHR", "*** CinderRenderer.resumed ***");
         resumed();
       }
     }
     else
     {
-      Log.i("CHR", "*** CinderRenderer.setup: " + w + "x" + h + " ***");
       setup(gl, w, h);
     }
 
@@ -209,7 +212,17 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public void onWindowFocusChanged(boolean hasFocus)
   {
     Log.i("CHR", "*** CinderRenderer.onWindowFocusChanged: " + hasFocus + " ***");
-    // TODO: SET hasFocus FLAG AND USE IT FOR "PROPERLY RESUMING" WHEN BACK-FROM-SLEEP
+
+    focused = hasFocus;
+
+    if (renewRequest && !resumed && focused)
+    {
+      /*
+       * HANDLING CASES WHERE THE SURFACE IS CREATED TOO EARLY ON CERTAIN DEVICES (E.G. XOOM 1, VER 3.1)
+       * E.G. WHEN BACK-FROM SLEEP (WHILE THE LOCK SCREEN IS DISPLAYED, BEFORE THE APP IS ACTUALLY RESTARTED)
+       */
+      resumed();
+    }
   }
 
   /*
