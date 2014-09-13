@@ -53,15 +53,13 @@ public class CinderRenderer extends GLRenderer
     
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
 
-  public void launch()
-  {
-    Log.i("CHR", "*** CinderRenderer.launch ***");
-    launch(mContext, mListener);
-  }
-
   public void setup(GL10 gl, int width, int height)
   {
     Log.i("CHR", "*** CinderRenderer.setup ***");
+
+    launch(mContext, mListener);
+
+    // ---
 
     Display display = getWindowManager().getDefaultDisplay();
     DisplayMetrics dm = new DisplayMetrics();
@@ -91,16 +89,16 @@ public class CinderRenderer extends GLRenderer
     draw();
   }
 
-  public void attached()
+  public void resumed(boolean contextRenewed)
   {
-    Log.i("CHR", "*** CinderRenderer.attached ***");
-    event(EVENT_ATTACHED);
-  }
+    Log.i("CHR", "*** CinderRenderer.resumed: " + contextRenewed + " ***");
 
-  public void detached()
-  {
-    Log.i("CHR", "*** CinderRenderer.detached ***");
-    event(EVENT_DETACHED);
+    if (contextRenewed)
+    {
+      contextRenewed();
+    }
+      
+    event(EVENT_RESUMED);
   }
 
   public void paused(boolean contextLost)
@@ -115,16 +113,28 @@ public class CinderRenderer extends GLRenderer
     event(EVENT_PAUSED);
   }
 
-  public void resumed(boolean contextRenewed)
+  public void attached()
   {
-    Log.i("CHR", "*** CinderRenderer.resumed: " + contextRenewed + " ***");
+    Log.i("CHR", "*** CinderRenderer.attached ***");
+    event(EVENT_ATTACHED);
+  }
 
-    if (contextRenewed)
-    {
-      contextRenewed();
-    }
-      
-    event(EVENT_RESUMED);
+  public void detached()
+  {
+    Log.i("CHR", "*** CinderRenderer.detached ***");
+    event(EVENT_DETACHED);
+  }
+
+  public void shown()
+  {
+    Log.i("CHR", "*** CinderRenderer.shown ***");
+    event(EVENT_SHOWN);
+  }
+
+  public void hidden()
+  {
+    Log.i("CHR", "*** CinderRenderer.hidden ***");
+    event(EVENT_HIDDEN);
   }
 
   public void background()
@@ -137,16 +147,6 @@ public class CinderRenderer extends GLRenderer
     event(EVENT_FOREGROUND);
   }
 
-  public void shown()
-  {
-    event(EVENT_SHOWN);
-  }
-
-  public void hidden()
-  {
-    event(EVENT_HIDDEN);
-  }
-    
   public void addTouches(Vector<Touch> touches)
   {
     for (Touch touch : touches)

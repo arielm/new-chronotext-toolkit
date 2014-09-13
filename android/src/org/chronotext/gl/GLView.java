@@ -26,6 +26,8 @@ public class GLView extends GLSurfaceView
   protected GLRenderer renderer;
 
   protected boolean resumed;
+  protected boolean attached;
+
   protected int originalWidth;
   protected int originalHeight;
 
@@ -45,15 +47,23 @@ public class GLView extends GLSurfaceView
     this.renderer = (GLRenderer) renderer;
   }
 
+  /*
+   * OCCURS AT APPLICATION-STARTUP OR WHEN RETURNING FROM BACKGROUND
+   * BUT *NOT* WHEN RETURNING FROM SLEEP
+   */
   @Override
-  public void surfaceCreated(SurfaceHolder holder) // OCCURS AT APPLICATION-STARTUP OR WHEN RETURNING FROM BACKGROUND, BUT *NOT* WHEN RETURNING FROM SLEEP
+  public void surfaceCreated(SurfaceHolder holder)
   {
     Log.i("CHR", "*** GLView.surfaceCreated ***"); 
     super.surfaceCreated(holder);
   }
 
+  /*
+   * OCCURS WHEN ENTERING BACKGROUND
+   * BUT *NOT* WHEN ENTERING SLEEP
+   */
   @Override
-  public void surfaceDestroyed(SurfaceHolder holder) // OCCURS WHEN ENTERING BACKGROUND, BUT *NOT* WHEN ENTERING SLEEP
+  public void surfaceDestroyed(SurfaceHolder holder)
   {
     Log.i("CHR", "*** GLView.surfaceDestroyed ***"); 
     super.surfaceDestroyed(holder);
@@ -187,6 +197,9 @@ public class GLView extends GLSurfaceView
     }
   }
 
+  /*
+   * WARNING: THIS CALLBACK IS CALLED SO INCONSISTENTLY BY THE SYSTEM THAT WE CAN'T RELY ON IT
+   */
   @Override
   public void onWindowFocusChanged(final boolean hasFocus)
   {

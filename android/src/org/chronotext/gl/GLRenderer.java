@@ -30,8 +30,9 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected boolean resumed;
   protected boolean attached;
   protected boolean hidden;
-  
+
   protected boolean resumeRequest;
+  protected boolean attachRequest;
   protected boolean showRequest;
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -39,26 +40,19 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     Log.i("CHR", "*** GLRenderer.onSurfaceCreated ***");
   }
 
+  /*
+   * WARNING: THIS CALLBACK IS CALLED FAR TOO MUCH BY THE SYSTEM
+   */
   public void onSurfaceChanged(GL10 gl, int w, int h)
   {
     Log.i("CHR", "*** GLRenderer.onSurfaceChanged: " + w + "x" + h + " ***");
-
-    /*
-     * WARNING:
-     * THIS CALLBACK IS CALLED FAR TOO MUCH BY THE SYSTEM, AND WITH INCONSISTENT VALUES
-     * THE LOGIC USED HERE IS INTENDED TO AVOID POTENTIALLY HARMFUL CONSEQUENCES
-     */
 
     if (!initialized)
     {
       initialized = true;
 
-      launch();
       setup(gl, w, h);
-
-      ticks = 0;
-      attached = true;
-      attached();
+      attach();
     }
   }
 
@@ -66,21 +60,24 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     if (resumeRequest)
     {
-        resumeRequest = false;
+      resumeRequest = false;
 
-        ticks = 0;
-        resumed = true;
-        resumed(true);
-        hidden = false; // TODO: TEST
+      start();
+      resumed(true); // XXX
     }
+    else if (attachRequest)
+    {
+      attachRequest = false;
 
-    if (showRequest)
+      start();
+      attached();
+    }
+    else if (showRequest)
     {
       showRequest = false;
 
-      ticks = 0;
-      shown(); // TODO: TEST
-      hidden = false; // TODO: TEST
+      start();
+      shown();
     }
     
     // ---
@@ -101,6 +98,60 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     draw(gl);
   }
 
+  // ---------------------------------------- LIFE-CYCLE ----------------------------------------
+
+  protected void resume()
+  {
+    resumed = true;
+    resumeRequest = true;
+  }
+
+  protected void pause()
+  {
+    resumed = false;
+
+    stop();
+    paused(true); // XXX
+  }
+
+  protected void attach() // TODO: TEST
+  {
+    attached = true;
+    attachRequest = true;
+  }
+
+  protected void detach() // TODO: TEST
+  {
+    attached = false;
+
+    stop();
+    detached();
+  }
+
+  protected void show() // TODO: TEST
+  {
+    hidden = false;
+    showRequest = true;
+  }
+
+  protected void hide() // TODO: TEST
+  {
+    hidden = true;
+
+    stop();
+    hidden();
+  }
+
+  protected void start()
+  {
+    ticks = 0;
+  }
+
+  protected void stop()
+  {
+    Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
+  }
+
   // ---------------------------------------- QUEUED EVENTS, INITIALLY RECEIVED ON THE UI-THREAD ----------------------------------------
 
   public void onAttachedToWindow()
@@ -109,10 +160,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (initialized && !resumed)
     {
-      ticks = 0;
-      attached = true;
-      attached(); // TODO: TEST
-      hidden = false; // TODO: TEST
+      attach();
     }
   }
 
@@ -122,9 +170,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     
     if (resumed && !hidden)
     {
-      attached = false;
-      detached(); // TODO: TEST
-      hidden = false; // TODO: TEST
+      detach();
     }
   }
 
@@ -134,20 +180,24 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     switch (visibility)
     {
-      case View.VISIBLE :
+      case View.VISIBLE:
       {
-        /*
-         * AT THIS STAGE (IN CASE THE APP WAS PREVIOUSLY IN THE BACKGROUND), THE SURFACE IS "NOT READY" YET
-         * THEREFORE shown() IS CALLED onDrawFrame()
-         */
-        showRequest = true; // TODO: TEST
+        show();
         break;
       }
 
-      case View.GONE :
+      case View.GONE:
       {
-        hidden(); // TODO: TEST
-        hidden = true; // TODO: TEST
+        hide();
+        break;
+      }
+
+      case View.INVISIBLE:
+      {
+        /*
+         * WARNING: View.INVISIBLE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
+         */
+        hide();
         break;
       }
     }
@@ -165,11 +215,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       }
       else
       {
-        /*
-         * AT THIS STAGE, THE SURFACE MAY NOT HAVE BEEN CREATED YET
-         * THEREFORE resumed() IS CALLED onDrawFrame()
-         */
-         resumeRequest = true;
+         resume();
       }
     }
   }
@@ -186,14 +232,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       }
       else
       {
-        Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
-
-        /*
-         * AT THIS STAGE, THE SURFACE HAS ALREADY BEEN DESTROYED,
-         * I.E. UNLOADING TEXTURES WILL BE A NO-OP...
-         */
-        resumed = false;
-        paused(true);
+        pause();
       }
     }
   }
@@ -209,23 +248,21 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   // ---------------------------------------- ABSTRACT METHODS ----------------------------------------
 
-  public abstract void launch();
-
   public abstract void setup(GL10 gl, int width, int height);
   public abstract void shutdown();
   public abstract void draw(GL10 gl);
 
+  public abstract void resumed(boolean contextRenewed);
+  public abstract void paused(boolean contextLost);
+
   public abstract void attached();
   public abstract void detached();
 
-  public abstract void paused(boolean contextLost);
-  public abstract void resumed(boolean contextRenewed);
+  public abstract void shown();
+  public abstract void hidden();
 
   public abstract void background();
   public abstract void foreground();
-
-  public abstract void shown();
-  public abstract void hidden();
 
   public abstract void addTouches(Vector<Touch> touches);
   public abstract void updateTouches(Vector<Touch> touches);
