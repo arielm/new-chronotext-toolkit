@@ -9,7 +9,7 @@
         android:label="GrapeFrukt"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <activity
-            android:name=".MainActivity"
+            android:name=".BridgeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="sensorLandscape">
             <intent-filter>

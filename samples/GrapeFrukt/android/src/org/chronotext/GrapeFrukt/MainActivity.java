@@ -4,7 +4,6 @@ package org.chronotext.GrapeFrukt;
 import org.chronotext.cinder.CinderDelegate;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
