@@ -66,12 +66,18 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onDrawFrame(GL10 gl)
   {
+    if (contextRenewalRequest)
+    {
+      contextRenewalRequest = false;
+      contextRenewed();
+    }
+
     if (startRequest)
     {
       startRequest = false;
       performStart(startReason);
     }
-    
+
     // ---
 
     now = System.currentTimeMillis();
@@ -104,13 +110,13 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     performStop(REASON_PAUSED);
   }
 
-  protected void attach() // TODO: TEST
+  protected void attach()
   {
     attached = true;
     requestStart(REASON_ATTACHED);
   }
 
-  protected void detach() // TODO: TEST
+  protected void detach()
   {
     attached = false;
     performStop(REASON_DETACHED);
@@ -137,13 +143,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected void performStart(int reason)
   {
     ticks = 0;
-
-    if (contextRenewalRequest)
-    {
-      contextRenewalRequest = false;
-      contextRenewed();
-    }
-
     start(reason);
   }
 
@@ -153,10 +152,20 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     stop(reason);    
   }
 
-  protected void handleContextLoss()
+  public void contextDestroyed()
   {
-    contextRenewalRequest = true;
-    contextLost();
+    if (initialized)
+    {
+      contextLost();
+    }
+  }
+
+  public void contextCreated()
+  {
+    if (initialized)
+    {
+      contextRenewalRequest = true;  
+    }
   }
 
   // ---------------------------------------- QUEUED EVENTS, INITIALLY RECEIVED ON THE UI-THREAD ----------------------------------------
@@ -172,7 +181,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   }
 
   /*
-   * PROBLEM 1: THIS CAN'T BE REACHED, AS DESCRIBED IN GLView.onDetachedFromWindow()
+   * WARNING: THIS CAN'T BE REACHED, AS DESCRIBED IN GLView.onDetachedFromWindow()
    */
   public void onDetachedFromWindow()
   {
@@ -180,7 +189,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     
     if (!paused && !hidden)
     {
-      detach(); // PROBLEM 2: WHENEVER REACHED, WE ALSO NEED TO HANDLE GL-CONTEXT-LOSS
+      detach();
     }
   }
 
@@ -231,8 +240,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (attached)
     {
-      handleContextLoss(); // ASSERTION: GLSurfaceView HAS DESTROYED ITS GL-CONTEXT
-
       if (hidden)
       {
         background();
@@ -245,7 +252,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   }
 
   /*
-   * THIS IS RELATED TO APPLICATION-DESTRUCTION (I.E. NOT SURFACE-DESTRUCTION)
+   * FORWARED FROM THE MAIN-THREAD UPON ACTIVITY DESTRUCTION
+   * ONE OF THE REASONS WHY A GLView SHOULD NEVER BE DETACHED
    */
   public void onDestroy()
   {

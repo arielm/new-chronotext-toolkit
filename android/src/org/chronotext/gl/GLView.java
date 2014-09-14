@@ -8,6 +8,11 @@
 
 package org.chronotext.gl;
 
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+
 import java.util.Vector;
 
 import org.chronotext.gl.Touch;
@@ -38,6 +43,9 @@ public class GLView extends GLSurfaceView
     // setEGLContextClientVersion(2);
     // setEGLConfigChooser(8, 8, 8, 8, 0, 0);
     // getHolder().setFormat(PixelFormat.RGBA_8888);
+
+    setEGLContextFactory(new CustomContextFactory(1)); // NECESSARY BECAUSE setPreserveEGLContextOnPause(true) CAN'T BE FULLY TRUSTED
+    setPreserveEGLContextOnPause(true);
   }
 
   @Override
@@ -325,5 +333,37 @@ public class GLView extends GLSurfaceView
         renderer.sendMessage(what, body);
       }
     });
+  }
+
+  /*
+   * BASED ON GLSurfaceView.DefaultContextFactory
+   * SEEMS LIKE THE ONLY WAY TO BE NOTIFIED WHEN THE GL-CONTEXT IS ACTUALLY CREATED OR DESTROYED
+   */
+  protected class CustomContextFactory implements EGLContextFactory
+  {
+    protected int mEGLContextClientVersion;
+
+    public CustomContextFactory(int eglContextClientVersion)
+    {
+      mEGLContextClientVersion = eglContextClientVersion;
+    }
+
+    public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config)
+    {
+      Log.i("CHR", "*** CustomContextFactory.createContext ***");
+
+      renderer.contextCreated();
+
+      int[] attrib_list = { 0x3098, mEGLContextClientVersion, EGL10.EGL_NONE };
+      return egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, mEGLContextClientVersion != 0 ? attrib_list : null);
+    }
+
+    public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context)
+    {
+      Log.i("CHR", "*** CustomContextFactory.destroyContext ***");
+
+      renderer.contextDestroyed();
+      egl.eglDestroyContext(display, context);
+    }
   }
 }
