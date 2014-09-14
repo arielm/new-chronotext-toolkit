@@ -28,15 +28,17 @@ namespace chronotext
         
         enum
         {
-            EVENT_ATTACHED = 1,
-            EVENT_DETACHED,
-            EVENT_PAUSED,
-            EVENT_RESUMED,
-            EVENT_SHOWN,
-            EVENT_HIDDEN,
-            EVENT_BACKGROUND,
-            EVENT_FOREGROUND,
-            EVENT_BACK_KEY
+            EVENT_RESUMED = 1,
+            EVENT_ATTACHED = 2,
+            EVENT_SHOWN = 3,
+            EVENT_PAUSED = 4,
+            EVENT_DETACHED = 5,
+            EVENT_HIDDEN = 6,
+            EVENT_CONTEXT_LOST = 7,
+            EVENT_CONTEXT_RENEWED = 8,
+            EVENT_BACKGROUND = 9,
+            EVENT_FOREGROUND = 10,
+            EVENT_BACK_KEY = 11
         };
         
     public:
@@ -62,9 +64,6 @@ namespace chronotext
         void setup(int width, int height, float diagonal, float density, int displayRotation);
         void shutdown();
         void draw();
-
-        void contextRenewed();
-        void contextLost();
         void event(int eventId);
         
         void addTouch(int index, float x, float y);
@@ -131,6 +130,9 @@ namespace chronotext
             
             return 1;
         }
+        
+        void start(int flags);
+        void stop(int flags);
         
         void processSensorEvents();
         void accelerated(float x, float y, float z);

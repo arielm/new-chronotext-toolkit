@@ -69,7 +69,7 @@ public class Bridge extends CinderDelegate
     switch (id)
     {
       case 1:
-        if (getView().getVisibility() == View.GONE)
+        if (getView().getVisibility() != View.VISIBLE)
         {
           getView().setVisibility(View.VISIBLE);
         }

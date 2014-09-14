@@ -70,6 +70,9 @@ void Sketch::draw()
 {
     gl::clear(Color::gray(1.0f), false);
     gl::setMatricesWindow(getWindowSize(), true);
+    
+    gl::color(Color::gray(0.5f));
+    drawGrid(getWindowBounds(), 64, Vec2f(0, getElapsedSeconds() * 60));
 
     gl::translate(getWindowCenter());
     gl::scale(getWindowHeight() / REFERENCE_H);

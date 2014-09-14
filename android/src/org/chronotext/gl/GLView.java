@@ -59,7 +59,7 @@ public class GLView extends GLSurfaceView
   }
 
   /*
-   * OCCURS WHEN ENTERING BACKGROUND
+   * OCCURS WHEN ENTERING BACKGROUND OR WHEN VIEW IS HIDDEN
    * BUT *NOT* WHEN ENTERING SLEEP
    */
   @Override

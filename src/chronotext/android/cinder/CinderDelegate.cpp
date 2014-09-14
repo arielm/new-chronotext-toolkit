@@ -201,55 +201,37 @@ namespace chronotext
         sketch->draw();
     }
     
-    void CinderDelegate::contextRenewed()
-    {
-        sketch->setup(true);
-        sketch->resize();
-    }
-    
-    void CinderDelegate::contextLost()
-    {
-        sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
-    }
-    
     void CinderDelegate::event(int eventId)
     {
         switch (eventId)
         {
+            case EVENT_RESUMED:
+                start(CinderSketch::FLAG_APP_RESUMED);
+                break;
+
             case EVENT_ATTACHED:
             case EVENT_SHOWN:
-                mFrameCount = 0;
-                
-                mTimer.start();
-                sketch->clock().start();
-                
-                sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
+                start(CinderSketch::FLAG_FOCUS_GAINED);
                 break;
-                
-            case EVENT_RESUMED:
-                mFrameCount = 0;
-                
-                mTimer.start();
-                sketch->clock().start();
-                
-                sketch->start(CinderSketch::FLAG_APP_RESUMED);
+
+            case EVENT_PAUSED:
+                stop(CinderSketch::FLAG_APP_PAUSED);
                 break;
                 
             case EVENT_DETACHED:
             case EVENT_HIDDEN:
-                mTimer.stop();
-                sketch->clock().stop();
-                
-                sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
+                stop(CinderSketch::FLAG_FOCUS_LOST);
                 break;
-                
-            case EVENT_PAUSED:
-                mTimer.stop();
-                sketch->clock().stop();
-                
-                sketch->stop(CinderSketch::FLAG_APP_PAUSED);
+
+            case EVENT_CONTEXT_LOST:
+                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
                 break;
-                
+
+            case EVENT_CONTEXT_RENEWED:
+                sketch->setup(true);
+                sketch->resize();
+                break;
+
             case EVENT_BACKGROUND:
                 sketch->event(CinderSketch::EVENT_BACKGROUND);
                 break;
@@ -386,6 +368,24 @@ namespace chronotext
 #endif
         
         sketch->sendMessage(Message(what, body));
+    }
+    
+    void CinderDelegate::start(int flags)
+    {
+        mFrameCount = 0;
+        
+        mTimer.start();
+        sketch->clock().start();
+        
+        sketch->start(flags);
+    }
+    
+    void CinderDelegate::stop(int flags)
+    {
+        mTimer.stop();
+        sketch->clock().stop();
+        
+        sketch->stop(flags);
     }
     
     // ---------------------------------------- JNI ----------------------------------------

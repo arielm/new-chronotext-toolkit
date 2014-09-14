@@ -21,6 +21,13 @@ import android.view.View;
 
 public abstract class GLRenderer implements GLSurfaceView.Renderer
 {
+  public static final int REASON_RESUMED = 1;
+  public static final int REASON_ATTACHED = 2;
+  public static final int REASON_SHOWN = 3;
+  public static final int REASON_PAUSED = 4;
+  public static final int REASON_DETACHED = 5;
+  public static final int REASON_HIDDEN = 6;
+
   protected int ticks;
   protected long t0;
   protected long now;
@@ -31,9 +38,10 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected boolean attached;
   protected boolean hidden;
 
-  protected boolean resumeRequest;
-  protected boolean attachRequest;
-  protected boolean showRequest;
+  protected boolean startRequest;
+  protected int startReason;
+
+  protected boolean contextRenewalRequest;
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
@@ -58,26 +66,10 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onDrawFrame(GL10 gl)
   {
-    if (resumeRequest)
+    if (startRequest)
     {
-      resumeRequest = false;
-
-      start();
-      resumed(true); // XXX
-    }
-    else if (attachRequest)
-    {
-      attachRequest = false;
-
-      start();
-      attached();
-    }
-    else if (showRequest)
-    {
-      showRequest = false;
-
-      start();
-      shown();
+      startRequest = false;
+      performStart(startReason);
     }
     
     // ---
@@ -103,53 +95,68 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected void resume()
   {
     resumed = true;
-    resumeRequest = true;
+    requestStart(REASON_RESUMED);
   }
 
   protected void pause()
   {
     resumed = false;
-
-    stop();
-    paused(true); // XXX
+    performStop(REASON_PAUSED);
   }
 
   protected void attach() // TODO: TEST
   {
     attached = true;
-    attachRequest = true;
+    requestStart(REASON_ATTACHED);
   }
 
   protected void detach() // TODO: TEST
   {
     attached = false;
-
-    stop();
-    detached();
+    performStop(REASON_DETACHED);
   }
 
-  protected void show() // TODO: TEST
+  protected void show()
   {
     hidden = false;
-    showRequest = true;
+    requestStart(REASON_SHOWN);
   }
 
-  protected void hide() // TODO: TEST
+  protected void hide()
   {
     hidden = true;
-
-    stop();
-    hidden();
+    performStop(REASON_HIDDEN);
   }
 
-  protected void start()
+  protected void requestStart(int reason)
+  {
+    startRequest = true;
+    startReason = reason;
+  }
+
+  protected void performStart(int reason)
   {
     ticks = 0;
+
+    if (contextRenewalRequest)
+    {
+      contextRenewalRequest = false;
+      contextRenewed();
+    }
+
+    start(reason);
   }
 
-  protected void stop()
+  protected void performStop(int reason)
   {
     Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
+    stop(reason);    
+  }
+
+  protected void handleContextLoss()
+  {
+    contextRenewalRequest = true;
+    contextLost();
   }
 
   // ---------------------------------------- QUEUED EVENTS, INITIALLY RECEIVED ON THE UI-THREAD ----------------------------------------
@@ -187,16 +194,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       }
 
       case View.GONE:
+      case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
       {
-        hide();
-        break;
-      }
-
-      case View.INVISIBLE:
-      {
-        /*
-         * WARNING: View.INVISIBLE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
-         */
         hide();
         break;
       }
@@ -211,7 +210,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     {
       if (hidden)
       {
-        foreground(); // TODO: TEST
+        foreground();
       }
       else
       {
@@ -226,9 +225,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (attached)
     {
+      handleContextLoss(); // ASSERTION: GLSurfaceView HAS DESTROYED ITS GL-CONTEXT
+
       if (hidden)
       {
-        background(); // TODO: TEST
+        background();
       }
       else
       {
@@ -252,17 +253,14 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public abstract void shutdown();
   public abstract void draw(GL10 gl);
 
-  public abstract void resumed(boolean contextRenewed);
-  public abstract void paused(boolean contextLost);
+  public abstract void start(int reason);
+  public abstract void stop(int reason);
 
-  public abstract void attached();
-  public abstract void detached();
-
-  public abstract void shown();
-  public abstract void hidden();
-
-  public abstract void background();
   public abstract void foreground();
+  public abstract void background();
+
+  public abstract void contextLost();
+  public abstract void contextRenewed();
 
   public abstract void addTouches(Vector<Touch> touches);
   public abstract void updateTouches(Vector<Touch> touches);

@@ -25,15 +25,17 @@ import android.view.WindowManager;
 
 public class CinderRenderer extends GLRenderer
 {
-  public static final int EVENT_ATTACHED = 1;
-  public static final int EVENT_DETACHED = 2;
-  public static final int EVENT_PAUSED = 3;
-  public static final int EVENT_RESUMED = 4;
-  public static final int EVENT_SHOWN = 5;
+  public static final int EVENT_RESUMED = 1;
+  public static final int EVENT_ATTACHED = 2;
+  public static final int EVENT_SHOWN = 3;
+  public static final int EVENT_PAUSED = 4;
+  public static final int EVENT_DETACHED = 5;
   public static final int EVENT_HIDDEN = 6;
-  public static final int EVENT_BACKGROUND = 7;
-  public static final int EVENT_FOREGROUND = 8;
-  public static final int EVENT_BACK_KEY = 9;
+  public static final int EVENT_CONTEXT_LOST = 7;
+  public static final int EVENT_CONTEXT_RENEWED = 8;
+  public static final int EVENT_BACKGROUND = 9;
+  public static final int EVENT_FOREGROUND = 10;
+  public static final int EVENT_BACK_KEY = 11;
 
   protected Context mContext;
   protected Object mListener;
@@ -57,10 +59,6 @@ public class CinderRenderer extends GLRenderer
   {
     Log.i("CHR", "*** CinderRenderer.setup ***");
 
-    launch(mContext, mListener);
-
-    // ---
-
     Display display = getWindowManager().getDefaultDisplay();
     DisplayMetrics dm = new DisplayMetrics();
     display.getMetrics(dm);
@@ -80,7 +78,8 @@ public class CinderRenderer extends GLRenderer
      * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
      */
     int displayRotation = display.getRotation();
-      
+
+    launch(mContext, mListener);
     setup(width, height, diagonal, density, displayRotation);
   }
 
@@ -89,62 +88,40 @@ public class CinderRenderer extends GLRenderer
     draw();
   }
 
-  public void resumed(boolean contextRenewed)
+  public void start(int reason)
   {
-    Log.i("CHR", "*** CinderRenderer.resumed: " + contextRenewed + " ***");
-
-    if (contextRenewed)
-    {
-      contextRenewed();
-    }
-      
-    event(EVENT_RESUMED);
+    Log.i("CHR", "*** CinderRenderer.start: " + reason + " ***");
+    event(reason);
   }
 
-  public void paused(boolean contextLost)
+  public void stop(int reason)
   {
-    Log.i("CHR", "*** CinderRenderer.paused: " + contextLost + " ***");
-
-    if (contextLost)
-    {
-      contextLost();  
-    }
-
-    event(EVENT_PAUSED);
+    Log.i("CHR", "*** CinderRenderer.stop: " + reason + " ***");
+    event(reason);
   }
 
-  public void attached()
+  public void contextLost()
   {
-    Log.i("CHR", "*** CinderRenderer.attached ***");
-    event(EVENT_ATTACHED);
+    Log.i("CHR", "*** CinderRenderer.contextLost ***");
+    event(EVENT_CONTEXT_LOST);
   }
 
-  public void detached()
+  public void contextRenewed()
   {
-    Log.i("CHR", "*** CinderRenderer.detached ***");
-    event(EVENT_DETACHED);
-  }
-
-  public void shown()
-  {
-    Log.i("CHR", "*** CinderRenderer.shown ***");
-    event(EVENT_SHOWN);
-  }
-
-  public void hidden()
-  {
-    Log.i("CHR", "*** CinderRenderer.hidden ***");
-    event(EVENT_HIDDEN);
-  }
-
-  public void background()
-  {
-    event(EVENT_BACKGROUND);
+    Log.i("CHR", "*** CinderRenderer.contextRenewed ***");
+    event(EVENT_CONTEXT_RENEWED);
   }
 
   public void foreground()
   {
+    Log.i("CHR", "*** CinderRenderer.foreground ***");
     event(EVENT_FOREGROUND);
+  }
+
+  public void background()
+  {
+    Log.i("CHR", "*** CinderRenderer.background ***");
+    event(EVENT_BACKGROUND);
   }
 
   public void addTouches(Vector<Touch> touches)
@@ -179,9 +156,6 @@ public class CinderRenderer extends GLRenderer
   public native void setup(int width, int height, float diagonal, float density, int displayRotation);
   public native void shutdown();
   public native void draw();
-
-  public native void contextRenewed();
-  public native void contextLost();
   public native void event(int id);
 
   public native void addTouch(int index, float x, float y);
