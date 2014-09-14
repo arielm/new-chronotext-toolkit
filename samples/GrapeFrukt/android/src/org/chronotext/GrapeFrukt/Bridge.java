@@ -27,9 +27,6 @@ public class Bridge extends CinderDelegate
   protected RelativeLayout rootView;
   protected RelativeLayout overlayView;
 
-  protected boolean hidden;
-  protected boolean detached;
-  
   public Bridge(Activity activity)
   {
     super(activity);
@@ -41,10 +38,9 @@ public class Bridge extends CinderDelegate
     activity.setContentView(rootView);
 
     rootView.addView(getView());
+    getView().setVisibility(View.GONE);
 
     overlayView = new RelativeLayout(activity);
-    overlayView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
-    overlayView.setFocusableInTouchMode(true);
     activity.addContentView(overlayView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
     // ---
@@ -76,17 +72,18 @@ public class Bridge extends CinderDelegate
 
   void buttonClicked(int id)
   {
+    boolean hidden = (getView().getVisibility() != View.VISIBLE);
+    boolean detached = (getView().getParent() == null);
+
     switch (id)
     {
       case 1:
         if (hidden)
         {
-          hidden = false;
           getView().setVisibility(View.VISIBLE);
         }
         else
         {
-          hidden = true;
           getView().setVisibility(View.GONE);
         }
         break;
@@ -94,12 +91,10 @@ public class Bridge extends CinderDelegate
       case 2:
         if (detached)
         {
-          detached = false;
           rootView.addView(getView());
         }
         else
         {
-          detached = true;
           rootView.removeView(getView());
         }
     }

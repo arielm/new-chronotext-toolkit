@@ -188,19 +188,22 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Log.i("CHR", "*** GLRenderer.onVisibilityChanged: " + visibility + " ***");
 
-    switch (visibility)
+    if (initialized)
     {
-      case View.VISIBLE:
+      switch (visibility)
       {
-        show();
-        break;
-      }
+        case View.VISIBLE:
+        {
+          show();
+          break;
+        }
 
-      case View.GONE:
-      case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
-      {
-        hide();
-        break;
+        case View.GONE:
+        case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
+        {
+          hide();
+          break;
+        }
       }
     }
   }

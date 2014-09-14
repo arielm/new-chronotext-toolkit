@@ -107,9 +107,12 @@ public class GLView extends GLSurfaceView
   {
     Log.i("CHR", "*** GLView.onConfigurationChanged ***");
 
-    LayoutParams layoutParams = getLayoutParams();
-    layoutParams.width = originalWidth;
-    layoutParams.height = originalHeight;
+    if (originalWidth * originalHeight != 0)
+    {
+      LayoutParams layoutParams = getLayoutParams();
+      layoutParams.width = originalWidth;
+      layoutParams.height = originalHeight;
+    }
   }
 
   @Override
