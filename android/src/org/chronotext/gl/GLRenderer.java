@@ -34,7 +34,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected long elapsed;
 
   protected boolean initialized;
-  protected boolean resumed;
+  protected boolean paused;
   protected boolean attached;
   protected boolean hidden;
 
@@ -94,13 +94,13 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   protected void resume()
   {
-    resumed = true;
+    paused = false;
     requestStart(REASON_RESUMED);
   }
 
   protected void pause()
   {
-    resumed = false;
+    paused = true;
     performStop(REASON_PAUSED);
   }
 
@@ -165,19 +165,22 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Log.i("CHR", "*** GLRenderer.onAttachedToWindow ***");
 
-    if (initialized && !resumed)
+    if (initialized && !paused)
     {
       attach();
     }
   }
 
+  /*
+   * PROBLEM 1: THIS CAN'T BE REACHED, AS DESCRIBED IN GLView.onDetachedFromWindow()
+   */
   public void onDetachedFromWindow()
   {
     Log.i("CHR", "*** GLRenderer.onDetachedFromWindow ***");
     
-    if (resumed && !hidden)
+    if (!paused && !hidden)
     {
-      detach();
+      detach(); // PROBLEM 2: WHENEVER REACHED, WE ALSO NEED TO HANDLE GL-CONTEXT-LOSS
     }
   }
 

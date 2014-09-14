@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -23,7 +24,11 @@ public class Bridge extends CinderDelegate
     System.loadLibrary("GrapeFrukt");
   }
 
-  protected RelativeLayout container;
+  protected RelativeLayout rootView;
+  protected RelativeLayout overlayView;
+
+  protected boolean hidden;
+  protected boolean detached;
   
   public Bridge(Activity activity)
   {
@@ -31,16 +36,21 @@ public class Bridge extends CinderDelegate
 
     // ---
 
-    activity.setContentView(getView());
+    rootView = new RelativeLayout(activity);
+    rootView.setBackgroundColor(Color.YELLOW);
+    activity.setContentView(rootView);
 
-    container = new RelativeLayout(activity);
-    container.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
-    container.setFocusableInTouchMode(true);
-    activity.addContentView(container, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    rootView.addView(getView());
+
+    overlayView = new RelativeLayout(activity);
+    overlayView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+    overlayView.setFocusableInTouchMode(true);
+    activity.addContentView(overlayView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
     // ---
 
     addButton("hide / show", 100, 100, 1);
+    addButton("detach / attach", 100, 200, 2);
   }
 
   void addButton(String text, int x, int y, final int id)
@@ -52,7 +62,7 @@ public class Bridge extends CinderDelegate
     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     params.leftMargin = x;
     params.topMargin = y;
-    container.addView(button, params);
+    overlayView.addView(button, params);
 
     button.setOnClickListener(new OnClickListener()
     {
@@ -69,15 +79,29 @@ public class Bridge extends CinderDelegate
     switch (id)
     {
       case 1:
-        if (getView().getVisibility() != View.VISIBLE)
+        if (hidden)
         {
+          hidden = false;
           getView().setVisibility(View.VISIBLE);
         }
         else
         {
+          hidden = true;
           getView().setVisibility(View.GONE);
         }
         break;
+
+      case 2:
+        if (detached)
+        {
+          detached = false;
+          rootView.addView(getView());
+        }
+        else
+        {
+          detached = true;
+          rootView.removeView(getView());
+        }
     }
   }
   

@@ -116,7 +116,7 @@ public class GLView extends GLSurfaceView
   protected void onAttachedToWindow()
   {
     Log.i("CHR", "*** GLView.onAttachedToWindow ***");
-    super.onAttachedToWindow(); // WILL RESTART THE RENDERER'S THREAD
+    super.onAttachedToWindow(); // WILL START THE RENDERER'S THREAD (IF NECESSARY)
 
     queueEvent(new Runnable()
     {
@@ -131,24 +131,19 @@ public class GLView extends GLSurfaceView
   protected void onDetachedFromWindow()
   {
     Log.i("CHR", "*** GLView.onDetachedFromWindow ***");
+    super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD
 
+    /*
+     * PROBLEM: THE FOLLOWING CAN'T BE DELIVERED
+     * SEE THE SOURCE-CODE GLSurfaceView.onDetachedFromWindow() TO FIND-OUT WHY
+     */
     queueEvent(new Runnable()
     {
       public void run()
       {
-        /*
-         * CURRENTLY NEVER REACHED WHEN DETACHED AS A RESULT OF APPLICATION DESTRUCTION
-         * NOT SURE IF IT WORTHS TRYING TO FIND A SOLUTION...
-         */
         renderer.onDetachedFromWindow();
       }
     });
-
-    /*
-     * PURPOSELY CALLED AT THE END
-     * TODO: TEST IF renderer.onDetachedFromWindow() IS REACHED WHEN DETACHED AS A RESULT OF VIEW REMOVAL
-     */
-    super.onDetachedFromWindow(); // WILL STOP THE RENDERER'S THREAD
   }
 
   /*
