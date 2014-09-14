@@ -24,29 +24,70 @@ public class Bridge extends CinderDelegate
     System.loadLibrary("GrapeFrukt");
   }
 
+  static final int GLVIEW_ATTACHED_AND_VISIBLE_AT_START = 1;
+  static final int GLVIEW_ATTACHED_AND_HIDDEN_AT_START = 2;
+  static final int GLVIEW_NOT_ATTACHED_AT_START = 3;
+
+  int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
+  boolean contentViewIsGLView = true; // CURRENTLY: true IS THE ONLY WAY TO AVOID THE "DEFORMATION BUG"
+
   protected RelativeLayout rootView;
   protected RelativeLayout overlayView;
 
-  public Bridge(Activity activity)
+  public Bridge(Activity activity) throws Exception
   {
     super(activity);
 
     // ---
 
-    rootView = new RelativeLayout(activity);
-    rootView.setBackgroundColor(Color.YELLOW);
-    activity.setContentView(rootView);
+    if (!contentViewIsGLView)
+    {
+      rootView = new RelativeLayout(activity);
+      rootView.setBackgroundColor(Color.YELLOW);
+      activity.setContentView(rootView);
+    }
 
-    rootView.addView(getView());
-    getView().setVisibility(View.GONE);
+    if (testMode == GLVIEW_ATTACHED_AND_VISIBLE_AT_START || testMode == GLVIEW_ATTACHED_AND_HIDDEN_AT_START)
+    {
+      if (contentViewIsGLView)
+      {
+        activity.setContentView(getView());
+      }
+      else
+      {
+        rootView.addView(getView());
+      }
+     
+      if (testMode == GLVIEW_ATTACHED_AND_HIDDEN_AT_START)
+      {
+        getView().setVisibility(View.GONE);
+      }  
+    }
+    else if (testMode == GLVIEW_NOT_ATTACHED_AT_START)
+    {
+      if (contentViewIsGLView)
+      {
+        throw new Exception("INVALID TEST MODE");
+      }
+    }
+    else
+    {
+      throw new Exception("UNDEFINED TEST MODE");
+    }
+
+    // ---    
 
     overlayView = new RelativeLayout(activity);
     activity.addContentView(overlayView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-    // ---
-
-    addButton("hide / show", 100, 100, 1);
-    addButton("detach / attach", 100, 200, 2);
+    if (testMode == GLVIEW_ATTACHED_AND_VISIBLE_AT_START || testMode == GLVIEW_ATTACHED_AND_HIDDEN_AT_START)
+    {
+      addButton("hide / show", 100, 100, 1);  
+    }
+    else if (testMode == GLVIEW_NOT_ATTACHED_AT_START)
+    {
+      addButton("detach / attach", 100, 200, 2);  
+    }
   }
 
   void addButton(String text, int x, int y, final int id)
