@@ -4,7 +4,6 @@ package org.chronotext.GrapeFrukt;
 import org.chronotext.cinder.CinderDelegate;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -59,13 +58,6 @@ public class MainActivity extends Activity
   {
     super.onDestroy();
     delegate.onDestroy();
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig)
-  {
-    super.onConfigurationChanged(newConfig);
-    delegate.onConfigurationChanged(newConfig);
   }
   
   @Override

@@ -48,12 +48,28 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     Log.i("CHR", "*** GLRenderer.onSurfaceCreated ***");
   }
 
-  /*
-   * WARNING: THIS CALLBACK IS CALLED FAR TOO MUCH BY THE SYSTEM
-   */
   public void onSurfaceChanged(GL10 gl, int w, int h)
   {
     Log.i("CHR", "*** GLRenderer.onSurfaceChanged: " + w + "x" + h + " ***");
+
+    /*
+     * THE SYSTEM IS CALLING onSurfaceChanged() FAR MORE THAN EXPECTED, APPARENTLY
+     * AS MEAN TO COPE WITH THE "CONFIGURATION-CHANGE / ORIENTATION-CHANGE" HELL
+     *
+     * IN ORDER TO AVOID "SCREEN DEFORMATION" WHEN RETURNING FROM SLEEP AT A DIFFERENT ORIENTATION
+     * IT IS THEREFORE MANDATORY TO CALL glViewport() AT *EACH* onSurfaceChanged()
+     *
+     * WARNING:
+     *
+     * THE "FULL SOLUTION" WOULD REQUIRE ADDING A resize() CALLBACK TO THE GLRenderer
+     * INTERFACE AND TO INVOKE IT AFTER EACH glViewport
+     * 
+     * CURRENTLY, CinderDelegate::resize() IS TIED TO CinderDelegate::setup()
+     * AN CALLED ONLY WHEN THE GLView IS ATTACHED OR WHEN THE GL-CONTEXT IS RECREATED
+     *
+     * IT IS NOT SUPPOSED TO CAUSE PROBLEMS IF THE APPLICATION IS NOT USING glViewport() WITHIN resize()
+     */
+    gl.glViewport(0, 0, w, h);
 
     if (!initialized)
     {
@@ -252,7 +268,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   }
 
   /*
-   * FORWARED FROM THE MAIN-THREAD UPON ACTIVITY DESTRUCTION
+   * FORWARDED FROM THE MAIN-THREAD UPON ACTIVITY DESTRUCTION
    * ONE OF THE REASONS WHY A GLView SHOULD NEVER BE DETACHED
    */
   public void onDestroy()

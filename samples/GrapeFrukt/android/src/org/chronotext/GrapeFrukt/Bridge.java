@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -34,7 +33,7 @@ public class Bridge extends CinderDelegate
   protected RelativeLayout rootView;
   protected RelativeLayout overlayView;
 
-  public Bridge(Activity activity) throws Exception
+  public Bridge(Activity activity)
   {
     super(activity);
 
@@ -67,12 +66,14 @@ public class Bridge extends CinderDelegate
     {
       if (contentViewIsGLView)
       {
-        throw new Exception("INVALID TEST MODE");
+        Log.e("CHR", "INVALID TEST MODE");
+        return;
       }
     }
     else
     {
-      throw new Exception("UNDEFINED TEST MODE");
+      Log.e("CHR", "UNDEFINED TEST MODE");
+      return;
     }
 
     // ---    

@@ -11,7 +11,6 @@ package org.chronotext.cinder;
 import org.chronotext.gl.GLView;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -38,8 +37,6 @@ public class CinderDelegate extends Handler
 
     mView = new GLView(activity);
     mView.setRenderer(mRenderer); // WILL START THE RENDERER'S THREAD
-
-    mBackKeyCaptured = false;
   }
 
   public CinderDelegate(Activity activity, Handler handler)
@@ -103,11 +100,6 @@ public class CinderDelegate extends Handler
   public void onResume()
   {
     mView.onResume(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
-  }
-
-  public void onConfigurationChanged (Configuration newConfig)
-  {
-    mView.onConfigurationChanged(newConfig);
   }
 
   public void onDestroy()

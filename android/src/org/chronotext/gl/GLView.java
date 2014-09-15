@@ -18,13 +18,11 @@ import java.util.Vector;
 import org.chronotext.gl.Touch;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 public class GLView extends GLSurfaceView
 {
@@ -82,48 +80,6 @@ public class GLView extends GLSurfaceView
   {
     Log.i("CHR", "*** GLView.surfaceChanged: " + width + "x" + height + " ***");
     super.surfaceChanged(holder, format, width, height);
-  }
-
-  @Override
-  protected void onSizeChanged(int w, int h, int oldw, int oldh)
-  {
-    Log.i("CHR", "*** GLView.onSizeChanged: " + w + "x" + h + " | " + oldw + "x" + oldh + " ***");
-    super.onSizeChanged(w, h, oldw, oldh);
-
-    if (originalWidth * originalHeight == 0)
-    {
-      /*
-       * ASSERTION: THIS IS THE "ORIGINAL SIZE" OF OUR GLView
-       */
-      originalWidth = w;
-      originalHeight = h;
-
-      getHolder().setFixedSize(originalWidth, originalHeight); // NECESSARY FOR THE SYSTEM-BUG TREATED IN onConfigurationChanged()
-    }
-  }
-
-  /*
-   * DISPLAY CAN BE DEFORMED WHEN RETURNING FROM SLEEP AT A DIFFERENT ORIENTATION
-   * THIS IS A SYSTEM-BUG REPRODUCIBLE ON DEVICES AS-OLD-AS XOOM 1 (3.1) AND AS-RECENT-AS NEXUS 7 2013 (4.2.2)
-   *
-   * THE WORKAROUND WORKS AS INTENDED *ONLY* WHEN OUR GLView IS FULL-SCREEN AND AT THE ROOT OF THE ACTIVITY'S VIEW-HIERARCHY
-   * I.E. ATTACHED VIA Activity.setContentView()
-   *
-   * LUCKILY, OTHER ANDROID VIEWS (E.G. WIDGETS PLACED ON TOP OF OUR GLView) DO NOT REQUIRE ANY "SPECIAL TREATMENT"
-   * TODO: FIND OUT WHY THE SYSTEM-BUG DO SHOW WHEN THE GLView IS NOT AT THE ROOT
-   *
-   * REFERENCE: http://stackoverflow.com/questions/7185644/android-opengl-crazy-aspect-ratio-after-sleep
-   */
-  public void onConfigurationChanged(Configuration newConfig)
-  {
-    Log.i("CHR", "*** GLView.onConfigurationChanged ***");
-
-    if (originalWidth * originalHeight != 0)
-    {
-      LayoutParams layoutParams = getLayoutParams();
-      layoutParams.width = originalWidth;
-      layoutParams.height = originalHeight;
-    }
   }
 
   @Override

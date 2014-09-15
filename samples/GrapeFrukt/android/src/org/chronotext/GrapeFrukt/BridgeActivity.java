@@ -2,7 +2,6 @@
 package org.chronotext.GrapeFrukt;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class BridgeActivity extends Activity
@@ -35,13 +34,6 @@ public class BridgeActivity extends Activity
   {
     super.onDestroy();
     bridge.onDestroy();
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig)
-  {
-    super.onConfigurationChanged(newConfig);
-    bridge.onConfigurationChanged(newConfig);
   }
   
   @Override
