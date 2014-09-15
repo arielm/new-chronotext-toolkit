@@ -31,9 +31,6 @@ public class GLView extends GLSurfaceView
   protected boolean resumed;
   protected boolean attached;
 
-  protected int originalWidth;
-  protected int originalHeight;
-
   public GLView(Context context)
   {
     super(context);

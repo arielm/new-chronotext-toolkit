@@ -38,10 +38,14 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   protected boolean attached;
   protected boolean hidden;
 
+  protected boolean contextRenewalRequest;
+
+  protected boolean resizeRequest;
+  protected int viewportWidth;
+  protected int viewportHeight;
+
   protected boolean startRequest;
   protected int startReason;
-
-  protected boolean contextRenewalRequest;
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
@@ -53,23 +57,15 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     Log.i("CHR", "*** GLRenderer.onSurfaceChanged: " + w + "x" + h + " ***");
 
     /*
-     * THE SYSTEM IS CALLING onSurfaceChanged() FAR MORE THAN EXPECTED, APPARENTLY
-     * AS MEAN TO COPE WITH THE "CONFIGURATION-CHANGE / ORIENTATION-CHANGE" HELL
-     *
-     * IN ORDER TO AVOID "SCREEN DEFORMATION" WHEN RETURNING FROM SLEEP AT A DIFFERENT ORIENTATION
-     * IT IS THEREFORE MANDATORY TO CALL glViewport() AT *EACH* onSurfaceChanged()
-     *
-     * WARNING:
-     *
-     * THE "FULL SOLUTION" WOULD REQUIRE ADDING A resize() CALLBACK TO THE GLRenderer
-     * INTERFACE AND TO INVOKE IT AFTER EACH glViewport
-     * 
-     * CURRENTLY, CinderDelegate::resize() IS TIED TO CinderDelegate::setup()
-     * AN CALLED ONLY WHEN THE GLView IS ATTACHED OR WHEN THE GL-CONTEXT IS RECREATED
-     *
-     * IT IS NOT SUPPOSED TO CAUSE PROBLEMS IF THE APPLICATION IS NOT USING glViewport() WITHIN resize()
+     * IT IS IMPERATIVE TO CALL glViewport() UPON EACH onSurfaceChanged()
+     * EVEN IF IT SEEMS THAT THE LATTER IS CALLED FAR TOO OFTEN BY THE SYSTEM
+     * OTHERWISE: THE GLView WILL BE DEFORMED IN SOME SITUATIONS (E.G. RETURNING FROM SLEEP AFTER AN ORIENTATION CHANGE)
      */
     gl.glViewport(0, 0, w, h);
+
+    resizeRequest = true;
+    viewportWidth = w;
+    viewportHeight = h;
 
     if (!initialized)
     {
@@ -84,8 +80,15 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     if (contextRenewalRequest)
     {
+      resizeRequest = true;
       contextRenewalRequest = false;
       contextRenewed();
+    }
+
+    if (resizeRequest)
+    {
+      resizeRequest = false;
+      resize(gl, viewportWidth, viewportHeight);
     }
 
     if (startRequest)
@@ -281,6 +284,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public abstract void setup(GL10 gl, int width, int height);
   public abstract void shutdown();
+
+  public abstract void resize(GL10 gl, int width, int height);
   public abstract void draw(GL10 gl);
 
   public abstract void start(int reason);

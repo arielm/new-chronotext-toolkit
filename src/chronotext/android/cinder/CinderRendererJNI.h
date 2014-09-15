@@ -24,6 +24,7 @@ extern "C"
 
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jfloat diagonal, jfloat density, jint displayRotation);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
+    void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id);
     
@@ -55,7 +56,7 @@ void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject ob
 }
 
 /*
- * THIS MUST BE CALLED FROM THE RENDERER'S THREAD
+ * THIS MUST BE CALLED FROM THE RENDERER'S THREAD, BEFORE setup
  */
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener)
 {
@@ -76,6 +77,11 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
 {
     gDelegate->shutdown();
     delete gDelegate;
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj)
+{
+    gDelegate->resize();
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)

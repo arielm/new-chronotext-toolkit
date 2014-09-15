@@ -83,6 +83,12 @@ public class CinderRenderer extends GLRenderer
     setup(width, height, diagonal, density, displayRotation);
   }
 
+  public void resize(GL10 gl, int width, int height)
+  {
+    Log.i("CHR", "*** CinderRenderer.resize: " + width + "x" + height + " ***");
+    resize();
+  }
+
   public void draw(GL10 gl)
   {
     draw();
@@ -155,7 +161,10 @@ public class CinderRenderer extends GLRenderer
 
   public native void setup(int width, int height, float diagonal, float density, int displayRotation);
   public native void shutdown();
+
+  public native void resize();
   public native void draw();
+
   public native void event(int id);
 
   public native void addTouch(int index, float x, float y);

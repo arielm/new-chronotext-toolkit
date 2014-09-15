@@ -63,7 +63,10 @@ namespace chronotext
         
         void setup(int width, int height, float diagonal, float density, int displayRotation);
         void shutdown();
+        
+        void resize();
         void draw();
+        
         void event(int eventId);
         
         void addTouch(int index, float x, float y);
