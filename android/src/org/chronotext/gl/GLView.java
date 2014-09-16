@@ -94,8 +94,16 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onAttachedToWindow");
 
-    super.onAttachedToWindow(); // WILL START A NEW RENDERER'S IF NECESSARY, E.G. WHEN THE GLView IS RE-ATTACHED (A SITUATION WE'RE NOT FULLY HANDLING AT THIS STAGE)
+    super.onAttachedToWindow(); // WILL START A NEW RENDERER'S IF NECESSARY (E.G. WHEN THE GLView IS RE-ATTACHED)
     attached = true;
+
+    queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        mRenderer.onAttachedToWindow();
+      }
+    });
   }
 
   @Override

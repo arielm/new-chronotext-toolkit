@@ -29,12 +29,18 @@ public class Bridge extends CinderDelegate
 
   // int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
   // boolean contentViewIsGLView = true;
-  
+
   int testMode = GLVIEW_NOT_ATTACHED_AT_START;
   boolean contentViewIsGLView = false;
 
-  protected RelativeLayout rootView;
-  protected RelativeLayout overlayView;
+  RelativeLayout rootView;
+  RelativeLayout overlayView;
+
+  Button button1;
+  Button button2;
+
+  boolean hidden;
+  boolean detached;
 
   public Bridge(Activity activity)
   {
@@ -84,21 +90,16 @@ public class Bridge extends CinderDelegate
     overlayView = new RelativeLayout(activity);
     activity.addContentView(overlayView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-    if (testMode == GLVIEW_ATTACHED_AND_VISIBLE_AT_START || testMode == GLVIEW_ATTACHED_AND_HIDDEN_AT_START)
-    {
-      addButton("hide / show", 100, 100, 1);  
-    }
-    else if (testMode == GLVIEW_NOT_ATTACHED_AT_START)
-    {
-      addButton("detach / attach", 100, 200, 2);  
-    }
+    button1 = addButton(100, 100, 1);
+    button2 = addButton(100, 200, 2);
+
+    refreshButtons();
   }
 
-  void addButton(String text, int x, int y, final int id)
+  Button addButton(int x, int y, final int id)
   {
-    Button button = new Button(getActivity());
-    button.setText(text);
-    button.setId(1);
+    final Button button = new Button(getActivity());
+    button.setId(id);
 
     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     params.leftMargin = x;
@@ -110,17 +111,16 @@ public class Bridge extends CinderDelegate
       @Override
       public void onClick(View v)
       {
-        buttonClicked(id);
+        buttonClicked(button);
       }
     });
+
+    return button;
   }
 
-  void buttonClicked(int id)
+  void buttonClicked(Button button)
   {
-    boolean hidden = (getView().getVisibility() != View.VISIBLE);
-    boolean detached = (getView().getParent() == null);
-
-    switch (id)
+    switch (button.getId())
     {
       case 1:
         if (hidden)
@@ -142,7 +142,22 @@ public class Bridge extends CinderDelegate
         {
           rootView.removeView(getView());
         }
+        break;
     }
+
+    refreshButtons();
+  }
+
+  void refreshButtons()
+  {
+    hidden = (getView().getVisibility() != View.VISIBLE);
+    detached = (getView().getParent() == null);
+
+    button1.setVisibility(detached ? View.GONE : View.VISIBLE);
+    button2.setVisibility(View.VISIBLE);
+
+    button1.setText(hidden ? "show" : "hide");
+    button2.setText(detached ? "attach" : "detach");
   }
   
   public void handleMessage(Message msg)

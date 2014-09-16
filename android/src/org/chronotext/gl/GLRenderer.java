@@ -204,28 +204,15 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     }
   }
 
-  // public void onAttachedToWindow()
-  // {
-  //   Utils.LOGD("GLRenderer.onAttachedToWindow");
+  public void onAttachedToWindow()
+  {
+    Utils.LOGD("GLRenderer.onAttachedToWindow");
 
-  //   if (initialized && !paused)
-  //   {
-  //     attach();
-  //   }
-  // }
-
-  
-  //  * WARNING: THIS CAN'T BE REACHED, AS DESCRIBED IN GLView.onDetachedFromWindow()
-   
-  // public void onDetachedFromWindow()
-  // {
-  //   Utils.LOGD("GLRenderer.onDetachedFromWindow");
-    
-  //   if (!paused && !hidden)
-  //   {
-  //     detach();
-  //   }
-  // }
+    if (initialized && !paused && !hidden)
+    {
+      attach();
+    }
+  }
 
   public void onVisibilityChanged(int visibility)
   {
