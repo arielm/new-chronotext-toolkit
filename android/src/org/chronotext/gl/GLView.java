@@ -156,7 +156,11 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onResume");
 
-    if (attached && !resumed)
+    if (destroyed)
+    {
+      Utils.LOGE("GLView IS INVALID");
+    }
+    else if (!resumed) // SIMPLE PROTECTION AGAINST SPURIOUS onResume() CALLS
     {
       resumed = true;
       super.onResume();
@@ -178,7 +182,11 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onPause");
 
-    if (attached && resumed)
+    if (destroyed)
+    {
+      Utils.LOGE("GLView IS INVALID");
+    }
+    else if (resumed) // SIMPLE PROTECTION AGAINST SPURIOUS onPause() CALLS
     {
       resumed = false;
       onPause();
@@ -196,7 +204,7 @@ public class GLView extends GLSurfaceView
   public void onDestroy()
   {
     Utils.LOGD("GLView.onDestroy");
-    finishing = true; // COMMUNICATING WITH THE RENDERER'S THREAD BEFORE IT EXITS
+    finishing = true;
   }
 
   @Override
