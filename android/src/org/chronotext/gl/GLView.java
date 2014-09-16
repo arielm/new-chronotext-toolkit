@@ -27,7 +27,7 @@ import android.view.View;
 public class GLView extends GLSurfaceView
 {
   protected GLRenderer mRenderer;
-  protected boolean mDestroyOnDetach = true;
+  protected boolean mDestroyOnDetach;
 
   protected boolean resumed;
   protected boolean attached;
@@ -42,8 +42,14 @@ public class GLView extends GLSurfaceView
     // setEGLConfigChooser(8, 8, 8, 8, 0, 0);
     // getHolder().setFormat(PixelFormat.RGBA_8888);
 
-    setEGLContextFactory(new CustomContextFactory(1));
+    setEGLContextFactory(new CustomContextFactory(1)); // FIXME: EGL-CONTEXT-CLIENT-VERSION SHOULD NOT BE HARD-CODED
     setPreserveEGLContextOnPause(true);
+
+    /*
+     * A GLView IS DESIGNED TO BE ATTACHED UPON ACTIVITY CREATION AND NOT BE
+     * DETACHED ANYMORE (IT IS OF-COURSE POSSIBLE TO HIDE/SHOW A GLView ON DEMAND)
+     */
+    mDestroyOnDetach = true;
   }
 
   @Override
@@ -64,6 +70,15 @@ public class GLView extends GLSurfaceView
     }
   }
 
+  /*
+   * SETTING THIS PARAMETER TO FALSE ALLOWS TO DETACH/ATTACH A GLView ON DEMAND, BUT
+   * THE FOLLOWING MUST BE TAKEN IN COUNT:
+   *
+   * 1) ATTACHING/DETACHING AFTER ACTIVITY CREATION IS CAUSING A VISUAL GLITCH
+   *
+   * 2) THE RENDERER'S THREAD EXITS UPON VIEW-DETACHMENT, THEREFORE IT IS NOT POSSIBLE
+   *    TO RELY ON THE FACT THAT THE THREAD WILL LIVE UP TO ACTIVITY DESTRUCTION
+   */
   public void setDestroyOnDetach(boolean destroyOnDetach)
   {
     mDestroyOnDetach = destroyOnDetach;
@@ -161,7 +176,7 @@ public class GLView extends GLSurfaceView
    */
   public void onPause(boolean isFinishing)
   {
-    Utils.LOGD("GLView.onPause: " + finishing);
+    Utils.LOGD("GLView.onPause: " + isFinishing);
 
     /*
      * ADVANTAGES OF RELYING ON Activity.isFinishing():
@@ -314,8 +329,8 @@ public class GLView extends GLSurfaceView
    * 1) setPreserveEGLContextOnPause(true) IS NOT TRUSTABLE BY DESIGN, SO WE NEED TO BE NOTIFIED WHEN CONTEXT-DESTRUCTION ACTUALLY OCCURS
    *
    * 2) EGLContextFactory.createContext() IS THE ONLY "HOOK" FOR COMMUNICATING ON THE RENDERER'S THREAD WHEN:
-   * - THE GLSurfaceView HAS BEEN DETACHED (ASSERTION: THE RENDERER'S THREAD EXITS UPON VIEW-DETACHMENT, WHICH IN TURN TRIGGERS CONTEXT-DESTRUCTION)
-   * - THE ACTIVITY IS BEING DESTROYED (ASSERTION: ACTIVITY DESTRUCTION WILL TRIGGER VIEW-DETACHMENT)
+   *    - THE GLSurfaceView HAS BEEN DETACHED (ASSERTION: THE RENDERER'S THREAD EXITS UPON VIEW-DETACHMENT, WHICH IN TURN TRIGGERS CONTEXT-DESTRUCTION)
+   *    - THE ACTIVITY IS BEING DESTROYED (ASSERTION: ACTIVITY DESTRUCTION WILL TRIGGER VIEW-DETACHMENT)
    */
   protected class CustomContextFactory implements EGLContextFactory
   {
