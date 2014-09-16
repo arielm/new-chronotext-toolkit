@@ -28,14 +28,10 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public static final int REASON_DETACHED = 5;
   public static final int REASON_HIDDEN = 6;
 
-  protected int ticks;
-  protected long t0;
-  protected long now;
-  protected long elapsed;
-
+  protected boolean launched;
   protected boolean initialized;
-  protected boolean paused;
   protected boolean attached;
+  protected boolean paused;
   protected boolean hidden;
 
   protected boolean contextRenewalRequest;
@@ -46,6 +42,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   protected boolean startRequest;
   protected int startReason;
+
+  protected int ticks;
+  protected long t0;
+  protected long now;
+  protected long elapsed;
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
@@ -61,13 +62,16 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
      * EVEN IF IT SEEMS THAT THE LATTER IS CALLED FAR TOO OFTEN BY THE SYSTEM
      * OTHERWISE: THE GLView WILL BE DEFORMED IN SOME SITUATIONS (E.G. RETURNING FROM SLEEP AFTER AN ORIENTATION CHANGE)
      */
+
     gl.glViewport(0, 0, w, h);
 
     resizeRequest = true;
     viewportWidth = w;
     viewportHeight = h;
 
-    if (!initialized)
+    // ---
+
+    if (launched && !initialized)
     {
       initialized = true;
 
@@ -117,6 +121,30 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   // ---------------------------------------- LIFE-CYCLE ----------------------------------------
 
+  protected void performLaunch()
+  {
+    launched = true;
+    launch();
+  }
+
+  protected void performStart(int reason)
+  {
+    ticks = 0;
+    start(reason);
+  }
+
+  protected void performStop(int reason)
+  {
+    Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
+    stop(reason);    
+  }
+
+  protected void requestStart(int reason)
+  {
+    startRequest = true;
+    startReason = reason;
+  }
+
   protected void resume()
   {
     paused = false;
@@ -153,23 +181,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     performStop(REASON_HIDDEN);
   }
 
-  protected void requestStart(int reason)
-  {
-    startRequest = true;
-    startReason = reason;
-  }
-
-  protected void performStart(int reason)
-  {
-    ticks = 0;
-    start(reason);
-  }
-
-  protected void performStop(int reason)
-  {
-    Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
-    stop(reason);    
-  }
+  // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD----------------------------------------
 
   public void contextDestroyed()
   {
@@ -186,8 +198,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       contextRenewalRequest = true;  
     }
   }
-
-  // ---------------------------------------- QUEUED EVENTS, INITIALLY RECEIVED ON THE UI-THREAD ----------------------------------------
 
   public void onAttachedToWindow()
   {
@@ -277,11 +287,16 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public void onDestroy()
   {
     Log.i("CHR", "*** GLRenderer.onDestroy ***");
-    shutdown();
+
+    if (initialized)
+    {
+      shutdown();  
+    }
   }
 
   // ---------------------------------------- ABSTRACT METHODS ----------------------------------------
 
+  public abstract void launch();
   public abstract void setup(GL10 gl, int width, int height);
   public abstract void shutdown();
 

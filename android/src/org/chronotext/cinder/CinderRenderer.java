@@ -55,6 +55,11 @@ public class CinderRenderer extends GLRenderer
     
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
 
+  public void launch()
+  {
+    launch(mContext, mListener);
+  }
+
   public void setup(GL10 gl, int width, int height)
   {
     Log.i("CHR", "*** CinderRenderer.setup ***");
@@ -79,7 +84,6 @@ public class CinderRenderer extends GLRenderer
      */
     int displayRotation = display.getRotation();
 
-    launch(mContext, mListener);
     setup(width, height, diagonal, density, displayRotation);
   }
 

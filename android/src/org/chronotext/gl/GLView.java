@@ -26,7 +26,7 @@ import android.view.View;
 
 public class GLView extends GLSurfaceView
 {
-  protected GLRenderer renderer;
+  protected GLRenderer mRenderer;
 
   protected boolean resumed;
   protected boolean attached;
@@ -46,8 +46,19 @@ public class GLView extends GLSurfaceView
   @Override
   public void setRenderer(Renderer renderer)
   {
-    super.setRenderer(renderer);
-    this.renderer = (GLRenderer) renderer;
+    if (mRenderer == null)
+    {
+      super.setRenderer(renderer); // WILL START THE RENDERER'S THREAD
+      mRenderer = (GLRenderer) renderer;
+
+      queueEvent(new Runnable()
+      {
+        public void run()
+        {
+          mRenderer.performLaunch();
+        }
+      });
+    }
   }
 
   /*
@@ -89,7 +100,7 @@ public class GLView extends GLSurfaceView
     {
       public void run()
       {
-        renderer.onAttachedToWindow();
+        mRenderer.onAttachedToWindow();
       }
     });
   }
@@ -108,7 +119,7 @@ public class GLView extends GLSurfaceView
     {
       public void run()
       {
-        renderer.onDetachedFromWindow();
+        mRenderer.onDetachedFromWindow();
       }
     });
   }
@@ -130,7 +141,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          renderer.onResume();
+          mRenderer.onResume();
         }
       });
     }
@@ -153,7 +164,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          renderer.onPause();
+          mRenderer.onPause();
         }
       });
     }
@@ -178,7 +189,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          renderer.onVisibilityChanged(visibility);
+          mRenderer.onVisibilityChanged(visibility);
         }
       });
     }
@@ -199,7 +210,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.addTouches(touches);
+            mRenderer.addTouches(touches);
           }
         });
         break;
@@ -215,7 +226,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.addTouches(touches);
+            mRenderer.addTouches(touches);
           }
         });
         break;
@@ -231,7 +242,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.removeTouches(touches);
+            mRenderer.removeTouches(touches);
           }
         });
         break;
@@ -247,7 +258,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.removeTouches(touches);
+            mRenderer.removeTouches(touches);
           }
         });
         break;
@@ -267,7 +278,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.updateTouches(touches);
+            mRenderer.updateTouches(touches);
           }
         });
         break;
@@ -283,7 +294,7 @@ public class GLView extends GLSurfaceView
     {
       public void run()
       {
-        renderer.sendMessage(what, body);
+        mRenderer.sendMessage(what, body);
       }
     });
   }
@@ -305,7 +316,7 @@ public class GLView extends GLSurfaceView
     {
       Log.i("CHR", "*** CustomContextFactory.createContext ***");
 
-      renderer.contextCreated();
+      mRenderer.contextCreated();
 
       int[] attrib_list = { 0x3098, mEGLContextClientVersion, EGL10.EGL_NONE };
       return egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, mEGLContextClientVersion != 0 ? attrib_list : null);
@@ -315,7 +326,7 @@ public class GLView extends GLSurfaceView
     {
       Log.i("CHR", "*** CustomContextFactory.destroyContext ***");
 
-      renderer.contextDestroyed();
+      mRenderer.contextDestroyed();
       egl.eglDestroyContext(display, context);
     }
   }
