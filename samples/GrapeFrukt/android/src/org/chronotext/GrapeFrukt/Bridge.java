@@ -29,9 +29,11 @@ public class Bridge extends CinderDelegate
 
   // int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
   // boolean contentViewIsGLView = true;
+  // boolean destroyGLViewOnDetach = true;
 
   int testMode = GLVIEW_NOT_ATTACHED_AT_START;
   boolean contentViewIsGLView = false;
+  boolean destroyGLViewOnDetach = false;
 
   RelativeLayout rootView;
   RelativeLayout overlayView;
@@ -84,6 +86,8 @@ public class Bridge extends CinderDelegate
       Utils.LOGE("UNDEFINED TEST MODE");
       return;
     }
+
+    getView().setDestroyOnDetach(destroyGLViewOnDetach);
 
     // ---    
 

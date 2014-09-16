@@ -102,16 +102,23 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onAttachedToWindow");
 
-    super.onAttachedToWindow(); // WILL START A NEW RENDERER'S THREAD IF NECESSARY (I.E. WHEN THE GLView IS RE-ATTACHED)
-    attached = true;
-
-    queueEvent(new Runnable()
+    if (destroyed)
     {
-      public void run()
+      Utils.LOGE("GLView IS INVALID");
+    }
+    else
+    {
+      super.onAttachedToWindow(); // WILL START A NEW RENDERER'S THREAD IF NECESSARY (I.E. WHEN THE GLView IS RE-ATTACHED)
+      attached = true;
+
+      queueEvent(new Runnable()
       {
-        mRenderer.onAttachedToWindow();
-      }
-    });
+        public void run()
+        {
+          mRenderer.onAttachedToWindow();
+        }
+      });
+    }
   }
 
   @Override
@@ -119,8 +126,11 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onDetachedFromWindow");
 
-    attached = false; // THE ONLY WAY TO COMMUNICATIE WITH THE RENDERER'S THREAD BEFORE IT EXITS
-    super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD (EVENTS QUEUED RIGHT BEOFRE-OR-AFTER THIS WILL NEVER BE DELIVERED)
+    if (attached)
+    {
+      attached = false; // THE ONLY WAY TO COMMUNICATIE WITH THE RENDERER'S THREAD BEFORE IT EXITS
+      super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD (EVENTS QUEUED RIGHT BEOFRE-OR-AFTER THIS WILL NEVER BE DELIVERED)
+    }
   }
 
   /*
@@ -191,7 +201,7 @@ public class GLView extends GLSurfaceView
   @Override
   public void onVisibilityChanged(View changedView, final int visibility)
   {
-    if (changedView == this)
+    if (attached && (changedView == this))
     {
       queueEvent(new Runnable()
       {
@@ -336,10 +346,15 @@ public class GLView extends GLSurfaceView
         {
           mRenderer.onDetachedFromWindow();
         }
+
         if (finishing || mDestroyOnDetach)
         {
           destroyed = true;
           mRenderer.onDestroy();
+        }
+        else
+        {
+          Utils.LOGW("GLView DETACHED BUT NOT DESTROYED");
         }
       }
 
@@ -349,12 +364,15 @@ public class GLView extends GLSurfaceView
 
   public void sendMessage(final int what, final String body)
   {
-    queueEvent(new Runnable()
+    if (!destroyed)
     {
-      public void run()
+      queueEvent(new Runnable()
       {
-        mRenderer.sendMessage(what, body);
-      }
-    });
+        public void run()
+        {
+          mRenderer.sendMessage(what, body);
+        }
+      });
+    }
   }
 }
