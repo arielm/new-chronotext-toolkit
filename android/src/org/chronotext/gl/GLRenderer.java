@@ -229,31 +229,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     }
   }
 
-  public void onVisibilityChanged(int visibility)
-  {
-    Utils.LOGD("GLRenderer.onVisibilityChanged: " + visibility);
-
-    if (initialized)
-    {
-      switch (visibility)
-      {
-        case View.VISIBLE:
-        {
-          show();
-          break;
-        }
-
-        case View.GONE:
-        case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
-        {
-          hide();
-          break;
-        }
-      }
-    }
-  }
-
-  public void onResume()
+    public void onResume()
   {
     Utils.LOGD("GLRenderer.onResume");
 
@@ -283,6 +259,30 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       else
       {
         pause();
+      }
+    }
+  }
+
+  public void onVisibilityChanged(int visibility)
+  {
+    Utils.LOGD("GLRenderer.onVisibilityChanged: " + visibility);
+
+    if (initialized)
+    {
+      switch (visibility)
+      {
+        case View.VISIBLE:
+        {
+          show();
+          break;
+        }
+
+        case View.GONE:
+        case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
+        {
+          hide();
+          break;
+        }
       }
     }
   }

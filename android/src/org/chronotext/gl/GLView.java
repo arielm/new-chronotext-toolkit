@@ -30,6 +30,7 @@ public class GLView extends GLSurfaceView
 
   protected boolean resumed;
   protected boolean attached;
+  protected boolean finishing;
   protected boolean destroyed;
 
   public GLView(Context context)
@@ -124,6 +125,11 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onResume");
 
+    /*
+     * SAFE-GUARDING AGAINST SPURIOUS onResume() EVENTS
+     * REFERENCE: http://stackoverflow.com/questions/11731285/onresume-being-called-over-and-over-while-phone-screen-is-locked
+     * REMARK: onWindowFocusChanged() IS NOT CONSISTENT ENOUGH TO BE TRUSTED
+     */
     if (!resumed)
     {
       super.onResume();
@@ -142,21 +148,23 @@ public class GLView extends GLSurfaceView
   /*
    * RECEIVED ON THE MAIN-THREAD
    */
-  @Override
-  public void onPause()
+  public void onPause(boolean finishing)
   {
-    Utils.LOGD("GLView.onPause");
+    Utils.LOGD("GLView.onPause: " + finishing);
 
+    /*
+     * NO EVIDENCE OF SPURIOUS onPause() EVENTS LIKE WIHT onResume(), JUST BEING ON THE SAFE-SIDE...
+     */
     if (resumed)
     {
-      super.onPause();
+      onPause();
       resumed = false;
 
       queueEvent(new Runnable()
       {
         public void run()
         {
-          mRenderer.onPause();
+          mRenderer.onPause(); // TODO: CALL mRenderer.onDetachedFromWindow() INSTEAD, IF finishing IS TRUE
         }
       });
     }

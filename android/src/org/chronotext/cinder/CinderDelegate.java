@@ -95,7 +95,7 @@ public class CinderDelegate extends Handler
 
   public void onPause()
   {
-    mView.onPause(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
+    mView.onPause(mActivity.isFinishing()); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
   }
 
   public void onResume()
