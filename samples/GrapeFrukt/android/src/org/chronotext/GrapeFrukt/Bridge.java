@@ -25,15 +25,15 @@ public class Bridge extends CinderDelegate
 
   static final int GLVIEW_ATTACHED_AND_VISIBLE_AT_START = 1;
   static final int GLVIEW_ATTACHED_AND_HIDDEN_AT_START = 2;
-  static final int GLVIEW_NOT_ATTACHED_AT_START = 3;
+  static final int GLVIEW_NOT_ATTACHED_AT_START = 3; // NOT RECOMMENDED!
 
-  // int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
-  // boolean contentViewIsGLView = true;
-  // boolean destroyGLViewOnDetach = true;
+  int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
+  boolean contentViewIsGLView = true;
+  boolean destroyGLViewOnDetach = true;
 
-  int testMode = GLVIEW_NOT_ATTACHED_AT_START;
-  boolean contentViewIsGLView = false;
-  boolean destroyGLViewOnDetach = false;
+  // int testMode = GLVIEW_NOT_ATTACHED_AT_START;
+  // boolean contentViewIsGLView = false;
+  // boolean destroyGLViewOnDetach = false;
 
   RelativeLayout rootView;
   RelativeLayout overlayView;
@@ -158,7 +158,7 @@ public class Bridge extends CinderDelegate
     detached = (getView().getParent() == null);
 
     button1.setVisibility(detached ? View.GONE : View.VISIBLE);
-    button2.setVisibility(View.VISIBLE);
+    button2.setVisibility(destroyGLViewOnDetach ? View.GONE : View.VISIBLE);
 
     button1.setText(hidden ? "show" : "hide");
     button2.setText(detached ? "attach" : "detach");
