@@ -30,7 +30,6 @@ public class GLView extends GLSurfaceView
 
   protected boolean resumed;
   protected boolean attached;
-  protected boolean finishing;
   protected boolean destroyed;
 
   public GLView(Context context)
@@ -132,8 +131,8 @@ public class GLView extends GLSurfaceView
      */
     if (!resumed)
     {
-      super.onResume();
       resumed = true;
+      super.onResume();
 
       queueEvent(new Runnable()
       {
@@ -153,30 +152,41 @@ public class GLView extends GLSurfaceView
     Utils.LOGD("GLView.onPause: " + finishing);
 
     /*
-     * NO EVIDENCE OF SPURIOUS onPause() EVENTS LIKE WIHT onResume(), JUST BEING ON THE SAFE-SIDE...
+     * ADVANTAGES OF RELYING ON Activity.isFinishing():
+     * - NO NEED TO RELY ON Activity.onDestroy()
+     * - POSSIBILITY TO DIFFERENTIATE BETWEEN A "REGULAR" onPause() AND ONE PRECEDING onDestroy()
+     */
+    destroyed = finishing;
+
+    /*
+     * NO EVIDENCE OF SPURIOUS onPause() EVENTS LIKE WITH onResume(), JUST BEING ON THE SAFE-SIDE...
      */
     if (resumed)
     {
-      onPause();
       resumed = false;
+      onPause();
 
-      queueEvent(new Runnable()
+      if (finishing)
       {
-        public void run()
+        queueEvent(new Runnable()
         {
-          mRenderer.onPause(); // TODO: CALL mRenderer.onDetachedFromWindow() INSTEAD, IF finishing IS TRUE
-        }
-      });
+          public void run()
+          {
+            mRenderer.onDetachedFromWindow();
+          }
+        });
+      }
+      else
+      {
+        queueEvent(new Runnable()
+        {
+          public void run()
+          {
+            mRenderer.onPause();
+          }
+        });
+      }
     }
-  }
-
-  /*
-   * RECEIVED ON THE MAIN-THREAD
-   */
-  public void onDestroy()
-  {
-    Utils.LOGD("GLView.onDestroy");
-    destroyed = true; // COMMUNICATING WITH THE RENDERER'S THREAD BEFORE IT EXITS
   }
 
   @Override
@@ -318,13 +328,13 @@ public class GLView extends GLSurfaceView
       Utils.LOGD("CustomContextFactory.destroyContext");
       mRenderer.contextDestroyed();
 
-      if (!attached)
+      if (!attached && resumed)
       {
         mRenderer.onDetachedFromWindow();
       }
-      if (destroyed)
+      if (!attached && destroyed)
       {
-        mRenderer.onDestroy(); // TODO: SHOULD ALWAYS BE CALLED, UNLESS forceDestroyOnDetach IS FALSE
+        mRenderer.onDestroy(); // TODO: SHOULD BE CALLED, UNLESS forceDestroyOnDetach IS FALSE
       }
 
       egl.eglDestroyContext(display, context);

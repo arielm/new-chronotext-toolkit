@@ -41,13 +41,6 @@ public class MainActivity extends Activity
   }
   
   @Override
-  protected void onDestroy()
-  {
-    super.onDestroy();
-    delegate.onDestroy();
-  }
-  
-  @Override
   public void onBackPressed()
   {
     if (!delegate.onBackPressed())

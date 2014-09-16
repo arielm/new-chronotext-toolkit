@@ -229,7 +229,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     }
   }
 
-    public void onResume()
+  public void onResume()
   {
     Utils.LOGD("GLRenderer.onResume");
 

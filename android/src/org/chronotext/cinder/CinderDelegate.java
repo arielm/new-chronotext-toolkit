@@ -102,11 +102,6 @@ public class CinderDelegate extends Handler
   {
     mView.onResume(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
   }
-
-  public void onDestroy()
-  {
-    mView.onDestroy(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
-  }
   
   public boolean onBackPressed()
   {

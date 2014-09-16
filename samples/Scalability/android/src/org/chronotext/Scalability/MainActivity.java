@@ -46,13 +46,6 @@ public class MainActivity extends Activity
     super.onResume();
     delegate.onResume();
   }
-
-  @Override
-  protected void onDestroy()
-  {
-    super.onDestroy();
-    delegate.onDestroy();
-  }
   
   @Override
   public void onBackPressed()
@@ -62,7 +55,7 @@ public class MainActivity extends Activity
       super.onBackPressed();
     }
   }
-  
+
   @Override
   protected void onStart()
   {
@@ -82,5 +75,12 @@ public class MainActivity extends Activity
   {
     Utils.LOGD("Activity.onRestart");
     super.onRestart();
+  }
+  
+  @Override
+  protected void onDestroy()
+  {
+    Utils.LOGD("Activity.onDestroy");
+    super.onDestroy();
   }
 }
