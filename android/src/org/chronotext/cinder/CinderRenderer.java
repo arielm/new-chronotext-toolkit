@@ -12,9 +12,9 @@ import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import org.chronotext.Utils;
 import org.chronotext.gl.GLRenderer;
 import org.chronotext.gl.Touch;
+import org.chronotext.Utils;
 
 import android.content.Context;
 import android.content.res.Configuration;

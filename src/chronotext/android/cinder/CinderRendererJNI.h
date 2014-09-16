@@ -56,7 +56,7 @@ void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject ob
 }
 
 /*
- * THIS MUST BE CALLED FROM THE RENDERER'S THREAD, BEFORE setup
+ * THIS MUST BE CALLED FROM THE RENDERER'S THREAD, AS-SOON-AS IT STARTS
  */
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener)
 {

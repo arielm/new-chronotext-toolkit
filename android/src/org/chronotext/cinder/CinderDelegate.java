@@ -9,6 +9,7 @@
 package org.chronotext.cinder;
 
 import org.chronotext.gl.GLView;
+import org.chronotext.Utils;
 
 import android.app.Activity;
 import android.os.Handler;

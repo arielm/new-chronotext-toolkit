@@ -27,8 +27,11 @@ public class Bridge extends CinderDelegate
   static final int GLVIEW_ATTACHED_AND_HIDDEN_AT_START = 2;
   static final int GLVIEW_NOT_ATTACHED_AT_START = 3;
 
-  int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
-  boolean contentViewIsGLView = true; // CURRENTLY: true IS THE ONLY WAY TO AVOID THE "DEFORMATION BUG"
+  // int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
+  // boolean contentViewIsGLView = true;
+  
+  int testMode = GLVIEW_NOT_ATTACHED_AT_START;
+  boolean contentViewIsGLView = false;
 
   protected RelativeLayout rootView;
   protected RelativeLayout overlayView;

@@ -15,8 +15,8 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 import java.util.Vector;
 
-import org.chronotext.Utils;
 import org.chronotext.gl.Touch;
+import org.chronotext.Utils;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -113,7 +113,7 @@ public class GLView extends GLSurfaceView
 
     /*
      * PROBLEM: THE FOLLOWING CAN'T BE DELIVERED
-     * SEE THE SOURCE-CODE GLSurfaceView.onDetachedFromWindow() TO FIND-OUT WHY
+     * A LIMITATION OF HOW GLSurfaceView.onDetachedFromWindow() IS DESIGNED
      */
     queueEvent(new Runnable()
     {
