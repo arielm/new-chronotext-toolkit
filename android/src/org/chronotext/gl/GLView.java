@@ -61,10 +61,6 @@ public class GLView extends GLSurfaceView
     }
   }
 
-  /*
-   * OCCURS AT APPLICATION-STARTUP OR WHEN RETURNING FROM BACKGROUND
-   * BUT *NOT* WHEN RETURNING FROM SLEEP
-   */
   @Override
   public void surfaceCreated(SurfaceHolder holder)
   {
@@ -72,10 +68,6 @@ public class GLView extends GLSurfaceView
     super.surfaceCreated(holder);
   }
 
-  /*
-   * OCCURS WHEN ENTERING BACKGROUND OR WHEN VIEW IS HIDDEN
-   * BUT *NOT* WHEN ENTERING SLEEP
-   */
   @Override
   public void surfaceDestroyed(SurfaceHolder holder)
   {
@@ -91,41 +83,32 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
+  public void onWindowFocusChanged(final boolean hasFocus)
+  {
+    Utils.LOGD("GLView.onWindowFocusChanged: " + hasFocus);
+    super.onWindowFocusChanged(hasFocus);
+  }
+
+  @Override
   protected void onAttachedToWindow()
   {
     Utils.LOGD("GLView.onAttachedToWindow");
-    super.onAttachedToWindow(); // WILL START THE RENDERER'S THREAD (IF NECESSARY)
 
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        mRenderer.onAttachedToWindow();
-      }
-    });
+    super.onAttachedToWindow(); // WILL START A NEW RENDERER'S IF NECESSARY, E.G. WHEN THE GLView IS RE-ATTACHED (A SITUATION WE'RE NOT FULLY HANDLING AT THIS STAGE)
+    attached = true;
   }
 
   @Override
   protected void onDetachedFromWindow()
   {
     Utils.LOGD("GLView.onDetachedFromWindow");
-    super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD
 
-    /*
-     * PROBLEM: THE FOLLOWING CAN'T BE DELIVERED
-     * A LIMITATION OF HOW GLSurfaceView.onDetachedFromWindow() IS DESIGNED
-     */
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        mRenderer.onDetachedFromWindow();
-      }
-    });
+    attached = false; // THE ONLY WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
+    super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD (CustomContextFactory.destroyContext() WILL BE INVOKED BEFOREHAND ON THE RENDERER'S THREAD)
   }
 
   /*
-   * RECEIVED ON MAIN-THREAD
+   * RECEIVED ON THE MAIN-THREAD
    */
   @Override
   public void onResume()
@@ -134,8 +117,8 @@ public class GLView extends GLSurfaceView
 
     if (!resumed)
     {
-      resumed = true;
       super.onResume();
+      resumed = true;
 
       queueEvent(new Runnable()
       {
@@ -148,7 +131,7 @@ public class GLView extends GLSurfaceView
   }
 
   /*
-   * RECEIVED ON MAIN-THREAD
+   * RECEIVED ON THE MAIN-THREAD
    */
   @Override
   public void onPause()
@@ -157,8 +140,8 @@ public class GLView extends GLSurfaceView
 
     if (resumed)
     {
-      resumed = false;
       super.onPause();
+      resumed = false;
 
       queueEvent(new Runnable()
       {
@@ -168,16 +151,6 @@ public class GLView extends GLSurfaceView
         }
       });
     }
-  }
-
-  /*
-   * WARNING: THIS CALLBACK IS CALLED SO INCONSISTENTLY BY THE SYSTEM THAT WE CAN'T RELY ON IT
-   */
-  @Override
-  public void onWindowFocusChanged(final boolean hasFocus)
-  {
-    Utils.LOGD("GLView.onWindowFocusChanged: " + hasFocus);
-    super.onWindowFocusChanged(hasFocus);
   }
 
   @Override
@@ -288,20 +261,12 @@ public class GLView extends GLSurfaceView
     return true;
   }
 
-  public void sendMessage(final int what, final String body)
-  {
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        mRenderer.sendMessage(what, body);
-      }
-    });
-  }
-
   /*
    * BASED ON GLSurfaceView.DefaultContextFactory
-   * SEEMS LIKE THE ONLY WAY TO BE NOTIFIED WHEN THE GL-CONTEXT IS ACTUALLY CREATED OR DESTROYED
+   *
+   * THE ONLY WAY TO BE NOTIFIED (ON THE RENDERER'S THREAD) WHEN:
+   * - THE GL-CONTEXT HAS BEEN ACTUALLY CREATED OR DESTROYED
+   * - THE GLView IS HAS BEEN DETACHED
    */
   protected class CustomContextFactory implements EGLContextFactory
   {
@@ -326,8 +291,19 @@ public class GLView extends GLSurfaceView
     {
       Utils.LOGD("CustomContextFactory.destroyContext");
 
-      mRenderer.contextDestroyed();
+      mRenderer.contextDestroyed(!attached);
       egl.eglDestroyContext(display, context);
     }
+  }
+
+  public void sendMessage(final int what, final String body)
+  {
+    queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        mRenderer.sendMessage(what, body);
+      }
+    });
   }
 }

@@ -183,14 +183,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD----------------------------------------
 
-  public void contextDestroyed()
-  {
-    if (initialized)
-    {
-      contextLost();
-    }
-  }
-
   public void contextCreated()
   {
     if (initialized)
@@ -199,28 +191,41 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     }
   }
 
-  public void onAttachedToWindow()
+  public void contextDestroyed(boolean surfaceDetached)
   {
-    Utils.LOGD("GLRenderer.onAttachedToWindow");
-
-    if (initialized && !paused)
+    if (initialized)
     {
-      attach();
+      contextLost();
+
+      if (surfaceDetached && !paused && !hidden)
+      {
+        detach();
+      }
     }
   }
 
-  /*
-   * WARNING: THIS CAN'T BE REACHED, AS DESCRIBED IN GLView.onDetachedFromWindow()
-   */
-  public void onDetachedFromWindow()
-  {
-    Utils.LOGD("GLRenderer.onDetachedFromWindow");
+  // public void onAttachedToWindow()
+  // {
+  //   Utils.LOGD("GLRenderer.onAttachedToWindow");
+
+  //   if (initialized && !paused)
+  //   {
+  //     attach();
+  //   }
+  // }
+
+  
+  //  * WARNING: THIS CAN'T BE REACHED, AS DESCRIBED IN GLView.onDetachedFromWindow()
+   
+  // public void onDetachedFromWindow()
+  // {
+  //   Utils.LOGD("GLRenderer.onDetachedFromWindow");
     
-    if (!paused && !hidden)
-    {
-      detach();
-    }
-  }
+  //   if (!paused && !hidden)
+  //   {
+  //     detach();
+  //   }
+  // }
 
   public void onVisibilityChanged(int visibility)
   {
