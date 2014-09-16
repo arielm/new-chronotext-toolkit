@@ -1,12 +1,20 @@
 
 package org.chronotext.GrapeFrukt;
 
+import org.chronotext.Utils;
+
 import android.app.Activity;
 import android.os.Bundle;
 
 public class BridgeActivity extends Activity
 {
   Bridge bridge;
+
+  static
+  {
+    Utils.DEBUG = true;
+    Utils.TAG = "cinder";
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState)
@@ -29,6 +37,20 @@ public class BridgeActivity extends Activity
     bridge.onResume();
   }
   
+  @Override
+  protected void onStart()
+  {
+    Utils.LOGD("Activity.onStart");
+    super.onStart();
+  }
+
+  @Override
+  protected void onRestart()
+  {
+    Utils.LOGD("Activity.onRestart");
+    super.onRestart();
+  }
+
   @Override
   protected void onDestroy()
   {

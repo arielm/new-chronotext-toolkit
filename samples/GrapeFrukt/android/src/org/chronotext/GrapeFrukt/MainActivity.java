@@ -2,6 +2,7 @@
 package org.chronotext.GrapeFrukt;
 
 import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -37,20 +38,6 @@ public class MainActivity extends Activity
   {
     super.onResume();
     delegate.onResume();
-  }
-
-  @Override
-  protected void onStart()
-  {
-    super.onStart();
-    Log.i("CHR", "*** MainActivity.onStart ***");
-  }
-
-  @Override
-  protected void onRestart()
-  {
-    super.onRestart();
-    Log.i("CHR", "*** MainActivity.onRestart ***");
   }
   
   @Override

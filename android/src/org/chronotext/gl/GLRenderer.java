@@ -13,10 +13,10 @@ import java.util.Vector;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import org.chronotext.Utils;
 import org.chronotext.gl.Touch;
 
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.View;
 
 public abstract class GLRenderer implements GLSurfaceView.Renderer
@@ -50,12 +50,12 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
-    Log.i("CHR", "*** GLRenderer.onSurfaceCreated ***");
+    Utils.LOGD("GLRenderer.onSurfaceCreated");
   }
 
   public void onSurfaceChanged(GL10 gl, int w, int h)
   {
-    Log.i("CHR", "*** GLRenderer.onSurfaceChanged: " + w + "x" + h + " ***");
+    Utils.LOGD("GLRenderer.onSurfaceChanged: " + w + "x" + h);
 
     /*
      * IT IS IMPERATIVE TO CALL glViewport() UPON EACH onSurfaceChanged()
@@ -107,7 +107,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (ticks == 0)
     {
-      Log.i("CHR", "*** GLRenderer.onDrawFrame ***");
+      Utils.LOGD("GLRenderer.onDrawFrame");
       t0 = now;
     }
 
@@ -135,7 +135,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   protected void performStop(int reason)
   {
-    Log.i("CHR", "AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
+    Utils.LOGI("AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
     stop(reason);    
   }
 
@@ -201,7 +201,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onAttachedToWindow()
   {
-    Log.i("CHR", "*** GLRenderer.onAttachedToWindow ***");
+    Utils.LOGD("GLRenderer.onAttachedToWindow");
 
     if (initialized && !paused)
     {
@@ -214,7 +214,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
    */
   public void onDetachedFromWindow()
   {
-    Log.i("CHR", "*** GLRenderer.onDetachedFromWindow ***");
+    Utils.LOGD("GLRenderer.onDetachedFromWindow");
     
     if (!paused && !hidden)
     {
@@ -224,7 +224,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onVisibilityChanged(int visibility)
   {
-    Log.i("CHR", "*** GLRenderer.onVisibilityChanged: " + visibility + " ***");
+    Utils.LOGD("GLRenderer.onVisibilityChanged: " + visibility);
 
     if (initialized)
     {
@@ -248,7 +248,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onResume()
   {
-    Log.i("CHR", "*** GLRenderer.onResume ***");
+    Utils.LOGD("GLRenderer.onResume");
 
     if (attached)
     {
@@ -265,7 +265,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onPause()
   {
-    Log.i("CHR", "*** GLRenderer.onPause ***");
+    Utils.LOGD("GLRenderer.onPause");
 
     if (attached)
     {
@@ -286,7 +286,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
    */
   public void onDestroy()
   {
-    Log.i("CHR", "*** GLRenderer.onDestroy ***");
+    Utils.LOGD("GLRenderer.onDestroy");
 
     if (initialized)
     {

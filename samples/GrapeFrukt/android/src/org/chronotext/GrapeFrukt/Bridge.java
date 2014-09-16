@@ -1,6 +1,7 @@
 
 package org.chronotext.GrapeFrukt;
 
+import org.chronotext.Utils;
 import org.chronotext.cinder.CinderDelegate;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,7 +10,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Button;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,13 +66,13 @@ public class Bridge extends CinderDelegate
     {
       if (contentViewIsGLView)
       {
-        Log.e("CHR", "INVALID TEST MODE");
+        Utils.LOGE("INVALID TEST MODE");
         return;
       }
     }
     else
     {
-      Log.e("CHR", "UNDEFINED TEST MODE");
+      Utils.LOGE("UNDEFINED TEST MODE");
       return;
     }
 

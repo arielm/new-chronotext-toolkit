@@ -15,11 +15,11 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 import java.util.Vector;
 
+import org.chronotext.Utils;
 import org.chronotext.gl.Touch;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -68,7 +68,7 @@ public class GLView extends GLSurfaceView
   @Override
   public void surfaceCreated(SurfaceHolder holder)
   {
-    Log.i("CHR", "*** GLView.surfaceCreated ***"); 
+    Utils.LOGD("GLView.surfaceCreated"); 
     super.surfaceCreated(holder);
   }
 
@@ -79,21 +79,21 @@ public class GLView extends GLSurfaceView
   @Override
   public void surfaceDestroyed(SurfaceHolder holder)
   {
-    Log.i("CHR", "*** GLView.surfaceDestroyed ***"); 
+    Utils.LOGD("GLView.surfaceDestroyed"); 
     super.surfaceDestroyed(holder);
   }
 
   @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
   {
-    Log.i("CHR", "*** GLView.surfaceChanged: " + width + "x" + height + " ***");
+    Utils.LOGD("GLView.surfaceChanged: " + width + "x" + height);
     super.surfaceChanged(holder, format, width, height);
   }
 
   @Override
   protected void onAttachedToWindow()
   {
-    Log.i("CHR", "*** GLView.onAttachedToWindow ***");
+    Utils.LOGD("GLView.onAttachedToWindow");
     super.onAttachedToWindow(); // WILL START THE RENDERER'S THREAD (IF NECESSARY)
 
     queueEvent(new Runnable()
@@ -108,7 +108,7 @@ public class GLView extends GLSurfaceView
   @Override
   protected void onDetachedFromWindow()
   {
-    Log.i("CHR", "*** GLView.onDetachedFromWindow ***");
+    Utils.LOGD("GLView.onDetachedFromWindow");
     super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD
 
     /*
@@ -130,7 +130,7 @@ public class GLView extends GLSurfaceView
   @Override
   public void onResume()
   {
-    Log.i("CHR", "*** GLView.onResume ***");
+    Utils.LOGD("GLView.onResume");
 
     if (!resumed)
     {
@@ -153,7 +153,7 @@ public class GLView extends GLSurfaceView
   @Override
   public void onPause()
   {
-    Log.i("CHR", "*** GLView.onPause ***");
+    Utils.LOGD("GLView.onPause");
 
     if (resumed)
     {
@@ -176,7 +176,7 @@ public class GLView extends GLSurfaceView
   @Override
   public void onWindowFocusChanged(final boolean hasFocus)
   {
-    Log.i("CHR", "*** GLView.onWindowFocusChanged: " + hasFocus + " ***");
+    Utils.LOGD("GLView.onWindowFocusChanged: " + hasFocus);
     super.onWindowFocusChanged(hasFocus);
   }
 
@@ -314,7 +314,7 @@ public class GLView extends GLSurfaceView
 
     public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config)
     {
-      Log.i("CHR", "*** CustomContextFactory.createContext ***");
+      Utils.LOGD("CustomContextFactory.createContext");
 
       mRenderer.contextCreated();
 
@@ -324,7 +324,7 @@ public class GLView extends GLSurfaceView
 
     public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context)
     {
-      Log.i("CHR", "*** CustomContextFactory.destroyContext ***");
+      Utils.LOGD("CustomContextFactory.destroyContext");
 
       mRenderer.contextDestroyed();
       egl.eglDestroyContext(display, context);

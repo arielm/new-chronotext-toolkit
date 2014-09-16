@@ -12,13 +12,13 @@ import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import org.chronotext.Utils;
 import org.chronotext.gl.GLRenderer;
 import org.chronotext.gl.Touch;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -62,7 +62,7 @@ public class CinderRenderer extends GLRenderer
 
   public void setup(GL10 gl, int width, int height)
   {
-    Log.i("CHR", "*** CinderRenderer.setup ***");
+    Utils.LOGD("CinderRenderer.setup");
 
     Display display = getWindowManager().getDefaultDisplay();
     DisplayMetrics dm = new DisplayMetrics();
@@ -89,7 +89,7 @@ public class CinderRenderer extends GLRenderer
 
   public void resize(GL10 gl, int width, int height)
   {
-    Log.i("CHR", "*** CinderRenderer.resize: " + width + "x" + height + " ***");
+    Utils.LOGD("CinderRenderer.resize: " + width + "x" + height);
     resize();
   }
 
@@ -100,37 +100,37 @@ public class CinderRenderer extends GLRenderer
 
   public void start(int reason)
   {
-    Log.i("CHR", "*** CinderRenderer.start: " + reason + " ***");
+    Utils.LOGD("CinderRenderer.start: " + reason);
     event(reason);
   }
 
   public void stop(int reason)
   {
-    Log.i("CHR", "*** CinderRenderer.stop: " + reason + " ***");
+    Utils.LOGD("CinderRenderer.stop: " + reason);
     event(reason);
   }
 
   public void contextLost()
   {
-    Log.i("CHR", "*** CinderRenderer.contextLost ***");
+    Utils.LOGD("CinderRenderer.contextLost");
     event(EVENT_CONTEXT_LOST);
   }
 
   public void contextRenewed()
   {
-    Log.i("CHR", "*** CinderRenderer.contextRenewed ***");
+    Utils.LOGD("CinderRenderer.contextRenewed");
     event(EVENT_CONTEXT_RENEWED);
   }
 
   public void foreground()
   {
-    Log.i("CHR", "*** CinderRenderer.foreground ***");
+    Utils.LOGD("CinderRenderer.foreground");
     event(EVENT_FOREGROUND);
   }
 
   public void background()
   {
-    Log.i("CHR", "*** CinderRenderer.background ***");
+    Utils.LOGD("CinderRenderer.background");
     event(EVENT_BACKGROUND);
   }
 
