@@ -30,6 +30,7 @@ public class GLView extends GLSurfaceView
 
   protected boolean resumed;
   protected boolean attached;
+  protected boolean destroyed;
 
   public GLView(Context context)
   {
@@ -111,7 +112,7 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onDetachedFromWindow");
 
-    attached = false; // THE ONLY WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
+    attached = false; // COMMUNICATING WITH THE RENDERER'S THREAD BEFORE IT EXITS
     super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD (CustomContextFactory.destroyContext() WILL BE INVOKED BEFOREHAND ON THE RENDERER'S THREAD)
   }
 
@@ -159,6 +160,15 @@ public class GLView extends GLSurfaceView
         }
       });
     }
+  }
+
+  /*
+   * RECEIVED ON THE MAIN-THREAD
+   */
+  public void onDestroy()
+  {
+    Utils.LOGD("GLView.onDestroy");
+    destroyed = true; // COMMUNICATING WITH THE RENDERER'S THREAD BEFORE IT EXITS
   }
 
   @Override
@@ -274,7 +284,8 @@ public class GLView extends GLSurfaceView
    *
    * THE ONLY WAY TO BE NOTIFIED (ON THE RENDERER'S THREAD) WHEN:
    * - THE GL-CONTEXT HAS BEEN ACTUALLY CREATED OR DESTROYED
-   * - THE GLView IS HAS BEEN DETACHED
+   * - THE GLView HAS BEEN DETACHED
+   * - THE ACTIVITY IS BEING DESTROYED
    */
   protected class CustomContextFactory implements EGLContextFactory
   {
@@ -288,7 +299,6 @@ public class GLView extends GLSurfaceView
     public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config)
     {
       Utils.LOGD("CustomContextFactory.createContext");
-
       mRenderer.contextCreated();
 
       int[] attrib_list = { 0x3098, mEGLContextClientVersion, EGL10.EGL_NONE };
@@ -298,8 +308,17 @@ public class GLView extends GLSurfaceView
     public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context)
     {
       Utils.LOGD("CustomContextFactory.destroyContext");
+      mRenderer.contextDestroyed();
 
-      mRenderer.contextDestroyed(!attached);
+      if (!attached)
+      {
+        mRenderer.onDetachedFromWindow();
+      }
+      if (destroyed)
+      {
+        mRenderer.onDestroy(); // TODO: SHOULD ALWAYS BE CALLED, UNLESS forceDestroyOnDetach IS FALSE
+      }
+
       egl.eglDestroyContext(display, context);
     }
   }

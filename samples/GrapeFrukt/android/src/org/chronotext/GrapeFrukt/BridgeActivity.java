@@ -8,13 +8,13 @@ import android.os.Bundle;
 
 public class BridgeActivity extends Activity
 {
-  Bridge bridge;
-
   static
   {
     Utils.DEBUG = true;
     Utils.TAG = "cinder";
   }
+
+  Bridge bridge;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
@@ -36,20 +36,6 @@ public class BridgeActivity extends Activity
     super.onResume();
     bridge.onResume();
   }
-  
-  @Override
-  protected void onStart()
-  {
-    Utils.LOGD("Activity.onStart");
-    super.onStart();
-  }
-
-  @Override
-  protected void onRestart()
-  {
-    Utils.LOGD("Activity.onRestart");
-    super.onRestart();
-  }
 
   @Override
   protected void onDestroy()
@@ -65,5 +51,26 @@ public class BridgeActivity extends Activity
     {
       bridge.onBackPressed();
     }
+  }
+
+  @Override
+  protected void onStart()
+  {
+    Utils.LOGD("Activity.onStart");
+    super.onStart();
+  }
+
+  @Override
+  protected void onStop()
+  {
+    Utils.LOGD("Activity.onStop");
+    super.onStop();
+  }
+
+  @Override
+  protected void onRestart()
+  {
+    Utils.LOGD("Activity.onRestart");
+    super.onRestart();
   }
 }

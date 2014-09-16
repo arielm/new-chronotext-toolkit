@@ -105,13 +105,7 @@ public class CinderDelegate extends Handler
 
   public void onDestroy()
   {
-    mView.queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        mRenderer.onDestroy();
-      }
-    });
+    mView.onDestroy(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
   }
   
   public boolean onBackPressed()

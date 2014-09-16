@@ -2,6 +2,7 @@
 package org.chronotext.Scalability;
 
 import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.Utils;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -13,6 +14,12 @@ public class MainActivity extends Activity
   static
   {
     System.loadLibrary("Scalability");
+  }
+
+  static
+  {
+    Utils.DEBUG = true;
+    Utils.TAG = "cinder";
   }
 
   CinderDelegate delegate;
@@ -46,20 +53,6 @@ public class MainActivity extends Activity
     super.onDestroy();
     delegate.onDestroy();
   }
-
-  @Override
-  public void onWindowFocusChanged(boolean hasFocus)
-  {
-    super.onWindowFocusChanged(hasFocus);
-    delegate.onWindowFocusChanged(hasFocus);
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig)
-  {
-    super.onConfigurationChanged(newConfig);
-    delegate.onConfigurationChanged(newConfig);
-  }
   
   @Override
   public void onBackPressed()
@@ -68,5 +61,26 @@ public class MainActivity extends Activity
     {
       super.onBackPressed();
     }
+  }
+  
+  @Override
+  protected void onStart()
+  {
+    Utils.LOGD("Activity.onStart");
+    super.onStart();
+  }
+
+  @Override
+  protected void onStop()
+  {
+    Utils.LOGD("Activity.onStop");
+    super.onStop();
+  }
+
+  @Override
+  protected void onRestart()
+  {
+    Utils.LOGD("Activity.onRestart");
+    super.onRestart();
   }
 }

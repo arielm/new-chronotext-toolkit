@@ -181,7 +181,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     performStop(REASON_HIDDEN);
   }
 
-  // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD----------------------------------------
+  // ---------------------------------------- GUARANTEED TO TAKE PLACE ON THE RENDERER'S THREAD----------------------------------------
 
   public void contextCreated()
   {
@@ -191,16 +191,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     }
   }
 
-  public void contextDestroyed(boolean surfaceDetached)
+  public void contextDestroyed()
   {
     if (initialized)
     {
       contextLost();
-
-      if (surfaceDetached && !paused && !hidden)
-      {
-        detach();
-      }
     }
   }
 
@@ -211,6 +206,26 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     if (initialized && !paused && !hidden)
     {
       attach();
+    }
+  }
+
+  public void onDetachedFromWindow()
+  {
+    Utils.LOGD("GLRenderer.onDetachedFromWindow");
+
+    if (!paused && !hidden)
+    {
+      detach();
+    }
+  }
+
+  public void onDestroy()
+  {
+    Utils.LOGD("GLRenderer.onDestroy");
+
+    if (initialized)
+    {
+      shutdown();
     }
   }
 
@@ -269,20 +284,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       {
         pause();
       }
-    }
-  }
-
-  /*
-   * FORWARDED FROM THE MAIN-THREAD UPON ACTIVITY DESTRUCTION
-   * ONE OF THE REASONS WHY A GLView SHOULD NEVER BE DETACHED
-   */
-  public void onDestroy()
-  {
-    Utils.LOGD("GLRenderer.onDestroy");
-
-    if (initialized)
-    {
-      shutdown();  
     }
   }
 
