@@ -95,12 +95,17 @@ public class CinderDelegate extends Handler
 
   public void onPause()
   {
-    mView.onPause(mActivity.isFinishing()); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
+    mView.onPause(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
   }
 
   public void onResume()
   {
     mView.onResume(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
+  }
+
+  public void onDestroy()
+  {
+    mView.onDestroy(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
   }
   
   public boolean onBackPressed()

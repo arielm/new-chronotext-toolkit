@@ -143,7 +143,7 @@ public class GLView extends GLSurfaceView
 
     if (attached)
     {
-      attached = false; // THE ONLY WAY TO COMMUNICATIE WITH THE RENDERER'S THREAD BEFORE IT EXITS
+      attached = false; // THE ONLY WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
       super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD (EVENTS QUEUED RIGHT BEOFRE-OR-AFTER THIS WILL NEVER BE DELIVERED)
     }
   }
@@ -174,43 +174,29 @@ public class GLView extends GLSurfaceView
   /*
    * RECEIVED ON THE MAIN-THREAD
    */
-  public void onPause(boolean isFinishing)
+  public void onPause()
   {
-    Utils.LOGD("GLView.onPause: " + isFinishing);
-
-    /*
-     * ADVANTAGES OF RELYING ON Activity.isFinishing():
-     * - NO NEED TO RELY ON Activity.onDestroy()
-     * - POSSIBILITY TO DIFFERENTIATE BETWEEN A "REGULAR" onPause() AND ONE PRECEDING onDestroy()
-     */
-    finishing = isFinishing;
+    Utils.LOGD("GLView.onPause");
 
     if (attached && resumed)
     {
       resumed = false;
       onPause();
 
-      if (isFinishing)
+      queueEvent(new Runnable()
       {
-        queueEvent(new Runnable()
+        public void run()
         {
-          public void run()
-          {
-            mRenderer.onDetachedFromWindow();
-          }
-        });
-      }
-      else
-      {
-        queueEvent(new Runnable()
-        {
-          public void run()
-          {
-            mRenderer.onPause();
-          }
-        });
-      }
+          mRenderer.onPause();
+        }
+      });
     }
+  }
+
+  public void onDestroy()
+  {
+    Utils.LOGD("GLView.onDestroy");
+    finishing = true; // COMMUNICATING WITH THE RENDERER'S THREAD BEFORE IT EXITS
   }
 
   @Override
@@ -357,7 +343,7 @@ public class GLView extends GLSurfaceView
 
       if (!attached)
       {
-        if (resumed || mDestroyOnDetach)
+        if (mDestroyOnDetach)
         {
           mRenderer.onDetachedFromWindow();
         }

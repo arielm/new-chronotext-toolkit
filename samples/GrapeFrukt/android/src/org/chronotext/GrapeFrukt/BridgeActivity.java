@@ -36,6 +36,13 @@ public class BridgeActivity extends Activity
     super.onResume();
     bridge.onResume();
   }
+
+  @Override
+  protected void onDestroy()
+  {
+    super.onDestroy();
+    bridge.onDestroy();
+  }
   
   @Override
   public void onBackPressed()
@@ -65,12 +72,5 @@ public class BridgeActivity extends Activity
   {
     Utils.LOGD("Activity.onRestart");
     super.onRestart();
-  }
-
-  @Override
-  protected void onDestroy()
-  {
-    Utils.LOGD("Activity.onDestroy");
-    super.onDestroy();
   }
 }
