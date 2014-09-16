@@ -91,7 +91,7 @@ public class CinderDelegate extends Handler
     }
   }
 
-  // ---------------------------------------- TO BE CALLED FROM THE HOST ACTIVITY ----------------------------------------
+  // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY ----------------------------------------
 
   public void onPause()
   {

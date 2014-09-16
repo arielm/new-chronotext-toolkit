@@ -27,9 +27,11 @@ import android.view.View;
 public class GLView extends GLSurfaceView
 {
   protected GLRenderer mRenderer;
+  protected boolean mDestroyOnDetach = true;
 
   protected boolean resumed;
   protected boolean attached;
+  protected boolean finishing;
   protected boolean destroyed;
 
   public GLView(Context context)
@@ -40,7 +42,7 @@ public class GLView extends GLSurfaceView
     // setEGLConfigChooser(8, 8, 8, 8, 0, 0);
     // getHolder().setFormat(PixelFormat.RGBA_8888);
 
-    setEGLContextFactory(new CustomContextFactory(1)); // NECESSARY BECAUSE setPreserveEGLContextOnPause(true) CAN'T BE FULLY TRUSTED
+    setEGLContextFactory(new CustomContextFactory(1));
     setPreserveEGLContextOnPause(true);
   }
 
@@ -60,6 +62,11 @@ public class GLView extends GLSurfaceView
         }
       });
     }
+  }
+
+  public void setDestroyOnDetach(boolean destroyOnDetach)
+  {
+    mDestroyOnDetach = destroyOnDetach;
   }
 
   @Override
@@ -95,7 +102,7 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onAttachedToWindow");
 
-    super.onAttachedToWindow(); // WILL START A NEW RENDERER'S IF NECESSARY (E.G. WHEN THE GLView IS RE-ATTACHED)
+    super.onAttachedToWindow(); // WILL START A NEW RENDERER'S THREAD IF NECESSARY (I.E. WHEN THE GLView IS RE-ATTACHED)
     attached = true;
 
     queueEvent(new Runnable()
@@ -112,8 +119,8 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onDetachedFromWindow");
 
-    attached = false; // COMMUNICATING WITH THE RENDERER'S THREAD BEFORE IT EXITS
-    super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD (CustomContextFactory.destroyContext() WILL BE INVOKED BEFOREHAND ON THE RENDERER'S THREAD)
+    attached = false; // THE ONLY WAY TO COMMUNICATIE WITH THE RENDERER'S THREAD BEFORE IT EXITS
+    super.onDetachedFromWindow(); // WILL EXIT THE RENDERER'S THREAD (EVENTS QUEUED RIGHT BEOFRE-OR-AFTER THIS WILL NEVER BE DELIVERED)
   }
 
   /*
@@ -124,12 +131,7 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onResume");
 
-    /*
-     * SAFE-GUARDING AGAINST SPURIOUS onResume() EVENTS
-     * REFERENCE: http://stackoverflow.com/questions/11731285/onresume-being-called-over-and-over-while-phone-screen-is-locked
-     * REMARK: onWindowFocusChanged() IS NOT CONSISTENT ENOUGH TO BE TRUSTED
-     */
-    if (!resumed)
+    if (attached && !resumed)
     {
       resumed = true;
       super.onResume();
@@ -147,7 +149,7 @@ public class GLView extends GLSurfaceView
   /*
    * RECEIVED ON THE MAIN-THREAD
    */
-  public void onPause(boolean finishing)
+  public void onPause(boolean isFinishing)
   {
     Utils.LOGD("GLView.onPause: " + finishing);
 
@@ -156,17 +158,14 @@ public class GLView extends GLSurfaceView
      * - NO NEED TO RELY ON Activity.onDestroy()
      * - POSSIBILITY TO DIFFERENTIATE BETWEEN A "REGULAR" onPause() AND ONE PRECEDING onDestroy()
      */
-    destroyed = finishing;
+    finishing = isFinishing;
 
-    /*
-     * NO EVIDENCE OF SPURIOUS onPause() EVENTS LIKE WITH onResume(), JUST BEING ON THE SAFE-SIDE...
-     */
-    if (resumed)
+    if (attached && resumed)
     {
       resumed = false;
       onPause();
 
-      if (finishing)
+      if (isFinishing)
       {
         queueEvent(new Runnable()
         {
@@ -300,10 +299,13 @@ public class GLView extends GLSurfaceView
   /*
    * BASED ON GLSurfaceView.DefaultContextFactory
    *
-   * THE ONLY WAY TO BE NOTIFIED (ON THE RENDERER'S THREAD) WHEN:
-   * - THE GL-CONTEXT HAS BEEN ACTUALLY CREATED OR DESTROYED
-   * - THE GLView HAS BEEN DETACHED
-   * - THE ACTIVITY IS BEING DESTROYED
+   * NECESSARY BECAUSE:
+   *
+   * 1) setPreserveEGLContextOnPause(true) IS NOT TRUSTABLE BY DESIGN, SO WE NEED TO BE NOTIFIED WHEN CONTEXT-DESTRUCTION ACTUALLY OCCURS
+   *
+   * 2) EGLContextFactory.createContext() IS THE ONLY "HOOK" FOR COMMUNICATING ON THE RENDERER'S THREAD WHEN:
+   * - THE GLSurfaceView HAS BEEN DETACHED (ASSERTION: THE RENDERER'S THREAD EXITS UPON VIEW-DETACHMENT, WHICH IN TURN TRIGGERS CONTEXT-DESTRUCTION)
+   * - THE ACTIVITY IS BEING DESTROYED (ASSERTION: ACTIVITY DESTRUCTION WILL TRIGGER VIEW-DETACHMENT)
    */
   protected class CustomContextFactory implements EGLContextFactory
   {
@@ -328,13 +330,17 @@ public class GLView extends GLSurfaceView
       Utils.LOGD("CustomContextFactory.destroyContext");
       mRenderer.contextDestroyed();
 
-      if (!attached && resumed)
+      if (!attached)
       {
-        mRenderer.onDetachedFromWindow();
-      }
-      if (!attached && destroyed)
-      {
-        mRenderer.onDestroy(); // TODO: SHOULD BE CALLED, UNLESS forceDestroyOnDetach IS FALSE
+        if (resumed || mDestroyOnDetach)
+        {
+          mRenderer.onDetachedFromWindow();
+        }
+        if (finishing || mDestroyOnDetach)
+        {
+          destroyed = true;
+          mRenderer.onDestroy();
+        }
       }
 
       egl.eglDestroyContext(display, context);

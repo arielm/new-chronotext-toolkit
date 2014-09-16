@@ -42,7 +42,7 @@ public class BridgeActivity extends Activity
   {
     if (!bridge.onBackPressed())
     {
-      bridge.onBackPressed();
+      super.onBackPressed();
     }
   }
 
