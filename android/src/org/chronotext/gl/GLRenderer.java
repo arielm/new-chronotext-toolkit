@@ -22,18 +22,18 @@ import android.view.View;
 public abstract class GLRenderer implements GLSurfaceView.Renderer
 {
   public static final int REASON_RESUMED = 1;
-  public static final int REASON_ATTACHED = 2;
-  public static final int REASON_SHOWN = 3;
-  public static final int REASON_PAUSED = 4;
-  public static final int REASON_DETACHED = 5;
-  public static final int REASON_HIDDEN = 6;
+  public static final int REASON_SHOWN = 2;
+  public static final int REASON_PAUSED = 3;
+  public static final int REASON_HIDDEN = 4;
 
   protected boolean launched;
   protected boolean initialized;
   protected boolean attached;
   protected boolean paused;
   protected boolean hidden;
+  protected boolean started;
 
+  protected boolean setupRequest;
   protected boolean contextRenewalRequest;
 
   protected boolean resizeRequest;
@@ -71,22 +71,30 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     // ---
 
-    if (launched && !initialized)
+    if (!initialized)
     {
-      initialized = true;
-
-      setup(gl, w, h);
-      attach();
+      setupRequest = true;
     }
   }
 
   public void onDrawFrame(GL10 gl)
   {
+    Utils.LOGD("GLRenderer.onDrawFrame");
+
     if (contextRenewalRequest)
     {
-      resizeRequest = true;
       contextRenewalRequest = false;
       contextRenewed();
+
+      resizeRequest = true;
+    }
+
+    if (setupRequest)
+    {
+      setupRequest = false;
+      setup(gl, viewportWidth, viewportHeight);
+
+      initialized = true;
     }
 
     if (resizeRequest)
@@ -107,7 +115,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     if (ticks == 0)
     {
-      Utils.LOGD("GLRenderer.onDrawFrame");
       t0 = now;
     }
 
@@ -123,62 +130,32 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   protected void performLaunch()
   {
-    launched = true;
-    launch();
+    if (!launched)
+    {
+      launched = true;
+      launch();
+    }
   }
 
   protected void performStart(int reason)
   {
     ticks = 0;
+    started = true;
     start(reason);
   }
-
+  
   protected void performStop(int reason)
   {
     Utils.LOGI("AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
-    stop(reason);    
+
+    started = false;
+    stop(reason);
   }
 
   protected void requestStart(int reason)
   {
     startRequest = true;
     startReason = reason;
-  }
-
-  protected void resume()
-  {
-    paused = false;
-    requestStart(REASON_RESUMED);
-  }
-
-  protected void pause()
-  {
-    paused = true;
-    performStop(REASON_PAUSED);
-  }
-
-  protected void attach()
-  {
-    attached = true;
-    requestStart(REASON_ATTACHED);
-  }
-
-  protected void detach()
-  {
-    attached = false;
-    performStop(REASON_DETACHED);
-  }
-
-  protected void show()
-  {
-    hidden = false;
-    requestStart(REASON_SHOWN);
-  }
-
-  protected void hide()
-  {
-    hidden = true;
-    performStop(REASON_HIDDEN);
   }
 
   // ---------------------------------------- GUARANTEED TO TAKE PLACE ON THE RENDERER'S THREAD----------------------------------------
@@ -203,9 +180,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Utils.LOGD("GLRenderer.onAttachedToWindow");
 
-    if (initialized && !paused && !hidden)
+    attached = true;
+
+    if (!hidden)
     {
-      attach();
+      requestStart(REASON_SHOWN);
     }
   }
 
@@ -213,9 +192,11 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Utils.LOGD("GLRenderer.onDetachedFromWindow");
 
+    attached = false;
+
     if (!paused && !hidden)
     {
-      detach();
+      performStop(REASON_HIDDEN);
     }
   }
 
@@ -233,16 +214,14 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Utils.LOGD("GLRenderer.onResume");
 
-    if (attached)
+    if (hidden)
     {
-      if (hidden)
-      {
-        foreground();
-      }
-      else
-      {
-         resume();
-      }
+      foreground();
+    }
+    else
+    {
+      paused = false;
+      requestStart(REASON_RESUMED);
     }
   }
 
@@ -250,16 +229,14 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Utils.LOGD("GLRenderer.onPause");
 
-    if (attached)
+    if (hidden)
     {
-      if (hidden)
-      {
-        background();
-      }
-      else
-      {
-        pause();
-      }
+      background();
+    }
+    else
+    {
+      paused = true;
+      performStop(REASON_PAUSED);
     }
   }
 
@@ -267,22 +244,21 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   {
     Utils.LOGD("GLRenderer.onVisibilityChanged: " + visibility);
 
-    if (initialized)
+    switch (visibility)
     {
-      switch (visibility)
+      case View.VISIBLE:
       {
-        case View.VISIBLE:
-        {
-          show();
-          break;
-        }
+        hidden = false;
+        requestStart(REASON_SHOWN);
+        break;
+      }
 
-        case View.GONE:
-        case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
-        {
-          hide();
-          break;
-        }
+      case View.GONE:
+      case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
+      {
+        hidden = true;
+        performStop(REASON_HIDDEN);
+        break;
       }
     }
   }

@@ -29,16 +29,14 @@ namespace chronotext
         enum
         {
             EVENT_RESUMED = 1,
-            EVENT_ATTACHED = 2,
-            EVENT_SHOWN = 3,
-            EVENT_PAUSED = 4,
-            EVENT_DETACHED = 5,
-            EVENT_HIDDEN = 6,
-            EVENT_CONTEXT_LOST = 7,
-            EVENT_CONTEXT_RENEWED = 8,
-            EVENT_BACKGROUND = 9,
-            EVENT_FOREGROUND = 10,
-            EVENT_BACK_KEY = 11
+            EVENT_SHOWN = 2,
+            EVENT_PAUSED = 3,
+            EVENT_HIDDEN = 4,
+            EVENT_CONTEXT_LOST = 5,
+            EVENT_CONTEXT_RENEWED = 6,
+            EVENT_BACKGROUND = 7,
+            EVENT_FOREGROUND = 8,
+            EVENT_BACK_KEY = 9
         };
         
     public:

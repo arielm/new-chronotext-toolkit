@@ -26,16 +26,14 @@ import android.view.WindowManager;
 public class CinderRenderer extends GLRenderer
 {
   public static final int EVENT_RESUMED = 1;
-  public static final int EVENT_ATTACHED = 2;
-  public static final int EVENT_SHOWN = 3;
-  public static final int EVENT_PAUSED = 4;
-  public static final int EVENT_DETACHED = 5;
-  public static final int EVENT_HIDDEN = 6;
-  public static final int EVENT_CONTEXT_LOST = 7;
-  public static final int EVENT_CONTEXT_RENEWED = 8;
-  public static final int EVENT_BACKGROUND = 9;
-  public static final int EVENT_FOREGROUND = 10;
-  public static final int EVENT_BACK_KEY = 11;
+  public static final int EVENT_SHOWN = 2;
+  public static final int EVENT_PAUSED = 3;
+  public static final int EVENT_HIDDEN = 4;
+  public static final int EVENT_CONTEXT_LOST = 5;
+  public static final int EVENT_CONTEXT_RENEWED = 6;
+  public static final int EVENT_BACKGROUND = 7;
+  public static final int EVENT_FOREGROUND = 8;
+  public static final int EVENT_BACK_KEY = 9;
 
   protected Context mContext;
   protected Object mListener;
@@ -100,13 +98,13 @@ public class CinderRenderer extends GLRenderer
 
   public void start(int reason)
   {
-    Utils.LOGD("CinderRenderer.start: " + reason);
+    Utils.LOGD("CinderRenderer.start: " + (reason == REASON_RESUMED ? "RESUMED" : "SHOWN"));
     event(reason);
   }
 
   public void stop(int reason)
   {
-    Utils.LOGD("CinderRenderer.stop: " + reason);
+    Utils.LOGD("CinderRenderer.stop: " + (reason == REASON_PAUSED ? "PAUSED" : "HIDDEN"));
     event(reason);
   }
 

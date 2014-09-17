@@ -27,10 +27,9 @@ import android.view.View;
 public class GLView extends GLSurfaceView
 {
   protected GLRenderer mRenderer;
-  protected boolean mDestroyOnDetach;
 
-  protected boolean resumed;
   protected boolean attached;
+  protected boolean paused;
   protected boolean finishing;
   protected boolean destroyed;
 
@@ -44,12 +43,6 @@ public class GLView extends GLSurfaceView
 
     setEGLContextFactory(new CustomContextFactory(1)); // FIXME: EGL-CONTEXT-CLIENT-VERSION SHOULD NOT BE HARD-CODED
     setPreserveEGLContextOnPause(true);
-
-    /*
-     * A GLView IS DESIGNED TO BE ATTACHED UPON ACTIVITY CREATION AND NOT BE
-     * DETACHED ANYMORE (IT IS OF-COURSE POSSIBLE TO HIDE/SHOW A GLView ON DEMAND)
-     */
-    mDestroyOnDetach = true;
   }
 
   @Override
@@ -68,20 +61,6 @@ public class GLView extends GLSurfaceView
         }
       });
     }
-  }
-
-  /*
-   * SETTING THIS PARAMETER TO FALSE ALLOWS TO DETACH/ATTACH A GLView ON DEMAND, BUT
-   * THE FOLLOWING MUST BE TAKEN IN COUNT:
-   *
-   * 1) ATTACHING/DETACHING AFTER ACTIVITY CREATION IS CAUSING A VISUAL GLITCH
-   *
-   * 2) THE RENDERER'S THREAD EXITS UPON VIEW-DETACHMENT, THEREFORE IT IS NOT POSSIBLE
-   *    TO RELY ON THE FACT THAT THE THREAD WILL LIVE UP TO ACTIVITY DESTRUCTION
-   */
-  public void setDestroyOnDetach(boolean destroyOnDetach)
-  {
-    mDestroyOnDetach = destroyOnDetach;
   }
 
   @Override
@@ -120,11 +99,13 @@ public class GLView extends GLSurfaceView
     if (destroyed)
     {
       Utils.LOGE("GLView IS INVALID");
+      return;
     }
-    else
+    
+    if (!attached)
     {
-      super.onAttachedToWindow(); // WILL START A NEW RENDERER'S THREAD IF NECESSARY (I.E. WHEN THE GLView IS RE-ATTACHED)
       attached = true;
+      super.onAttachedToWindow();
 
       queueEvent(new Runnable()
       {
@@ -159,10 +140,12 @@ public class GLView extends GLSurfaceView
     if (destroyed)
     {
       Utils.LOGE("GLView IS INVALID");
+      return;
     }
-    else if (!resumed) // SIMPLE PROTECTION AGAINST SPURIOUS onResume() CALLS
+    
+    if (attached && paused) // SIMPLE PROTECTION AGAINST SPURIOUS onResume() CALLS
     {
-      resumed = true;
+      paused = false;
       super.onResume();
 
       queueEvent(new Runnable()
@@ -178,6 +161,7 @@ public class GLView extends GLSurfaceView
   /*
    * RECEIVED ON THE MAIN-THREAD
    */
+  @Override
   public void onPause()
   {
     Utils.LOGD("GLView.onPause");
@@ -185,10 +169,12 @@ public class GLView extends GLSurfaceView
     if (destroyed)
     {
       Utils.LOGE("GLView IS INVALID");
+      return;
     }
-    else if (resumed) // SIMPLE PROTECTION AGAINST SPURIOUS onPause() CALLS
+
+    if (attached && !paused) // SIMPLE PROTECTION AGAINST SPURIOUS onPause() CALLS
     {
-      resumed = false;
+      paused = true;
       super.onPause();
 
       queueEvent(new Runnable()
@@ -225,6 +211,11 @@ public class GLView extends GLSurfaceView
   @Override
   public boolean onTouchEvent(MotionEvent event)
   {
+    if (destroyed)
+    {
+      return false;
+    }
+
     switch (event.getAction() & MotionEvent.ACTION_MASK)
     {
       case MotionEvent.ACTION_DOWN :
@@ -349,22 +340,12 @@ public class GLView extends GLSurfaceView
       Utils.LOGD("CustomContextFactory.destroyContext");
       mRenderer.contextDestroyed();
 
-      if (!attached)
+      if (!attached || finishing)
       {
-        if (mDestroyOnDetach)
-        {
-          mRenderer.onDetachedFromWindow();
-        }
+        destroyed = true;
 
-        if (finishing || mDestroyOnDetach)
-        {
-          destroyed = true;
-          mRenderer.onDestroy();
-        }
-        else
-        {
-          Utils.LOGW("GLView DETACHED BUT NOT DESTROYED");
-        }
+        mRenderer.onDetachedFromWindow();
+        mRenderer.onDestroy();
       }
 
       egl.eglDestroyContext(display, context);

@@ -213,7 +213,6 @@ namespace chronotext
                 start(CinderSketch::FLAG_APP_RESUMED);
                 break;
 
-            case EVENT_ATTACHED:
             case EVENT_SHOWN:
                 start(CinderSketch::FLAG_FOCUS_GAINED);
                 break;
@@ -222,7 +221,6 @@ namespace chronotext
                 stop(CinderSketch::FLAG_APP_PAUSED);
                 break;
                 
-            case EVENT_DETACHED:
             case EVENT_HIDDEN:
                 stop(CinderSketch::FLAG_FOCUS_LOST);
                 break;
