@@ -189,7 +189,7 @@ public class GLView extends GLSurfaceView
     else if (resumed) // SIMPLE PROTECTION AGAINST SPURIOUS onPause() CALLS
     {
       resumed = false;
-      onPause();
+      super.onPause();
 
       queueEvent(new Runnable()
       {
