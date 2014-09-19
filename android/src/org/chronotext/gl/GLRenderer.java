@@ -271,7 +271,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public abstract void shutdown();
 
   public abstract void resize(GL10 gl, int width, int height);
-  public abstract void draw(GL10 gl, int ticks);
+  public abstract void draw(GL10 gl);
 
   public abstract void start(int reason);
   public abstract void stop(int reason);
