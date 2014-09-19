@@ -18,21 +18,57 @@
 
 class Sketch : public chr::CinderSketch
 {
-    chr::TextureManager textureManager;
-    chr::xf::FontManager fontManager;
-
-    chr::TextureRef dot;
-    std::shared_ptr<chr::XFont> font;
-
-    float scale;
-
 public:
+    struct Particle
+    {
+        ci::Vec2f position;
+        ci::Vec2f previousPosition;
+        ci::Vec2f acceleration;
+        
+        float radius;
+        float mass;
+        
+        Particle()
+        {}
+        
+        Particle(const ci::Vec2f &position, float radius, float mass = 1)
+        :
+        position(position),
+        previousPosition(position),
+        radius(radius),
+        mass(mass)
+        {}
+    };
+    
     Sketch(void *context, void *delegate = NULL);
     
     void setup(bool renewContext);
     void event(int id);
+    
+    void start(int flags);
+    void stop(int flags);
+    
+    void update();
     void draw();
     
     void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
     void drawText(const std::wstring &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
+    
+    void accelerated(AccelEvent event);
+    
+    void accumulateForces();
+    void verlet();
+    void satifsfyConstraints();
+    
+protected:
+    chr::TextureManager textureManager;
+    chr::xf::FontManager fontManager;
+    
+    chr::TextureRef dot;
+    std::shared_ptr<chr::XFont> font;
+    
+    float scale;
+
+    ci::Vec2f acceleration;
+    Particle particle;
 };
