@@ -79,51 +79,53 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   public void onDrawFrame(GL10 gl)
   {
-    Utils.LOGD("GLRenderer.onDrawFrame");
-
-    if (contextRenewalRequest)
+    if (attached && !paused && !hidden)
     {
-      contextRenewalRequest = false;
-      contextRenewed();
+      if (contextRenewalRequest)
+      {
+        contextRenewed();
+        resizeRequest = true;
+      }
 
-      resizeRequest = true;
+      if (setupRequest)
+      {
+        setup(gl, viewportWidth, viewportHeight);
+        initialized = true;
+      }
+
+      if (resizeRequest)
+      {
+        resize(gl, viewportWidth, viewportHeight);
+      }
+
+      if (startRequest)
+      {
+        performStart(startReason);
+      }
+
+      if (started)
+      {
+        now = System.currentTimeMillis();
+
+        if (startRequest)
+        {
+          ticks = 0;
+          t0 = now;
+        }
+
+        ticks++;
+        elapsed = now - t0;
+
+        // ---
+
+        draw(gl);
+      }
     }
 
-    if (setupRequest)
-    {
-      setupRequest = false;
-      setup(gl, viewportWidth, viewportHeight);
-
-      initialized = true;
-    }
-
-    if (resizeRequest)
-    {
-      resizeRequest = false;
-      resize(gl, viewportWidth, viewportHeight);
-    }
-
-    if (startRequest)
-    {
-      startRequest = false;
-      performStart(startReason);
-    }
-
-    // ---
-
-    now = System.currentTimeMillis();
-
-    if (ticks == 0)
-    {
-      t0 = now;
-    }
-
-    ticks++;
-    elapsed = now - t0;
-
-    // ---
-
-    draw(gl);
+    contextRenewalRequest = false;
+    setupRequest = false;
+    resizeRequest = false;
+    startRequest = false;
   }
 
   // ---------------------------------------- LIFE-CYCLE ----------------------------------------
@@ -139,7 +141,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
   protected void performStart(int reason)
   {
-    ticks = 0;
     started = true;
     start(reason);
   }
@@ -270,7 +271,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   public abstract void shutdown();
 
   public abstract void resize(GL10 gl, int width, int height);
-  public abstract void draw(GL10 gl);
+  public abstract void draw(GL10 gl, int ticks);
 
   public abstract void start(int reason);
   public abstract void stop(int reason);

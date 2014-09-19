@@ -113,7 +113,7 @@ float StyledLineLayout::getOffsetY(ZFont::Alignment align) const
     switch (align)
     {
         case ZFont::ALIGN_MIDDLE:
-            return 0.5f * (maxAscent - maxDescent);
+            return 0.5f * (maxAscent - maxDescent); // TODO: USE SAME POLICY AS FOR ZFont REGARDING VERTICAL ALIGNMENT (I.E. setMiddleLineFactor(), ETC.)
             
         case ZFont::ALIGN_TOP:
             return +maxAscent;

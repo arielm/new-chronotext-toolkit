@@ -25,16 +25,16 @@ public class Utils
 
   public static void LOGI(String message)
   {
-	Log.i(TAG, message);
+	  Log.i(TAG, message);
   }
 
   public static void LOGE(String message)
   {
-	Log.e(TAG, message);
+	  Log.e(TAG, message);
   }
 
   public static void LOGW(String message)
   {
-	Log.w(TAG, message);
+	  Log.w(TAG, message);
   }
 }

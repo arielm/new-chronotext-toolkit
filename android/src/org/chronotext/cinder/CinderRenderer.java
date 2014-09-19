@@ -38,6 +38,8 @@ public class CinderRenderer extends GLRenderer
   protected Context mContext;
   protected Object mListener;
 
+  protected int ticks;
+
   public CinderRenderer(Context context, Object listener)
   {
     mContext = context;
@@ -55,12 +57,23 @@ public class CinderRenderer extends GLRenderer
 
   public void launch()
   {
+    /*
+     * TODO:
+     * WE SHOULD CREATE THE DisplayInfo HERE AND PASS IT ON
+     * (CF WindowInfo/DisplayInfo REDESIGN...)
+     */
     launch(mContext, mListener);
   }
 
   public void setup(GL10 gl, int width, int height)
   {
     Utils.LOGD("CinderRenderer.setup");
+
+    /*
+     * TODO:
+     * THE WindowInfo CONCEPT SHOULD BE REDESIGNED (WE ALSO NEED A DisplayInfo)
+     * SINCE VIEWPORT-SIZE CAN BE DIFFERENT FROM DISPLAY-SIZE
+     */
 
     Display display = getWindowManager().getDefaultDisplay();
     DisplayMetrics dm = new DisplayMetrics();
@@ -80,9 +93,9 @@ public class CinderRenderer extends GLRenderer
      * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
      * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
      */
-    int displayRotation = display.getRotation();
+    int displayRotation = display.getRotation(); // TODO: TEST WHEN "SENSOR ORIENTATION" IS ENABLED (WE MAY NEED TO HANDLE THIS IN draw() OR resize())
 
-    setup(width, height, diagonal, density, displayRotation);
+    setup(width, height, diagonal, density, displayRotation); // TODO: WE SHOULD ONLY PASS width AND height (CF WindowInfo/DisplayInfo REDESIGN...)
   }
 
   public void resize(GL10 gl, int width, int height)
@@ -93,6 +106,11 @@ public class CinderRenderer extends GLRenderer
 
   public void draw(GL10 gl)
   {
+    if (ticks++ == 0)
+    {
+      Utils.LOGD("CinderRenderer.draw");  
+    }
+    
     draw();
   }
 
@@ -100,6 +118,8 @@ public class CinderRenderer extends GLRenderer
   {
     Utils.LOGD("CinderRenderer.start: " + (reason == REASON_RESUMED ? "RESUMED" : "SHOWN"));
     event(reason);
+    
+    ticks = 0;
   }
 
   public void stop(int reason)
