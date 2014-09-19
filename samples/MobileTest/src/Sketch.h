@@ -13,13 +13,17 @@
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
-
-#include "Animation.h"
+#include "chronotext/texture/TextureManager.h"
+#include "chronotext/font/xf/FontManager.h"
 
 class Sketch : public chr::CinderSketch
 {
     chr::TextureManager textureManager;
-    Animation animation;
+    chr::xf::FontManager fontManager;
+
+    chr::TextureRef dot;
+    std::shared_ptr<chr::XFont> font;
+
     float scale;
 
 public:
@@ -28,4 +32,7 @@ public:
     void setup(bool renewContext);
     void event(int id);
     void draw();
+    
+    void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
+    void drawText(const std::wstring &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
 };
