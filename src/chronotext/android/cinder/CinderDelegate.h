@@ -21,13 +21,6 @@ namespace chronotext
     {
         enum
         {
-            ACCELEROMETER_ROTATION_DEFAULT = 0,
-            ACCELEROMETER_ROTATION_PORTRAIT,
-            ACCELEROMETER_ROTATION_LANDSCAPE
-        };
-        
-        enum
-        {
             EVENT_RESUMED = 1,
             EVENT_SHOWN = 2,
             EVENT_PAUSED = 3,
@@ -43,6 +36,7 @@ namespace chronotext
         JavaVM *mJavaVM;
         jobject mJavaContext;
         jobject mJavaListener;
+        jobject mJavaDisplay;
         
         CinderSketch *sketch;
         
@@ -57,9 +51,9 @@ namespace chronotext
             CI_LOGD("CinderDelegate DELETED");
         }
         
-        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
+        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay);
         
-        void setup(int width, int height, float diagonal, float density, int displayRotation);
+        void setup(int width, int height, float diagonal, float density);
         void shutdown();
         
         void resize();
@@ -109,7 +103,6 @@ namespace chronotext
         std::shared_ptr<ci::android::dostream> mOutputStream;
         
         WindowInfo mWindowInfo;
-        int mDisplayRotation;
         
         ci::Timer mTimer;
         uint32_t mFrameCount;
@@ -135,6 +128,7 @@ namespace chronotext
         void start(int flags);
         void stop(int flags);
         
+        int getDisplayRotation();
         void processSensorEvents();
         void accelerated(float x, float y, float z);
     };

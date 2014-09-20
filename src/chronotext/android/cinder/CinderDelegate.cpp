@@ -18,17 +18,19 @@ using namespace std;
 using namespace ci;
 using namespace app;
 
-#define GRAVITY_EARTH 9.80665f
+const float GRAVITY_EARTH = 9.80665f;
 
 namespace chronotext
 {
     /*
      * CALLED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
      */
-    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener)
+    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay)
     {
         mJavaVM = javaVM;
+        mJavaContext = javaContext;
         mJavaListener = javaListener;
+        mJavaDisplay = javaDisplay;
         
         JNIEnv *env;
         javaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
@@ -115,6 +117,15 @@ namespace chronotext
         worldVec.z = canVec[2];
     }
     
+    int CinderDelegate::getDisplayRotation()
+    {
+        JNIEnv *env;
+        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
+        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
+    }
+    
     void CinderDelegate::processSensorEvents()
     {
         ASensorEvent event;
@@ -124,7 +135,7 @@ namespace chronotext
             if (event.type == ASENSOR_TYPE_ACCELEROMETER)
             {
                 Vec3f transformed;
-                canonicalToWorld(mDisplayRotation, (float*)&event.acceleration.v, transformed);
+                canonicalToWorld(getDisplayRotation(), (float*)&event.acceleration.v, transformed);
                 
                 /*
                  * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
@@ -146,14 +157,12 @@ namespace chronotext
         mLastRawAccel = acceleration;
     }
     
-    void CinderDelegate::setup(int width, int height, float diagonal, float density, int displayRotation)
+    void CinderDelegate::setup(int width, int height, float diagonal, float density)
     {
         mWindowInfo.size = Vec2i(width, height);
         mWindowInfo.contentScale = 1;
         mWindowInfo.diagonal = diagonal;
         mWindowInfo.density = density;
-        mDisplayRotation = displayRotation;
-        
         SystemInfo::instance().setWindowInfo(mWindowInfo);
         
         io = make_shared<boost::asio::io_service>();
@@ -388,7 +397,7 @@ namespace chronotext
         
         sketch->stop(flags);
     }
-    
+
     // ---------------------------------------- JNI ----------------------------------------
     
     JNIEnv* CinderDelegate::getJNIEnv()

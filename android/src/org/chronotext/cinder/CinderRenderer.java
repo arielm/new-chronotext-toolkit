@@ -48,9 +48,9 @@ public class CinderRenderer extends GLRenderer
     prelaunch();
   }
 
-  protected WindowManager getWindowManager()
+  protected Display getDisplay()
   {
-    return (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+    return ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
   }
     
   // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
@@ -58,11 +58,9 @@ public class CinderRenderer extends GLRenderer
   public void launch()
   {
     /*
-     * TODO:
-     * WE SHOULD CREATE THE DisplayInfo HERE AND PASS IT ON
-     * (CF WindowInfo/DisplayInfo REDESIGN...)
+     * TODO: CREATE DisplayInfo ON THE C++ SIDE (CF WindowInfo/DisplayInfo REDESIGN...)
      */
-    launch(mContext, mListener);
+    launch(mContext, mListener, getDisplay());
   }
 
   public void setup(GL10 gl, int width, int height)
@@ -71,11 +69,11 @@ public class CinderRenderer extends GLRenderer
 
     /*
      * TODO:
-     * THE WindowInfo CONCEPT SHOULD BE REDESIGNED (WE ALSO NEED A DisplayInfo)
+     * THE WindowInfo CONCEPT SHOULD BE REPLACED BY DisplayInfo
      * SINCE VIEWPORT-SIZE CAN BE DIFFERENT FROM DISPLAY-SIZE
      */
 
-    Display display = getWindowManager().getDefaultDisplay();
+    Display display = getDisplay();
     DisplayMetrics dm = new DisplayMetrics();
     display.getMetrics(dm);
 
@@ -88,14 +86,7 @@ public class CinderRenderer extends GLRenderer
      */
     float density = (float) Math.sqrt(dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels) / diagonal;
 
-    /*
-     * REFERENCES:
-     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
-     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
-     */
-    int displayRotation = display.getRotation(); // TODO: TEST WHEN "SENSOR ORIENTATION" IS ENABLED (WE MAY NEED TO HANDLE THIS IN draw() OR resize())
-
-    setup(width, height, diagonal, density, displayRotation); // TODO: WE SHOULD ONLY PASS width AND height (CF WindowInfo/DisplayInfo REDESIGN...)
+    setup(width, height, diagonal, density); // TODO: WE SHOULD ONLY PASS width AND height, I.E. THE VIEWPORT-SIZE (CF WindowInfo/DisplayInfo REDESIGN...)
   }
 
   public void resize(GL10 gl, int width, int height)
@@ -118,7 +109,7 @@ public class CinderRenderer extends GLRenderer
   {
     Utils.LOGD("CinderRenderer.start: " + (reason == REASON_RESUMED ? "RESUMED" : "SHOWN"));
     event(reason);
-    
+
     ticks = 0;
   }
 
@@ -179,9 +170,9 @@ public class CinderRenderer extends GLRenderer
   // ---------------------------------------- JNI ----------------------------------------
 
   public native void prelaunch();
-  public native void launch(Context context, Object listener);
+  public native void launch(Context context, Object listener, Display display);
 
-  public native void setup(int width, int height, float diagonal, float density, int displayRotation);
+  public native void setup(int width, int height, float diagonal, float density);
   public native void shutdown();
 
   public native void resize();

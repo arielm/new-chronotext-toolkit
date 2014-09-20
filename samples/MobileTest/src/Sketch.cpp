@@ -131,7 +131,7 @@ void Sketch::drawText(const wstring &text, const Vec2f &position, XFont::Alignme
 
 void Sketch::accelerated(AccelEvent event)
 {
-    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y); // FIXME: TAKE IN COUNT DEVICE ORIENTATION
+    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y); // FIXME: TAKE IN COUNT DEVICE ORIENTATION ON iOS
 }
 
 void Sketch::accumulateForces()
