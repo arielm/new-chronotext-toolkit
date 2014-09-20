@@ -3,13 +3,13 @@
     android:versionCode="1"
     android:versionName="1.0">
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="13" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="15" />
     <application
         android:label="GrapeFrukt"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <activity
-            android:name=".BridgeActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="sensorLandscape">
             <intent-filter>

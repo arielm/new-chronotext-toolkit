@@ -16,12 +16,6 @@ public class MainActivity extends Activity
     System.loadLibrary("Scalability");
   }
 
-  static
-  {
-    Utils.DEBUG = true;
-    Utils.TAG = "cinder";
-  }
-
   CinderDelegate delegate;
 
   @Override
@@ -54,33 +48,5 @@ public class MainActivity extends Activity
     {
       super.onBackPressed();
     }
-  }
-
-  @Override
-  protected void onStart()
-  {
-    Utils.LOGD("Activity.onStart");
-    super.onStart();
-  }
-
-  @Override
-  protected void onStop()
-  {
-    Utils.LOGD("Activity.onStop");
-    super.onStop();
-  }
-
-  @Override
-  protected void onRestart()
-  {
-    Utils.LOGD("Activity.onRestart");
-    super.onRestart();
-  }
-  
-  @Override
-  protected void onDestroy()
-  {
-    Utils.LOGD("Activity.onDestroy");
-    super.onDestroy();
   }
 }
