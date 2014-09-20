@@ -213,16 +213,16 @@ using namespace chr;
 {
     switch (viewController.interfaceOrientation)
     {
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
-            windowInfo.size.x = view.frame.size.height;
-            windowInfo.size.y = view.frame.size.width;
-            break;
-            
         case UIInterfaceOrientationPortrait:
         case UIInterfaceOrientationPortraitUpsideDown:
             windowInfo.size.x = view.frame.size.width;
             windowInfo.size.y = view.frame.size.height;
+            break;
+            
+        case UIInterfaceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeRight:
+            windowInfo.size.x = view.frame.size.height;
+            windowInfo.size.y = view.frame.size.width;
             break;
     }
     
@@ -278,7 +278,33 @@ using namespace chr;
 
 - (void) accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
 {
-    Vec3f direction(acceleration.x, acceleration.y, acceleration.z);
+    float ax;
+    float ay;
+    
+    switch (viewController.interfaceOrientation)
+    {
+        case UIInterfaceOrientationPortrait:
+            ax = +acceleration.x;
+            ay = +acceleration.y;
+            break;
+            
+        case UIInterfaceOrientationPortraitUpsideDown:
+            ax = -acceleration.x;
+            ay = -acceleration.y;
+            break;
+            
+        case UIInterfaceOrientationLandscapeLeft:
+            ax = +acceleration.y;
+            ay = -acceleration.x;
+            break;
+            
+        case UIInterfaceOrientationLandscapeRight:
+            ax = -acceleration.y;
+            ay = +acceleration.x;
+            break;
+    }
+    
+    Vec3f direction(ax, ay, acceleration.z);
     Vec3f filtered = lastAccel * (1 - accelFilterFactor) + direction * accelFilterFactor;
     
     AccelEvent event(filtered, direction, lastAccel, lastRawAccel);
