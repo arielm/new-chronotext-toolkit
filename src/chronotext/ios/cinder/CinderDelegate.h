@@ -48,6 +48,7 @@ enum
 - (void) stopWithReason:(int)reason;
 
 - (void) setup;
+- (void) resize;
 - (void) update;
 - (void) draw;
 

@@ -83,6 +83,11 @@ void Sketch::stop(int flags)
 	disableAccelerometer();
 }
 
+void Sketch::resize()
+{
+    LOGI << "RESIZE: " << getWindowSize() << endl;
+}
+
 void Sketch::update()
 {
     accumulateForces();

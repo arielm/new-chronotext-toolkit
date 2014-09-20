@@ -43,6 +43,9 @@ using namespace chr;
     BOOL active;
 }
 
+- (void) updateDisplay;
+- (void) updateWindow;
+
 - (uint32_t) addTouchToMap:(UITouch*)touch;
 - (void) removeTouchFromMap:(UITouch*)touch;
 - (uint32_t) findTouchInMap:(UITouch*)touch;
@@ -79,7 +82,7 @@ using namespace chr;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     io->stop();
-
+    
     sketch->shutdown();
     delete sketch;
     
@@ -89,7 +92,7 @@ using namespace chr;
 - (void) startWithReason:(int)reason
 {
     frameCount = 0;
-
+    
     timer.start();
     sketch->clock().start();
     
@@ -108,7 +111,7 @@ using namespace chr;
 {
     timer.stop();
     sketch->clock().stop();
-
+    
     if (reason == REASON_VIEW_WILL_DISAPPEAR)
     {
         sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
@@ -122,65 +125,8 @@ using namespace chr;
 
 - (void) setup
 {
-    switch (viewController.interfaceOrientation)
-    {
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
-            windowInfo.size.x = view.frame.size.height;
-            windowInfo.size.y = view.frame.size.width;
-            break;
-            
-        case UIInterfaceOrientationPortrait:
-        case UIInterfaceOrientationPortraitUpsideDown:
-            windowInfo.size.x = view.frame.size.width;
-            windowInfo.size.y = view.frame.size.height;
-            break;
-    }
-    
-    windowInfo.size *= view.contentScaleFactor;
-    windowInfo.contentScale = view.contentScaleFactor;
-
-    // ---
-    
-    /*
-     * TODO: HANDLE LATEST DEVICES
-     */
-    switch (SystemInfo::instance().getSizeFactor())
-    {
-        case SystemInfo::SIZE_FACTOR_PHONE:
-            if (windowInfo.size.x == 1136)
-            {
-                windowInfo.diagonal = 4;
-            }
-            else
-            {
-                windowInfo.diagonal = 3.54f;
-            }
-            break;
-            
-        case SystemInfo::SIZE_FACTOR_TABLET:
-            windowInfo.diagonal = 9.7f;
-            break;
-            
-        case SystemInfo::SIZE_FACTOR_TABLET_MINI:
-            windowInfo.diagonal = 7.9f;
-            break;
-    }
-    
-    windowInfo.density = windowInfo.size.length() / windowInfo.diagonal;
-    
-    // ---
-    
-    switch (view.drawableMultisample)
-    {
-        case GLKViewDrawableMultisampleNone:
-            windowInfo.aaLevel = 0;
-            break;
-            
-        case GLKViewDrawableMultisample4X:
-            windowInfo.aaLevel = 4;
-            break;
-    }
+    [self updateWindow];
+    [self updateDisplay];
     
     // ---
     
@@ -191,9 +137,13 @@ using namespace chr;
     sketch->timeline().stepTo(0);
     
     sketch->setup(false);
-    sketch->resize();
-    
     initialized = YES;
+}
+
+- (void) resize
+{
+    [self updateWindow];
+    sketch->resize();
 }
 
 - (void) update
@@ -259,13 +209,78 @@ using namespace chr;
     sketch->sendMessage(Message(what, [body UTF8String]));
 }
 
+- (void) updateWindow
+{
+    switch (viewController.interfaceOrientation)
+    {
+        case UIInterfaceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeRight:
+            windowInfo.size.x = view.frame.size.height;
+            windowInfo.size.y = view.frame.size.width;
+            break;
+            
+        case UIInterfaceOrientationPortrait:
+        case UIInterfaceOrientationPortraitUpsideDown:
+            windowInfo.size.x = view.frame.size.width;
+            windowInfo.size.y = view.frame.size.height;
+            break;
+    }
+    
+    windowInfo.size *= view.contentScaleFactor;
+    windowInfo.contentScale = view.contentScaleFactor;
+}
+
+- (void) updateDisplay
+{
+    /*
+     * TODO: HANDLE LATEST DEVICES
+     */
+    
+    switch (SystemInfo::instance().getSizeFactor())
+    {
+        case SystemInfo::SIZE_FACTOR_PHONE:
+            if (windowInfo.size.x == 1136)
+            {
+                windowInfo.diagonal = 4;
+            }
+            else
+            {
+                windowInfo.diagonal = 3.54f;
+            }
+            break;
+            
+        case SystemInfo::SIZE_FACTOR_TABLET:
+            windowInfo.diagonal = 9.7f;
+            break;
+            
+        case SystemInfo::SIZE_FACTOR_TABLET_MINI:
+            windowInfo.diagonal = 7.9f;
+            break;
+    }
+    
+    windowInfo.density = windowInfo.size.length() / windowInfo.diagonal;
+    
+    // ---
+    
+    switch (view.drawableMultisample)
+    {
+        case GLKViewDrawableMultisampleNone:
+            windowInfo.aaLevel = 0;
+            break;
+            
+        case GLKViewDrawableMultisample4X:
+            windowInfo.aaLevel = 4;
+            break;
+    }
+}
+
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
 
 - (void) accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
 {
     Vec3f direction(acceleration.x, acceleration.y, acceleration.z);
     Vec3f filtered = lastAccel * (1 - accelFilterFactor) + direction * accelFilterFactor;
-
+    
     AccelEvent event(filtered, direction, lastAccel, lastRawAccel);
     sketch->accelerated(event);
     
@@ -361,7 +376,7 @@ using namespace chr;
     for (UITouch *touch in touches)
     {
         CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];            
+        CGPoint prevPt = [touch previousLocationInView:view];
         touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
     }
     

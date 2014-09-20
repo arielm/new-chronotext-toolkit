@@ -22,7 +22,15 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     NSMutableDictionary *properties;
     int interfaceOrientationMask;
     
+    BOOL setupRequest;
+    
+    BOOL resizeRequest;
+    int viewportWidth;
+    int viewportHeight;
+
     BOOL started;
+    BOOL startRequest;
+    int startReason;
     
     int ticks;
     NSTimeInterval t0;
@@ -109,8 +117,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
      * MUST TAKE PLACE BEFORE SETUP
      */
     [EAGLContext setCurrentContext:glView.context];
-
+    
     [cinderDelegate setup];
+    resizeRequest = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -147,18 +156,14 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (!started)
     {
-        ticks = 0;
-
         /*
          * MUST TAKE PLACE BEFORE START AND DRAW
          */
         [EAGLContext setCurrentContext:glView.context];
         
-        /*
-         * MUST TAKE PLACE BEFORE DRAW
-         */
-        [cinderDelegate startWithReason:reason];
         started = YES;
+        startRequest = true;
+        startReason = reason;
     }
 }
 
@@ -175,24 +180,45 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) update
 {
-    NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
-    
-    if (ticks == 0)
+    if (started)
     {
-        t0 = now;
+        if (resizeRequest)
+        {
+            [cinderDelegate resize];
+        }
+        
+        if (startRequest)
+        {
+            [cinderDelegate startWithReason:startReason];
+        }
+        
+        // ---
+        
+        NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
+        
+        if (startRequest)
+        {
+            t0 = now;
+        }
+        
+        ticks++;
+        elapsed = now - t0;
+        
+        // ---
+        
+        [cinderDelegate update];
     }
     
-    ticks++;
-    elapsed = now - t0;
-    
-    // ---
-    
-    [cinderDelegate update];
+    resizeRequest = NO;
+    startRequest = NO;
 }
 
 - (void) glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
-    [cinderDelegate draw];
+    if (started)
+    {
+        [cinderDelegate draw];
+    }
 }
 
 /*
@@ -204,6 +230,11 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 }
 
 #pragma mark ---------------------------------------- ORIENTATION ----------------------------------------
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    resizeRequest = YES;
+}
 
 /*
  * IMPORTANT:

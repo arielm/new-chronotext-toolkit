@@ -47,7 +47,8 @@ public:
     
     void start(int flags);
     void stop(int flags);
-    
+
+    void resize();
     void update();
     void draw();
     
