@@ -15,8 +15,6 @@
 
 #import "chronotext/cocoa/utils/NSString+JSON.h"
 
-#include <map>
-
 @class GLKView;
 @class GLViewController;
 
@@ -33,22 +31,6 @@ enum
     GLKView *view;
     GLViewController *viewController;
     chr::CinderSketch *sketch;
-    
-    std::map<UITouch*, uint32_t> touchIdMap;
-
-    float accelFilterFactor;
-    ci::Vec3f lastAccel, lastRawAccel;
-    
-    std::shared_ptr<boost::asio::io_service> io;
-    std::shared_ptr<boost::asio::io_service::work> ioWork;
-    
-    chr::WindowInfo windowInfo;
-    
-    ci::Timer timer;
-    uint32_t frameCount;
-    
-    BOOL initialized;
-    BOOL active;
 }
 
 @property (nonatomic, assign) GLKView *view;
@@ -69,15 +51,10 @@ enum
 - (void) update;
 - (void) draw;
 
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
-
-- (uint32_t) addTouchToMap:(UITouch*)touch;
-- (void) removeTouchFromMap:(UITouch*)touch;
-- (uint32_t) findTouchInMap:(UITouch*)touch;
-- (void) updateActiveTouches;
+- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
 
 - (void) action:(int)actionId;
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body;

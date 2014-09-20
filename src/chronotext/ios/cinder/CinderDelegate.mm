@@ -17,10 +17,38 @@
 #include "chronotext/utils/accel/AccelEvent.h"
 #include "chronotext/system/SystemInfo.h"
 
+#include <map>
+
 using namespace std;
 using namespace ci;
 using namespace app;
 using namespace chr;
+
+@interface CinderDelegate ()
+{
+    std::map<UITouch*, uint32_t> touchIdMap;
+    
+    float accelFilterFactor;
+    ci::Vec3f lastAccel, lastRawAccel;
+    
+    std::shared_ptr<boost::asio::io_service> io;
+    std::shared_ptr<boost::asio::io_service::work> ioWork;
+    
+    chr::WindowInfo windowInfo;
+    
+    ci::Timer timer;
+    uint32_t frameCount;
+    
+    BOOL initialized;
+    BOOL active;
+}
+
+- (uint32_t) addTouchToMap:(UITouch*)touch;
+- (void) removeTouchFromMap:(UITouch*)touch;
+- (uint32_t) findTouchInMap:(UITouch*)touch;
+- (void) updateActiveTouches;
+
+@end
 
 @implementation CinderDelegate
 

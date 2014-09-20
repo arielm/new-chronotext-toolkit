@@ -22,17 +22,8 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
 
 @interface GLViewController : GLKViewController
 {
-    NSMutableDictionary *properties;
-    int interfaceOrientationMask;
-
     GLKView *glView;
     CinderDelegate *cinderDelegate;
-    
-    BOOL started;
-    
-    int ticks;
-    NSTimeInterval t0;
-    NSTimeInterval elapsed;
 }
 
 @property (nonatomic, assign) GLKView *glView;

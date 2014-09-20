@@ -18,6 +18,16 @@ NSString* kGLViewControllerPropertyStencilFormat = @"kGLViewControllerPropertySt
 NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMultisample";
 
 @interface GLViewController ()
+{
+    NSMutableDictionary *properties;
+    int interfaceOrientationMask;
+    
+    BOOL started;
+    
+    int ticks;
+    NSTimeInterval t0;
+    NSTimeInterval elapsed;
+}
 
 - (void) startWithReason:(int)reason;
 - (void) stopWithReason:(int)reason;
