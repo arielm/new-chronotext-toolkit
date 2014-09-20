@@ -59,7 +59,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     /*
      * IT IS IMPERATIVE TO CALL glViewport() UPON EACH onSurfaceChanged()
-     * EVEN IF IT SEEMS THAT THE LATTER IS CALLED FAR TOO OFTEN BY THE SYSTEM
+     * EVEN IF IT SEEMS THAT THE LATTER IS CALLED TOO OFTEN BY THE SYSTEM
      * OTHERWISE: THE GLView WILL BE DEFORMED IN SOME SITUATIONS (E.G. RETURNING FROM SLEEP AFTER AN ORIENTATION CHANGE)
      */
 
@@ -83,18 +83,23 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     {
       if (contextRenewalRequest)
       {
+        contextRenewalRequest = false;
         contextRenewed();
-        resizeRequest = true;
+
+        resizeRequest = true; // ALREADY TRUE IN PRINCIPLE
       }
 
       if (setupRequest)
       {
+        setupRequest = false;
         setup(gl, viewportWidth, viewportHeight);
+
         initialized = true;
       }
 
       if (resizeRequest)
       {
+        resizeRequest = false;
         resize(gl, viewportWidth, viewportHeight);
       }
 
@@ -122,9 +127,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       }
     }
 
-    contextRenewalRequest = false;
-    setupRequest = false;
-    resizeRequest = false;
     startRequest = false;
   }
 

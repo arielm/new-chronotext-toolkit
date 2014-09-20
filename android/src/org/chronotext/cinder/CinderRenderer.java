@@ -57,22 +57,6 @@ public class CinderRenderer extends GLRenderer
 
   public void launch()
   {
-    /*
-     * TODO: CREATE DisplayInfo ON THE C++ SIDE (CF WindowInfo/DisplayInfo REDESIGN...)
-     */
-    launch(mContext, mListener, getDisplay());
-  }
-
-  public void setup(GL10 gl, int width, int height)
-  {
-    Utils.LOGD("CinderRenderer.setup");
-
-    /*
-     * TODO:
-     * THE WindowInfo CONCEPT SHOULD BE REPLACED BY DisplayInfo
-     * SINCE VIEWPORT-SIZE CAN BE DIFFERENT FROM DISPLAY-SIZE
-     */
-
     Display display = getDisplay();
     DisplayMetrics dm = new DisplayMetrics();
     display.getMetrics(dm);
@@ -86,13 +70,19 @@ public class CinderRenderer extends GLRenderer
      */
     float density = (float) Math.sqrt(dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels) / diagonal;
 
-    setup(width, height, diagonal, density); // TODO: WE SHOULD ONLY PASS width AND height, I.E. THE VIEWPORT-SIZE (CF WindowInfo/DisplayInfo REDESIGN...)
+    launch(mContext, mListener, display, diagonal, density);
+  }
+
+  public void setup(GL10 gl, int width, int height)
+  {
+    Utils.LOGD("CinderRenderer.setup: " + width + "x" + height);
+    setup(width, height);
   }
 
   public void resize(GL10 gl, int width, int height)
   {
     Utils.LOGD("CinderRenderer.resize: " + width + "x" + height);
-    resize();
+    resize(width, height);
   }
 
   public void draw(GL10 gl)
@@ -170,12 +160,12 @@ public class CinderRenderer extends GLRenderer
   // ---------------------------------------- JNI ----------------------------------------
 
   public native void prelaunch();
-  public native void launch(Context context, Object listener, Display display);
+  public native void launch(Context context, Object listener, Display display, float diagonal, float density);
 
-  public native void setup(int width, int height, float diagonal, float density);
+  public native void setup(int width, int height);
   public native void shutdown();
 
-  public native void resize();
+  public native void resize(int width, int height);
   public native void draw();
 
   public native void event(int id);

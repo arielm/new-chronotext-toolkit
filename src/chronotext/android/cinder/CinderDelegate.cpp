@@ -25,7 +25,7 @@ namespace chronotext
     /*
      * CALLED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
      */
-    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay)
+    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, float diagonal, float density)
     {
         mJavaVM = javaVM;
         mJavaContext = javaContext;
@@ -34,6 +34,14 @@ namespace chronotext
         
         JNIEnv *env;
         javaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        
+        // ---
+        
+        mWindowInfo.diagonal = diagonal;
+        mWindowInfo.density = density;
+        mWindowInfo.contentScale = 1;
+        
+        SystemInfo::instance().setWindowInfo(mWindowInfo); // TODO: THERE SHOULD BE A DisplayInfo STRUCT FOR EVERYTHING EXCEPT SIZE
         
         // ---
         
@@ -87,6 +95,20 @@ namespace chronotext
         mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, NULL, NULL);
     }
     
+    void CinderDelegate::setup(int width, int height)
+    {
+        mWindowInfo.size = Vec2i(width, height);
+        SystemInfo::instance().setWindowInfo(mWindowInfo); // TODO: THERE SHOULD BE A DisplayInfo STRUCT FOR EVERYTHING EXCEPT SIZE
+        
+        io = make_shared<boost::asio::io_service>();
+        ioWork = make_shared<boost::asio::io_service::work>(*io);
+        
+        sketch->setIOService(*io);
+        sketch->timeline().stepTo(0);
+        
+        sketch->setup(false);
+    }
+    
     void CinderDelegate::shutdown()
     {
         ASensorManager_destroyEventQueue(mSensorManager, mSensorEventQueue);
@@ -96,8 +118,11 @@ namespace chronotext
         delete sketch;
     }
     
-    void CinderDelegate::resize()
+    void CinderDelegate::resize(int width, int height)
     {
+        mWindowInfo.size = Vec2i(width, height);
+        SystemInfo::instance().setWindowInfo(mWindowInfo); // TODO: THERE SHOULD BE A DisplayInfo STRUCT FOR EVERYTHING EXCEPT SIZE
+
         sketch->resize();
     }
     
@@ -378,23 +403,6 @@ namespace chronotext
         
         mLastAccel = filtered;
         mLastRawAccel = acceleration;
-    }
-    
-    void CinderDelegate::setup(int width, int height, float diagonal, float density)
-    {
-        mWindowInfo.size = Vec2i(width, height);
-        mWindowInfo.contentScale = 1;
-        mWindowInfo.diagonal = diagonal;
-        mWindowInfo.density = density;
-        SystemInfo::instance().setWindowInfo(mWindowInfo);
-        
-        io = make_shared<boost::asio::io_service>();
-        ioWork = make_shared<boost::asio::io_service::work>(*io);
-        
-        sketch->setIOService(*io);
-        sketch->timeline().stepTo(0);
-        
-        sketch->setup(false);
     }
 
     // ---------------------------------------- JNI ----------------------------------------

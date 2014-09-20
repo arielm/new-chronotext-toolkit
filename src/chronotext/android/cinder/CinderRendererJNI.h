@@ -14,17 +14,16 @@ extern "C"
 {
     /*
      * THIS IS THE "STUB" FUNCTION:
-     * IT SHOULD RETURN CinderDelegate WITH A
-     * PROPERLY DEFINED CinderSketch
+     * IT SHOULD RETURN CinderDelegate WITH A PROPERLY DEFINED CinderSketch
      */
     chr::CinderDelegate* createDelegate();
 
     void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject obj);
-    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display);
+    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jfloat diagonal, jfloat density);
 
-    void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jfloat diagonal, jfloat density);
+    void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
-    void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj);
+    void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id);
     
@@ -58,19 +57,19 @@ void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject ob
 /*
  * THIS MUST BE CALLED FROM THE RENDERER'S THREAD, AS-SOON-AS IT STARTS
  */
-void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display)
+void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jfloat diagonal, jfloat density)
 {
     /*
      * FROM ICS AND HIGHER, WE NEED TO WRAP jobject INSTANCES AS GLOBAL-REFERENCES
      * IN THEORY, WE SHOULD DELETE THE REFERENCES UPON APPLICATION-EXIT
      * (BUT IN PRACTICE, THIS IS A NON-ISSUE...)
      */
-    gDelegate->launch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display));
+    gDelegate->launch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), diagonal, density);
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height, jfloat diagonal, jfloat density)
+void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    gDelegate->setup(width, height, diagonal, density);
+    gDelegate->setup(width, height);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
@@ -79,9 +78,9 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
     delete gDelegate;
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj)
+void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    gDelegate->resize();
+    gDelegate->resize(width, height);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)

@@ -51,12 +51,12 @@ namespace chronotext
             CI_LOGD("CinderDelegate DELETED");
         }
         
-        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay);
+        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, float diagonal, float density);
         
-        void setup(int width, int height, float diagonal, float density);
+        void setup(int width, int height);
         void shutdown();
         
-        void resize();
+        void resize(int width, int height);
         void draw();
         
         void event(int eventId);
