@@ -162,7 +162,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         [EAGLContext setCurrentContext:glView.context];
         
         started = YES;
-        startRequest = true;
+        startRequest = YES;
         startReason = reason;
     }
 }
@@ -174,6 +174,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         NSLog(@"AVERAGE FRAME-RATE: %f FRAMES PER SECOND", ticks / elapsed);
         
         [cinderDelegate stopWithReason:reason];
+        
         started = NO;
     }
 }
@@ -184,6 +185,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     {
         if (resizeRequest)
         {
+            resizeRequest = NO;
             [cinderDelegate resize];
         }
         
@@ -209,7 +211,6 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         [cinderDelegate update];
     }
     
-    resizeRequest = NO;
     startRequest = NO;
 }
 
@@ -233,11 +234,21 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    /*
+     * WHEN ROTATING FROM PORTRAIT TO LANDSCAPE (OR VICE-VERSA):
+     *
+     * - THIS IS NECESSARY, OTHERWISE SCREEN WILL BE DEFORMED
+     *
+     * - CURRENTLY, THERE IS STILL A SHORT "STRETCH ARTEFACT" DURING ROTATION:
+     *   A MINOR ISSUE WHICH WON'T AFFECT MOST OF THE APPS, WHICH ARE
+     *   SUPPOSED TO BE EITHER LANDSCAPE RIGHT/LEFT, OR PORTAIT BOTTOM/UP
+     */
     resizeRequest = YES;
 }
 
 /*
  * IMPORTANT:
+ *
  * - SUPPORTED ORIENTATIONS SHOULD ALSO BE LISTED IN Info.plist
  * - THE APP WILL START USING THE 1ST ORIENTATION IN THE LIST (Item 0)
  */

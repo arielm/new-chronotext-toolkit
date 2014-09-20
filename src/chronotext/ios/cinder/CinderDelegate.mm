@@ -319,14 +319,14 @@ using namespace chr;
             break;
     }
     
-    Vec3f direction(ax, ay, acceleration.z);
-    Vec3f filtered = lastAccel * (1 - accelFilterFactor) + direction * accelFilterFactor;
+    Vec3f transformed(ax, ay, acceleration.z);
+    Vec3f filtered = lastAccel * (1 - accelFilterFactor) + transformed * accelFilterFactor;
     
-    AccelEvent event(filtered, direction, lastAccel, lastRawAccel);
+    AccelEvent event(filtered, transformed, lastAccel, lastRawAccel);
     sketch->accelerated(event);
     
     lastAccel = filtered;
-    lastRawAccel = direction;
+    lastRawAccel = transformed;
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -403,6 +403,7 @@ using namespace chr;
     }
     
     [self updateActiveTouches];
+    
     if (!touchList.empty())
     {
         sketch->touchesBegan(TouchEvent(WindowRef(), touchList));
