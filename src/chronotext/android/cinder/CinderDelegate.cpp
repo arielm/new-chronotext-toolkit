@@ -84,94 +84,7 @@ namespace chronotext
         
         mSensorManager = ASensorManager_getInstance();
         mAccelerometerSensor = ASensorManager_getDefaultSensor(mSensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, NULL, NULL/*sensorEventCallback, this*/); // WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
-    }
-    
-    /*
-     * REFERENCES:
-     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
-     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
-     */
-    static void canonicalToWorld(int displayRotation, float *canVec, ci::Vec3f &worldVec)
-    {
-        struct AxisSwap
-        {
-            int negateX;
-            int negateY;
-            int xSrc;
-            int ySrc;
-        };
-        
-        static const AxisSwap axisSwap[] =
-        {
-            { 1,  1, 0, 1 }, // ROTATION_0
-            {-1,  1, 1, 0 }, // ROTATION_90
-            {-1, -1, 0, 1 }, // ROTATION_180
-            { 1, -1, 1, 0 }  // ROTATION_270
-        };
-        
-        const AxisSwap &as = axisSwap[displayRotation];
-        
-        worldVec.x = as.negateX * canVec[as.xSrc];
-        worldVec.y = as.negateY * canVec[as.ySrc];
-        worldVec.z = canVec[2];
-    }
-    
-    int CinderDelegate::getDisplayRotation()
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
-        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
-    }
-    
-    void CinderDelegate::processSensorEvents()
-    {
-        ASensorEvent event;
-        
-        while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
-        {
-            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
-            {
-                Vec3f transformed;
-                canonicalToWorld(getDisplayRotation(), (float*)&event.acceleration.v, transformed);
-                
-                /*
-                 * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
-                 */
-                accelerated(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
-            }
-        }
-    }
-    
-    void CinderDelegate::accelerated(float x, float y, float z)
-    {
-        Vec3f acceleration(x, y, z);
-        Vec3f filtered = mLastAccel * (1 - mAccelFilterFactor) + acceleration * mAccelFilterFactor;
-        
-        AccelEvent event(filtered, acceleration, mLastAccel, mLastRawAccel);
-        sketch->accelerated(event);
-        
-        mLastAccel = filtered;
-        mLastRawAccel = acceleration;
-    }
-    
-    void CinderDelegate::setup(int width, int height, float diagonal, float density)
-    {
-        mWindowInfo.size = Vec2i(width, height);
-        mWindowInfo.contentScale = 1;
-        mWindowInfo.diagonal = diagonal;
-        mWindowInfo.density = density;
-        SystemInfo::instance().setWindowInfo(mWindowInfo);
-        
-        io = make_shared<boost::asio::io_service>();
-        ioWork = make_shared<boost::asio::io_service::work>(*io);
-        
-        sketch->setIOService(*io);
-        sketch->timeline().stepTo(0);
-        
-        sketch->setup(false);
+        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, NULL, NULL);
     }
     
     void CinderDelegate::shutdown()
@@ -190,13 +103,10 @@ namespace chronotext
     
     void CinderDelegate::draw()
     {
-        /*
-         * WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
-         */
-        processSensorEvents();
-
         sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-        io->poll();
+
+        pollSensorEvents(); // WHERE accelerated IS INVOKED
+        io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
         
         /*
          * MUST BE CALLED BEFORE Sketch::update
@@ -396,6 +306,95 @@ namespace chronotext
         sketch->clock().stop();
         
         sketch->stop(flags);
+    }
+    
+    // ---------------------------------------- ACCELEROMETER ----------------------------------------
+    
+    /*
+     * REFERENCES:
+     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
+     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
+     */
+    static void canonicalToWorld(int displayRotation, float *canVec, ci::Vec3f &worldVec)
+    {
+        struct AxisSwap
+        {
+            int negateX;
+            int negateY;
+            int xSrc;
+            int ySrc;
+        };
+        
+        static const AxisSwap axisSwap[] =
+        {
+            { 1,  1, 0, 1 }, // ROTATION_0
+            {-1,  1, 1, 0 }, // ROTATION_90
+            {-1, -1, 0, 1 }, // ROTATION_180
+            { 1, -1, 1, 0 }  // ROTATION_270
+        };
+        
+        const AxisSwap &as = axisSwap[displayRotation];
+        
+        worldVec.x = as.negateX * canVec[as.xSrc];
+        worldVec.y = as.negateY * canVec[as.ySrc];
+        worldVec.z = canVec[2];
+    }
+    
+    int CinderDelegate::getDisplayRotation()
+    {
+        JNIEnv *env;
+        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
+        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
+    }
+    
+    void CinderDelegate::pollSensorEvents()
+    {
+        ASensorEvent event;
+        
+        while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
+        {
+            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
+            {
+                Vec3f transformed;
+                canonicalToWorld(getDisplayRotation(), (float*)&event.acceleration.v, transformed);
+                
+                /*
+                 * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
+                 */
+                accelerated(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
+            }
+        }
+    }
+    
+    void CinderDelegate::accelerated(float x, float y, float z)
+    {
+        Vec3f acceleration(x, y, z);
+        Vec3f filtered = mLastAccel * (1 - mAccelFilterFactor) + acceleration * mAccelFilterFactor;
+        
+        AccelEvent event(filtered, acceleration, mLastAccel, mLastRawAccel);
+        sketch->accelerated(event);
+        
+        mLastAccel = filtered;
+        mLastRawAccel = acceleration;
+    }
+    
+    void CinderDelegate::setup(int width, int height, float diagonal, float density)
+    {
+        mWindowInfo.size = Vec2i(width, height);
+        mWindowInfo.contentScale = 1;
+        mWindowInfo.diagonal = diagonal;
+        mWindowInfo.density = density;
+        SystemInfo::instance().setWindowInfo(mWindowInfo);
+        
+        io = make_shared<boost::asio::io_service>();
+        ioWork = make_shared<boost::asio::io_service::work>(*io);
+        
+        sketch->setIOService(*io);
+        sketch->timeline().stepTo(0);
+        
+        sketch->setup(false);
     }
 
     // ---------------------------------------- JNI ----------------------------------------
