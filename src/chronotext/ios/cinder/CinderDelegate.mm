@@ -248,13 +248,18 @@ using namespace chr;
     // ---
     
     /*
-     * TODO: HANDLE LATEST DEVICES
+     * TODO:
+     *
+     * DIAGONAL AND SIZE-FACTOR SHOULD BE DEFINED IN THE SAME FUNCTION
+     * USING SystemInfoImplCocoaTouch::getModel AND UIDevice.mainScreen.bounds
+     *
+     * SEE SystemInfoImplCocoaTouch::getSizeFactor
      */
     
     switch (SystemInfo::instance().getSizeFactor())
     {
         case SystemInfo::SIZE_FACTOR_PHONE:
-            if (windowInfo.size.x == 1136)
+            if (windowInfo.size.x == 1136) // FIXME: BOTH DIMENSIONS SHOULD BE USED (CURRENTLY, IT WILL ONLY WORK WHEN IN LANDSCAPE)
             {
                 windowInfo.diagonal = 4;
             }

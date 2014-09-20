@@ -17,8 +17,14 @@ using namespace std;
 namespace chronotext
 {
     /*
-     * TODO: HANDLE LATEST DEVICES
+     * TODO:
+     *
+     * DIAGONAL AND SIZE-FACTOR SHOULD BE DEFINED IN THE SAME FUNCTION
+     * USING SystemInfoImplCocoaTouch::getModel AND UIDevice.mainScreen.bounds
+     *
+     * SEE CinderDelegate:updateDisplayInfo
      */
+    
     int SystemInfoImplCocoaTouch::getSizeFactor()
     {
         auto model = getModel();
@@ -40,7 +46,15 @@ namespace chronotext
     }
     
     /*
-     * REFERENCE: http://theiphonewiki.com/wiki/Models
+     * TODO:
+     *
+     * USE UIDevice.currentDevice.model, WHICH SHOULD RETURN ONE THE FOLLOWING:
+     *
+     * - iPod touch
+     * - iPhone
+     * - iPhone Simulator
+     * - iPad
+     * - iPad Simulator
      */
     string SystemInfoImplCocoaTouch::getModel()
     {
