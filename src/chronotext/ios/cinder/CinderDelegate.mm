@@ -26,25 +26,26 @@ using namespace chr;
 
 @interface CinderDelegate ()
 {
-    std::map<UITouch*, uint32_t> touchIdMap;
+    map<UITouch*, uint32_t> touchIdMap;
     
     float accelFilterFactor;
-    ci::Vec3f lastAccel, lastRawAccel;
+    Vec3f lastAccel, lastRawAccel;
     
-    std::shared_ptr<boost::asio::io_service> io;
-    std::shared_ptr<boost::asio::io_service::work> ioWork;
+    shared_ptr<boost::asio::io_service> io;
+    shared_ptr<boost::asio::io_service::work> ioWork;
     
-    chr::WindowInfo windowInfo;
+    WindowInfo windowInfo;
+    BOOL forceResize;
     
-    ci::Timer timer;
+    Timer timer;
     uint32_t frameCount;
     
     BOOL initialized;
     BOOL active;
 }
 
-- (void) updateDisplay;
-- (void) updateWindow;
+- (Vec2f) getWindowSize;
+- (void) updateDisplayInfo;
 
 - (uint32_t) addTouchToMap:(UITouch*)touch;
 - (void) removeTouchFromMap:(UITouch*)touch;
@@ -125,8 +126,10 @@ using namespace chr;
 
 - (void) setup
 {
-    [self updateWindow];
-    [self updateDisplay];
+    windowInfo.size = [self getWindowSize];
+    forceResize = YES;
+    
+    [self updateDisplayInfo];
     
     // ---
     
@@ -142,8 +145,15 @@ using namespace chr;
 
 - (void) resize
 {
-    [self updateWindow];
-    sketch->resize();
+    Vec2f size = [self getWindowSize];
+    
+    if (forceResize || (size != windowInfo.size))
+    {
+        forceResize = NO;
+        windowInfo.size = size;
+        
+        sketch->resize();
+    }
 }
 
 - (void) update
@@ -209,29 +219,34 @@ using namespace chr;
     sketch->sendMessage(Message(what, [body UTF8String]));
 }
 
-- (void) updateWindow
+- (Vec2f) getWindowSize;
 {
+    Vec2f size;
+    
     switch (viewController.interfaceOrientation)
     {
         case UIInterfaceOrientationPortrait:
         case UIInterfaceOrientationPortraitUpsideDown:
-            windowInfo.size.x = view.frame.size.width;
-            windowInfo.size.y = view.frame.size.height;
+            size.x = view.frame.size.width;
+            size.y = view.frame.size.height;
             break;
             
         case UIInterfaceOrientationLandscapeLeft:
         case UIInterfaceOrientationLandscapeRight:
-            windowInfo.size.x = view.frame.size.height;
-            windowInfo.size.y = view.frame.size.width;
+            size.x = view.frame.size.height;
+            size.y = view.frame.size.width;
             break;
     }
     
-    windowInfo.size *= view.contentScaleFactor;
-    windowInfo.contentScale = view.contentScaleFactor;
+    return size * view.contentScaleFactor;
 }
 
-- (void) updateDisplay
+- (void) updateDisplayInfo
 {
+    windowInfo.contentScale = view.contentScaleFactor;
+
+    // ---
+    
     /*
      * TODO: HANDLE LATEST DEVICES
      */
