@@ -11,8 +11,6 @@
 #include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/font/xf/FontSequence.h"
 
-#include "cinder/gl/gl.h"
-
 #include <map>
 
 namespace chronotext
@@ -110,7 +108,7 @@ namespace chronotext
             inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
             
             QuadMatrix* getMatrix();
-            const GLushort* getIndices() const;
+            const uint16_t* getIndices() const;
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }
@@ -151,7 +149,7 @@ namespace chronotext
             FontTexture *texture;
             
             Properties properties;
-            const std::vector<GLushort> &indices;
+            const std::vector<uint16_t> &indices;
             QuadMatrix matrix;
             
             float anisotropy;

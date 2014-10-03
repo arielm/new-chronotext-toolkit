@@ -12,8 +12,6 @@
 
 #include "hb.h"
 
-#include "cinder/gl/gl.h"
-
 namespace chronotext
 {
     namespace zf
@@ -29,7 +27,7 @@ namespace chronotext
             bool useMipmap;
             int width;
             int height;
-            GLuint id;
+            uint32_t id;
 
             FontTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData);
             ~FontTexture();

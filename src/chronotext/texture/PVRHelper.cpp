@@ -226,7 +226,7 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
     
     char *data = (char*)buffer.getData() + header->headerLength;
     
-    GLuint name;
+    uint32_t name;
     glGenTextures(1, &name);
     
     glBindTexture(GL_TEXTURE_2D, name);

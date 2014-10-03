@@ -9,6 +9,8 @@
 #include "chronotext/font/xf/Font.h"
 #include "chronotext/font/xf/FontManager.h"
 
+#include "cinder/gl/gl.h"
+
 using namespace ci;
 using namespace std;
 
@@ -302,9 +304,9 @@ namespace chronotext
             return &matrix;
         }
         
-        const GLushort* Font::getIndices() const
+        const uint16_t* Font::getIndices() const
         {
-            return const_cast<GLushort*>(indices.data());
+            return const_cast<uint16_t*>(indices.data());
         }
         
         void Font::begin(bool useColor)

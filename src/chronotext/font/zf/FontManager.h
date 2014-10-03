@@ -102,7 +102,7 @@ namespace chronotext
             std::map<std::tuple<std::string, VirtualFont::Style, VirtualFont::Properties>, std::shared_ptr<VirtualFont>> shortcuts;
             std::map<std::string, std::string> aliases;
 
-            std::vector<GLushort> indices;
+            std::vector<uint16_t> indices;
             
             std::map<std::pair<std::string, VirtualFont::Properties>, std::shared_ptr<VirtualFont>> virtualFonts;
             std::map<ActualFont::Key, std::unique_ptr<ActualFont>> actualFonts;
@@ -112,7 +112,7 @@ namespace chronotext
             static std::vector<std::string> splitLanguages(const std::string &languages);
             static ActualFont::Descriptor parseDescriptor(const ci::XmlTree &element);
             
-            const std::vector<GLushort>& getIndices(int capacity);
+            const std::vector<uint16_t>& getIndices(int capacity);
         };
     }
 }

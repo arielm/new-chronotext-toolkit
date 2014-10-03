@@ -9,6 +9,8 @@
 #include "chronotext/font/zf/FontManager.h"
 #include "chronotext/utils/Utils.h"
 
+#include "cinder/gl/gl.h"
+
 using namespace std;
 using namespace ci;
 
@@ -383,7 +385,7 @@ namespace chronotext
             }
         }
         
-        const vector<GLushort>& FontManager::getIndices(int capacity)
+        const vector<uint16_t>& FontManager::getIndices(int capacity)
         {
             if (capacity * 6 > indices.size())
             {

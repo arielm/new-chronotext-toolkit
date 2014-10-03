@@ -141,7 +141,7 @@ namespace chronotext
             void clearClip(); // INVOKED UPON SEQUENCE-BEGIN
             
             QuadMatrix* getMatrix();
-            const GLushort* getIndices() const;
+            const uint16_t* getIndices() const;
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }
@@ -172,7 +172,7 @@ namespace chronotext
             ci::Rectf clipRect;
 
             Properties properties;
-            const std::vector<GLushort> &indices;
+            const std::vector<uint16_t> &indices;
             QuadMatrix matrix;
             
             float anisotropy;

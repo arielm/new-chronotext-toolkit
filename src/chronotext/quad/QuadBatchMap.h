@@ -64,7 +64,7 @@ namespace chronotext
                 }
             }
             
-            void flush(const GLushort *indices, bool useColor = false, float anisotropy = 0) const
+            void flush(const uint16_t *indices, bool useColor = false, float anisotropy = 0) const
             {
                 for (auto &it : map)
                 {
