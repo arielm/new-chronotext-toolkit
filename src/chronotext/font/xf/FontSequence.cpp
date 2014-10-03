@@ -28,7 +28,7 @@ namespace chronotext
             batches.emplace_back(forward<unique_ptr<QuadBatch>>(batch));
         }
         
-        void FontSequence::replay(const GLushort *indices)
+        void FontSequence::replay(const uint16_t *indices)
         {
             for (auto &batch : batches)
             {

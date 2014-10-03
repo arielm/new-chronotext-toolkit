@@ -30,7 +30,7 @@ namespace chronotext
             void end();
             
             void addBatch(std::unique_ptr<QuadBatch> &&batch);
-            void replay(const GLushort *indices);
+            void replay(const uint16_t *indices);
             
             friend class Font;
             

@@ -9,6 +9,8 @@
 #include "chronotext/font/zf/VirtualFont.h"
 #include "chronotext/font/zf/FontManager.h"
 
+#include "cinder/gl/gl.h"
+
 using namespace std;
 using namespace ci;
 
@@ -374,9 +376,9 @@ namespace chronotext
             return &matrix;
         }
         
-        const GLushort* VirtualFont::getIndices() const
+        const uint16_t* VirtualFont::getIndices() const
         {
-            return const_cast<GLushort*>(indices.data());
+            return const_cast<uint16_t*>(indices.data());
         }
         
         void VirtualFont::begin(bool useColor)

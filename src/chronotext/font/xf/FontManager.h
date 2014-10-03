@@ -60,7 +60,7 @@ namespace chronotext
         {
             int width;
             int height;
-            GLuint id;
+            uint32_t id;
             InputSourceRef inputSource;
             
             FontTexture(FontAtlas *atlas, InputSourceRef inputSource);
@@ -100,12 +100,12 @@ namespace chronotext
         protected:
             std::map<std::pair<std::string, Font::Properties>, std::shared_ptr<Font>> fonts;
             std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;
-            std::vector<GLushort> indices;
+            std::vector<uint16_t> indices;
             
             void discardUnusedTextures();
             static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
             
-            const std::vector<GLushort>& getIndices(int capacity);
+            const std::vector<uint16_t>& getIndices(int capacity);
         };
     }
 }

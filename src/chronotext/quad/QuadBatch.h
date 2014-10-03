@@ -79,7 +79,7 @@ namespace chronotext
             colors.emplace_back(color);
         }
         
-        void flush(const GLushort *indices, bool useColor = false) const
+        void flush(const uint16_t *indices, bool useColor = false) const
         {
             const float *pointer = reinterpret_cast<const float*>(vertices.data());
 

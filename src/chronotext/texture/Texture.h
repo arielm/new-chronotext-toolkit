@@ -68,7 +68,7 @@ namespace chronotext
     protected:
         ci::gl::TextureRef target;
         
-        GLuint id;
+        uint32_t id;
         int width;
         int height;
         float maxU;

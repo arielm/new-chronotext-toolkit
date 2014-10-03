@@ -10,6 +10,8 @@
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/utils/MathUtils.h"
 
+#include "cinder/gl/gl.h"
+
 using namespace std;
 using namespace ci;
 

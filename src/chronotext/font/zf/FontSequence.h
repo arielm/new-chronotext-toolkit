@@ -30,7 +30,7 @@ namespace chronotext
             void end();
             
             void addMap(std::unique_ptr<QuadBatchMap<FontTexture>> &&map);
-            void replay(const GLushort *indices);
+            void replay(const uint16_t *indices);
             
             friend class VirtualFont;
             

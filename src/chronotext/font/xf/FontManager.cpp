@@ -9,6 +9,8 @@
 #include "chronotext/font/xf/FontManager.h"
 #include "chronotext/utils/Utils.h"
 
+#include "cinder/gl/gl.h"
+
 using namespace ci;
 using namespace std;
 using namespace chr;
@@ -402,7 +404,7 @@ namespace chronotext
             return make_pair(data, atlas);
         }
         
-        const vector<GLushort>& FontManager::getIndices(int capacity)
+        const vector<uint16_t>& FontManager::getIndices(int capacity)
         {
             if (capacity * 6 > indices.size())
             {

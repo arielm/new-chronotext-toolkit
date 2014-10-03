@@ -30,7 +30,7 @@ namespace chronotext
             maps.emplace_back(forward<unique_ptr<QuadBatchMap<FontTexture>>>(map));
         }
         
-        void FontSequence::replay(const GLushort *indices)
+        void FontSequence::replay(const uint16_t *indices)
         {
             for (auto &map : maps)
             {
