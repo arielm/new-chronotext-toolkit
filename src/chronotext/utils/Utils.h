@@ -186,6 +186,7 @@ namespace chronotext
      * ADAPTED IN ORDER TO RETURN A REFERENCE INSTEAD OF AN ITERATOR
      */
 
+#if !defined(CINDER_MSW)
     template <typename T> struct Iterator
     {
         T& container;
@@ -214,6 +215,7 @@ namespace chronotext
     {
         return Iterator<T>(container, reverse);
     }
+#endif
 }
 
 namespace chr = chronotext;
