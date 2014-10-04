@@ -34,7 +34,7 @@ namespace chronotext
             
             friend class Font;
             
-		private:
+        private:
             FontSequence(const FontSequence &that); // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
         };
     }
