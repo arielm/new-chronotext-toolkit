@@ -17,7 +17,7 @@ namespace chronotext
     class CinderSketchComplex : public CinderSketchBase
     {
     public:
-        CinderSketchComplex(void *context, void *delegate = NULL);
+        CinderSketchComplex(void *context, void *delegate = nullptr);
         
         void touchesBegan(ci::app::TouchEvent event);
         void touchesMoved(ci::app::TouchEvent event);

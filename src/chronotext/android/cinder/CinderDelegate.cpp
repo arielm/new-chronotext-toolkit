@@ -158,7 +158,7 @@ namespace chronotext
                 break;
 
             case EVENT_SHOWN:
-                start(CinderSketch::FLAG_FOCUS_GAINED);
+                start(CinderSketch::FLAG_APP_SHOWN);
                 break;
 
             case EVENT_PAUSED:
@@ -166,7 +166,7 @@ namespace chronotext
                 break;
                 
             case EVENT_HIDDEN:
-                stop(CinderSketch::FLAG_FOCUS_LOST);
+                stop(CinderSketch::FLAG_APP_HIDDEN);
                 break;
 
             case EVENT_CONTEXT_LOST:

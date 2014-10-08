@@ -36,7 +36,7 @@ namespace chronotext
     void CinderApp::shutdown()
     {
         stop();
-        sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
+        sketch->stop(CinderSketch::FLAG_APP_HIDDEN);
         sketch->shutdown();
         delete sketch;
     }
@@ -48,7 +48,7 @@ namespace chronotext
         if (startCount == 0)
         {
             start();
-            sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
+            sketch->start(CinderSketch::FLAG_APP_SHOWN);
             startCount++;
         }
     }

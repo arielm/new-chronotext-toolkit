@@ -24,8 +24,8 @@ namespace chronotext
     public:
         enum
         {
-            FLAG_FOCUS_GAINED,
-            FLAG_FOCUS_LOST,
+            FLAG_APP_SHOWN,
+            FLAG_APP_HIDDEN,
             FLAG_APP_RESUMED,
             FLAG_APP_PAUSED
         };
@@ -51,14 +51,15 @@ namespace chronotext
         
         virtual void setup() {}
         virtual void shutdown() {}
+
         virtual void resize() {}
-        
-        virtual void update() {}
-        virtual void draw() {}
+        virtual void event(int eventId) {}
         
         virtual void start(int flags) {}
         virtual void stop(int flags) {}
-        virtual void event(int eventId) {}
+
+        virtual void update() {}
+        virtual void draw() {}
         
         virtual void addTouch(int index, float x, float y) {}
         virtual void updateTouch(int index, float x, float y) {}

@@ -99,7 +99,7 @@ using namespace chr;
     
     if (reason == REASON_VIEW_WILL_APPEAR)
     {
-        sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
+        sketch->start(CinderSketch::FLAG_APP_SHOWN);
         active = YES;
     }
     else
@@ -115,7 +115,7 @@ using namespace chr;
     
     if (reason == REASON_VIEW_WILL_DISAPPEAR)
     {
-        sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
+        sketch->stop(CinderSketch::FLAG_APP_HIDDEN);
         active = NO;
     }
     else
