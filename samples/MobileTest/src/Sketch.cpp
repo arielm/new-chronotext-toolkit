@@ -54,9 +54,9 @@ void Sketch::setup()
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::event(int id)
+void Sketch::event(int eventId)
 {
-    switch (id)
+    switch (eventId)
     {
         case EVENT_CONTEXT_LOST:
         {
@@ -86,7 +86,7 @@ void Sketch::event(int id)
         case EVENT_MEMORY_WARNING:
         {
             /*
-             * ALL THE OPERATIONS CAUSING GL MEMORY TO BE DISCARDED
+             * OPERATIONS CAUSING GL MEMORY TO BE DISCARDED
              * MUST TAKE PLACE BEFORE ANY NEW ALLOCATION
              */
             textureManager.discard();
@@ -109,11 +109,6 @@ void Sketch::start(int flags)
 void Sketch::stop(int flags)
 {
 	disableAccelerometer();
-}
-
-void Sketch::resize()
-{
-    LOGD << "RESIZE: " << getWindowSize() << endl;
 }
 
 void Sketch::update()

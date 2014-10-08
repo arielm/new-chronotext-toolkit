@@ -43,12 +43,11 @@ public:
     Sketch(void *context, void *delegate = NULL);
     
     void setup();
-    void event(int id);
-    
+
+    void event(int eventId);
     void start(int flags);
     void stop(int flags);
 
-    void resize();
     void update();
     void draw();
     
