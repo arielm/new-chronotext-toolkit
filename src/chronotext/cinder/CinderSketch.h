@@ -10,13 +10,17 @@
 
 #include "cinder/Cinder.h"
 
-#if defined(CHR_COMPLEX) && defined(CINDER_COCOA_TOUCH)
+#if !defined(CHR_COMPLEX) && (defined(CINDER_COCOA_TOUCH) || defined(CINDER_ANDROID))
+#error A CinderSketch SHOULD BE LAUNCHED NATIVELY ON iOS AND ANDROID
+#endif
+
+#if defined(CINDER_COCOA_TOUCH)
 #include "chronotext/ios/cinder/CinderSketchComplex.h"
 namespace chronotext
 {
     typedef CinderSketchComplex CinderSketch;
 }
-#elif defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#elif defined(CINDER_ANDROID)
 #include "chronotext/android/cinder/CinderSketchComplex.h"
 namespace chronotext
 {

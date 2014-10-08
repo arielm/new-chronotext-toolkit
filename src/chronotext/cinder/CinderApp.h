@@ -45,11 +45,6 @@ namespace chronotext
         
         void emulate(Settings *settings, const EmulatedDevice &device);
         
-#if defined(CINDER_ANDROID)
-        void pause();
-        void resume(bool renewContext);
-#endif
-        
     protected:
         int startCount;
         int updateCount;

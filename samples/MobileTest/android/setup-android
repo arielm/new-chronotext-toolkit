@@ -3,7 +3,7 @@ setup()
   android update project --path . --name MobileTest --target android-15
 
   echo "READY TO RUN:"
-  echo "ndk-build -j 4"
+  echo "ndk-build -j4"
   echo "ant debug"
   echo "adb install -r bin/MobileTest-debug.apk"
 }

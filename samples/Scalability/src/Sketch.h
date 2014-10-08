@@ -46,10 +46,9 @@ class Sketch : public chr::CinderSketch
     ci::Vec2f position;
 
 public:
-    Sketch(void *context, void *delegate = NULL) : chr::CinderSketch(context, delegate) {}
-
-    void setup(bool renewContext);
-    void event(int id);
+    Sketch(void *context, void *delegate = nullptr);
+    
+    void setup();
     void resize();
     void draw();
     

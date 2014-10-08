@@ -25,7 +25,7 @@ namespace chronotext
         
         if (folderPath.empty())
         {
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
             target = getAndroidInternalDataPath();
 #else
             target = fs::current_path();
@@ -136,7 +136,7 @@ namespace chronotext
 #if defined(CINDER_COCOA)
     fs::path FileSystem::getResourcePath()
     {
-#if defined(CHR_COMPLEX)
+#if defined(CINDER_COCOA_TOUCH)
         CFBundleRef bundle = CFBundleGetMainBundle();
         CFURLRef url = CFBundleCopyBundleURL(bundle);
         CFStringRef tmp = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
@@ -162,7 +162,7 @@ namespace chronotext
 #if defined(CINDER_COCOA)
     fs::path FileSystem::getResourcePath(const fs::path &relativePath)
     {
-#if defined(CHR_COMPLEX)
+#if defined(CINDER_COCOA_TOUCH)
         return FileSystem::getResourcePath() / relativePath;
 #else
         return App::getResourcePath(relativePath);
@@ -170,7 +170,7 @@ namespace chronotext
     }
 #endif
     
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
     
     void FileSystem::setAndroidAssetManager(AAssetManager *assetManager)
     {

@@ -20,35 +20,23 @@ const float PADDING2 = 12; // IN ABSOLUTE SCREEN SPACE
 const float FRAME_INTERIOR_WIDTH = 464; // IN FRAME-IMAGE SPACE
 const float GRID_SIZE = 32; // IN FRAME-IMAGE SPACE
 
-void Sketch::setup(bool renewContext)
-{
-    if (renewContext)
-    {
-        textureManager.reload();
-    }
-    else
-    {
-        frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT);
-        picture = textureManager.getTexture("Louis XIV of France - 512.png", true, TextureRequest::FLAGS_POT);
-    }
+Sketch::Sketch(void *context, void *delegate)
+:
+CinderSketch(context, delegate)
+{}
 
+void Sketch::setup()
+{
+    frame = textureManager.getTexture("frame rococo - 1024.png", true, TextureRequest::FLAGS_POT);
+    picture = textureManager.getTexture("Louis XIV of France - 512.png", true, TextureRequest::FLAGS_POT);
+    
     // ---
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-
+    
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            break;
-    }
 }
 
 void Sketch::resize()

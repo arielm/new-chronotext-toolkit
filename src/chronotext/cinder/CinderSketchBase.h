@@ -36,6 +36,7 @@ namespace chronotext
             EVENT_BACKGROUND,
             EVENT_MEMORY_WARNING,
             EVENT_CONTEXT_LOST,
+            EVENT_CONTEXT_RENEWED,
             EVENT_BACK_KEY
         };
         
@@ -48,7 +49,7 @@ namespace chronotext
         CinderSketchBase() : SuperHandler() {}
         virtual ~CinderSketchBase() {}
         
-        virtual void setup(bool renewContext) {}
+        virtual void setup() {}
         virtual void shutdown() {}
         virtual void resize() {}
         

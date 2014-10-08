@@ -30,12 +30,7 @@ namespace chronotext
         
         sketch->setIOService(io_service());
         sketch->timeline().stepTo(0);
-        sketch->setup(false);
-        
-#if defined(CINDER_COCOA_TOUCH)
-        getSignalDidBecomeActive().connect(bind(&CinderApp::start, this));
-        getSignalWillResignActive().connect(bind(&CinderApp::stop, this));
-#endif
+        sketch->setup();
     }
     
     void CinderApp::shutdown()
@@ -159,22 +154,6 @@ namespace chronotext
         
         SystemInfo::instance().setWindowInfo(windowInfo);
     }
-    
-#if defined(CINDER_ANDROID)
-    
-    void CinderApp::resume(bool renewContext)
-    {
-        sketch->setup(true);
-        sketch->start(CinderSketch::FLAG_APP_RESUMED);
-    }
-    
-    void CinderApp::pause()
-    {
-        sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
-        sketch->stop(CinderSketch::FLAG_APP_PAUSED);
-    }
-    
-#endif
     
     void CinderApp::start()
     {

@@ -139,7 +139,7 @@ using namespace chr;
     sketch->setIOService(*io);
     sketch->timeline().stepTo(0);
     
-    sketch->setup(false);
+    sketch->setup();
     initialized = YES;
 }
 

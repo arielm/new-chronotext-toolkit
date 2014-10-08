@@ -36,10 +36,9 @@ class Sketch : public chr::CinderSketch
     float offset2;
     
 public:
-    Sketch(void *context, void *delegate = NULL);
+    Sketch(void *context, void *delegate = nullptr);
     
-    void setup(bool renewContext);
-    void event(int id);
+    void setup();
     void resize();
     void update();
     void draw();

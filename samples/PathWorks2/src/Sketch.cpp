@@ -25,68 +25,61 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
+    /*
+     * THESE ARE MIPMAPPED TEXTURES:
+     * SOME EMPTY-SPACE MUST BE LEFT AT THE EDGES IN ORDER TO AVOID ARTIFACTS WHEN SCALING-DOWN
+     */
+    roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+    checkerTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+    dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+    
+    // ---
+    
+    SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
+    
+    spline.flush(SplinePath::TYPE_BSPLINE, roadPath);
+    float length = roadPath.getLength();
+    roadPath.setMode(FollowablePath::MODE_MODULO); // NECESSARY, FOR THE DOT TO COME-BACK TO THE START OF THE PATH ONCE THE END IS REACHED
+    
+    /*
+     * SINGLE-PORTION TRIANGLE-STRIP
+     */
+    StrokeHelper::stroke(roadPath, roadStrip, 64);
+    
+    /*
+     * MULTI-PORTION TRIANGLE-STRIP
+     */
+    checkerStrip.clear();
+    StrokeHelper::stroke(roadPath, 0, 32, checkerStrip, 64, 2);
+    StrokeHelper::stroke(roadPath, length - 32, length, checkerStrip, 64, 2, length - 32);
+    
+    // ---
+    
+    peanutSpline.add(-100, -100);
+    peanutSpline.add(   0,  -25);
+    peanutSpline.add( 100, -100);
+    peanutSpline.add( 200,    0);
+    peanutSpline.add( 100,  100);
+    peanutSpline.add(   0,   25);
+    peanutSpline.add(-100,  100);
+    peanutSpline.add(-200,    0);
+    peanutSpline.close();
+    
+    peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
+    peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED);
+    
+    // ---
+    
+    FXGDocument document(InputSource::loadResource("lys.fxg"));
+    
+    for (auto &path : document.getPaths())
     {
-        textureManager.reload();
+        lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL)));
     }
-    else
-    {
-        /*
-         * THESE ARE MIPMAPPED TEXTURES:
-         * SOME EMPTY-SPACE MUST BE LEFT AT THE EDGES IN ORDER TO AVOID ARTIFACTS WHEN SCALING-DOWN
-         */
-        roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-        checkerTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-        dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        
-        // ---
-
-        SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
-        
-        spline.flush(SplinePath::TYPE_BSPLINE, roadPath);
-        float length = roadPath.getLength();
-        roadPath.setMode(FollowablePath::MODE_MODULO); // NECESSARY, FOR THE DOT TO COME-BACK TO THE START OF THE PATH ONCE THE END IS REACHED
-        
-        /*
-         * SINGLE-PORTION TRIANGLE-STRIP
-         */
-        StrokeHelper::stroke(roadPath, roadStrip, 64);
-        
-        /*
-         * MULTI-PORTION TRIANGLE-STRIP
-         */
-        checkerStrip.clear();
-        StrokeHelper::stroke(roadPath, 0, 32, checkerStrip, 64, 2);
-        StrokeHelper::stroke(roadPath, length - 32, length, checkerStrip, 64, 2, length - 32);
-        
-        // ---
-        
-        peanutSpline.add(-100, -100);
-        peanutSpline.add(   0,  -25);
-        peanutSpline.add( 100, -100);
-        peanutSpline.add( 200,    0);
-        peanutSpline.add( 100,  100);
-        peanutSpline.add(   0,   25);
-        peanutSpline.add(-100,  100);
-        peanutSpline.add(-200,    0);
-        peanutSpline.close();
-        
-        peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
-        peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED);
-        
-        // ---
-        
-        FXGDocument document(InputSource::loadResource("lys.fxg"));
-        
-        for (auto &path : document.getPaths())
-        {
-            lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL)));
-        }
-        
-        lysOffset = -document.getViewSize() * 0.5f;
-    }
+    
+    lysOffset = -document.getViewSize() * 0.5f;
     
     // ---
     
@@ -95,16 +88,6 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            break;
-    }
 }
 
 void Sketch::resize()

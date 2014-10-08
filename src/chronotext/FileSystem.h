@@ -12,7 +12,7 @@
 
 #include "boost/filesystem/fstream.hpp" 
 
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
 #endif
 
@@ -33,7 +33,7 @@ namespace chronotext
         static ci::fs::path getResourcePath(const ci::fs::path &relativePath);
 #endif
         
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
         static void setAndroidAssetManager(AAssetManager *assetManager);
         static AAssetManager* getAndroidAssetManager();
         
@@ -48,7 +48,7 @@ namespace chronotext
 #endif
     };
     
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
     static AAssetManager *gAssetManager;
     static ci::fs::path gInternalDataPath;
     static ci::fs::path gExternalDataPath;

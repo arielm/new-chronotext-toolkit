@@ -106,7 +106,7 @@ namespace chronotext
         sketch->setIOService(*io);
         sketch->timeline().stepTo(0);
         
-        sketch->setup(false);
+        sketch->setup();
     }
     
     void CinderDelegate::shutdown()
@@ -174,7 +174,7 @@ namespace chronotext
                 break;
 
             case EVENT_CONTEXT_RENEWED:
-                sketch->setup(true); // TODO: DISPATCH AN EVENT INSTEAD, AND REMOVE THE rewewContext PARAMETER FROM Sketch::setup()
+                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
                 break;
 
             case EVENT_BACKGROUND:

@@ -27,18 +27,10 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
-    {
-        dot = textureManager.getTexture("dot.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("American Typewriter_Regular_64.fnt"), XFont::Properties2d());
-    }
+    dot = textureManager.getTexture("dot.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+    font = fontManager.getCachedFont(InputSource::getResource("American Typewriter_Regular_64.fnt"), XFont::Properties2d());
     
     // ---
     
@@ -47,17 +39,6 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            fontManager.discardTextures();
-            break;
-    }
 }
 
 void Sketch::update()

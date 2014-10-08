@@ -37,21 +37,13 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
-    {
-        dot = textureManager.getTexture("dot_112.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
-
-        scale = getWindowInfo().density / REFERENCE_DENSITY;
-        particle = Particle(getWindowCenter(), scale * DOT_RADIUS);
-    }
+    dot = textureManager.getTexture("dot_112.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+    font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
+    
+    scale = getWindowInfo().density / REFERENCE_DENSITY;
+    particle = Particle(getWindowCenter(), scale * DOT_RADIUS);
     
     // ---
     
@@ -67,8 +59,44 @@ void Sketch::event(int id)
     switch (id)
     {
         case EVENT_CONTEXT_LOST:
-            textureManager.discard();
+        {
+            textureManager.discard(); // MANDATORY
+            fontManager.discardTextures(); // MANDATORY
             break;
+        }
+            
+        case EVENT_CONTEXT_RENEWED:
+        {
+            textureManager.reload(); // MANDATORY
+            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
+            
+            /*
+             * DEFAULT GL STATES MUST BE RESTORED AS WELL
+             */
+            
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask(GL_FALSE);
+            
+            break;
+        }
+            
+        case EVENT_MEMORY_WARNING:
+        {
+            /*
+             * ALL THE OPERATIONS CAUSING GL MEMORY TO BE DISCARDED
+             * MUST TAKE PLACE BEFORE ANY NEW ALLOCATION
+             */
+            textureManager.discard();
+            fontManager.discardTextures();
+            
+            textureManager.reload(); // MANDATORY
+            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
+            
+            break;
+        }
     }
 }
 
@@ -85,7 +113,7 @@ void Sketch::stop(int flags)
 
 void Sketch::resize()
 {
-    LOGI << "RESIZE: " << getWindowSize() << endl;
+    LOGD << "RESIZE: " << getWindowSize() << endl;
 }
 
 void Sketch::update()
@@ -136,7 +164,7 @@ void Sketch::drawText(const wstring &text, const Vec2f &position, XFont::Alignme
 
 void Sketch::accelerated(AccelEvent event)
 {
-    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y); // FIXME: TAKE IN COUNT DEVICE ORIENTATION ON iOS
+    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y);
 }
 
 void Sketch::accumulateForces()

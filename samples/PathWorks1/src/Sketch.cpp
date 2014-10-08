@@ -31,47 +31,39 @@ CinderSketch(context, delegate)
 const wstring text1 = L"followable-paths were born for motion";
 const wstring text2 = L"this peanut is a B-spline with 8 points";
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
-    {
-        dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
-        
-        // ---
-        
-        spline = SplinePath(InputSource::loadResource("spline_1.dat"));
-        spline.flush(SplinePath::TYPE_BSPLINE, path);
-        
-        // ---
-        
-        peanutSpline.add(-100, -100);
-        peanutSpline.add(   0,  -25);
-        peanutSpline.add( 100, -100);
-        peanutSpline.add( 200,    0);
-        peanutSpline.add( 100,  100);
-        peanutSpline.add(   0,   25);
-        peanutSpline.add(-100,  100);
-        peanutSpline.add(-200,    0);
-        peanutSpline.close();
-        
-        peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
-        
-        // ---
-        
-        auto document = FXGDocument(InputSource::loadResource("lys.fxg"));
-        
-        ShapeTesselator tesselator;
-        tesselator.add(document);
-        lys = shared_ptr<ShapeMesh>(tesselator.createMesh());
-        
-        lysOffset = -document.getViewSize() * 0.5f;
-    }
+    dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+    font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
+    
+    // ---
+    
+    spline = SplinePath(InputSource::loadResource("spline_1.dat"));
+    spline.flush(SplinePath::TYPE_BSPLINE, path);
+    
+    // ---
+    
+    peanutSpline.add(-100, -100);
+    peanutSpline.add(   0,  -25);
+    peanutSpline.add( 100, -100);
+    peanutSpline.add( 200,    0);
+    peanutSpline.add( 100,  100);
+    peanutSpline.add(   0,   25);
+    peanutSpline.add(-100,  100);
+    peanutSpline.add(-200,    0);
+    peanutSpline.close();
+    
+    peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
+    
+    // ---
+    
+    auto document = FXGDocument(InputSource::loadResource("lys.fxg"));
+    
+    ShapeTesselator tesselator;
+    tesselator.add(document);
+    lys = shared_ptr<ShapeMesh>(tesselator.createMesh());
+    
+    lysOffset = -document.getViewSize() * 0.5f;
     
     // ---
     
@@ -85,17 +77,6 @@ void Sketch::setup(bool renewContext)
     {
         glEnable(GL_LINE_SMOOTH);
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    }
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            fontManager.discardTextures();
-            break;
     }
 }
 

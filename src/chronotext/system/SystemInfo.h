@@ -10,13 +10,13 @@
 
 #include "cinder/Cinder.h"
 
-#if defined(CHR_COMPLEX) && defined(CINDER_COCOA_TOUCH)
+#if defined(CINDER_COCOA_TOUCH)
 #include "chronotext/ios/system/SystemInfoImplCocoaTouch.h"
 namespace chronotext
 {
     typedef SystemInfoImplCocoaTouch SystemInfo;
 }
-#elif defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#elif defined(CINDER_ANDROID)
 #include "chronotext/android/system/SystemInfoImplAndroid.h"
 namespace chronotext
 {

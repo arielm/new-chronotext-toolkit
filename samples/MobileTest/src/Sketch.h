@@ -42,7 +42,7 @@ public:
     
     Sketch(void *context, void *delegate = NULL);
     
-    void setup(bool renewContext);
+    void setup();
     void event(int id);
     
     void start(int flags);

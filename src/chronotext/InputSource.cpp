@@ -178,7 +178,7 @@ namespace chronotext
         {
             case TYPE_RESOURCE:
             {
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
                 AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), filePathHint.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
@@ -187,15 +187,6 @@ namespace chronotext
                     return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), filePathHint);
                 }
                 else
-                {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
-                }
-#elif defined(CINDER_ANDROID)
-                try
-                {
-                    return app::loadResource(filePathHint); // TODO: TEST IF IT REALLY THROWS UPON ERROR
-                }
-                catch (exception &e)
                 {
                     throw Exception("RESOURCE NOT FOUND: " + filePathHint);
                 }
@@ -237,7 +228,7 @@ namespace chronotext
                 
             case TYPE_ASSET:
             {
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
                 string resourcePath = ("assets" / relativePath).string();
                 AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
                 
@@ -247,15 +238,6 @@ namespace chronotext
                     return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), resourcePath);
                 }
                 else
-                {
-                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
-                }
-#elif defined(CINDER_ANDROID)
-                try
-                {
-                    return app::loadResource(("assets" / relativePath).string()); // TODO: TEST IF IT REALLY THROWS UPON ERROR
-                }
-                catch (exception &e)
                 {
                     throw Exception("ASSET NOT FOUND: " + relativePath.string());
                 }
