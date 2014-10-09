@@ -11,7 +11,7 @@
 #include "cinder/Cinder.h"
 
 #if !defined(CHR_COMPLEX) && (defined(CINDER_COCOA_TOUCH) || defined(CINDER_ANDROID))
-#error A CinderSketch SHOULD BE LAUNCHED NATIVELY ON iOS AND ANDROID
+#error A CinderSketch MUST BE LAUNCHED NATIVELY ON iOS AND ANDROID
 #endif
 
 #if defined(CINDER_COCOA_TOUCH)
@@ -33,5 +33,3 @@ namespace chronotext
     typedef CinderSketchSimple CinderSketch;
 }
 #endif
-
-namespace chr = chronotext;

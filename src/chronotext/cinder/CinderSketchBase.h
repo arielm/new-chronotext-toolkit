@@ -10,6 +10,7 @@
 
 #include "chronotext/cinder/WindowInfo.h"
 #include "chronotext/os/SuperHandler.h"
+#include "chronotext/system/DisplayHelper.h"
 #include "chronotext/time/FrameClock.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
@@ -74,15 +75,18 @@ namespace chronotext
         
         virtual double getElapsedSeconds() const = 0;
         virtual uint32_t getElapsedFrames() const = 0;
-        
+
+        virtual ci::Vec2i getWindowSize() const = 0;
         virtual int getWindowWidth() const = 0;
         virtual int getWindowHeight() const = 0;
-        virtual ci::Vec2f getWindowCenter() const = 0;
-        virtual ci::Vec2i getWindowSize() const = 0;
-        virtual float getWindowAspectRatio() const = 0;
         virtual ci::Area getWindowBounds() const = 0;
+        virtual ci::Vec2f getWindowCenter() const = 0;
+        virtual float getWindowAspectRatio() const = 0;
         virtual float getWindowContentScale() const = 0;
+        
         virtual WindowInfo getWindowInfo() const = 0;
+        virtual DisplayInfo getDisplayInfo() const = 0;
+        virtual bool isEmulated() const = 0;
         
         virtual chr::FrameClock& clock() const = 0;
         virtual ci::Timeline& timeline() const = 0;
@@ -91,5 +95,3 @@ namespace chronotext
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
     };
 }
-
-namespace chr = chronotext;

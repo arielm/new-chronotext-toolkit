@@ -7,22 +7,27 @@
  */
 
 #include "chronotext/cinder/CinderApp.h"
+#include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 
 namespace chronotext
 {
     CinderApp::CinderApp()
     :
+    AppNative(),
+    emulated(false),
     startCount(0),
     updateCount(0)
     {}
 
     void CinderApp::setup()
     {
+        updateDisplayAndWindowInfo();
+        
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderApp::update
          */
@@ -136,23 +141,58 @@ namespace chronotext
         sketch->sendMessage(Message(what, body));
     }
     
+    WindowInfo CinderApp::getWindowInfo() const
+    {
+        return isEmulated() ? emulatedDevice.windowInfo : realWindowInfo;
+    }
+    
+    DisplayInfo CinderApp::getDisplayInfo() const
+    {
+        return isEmulated() ? emulatedDevice.displayInfo : realDisplayInfo;
+    }
+    
+    bool CinderApp::isEmulated() const
+    {
+        return emulated;
+    }
+    
+    /*
+     * TODO: ADDITIONAL CARE IS REQUIRED FOR "SIMULATED" CONTENT-SCALE AND ANTI-ALIASING
+     */
     void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
     {
+        LOGD << "EMULATED DEVICE: " << device << endl;
+        
+        emulatedDevice = device;
+        emulated = true;
+
+        settings->setWindowSize(emulatedDevice.windowInfo.size);
+
         /*
          * POINTLESS TO ALLOW RESIZE WHEN EMULATING
-         * (IT WOULD ALSO MAKE THE CODE MORE COMPLEX...)
+         * IT WOULD ALSO COMPLICATE EVERYTHING...
          */
         settings->setResizable(false);
-
-        settings->setWindowSize(device.size);
-
-        WindowInfo windowInfo;
-        windowInfo.size = device.size;
-        windowInfo.contentScale = device.contentScale;
-        windowInfo.diagonal = device.diagonal;
-        windowInfo.density = (device.diagonal == 0) ? 0 : (device.size.length() / device.diagonal);
+    }
+    
+    void CinderApp::updateDisplayAndWindowInfo()
+    {
+        updateRealDisplayInfo();
+        updateRealWindowInfo();
+    }
+    
+    void CinderApp::updateRealDisplayInfo()
+    {
+        float contentScale = getWindowContentScale();
+        Vec2i baseSize = getWindowSize() / contentScale;
         
-        SystemInfo::instance().setWindowInfo(windowInfo);
+        realDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
+    }
+    
+    void CinderApp::updateRealWindowInfo()
+    {
+        realWindowInfo.size = getWindowSize();
+        realWindowInfo.aaLevel = DisplayHelper::getAALevel(static_pointer_cast<RendererGl>(getRenderer()));
     }
     
     void CinderApp::start()

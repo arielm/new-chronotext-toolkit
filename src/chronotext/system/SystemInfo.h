@@ -10,58 +10,51 @@
 
 #include "cinder/Cinder.h"
 
-#if defined(CINDER_COCOA_TOUCH)
-#include "chronotext/ios/system/SystemInfoImplCocoaTouch.h"
+#include <string>
+#include <iostream>
+
 namespace chronotext
 {
-    typedef SystemInfoImplCocoaTouch SystemInfo;
-}
-#elif defined(CINDER_ANDROID)
-#include "chronotext/android/system/SystemInfoImplAndroid.h"
-namespace chronotext
-{
-    typedef SystemInfoImplAndroid SystemInfo;
-}
-#else
-#include "chronotext/system/SystemInfoBase.h"
-namespace chronotext
-{
-    class SystemInfo : public SystemInfoBase
+    class SystemInfo
     {
-    private:
-        SystemInfo() {}
-        
     public:
-        static SystemInfo& instance()
+        enum
         {
-            static SystemInfo instance;
-            return instance;
-        }
+            PLATFORM_OSX,
+            PLATFORM_WINDOW,
+            PLATFORM_IOS,
+            PLATFORM_ANDROID
+        };
         
-        std::string getModel()
-        {
-            return "?";
-        }
+        int platform;
+        std::string platformString;
+
+        std::string osVersion;
+        std::string manufacturer;
+        std::string model;
         
-        std::string getManufacturer()
+        friend std::ostream& operator<<(std::ostream &lhs, const SystemInfo &rhs)
         {
-#if defined(CINDER_MAC)
-            return "Apple";
-#endif
-            return "?";
-        }
-        
-        std::string getPlatform()
-        {
-#if defined(CINDER_MAC)
-            return "OSX";
-#elif defined(CINDER_MSW)
-            return "Windows";
-#endif
-            return "?";
+            lhs
+            << "{"
+            << "platform: " << rhs.platformString
+            << ", osVersion: " << rhs.osVersion;
+            
+            if (!rhs.manufacturer.empty())
+            {
+                lhs << ", manufacturer: " << rhs.manufacturer;
+            }
+            
+            if (!rhs.model.empty())
+            {
+                lhs << ", model: " << rhs.model;
+            }
+            
+            lhs << "}";
+            
+            return lhs;
         }
     };
 }
-#endif
 
 namespace chr = chronotext;

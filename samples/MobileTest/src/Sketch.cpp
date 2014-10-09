@@ -8,20 +8,18 @@
 
 #include "Sketch.h"
 
+#include "chronotext/font/xf/TextHelper.h"
 #include "chronotext/utils/Utils.h"
 #include "chronotext/utils/GLUtils.h"
-#include "chronotext/utils/MathUtils.h"
-#include "chronotext/font/xf/TextHelper.h"
+#include "chronotext/system/SystemManager.h"
 
 using namespace std;
 using namespace ci;
 using namespace chr;
 using namespace chr::xf;
 
-const float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
-
-const float DOT_RADIUS = 22; // DP
-const float DOT_SCALE = 112; // DEPENDS ON IMAGE
+const float DOT_RADIUS_DP = 22;
+const float DOT_RADIUS_PIXELS = 56; // DEPENDS ON IMAGE
 
 const float FONT_SIZE = 24; // DP
 const float PADDING = 20; // DP
@@ -39,11 +37,13 @@ CinderSketch(context, delegate)
 
 void Sketch::setup()
 {
+    LOGD << "SYSTEM INFO: " << SystemManager::instance().getSystemInfo() << endl;
+    
     dot = textureManager.getTexture("dot_112.png", true, TextureRequest::FLAGS_TRANSLUCENT);
     font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
     
-    scale = getWindowInfo().density / REFERENCE_DENSITY;
-    particle = Particle(getWindowCenter(), scale * DOT_RADIUS);
+    scale = getDisplayInfo().getDensity() / DisplayInfo::REFERENCE_DENSITY;
+    particle = Particle(getWindowCenter(), scale * DOT_RADIUS_DP);
     
     // ---
     
@@ -67,8 +67,8 @@ void Sketch::event(int eventId)
             
         case EVENT_CONTEXT_RENEWED:
         {
-            textureManager.reload(); // MANDATORY
-            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
+            textureManager.reload(); // MANDATORY AFTER DISCARDING
+            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
             
             /*
              * DEFAULT GL STATES MUST BE RESTORED AS WELL
@@ -86,14 +86,14 @@ void Sketch::event(int eventId)
         case EVENT_MEMORY_WARNING:
         {
             /*
-             * OPERATIONS CAUSING GL MEMORY TO BE DISCARDED
+             * OPERATIONS CAUSING GL MEMORY DISCARDING
              * MUST TAKE PLACE BEFORE ANY NEW ALLOCATION
              */
             textureManager.discard();
             fontManager.discardTextures();
             
-            textureManager.reload(); // MANDATORY
-            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
+            textureManager.reload(); // MANDATORY AFTER DISCARDING
+            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
             
             break;
         }
@@ -140,7 +140,7 @@ void Sketch::drawDot(const Vec2f &position, float radius, const ColorA &color)
 
     glPushMatrix();
     gl::translate(position);
-    gl::scale(2 * radius / DOT_SCALE);
+    gl::scale(radius / DOT_RADIUS_PIXELS);
     
     dot->begin();
     dot->drawFromCenter();

@@ -8,17 +8,78 @@
 
 #pragma once
 
-#include "cinder/Vector.h"
+#include "cinder/Area.h"
 
 namespace chronotext
 {
     struct WindowInfo
     {
         ci::Vec2i size;
-        float contentScale;
-        float diagonal; // INCHES
-        float density; // PIXEL/INCH
         int aaLevel;
+
+        static WindowInfo create(int width, int height, int aaLevel = 0)
+        {
+            return WindowInfo(ci::Vec2i(width, height), aaLevel);
+        }
+
+        WindowInfo(const ci::Vec2i &size = ci::Vec2i::zero(), int aaLevel = 0)
+        :
+        size(size),
+        aaLevel(aaLevel)
+        {}
+        
+        void rotate()
+        {
+            size = size.yx();
+        }
+        
+        ci::Vec2i getSize() const
+        {
+            return size;
+        }
+        
+        float getWidth() const
+        {
+            return size.x;
+        }
+        
+        float getHeight() const
+        {
+            return size.y;
+        }
+        
+        ci::Area getBounds() const
+        {
+            return ci::Area(0, 0, size.x, size.y);
+        }
+        
+        ci::Vec2f getCenter() const
+        {
+            return size * 0.5f;
+        }
+        
+        float getAspectRatio() const
+        {
+            if (size.y > 0)
+            {
+                return size.x / float(size.y);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        
+        friend std::ostream& operator<<(std::ostream &lhs, const WindowInfo &rhs)
+        {
+            lhs
+            << "{"
+            << "size: " << rhs.size
+            << ", aaLevel: " << rhs.aaLevel
+            << "}";
+            
+            return lhs;
+        }
     };
 }
 

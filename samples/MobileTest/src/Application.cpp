@@ -11,12 +11,13 @@
  */
 
 #include "chronotext/cinder/CinderApp.h"
+#include "chronotext/system/Emulators.h"
 
 #include "Sketch.h"
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 using namespace chr;
 
 class Application : public CinderApp
@@ -38,13 +39,13 @@ void Application::prepareSettings(Settings *settings)
     settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL SYNC IS ALLOWED BY DEFAULT)
     settings->enableHighDensityDisplay();
     
-//  emulate(settings, DEVICE_IPHONE_4_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_IPHONE_5_PORTRAIT.rotate());
-    emulate(settings, DEVICE_IPAD_1_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_GALAXY_S_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_GALAXY_S4_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_NEXUS_7_2012_PORTRAIT.rotate());
-//  emulate(settings, DEVICE_XOOM_1_PORTRAIT.rotate());
+//  emulate(settings, Emulators::IPHONE_3GS_PORTRAIT.rotated());
+    emulate(settings, Emulators::IPHONE_4_PORTRAIT.rotated());
+//  emulate(settings, Emulators::IPHONE_5_PORTRAIT.rotated());
+//  emulate(settings, Emulators::IPAD_1_LANDSCAPE);
+//  emulate(settings, Emulators::GALAXY_S_PORTRAIT.rotated());
+//  emulate(settings, Emulators::GALAXY_S4_PORTRAIT.rotated());
+//  emulate(settings, Emulators::NEXUS_7_2012_PORTRAIT.rotated());
 }
 
 void Application::keyDown(KeyEvent event)

@@ -19,7 +19,7 @@ namespace chronotext
     {
     public:
         CinderSketch *sketch;
-        
+
         CinderApp();
         
         void setup();
@@ -43,15 +43,27 @@ namespace chronotext
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         void sendMessageToSketch(int what, const std::string &body);
         
+        WindowInfo getWindowInfo() const;
+        DisplayInfo getDisplayInfo() const;
+        
+        bool isEmulated() const;
         void emulate(Settings *settings, const EmulatedDevice &device);
         
     protected:
+        bool emulated;
+        EmulatedDevice emulatedDevice;
+        
+        DisplayInfo realDisplayInfo;
+        WindowInfo realWindowInfo;
+        
         int startCount;
         int updateCount;
+
+        void updateDisplayAndWindowInfo();
+        void updateRealDisplayInfo();
+        void updateRealWindowInfo();
         
         void start();
         void stop();
     };
 }
-
-namespace chr = chronotext;
