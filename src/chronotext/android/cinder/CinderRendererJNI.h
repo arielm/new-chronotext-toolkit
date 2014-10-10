@@ -19,13 +19,13 @@ extern "C"
     chr::CinderDelegate* createDelegate();
 
     void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject obj);
-    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jfloat diagonal, jfloat density);
+    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
 
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height);
-    void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId);
+    void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
     
     void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
     void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
@@ -57,14 +57,14 @@ void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject ob
 /*
  * THIS MUST BE CALLED FROM THE RENDERER'S THREAD, AS-SOON-AS IT STARTS
  */
-void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jfloat diagonal, jfloat density)
+void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
     /*
      * FROM ICS AND HIGHER, WE NEED TO WRAP jobject INSTANCES AS GLOBAL-REFERENCES
      * IN THEORY, WE SHOULD DELETE THE REFERENCES UPON APPLICATION-EXIT
      * (BUT IN PRACTICE, THIS IS A NON-ISSUE...)
      */
-    gDelegate->launch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), diagonal, density);
+    gDelegate->launch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
@@ -83,14 +83,14 @@ void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, 
     gDelegate->resize(width, height);
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
-{
-    gDelegate->draw();
-}
-
 void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
 {
     gDelegate->event(eventId);
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
+{
+    gDelegate->draw();
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)

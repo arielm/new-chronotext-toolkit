@@ -26,7 +26,7 @@ namespace chronotext
 
     void CinderApp::setup()
     {
-        updateRealDisplayInfo();
+        updateRealDisplayInfo(); // TODO: displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
         updateRealWindowInfo();
         
         // ---
@@ -51,6 +51,12 @@ namespace chronotext
     
     void CinderApp::resize()
     {
+        /*
+         * RESIZING IS NOT SUPPORTED WHEN EMULATING
+         */
+        assert(!(emulated && (startCount > 0)));
+        
+        realWindowInfo.size = getWindowSize();
         sketch->resize();
         
         if (startCount == 0)
@@ -144,6 +150,27 @@ namespace chronotext
         sketch->sendMessage(Message(what, body));
     }
     
+    /*
+     * TODO: ADDITIONAL CARE IS REQUIRED FOR "SIMULATED" CONTENT-SCALE AND ANTI-ALIASING
+     */
+    void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
+    {
+        emulatedDevice = device;
+        emulated = true;
+        
+        settings->setWindowSize(emulatedDevice.windowInfo.size);
+        
+        /*
+         * ALLOWING TO RESIZE AN EMULATOR WOULD BE POINTLESS (AND NOT TRIVIAL TO IMPLEMENT...)
+         */
+        settings->setResizable(false);
+    }
+    
+    bool CinderApp::isEmulated() const
+    {
+        return emulated;
+    }
+    
     WindowInfo CinderApp::getWindowInfo() const
     {
         return isEmulated() ? emulatedDevice.windowInfo : realWindowInfo;
@@ -152,27 +179,6 @@ namespace chronotext
     DisplayInfo CinderApp::getDisplayInfo() const
     {
         return isEmulated() ? emulatedDevice.displayInfo : realDisplayInfo;
-    }
-    
-    bool CinderApp::isEmulated() const
-    {
-        return emulated;
-    }
-    
-    /*
-     * TODO: ADDITIONAL CARE IS REQUIRED FOR "SIMULATED" CONTENT-SCALE AND ANTI-ALIASING
-     */
-    void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
-    {
-        emulatedDevice = device;
-        emulated = true;
-
-        settings->setWindowSize(emulatedDevice.windowInfo.size);
-
-        /*
-         * ALLOWING TO RESIZE AN EMULATOR WOULD BE POINTLESS (AND NOT TRIVIAL TO IMPLEMENT...)
-         */
-        settings->setResizable(false);
     }
     
     void CinderApp::updateRealDisplayInfo()

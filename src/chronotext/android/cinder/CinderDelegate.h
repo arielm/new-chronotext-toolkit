@@ -8,12 +8,10 @@
 
 #pragma once
 
-#include <jni.h>
-#include <android/sensor.h>
-
 #include "chronotext/cinder/CinderSketch.h"
 
-#include "cinder/android/LogStream.h"
+#include <jni.h>
+#include <android/sensor.h>
 
 namespace chronotext
 {
@@ -34,32 +32,22 @@ namespace chronotext
         
     public:
         CinderSketch *sketch;
-        DisplayInfo displayInfo;
-        WindowInfo windowInfo;
 
         JavaVM *mJavaVM;
         jobject mJavaContext;
         jobject mJavaListener;
         jobject mJavaDisplay;
 
-        CinderDelegate()
-        :
-        mLastAccel(ci::Vec3f::zero()),
-        mLastRawAccel(ci::Vec3f::zero())
-        {}
+        CinderDelegate();
+        virtual ~CinderDelegate();
         
-        virtual ~CinderDelegate()
-        {
-            CI_LOGD("CinderDelegate DELETED");
-        }
-        
-        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, float diagonal, float density);
+        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void setup(int width, int height);
         void shutdown();
 
-        void event(int eventId);
         void resize(int width, int height);
+        void event(int eventId);
 
         void draw();
         
@@ -75,6 +63,10 @@ namespace chronotext
 
         double getElapsedSeconds() const;
         uint32_t getElapsedFrames() const;
+
+        bool isEmulated() const;
+        WindowInfo getWindowInfo() const;
+        DisplayInfo getDisplayInfo() const;
         
         virtual void action(int actionId);
         virtual void receiveMessageFromSketch(int what, const std::string &body);
@@ -93,6 +85,9 @@ namespace chronotext
         jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
         
     protected:
+        DisplayInfo displayInfo;
+        WindowInfo windowInfo;
+
         std::shared_ptr<ci::android::dostream> mOutputStream;
         
         ci::Timer mTimer;
@@ -116,5 +111,3 @@ namespace chronotext
         void accelerated(float x, float y, float z);
     };
 }
-
-namespace chr = chronotext;

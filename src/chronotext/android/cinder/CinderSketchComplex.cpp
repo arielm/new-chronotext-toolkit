@@ -11,7 +11,7 @@
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 
 namespace chronotext
 {
@@ -34,61 +34,6 @@ namespace chronotext
         context->disableAccelerometer();
     }
     
-    double CinderSketchComplex::getElapsedSeconds() const
-    {
-        return context->getElapsedSeconds();
-    }
-    
-    uint32_t CinderSketchComplex::getElapsedFrames() const
-    {
-        return context->getElapsedFrames();
-    }
-    
-    int CinderSketchComplex::getWindowWidth() const
-    {
-        return context->windowInfo.size.x;
-    }
-    
-    int CinderSketchComplex::getWindowHeight() const
-    {
-        return context->windowInfo.size.y;
-    }
-    
-    Vec2f CinderSketchComplex::getWindowCenter() const
-    {
-        return context->windowInfo.size * 0.5f;
-    }
-    
-    Vec2i CinderSketchComplex::getWindowSize() const
-    {
-        return context->windowInfo.size;
-    }
-    
-    float CinderSketchComplex::getWindowAspectRatio() const
-    {
-        return getWindowWidth() / float(getWindowHeight());
-    }
-    
-    Area CinderSketchComplex::getWindowBounds() const
-    {
-        return Area(0, 0, getWindowWidth(), getWindowHeight());
-    }
-    
-    float CinderSketchComplex::getWindowContentScale() const
-    {
-        return context->displayInfo.contentScale;
-    }
-    
-    WindowInfo CinderSketchComplex::getWindowInfo() const
-    {
-        return context->windowInfo;
-    }
-    
-    DisplayInfo CinderSketchComplex::getDisplayInfo() const
-    {
-        return context->displayInfo;
-    }
-    
     ostream& CinderSketchComplex::console()
     {
         return context->console();
@@ -98,7 +43,32 @@ namespace chronotext
     {
         return context->io_service();
     }
-   
+    
+    double CinderSketchComplex::getElapsedSeconds() const
+    {
+        return context->getElapsedSeconds();
+    }
+    
+    uint32_t CinderSketchComplex::getElapsedFrames() const
+    {
+        return context->getElapsedFrames();
+    }
+
+    bool CinderSketchComplex::isEmulated() const
+    {
+        return context->isEmulated();
+    }
+    
+    DisplayInfo CinderSketchComplex::getDisplayInfo() const
+    {
+        return context->getDisplayInfo();
+    }
+    
+    WindowInfo CinderSketchComplex::getWindowInfo() const
+    {
+        return context->getWindowInfo();
+    }
+    
     void CinderSketchComplex::action(int actionId)
     {
         if (delegate)

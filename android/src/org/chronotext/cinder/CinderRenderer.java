@@ -18,6 +18,7 @@ import org.chronotext.utils.DisplayUtils;
 import org.chronotext.utils.Utils;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.view.Display;
 
 public class CinderRenderer extends GLRenderer
@@ -49,34 +50,12 @@ public class CinderRenderer extends GLRenderer
 
   public void launch()
   {
-    // Display display = getDisplay();
-    // DisplayMetrics dm = new DisplayMetrics();
-    // display.getMetrics(dm);
-
-    // Utils.LOGD("SDK VERSION: " + Build.VERSION.SDK_INT);
-    // Utils.LOGD("ROTATION: " + display.getRotation());
-
-    // Point realDisplaySize = getRealSize();
-    // Utils.LOGD("REAL SIZE (PIXELS): " + realDisplaySize.x + " x " + realDisplaySize.y);
-
-    // float density = getRealDensity();
-    // Utils.LOGD("REAL DENSITY: " + density);
-
-    // float widthInches = realDisplaySize.x / density;
-    // float heightInches = realDisplaySize.y / density;
-    // Utils.LOGD("REAL SIZE (INCHES): " + widthInches + " x " + heightInches);
-
-    // float diagonal = (float) Math.sqrt(widthInches * widthInches + heightInches * heightInches);
-    // Utils.LOGD("DIAGONAL: " + diagonal);
-
-    // Utils.LOGD("dm.sizePixels: " + dm.widthPixels + " x " + dm.heightPixels);
-    // Utils.LOGD("dm.densityDpi: " + dm.densityDpi);
-    // Utils.LOGD("PHYSICAL DPI: " + dm.xdpi + " x " + dm.ydpi);
-
     Display display = DisplayUtils.getDisplay(mContext);
-    float density = DisplayUtils.getRealDensity(display);
+    Point displaySize = DisplayUtils.getRealSize(display);
+    float displayDensity = DisplayUtils.getRealDensity(display);
 
-    launch(mContext, mListener, display, 0, density); // TODO: PASS "REAL" LANDSCAPE-SIZE AND DENSITY
+    Utils.LOGD("CinderRenderer.launch: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + "dpi)");
+    launch(mContext, mListener, display, displaySize.x, displaySize.y, displayDensity);
   }
 
   public void setup(GL10 gl, int width, int height)
@@ -166,14 +145,14 @@ public class CinderRenderer extends GLRenderer
   // ---------------------------------------- JNI ----------------------------------------
 
   public native void prelaunch();
-  public native void launch(Context context, Object listener, Display display, float diagonal, float density);
+  public native void launch(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
 
   public native void setup(int width, int height);
   public native void shutdown();
 
   public native void resize(int width, int height);
-  public native void event(int id);
-
+  public native void event(int eventId);
+  
   public native void draw();
 
   public native void addTouch(int index, float x, float y);

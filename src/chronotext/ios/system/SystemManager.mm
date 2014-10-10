@@ -38,7 +38,7 @@ namespace chronotext
     void SystemManager::updateSystemInfo()
     {
         /*
-         * ORDER OF EXECUTION MATTERS!
+         * XXX: ORDER OF EXECUTION MATTERS!
          */
         
         systemInfo.model = getModel();

@@ -37,9 +37,9 @@ CinderSketch(context, delegate)
 
 void Sketch::setup()
 {
-    LOGD << "SYSTEM INFO: " << SystemManager::getSystemInfo() << endl;
-    LOGD << "DISPLAY INFO: " << getDisplayInfo() << endl;
-    LOGD << "WINDOW INFO: " << getWindowInfo() << endl;
+    LOGI << "SYSTEM INFO: " << SystemManager::getSystemInfo() << endl;
+    LOGI << "DISPLAY INFO: " << getDisplayInfo() << endl;
+    LOGI << "WINDOW INFO: " << getWindowInfo() << endl;
     
     // ---
     

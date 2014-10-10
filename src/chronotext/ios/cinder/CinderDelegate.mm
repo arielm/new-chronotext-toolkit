@@ -46,8 +46,6 @@ using namespace chr;
 }
 
 - (void) updateDisplayInfo;
-- (void) updateWindowInfo;
-
 - (Vec2f) windowSize;
 - (int) aaLevel;
 
@@ -131,8 +129,12 @@ using namespace chr;
 
 - (void) setup
 {
-    [self updateDisplayInfo]; // TODO: displayInfo SHOULD BE UPDATED AT APPLICATION START
-    [self updateWindowInfo];
+    /*
+     * TODO: displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
+     */
+    [self updateDisplayInfo];
+    
+    windowInfo = WindowInfo([self windowSize], [self aaLevel]);
     forceResize = YES;
     
     // ---
@@ -228,7 +230,7 @@ using namespace chr;
     return SystemManager::getSystemInfo().isSimulator;
 }
 
-#pragma mark ---------------------------------------- DISPLAY AND WINDOW ----------------------------------------
+#pragma mark ---------------------------------------- DISPLAY AND WINDOW INFO ----------------------------------------
 
 - (void) updateDisplayInfo
 {
@@ -271,11 +273,6 @@ using namespace chr;
     // ---
     
     displayInfo = DisplayInfo::createWithDiagonal(baseSize.x, baseSize.y, diagonal, contentScale);
-}
-
-- (void) updateWindowInfo
-{
-    windowInfo = WindowInfo([self windowSize], [self aaLevel]);
 }
 
 - (Vec2f) windowSize;

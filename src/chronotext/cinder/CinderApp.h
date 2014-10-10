@@ -43,11 +43,11 @@ namespace chronotext
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         void sendMessageToSketch(int what, const std::string &body);
         
+        void emulate(Settings *settings, const EmulatedDevice &device);
+        bool isEmulated() const;
+        
         WindowInfo getWindowInfo() const;
         DisplayInfo getDisplayInfo() const;
-        
-        bool isEmulated() const;
-        void emulate(Settings *settings, const EmulatedDevice &device);
         
     protected:
         bool emulated;

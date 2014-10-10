@@ -10,22 +10,31 @@
 #include "chronotext/FileSystem.h"
 #include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/accel/AccelEvent.h"
-
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
+#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 
 const float GRAVITY_EARTH = 9.80665f;
 
 namespace chronotext
 {
+    CinderDelegate::CinderDelegate()
+    :
+    mLastAccel(Vec3f::zero()),
+    mLastRawAccel(Vec3f::zero())
+    {}
+    
+    CinderDelegate::~CinderDelegate()
+    {
+        LOGI << "~CinderDelegate()" << endl;
+    }
+    
     /*
      * CALLED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
      */
-    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, float diagonal, float density)
+    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
         mJavaVM = javaVM;
         mJavaContext = javaContext;
@@ -37,10 +46,10 @@ namespace chronotext
         
         // ---
         
-        displayInfo.diagonal = diagonal;
-        displayInfo.density = density;
-        
-        SystemInfo::instance().setDisplayInfo(displayInfo);
+        /*
+         * TODO: displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
+         */
+        displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
         
         // ---
         
@@ -96,7 +105,9 @@ namespace chronotext
     
     void CinderDelegate::setup(int width, int height)
     {
-        windowInfo.size = Vec2i(width, height);
+        windowInfo = WindowInfo(Vec2i(width, height));
+        
+        // ---
         
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);
@@ -118,7 +129,7 @@ namespace chronotext
     
     void CinderDelegate::resize(int width, int height)
     {
-        windowInfo.size = Vec2i(width, height);
+        windowInfo.size = Vec2i(width, height); // TODO: WE COULD FILTER SPURIOUS RESIZE EVENT LIKE IN ios/cinder/CinderDelegate.mm
         sketch->resize();
     }
     
@@ -248,6 +259,21 @@ namespace chronotext
         return mFrameCount;
     }
     
+    bool CinderDelegate::isEmulated() const
+    {
+        return false;
+    }
+    
+    WindowInfo CinderDelegate::getWindowInfo() const
+    {
+        return windowInfo;
+    }
+    
+    DisplayInfo CinderDelegate::getDisplayInfo() const
+    {
+        return displayInfo;
+    }
+    
     void CinderDelegate::action(int actionId)
     {
         callVoidMethodOnJavaListener("action", "(I)V", actionId);
@@ -255,18 +281,18 @@ namespace chronotext
 
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
-#ifdef DEBUG_MESSAGES
-        CI_LOGD("MESSAGE SENT TO JAVA: %d %s", what, body.c_str());
-#endif
+//#ifdef DEBUG_MESSAGES
+//        CI_LOGD("MESSAGE SENT TO JAVA: %d %s", what, body.c_str());
+//#endif
         
         callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
-#ifdef DEBUG_MESSAGES
-        CI_LOGD("MESSAGE RECEIVED FROM JAVA: %d %s", what, body.c_str());
-#endif
+//#ifdef DEBUG_MESSAGES
+//        CI_LOGD("MESSAGE RECEIVED FROM JAVA: %d %s", what, body.c_str());
+//#endif
         
         sketch->sendMessage(Message(what, body));
     }
@@ -321,6 +347,9 @@ namespace chronotext
         worldVec.z = canVec[2];
     }
     
+    /*
+     * TODO: COULD BE PART OF SystemManager (OR DisplayManager)
+     */
     int CinderDelegate::getDisplayRotation()
     {
         JNIEnv *env;
@@ -332,6 +361,7 @@ namespace chronotext
     
     void CinderDelegate::pollSensorEvents()
     {
+        int displayRotation = getDisplayRotation();
         ASensorEvent event;
         
         while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
@@ -339,7 +369,7 @@ namespace chronotext
             if (event.type == ASENSOR_TYPE_ACCELEROMETER)
             {
                 Vec3f transformed;
-                canonicalToWorld(getDisplayRotation(), (float*)&event.acceleration.v, transformed);
+                canonicalToWorld(displayRotation, (float*)&event.acceleration.v, transformed);
                 
                 /*
                  * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
@@ -371,15 +401,19 @@ namespace chronotext
         
         if (err == JNI_EDETACHED)
         {
-            CI_LOGE("getJNIEnv error: current thread not attached to Java VM");
+            throw runtime_error("CURRENT THREAD NOT ATTACHED TO JAVA VM");
         }
         else if (err == JNI_EVERSION)
         {
-            CI_LOGE("getJNIEnv error: VM doesn't support requested JNI version");
+            throw runtime_error("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
         }
         
         return env;
     }
+    
+    /*
+     * TODO: USE getJNIEnv() FOR THE FOLLOWING...
+     */
     
     void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
     {

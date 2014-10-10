@@ -14,6 +14,7 @@
 
 #if defined(CINDER_ANDROID)
 #include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 #endif
 
 namespace chronotext
