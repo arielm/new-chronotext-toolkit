@@ -8,8 +8,9 @@
 
 #include "SystemManagerBase.h"
 
+#include "chronotext/utils/Utils.h"
+
 #include "cinder/System.h"
-#include "cinder/Utilities.h"
 
 using namespace std;
 using namespace ci;
@@ -34,6 +35,12 @@ namespace chronotext
     {
         static const string PLATFORM_NAMES[4] = {"OSX", "Windows", "iOS", "Android"};
         return PLATFORM_NAMES[getPlatform()];
+    }
+
+    SystemManagerBase& SystemManagerBase::instance()
+    {
+        static SystemManagerBase instance;
+        return instance;
     }
     
     SystemManagerBase::SystemManagerBase()

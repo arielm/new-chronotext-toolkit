@@ -8,7 +8,7 @@
 
 #include "SystemManager.h"
 
-#include <boost/algorithm/string/predicate.hpp>
+#include "chronotext/utils/Utils.h"
 
 #include <sys/utsname.h>
 
@@ -22,11 +22,11 @@ namespace chronotext
         static SystemManager instance;
         return instance;
     }
-
+    
     SystemManager::SystemManager()
-    :
-    SystemManagerBase()
-    {}
+    {
+        SystemManagerBase::update(); // XXX: AWKWARD, BUT WHEN INVOKING THE SUPER-CONSTUCTOR, OUR OVERRIDEN METHODS ARE NOT CALLED
+    }
     
     string SystemManager::getCompositeModelString()
     {

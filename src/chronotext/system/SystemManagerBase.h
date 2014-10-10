@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
-
 #include "chronotext/system/SystemInfo.h"
 
 namespace chronotext
@@ -20,11 +18,7 @@ namespace chronotext
         static int getPlatform();
         static std::string getPlatformString();
         
-        static SystemManagerBase& instance()
-        {
-            static SystemManagerBase instance;
-            return instance;
-        }
+        static SystemManagerBase& instance();
 
         virtual SystemInfo getSystemInfo() const;
         virtual std::string getIpAddress(bool maskForBroadcast = false);
