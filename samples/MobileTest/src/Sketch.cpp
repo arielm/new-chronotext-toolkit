@@ -100,7 +100,7 @@ void Sketch::event(int eventId)
              * DISCARDING: FOR RELEASING GL MEMORY
              *
              * IN ORDER TO AVOID "INTERFERENCES" WITH GL NAMES:
-             * RELOADING MUST TAKE PLACE ONLY AFTER EVERYTHING HAS BEEN DISCARDED
+             * RELOADING MUST TAKE PLACE ONLY AFTER EVERYTHING HAVE BEEN DISCARDED
              */
             
             textureManager.discard();
@@ -144,7 +144,7 @@ void Sketch::draw()
     
     drawDot(particle.position, particle.radius, ColorA(1, 0, 0, 1));
     
-    wstring text = utf8ToWstring(toString(int(clock().getTime())));
+    string text = toString(int(clock().getTime()));
     drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
 }
 
@@ -163,12 +163,12 @@ void Sketch::drawDot(const Vec2f &position, float radius, const ColorA &color)
     glPopMatrix();
 }
 
-void Sketch::drawText(const wstring &text, const Vec2f &position, XFont::Alignment alignX, XFont::Alignment alignY, float fontSize, const ColorA &color)
+void Sketch::drawText(const string &text, const Vec2f &position, XFont::Alignment alignX, XFont::Alignment alignY, float fontSize, const ColorA &color)
 {
     font->setColor(color);
     font->setSize(fontSize);
     
-    TextHelper::drawAlignedText(*font, text, position, alignX, alignY);
+    TextHelper::drawAlignedText(*font, utf8ToWstring(text), position, alignX, alignY);
 }
 
 void Sketch::accelerated(AccelEvent event)

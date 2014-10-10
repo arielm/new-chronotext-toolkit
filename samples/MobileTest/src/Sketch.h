@@ -40,7 +40,7 @@ public:
         {}
     };
     
-    Sketch(void *context, void *delegate = NULL);
+    Sketch(void *context, void *delegate = nullptr);
     
     void setup();
 
@@ -52,7 +52,7 @@ public:
     void draw();
     
     void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
-    void drawText(const std::wstring &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
+    void drawText(const std::string &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
     
     void accelerated(AccelEvent event);
     
