@@ -23,6 +23,11 @@ namespace chronotext
         return instance;
     }
     
+    SystemInfo SystemManager::getSystemInfo()
+    {
+        return instance().systemInfo;
+    }
+    
     SystemManager::SystemManager()
     {
         updateSystemInfo();

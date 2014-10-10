@@ -19,8 +19,7 @@ namespace chronotext
         static std::string getPlatformString();
         
         static SystemManagerBase& instance();
-
-        virtual SystemInfo getSystemInfo() const;
+        static SystemInfo getSystemInfo();
         
         virtual std::string getIpAddress(bool maskForBroadcast = false);
         

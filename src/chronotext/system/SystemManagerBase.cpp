@@ -45,16 +45,16 @@ namespace chronotext
         return instance;
     }
     
+    SystemInfo SystemManagerBase::getSystemInfo()
+    {
+        return instance().systemInfo;
+    }
+
     SystemManagerBase::SystemManagerBase()
     {
         updateSystemInfo();
     }
-    
-    SystemInfo SystemManagerBase::getSystemInfo() const
-    {
-        return systemInfo;
-    }
-    
+
 #pragma mark ---------------------------------------- RUN-TIME METHODS ----------------------------------------
 
 #if defined(ANDROID)

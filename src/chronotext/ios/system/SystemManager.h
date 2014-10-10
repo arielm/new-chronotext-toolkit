@@ -16,6 +16,7 @@ namespace chronotext
     {
     public:
         static SystemManager& instance();
+        static SystemInfo getSystemInfo();
         
     protected:
         SystemManager();
