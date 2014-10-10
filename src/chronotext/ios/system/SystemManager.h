@@ -17,9 +17,11 @@ namespace chronotext
     public:
         static SystemManager& instance();
         
-        /*
-         * TODO: DEFINE ALL THESE ONCE, IN OUR OWN upate()
-         */
+    protected:
+        SystemManager();
+        void updateSystemInfo();
+        
+        std::string getCompositeModelString();
         
         std::string getModel();
         std::string getMachine();
@@ -29,11 +31,5 @@ namespace chronotext
         bool isPad();
         bool isPadMini();
         bool isSimulator();
-        
-    protected:
-        SystemManager();
-        void updateSystemInfo();
-        
-        std::string getCompositeModelString();
     };
 }

@@ -225,7 +225,7 @@ using namespace chr;
 
 - (BOOL) simulated
 {
-    return SystemManager::instance().isSimulator();
+    return SystemManager::instance().getSystemInfo().isSimulator;
 }
 
 #pragma mark ---------------------------------------- DISPLAY AND WINDOW ----------------------------------------
@@ -258,7 +258,7 @@ using namespace chr;
     }
     else if (magSize == 1024 * 768)
     {
-        if (SystemManager::instance().isPadMini())
+        if (SystemManager::instance().getSystemInfo().isPadMini)
         {
             diagonal = 7.90f; // IPAD MINI
         }

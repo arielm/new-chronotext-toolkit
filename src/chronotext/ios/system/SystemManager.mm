@@ -32,12 +32,25 @@ namespace chronotext
 
     void SystemManager::updateSystemInfo()
     {
+        /*
+         * ORDER OF EXECUTION MATTERS!
+         */
+        
+        systemInfo.model = getModel();
+        systemInfo.machine = getMachine();
+        
+        systemInfo.isPodTouch = isPodTouch();
+        systemInfo.isIPhone = isIPhone();
+        systemInfo.isPad = isPad();
+        systemInfo.isPadMini = isPadMini();
+        systemInfo.isSimulator = isSimulator();
+
         SystemManagerBase::updateSystemInfo();
     }
     
     string SystemManager::getCompositeModelString()
     {
-        return getModel() + " [" + getMachine() + "]";
+        return systemInfo.model + " [" + systemInfo.machine + "]";
     }
     
     /*
@@ -65,17 +78,17 @@ namespace chronotext
     
     bool SystemManager::isPodTouch()
     {
-        return boost::starts_with(getModel() , "iPod touch");
+        return boost::starts_with(systemInfo.model , "iPod touch");
     }
     
     bool SystemManager::isIPhone()
     {
-        return boost::starts_with(getModel() , "iPhone");
+        return boost::starts_with(systemInfo.model , "iPhone");
     }
     
     bool SystemManager::isPad()
     {
-        return boost::starts_with(getModel() , "iPad");
+        return boost::starts_with(systemInfo.model , "iPad");
     }
     
     /*
@@ -83,20 +96,18 @@ namespace chronotext
      */
     bool SystemManager::isPadMini()
     {
-        string machine = getMachine();
-        
-        if (machine == "iPad2,5") return true;
-        if (machine == "iPad2,6") return true;
-        if (machine == "iPad2,7") return true;
-        if (machine == "iPad4,4") return true;
-        if (machine == "iPad4,5") return true;
-        if (machine == "iPad4,6") return true;
+        if (systemInfo.machine == "iPad2,5") return true;
+        if (systemInfo.machine == "iPad2,6") return true;
+        if (systemInfo.machine == "iPad2,7") return true;
+        if (systemInfo.machine == "iPad4,4") return true;
+        if (systemInfo.machine == "iPad4,5") return true;
+        if (systemInfo.machine == "iPad4,6") return true;
         
         return false;
     }
     
     bool SystemManager::isSimulator()
     {
-        return boost::ends_with(getModel() , "Simulator");
+        return boost::ends_with(systemInfo.model , "Simulator");
     }
 }
