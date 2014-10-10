@@ -23,6 +23,9 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import android.graphics.Point;
+import android.os.Build;
+
 public class CinderRenderer extends GLRenderer
 {
   public static final int EVENT_RESUMED = 1;
@@ -48,12 +51,103 @@ public class CinderRenderer extends GLRenderer
     prelaunch();
   }
 
-  protected Display getDisplay()
+  public Display getDisplay()
   {
     return ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
   }
-    
-  // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
+
+  public Point getRealSize()
+  {
+    Display display = getDisplay();
+    DisplayMetrics metrics = new DisplayMetrics();
+    display.getMetrics(metrics);
+
+    /*
+     * PROBLEM: THE FOLLOWING IS AFFECTED BY "SYSTEM DECORATIONS" (E.G. NAVIGATION BAR)
+     */
+    int widthPixels = metrics.widthPixels;
+    int heightPixels = metrics.heightPixels;
+
+    /*
+     * SOLUTIONS...
+     *
+     * REFERENCE: http://stackoverflow.com/a/15699681/50335
+     */
+
+    if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
+    {
+      try
+      {
+        widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
+        heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+      }
+      catch (Exception ignored)
+      {}
+    }
+
+    if (Build.VERSION.SDK_INT >= 17)
+    {
+      try
+      {
+        Point realSize = new Point();
+        Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
+
+        widthPixels = realSize.x;
+        heightPixels = realSize.y;
+      }
+      catch (Exception ignored)
+      {}
+    }
+
+    return new Point(widthPixels, heightPixels);
+  }
+
+  public Point getRealNaturalSize()
+  {
+    Point realSize = getRealSize();
+    int rotation = getDisplay().getRotation();
+
+    if ((rotation == Surface.ROTATION_0) || (rotation == Surface.ROTATION_180))
+    {
+      return realSize;
+    }
+    else
+    {
+      return new Point(realSize.y, realSize.x);
+    }
+  }
+
+  public Point getRealLandscapeSize()
+  {
+    Point realSize = getRealSize();
+
+    if (realSize.x > realSize.y)
+    {
+      return realSize;
+    }
+    else
+    {
+      return new Point(realSize.y, realSize.x);
+    }
+  }
+
+  public float getRealDensity()
+  {
+    Display display = getDisplay();
+    DisplayMetrics metrics = new DisplayMetrics();
+    display.getMetrics(metrics);
+
+    Point realNaturalSize = getRealNaturalSize();
+    float widthInches = realNaturalSize.x / metrics.xdpi;
+    float heightInches = realNaturalSize.y / metrics.ydpi;
+
+    double diagonal = Math.sqrt(widthInches * widthInches + heightInches * heightInches);
+    double density = Math.sqrt(realNaturalSize.x * realNaturalSize.x + realNaturalSize.y * realNaturalSize.y) / diagonal;
+
+    return (float) density;
+  }
+
+  // ---------------------------------------- CALLBACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
 
   public void launch()
   {
@@ -61,16 +155,44 @@ public class CinderRenderer extends GLRenderer
     DisplayMetrics dm = new DisplayMetrics();
     display.getMetrics(dm);
 
-    float widthInches = (float) dm.widthPixels / dm.xdpi;
-    float heightInches = (float) dm.heightPixels / dm.ydpi;
-    float diagonal = (float) Math.sqrt(widthInches * widthInches + heightInches * heightInches);
+    // float widthInches = (float) dm.widthPixels / dm.xdpi;
+    // float heightInches = (float) dm.heightPixels / dm.ydpi;
+    // float diagonal = (float) Math.sqrt(widthInches * widthInches + heightInches * heightInches);
 
     /*
-     * MORE RELIABLE THAN dm.densityDpi
+     * MORE RELIABLE THAN dm.densityDpi (THE LATTER IS APPROXIMATING TO "BUCKETS" OF DENSITY: 120, 160, 240, 320...)
      */
-    float density = (float) Math.sqrt(dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels) / diagonal;
+    // float density = (float) Math.sqrt(dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels) / diagonal;
 
-    launch(mContext, mListener, display, diagonal, density);
+
+    Utils.LOGD("SDK VERSION: " + Build.VERSION.SDK_INT);
+    Utils.LOGD("ROTATION: " + display.getRotation());
+
+    Point getRealLandscapeSize = getRealLandscapeSize();
+    Utils.LOGD("REAL LANDSCAPE SIZE (PIXELS): " + getRealLandscapeSize.x + " x " + getRealLandscapeSize.y);
+
+    float density = getRealDensity();
+    Utils.LOGD("REAL DENSITY: " + density);
+
+    float widthInches = getRealLandscapeSize.x / density;
+    float heightInches = getRealLandscapeSize.y / density;
+    Utils.LOGD("REAL LANDSCAPE SIZE (INCHES): " + widthInches + " x " + heightInches);
+
+    float diagonal = (float) Math.sqrt(widthInches * widthInches + heightInches * heightInches);
+    Utils.LOGD("DIAGONAL: " + diagonal);
+
+    Utils.LOGD("dm.sizePixels: " + dm.widthPixels + " x " + dm.heightPixels);
+    Utils.LOGD("dm.densityDpi: " + dm.densityDpi);
+    Utils.LOGD("PHYSICAL DPI: " + dm.xdpi + " x " + dm.ydpi);
+
+
+    // Utils.LOGD("LCD DENSITY: " + DisplayMetrics.DENSITY_DEFAULT_SCALE);
+    // Utils.LOGD("REAL METRICS:" + display.getRealMetrics());
+    
+    // Utils.LOGD("DIAGONAL: " + diagonal);
+    // Utils.LOGD("DENSITY: " + density);
+
+    launch(mContext, mListener, display, diagonal, density); // TODO: PASS "REAL" LANDSCAPE-SIZE AND DENSITY
   }
 
   public void setup(GL10 gl, int width, int height)
@@ -166,9 +288,9 @@ public class CinderRenderer extends GLRenderer
   public native void shutdown();
 
   public native void resize(int width, int height);
-  public native void draw();
-
   public native void event(int id);
+
+  public native void draw();
 
   public native void addTouch(int index, float x, float y);
   public native void updateTouch(int index, float x, float y);

@@ -24,44 +24,9 @@ namespace chronotext
     mTimeline(Timeline::create())
     {}
     
-    Vec2i CinderSketchSimple::getWindowSize() const
+    bool CinderSketchSimple::isEmulated() const
     {
-        return getWindowInfo().getSize();
-    }
-
-    int CinderSketchSimple::getWindowWidth() const
-    {
-        return getWindowInfo().getWidth();
-    }
-    
-    int CinderSketchSimple::getWindowHeight() const
-    {
-        return getWindowInfo().getHeight();
-    }
-    
-    Area CinderSketchSimple::getWindowBounds() const
-    {
-        return getWindowInfo().getBounds();
-    }
-    
-    Vec2f CinderSketchSimple::getWindowCenter() const
-    {
-        return getWindowInfo().getCenter();
-    }
-    
-    float CinderSketchSimple::getWindowAspectRatio() const
-    {
-        return getWindowInfo().getAspectRatio();
-    }
-    
-    float CinderSketchSimple::getWindowContentScale() const
-    {
-        return getDisplayInfo().getContentScale();
-    }
-    
-    WindowInfo CinderSketchSimple::getWindowInfo() const
-    {
-        return static_cast<CinderApp*>(context)->getWindowInfo();
+        return static_cast<CinderApp*>(context)->isEmulated();
     }
     
     DisplayInfo CinderSketchSimple::getDisplayInfo() const
@@ -69,9 +34,9 @@ namespace chronotext
         return static_cast<CinderApp*>(context)->getDisplayInfo();
     }
     
-    bool CinderSketchSimple::isEmulated() const
+    WindowInfo CinderSketchSimple::getWindowInfo() const
     {
-        return static_cast<CinderApp*>(context)->isEmulated();
+        return static_cast<CinderApp*>(context)->getWindowInfo();
     }
     
     void CinderSketchSimple::action(int actionId)

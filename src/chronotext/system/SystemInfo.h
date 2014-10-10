@@ -29,25 +29,19 @@ namespace chronotext
         int platform;
         std::string platformString;
 
-        std::string osVersion;
-        std::string manufacturer;
-        std::string model;
+        std::string osVersionString;
+        std::string compositeModelString;
         
         friend std::ostream& operator<<(std::ostream &lhs, const SystemInfo &rhs)
         {
             lhs
             << "{"
             << "platform: " << rhs.platformString
-            << ", osVersion: " << rhs.osVersion;
+            << ", osVersion: " << rhs.osVersionString;
             
-            if (!rhs.manufacturer.empty())
+            if (!rhs.compositeModelString.empty())
             {
-                lhs << ", manufacturer: " << rhs.manufacturer;
-            }
-            
-            if (!rhs.model.empty())
-            {
-                lhs << ", model: " << rhs.model;
+                lhs << ", model: " << rhs.compositeModelString;
             }
             
             lhs << "}";

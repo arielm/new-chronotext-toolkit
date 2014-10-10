@@ -37,7 +37,9 @@ namespace chronotext
         float getWindowAspectRatio() const;
         ci::Area getWindowBounds() const;
         float getWindowContentScale() const;
+        
         WindowInfo getWindowInfo() const;
+        DisplayInfo getDisplayInfo() const;
         
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }

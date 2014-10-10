@@ -35,8 +35,7 @@ namespace chronotext
         SystemManagerBase();
         virtual void update();
 
-        virtual std::string getOsVersion();
-        virtual std::string getManufacturer();
-        virtual std::string getModel();
+        virtual std::string getOsVersionString();
+        virtual std::string getCompositeModelString();
     };
 }

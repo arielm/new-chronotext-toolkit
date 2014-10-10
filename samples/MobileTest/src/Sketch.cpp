@@ -9,8 +9,8 @@
 #include "Sketch.h"
 
 #include "chronotext/font/xf/TextHelper.h"
-#include "chronotext/utils/Utils.h"
 #include "chronotext/utils/GLUtils.h"
+#include "chronotext/utils/Utils.h"
 #include "chronotext/system/SystemManager.h"
 
 using namespace std;
@@ -38,6 +38,10 @@ CinderSketch(context, delegate)
 void Sketch::setup()
 {
     LOGD << "SYSTEM INFO: " << SystemManager::instance().getSystemInfo() << endl;
+    LOGD << "DISPLAY INFO: " << getDisplayInfo() << endl;
+    LOGD << "WINDOW INFO: " << getWindowInfo() << endl;
+    
+    // ---
     
     dot = textureManager.getTexture("dot_112.png", true, TextureRequest::FLAGS_TRANSLUCENT);
     font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
@@ -60,8 +64,15 @@ void Sketch::event(int eventId)
     {
         case EVENT_CONTEXT_LOST:
         {
-            textureManager.discard(); // MANDATORY
-            fontManager.discardTextures(); // MANDATORY
+            /*
+             * DISCARDING: FOR RELEASING GL NAMES
+             *
+             * AT THIS STAGE: GL MEMORY HAS ALREADY BEEN INVALIDATED
+             */
+            
+            textureManager.discard();
+            fontManager.discardTextures();
+            
             break;
         }
             
@@ -86,9 +97,12 @@ void Sketch::event(int eventId)
         case EVENT_MEMORY_WARNING:
         {
             /*
-             * OPERATIONS CAUSING GL MEMORY DISCARDING
-             * MUST TAKE PLACE BEFORE ANY NEW ALLOCATION
+             * DISCARDING: FOR RELEASING GL MEMORY
+             *
+             * IN ORDER TO AVOID "INTERFERENCES" WITH GL NAMES:
+             * RELOADING MUST TAKE PLACE ONLY AFTER EVERYTHING HAS BEEN DISCARDED
              */
+            
             textureManager.discard();
             fontManager.discardTextures();
             

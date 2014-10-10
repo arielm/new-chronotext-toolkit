@@ -8,13 +8,8 @@
 
 #include "DisplayHelper.h"
 
-#if defined(CINDER_MAC) || defined(CINDER_MSW)
-#include "cinder/app/Renderer.h"
-#endif
-
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace chronotext
 {
@@ -52,26 +47,26 @@ namespace chronotext
     }
     
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
-    int  DisplayHelper::getAALevel(::RendererGlRef renderer)
+    int DisplayHelper::getAALevel(app::RendererGlRef renderer)
     {
         switch (renderer->getAntiAliasing())
         {
-            case ::RendererGl::AA_MSAA_2:
+            case app::RendererGl::AA_MSAA_2:
                 return 2;
                 
-            case ::RendererGl::AA_MSAA_4:
+            case app::RendererGl::AA_MSAA_4:
                 return 4;
                 
-            case ::RendererGl::AA_MSAA_6:
+            case app::RendererGl::AA_MSAA_6:
                 return 6;
                 
-            case ::RendererGl::AA_MSAA_8:
+            case app::RendererGl::AA_MSAA_8:
                 return 8;
                 
-            case ::RendererGl::AA_MSAA_16:
+            case app::RendererGl::AA_MSAA_16:
                 return 16;
                 
-            case ::RendererGl::AA_MSAA_32:
+            case app::RendererGl::AA_MSAA_32:
                 return 32;
         }
         

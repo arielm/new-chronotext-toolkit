@@ -82,39 +82,14 @@ namespace chronotext
         return ((CinderDelegate*)context).elapsedFrames;
     }
     
-    int CinderSketchComplex::getWindowWidth() const
+    bool CinderSketchComplex::isEmulated() const
     {
-        return ((CinderDelegate*)context).windowInfo.size.x;
+        return ((CinderDelegate*)context).simulated;
     }
     
-    int CinderSketchComplex::getWindowHeight() const
+    DisplayInfo CinderSketchComplex::getDisplayInfo() const
     {
-        return ((CinderDelegate*)context).windowInfo.size.y;
-    }
-    
-    Vec2f CinderSketchComplex::getWindowCenter() const
-    {
-        return getWindowSize() * 0.5f;
-    }
-    
-    Vec2i CinderSketchComplex::getWindowSize() const
-    {
-        return Vec2i(getWindowWidth(), getWindowHeight());
-    }
-    
-    float CinderSketchComplex::getWindowAspectRatio() const
-    {
-        return getWindowWidth() / (float)getWindowHeight();
-    }
-    
-    Area CinderSketchComplex::getWindowBounds() const
-    {
-        return Area(0, 0, getWindowWidth(), getWindowHeight());
-    }
-    
-    float CinderSketchComplex::getWindowContentScale() const
-    {
-        return ((CinderDelegate*)context).windowInfo.contentScale;
+        return ((CinderDelegate*)context).displayInfo;
     }
     
     WindowInfo CinderSketchComplex::getWindowInfo() const

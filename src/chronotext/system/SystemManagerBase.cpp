@@ -72,30 +72,24 @@ namespace chronotext
     {
         systemInfo.platform = getPlatform();
         systemInfo.platformString = getPlatformString();
-        
-        systemInfo.model = getModel();
-        systemInfo.manufacturer = getManufacturer();
-        systemInfo.osVersion = getOsVersion();
+
+        systemInfo.osVersionString = getOsVersionString();
+        systemInfo.compositeModelString = getCompositeModelString();
     }
     
 #if defined(ANDROID)
-    string SystemManagerBase::getOsVersion()
+    string SystemManagerBase::getOsVersionString()
     {
         return "";
     }
 #else
-    string SystemManagerBase::getOsVersion()
+    string SystemManagerBase::getOsVersionString()
     {
         return toString(System::getOsMajorVersion()) + "." + toString(System::getOsMinorVersion()) + "." + toString(System::getOsBugFixVersion());
     }
 #endif
     
-    string SystemManagerBase::getManufacturer()
-    {
-        return "";
-    }
-    
-    string SystemManagerBase::getModel()
+    string SystemManagerBase::getCompositeModelString()
     {
         return "";
     }

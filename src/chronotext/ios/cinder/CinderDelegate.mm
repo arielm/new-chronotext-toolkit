@@ -14,8 +14,8 @@
 #import "CinderDelegate.h"
 #import "GLViewController.h"
 
+#include "chronotext/system/SystemManager.h"
 #include "chronotext/utils/accel/AccelEvent.h"
-#include "chronotext/system/SystemInfo.h"
 
 #include <map>
 
@@ -33,7 +33,8 @@ using namespace chr;
     
     shared_ptr<boost::asio::io_service> io;
     shared_ptr<boost::asio::io_service::work> ioWork;
-    
+
+    DisplayInfo displayInfo;
     WindowInfo windowInfo;
     BOOL forceResize;
     
@@ -44,8 +45,11 @@ using namespace chr;
     BOOL active;
 }
 
-- (Vec2f) getWindowSize;
 - (void) updateDisplayInfo;
+- (void) updateWindowInfo;
+
+- (Vec2f) windowSize;
+- (int) aaLevel;
 
 - (uint32_t) addTouchToMap:(UITouch*)touch;
 - (void) removeTouchFromMap:(UITouch*)touch;
@@ -61,6 +65,7 @@ using namespace chr;
 @synthesize sketch;
 @synthesize accelFilterFactor;
 @synthesize io;
+@synthesize displayInfo;
 @synthesize windowInfo;
 @synthesize initialized;
 @synthesize active;
@@ -126,10 +131,9 @@ using namespace chr;
 
 - (void) setup
 {
-    windowInfo.size = [self getWindowSize];
+    [self updateDisplayInfo]; // TODO: displayInfo SHOULD BE UPDATED AT APPLICATION START
+    [self updateWindowInfo];
     forceResize = YES;
-    
-    [self updateDisplayInfo];
     
     // ---
     
@@ -145,7 +149,7 @@ using namespace chr;
 
 - (void) resize
 {
-    Vec2f size = [self getWindowSize];
+    Vec2f size = [self windowSize];
     
     if (forceResize || (size != windowInfo.size))
     {
@@ -185,16 +189,6 @@ using namespace chr;
     sketch->draw();
 }
 
-- (double) elapsedSeconds
-{
-    return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-}
-
-- (uint32_t) elapsedFrames
-{
-    return frameCount;
-}
-
 - (void) action:(int)actionId
 {}
 
@@ -219,7 +213,72 @@ using namespace chr;
     sketch->sendMessage(Message(what, [body UTF8String]));
 }
 
-- (Vec2f) getWindowSize;
+- (double) elapsedSeconds
+{
+    return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
+}
+
+- (uint32_t) elapsedFrames
+{
+    return frameCount;
+}
+
+- (BOOL) simulated
+{
+    return SystemManager::instance().isSimulator();
+}
+
+#pragma mark ---------------------------------------- DISPLAY AND WINDOW ----------------------------------------
+
+- (void) updateDisplayInfo
+{
+    float contentScale = view.contentScaleFactor;
+    Vec2i baseSize = [self windowSize] / contentScale;
+
+    // ---
+    
+    float diagonal = 0;
+    int magSize = baseSize.x * baseSize.y;
+    
+    if (magSize == 320 * 480)
+    {
+        diagonal = 3.54f; // IPHONE 3GS OR 4
+    }
+    else if (magSize == 320 * 568)
+    {
+        diagonal = 4.00f; // IPHONE 5
+    }
+    else if (magSize == 375 * 667)
+    {
+        diagonal = 4.70f; // IPHONE 6
+    }
+    else if (magSize == 360 * 640)
+    {
+        diagonal = 5.50f; // IPHONE 6+
+    }
+    else if (magSize == 1024 * 768)
+    {
+        if (SystemManager::instance().isPadMini())
+        {
+            diagonal = 7.90f; // IPAD MINI
+        }
+        else
+        {
+            diagonal = 9.70f; // IPAD
+        }
+    }
+    
+    // ---
+    
+    displayInfo = DisplayInfo::createWithDiagonal(baseSize.x, baseSize.y, diagonal, contentScale);
+}
+
+- (void) updateWindowInfo
+{
+    windowInfo = WindowInfo([self windowSize], [self aaLevel]);
+}
+
+- (Vec2f) windowSize;
 {
     Vec2f size;
     
@@ -241,56 +300,15 @@ using namespace chr;
     return size * view.contentScaleFactor;
 }
 
-- (void) updateDisplayInfo
+- (int) aaLevel
 {
-    windowInfo.contentScale = view.contentScaleFactor;
-
-    // ---
-    
-    /*
-     * TODO:
-     *
-     * DIAGONAL AND SIZE-FACTOR SHOULD BE DEFINED IN THE SAME FUNCTION
-     * USING SystemInfoImplCocoaTouch::getModel AND UIDevice.mainScreen.bounds
-     *
-     * SEE SystemInfoImplCocoaTouch::getSizeFactor
-     */
-    
-    switch (SystemInfo::instance().getSizeFactor())
-    {
-        case SystemInfo::SIZE_FACTOR_PHONE:
-            if (windowInfo.size.x == 1136) // FIXME: BOTH DIMENSIONS SHOULD BE USED (CURRENTLY, IT WILL ONLY WORK WHEN IN LANDSCAPE)
-            {
-                windowInfo.diagonal = 4;
-            }
-            else
-            {
-                windowInfo.diagonal = 3.54f;
-            }
-            break;
-            
-        case SystemInfo::SIZE_FACTOR_TABLET:
-            windowInfo.diagonal = 9.7f;
-            break;
-            
-        case SystemInfo::SIZE_FACTOR_TABLET_MINI:
-            windowInfo.diagonal = 7.9f;
-            break;
-    }
-    
-    windowInfo.density = windowInfo.size.length() / windowInfo.diagonal;
-    
-    // ---
-    
     switch (view.drawableMultisample)
     {
         case GLKViewDrawableMultisampleNone:
-            windowInfo.aaLevel = 0;
-            break;
+            return 0;
             
         case GLKViewDrawableMultisample4X:
-            windowInfo.aaLevel = 4;
-            break;
+            return 4;
     }
 }
 

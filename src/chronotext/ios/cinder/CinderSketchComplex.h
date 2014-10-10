@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "cinder/app/AppCocoaTouch.h"
-
 #include "chronotext/cinder/CinderSketchBase.h"
+
+#include "cinder/app/AppCocoaTouch.h"
 
 namespace chronotext
 {
@@ -26,24 +26,19 @@ namespace chronotext
         void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
         void disableAccelerometer();
         
+        chr::FrameClock& clock() const { return *mClock; }
+        ci::Timeline& timeline() const { return *mTimeline; }
+        
         std::ostream& console() { return std::cout; }
         boost::asio::io_service& io_service() const;
         
         double getElapsedSeconds() const;
         uint32_t getElapsedFrames() const;
         
-        int getWindowWidth() const;
-        int getWindowHeight() const;
-        ci::Vec2f getWindowCenter() const;
-        ci::Vec2i getWindowSize() const;
-        float getWindowAspectRatio() const;
-        ci::Area getWindowBounds() const;
-        float getWindowContentScale() const;
+        bool isEmulated() const;
+        DisplayInfo getDisplayInfo() const;
         WindowInfo getWindowInfo() const;
-        
-        chr::FrameClock& clock() const { return *mClock; }
-        ci::Timeline& timeline() const { return *mTimeline; }
-        
+
         void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");
         
@@ -55,5 +50,3 @@ namespace chronotext
         ci::TimelineRef mTimeline;
     };
 }
-
-namespace chr = chronotext;

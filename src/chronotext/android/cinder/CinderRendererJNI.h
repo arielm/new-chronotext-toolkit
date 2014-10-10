@@ -25,7 +25,7 @@ extern "C"
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
-    void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id);
+    void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId);
     
     void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
     void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
@@ -88,9 +88,9 @@ void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
     gDelegate->draw();
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint id)
+void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
 {
-    gDelegate->event(id);
+    gDelegate->event(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
@@ -110,14 +110,14 @@ void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject 
 
 void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)
 {
-    if (body == NULL)
+    if (body)
     {
-        gDelegate->sendMessageToSketch(what, "");
+        const char *chars = env->GetStringUTFChars(body, nullptr);
+        gDelegate->sendMessageToSketch(what, std::string(chars));
+        env->ReleaseStringUTFChars(body, chars);
     }
     else
     {
-        const char* chars = env->GetStringUTFChars(body, NULL);
-        gDelegate->sendMessageToSketch(what, std::string(chars));
-        env->ReleaseStringUTFChars(body, chars);
+        gDelegate->sendMessageToSketch(what, "");
     }
 }

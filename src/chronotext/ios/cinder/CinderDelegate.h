@@ -38,9 +38,11 @@ enum
 @property (nonatomic, assign) chr::CinderSketch *sketch;
 @property (nonatomic, assign) float accelFilterFactor;
 @property (nonatomic, readonly) std::shared_ptr<boost::asio::io_service> &io;
-@property (nonatomic, readonly) chr::WindowInfo windowInfo;
 @property (nonatomic, readonly) double elapsedSeconds;
 @property (nonatomic, readonly) uint32_t elapsedFrames;
+@property (nonatomic, readonly) BOOL simulated;
+@property (nonatomic, readonly) chr::DisplayInfo displayInfo;
+@property (nonatomic, readonly) chr::WindowInfo windowInfo;
 @property (nonatomic, readonly) BOOL initialized;
 @property (nonatomic, readonly) BOOL active;
 

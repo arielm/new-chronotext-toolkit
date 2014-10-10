@@ -33,13 +33,15 @@ namespace chronotext
         };
         
     public:
+        CinderSketch *sketch;
+        DisplayInfo displayInfo;
+        WindowInfo windowInfo;
+
         JavaVM *mJavaVM;
         jobject mJavaContext;
         jobject mJavaListener;
         jobject mJavaDisplay;
-        
-        CinderSketch *sketch;
-        
+
         CinderDelegate()
         :
         mLastAccel(ci::Vec3f::zero()),
@@ -55,11 +57,11 @@ namespace chronotext
         
         void setup(int width, int height);
         void shutdown();
-        
-        void resize(int width, int height);
-        void draw();
-        
+
         void event(int eventId);
+        void resize(int width, int height);
+
+        void draw();
         
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
@@ -73,15 +75,6 @@ namespace chronotext
 
         double getElapsedSeconds() const;
         uint32_t getElapsedFrames() const;
-        
-        int getWindowWidth() const;
-        int getWindowHeight() const;
-        ci::Vec2f getWindowCenter() const;
-        ci::Vec2i getWindowSize() const;
-        float getWindowAspectRatio() const;
-        ci::Area getWindowBounds() const;
-        float getWindowContentScale() const;
-        WindowInfo getWindowInfo() const;
         
         virtual void action(int actionId);
         virtual void receiveMessageFromSketch(int what, const std::string &body);
@@ -101,8 +94,6 @@ namespace chronotext
         
     protected:
         std::shared_ptr<ci::android::dostream> mOutputStream;
-        
-        WindowInfo mWindowInfo;
         
         ci::Timer mTimer;
         uint32_t mFrameCount;

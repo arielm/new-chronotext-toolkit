@@ -70,26 +70,26 @@ namespace chronotext
         virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
         virtual void disableAccelerometer() {}
         
+        virtual chr::FrameClock& clock() const = 0;
+        virtual ci::Timeline& timeline() const = 0;
+
         virtual std::ostream& console() = 0;
         virtual boost::asio::io_service& io_service() const = 0;
         
         virtual double getElapsedSeconds() const = 0;
         virtual uint32_t getElapsedFrames() const = 0;
 
-        virtual ci::Vec2i getWindowSize() const = 0;
-        virtual int getWindowWidth() const = 0;
-        virtual int getWindowHeight() const = 0;
-        virtual ci::Area getWindowBounds() const = 0;
-        virtual ci::Vec2f getWindowCenter() const = 0;
-        virtual float getWindowAspectRatio() const = 0;
-        virtual float getWindowContentScale() const = 0;
-        
-        virtual WindowInfo getWindowInfo() const = 0;
-        virtual DisplayInfo getDisplayInfo() const = 0;
         virtual bool isEmulated() const = 0;
-        
-        virtual chr::FrameClock& clock() const = 0;
-        virtual ci::Timeline& timeline() const = 0;
+        virtual DisplayInfo getDisplayInfo() const = 0;
+        virtual WindowInfo getWindowInfo() const = 0;
+
+        virtual ci::Vec2i getWindowSize() const { return getWindowInfo().getSize(); }
+        virtual int getWindowWidth() const { return getWindowInfo().getWidth(); };
+        virtual int getWindowHeight() const { return getWindowInfo().getHeight(); };
+        virtual ci::Area getWindowBounds() const { return getWindowInfo().getBounds(); };
+        virtual ci::Vec2f getWindowCenter() const { return getWindowInfo().getCenter(); };
+        virtual float getWindowAspectRatio() const { return getWindowInfo().getAspectRatio(); };
+        virtual float getWindowContentScale() const { return getDisplayInfo().getContentScale(); };
         
         virtual void action(int actionId) = 0;
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;

@@ -26,7 +26,10 @@ namespace chronotext
 
     void CinderApp::setup()
     {
-        updateDisplayAndWindowInfo();
+        updateRealDisplayInfo();
+        updateRealWindowInfo();
+        
+        // ---
         
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderApp::update
@@ -161,24 +164,15 @@ namespace chronotext
      */
     void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
     {
-        LOGD << "EMULATED DEVICE: " << device << endl;
-        
         emulatedDevice = device;
         emulated = true;
 
         settings->setWindowSize(emulatedDevice.windowInfo.size);
 
         /*
-         * POINTLESS TO ALLOW RESIZE WHEN EMULATING
-         * IT WOULD ALSO COMPLICATE EVERYTHING...
+         * ALLOWING TO RESIZE AN EMULATOR WOULD BE POINTLESS (AND NOT TRIVIAL TO IMPLEMENT...)
          */
         settings->setResizable(false);
-    }
-    
-    void CinderApp::updateDisplayAndWindowInfo()
-    {
-        updateRealDisplayInfo();
-        updateRealWindowInfo();
     }
     
     void CinderApp::updateRealDisplayInfo()
@@ -191,8 +185,8 @@ namespace chronotext
     
     void CinderApp::updateRealWindowInfo()
     {
-        realWindowInfo.size = getWindowSize();
-        realWindowInfo.aaLevel = DisplayHelper::getAALevel(static_pointer_cast<RendererGl>(getRenderer()));
+        auto renderer = static_pointer_cast<RendererGl>(getRenderer());
+        realWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(renderer));
     }
     
     void CinderApp::start()

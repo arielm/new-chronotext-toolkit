@@ -21,26 +21,18 @@ namespace chronotext
     public:
         CinderSketchSimple(void *context, void *delegate = nullptr);
         
+        chr::FrameClock& clock() const { return *mClock; }
+        ci::Timeline& timeline() const { return *mTimeline; }
+        
         std::ostream& console() { return context->console(); }
         boost::asio::io_service& io_service() const { return context->io_service(); }
         
         double getElapsedSeconds() const { return context->getElapsedSeconds(); }
         uint32_t getElapsedFrames() const { return context->getElapsedFrames(); }
 
-        ci::Vec2i getWindowSize() const;
-        int getWindowWidth() const;
-        int getWindowHeight() const;
-        ci::Area getWindowBounds() const;
-        ci::Vec2f getWindowCenter() const;
-        float getWindowAspectRatio() const;
-        float getWindowContentScale() const;
-        
-        WindowInfo getWindowInfo() const;
-        DisplayInfo getDisplayInfo() const;
         bool isEmulated() const;
-        
-        chr::FrameClock& clock() const { return *mClock; }
-        ci::Timeline& timeline() const { return *mTimeline; }
+        DisplayInfo getDisplayInfo() const;
+        WindowInfo getWindowInfo() const;
         
         void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");

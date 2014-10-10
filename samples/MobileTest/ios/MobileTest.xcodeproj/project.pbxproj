@@ -29,14 +29,14 @@
 		A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D816E75A3700F27EDE /* Texture.cpp */; };
 		A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E016E75A3700F27EDE /* TextureHelper.cpp */; };
 		A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E216E75A3700F27EDE /* TextureManager.cpp */; };
+		A8B31A8A19E7509F00127AAA /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8B31A8419E7509F00127AAA /* DisplayHelper.cpp */; };
+		A8B31A8B19E7509F00127AAA /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8B31A8619E7509F00127AAA /* SystemManagerBase.cpp */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
 		A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */; };
 		A8F2E308189D3F47002D5D75 /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E305189D3F47002D5D75 /* stb_image.c */; };
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
-		A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B9416E3AB8000367F97 /* CinderApp.cpp */; };
-		A8FA3C0816E3AB8000367F97 /* CinderSketchSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B9716E3AB8000367F97 /* CinderSketchSimple.cpp */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
 		A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */; };
 		A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC416E3AB8000367F97 /* CinderSketchComplex.mm */; };
@@ -46,7 +46,7 @@
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
 		A8FBC44D18E35EE200F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC44B18E35EE200F5BBEF /* FrameClock.cpp */; };
-		A8FBC45118E35F4100F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45018E35F4100F5BBEF /* SystemInfoImplCocoaTouch.mm */; };
+		A8FBC45118E35F4100F5BBEF /* SystemManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45018E35F4100F5BBEF /* SystemManager.mm */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
@@ -80,9 +80,7 @@
 		A802714019CC83FD0072973D /* QuadBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatchMap.h; sourceTree = "<group>"; };
 		A802714119CC83FD0072973D /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
 		A802714219CC83FD0072973D /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
-		A824C470190608D4003C4B84 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
 		A824C471190608D4003C4B84 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
-		A824C472190608D4003C4B84 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
@@ -104,6 +102,12 @@
 		A87CE0E116E75A3700F27EDE /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureHelper.h; sourceTree = "<group>"; };
 		A87CE0E216E75A3700F27EDE /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
 		A87CE0E316E75A3700F27EDE /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
+		A8B31A8419E7509F00127AAA /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
+		A8B31A8519E7509F00127AAA /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
+		A8B31A8619E7509F00127AAA /* SystemManagerBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemManagerBase.cpp; sourceTree = "<group>"; };
+		A8B31A8719E7509F00127AAA /* SystemManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManagerBase.h; sourceTree = "<group>"; };
+		A8B31A8819E7509F00127AAA /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
+		A8B31A8919E7509F00127AAA /* DisplayInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayInfo.h; sourceTree = "<group>"; };
 		A8DB3EC416E0B96C00504D27 /* Sketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sketch.cpp; path = ../src/Sketch.cpp; sourceTree = "<group>"; };
 		A8DB3EC516E0B96C00504D27 /* Sketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sketch.h; path = ../src/Sketch.h; sourceTree = "<group>"; };
 		A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSourceFileStbImage.cpp; sourceTree = "<group>"; };
@@ -117,11 +121,7 @@
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		A8FA3B9416E3AB8000367F97 /* CinderApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderApp.cpp; sourceTree = "<group>"; };
-		A8FA3B9516E3AB8000367F97 /* CinderApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderApp.h; sourceTree = "<group>"; };
 		A8FA3B9616E3AB8000367F97 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
-		A8FA3B9716E3AB8000367F97 /* CinderSketchSimple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketchSimple.cpp; sourceTree = "<group>"; };
-		A8FA3B9816E3AB8000367F97 /* CinderSketchSimple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketchSimple.h; sourceTree = "<group>"; };
 		A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
 		A8FA3BBE16E3AB8000367F97 /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
 		A8FA3BC116E3AB8000367F97 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
@@ -142,8 +142,8 @@
 		A8FA3C0616E3AB8000367F97 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A8FBC44B18E35EE200F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
 		A8FBC44C18E35EE200F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
-		A8FBC44F18E35F4100F5BBEF /* SystemInfoImplCocoaTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoImplCocoaTouch.h; sourceTree = "<group>"; };
-		A8FBC45018E35F4100F5BBEF /* SystemInfoImplCocoaTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemInfoImplCocoaTouch.mm; sourceTree = "<group>"; };
+		A8FBC44F18E35F4100F5BBEF /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
+		A8FBC45018E35F4100F5BBEF /* SystemManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemManager.mm; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -272,9 +272,13 @@
 		A824C46F190608D4003C4B84 /* system */ = {
 			isa = PBXGroup;
 			children = (
-				A824C470190608D4003C4B84 /* EmulatedDevice.h */,
+				A8B31A8919E7509F00127AAA /* DisplayInfo.h */,
+				A8B31A8519E7509F00127AAA /* DisplayHelper.h */,
+				A8B31A8419E7509F00127AAA /* DisplayHelper.cpp */,
 				A824C471190608D4003C4B84 /* SystemInfo.h */,
-				A824C472190608D4003C4B84 /* SystemInfoBase.h */,
+				A8B31A8819E7509F00127AAA /* SystemManager.h */,
+				A8B31A8719E7509F00127AAA /* SystemManagerBase.h */,
+				A8B31A8619E7509F00127AAA /* SystemManagerBase.cpp */,
 			);
 			path = system;
 			sourceTree = "<group>";
@@ -356,12 +360,8 @@
 		A8FA3B9316E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3B9516E3AB8000367F97 /* CinderApp.h */,
-				A8FA3B9416E3AB8000367F97 /* CinderApp.cpp */,
 				A8FA3B9616E3AB8000367F97 /* CinderSketch.h */,
 				A8720806180833E10055F0BA /* CinderSketchBase.h */,
-				A8FA3B9816E3AB8000367F97 /* CinderSketchSimple.h */,
-				A8FA3B9716E3AB8000367F97 /* CinderSketchSimple.cpp */,
 				A85483B819CE12CD00B7866C /* WindowInfo.h */,
 			);
 			path = cinder;
@@ -447,8 +447,8 @@
 		A8FBC44E18E35F4100F5BBEF /* system */ = {
 			isa = PBXGroup;
 			children = (
-				A8FBC44F18E35F4100F5BBEF /* SystemInfoImplCocoaTouch.h */,
-				A8FBC45018E35F4100F5BBEF /* SystemInfoImplCocoaTouch.mm */,
+				A8FBC44F18E35F4100F5BBEF /* SystemManager.h */,
+				A8FBC45018E35F4100F5BBEF /* SystemManager.mm */,
 			);
 			path = system;
 			sourceTree = "<group>";
@@ -521,11 +521,9 @@
 				A802715119CC83FD0072973D /* QuadMatrix.cpp in Sources */,
 				A802714519CC83FD0072973D /* FontSequence.cpp in Sources */,
 				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
-				A8FA3C0716E3AB8000367F97 /* CinderApp.cpp in Sources */,
-				A8FA3C0816E3AB8000367F97 /* CinderSketchSimple.cpp in Sources */,
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
-				A8FBC45118E35F4100F5BBEF /* SystemInfoImplCocoaTouch.mm in Sources */,
+				A8FBC45118E35F4100F5BBEF /* SystemManager.mm in Sources */,
 				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
@@ -535,6 +533,7 @@
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
+				A8B31A8A19E7509F00127AAA /* DisplayHelper.cpp in Sources */,
 				A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */,
 				A87CE0E516E75A3700F27EDE /* Sprite.cpp in Sources */,
 				A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */,
@@ -542,6 +541,7 @@
 				A8F2E308189D3F47002D5D75 /* stb_image.c in Sources */,
 				A8FBC44D18E35EE200F5BBEF /* FrameClock.cpp in Sources */,
 				A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */,
+				A8B31A8B19E7509F00127AAA /* SystemManagerBase.cpp in Sources */,
 				A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */,
 				A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */,
 				A872080118081CDE0055F0BA /* SuperHandler.cpp in Sources */,

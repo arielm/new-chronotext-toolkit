@@ -46,42 +46,47 @@ namespace chronotext
     
     int CinderSketchComplex::getWindowWidth() const
     {
-        return context->getWindowWidth();
+        return context->windowInfo.size.x;
     }
     
     int CinderSketchComplex::getWindowHeight() const
     {
-        return context->getWindowHeight();
+        return context->windowInfo.size.y;
     }
     
     Vec2f CinderSketchComplex::getWindowCenter() const
     {
-        return context->getWindowCenter();
+        return context->windowInfo.size * 0.5f;
     }
     
     Vec2i CinderSketchComplex::getWindowSize() const
     {
-        return context->getWindowSize();
+        return context->windowInfo.size;
     }
     
     float CinderSketchComplex::getWindowAspectRatio() const
     {
-        return context->getWindowAspectRatio();
+        return getWindowWidth() / float(getWindowHeight());
     }
     
     Area CinderSketchComplex::getWindowBounds() const
     {
-        return context->getWindowBounds();
+        return Area(0, 0, getWindowWidth(), getWindowHeight());
     }
     
     float CinderSketchComplex::getWindowContentScale() const
     {
-        return context->getWindowContentScale();
+        return context->displayInfo.contentScale;
     }
     
     WindowInfo CinderSketchComplex::getWindowInfo() const
     {
-        return context->getWindowInfo();
+        return context->windowInfo;
+    }
+    
+    DisplayInfo CinderSketchComplex::getDisplayInfo() const
+    {
+        return context->displayInfo;
     }
     
     ostream& CinderSketchComplex::console()

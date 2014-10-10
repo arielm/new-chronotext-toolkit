@@ -59,7 +59,6 @@ namespace chronotext
         int startCount;
         int updateCount;
 
-        void updateDisplayAndWindowInfo();
         void updateRealDisplayInfo();
         void updateRealWindowInfo();
         

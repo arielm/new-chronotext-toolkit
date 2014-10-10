@@ -37,11 +37,10 @@ namespace chronotext
         
         // ---
         
-        mWindowInfo.diagonal = diagonal;
-        mWindowInfo.density = density;
-        mWindowInfo.contentScale = 1;
+        displayInfo.diagonal = diagonal;
+        displayInfo.density = density;
         
-        SystemInfo::instance().setWindowInfo(mWindowInfo); // TODO: THERE SHOULD BE A DisplayInfo STRUCT FOR EVERYTHING EXCEPT SIZE
+        SystemInfo::instance().setDisplayInfo(displayInfo);
         
         // ---
         
@@ -57,7 +56,7 @@ namespace chronotext
         jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
         jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
         
-        const char *internalDataPath = env->GetStringUTFChars(absolutePathString, NULL);
+        const char *internalDataPath = env->GetStringUTFChars(absolutePathString, nullptr);
         FileSystem::setAndroidInternalDataPath(internalDataPath);
         env->ReleaseStringUTFChars(absolutePathString, internalDataPath);
         
@@ -68,7 +67,7 @@ namespace chronotext
         jobject externalStorageDirectoryObject = env->CallStaticObjectMethod(environmentClass, getExternalStorageDirectoryMethod);
         absolutePathString = (jstring)env->CallObjectMethod(externalStorageDirectoryObject, getAbsolutePathMethod);
         
-        const char *externalDataPath = env->GetStringUTFChars(absolutePathString, NULL);
+        const char *externalDataPath = env->GetStringUTFChars(absolutePathString, nullptr);
         FileSystem::setAndroidExternalDataPath(externalDataPath);
         env->ReleaseStringUTFChars(absolutePathString, externalDataPath);
         
@@ -77,7 +76,7 @@ namespace chronotext
         jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getPackageCodePath", "()Ljava/lang/String;");
         jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext, getPackageCodePathMethod);
         
-        const char *apkPath = env->GetStringUTFChars(packageCodePathString, NULL);
+        const char *apkPath = env->GetStringUTFChars(packageCodePathString, nullptr);
         FileSystem::setAndroidApkPath(apkPath);
         env->ReleaseStringUTFChars(packageCodePathString, apkPath);
         
@@ -92,13 +91,12 @@ namespace chronotext
         
         mSensorManager = ASensorManager_getInstance();
         mAccelerometerSensor = ASensorManager_getDefaultSensor(mSensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, NULL, NULL);
+        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, nullptr, nullptr);
     }
     
     void CinderDelegate::setup(int width, int height)
     {
-        mWindowInfo.size = Vec2i(width, height);
-        SystemInfo::instance().setWindowInfo(mWindowInfo); // TODO: THERE SHOULD BE A DisplayInfo STRUCT FOR EVERYTHING EXCEPT SIZE
+        windowInfo.size = Vec2i(width, height);
         
         io = make_shared<boost::asio::io_service>();
         ioWork = make_shared<boost::asio::io_service::work>(*io);
@@ -120,10 +118,50 @@ namespace chronotext
     
     void CinderDelegate::resize(int width, int height)
     {
-        mWindowInfo.size = Vec2i(width, height);
-        SystemInfo::instance().setWindowInfo(mWindowInfo); // TODO: THERE SHOULD BE A DisplayInfo STRUCT FOR EVERYTHING EXCEPT SIZE
-
+        windowInfo.size = Vec2i(width, height);
         sketch->resize();
+    }
+    
+    void CinderDelegate::event(int eventId)
+    {
+        switch (eventId)
+        {
+            case EVENT_RESUMED:
+                start(CinderSketch::FLAG_APP_RESUMED);
+                break;
+                
+            case EVENT_SHOWN:
+                start(CinderSketch::FLAG_APP_SHOWN);
+                break;
+                
+            case EVENT_PAUSED:
+                stop(CinderSketch::FLAG_APP_PAUSED);
+                break;
+                
+            case EVENT_HIDDEN:
+                stop(CinderSketch::FLAG_APP_HIDDEN);
+                break;
+                
+            case EVENT_CONTEXT_LOST:
+                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
+                break;
+                
+            case EVENT_CONTEXT_RENEWED:
+                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
+                break;
+                
+            case EVENT_BACKGROUND:
+                sketch->event(CinderSketch::EVENT_BACKGROUND);
+                break;
+                
+            case EVENT_FOREGROUND:
+                sketch->event(CinderSketch::EVENT_FOREGROUND);
+                break;
+                
+            case EVENT_BACK_KEY:
+                sketch->event(CinderSketch::EVENT_BACK_KEY);
+                break;
+        }
     }
     
     void CinderDelegate::draw()
@@ -147,48 +185,6 @@ namespace chronotext
         mFrameCount++;
 
         sketch->draw();
-    }
-    
-    void CinderDelegate::event(int eventId)
-    {
-        switch (eventId)
-        {
-            case EVENT_RESUMED:
-                start(CinderSketch::FLAG_APP_RESUMED);
-                break;
-
-            case EVENT_SHOWN:
-                start(CinderSketch::FLAG_APP_SHOWN);
-                break;
-
-            case EVENT_PAUSED:
-                stop(CinderSketch::FLAG_APP_PAUSED);
-                break;
-                
-            case EVENT_HIDDEN:
-                stop(CinderSketch::FLAG_APP_HIDDEN);
-                break;
-
-            case EVENT_CONTEXT_LOST:
-                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
-                break;
-
-            case EVENT_CONTEXT_RENEWED:
-                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
-                break;
-
-            case EVENT_BACKGROUND:
-                sketch->event(CinderSketch::EVENT_BACKGROUND);
-                break;
-                
-            case EVENT_FOREGROUND:
-                sketch->event(CinderSketch::EVENT_FOREGROUND);
-                break;
-                
-            case EVENT_BACK_KEY:
-                sketch->event(CinderSketch::EVENT_BACK_KEY);
-                break;
-        }
     }
     
     void CinderDelegate::addTouch(int index, float x, float y)
@@ -250,46 +246,6 @@ namespace chronotext
     uint32_t CinderDelegate::getElapsedFrames() const
     {
         return mFrameCount;
-    }
-    
-    int CinderDelegate::getWindowWidth() const
-    {
-        return mWindowInfo.size.x;
-    }
-    
-    int CinderDelegate::getWindowHeight() const
-    {
-        return mWindowInfo.size.y;
-    }
-    
-    Vec2f CinderDelegate::getWindowCenter() const
-    {
-        return mWindowInfo.size * 0.5f;
-    }
-    
-    Vec2i CinderDelegate::getWindowSize() const
-    {
-        return mWindowInfo.size;
-    }
-    
-    float CinderDelegate::getWindowAspectRatio() const
-    {
-        return mWindowInfo.size.x / (float)mWindowInfo.size.y;
-    }
-    
-    Area CinderDelegate::getWindowBounds() const
-    {
-        return Area(0, 0, mWindowInfo.size.x, mWindowInfo.size.y);
-    }
-
-    float CinderDelegate::getWindowContentScale() const
-    {
-        return mWindowInfo.contentScale;
-    }
-    
-    WindowInfo CinderDelegate::getWindowInfo() const
-    {
-        return mWindowInfo;
     }
     
     void CinderDelegate::action(int actionId)
@@ -409,7 +365,7 @@ namespace chronotext
     
     JNIEnv* CinderDelegate::getJNIEnv()
     {
-        JNIEnv *env = NULL;
+        JNIEnv *env = nullptr;
         
         int err = mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
         
