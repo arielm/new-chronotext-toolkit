@@ -121,6 +121,7 @@
 		A8B31A7F19E7391900127AAA /* SystemManagerBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemManagerBase.cpp; sourceTree = "<group>"; };
 		A8B31A8019E7391900127AAA /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
 		A8B31A8219E74BC500127AAA /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
+		A8B31A8E19E8039E00127AAA /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A8EC39CC178584A000837298 /* TextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureData.h; sourceTree = "<group>"; };
 		A8EC39CD178584A000837298 /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
 		A8F2E30A189E4FDE002D5D75 /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
@@ -275,6 +276,7 @@
 				A82AF20619E6F82500EE42E6 /* DisplayHelper.h */,
 				A8B31A8219E74BC500127AAA /* DisplayHelper.cpp */,
 				A824C4551905F830003C4B84 /* SystemInfo.h */,
+				A8B31A8E19E8039E00127AAA /* SystemInfoBase.h */,
 				A8B31A8019E7391900127AAA /* SystemManager.h */,
 				A824C4561905F830003C4B84 /* SystemManagerBase.h */,
 				A8B31A7F19E7391900127AAA /* SystemManagerBase.cpp */,

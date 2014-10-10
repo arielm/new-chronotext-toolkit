@@ -8,16 +8,20 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
-
-#if defined(CINDER_COCOA_TOUCH)
-#include "chronotext/ios/system/SystemInfo.h"
-#elif defined(CINDER_ANDROID)
-#include "chronotext/android/system/SystemInfo.h"
-#else
 #include "chronotext/system/SystemInfoBase.h"
+
 namespace chronotext
 {
-    typedef SystemInfoBase SystemInfo;
+    class SystemInfo : public SystemInfoBase
+    {
+    public:
+        std::string model;
+        std::string machine;
+        
+        bool isPodTouch;
+        bool isIPhone;
+        bool isPad;
+        bool isPadMini;
+        bool isSimulator;
+    };
 }
-#endif
