@@ -32,36 +32,40 @@ namespace chronotext
     }
     
     /*
-     * CALLED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
+     * CALLED BEFORE THE RENDERER'S THREAD IS CREATED
      */
-    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
+    void CinderDelegate::prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener)
     {
         mJavaVM = javaVM;
         mJavaContext = javaContext;
         mJavaListener = javaListener;
+    }
+    
+    /*
+     * CALLED ON THE RENDERER'S THREAD, BEFORE THE GL-CONTEXT IS CREATED
+     */
+    void CinderDelegate::launch(jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
+    {
+        /*
+         * TODO: javaDisplay SHOULD BE PART OF SystemManager (OR DisplayManager)
+         */
         mJavaDisplay = javaDisplay;
         
-        JNIEnv *env;
-        javaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        // ---
-        
-        /*
-         * TODO: displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
-         */
         displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
         
         // ---
         
-        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getAssets", "()Landroid/content/res/AssetManager;");
-        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(javaContext, getAssetsMethod));
+        JNIEnv *env = getJNIEnv();
+        
+        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(mJavaContext), "getAssets", "()Landroid/content/res/AssetManager;");
+        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(mJavaContext, getAssetsMethod));
         
         FileSystem::setAndroidAssetManager(assetManager);
         
         // ---
         
-        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
-        jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
+        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(mJavaContext), "getFilesDir", "()Ljava/io/File;");
+        jobject filesDirObject = env->CallObjectMethod(mJavaContext, getFilesDirMethod);
         jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
         jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
         
@@ -82,8 +86,8 @@ namespace chronotext
         
         // ---
         
-        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getPackageCodePath", "()Ljava/lang/String;");
-        jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext, getPackageCodePathMethod);
+        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(mJavaContext), "getPackageCodePath", "()Ljava/lang/String;");
+        jstring packageCodePathString = (jstring)env->CallObjectMethod(mJavaContext, getPackageCodePathMethod);
         
         const char *apkPath = env->GetStringUTFChars(packageCodePathString, nullptr);
         FileSystem::setAndroidApkPath(apkPath);
@@ -348,7 +352,7 @@ namespace chronotext
     }
     
     /*
-     * TODO: COULD BE PART OF SystemManager (OR DisplayManager)
+     * TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
      */
     int CinderDelegate::getDisplayRotation()
     {

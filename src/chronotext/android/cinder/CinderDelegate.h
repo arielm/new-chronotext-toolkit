@@ -41,7 +41,8 @@ namespace chronotext
         CinderDelegate();
         virtual ~CinderDelegate();
         
-        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
+        void prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
+        void launch(jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void setup(int width, int height);
         void shutdown();

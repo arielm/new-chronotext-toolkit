@@ -12,6 +12,7 @@ import org.chronotext.gl.GLView;
 import org.chronotext.utils.Utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class CinderDelegate extends Handler
     mHandler = this;
 
     mRenderer = new CinderRenderer(activity, this);
+    prelaunch(activity, this); // WILL CREATE THE C++ CinderDelegate
 
     mView = new GLView(activity);
     mView.setRenderer(mRenderer); // WILL START THE RENDERER'S THREAD
@@ -167,4 +169,8 @@ public class CinderDelegate extends Handler
   {
     mView.sendMessage(what, body);
   }
+
+  // ---------------------------------------- JNI ----------------------------------------
+
+  public native void prelaunch(Context context, Object listener);
 }

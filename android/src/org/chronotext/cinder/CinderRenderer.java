@@ -42,8 +42,6 @@ public class CinderRenderer extends GLRenderer
   {
     mContext = context;
     mListener = listener;
-
-    prelaunch();
   }
 
   // ---------------------------------------- CALLBACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
@@ -54,8 +52,8 @@ public class CinderRenderer extends GLRenderer
     Point displaySize = DisplayUtils.getRealSize(display);
     float displayDensity = DisplayUtils.getRealDensity(display);
 
-    Utils.LOGD("CinderRenderer.launch: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + "dpi)");
-    launch(mContext, mListener, display, displaySize.x, displaySize.y, displayDensity);
+    Utils.LOGD("CinderRenderer.launch: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+    launch(display, displaySize.x, displaySize.y, displayDensity);
   }
 
   public void setup(GL10 gl, int width, int height)
@@ -144,8 +142,7 @@ public class CinderRenderer extends GLRenderer
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  public native void prelaunch();
-  public native void launch(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
+  public native void launch(Display display, int displayWidth, int displayHeight, float displayDensity);
 
   public native void setup(int width, int height);
   public native void shutdown();

@@ -15,11 +15,13 @@ extern "C"
     /*
      * THIS IS THE "STUB" FUNCTION:
      * IT SHOULD RETURN CinderDelegate WITH A PROPERLY DEFINED CinderSketch
+     *
+     * TODO: ADD DEFAULT "STUB" FUNCTION (THAT COULD BE OVERRIDEN IN A NON-MANDATORY main.cpp?)
      */
     chr::CinderDelegate* createDelegate();
 
-    void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject obj);
-    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
+    void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener);
+    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
 
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
@@ -47,24 +49,20 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 }
 
 /*
- * THIS MUST BE CALLED AS SOON AS THE APP STARTS
+ * MUST BE CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
  */
-void Java_org_chronotext_cinder_CinderRenderer_prelaunch(JNIEnv *env, jobject obj)
+void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener)
 {
     gDelegate = createDelegate();
+    gDelegate->prelaunch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener));
 }
 
 /*
- * THIS MUST BE CALLED FROM THE RENDERER'S THREAD, AS-SOON-AS IT STARTS
+ * MUST BE CALLED ON THE RENDERER'S THREAD, BEFORE THE GL-CONTEXT IS CREATED
  */
-void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
+void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
-    /*
-     * FROM ICS AND HIGHER, WE NEED TO WRAP jobject INSTANCES AS GLOBAL-REFERENCES
-     * IN THEORY, WE SHOULD DELETE THE REFERENCES UPON APPLICATION-EXIT
-     * (BUT IN PRACTICE, THIS IS A NON-ISSUE...)
-     */
-    gDelegate->launch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    gDelegate->launch(env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
