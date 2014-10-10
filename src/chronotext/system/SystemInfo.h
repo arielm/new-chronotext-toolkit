@@ -41,7 +41,7 @@ namespace chronotext
             
             if (!rhs.compositeModelString.empty())
             {
-                lhs << ", model: " << rhs.compositeModelString;
+                lhs << ", model: '" << rhs.compositeModelString << "'";
             }
             
             lhs << "}";

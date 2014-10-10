@@ -21,13 +21,14 @@ namespace chronotext
         static SystemManagerBase& instance();
 
         virtual SystemInfo getSystemInfo() const;
+        
         virtual std::string getIpAddress(bool maskForBroadcast = false);
         
     protected:
         SystemInfo systemInfo;
 
         SystemManagerBase();
-        virtual void update();
+        virtual void updateSystemInfo();
 
         virtual std::string getOsVersionString();
         virtual std::string getCompositeModelString();

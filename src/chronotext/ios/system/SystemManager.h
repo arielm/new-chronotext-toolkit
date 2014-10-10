@@ -32,6 +32,7 @@ namespace chronotext
         
     protected:
         SystemManager();
+        void updateSystemInfo();
         
         std::string getCompositeModelString();
     };

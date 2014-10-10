@@ -25,7 +25,14 @@ namespace chronotext
     
     SystemManager::SystemManager()
     {
-        SystemManagerBase::update(); // XXX: AWKWARD, BUT WHEN INVOKING THE SUPER-CONSTUCTOR, OUR OVERRIDEN METHODS ARE NOT CALLED
+        updateSystemInfo();
+    }
+    
+#pragma mark ---------------------------------------- SystemInfo ----------------------------------------
+
+    void SystemManager::updateSystemInfo()
+    {
+        SystemManagerBase::updateSystemInfo();
     }
     
     string SystemManager::getCompositeModelString()

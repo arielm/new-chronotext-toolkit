@@ -36,6 +36,8 @@ namespace chronotext
         static const string PLATFORM_NAMES[4] = {"OSX", "Windows", "iOS", "Android"};
         return PLATFORM_NAMES[getPlatform()];
     }
+    
+    // ---
 
     SystemManagerBase& SystemManagerBase::instance()
     {
@@ -45,7 +47,7 @@ namespace chronotext
     
     SystemManagerBase::SystemManagerBase()
     {
-        update();
+        updateSystemInfo();
     }
     
     SystemInfo SystemManagerBase::getSystemInfo() const
@@ -53,6 +55,8 @@ namespace chronotext
         return systemInfo;
     }
     
+#pragma mark ---------------------------------------- RUN-TIME METHODS ----------------------------------------
+
 #if defined(ANDROID)
     string SystemManagerBase::getIpAddress(bool maskForBroadcast)
     {
@@ -75,7 +79,9 @@ namespace chronotext
     }
 #endif
     
-    void SystemManagerBase::update()
+#pragma mark ---------------------------------------- SystemInfo ----------------------------------------
+    
+    void SystemManagerBase::updateSystemInfo()
     {
         systemInfo.platform = getPlatform();
         systemInfo.platformString = getPlatformString();
