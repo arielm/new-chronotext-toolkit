@@ -14,7 +14,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.chronotext.gl.Touch;
-import org.chronotext.Utils;
+import org.chronotext.utils.Utils;
 
 import android.opengl.GLSurfaceView;
 import android.view.View;

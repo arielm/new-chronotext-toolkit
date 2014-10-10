@@ -1,8 +1,8 @@
 
 package org.chronotext.MobileTest;
 
-import org.chronotext.Utils;
 import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 

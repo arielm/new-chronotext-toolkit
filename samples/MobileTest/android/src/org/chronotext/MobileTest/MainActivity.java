@@ -1,7 +1,7 @@
 
 package org.chronotext.MobileTest;
 
-import org.chronotext.Utils;
+import org.chronotext.utils.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;

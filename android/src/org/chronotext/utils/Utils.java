@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-package org.chronotext;
+package org.chronotext.utils;
 
 import android.util.Log;
 
@@ -17,24 +17,24 @@ public class Utils
 
   public static void LOGD(String message)
   {
-  	if (DEBUG)
-  	{
-  		Log.i(TAG, message);
-  	}
+    if (DEBUG)
+    {
+      Log.i(TAG, message);
+    }
   }
 
   public static void LOGI(String message)
   {
-	  Log.i(TAG, message);
+    Log.i(TAG, message);
   }
 
   public static void LOGE(String message)
   {
-	  Log.e(TAG, message);
+    Log.e(TAG, message);
   }
 
   public static void LOGW(String message)
   {
-	  Log.w(TAG, message);
+    Log.w(TAG, message);
   }
 }

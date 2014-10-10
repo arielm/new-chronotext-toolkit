@@ -16,7 +16,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import java.util.Vector;
 
 import org.chronotext.gl.Touch;
-import org.chronotext.Utils;
+import org.chronotext.utils.Utils;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
