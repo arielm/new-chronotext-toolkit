@@ -12,6 +12,8 @@
 
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/system/EmulatedDevice.h"
+#include "chronotext/InputSource.h"
+#include "chronotext/Utils/utils.h"
 
 namespace chronotext
 {
@@ -21,6 +23,8 @@ namespace chronotext
         CinderSketch *sketch;
 
         CinderApp();
+        
+        void applyDefaultSettings(Settings *settings);
         
         void setup();
         void shutdown();
@@ -43,15 +47,19 @@ namespace chronotext
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         void sendMessageToSketch(int what, const std::string &body);
         
-        void emulate(Settings *settings, const EmulatedDevice &device);
         bool isEmulated() const;
-        
         WindowInfo getWindowInfo() const;
         DisplayInfo getDisplayInfo() const;
+        
+        void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
+        bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
+        
+        bool loadEmulators(chr::InputSourceRef source);
         
     protected:
         bool emulated;
         EmulatedDevice emulatedDevice;
+        std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
         
         DisplayInfo realDisplayInfo;
         WindowInfo realWindowInfo;

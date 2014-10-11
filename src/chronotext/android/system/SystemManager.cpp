@@ -33,7 +33,7 @@ namespace chronotext
         updateSystemInfo();
     }
     
-#pragma mark ---------------------------------------- RUN-TIME METHODS ----------------------------------------
+#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
     
     string SystemManager::getIpAddress(bool maskForBroadcast)
     {

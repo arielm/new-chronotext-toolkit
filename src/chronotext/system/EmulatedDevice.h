@@ -34,12 +34,10 @@ namespace chronotext
         windowInfo(windowInfo)
         {}
         
-        EmulatedDevice& rotated()
+        void rotate()
         {
             displayInfo.rotate();
             windowInfo.rotate();
-            
-            return *this;
         }
         
         friend std::ostream& operator<<(std::ostream &lhs, const EmulatedDevice &rhs)

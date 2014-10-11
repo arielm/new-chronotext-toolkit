@@ -7,11 +7,10 @@
  */
 
 /*
- * STUB FOR RUNNING A CinderSketch ON THE DESKTOP (OSX OR WINDOW)
+ * STUB FOR RUNNING A CinderSketch ON THE DESKTOP
  */
 
 #include "chronotext/cinder/CinderApp.h"
-#include "chronotext/system/Emulators.h"
 
 #include "Sketch.h"
 
@@ -36,16 +35,18 @@ Application::Application()
 
 void Application::prepareSettings(Settings *settings)
 {
-    settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL SYNC IS ALLOWED BY DEFAULT)
-    settings->enableHighDensityDisplay();
+    CinderApp::prepareSettings(settings);
     
-//  emulate(settings, Emulators::IPHONE_3GS_PORTRAIT.rotated());
-    emulate(settings, Emulators::IPHONE_4_PORTRAIT.rotated());
-//  emulate(settings, Emulators::IPHONE_5_PORTRAIT.rotated());
-//  emulate(settings, Emulators::IPAD_1_LANDSCAPE);
-//  emulate(settings, Emulators::GALAXY_S_PORTRAIT.rotated());
-//  emulate(settings, Emulators::GALAXY_S4_PORTRAIT.rotated());
-//  emulate(settings, Emulators::NEXUS_7_2012_PORTRAIT.rotated());
+    if (loadEmulators(InputSource::getResource("emulators.json")))
+    {
+//      emulate(settings, "IPHONE_3GS", DisplayInfo::ORIENTATION_PORTRAIT);
+        emulate(settings, "IPHONE_4", DisplayInfo::ORIENTATION_LANDSCAPE);
+//      emulate(settings, "IPHONE_5", DisplayInfo::ORIENTATION_LANDSCAPE);
+//      emulate(settings, "IPAD_1", DisplayInfo::ORIENTATION_LANDSCAPE);
+//      emulate(settings, "GALAXY_S", DisplayInfo::ORIENTATION_PORTRAIT);
+//      emulate(settings, "GALAXY_S4", DisplayInfo::ORIENTATION_LANDSCAPE);
+//      emulate(settings, "NEXUS_7_2012", DisplayInfo::ORIENTATION_LANDSCAPE);
+    }
 }
 
 void Application::keyDown(KeyEvent event)

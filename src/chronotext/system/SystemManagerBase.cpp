@@ -55,7 +55,7 @@ namespace chronotext
         updateSystemInfo();
     }
 
-#pragma mark ---------------------------------------- RUN-TIME METHODS ----------------------------------------
+#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
 
 #if defined(ANDROID)
     string SystemManagerBase::getIpAddress(bool maskForBroadcast)

@@ -41,6 +41,7 @@
 		A8B31A8119E7391900127AAA /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8B31A7F19E7391900127AAA /* SystemManagerBase.cpp */; };
 		A8B31A8319E74BC500127AAA /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8B31A8219E74BC500127AAA /* DisplayHelper.cpp */; };
 		A8B31A9119E83CF400127AAA /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8B31A9019E83CF400127AAA /* Application.cpp */; };
+		A8B31AA119E8A83000127AAA /* emulators.json in Resources */ = {isa = PBXBuildFile; fileRef = A8B31AA019E8A83000127AAA /* emulators.json */; };
 		A8F2E312189E4FDE002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E30A189E4FDE002D5D75 /* Clock.cpp */; };
 		A8F2E314189E4FDE002D5D75 /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E30F189E4FDE002D5D75 /* FrameClock.cpp */; };
 /* End PBXBuildFile section */
@@ -116,12 +117,12 @@
 		A87207F718081C460055F0BA /* SuperHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SuperHandler.cpp; sourceTree = "<group>"; };
 		A87207F818081C460055F0BA /* SuperHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperHandler.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
-		A8B31A7E19E7333F00127AAA /* Emulators.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Emulators.h; sourceTree = "<group>"; };
 		A8B31A7F19E7391900127AAA /* SystemManagerBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemManagerBase.cpp; sourceTree = "<group>"; };
 		A8B31A8019E7391900127AAA /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
 		A8B31A8219E74BC500127AAA /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
 		A8B31A8E19E8039E00127AAA /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
 		A8B31A9019E83CF400127AAA /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
+		A8B31AA019E8A83000127AAA /* emulators.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = emulators.json; path = ../resources/emulators.json; sourceTree = "<group>"; };
 		A8EC39CC178584A000837298 /* TextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureData.h; sourceTree = "<group>"; };
 		A8EC39CD178584A000837298 /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
 		A8F2E30A189E4FDE002D5D75 /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
@@ -208,6 +209,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A8B31AA019E8A83000127AAA /* emulators.json */,
 				A802711419CC7CFC0072973D /* dot_112.png */,
 				A80270DA19CC753C0072973D /* Roboto_Regular_64.fnt */,
 			);
@@ -270,7 +272,6 @@
 			isa = PBXGroup;
 			children = (
 				A824C4541905F830003C4B84 /* EmulatedDevice.h */,
-				A8B31A7E19E7333F00127AAA /* Emulators.h */,
 				A82AF20719E6F85100EE42E6 /* DisplayInfo.h */,
 				A82AF20619E6F82500EE42E6 /* DisplayHelper.h */,
 				A8B31A8219E74BC500127AAA /* DisplayHelper.cpp */,
@@ -450,6 +451,7 @@
 			files = (
 				A80270DB19CC753C0072973D /* Roboto_Regular_64.fnt in Resources */,
 				A802711519CC7CFC0072973D /* dot_112.png in Resources */,
+				A8B31AA119E8A83000127AAA /* emulators.json in Resources */,
 				A8027DFA16E377AE00184149 /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

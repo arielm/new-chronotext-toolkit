@@ -17,6 +17,14 @@ namespace chronotext
     public:
         constexpr static float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
         
+        typedef enum
+        {
+            ORIENTATION_DEFAULT,
+            ORIENTATION_PORTRAIT,
+            ORIENTATION_LANDSCAPE
+        }
+        Orientation;
+        
         static DisplayInfo create(int width, int height, float contentScale = 1)
         {
             return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, 0);
@@ -88,9 +96,18 @@ namespace chronotext
             return aspectRatio;
         }
 
-        bool isLandscape() const
+        Orientation getOrientation() const
         {
-            return (aspectRatio > 1);
+            if (aspectRatio > 1)
+            {
+                return ORIENTATION_LANDSCAPE;
+            }
+            if (aspectRatio > 0)
+            {
+                return ORIENTATION_PORTRAIT;
+            }
+            
+            return ORIENTATION_DEFAULT;
         }
 
         friend std::ostream& operator<<(std::ostream &lhs, const DisplayInfo &rhs)

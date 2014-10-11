@@ -10,6 +10,8 @@
 #include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/Utils.h"
 
+#include "cinder/Json.h"
+
 using namespace std;
 using namespace ci;
 using namespace ci::app;
@@ -23,6 +25,12 @@ namespace chronotext
     startCount(0),
     updateCount(0)
     {}
+    
+    void CinderApp::applyDefaultSettings(Settings *settings)
+    {
+        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
+        settings->enableHighDensityDisplay();
+    }
 
     void CinderApp::setup()
     {
@@ -150,22 +158,6 @@ namespace chronotext
         sketch->sendMessage(Message(what, body));
     }
     
-    /*
-     * TODO: ADDITIONAL CARE IS REQUIRED FOR "SIMULATED" CONTENT-SCALE AND ANTI-ALIASING
-     */
-    void CinderApp::emulate(Settings *settings, const EmulatedDevice &device)
-    {
-        emulatedDevice = device;
-        emulated = true;
-        
-        settings->setWindowSize(emulatedDevice.windowInfo.size);
-        
-        /*
-         * ALLOWING TO RESIZE AN EMULATOR WOULD BE POINTLESS (AND NOT TRIVIAL TO IMPLEMENT...)
-         */
-        settings->setResizable(false);
-    }
-    
     bool CinderApp::isEmulated() const
     {
         return emulated;
@@ -180,6 +172,113 @@ namespace chronotext
     {
         return isEmulated() ? emulatedDevice.displayInfo : realDisplayInfo;
     }
+    
+#pragma mark ---------------------------------------- EMULATION ----------------------------------------
+    
+    /*
+     * TODO: ADDITIONAL CARE IS REQUIRED FOR "SIMULATED" CONTENT-SCALE AND ANTI-ALIASING
+     */
+    
+    void CinderApp::emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation)
+    {
+        emulated = true;
+        emulatedDevice = device; // COPYING, IN ORDER TO ALLOW ROTATION
+        
+        if (device.displayInfo.getOrientation() != orientation)
+        {
+            emulatedDevice.rotate();
+        }
+        
+        settings->setWindowSize(emulatedDevice.windowInfo.size);
+        
+        /*
+         * ALLOWING TO RESIZE AN EMULATOR WOULD BE POINTLESS (AND NOT TRIVIAL TO IMPLEMENT...)
+         */
+        settings->setResizable(false);
+    }
+    
+    bool CinderApp::emulate(Settings *settings, const string &deviceKey, DisplayInfo::Orientation orientation)
+    {
+        auto it = emulators.find(deviceKey);
+        
+        if (it != emulators.end())
+        {
+            emulate(settings, *it->second, orientation);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    bool CinderApp::loadEmulators(InputSourceRef source)
+    {
+        emulators.clear();
+        
+        JsonTree doc(source->loadDataSource());
+        
+        for (auto &emulatorNode: doc.getChildren())
+        {
+            auto emulatorKey = emulatorNode.getKey();
+            auto &displayNode = emulatorNode["display"];
+            
+            // ---
+            
+            auto &sizeNode = displayNode["size"];
+            int displayWidth = sizeNode[0].getValue<int>();
+            int displayHeight = sizeNode[1].getValue<int>();
+            
+            // ---
+            
+            float contentScale = 1;
+            
+            if (displayNode.hasChild("contentScale"))
+            {
+                contentScale = displayNode["contentScale"].getValue<float>();
+            }
+            
+            // ---
+            
+            DisplayInfo displayInfo;
+            
+            if (displayNode.hasChild("diagonal"))
+            {
+                float diagonal = displayNode["diagonal"].getValue<float>();
+                displayInfo = DisplayInfo::createWithDiagonal(displayWidth, displayHeight, diagonal, contentScale);
+            }
+            else if (displayNode.hasChild("density"))
+            {
+                float density = displayNode["density"].getValue<float>();
+                displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, density, contentScale);
+            }
+            else
+            {
+                throw runtime_error(emulatorKey + ": display MUST HAVE A diagonal OR density");
+            }
+            
+            // ---
+            
+            if (emulatorNode.hasChild("window"))
+            {
+                auto &sizeNode = emulatorNode["window"]["size"];
+                int windowWidth = sizeNode[0].getValue<int>();
+                int windowHeight = sizeNode[1].getValue<int>();
+                
+                WindowInfo windowInfo(Vec2i(windowWidth, windowHeight));
+                
+                // ---
+                
+                emulators[emulatorKey] = make_shared<EmulatedDevice>(displayInfo, windowInfo);
+            }
+            else
+            {
+                emulators[emulatorKey] = make_shared<EmulatedDevice>(displayInfo);
+            }
+        }
+        
+        return !emulators.empty();
+    }
+
+#pragma mark ---------------------------------------- ----------------------------------------
     
     void CinderApp::updateRealDisplayInfo()
     {

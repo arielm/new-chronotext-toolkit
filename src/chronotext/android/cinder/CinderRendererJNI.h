@@ -15,8 +15,6 @@ extern "C"
     /*
      * THIS IS THE "STUB" FUNCTION:
      * IT SHOULD RETURN CinderDelegate WITH A PROPERLY DEFINED CinderSketch
-     *
-     * TODO: ADD DEFAULT "STUB" FUNCTION (THAT COULD BE OVERRIDEN IN A NON-MANDATORY main.cpp?)
      */
     chr::CinderDelegate* createDelegate();
 
