@@ -24,6 +24,8 @@ namespace chronotext
     mTimeline(Timeline::create())
     {}
     
+#pragma mark ---------------------------------------- GETTERS ----------------------------------------
+
     bool CinderSketchSimple::isEmulated() const
     {
         return static_cast<CinderApp*>(context)->isEmulated();
@@ -38,6 +40,8 @@ namespace chronotext
     {
         return static_cast<CinderApp*>(context)->getWindowInfo();
     }
+    
+#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
     
     void CinderSketchSimple::action(int actionId)
     {

@@ -10,7 +10,7 @@
 
 #include "chronotext/cinder/CinderSketchBase.h"
 
-#include "cinder/app/AppCocoaTouch.h"
+#include "cinder/app/TouchEvent.h"
 
 namespace chronotext
 {
@@ -18,13 +18,6 @@ namespace chronotext
     {
     public:
         CinderSketchComplex(void *context, void *delegate = nullptr);
-        
-        void touchesBegan(ci::app::TouchEvent event);
-        void touchesMoved(ci::app::TouchEvent event);
-        void touchesEnded(ci::app::TouchEvent event);
-        
-        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
         
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
@@ -38,6 +31,13 @@ namespace chronotext
         bool isEmulated() const;
         DisplayInfo getDisplayInfo() const;
         WindowInfo getWindowInfo() const;
+
+        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
+        void disableAccelerometer();
+
+        void touchesBegan(ci::app::TouchEvent event);
+        void touchesMoved(ci::app::TouchEvent event);
+        void touchesEnded(ci::app::TouchEvent event);
 
         void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");

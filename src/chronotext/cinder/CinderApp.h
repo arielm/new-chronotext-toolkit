@@ -38,7 +38,9 @@ namespace chronotext
         
         void update();
         void draw();
-        
+
+        void accelerated(AccelEvent event);
+
         void mouseDown(ci::app::MouseEvent event);
         void mouseUp(ci::app::MouseEvent event);
         void mouseDrag(ci::app::MouseEvent event);
@@ -47,15 +49,12 @@ namespace chronotext
         void touchesMoved(ci::app::TouchEvent event);
         void touchesEnded(ci::app::TouchEvent event);
         
-        void accelerated(AccelEvent event);
-        
         bool isEmulated() const;
         WindowInfo getWindowInfo() const;
         DisplayInfo getDisplayInfo() const;
         
         void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
-        
         bool loadEmulators(chr::InputSourceRef source);
         
     protected:

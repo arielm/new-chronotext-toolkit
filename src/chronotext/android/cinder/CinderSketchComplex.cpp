@@ -24,16 +24,8 @@ namespace chronotext
     mTimeline(Timeline::create())
     {}
     
-    void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
-    {
-        context->enableAccelerometer(updateFrequency, filterFactor);
-    }
-    
-    void CinderSketchComplex::disableAccelerometer()
-    {
-        context->disableAccelerometer();
-    }
-    
+#pragma mark ---------------------------------------- GETTERS ----------------------------------------
+
     ostream& CinderSketchComplex::console()
     {
         return context->console();
@@ -68,6 +60,20 @@ namespace chronotext
     {
         return context->getWindowInfo();
     }
+    
+#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
+
+    void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
+    {
+        context->enableAccelerometer(updateFrequency, filterFactor);
+    }
+    
+    void CinderSketchComplex::disableAccelerometer()
+    {
+        context->disableAccelerometer();
+    }
+    
+#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
     
     void CinderSketchComplex::action(int actionId)
     {

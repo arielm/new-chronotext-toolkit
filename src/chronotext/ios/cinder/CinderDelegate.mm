@@ -26,24 +26,27 @@ using namespace chr;
 
 @interface CinderDelegate ()
 {
-    map<UITouch*, uint32_t> touchIdMap;
-    
-    float accelFilterFactor;
-    Vec3f lastAccel, lastRawAccel;
+    AccelEvent::Filter accelFilter;
     
     shared_ptr<boost::asio::io_service> io;
     shared_ptr<boost::asio::io_service::work> ioWork;
 
     DisplayInfo displayInfo;
     WindowInfo windowInfo;
+
+    BOOL initialized;
+    BOOL active;
     BOOL forceResize;
-    
+
     Timer timer;
     uint32_t frameCount;
     
-    BOOL initialized;
-    BOOL active;
+    map<UITouch*, uint32_t> touchIdMap;
 }
+
+- (void) startIOService;
+- (void) stopIOService;
+- (void) pollIOService;
 
 - (void) updateDisplayInfo;
 - (Vec2f) windowSize;
@@ -61,7 +64,7 @@ using namespace chr;
 @synthesize view;
 @synthesize viewController;
 @synthesize sketch;
-@synthesize accelFilterFactor;
+@synthesize accelFilter;
 @synthesize io;
 @synthesize displayInfo;
 @synthesize windowInfo;
@@ -72,8 +75,6 @@ using namespace chr;
 {
     if (self = [super init])
     {
-        lastAccel = lastRawAccel = Vec3f::zero();
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
@@ -85,7 +86,7 @@ using namespace chr;
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    io->stop();
+    [self stopIOService];
     
     sketch->shutdown();
     delete sketch;
@@ -138,9 +139,8 @@ using namespace chr;
     forceResize = YES;
     
     // ---
-    
-    io = make_shared<boost::asio::io_service>();
-    ioWork = make_shared<boost::asio::io_service::work>(*io);
+
+    [self startIOService];
 
     sketch->setIOService(*io);
     sketch->timeline().stepTo(0);
@@ -165,7 +165,7 @@ using namespace chr;
 - (void) update
 {
     sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-    io->poll();
+    [self pollIOService];
     
     /*
      * MUST BE CALLED BEFORE Sketch::update
@@ -191,29 +191,7 @@ using namespace chr;
     sketch->draw();
 }
 
-- (void) action:(int)actionId
-{}
-
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
-{}
-
-- (void) sendMessageToSketch:(int)what
-{
-    sketch->sendMessage(Message(what));
-}
-
-- (void) sendMessageToSketch:(int)what json:(id)json
-{
-    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
-    NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    
-    [self sendMessageToSketch:what body:string];
-}
-
-- (void) sendMessageToSketch:(int)what body:(NSString*)body
-{
-    sketch->sendMessage(Message(what, [body UTF8String]));
-}
+#pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
 - (double) elapsedSeconds
 {
@@ -225,9 +203,27 @@ using namespace chr;
     return frameCount;
 }
 
-- (BOOL) simulated
+- (BOOL) emulated
 {
     return SystemManager::getSystemInfo().isSimulator;
+}
+
+#pragma mark ---------------------------------------- IO SERVICE ----------------------------------------
+
+- (void) startIOService
+{
+    io = make_shared<boost::asio::io_service>();
+    ioWork = make_shared<boost::asio::io_service::work>(*io);
+}
+
+- (void) stopIOService
+{
+    io->stop();
+}
+
+- (void) pollIOService
+{
+    io->poll();
 }
 
 #pragma mark ---------------------------------------- DISPLAY AND WINDOW INFO ----------------------------------------
@@ -340,13 +336,7 @@ using namespace chr;
     }
     
     Vec3f transformed(ax, ay, acceleration.z);
-    Vec3f filtered = lastAccel * (1 - accelFilterFactor) + transformed * accelFilterFactor;
-    
-    AccelEvent event(filtered, transformed, lastAccel, lastRawAccel);
-    sketch->accelerated(event);
-    
-    lastAccel = filtered;
-    lastRawAccel = transformed;
+    sketch->accelerated(accelFilter.process(transformed));
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -475,6 +465,32 @@ using namespace chr;
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
     [self touchesEnded:touches withEvent:event];
+}
+
+#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
+
+- (void) action:(int)actionId
+{}
+
+- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
+{}
+
+- (void) sendMessageToSketch:(int)what
+{
+    sketch->sendMessage(Message(what));
+}
+
+- (void) sendMessageToSketch:(int)what json:(id)json
+{
+    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
+    NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    
+    [self sendMessageToSketch:what body:string];
+}
+
+- (void) sendMessageToSketch:(int)what body:(NSString*)body
+{
+    sketch->sendMessage(Message(what, [body UTF8String]));
 }
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------

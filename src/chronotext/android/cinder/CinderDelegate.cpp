@@ -22,31 +22,12 @@ namespace chronotext
 {
     CinderDelegate::CinderDelegate()
     :
-    sketch(nullptr),
-    mLastAccel(Vec3f::zero()),
-    mLastRawAccel(Vec3f::zero())
+    sketch(nullptr)
     {}
     
     CinderDelegate::~CinderDelegate()
     {
         LOGI << "~CinderDelegate()" << endl;
-    }
-    
-    void CinderDelegate::action(int actionId)
-    {
-        callVoidMethodOnJavaListener("action", "(I)V", actionId);
-    }
-    
-    void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
-    {
-        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
-        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
-    }
-    
-    void CinderDelegate::sendMessageToSketch(int what, const string &body)
-    {
-        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
-        sketch->sendMessage(Message(what, body));
     }
     
     /*
@@ -174,6 +155,24 @@ namespace chronotext
         }
     }
     
+    void CinderDelegate::start(int flags)
+    {
+        mFrameCount = 0;
+        
+        mTimer.start();
+        sketch->clock().start();
+        
+        sketch->start(flags);
+    }
+    
+    void CinderDelegate::stop(int flags)
+    {
+        mTimer.stop();
+        sketch->clock().stop();
+        
+        sketch->stop(flags);
+    }
+    
     void CinderDelegate::draw()
     {
         sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
@@ -197,21 +196,8 @@ namespace chronotext
         sketch->draw();
     }
     
-    void CinderDelegate::addTouch(int index, float x, float y)
-    {
-        sketch->addTouch(index, x, y);
-    }
-    
-    void CinderDelegate::updateTouch(int index, float x, float y)
-    {
-        sketch->updateTouch(index, x, y);
-    }
-    
-    void CinderDelegate::removeTouch(int index, float x, float y)
-    {
-        sketch->removeTouch(index, x, y);
-    }
-    
+#pragma mark ---------------------------------------- GETTERS ----------------------------------------
+
     ostream& CinderDelegate::console()
     {
         if (!mOutputStream)
@@ -252,24 +238,6 @@ namespace chronotext
         return displayInfo;
     }
     
-    void CinderDelegate::start(int flags)
-    {
-        mFrameCount = 0;
-        
-        mTimer.start();
-        sketch->clock().start();
-        
-        sketch->start(flags);
-    }
-    
-    void CinderDelegate::stop(int flags)
-    {
-        mTimer.stop();
-        sketch->clock().stop();
-        
-        sketch->stop(flags);
-    }
-    
     /*
      * TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
      */
@@ -280,7 +248,7 @@ namespace chronotext
         return env->CallIntMethod(mJavaDisplay, getRotationMethod);
     }
     
-    // ---------------------------------------- IO SERVICE ----------------------------------------
+#pragma mark ---------------------------------------- IO SERVICE ----------------------------------------
 
     void CinderDelegate::startIOService()
     {
@@ -298,8 +266,8 @@ namespace chronotext
         io->poll();
     }
     
-    // ---------------------------------------- SENSOR EVENTS ----------------------------------------
-    
+#pragma mark ---------------------------------------- SENSOR EVENTS ----------------------------------------
+
     void CinderDelegate::createSensorEventQueue()
     {
         auto looper = ALooper_forThread();
@@ -332,12 +300,11 @@ namespace chronotext
         }
     }
     
-    // ---------------------------------------- ACCELEROMETER ----------------------------------------
-
-    const float GRAVITY_EARTH = 9.80665f;
+#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
 
     /*
      * REFERENCES:
+     *
      * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
      * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
      */
@@ -368,7 +335,7 @@ namespace chronotext
     
     void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
     {
-        mAccelFilterFactor = filterFactor;
+        accelFilter = AccelEvent::Filter(filterFactor);
         
         int delay = 1000000 / updateFrequency;
         int min = ASensor_getMinDelay(mAccelerometerSensor);
@@ -389,7 +356,7 @@ namespace chronotext
     
     void CinderDelegate::handleAcceleration(ASensorEvent event)
     {
-        int displayRotation = getDisplayRotation();
+        int displayRotation = getDisplayRotation(); // XXX
 
         Vec3f transformed;
         canonicalToWorld(displayRotation, (float*)&event.acceleration.v, transformed);
@@ -397,23 +364,49 @@ namespace chronotext
         /*
          * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
          */
-        dispatchAcceleration(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
+        transformed *= Vec3f(-1, -1, +1) / ASENSOR_STANDARD_GRAVITY; // TODO: DOUBLE-CHECK Z AXIS
+        
+        sketch->accelerated(accelFilter.process(transformed));
     }
     
-    void CinderDelegate::dispatchAcceleration(float x, float y, float z)
-    {
-        Vec3f acceleration(x, y, z);
-        Vec3f filtered = mLastAccel * (1 - mAccelFilterFactor) + acceleration * mAccelFilterFactor;
-        
-        AccelEvent event(filtered, acceleration, mLastAccel, mLastRawAccel);
-        sketch->accelerated(event);
-        
-        mLastAccel = filtered;
-        mLastRawAccel = acceleration;
-    }
+#pragma mark ---------------------------------------- TOUCH ----------------------------------------
 
-    // ---------------------------------------- JNI ----------------------------------------
+    void CinderDelegate::addTouch(int index, float x, float y)
+    {
+        sketch->addTouch(index, x, y);
+    }
     
+    void CinderDelegate::updateTouch(int index, float x, float y)
+    {
+        sketch->updateTouch(index, x, y);
+    }
+    
+    void CinderDelegate::removeTouch(int index, float x, float y)
+    {
+        sketch->removeTouch(index, x, y);
+    }
+    
+#pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------
+
+    void CinderDelegate::action(int actionId)
+    {
+        callVoidMethodOnJavaListener("action", "(I)V", actionId);
+    }
+    
+    void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
+    {
+        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
+        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
+    }
+    
+    void CinderDelegate::sendMessageToSketch(int what, const string &body)
+    {
+        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
+        sketch->sendMessage(Message(what, body));
+    }
+    
+#pragma mark ---------------------------------------- JNI ----------------------------------------
+
     JNIEnv* CinderDelegate::getJNIEnv()
     {
         JNIEnv *env = nullptr;

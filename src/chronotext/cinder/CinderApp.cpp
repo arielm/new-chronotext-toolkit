@@ -118,6 +118,28 @@ namespace chronotext
         sketch->draw();
     }
     
+    bool CinderApp::isEmulated() const
+    {
+        return emulated;
+    }
+    
+    WindowInfo CinderApp::getWindowInfo() const
+    {
+        return isEmulated() ? emulatedDevice.windowInfo : realWindowInfo;
+    }
+    
+    DisplayInfo CinderApp::getDisplayInfo() const
+    {
+        return isEmulated() ? emulatedDevice.displayInfo : realDisplayInfo;
+    }
+    
+#pragma mark ---------------------------------------- INPUT ----------------------------------------
+
+    void CinderApp::accelerated(AccelEvent event)
+    {
+        sketch->accelerated(event);
+    }
+    
     void CinderApp::mouseDown(MouseEvent event)
     {
         sketch->addTouch(0, event.getX(), event.getY());
@@ -155,26 +177,6 @@ namespace chronotext
         {
             sketch->removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
         }
-    }
-    
-    void CinderApp::accelerated(AccelEvent event)
-    {
-        sketch->accelerated(event);
-    }
-    
-    bool CinderApp::isEmulated() const
-    {
-        return emulated;
-    }
-    
-    WindowInfo CinderApp::getWindowInfo() const
-    {
-        return isEmulated() ? emulatedDevice.windowInfo : realWindowInfo;
-    }
-    
-    DisplayInfo CinderApp::getDisplayInfo() const
-    {
-        return isEmulated() ? emulatedDevice.displayInfo : realDisplayInfo;
     }
     
 #pragma mark ---------------------------------------- EMULATION ----------------------------------------

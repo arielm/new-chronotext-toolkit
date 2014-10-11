@@ -21,9 +21,6 @@ namespace chronotext
     public:
         CinderSketchComplex(void *context, void *delegate = nullptr);
         
-        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
-        
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
         
@@ -36,6 +33,9 @@ namespace chronotext
         bool isEmulated() const;
         DisplayInfo getDisplayInfo() const;
         WindowInfo getWindowInfo() const;
+        
+        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
+        void disableAccelerometer();
         
         void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");

@@ -50,13 +50,6 @@ namespace chronotext
 
         void draw();
         
-        void addTouch(int index, float x, float y);
-        void updateTouch(int index, float x, float y);
-        void removeTouch(int index, float x, float y);
-        
-        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
-        
         std::ostream& console();
         boost::asio::io_service& io_service() const;
 
@@ -66,8 +59,15 @@ namespace chronotext
         bool isEmulated() const;
         WindowInfo getWindowInfo() const;
         DisplayInfo getDisplayInfo() const;
-        
-        // ---------------------------------------- JNI ----------------------------------------
+
+        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
+        void disableAccelerometer();
+
+        void addTouch(int index, float x, float y);
+        void updateTouch(int index, float x, float y);
+        void removeTouch(int index, float x, float y);
+
+        // ---
         
         JNIEnv* getJNIEnv();
         
@@ -96,12 +96,11 @@ namespace chronotext
         std::shared_ptr<boost::asio::io_service> io;
         std::shared_ptr<boost::asio::io_service::work> ioWork;
         
-        float mAccelFilterFactor;
-        ci::Vec3f mLastAccel, mLastRawAccel;
-        
         ASensorManager *mSensorManager;
         const ASensor *mAccelerometerSensor;
         ASensorEventQueue *mSensorEventQueue;
+        
+        AccelEvent::Filter accelFilter;
 
         int getDisplayRotation();
 
@@ -117,6 +116,5 @@ namespace chronotext
         void pollSensorEvents();
 
         void handleAcceleration(ASensorEvent event);
-        void dispatchAcceleration(float x, float y, float z);
     };
 }

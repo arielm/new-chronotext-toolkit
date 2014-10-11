@@ -17,25 +17,59 @@
 
 class AccelEvent
 {
-    ci::Vec3f mData, mPrevData;
-	ci::Vec3f mRawData, mPrevRawData;
-    
 public:
     AccelEvent(const ci::Vec3f &data, const ci::Vec3f &rawData, const ci::Vec3f &prevData, const ci::Vec3f &prevRawData)
     :
-    mData(data),
-    mRawData(rawData),
-    mPrevData(prevData),
-    mPrevRawData(prevRawData)
+    data(data),
+    rawData(rawData),
+    prevData(prevData),
+    prevRawData(prevRawData)
     {}
-
-    ci::Vec3f getData() const { return mData; }
-    ci::Vec3f getRawData() const { return mRawData; }
-    ci::Vec3f getPrevData() const { return mPrevData; }
-    ci::Vec3f getPrevRawData() const { return mPrevRawData; }
+    
+    ci::Vec3f getData() const { return data; }
+    ci::Vec3f getRawData() const { return rawData; }
+    ci::Vec3f getPrevData() const { return prevData; }
+    ci::Vec3f getPrevRawData() const { return prevRawData; }
     
     bool isShaking(float shakeDelta = 2.2f) const
     {
-        return (mRawData - mPrevRawData).lengthSquared() > shakeDelta * shakeDelta;
+        return (rawData - prevRawData).length() > shakeDelta;
     }
+    
+    class Filter
+    {
+    public:
+        Filter()
+        :
+        factor(0.1f),
+        lastAccel(ci::Vec3f::zero()),
+        lastRawAccel(ci::Vec3f::zero())
+        {}
+        
+        Filter(float factor)
+        :
+        factor(factor),
+        lastAccel(ci::Vec3f::zero()),
+        lastRawAccel(ci::Vec3f::zero())
+        {}
+        
+        AccelEvent process(const ci::Vec3f &acceleration)
+        {
+            ci::Vec3f filtered = lastAccel * (1 - factor) + acceleration * factor;
+            AccelEvent event(filtered, acceleration, lastAccel, lastRawAccel);
+            
+            lastAccel = filtered;
+            lastRawAccel = acceleration;
+            
+            return event;
+        }
+        
+    protected:
+        float factor;
+        ci::Vec3f lastAccel, lastRawAccel;
+    };
+    
+protected:
+    ci::Vec3f data, prevData;
+	ci::Vec3f rawData, prevRawData;
 };

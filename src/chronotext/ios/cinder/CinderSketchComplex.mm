@@ -35,6 +35,61 @@ namespace chronotext
     mTimeline(Timeline::create())
     {}
     
+#pragma mark ---------------------------------------- GETTERS ----------------------------------------
+
+    
+    boost::asio::io_service& CinderSketchComplex::io_service() const
+    {
+        return *(getContext(context)).io;
+    }
+    
+    double CinderSketchComplex::getElapsedSeconds() const
+    {
+        return getContext(context).elapsedSeconds;
+    }
+    
+    uint32_t CinderSketchComplex::getElapsedFrames() const
+    {
+        return getContext(context).elapsedFrames;
+    }
+    
+    bool CinderSketchComplex::isEmulated() const
+    {
+        return getContext(context).emulated;
+    }
+    
+    DisplayInfo CinderSketchComplex::getDisplayInfo() const
+    {
+        return getContext(context).displayInfo;
+    }
+    
+    WindowInfo CinderSketchComplex::getWindowInfo() const
+    {
+        return getContext(context).windowInfo;
+    }
+
+#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
+    
+    void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
+    {
+        getContext(context).accelFilter = AccelEvent::Filter(filterFactor);
+        
+        if (updateFrequency <= 0)
+        {
+            updateFrequency = 30;
+        }
+        
+        [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1 / updateFrequency)];
+        [[UIAccelerometer sharedAccelerometer] setDelegate:getContext(context)];
+    }
+    
+    void CinderSketchComplex::disableAccelerometer()
+    {
+        [[UIAccelerometer sharedAccelerometer] setDelegate:nil];
+    }
+    
+#pragma mark ---------------------------------------- TOUCH ----------------------------------------
+
     void CinderSketchComplex::touchesBegan(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
@@ -59,53 +114,7 @@ namespace chronotext
         }
     }
     
-    void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
-    {
-        [getContext(context) setAccelFilterFactor:filterFactor];
-        
-        if (updateFrequency <= 0)
-        {
-            updateFrequency = 30;
-        }
-        
-        [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1 / updateFrequency)];
-        [[UIAccelerometer sharedAccelerometer] setDelegate:getContext(context)];
-    }
-    
-    void CinderSketchComplex::disableAccelerometer()
-    {
-        [[UIAccelerometer sharedAccelerometer] setDelegate:nil];
-    }
-    
-    boost::asio::io_service& CinderSketchComplex::io_service() const
-    {
-        return *(getContext(context)).io;
-    }
-    
-    double CinderSketchComplex::getElapsedSeconds() const
-    {
-        return getContext(context).elapsedSeconds;
-    }
-    
-    uint32_t CinderSketchComplex::getElapsedFrames() const
-    {
-        return getContext(context).elapsedFrames;
-    }
-    
-    bool CinderSketchComplex::isEmulated() const
-    {
-        return getContext(context).simulated;
-    }
-    
-    DisplayInfo CinderSketchComplex::getDisplayInfo() const
-    {
-        return getContext(context).displayInfo;
-    }
-    
-    WindowInfo CinderSketchComplex::getWindowInfo() const
-    {
-        return getContext(context).windowInfo;
-    }
+#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
     
     void CinderSketchComplex::action(int actionId)
     {
