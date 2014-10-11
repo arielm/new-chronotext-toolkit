@@ -11,6 +11,7 @@
 #include "chronotext/system/DisplayInfo.h"
 
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
+#include "cinder/app/AppNative.h"
 #include "cinder/app/Renderer.h"
 #endif
 
@@ -33,7 +34,7 @@ namespace chronotext
         static int getSizeFactor(const DisplayInfo &displayInfo);
         
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
-        static int getAALevel(ci::app::RendererGlRef renderer);
+        static int getAALevel(ci::app::AppNative *application);
 #endif
     };
 }

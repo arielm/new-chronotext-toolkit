@@ -296,8 +296,7 @@ namespace chronotext
     
     void CinderApp::updateRealWindowInfo()
     {
-        auto renderer = static_pointer_cast<RendererGl>(getRenderer());
-        realWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(renderer));
+        realWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
     }
     
     void CinderApp::start()
