@@ -14,12 +14,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.chronotext.gl.GLRenderer;
 import org.chronotext.gl.Touch;
-import org.chronotext.utils.DisplayUtils;
 import org.chronotext.utils.Utils;
-
-import android.content.Context;
-import android.graphics.Point;
-import android.view.Display;
 
 public class CinderRenderer extends GLRenderer
 {
@@ -33,28 +28,12 @@ public class CinderRenderer extends GLRenderer
   public static final int EVENT_FOREGROUND = 8;
   public static final int EVENT_BACK_KEY = 9;
 
-  protected Context mContext;
-  protected Object mListener;
-
   protected int ticks;
-
-  public CinderRenderer(Context context, Object listener)
-  {
-    mContext = context;
-    mListener = listener;
-  }
 
   // ---------------------------------------- CALLBACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
 
   public void launch()
-  {
-    Display display = DisplayUtils.getDisplay(mContext);
-    Point displaySize = DisplayUtils.getRealSize(display);
-    float displayDensity = DisplayUtils.getRealDensity(display);
-
-    Utils.LOGD("CinderRenderer.launch: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
-    launch(display, displaySize.x, displaySize.y, displayDensity);
-  }
+  {}
 
   public void setup(GL10 gl, int width, int height)
   {
@@ -141,8 +120,6 @@ public class CinderRenderer extends GLRenderer
   }
 
   // ---------------------------------------- JNI ----------------------------------------
-
-  public native void launch(Display display, int displayWidth, int displayHeight, float displayDensity);
 
   public native void setup(int width, int height);
   public native void shutdown();

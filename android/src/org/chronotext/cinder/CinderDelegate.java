@@ -9,13 +9,16 @@
 package org.chronotext.cinder;
 
 import org.chronotext.gl.GLView;
+import org.chronotext.utils.DisplayUtils;
 import org.chronotext.utils.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 
 public class CinderDelegate extends Handler
@@ -25,9 +28,10 @@ public class CinderDelegate extends Handler
 
   protected Activity mActivity;
   protected Handler mHandler;
-
+  
   protected CinderRenderer mRenderer;
   protected GLView mView;
+
   protected boolean mBackKeyCaptured;
 
   public CinderDelegate(Activity activity)
@@ -35,10 +39,10 @@ public class CinderDelegate extends Handler
     mActivity = activity;
     mHandler = this;
 
-    mRenderer = new CinderRenderer(activity, this);
-    prelaunch(activity, this); // WILL CREATE THE C++ CinderDelegate
-
+    mRenderer = new CinderRenderer();
     mView = new GLView(activity);
+
+    prelaunch(); // WILL CREATE THE C++ CinderDelegate
     mView.setRenderer(mRenderer); // WILL START THE RENDERER'S THREAD
   }
 
@@ -46,6 +50,16 @@ public class CinderDelegate extends Handler
   {
     this(activity);
     mHandler = handler;
+  }
+
+  public void prelaunch()
+  {
+    Display display = DisplayUtils.getDisplay(mActivity);
+    Point displaySize = DisplayUtils.getRealSize(display);
+    float displayDensity = DisplayUtils.getRealDensity(display);
+
+    Utils.LOGD("CinderDelegate.prelaunch: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+    prelaunch(mActivity, this, display, displaySize.x, displaySize.y, displayDensity);
   }
 
   public Activity getActivity()
@@ -172,5 +186,5 @@ public class CinderDelegate extends Handler
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  public native void prelaunch(Context context, Object listener);
+  public native void prelaunch(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
 }

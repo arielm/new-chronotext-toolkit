@@ -18,8 +18,7 @@ extern "C"
      */
     chr::CinderDelegate* createDelegate();
 
-    void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener);
-    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
+    void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
 
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
@@ -49,18 +48,10 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 /*
  * MUST BE CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
  */
-void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener)
+void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
     gDelegate = createDelegate();
-    gDelegate->prelaunch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener));
-}
-
-/*
- * MUST BE CALLED ON THE RENDERER'S THREAD, BEFORE THE GL-CONTEXT IS CREATED
- */
-void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
-{
-    gDelegate->launch(env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    gDelegate->prelaunch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)

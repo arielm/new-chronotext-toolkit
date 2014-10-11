@@ -55,6 +55,7 @@ namespace chronotext
         
         sketch->setIOService(io_service());
         sketch->timeline().stepTo(0);
+        
         sketch->setup();
     }
     

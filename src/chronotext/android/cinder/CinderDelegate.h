@@ -40,8 +40,7 @@ namespace chronotext
         virtual void receiveMessageFromSketch(int what, const std::string &body);
         virtual void sendMessageToSketch(int what, const std::string &body);
         
-        void prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
-        void launch(jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
+        void prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void setup(int width, int height);
         void shutdown();
@@ -94,21 +93,30 @@ namespace chronotext
         ci::Timer mTimer;
         uint32_t mFrameCount;
         
+        std::shared_ptr<boost::asio::io_service> io;
+        std::shared_ptr<boost::asio::io_service::work> ioWork;
+        
         float mAccelFilterFactor;
         ci::Vec3f mLastAccel, mLastRawAccel;
         
         ASensorManager *mSensorManager;
         const ASensor *mAccelerometerSensor;
         ASensorEventQueue *mSensorEventQueue;
-        
-        std::shared_ptr<boost::asio::io_service> io;
-        std::shared_ptr<boost::asio::io_service::work> ioWork;
-        
+
+        int getDisplayRotation();
+
         void start(int flags);
         void stop(int flags);
         
-        int getDisplayRotation();
+        void startIOService();
+        void stopIOService();
+        void pollIOService();
+        
+        void createSensorEventQueue();
+        void destroySensorEventQueue();
         void pollSensorEvents();
-        void accelerated(float x, float y, float z);
+
+        void handleAcceleration(ASensorEvent event);
+        void dispatchAcceleration(float x, float y, float z);
     };
 }

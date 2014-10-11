@@ -52,22 +52,12 @@ namespace chronotext
     /*
      * CALLED BEFORE THE RENDERER'S THREAD IS CREATED
      */
-    void CinderDelegate::prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener)
+    void CinderDelegate::prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
         mJavaVM = javaVM;
         mJavaContext = javaContext;
         mJavaListener = javaListener;
-    }
-    
-    /*
-     * CALLED ON THE RENDERER'S THREAD, BEFORE THE GL-CONTEXT IS CREATED
-     */
-    void CinderDelegate::launch(jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
-    {
-        /*
-         * TODO: javaDisplay SHOULD BE PART OF SystemManager (OR DisplayManager)
-         */
-        mJavaDisplay = javaDisplay;
+        mJavaDisplay = javaDisplay; // TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
         
         displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
         
@@ -110,19 +100,6 @@ namespace chronotext
         const char *apkPath = env->GetStringUTFChars(packageCodePathString, nullptr);
         FileSystem::setAndroidApkPath(apkPath);
         env->ReleaseStringUTFChars(packageCodePathString, apkPath);
-        
-        // ---
-        
-        ALooper *looper = ALooper_forThread();
-        
-        if (!looper)
-        {
-            looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
-        }
-        
-        mSensorManager = ASensorManager_getInstance();
-        mAccelerometerSensor = ASensorManager_getDefaultSensor(mSensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, nullptr, nullptr);
     }
     
     void CinderDelegate::setup(int width, int height)
@@ -131,8 +108,8 @@ namespace chronotext
         
         // ---
         
-        io = make_shared<boost::asio::io_service>();
-        ioWork = make_shared<boost::asio::io_service::work>(*io);
+        createSensorEventQueue();
+        startIOService();
         
         sketch->setIOService(*io);
         sketch->timeline().stepTo(0);
@@ -142,8 +119,8 @@ namespace chronotext
     
     void CinderDelegate::shutdown()
     {
-        ASensorManager_destroyEventQueue(mSensorManager, mSensorEventQueue);
-        io->stop();
+        stopIOService();
+        destroySensorEventQueue();
         
         sketch->shutdown();
         delete sketch;
@@ -202,7 +179,7 @@ namespace chronotext
         sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
 
         pollSensorEvents(); // WHERE accelerated IS INVOKED
-        io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
+        pollIOService(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
         
         /*
          * MUST BE CALLED BEFORE Sketch::update
@@ -235,32 +212,11 @@ namespace chronotext
         sketch->removeTouch(index, x, y);
     }
     
-    void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
-    {
-        mAccelFilterFactor = filterFactor;
-        
-        int delay = 1000000 / updateFrequency;
-        int min = ASensor_getMinDelay(mAccelerometerSensor);
-        
-        if (delay < min)
-        {
-            delay = min;
-        }
-        
-        ASensorEventQueue_enableSensor(mSensorEventQueue, mAccelerometerSensor);
-        ASensorEventQueue_setEventRate(mSensorEventQueue, mAccelerometerSensor, delay);
-    }
-    
-    void CinderDelegate::disableAccelerometer()
-    {
-        ASensorEventQueue_disableSensor(mSensorEventQueue, mAccelerometerSensor);
-    }
-    
     ostream& CinderDelegate::console()
     {
         if (!mOutputStream)
         {
-            mOutputStream = shared_ptr<cinder::android::dostream>(new android::dostream);
+            mOutputStream = make_shared<android::dostream>();
         }
         
         return *mOutputStream;
@@ -314,8 +270,70 @@ namespace chronotext
         sketch->stop(flags);
     }
     
-    // ---------------------------------------- ACCELEROMETER ----------------------------------------
+    /*
+     * TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
+     */
+    int CinderDelegate::getDisplayRotation()
+    {
+        JNIEnv *env = getJNIEnv();
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
+        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
+    }
     
+    // ---------------------------------------- IO SERVICE ----------------------------------------
+
+    void CinderDelegate::startIOService()
+    {
+        io = make_shared<boost::asio::io_service>();
+        ioWork = make_shared<boost::asio::io_service::work>(*io);
+    }
+    
+    void CinderDelegate::stopIOService()
+    {
+        io->stop();
+    }
+    
+    void CinderDelegate::pollIOService()
+    {
+        io->poll();
+    }
+    
+    // ---------------------------------------- SENSOR EVENTS ----------------------------------------
+    
+    void CinderDelegate::createSensorEventQueue()
+    {
+        auto looper = ALooper_forThread();
+        
+        if (!looper)
+        {
+            looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
+        }
+        
+        mSensorManager = ASensorManager_getInstance();
+        mAccelerometerSensor = ASensorManager_getDefaultSensor(mSensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, nullptr, nullptr);
+    }
+    
+    void CinderDelegate::destroySensorEventQueue()
+    {
+        ASensorManager_destroyEventQueue(mSensorManager, mSensorEventQueue);
+    }
+    
+    void CinderDelegate::pollSensorEvents()
+    {
+        ASensorEvent event;
+        
+        while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
+        {
+            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
+            {
+                handleAcceleration(event);
+            }
+        }
+    }
+    
+    // ---------------------------------------- ACCELEROMETER ----------------------------------------
+
     const float GRAVITY_EARTH = 9.80665f;
 
     /*
@@ -348,38 +366,41 @@ namespace chronotext
         worldVec.z = canVec[2];
     }
     
-    /*
-     * TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
-     */
-    int CinderDelegate::getDisplayRotation()
+    void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
     {
-        JNIEnv *env = getJNIEnv();
-        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
-        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
+        mAccelFilterFactor = filterFactor;
+        
+        int delay = 1000000 / updateFrequency;
+        int min = ASensor_getMinDelay(mAccelerometerSensor);
+        
+        if (delay < min)
+        {
+            delay = min;
+        }
+        
+        ASensorEventQueue_enableSensor(mSensorEventQueue, mAccelerometerSensor);
+        ASensorEventQueue_setEventRate(mSensorEventQueue, mAccelerometerSensor, delay);
     }
     
-    void CinderDelegate::pollSensorEvents()
+    void CinderDelegate::disableAccelerometer()
+    {
+        ASensorEventQueue_disableSensor(mSensorEventQueue, mAccelerometerSensor);
+    }
+    
+    void CinderDelegate::handleAcceleration(ASensorEvent event)
     {
         int displayRotation = getDisplayRotation();
+
+        Vec3f transformed;
+        canonicalToWorld(displayRotation, (float*)&event.acceleration.v, transformed);
         
-        ASensorEvent event;
-        
-        while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
-        {
-            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
-            {
-                Vec3f transformed;
-                canonicalToWorld(displayRotation, (float*)&event.acceleration.v, transformed);
-                
-                /*
-                 * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
-                 */
-                accelerated(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
-            }
-        }
+        /*
+         * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
+         */
+        dispatchAcceleration(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
     }
     
-    void CinderDelegate::accelerated(float x, float y, float z)
+    void CinderDelegate::dispatchAcceleration(float x, float y, float z)
     {
         Vec3f acceleration(x, y, z);
         Vec3f filtered = mLastAccel * (1 - mAccelFilterFactor) + acceleration * mAccelFilterFactor;
@@ -409,10 +430,6 @@ namespace chronotext
         
         return env;
     }
-    
-    /*
-     * TODO: USE getJNIEnv() FOR THE FOLLOWING...
-     */
     
     void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
     {
