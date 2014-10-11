@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "cinder/app/AppNative.h"
-
 #include "chronotext/cinder/CinderSketchBase.h"
+
+#include "cinder/app/AppNative.h"
 
 namespace chronotext
 {

@@ -89,7 +89,6 @@ namespace chronotext
         virtual ci::Area getWindowBounds() const { return getWindowInfo().getBounds(); };
         virtual ci::Vec2f getWindowCenter() const { return getWindowInfo().getCenter(); };
         virtual float getWindowAspectRatio() const { return getWindowInfo().getAspectRatio(); };
-        virtual float getWindowContentScale() const { return getDisplayInfo().getContentScale(); };
         
         virtual void action(int actionId) = 0;
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;

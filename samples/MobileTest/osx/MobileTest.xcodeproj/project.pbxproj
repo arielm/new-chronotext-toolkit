@@ -302,10 +302,10 @@
 			children = (
 				A82C90E816E00B0500FF519C /* CinderApp.h */,
 				A82C90E716E00B0500FF519C /* CinderApp.cpp */,
-				A82C90E916E00B0500FF519C /* CinderSketch.h */,
-				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A82C90EB16E00B0500FF519C /* CinderSketchSimple.h */,
 				A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */,
+				A82C90E916E00B0500FF519C /* CinderSketch.h */,
+				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A85483B919CE19A900B7866C /* WindowInfo.h */,
 			);
 			path = cinder;

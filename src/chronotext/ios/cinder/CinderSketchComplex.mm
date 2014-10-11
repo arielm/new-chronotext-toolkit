@@ -16,6 +16,16 @@ using namespace app;
 
 namespace chronotext
 {
+    static CinderDelegate* getContext(void *context)
+    {
+        return static_cast<CinderDelegate*>(context);
+    }
+    
+    static CinderDelegate* getDelegate(void *delegate)
+    {
+        return static_cast<CinderDelegate*>(delegate);
+    }
+    
     CinderSketchComplex::CinderSketchComplex(void *context, void *delegate)
     :
     CinderSketchBase(),
@@ -51,7 +61,7 @@ namespace chronotext
     
     void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
     {
-        [(CinderDelegate*)context setAccelFilterFactor:filterFactor];
+        [getContext(context) setAccelFilterFactor:filterFactor];
         
         if (updateFrequency <= 0)
         {
@@ -59,7 +69,7 @@ namespace chronotext
         }
         
         [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1 / updateFrequency)];
-        [[UIAccelerometer sharedAccelerometer] setDelegate:(CinderDelegate*)context];
+        [[UIAccelerometer sharedAccelerometer] setDelegate:getContext(context)];
     }
     
     void CinderSketchComplex::disableAccelerometer()
@@ -69,39 +79,39 @@ namespace chronotext
     
     boost::asio::io_service& CinderSketchComplex::io_service() const
     {
-        return *((CinderDelegate*)context).io;
+        return *(getContext(context)).io;
     }
     
     double CinderSketchComplex::getElapsedSeconds() const
     {
-        return ((CinderDelegate*)context).elapsedSeconds;
+        return getContext(context).elapsedSeconds;
     }
     
     uint32_t CinderSketchComplex::getElapsedFrames() const
     {
-        return ((CinderDelegate*)context).elapsedFrames;
+        return getContext(context).elapsedFrames;
     }
     
     bool CinderSketchComplex::isEmulated() const
     {
-        return ((CinderDelegate*)context).simulated;
+        return getContext(context).simulated;
     }
     
     DisplayInfo CinderSketchComplex::getDisplayInfo() const
     {
-        return ((CinderDelegate*)context).displayInfo;
+        return getContext(context).displayInfo;
     }
     
     WindowInfo CinderSketchComplex::getWindowInfo() const
     {
-        return ((CinderDelegate*)context).windowInfo;
+        return getContext(context).windowInfo;
     }
     
     void CinderSketchComplex::action(int actionId)
     {
         if (delegate)
         {
-            [(CinderDelegate*)delegate action:actionId];
+            [getDelegate(delegate) action:actionId];
         }
     }
     
@@ -111,11 +121,11 @@ namespace chronotext
         {
             if (body.empty())
             {
-                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:nil];
+                [getDelegate(delegate) receiveMessageFromSketch:what body:nil];
             }
             else
             {
-                [(CinderDelegate*)delegate receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
+                [getDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
             }
         }
     }
