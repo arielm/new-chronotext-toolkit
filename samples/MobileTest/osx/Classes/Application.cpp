@@ -22,11 +22,9 @@ using namespace chr;
 class Application : public CinderApp
 {
 public:
-    Application()
-    :
-    CinderApp()
+    CinderSketch* createSketch()
     {
-        sketch = new Sketch(this);
+        return new Sketch(this);
     }
     
     void prepareSettings(Settings *settings)

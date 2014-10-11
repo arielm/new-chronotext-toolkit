@@ -33,13 +33,12 @@ namespace chronotext
     public:
         CinderSketch *sketch;
 
-        JavaVM *mJavaVM;
-        jobject mJavaContext;
-        jobject mJavaListener;
-        jobject mJavaDisplay;
-
         CinderDelegate();
         virtual ~CinderDelegate();
+        
+        virtual void action(int actionId);
+        virtual void receiveMessageFromSketch(int what, const std::string &body);
+        virtual void sendMessageToSketch(int what, const std::string &body);
         
         void prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
         void launch(jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
@@ -69,10 +68,6 @@ namespace chronotext
         WindowInfo getWindowInfo() const;
         DisplayInfo getDisplayInfo() const;
         
-        virtual void action(int actionId);
-        virtual void receiveMessageFromSketch(int what, const std::string &body);
-        virtual void sendMessageToSketch(int what, const std::string &body);
-        
         // ---------------------------------------- JNI ----------------------------------------
         
         JNIEnv* getJNIEnv();
@@ -86,6 +81,11 @@ namespace chronotext
         jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
         
     protected:
+        JavaVM *mJavaVM;
+        jobject mJavaContext;
+        jobject mJavaListener;
+        jobject mJavaDisplay;
+        
         DisplayInfo displayInfo;
         WindowInfo windowInfo;
 

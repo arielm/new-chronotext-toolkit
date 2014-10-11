@@ -22,6 +22,7 @@ namespace chronotext
 {
     CinderDelegate::CinderDelegate()
     :
+    sketch(nullptr),
     mLastAccel(Vec3f::zero()),
     mLastRawAccel(Vec3f::zero())
     {}
@@ -29,6 +30,23 @@ namespace chronotext
     CinderDelegate::~CinderDelegate()
     {
         LOGI << "~CinderDelegate()" << endl;
+    }
+    
+    void CinderDelegate::action(int actionId)
+    {
+        callVoidMethodOnJavaListener("action", "(I)V", actionId);
+    }
+    
+    void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
+    {
+        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
+        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
+    }
+    
+    void CinderDelegate::sendMessageToSketch(int what, const string &body)
+    {
+        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
+        sketch->sendMessage(Message(what, body));
     }
     
     /*
@@ -276,23 +294,6 @@ namespace chronotext
     DisplayInfo CinderDelegate::getDisplayInfo() const
     {
         return displayInfo;
-    }
-    
-    void CinderDelegate::action(int actionId)
-    {
-        callVoidMethodOnJavaListener("action", "(I)V", actionId);
-    }
-
-    void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
-    {
-        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
-        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
-    }
-    
-    void CinderDelegate::sendMessageToSketch(int what, const string &body)
-    {
-        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
-        sketch->sendMessage(Message(what, body));
     }
     
     void CinderDelegate::start(int flags)

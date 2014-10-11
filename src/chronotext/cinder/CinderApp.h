@@ -22,6 +22,13 @@ namespace chronotext
         CinderSketch *sketch;
 
         CinderApp();
+        virtual ~CinderApp() {}
+        
+        virtual CinderSketch* createSketch() = 0;
+        
+        virtual void action(int actionId) {}
+        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
+        virtual void sendMessageToSketch(int what, const std::string &body);
         
         void applyDefaultSettings(Settings *settings);
         
@@ -41,10 +48,6 @@ namespace chronotext
         void touchesEnded(ci::app::TouchEvent event);
         
         void accelerated(AccelEvent event);
-        
-        virtual void action(int actionId) {}
-        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
-        void sendMessageToSketch(int what, const std::string &body);
         
         bool isEmulated() const;
         WindowInfo getWindowInfo() const;

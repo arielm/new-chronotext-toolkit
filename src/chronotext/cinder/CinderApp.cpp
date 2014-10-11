@@ -22,10 +22,16 @@ namespace chronotext
     CinderApp::CinderApp()
     :
     AppNative(),
+    sketch(nullptr),
     emulated(false),
     startCount(0),
     updateCount(0)
     {}
+    
+    void CinderApp::sendMessageToSketch(int what, const string &body)
+    {
+        sketch->sendMessage(Message(what, body));
+    }
     
     void CinderApp::applyDefaultSettings(Settings *settings)
     {
@@ -35,7 +41,9 @@ namespace chronotext
 
     void CinderApp::setup()
     {
-        updateRealDisplayInfo(); // TODO: displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
+        sketch = createSketch();
+        
+        updateRealDisplayInfo();
         updateRealWindowInfo();
         
         // ---
@@ -53,7 +61,7 @@ namespace chronotext
     void CinderApp::shutdown()
     {
         stop();
-        sketch->stop(CinderSketch::FLAG_APP_HIDDEN);
+
         sketch->shutdown();
         delete sketch;
     }
@@ -71,7 +79,6 @@ namespace chronotext
         if (startCount == 0)
         {
             start();
-            sketch->start(CinderSketch::FLAG_APP_SHOWN);
             startCount++;
         }
     }
@@ -152,11 +159,6 @@ namespace chronotext
     void CinderApp::accelerated(AccelEvent event)
     {
         sketch->accelerated(event);
-    }
-    
-    void CinderApp::sendMessageToSketch(int what, const string &body)
-    {
-        sketch->sendMessage(Message(what, body));
     }
     
     bool CinderApp::isEmulated() const
@@ -279,7 +281,7 @@ namespace chronotext
         return !emulators.empty();
     }
 
-#pragma mark ---------------------------------------- ----------------------------------------
+#pragma mark ---------------------------------------- MISC ----------------------------------------
     
     void CinderApp::updateRealDisplayInfo()
     {
@@ -298,11 +300,14 @@ namespace chronotext
     void CinderApp::start()
     {
         sketch->clock().start();
+        sketch->start(CinderSketch::FLAG_APP_SHOWN);
     }
     
     void CinderApp::stop()
     {
         sketch->clock().stop();
+        sketch->stop(CinderSketch::FLAG_APP_HIDDEN);
+        
         LOGI << "AVERAGE FRAME-RATE: " << getAverageFps() << " FPS" << endl;
     }
 }
