@@ -16,7 +16,7 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 
-const float GRAVITY_EARTH = 9.80665f;
+const bool DEBUG_MESSAGES = false;
 
 namespace chronotext
 {
@@ -109,7 +109,7 @@ namespace chronotext
     
     void CinderDelegate::setup(int width, int height)
     {
-        windowInfo = WindowInfo(Vec2i(width, height));
+        windowInfo = WindowInfo(width, height);
         
         // ---
         
@@ -285,19 +285,13 @@ namespace chronotext
 
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
-//#ifdef DEBUG_MESSAGES
-//        CI_LOGD("MESSAGE SENT TO JAVA: %d %s", what, body.c_str());
-//#endif
-        
+        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
         callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
-//#ifdef DEBUG_MESSAGES
-//        CI_LOGD("MESSAGE RECEIVED FROM JAVA: %d %s", what, body.c_str());
-//#endif
-        
+        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
         sketch->sendMessage(Message(what, body));
     }
     
@@ -321,6 +315,8 @@ namespace chronotext
     
     // ---------------------------------------- ACCELEROMETER ----------------------------------------
     
+    const float GRAVITY_EARTH = 9.80665f;
+
     /*
      * REFERENCES:
      * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
@@ -356,9 +352,7 @@ namespace chronotext
      */
     int CinderDelegate::getDisplayRotation()
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
+        JNIEnv *env = getJNIEnv();
         jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
         return env->CallIntMethod(mJavaDisplay, getRotationMethod);
     }
@@ -366,6 +360,7 @@ namespace chronotext
     void CinderDelegate::pollSensorEvents()
     {
         int displayRotation = getDisplayRotation();
+        
         ASensorEvent event;
         
         while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
@@ -400,7 +395,6 @@ namespace chronotext
     JNIEnv* CinderDelegate::getJNIEnv()
     {
         JNIEnv *env = nullptr;
-        
         int err = mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
         
         if (err == JNI_EDETACHED)
@@ -421,8 +415,7 @@ namespace chronotext
     
     void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        JNIEnv *env = getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -435,8 +428,7 @@ namespace chronotext
     
     jboolean CinderDelegate::callBooleanMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        JNIEnv *env = getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -451,8 +443,7 @@ namespace chronotext
     
     jchar CinderDelegate::callCharMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        JNIEnv *env = getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -467,8 +458,7 @@ namespace chronotext
     
     jint CinderDelegate::callIntMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        JNIEnv *env = getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -483,8 +473,7 @@ namespace chronotext
     
     jlong CinderDelegate::callLongMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        JNIEnv *env = getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -499,8 +488,7 @@ namespace chronotext
     
     jfloat CinderDelegate::callFloatMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        JNIEnv *env = getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -515,8 +503,7 @@ namespace chronotext
     
     jdouble CinderDelegate::callDoubleMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        JNIEnv *env = getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);

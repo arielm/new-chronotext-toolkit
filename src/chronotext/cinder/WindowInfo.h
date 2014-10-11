@@ -19,8 +19,14 @@ namespace chronotext
 
         static WindowInfo create(int width, int height, int aaLevel = 0)
         {
-            return WindowInfo(ci::Vec2i(width, height), aaLevel);
+            return WindowInfo(width, height, aaLevel);
         }
+        
+        WindowInfo(int width, int height, int aaLevel = 0)
+        :
+        size(width, height),
+        aaLevel(aaLevel)
+        {}
 
         WindowInfo(const ci::Vec2i &size = ci::Vec2i::zero(), int aaLevel = 0)
         :

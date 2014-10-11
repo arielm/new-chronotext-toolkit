@@ -22,41 +22,38 @@ using namespace chr;
 class Application : public CinderApp
 {
 public:
-    Application();
+    Application()
+    :
+    CinderApp()
+    {
+        sketch = new Sketch(this);
+    }
     
-    void prepareSettings(Settings *settings);
-    void keyDown(KeyEvent event);
+    void prepareSettings(Settings *settings)
+    {
+        CinderApp::prepareSettings(settings);
+        
+        if (loadEmulators(InputSource::getResource("emulators.json")))
+        {
+//          emulate(settings, "IPHONE_3GS", DisplayInfo::ORIENTATION_PORTRAIT);
+            emulate(settings, "IPHONE_4", DisplayInfo::ORIENTATION_LANDSCAPE);
+//          emulate(settings, "IPHONE_5", DisplayInfo::ORIENTATION_LANDSCAPE);
+//          emulate(settings, "IPAD_1", DisplayInfo::ORIENTATION_LANDSCAPE);
+//          emulate(settings, "GALAXY_S", DisplayInfo::ORIENTATION_PORTRAIT);
+//          emulate(settings, "GALAXY_S4", DisplayInfo::ORIENTATION_LANDSCAPE);
+//          emulate(settings, "NEXUS_7_2012", DisplayInfo::ORIENTATION_LANDSCAPE);
+        }
+    }
+    
+    void keyDown(KeyEvent event)
+    {
+        switch (event.getCode())
+        {
+            case KeyEvent::KEY_ESCAPE:
+                quit();
+                break;
+        }
+    }
 };
-
-Application::Application()
-{
-    sketch = new Sketch(this);
-}
-
-void Application::prepareSettings(Settings *settings)
-{
-    CinderApp::prepareSettings(settings);
-    
-    if (loadEmulators(InputSource::getResource("emulators.json")))
-    {
-//      emulate(settings, "IPHONE_3GS", DisplayInfo::ORIENTATION_PORTRAIT);
-        emulate(settings, "IPHONE_4", DisplayInfo::ORIENTATION_LANDSCAPE);
-//      emulate(settings, "IPHONE_5", DisplayInfo::ORIENTATION_LANDSCAPE);
-//      emulate(settings, "IPAD_1", DisplayInfo::ORIENTATION_LANDSCAPE);
-//      emulate(settings, "GALAXY_S", DisplayInfo::ORIENTATION_PORTRAIT);
-//      emulate(settings, "GALAXY_S4", DisplayInfo::ORIENTATION_LANDSCAPE);
-//      emulate(settings, "NEXUS_7_2012", DisplayInfo::ORIENTATION_LANDSCAPE);
-    }
-}
-
-void Application::keyDown(KeyEvent event)
-{
-    switch (event.getCode())
-    {
-        case KeyEvent::KEY_ESCAPE:
-            quit();
-            break;
-    }
-}
 
 CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

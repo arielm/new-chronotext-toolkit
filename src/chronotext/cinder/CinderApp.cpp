@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/cinder/CinderApp.h"
+#include "chronotext/system/DisplayHelper.h"
 #include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/Utils.h"
 
@@ -263,7 +264,7 @@ namespace chronotext
                 int windowWidth = sizeNode[0].getValue<int>();
                 int windowHeight = sizeNode[1].getValue<int>();
                 
-                WindowInfo windowInfo(Vec2i(windowWidth, windowHeight));
+                WindowInfo windowInfo(windowWidth, windowHeight);
                 
                 // ---
                 
