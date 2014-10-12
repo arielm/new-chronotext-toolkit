@@ -30,24 +30,14 @@ namespace chronotext
             return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, 0);
         }
         
-        static DisplayInfo createWithDiagonal(int width, int height, float diagonal, float contentScale)
+        static DisplayInfo createWithDiagonal(int width, int height, float diagonal, float contentScale = 1)
         {
             return DisplayInfo(ci::Vec2i(width, height), contentScale, diagonal, 0);
         }
 
-        static DisplayInfo createWithDiagonal(int width, int height, float diagonal)
-        {
-            return createWithDiagonal(width, height, diagonal, 1);
-        }
-
-        static DisplayInfo createWithDensity(int width, int height, float density, float contentScale)
+        static DisplayInfo createWithDensity(int width, int height, float density, float contentScale = 1)
         {
             return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, density);
-        }
-        
-        static DisplayInfo createWithDensity(int width, int height, float density)
-        {
-            return createWithDensity(width, height, density, 1);
         }
         
         DisplayInfo()
@@ -165,14 +155,14 @@ namespace chronotext
             {
                 density = REFERENCE_DENSITY;
             }
-            
-            if (diagonal > 0)
-            {
-                density = fullSize.length() / diagonal;
-            }
-            else
+
+            if (diagonal == 0)
             {
                 diagonal = fullSize.length() / density;
+            }
+            else if (density == 0)
+            {
+                density = fullSize.length() / diagonal;
             }
             
             return true;

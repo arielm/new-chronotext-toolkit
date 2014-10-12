@@ -125,12 +125,12 @@ namespace chronotext
     
     WindowInfo CinderApp::getWindowInfo() const
     {
-        return isEmulated() ? emulatedDevice.windowInfo : realWindowInfo;
+        return emulated ? emulatedDevice.windowInfo : realWindowInfo;
     }
     
     DisplayInfo CinderApp::getDisplayInfo() const
     {
-        return isEmulated() ? emulatedDevice.displayInfo : realDisplayInfo;
+        return emulated ? emulatedDevice.displayInfo : realDisplayInfo;
     }
     
 #pragma mark ---------------------------------------- INPUT ----------------------------------------
