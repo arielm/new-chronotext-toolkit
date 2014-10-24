@@ -258,7 +258,7 @@ namespace chronotext
             }
             else
             {
-                throw chr::Exception<CinderApp>(emulatorKey + ": display MUST HAVE A diagonal OR density");
+                throw EXCEPTION(CinderApp, "EMULATOR: " + emulatorKey + ": display MUST HAVE A diagonal OR density");
             }
             
             // ---

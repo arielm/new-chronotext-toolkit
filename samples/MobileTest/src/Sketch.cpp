@@ -38,16 +38,16 @@ CinderSketch(context, delegate)
 void Sketch::setup()
 {
     /*
-     * TESTING NEW EXCEPTION MECHANISM
+     * TESTING THE NEW EXCEPTION MECHANISM
      */
     
     try
     {
-        throw chr::Exception<Texture>("boo!");
+        throw EXCEPTION(Texture, "wow!");
     }
-    catch (chr::Exception<Texture> &e)
+    catch (EXCEPTION_TYPE(Texture) &e)
     {
-        LOGI << "Texture EXCEPTION: " << e.what() << endl;
+        LOGI << e.message(true) << endl;
     }
     catch (exception &e)
     {

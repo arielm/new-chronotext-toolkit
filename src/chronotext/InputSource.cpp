@@ -137,7 +137,7 @@ namespace chronotext
             }
         }
         
-        throw Exception<InputSource>("INVALID URI: " + uri);
+        throw EXCEPTION(InputSource, "INVALID URI: " + uri);
     }
     
     DataSourceRef InputSource::load(const string &uri)
@@ -188,7 +188,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception<InputSource>("RESOURCE NOT FOUND: " + filePathHint);
+                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
                 }
 #else
                 if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
@@ -197,7 +197,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception<InputSource>("RESOURCE NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + relativePath.string());
                 }
 #endif
             }
@@ -210,7 +210,7 @@ namespace chronotext
                 }
                 catch (exception &e)
                 {
-                    throw Exception<InputSource>("RESOURCE NOT FOUND: " + filePathHint);
+                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
                 }
             }
                 
@@ -222,7 +222,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception<InputSource>("FILE NOT FOUND: " + filePath.string());
+                    throw EXCEPTION(InputSource, "FILE NOT FOUND: " + filePath.string());
                 }
             }
                 
@@ -239,7 +239,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception<InputSource>("ASSET NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + relativePath.string());
                 }
 #else
                 if (!filePath.empty() && fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
@@ -248,7 +248,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception<InputSource>("ASSET NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + relativePath.string());
                 }
 #endif
             }
