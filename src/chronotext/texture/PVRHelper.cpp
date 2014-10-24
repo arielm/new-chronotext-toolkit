@@ -82,23 +82,23 @@ static bool isPOT(int n)
  */
 Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
 {
-    gzFile file = gzopen(filePath.string().c_str(), "rb");
+    gzFile file = gzopen(filePath.string().data(), "rb");
     if (!file)
     {
-        throw Texture::Exception("PVR.GZ: CAN'T OPEN FILE");
+        throw chr::Exception<Texture>("PVR.GZ: CAN'T OPEN FILE");
     }
     
     PVRTexHeader header;
     if (gzread(file, &header, sizeof(header)) != sizeof(header))
     {
         gzclose(file);
-        throw Texture::Exception("PVR.GZ: HEADER ERROR");
+        throw chr::Exception<Texture>("PVR.GZ: HEADER ERROR");
     }
     
     if (header.pvrTag != 559044176)
     {
         gzclose(file);
-        throw Texture::Exception("PVR.GZ: FORMAT ERROR");
+        throw chr::Exception<Texture>("PVR.GZ: FORMAT ERROR");
     }
     
     Buffer buffer(sizeof(header) + header.dataLength);
@@ -107,7 +107,7 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     if (!data)
     {
         gzclose(file);
-        throw Texture::Exception("PVR.GZ: OUT-OF-MEMORY");
+        throw chr::Exception<Texture>("PVR.GZ: OUT-OF-MEMORY");
     }
     
     memcpy(data, &header, sizeof(header));
@@ -115,7 +115,7 @@ Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
     if (gzread(file, data + sizeof(header), header.dataLength) != header.dataLength)
     {
         gzclose(file);
-        throw Texture::Exception("PVR.GZ: DECOMPRESSION ERROR");
+        throw chr::Exception<Texture>("PVR.GZ: DECOMPRESSION ERROR");
     }
     
     gzclose(file);
@@ -132,7 +132,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     CCZHeader *header = (CCZHeader*)tmp.getData();
     if ((header->sig[0] != 'C') || (header->sig[1] != 'C') || (header->sig[2] != 'Z') || (header->sig[3] != '!'))
     {
-        throw Texture::Exception("PVR.CCZ: FORMAT ERROR");
+        throw chr::Exception<Texture>("PVR.CCZ: FORMAT ERROR");
     }
 
     /*
@@ -144,12 +144,12 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     
     if (compression_type != CCZ_COMPRESSION_ZLIB)
     {
-        throw Texture::Exception("PVR.CCZ: UNSUPPORTED COMPRESSION FORMAT");
+        throw chr::Exception<Texture>("PVR.CCZ: UNSUPPORTED COMPRESSION FORMAT");
     }
 
     if (version > 2)
     {
-        throw Texture::Exception("PVR.CCZ: UNSUPPORTED VERSION");
+        throw chr::Exception<Texture>("PVR.CCZ: UNSUPPORTED VERSION");
     }
 
     Buffer buffer(len);
@@ -157,7 +157,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     void *out = buffer.getData();
     if (!out)
     {
-        throw Texture::Exception("PVR.CCZ: OUT-OF-MEMORY");
+        throw chr::Exception<Texture>("PVR.CCZ: OUT-OF-MEMORY");
     }
     
     uLongf destlen = len;
@@ -166,7 +166,7 @@ Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
     
     if (ret != Z_OK)
     {
-        throw Texture::Exception("PVR.CCZ: DECOMPRESSION ERROR");
+        throw chr::Exception<Texture>("PVR.CCZ: DECOMPRESSION ERROR");
     }
     
     return buffer;
@@ -181,7 +181,7 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
     
     if (!isPOT(width) || !isPOT(height))
     {
-        throw Texture::Exception("PVR TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
+        throw chr::Exception<Texture>("PVR TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
     }
 
     GLenum internalFormat;
@@ -221,7 +221,7 @@ gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GL
             break;
             
         default:
-            throw Texture::Exception("PVR TEXTURE: UNSUPPORTED PIXEL-TYPE");
+            throw chr::Exception<Texture>("PVR TEXTURE: UNSUPPORTED PIXEL-TYPE");
     }
     
     char *data = (char*)buffer.getData() + header->headerLength;

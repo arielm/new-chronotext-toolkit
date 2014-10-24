@@ -51,7 +51,7 @@ namespace chronotext
         {
             if (!globalMap.empty() || !aliases.empty() || hasDefaultFont)
             {
-                throw runtime_error("FONT-CONFIG ALREADY DEFINED");
+                throw chr::Exception<FontManager>("FONT-CONFIG ALREADY DEFINED");
             }
             else
             {

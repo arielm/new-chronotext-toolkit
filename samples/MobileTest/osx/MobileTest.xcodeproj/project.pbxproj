@@ -131,6 +131,7 @@
 		A8F2E30F189E4FDE002D5D75 /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
 		A8F2E310189E4FDE002D5D75 /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
 		A8F2E311189E4FDE002D5D75 /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
+		A8F9978319FA8ED300F08369 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -339,6 +340,7 @@
 		A8985B3C16DA4EB300448A41 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
+				A8F9978319FA8ED300F08369 /* Exception.h */,
 				A853DFD518116D42006C2085 /* FileSystem.h */,
 				A853DFD418116D42006C2085 /* FileSystem.cpp */,
 				A82C909816DFA58900FF519C /* InputSource.h */,

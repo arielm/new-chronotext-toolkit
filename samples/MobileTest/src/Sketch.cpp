@@ -37,6 +37,27 @@ CinderSketch(context, delegate)
 
 void Sketch::setup()
 {
+    /*
+     * TESTING NEW EXCEPTION MECHANISM
+     */
+    
+    try
+    {
+        throw chr::Exception<Texture>("boo!");
+    }
+    catch (chr::Exception<Texture> &e)
+    {
+        LOGI << "Texture EXCEPTION: " << e.what() << endl;
+    }
+    catch (exception &e)
+    {
+        LOGI << e.what() << endl;
+    }
+    
+    /*
+     * TESTING VARIOUS INFO STRUCTURES
+     */
+    
     LOGI << "SYSTEM INFO: " << SystemManager::getSystemInfo() << endl;
     LOGI << "DISPLAY INFO: " << getDisplayInfo() << endl;
     LOGI << "WINDOW INFO: " << getWindowInfo() << endl;

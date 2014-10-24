@@ -327,7 +327,7 @@ namespace chronotext
             
             if (version != "XFONT.004")
             {
-                throw runtime_error("Font: WRONG FORMAT");
+                throw chr::Exception<FontManager>("XFONT: WRONG FORMAT");
             }
             
             // ---

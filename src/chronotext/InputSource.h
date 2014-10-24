@@ -8,11 +8,10 @@
 
 #pragma once
 
+#include "chronotext/Exception.h"
 #include "chronotext/FileSystem.h"
 
 #include "cinder/DataSource.h"
-
-#include <exception>
 
 namespace chronotext
 {
@@ -21,12 +20,6 @@ namespace chronotext
     class InputSource
     {
     public:
-        class Exception : public std::runtime_error
-        {
-        public:
-            Exception(const std::string &what) : std::runtime_error(what) {}
-        };
-        
         enum
         {
             TYPE_RESOURCE,

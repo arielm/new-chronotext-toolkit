@@ -27,33 +27,30 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (!renewContext)
-    {
-        fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-
-        font = fontManager.getCachedFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
-        font->setSize(TEXT_SIZE);
-        font->setColor(0, 0, 0, 0.85f);
-        
-        spiral.update(0, 0, 67, 500, 17, 1, 40);
-
-        addVersion("he"); // HEBREW
-        addVersion("en"); // ENGLISH
-        addVersion("zh-tw"); // CHINESE (TRADITIONAL)
-        addVersion("fr"); // FRENCH
-        addVersion("ru"); // RUSSIAN
-        addVersion("ko"); // KOREAN
-        addVersion("de"); // GERMAN
-        addVersion("hi"); // HINDI
-        addVersion("es"); // SPANISH
-        addVersion("ja"); // JAPANESE
-        addVersion("ar"); // ARABIC
-        addVersion("el"); // GREEK
-        
-        currentLangIndex = Rand::randInt(0, languages.size() - 1);
-    }
+    fontManager.loadConfig(InputSource::getResource("font-config.xml"));
+    
+    font = fontManager.getCachedFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
+    font->setSize(TEXT_SIZE);
+    font->setColor(0, 0, 0, 0.85f);
+    
+    spiral.update(0, 0, 67, 500, 17, 1, 40);
+    
+    addVersion("he"); // HEBREW
+    addVersion("en"); // ENGLISH
+    addVersion("zh-tw"); // CHINESE (TRADITIONAL)
+    addVersion("fr"); // FRENCH
+    addVersion("ru"); // RUSSIAN
+    addVersion("ko"); // KOREAN
+    addVersion("de"); // GERMAN
+    addVersion("hi"); // HINDI
+    addVersion("es"); // SPANISH
+    addVersion("ja"); // JAPANESE
+    addVersion("ar"); // ARABIC
+    addVersion("el"); // GREEK
+    
+    currentLangIndex = Rand::randInt(0, languages.size() - 1);
     
     // ---
     
@@ -67,16 +64,6 @@ void Sketch::setup(bool renewContext)
     {
         glEnable(GL_LINE_SMOOTH);
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    }
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            fontManager.discardTextures();
-            break;
     }
 }
 

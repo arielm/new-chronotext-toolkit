@@ -8,9 +8,8 @@
 
 #pragma once
 
+#include "chronotext/Exception.h"
 #include "chronotext/texture/TextureData.h"
-
-#include <exception>
 
 namespace chronotext
 {
@@ -19,12 +18,6 @@ namespace chronotext
     class Texture
     {
     public:
-        class Exception : public std::runtime_error
-        {
-        public:
-            Exception(const std::string &what) : std::runtime_error(what) {}
-        };
-        
         TextureRequest request;
         
         Texture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);

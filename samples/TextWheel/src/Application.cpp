@@ -7,7 +7,7 @@
  */
 
 /*
- * STUB FOR RUNNING A CinderSketch ON THE DESKTOP (OSX OR WINDOW)
+ * STUB FOR RUNNING A CinderSketch ON THE DESKTOP
  */
 
 #include "chronotext/cinder/CinderApp.h"
@@ -16,49 +16,43 @@
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 using namespace chr;
 
 class Application : public CinderApp
 {
+public:
     Sketch *target;
     
-public:
-    Application();
-    
-    void prepareSettings(Settings *settings);
-    void keyDown(KeyEvent event);
-};
-
-Application::Application()
-{
-    sketch = target = new Sketch(this);
-}
-
-void Application::prepareSettings(Settings *settings)
-{
-    settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL SYNC IS ALLOWED BY DEFAULT)
-    settings->enableHighDensityDisplay();
-    
-    settings->setWindowSize(1024, 768);
-}
-
-void Application::keyDown(KeyEvent event)
-{
-    switch (event.getCode())
+    CinderSketch* createSketch()
     {
-        case KeyEvent::KEY_ESCAPE:
-            quit();
-            break;
-            
-        case KeyEvent::KEY_RIGHT:
-            target->nextVersion();
-            break;
-            
-        case KeyEvent::KEY_LEFT:
-            target->previousVersion();
-            break;
+        target = new Sketch(this);
+        return target;
     }
-}
+    
+    void prepareSettings(Settings *settings)
+    {
+        CinderApp::prepareSettings(settings);
+        settings->setWindowSize(1024, 768);
+    }
+    
+    void keyDown(KeyEvent event)
+    {
+        switch (event.getCode())
+        {
+            case KeyEvent::KEY_ESCAPE:
+                quit();
+                break;
+                
+            case KeyEvent::KEY_RIGHT:
+                target->nextVersion();
+                break;
+                
+            case KeyEvent::KEY_LEFT:
+                target->previousVersion();
+                break;
+        }
+    }
+};
 
 CINDER_APP_NATIVE(Application, RendererGl(RendererGl::AA_NONE))

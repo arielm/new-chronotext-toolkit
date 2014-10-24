@@ -36,7 +36,7 @@ namespace chronotext
         
         if (textureData.undefined())
         {
-            throw Texture::Exception("TEXTURE IS UNDEFINED");
+            throw chr::Exception<Texture>("TEXTURE IS UNDEFINED");
         }
         else if ((textureRequest.maxSize.x > 0) && (textureRequest.maxSize.y > 0))
         {
@@ -44,7 +44,7 @@ namespace chronotext
             
             if ((size.x > textureRequest.maxSize.x) || (size.y > textureRequest.maxSize.y))
             {
-                throw Texture::Exception("TEXTURE IS OVER-SIZED (" + toString(size.x) + "x" + toString(size.y) + ")");
+                throw chr::Exception<Texture>("TEXTURE IS OVER-SIZED (" + toString(size.x) + "x" + toString(size.y) + ")");
             }
         }
 
@@ -61,7 +61,7 @@ namespace chronotext
             }
             else
             {
-                throw Texture::Exception("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
+                throw chr::Exception<Texture>("PVR.GZ TEXTURES CAN ONLY BE LOADED FROM FILES");
             }
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
@@ -128,7 +128,7 @@ namespace chronotext
             
             if (glGetError() == GL_OUT_OF_MEMORY)
             {
-                throw Texture::Exception("GL: OUT-OF-MEMORY");
+                throw chr::Exception<Texture>("GL: OUT-OF-MEMORY");
             }
             else if (texture)
             {

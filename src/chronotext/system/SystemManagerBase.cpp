@@ -17,6 +17,8 @@ using namespace ci;
 
 namespace chronotext
 {
+    class SystemManager;
+
     int SystemManagerBase::getPlatform()
     {
 #if defined(CINDER_MAC)
@@ -28,7 +30,7 @@ namespace chronotext
 #elif defined(CINDER_ANDROID)
         return SystemInfo::PLATFORM_ANDROID;
 #endif
-        throw std::runtime_error("UNDEFINED PLATFORM");
+        throw chr::Exception<SystemManager>("UNDEFINED PLATFORM");
     }
     
     string SystemManagerBase::getPlatformString()

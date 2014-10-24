@@ -131,13 +131,13 @@ namespace chronotext
                 
                 if (error)
                 {
-                    throw runtime_error("FREETYPE: ERROR " + toString(error));
+                    throw chr::Exception<ActualFont>("FREETYPE: ERROR " + toString(error));
                 }
                 
                 if (force_ucs2_charmap(ftFace))
                 {
                     FT_Done_Face(ftFace); ftFace = nullptr;
-                    throw runtime_error("HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
+                    throw chr::Exception<ActualFont>("HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
                 
                 // ---

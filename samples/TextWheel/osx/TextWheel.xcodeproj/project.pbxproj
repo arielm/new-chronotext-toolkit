@@ -38,6 +38,8 @@
 		A8A8841018C8DB8800BC0BDB /* es.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840D18C8DB8800BC0BDB /* es.txt */; };
 		A8A8841118C8DB8800BC0BDB /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840E18C8DB8800BC0BDB /* en.txt */; };
 		A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8A8841218C9329B00BC0BDB /* font-config.xml */; };
+		A8F9978E19FA961900F08369 /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9978519FA961900F08369 /* DisplayHelper.cpp */; };
+		A8F9978F19FA961900F08369 /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9978C19FA961900F08369 /* SystemManagerBase.cpp */; };
 		A8F9FC3018C5681600C48245 /* babel_serif_osx.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2F18C5681600C48245 /* babel_serif_osx.xml */; };
 		A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3218C5683B00C48245 /* ActualFont.cpp */; };
 		A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3418C5683B00C48245 /* FontManager.cpp */; };
@@ -117,6 +119,17 @@
 		A8A8840D18C8DB8800BC0BDB /* es.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = es.txt; path = ../resources/es.txt; sourceTree = "<group>"; };
 		A8A8840E18C8DB8800BC0BDB /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = en.txt; path = ../resources/en.txt; sourceTree = "<group>"; };
 		A8A8841218C9329B00BC0BDB /* font-config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "font-config.xml"; path = "../resources/font-config.xml"; sourceTree = "<group>"; };
+		A8F9978519FA961900F08369 /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
+		A8F9978619FA961900F08369 /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
+		A8F9978719FA961900F08369 /* DisplayInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayInfo.h; sourceTree = "<group>"; };
+		A8F9978819FA961900F08369 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
+		A8F9978919FA961900F08369 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		A8F9978A19FA961900F08369 /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
+		A8F9978B19FA961900F08369 /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
+		A8F9978C19FA961900F08369 /* SystemManagerBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemManagerBase.cpp; sourceTree = "<group>"; };
+		A8F9978D19FA961900F08369 /* SystemManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManagerBase.h; sourceTree = "<group>"; };
+		A8F9979019FA96B500F08369 /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
+		A8F9979119FA9BE000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8F9FC2F18C5681600C48245 /* babel_serif_osx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = babel_serif_osx.xml; path = ../resources/babel_serif_osx.xml; sourceTree = "<group>"; };
 		A8F9FC3218C5683B00C48245 /* ActualFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActualFont.cpp; sourceTree = "<group>"; };
 		A8F9FC3318C5683B00C48245 /* ActualFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActualFont.h; sourceTree = "<group>"; };
@@ -308,6 +321,7 @@
 				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A82C90EB16E00B0500FF519C /* CinderSketchSimple.h */,
 				A82C90EA16E00B0500FF519C /* CinderSketchSimple.cpp */,
+				A8F9979019FA96B500F08369 /* WindowInfo.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -351,6 +365,7 @@
 		A8985B3C16DA4EB300448A41 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
+				A8F9979119FA9BE000F08369 /* Exception.h */,
 				A853DFD418116D42006C2085 /* FileSystem.cpp */,
 				A853DFD518116D42006C2085 /* FileSystem.h */,
 				A82C909816DFA58900FF519C /* InputSource.h */,
@@ -359,11 +374,28 @@
 				A829870718BD02D500934642 /* font */,
 				A82986FC18BD00C300934642 /* os */,
 				A867AB84194B9AEF008EF66E /* quad */,
+				A8F9978419FA961900F08369 /* system */,
 				A822636E18BF54BC00D57C8C /* time */,
 				A82C90F416E00B3B00FF519C /* utils */,
 			);
 			name = chronotext;
 			path = ../../../src/chronotext;
+			sourceTree = "<group>";
+		};
+		A8F9978419FA961900F08369 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A8F9978519FA961900F08369 /* DisplayHelper.cpp */,
+				A8F9978619FA961900F08369 /* DisplayHelper.h */,
+				A8F9978719FA961900F08369 /* DisplayInfo.h */,
+				A8F9978819FA961900F08369 /* EmulatedDevice.h */,
+				A8F9978919FA961900F08369 /* SystemInfo.h */,
+				A8F9978A19FA961900F08369 /* SystemInfoBase.h */,
+				A8F9978B19FA961900F08369 /* SystemManager.h */,
+				A8F9978C19FA961900F08369 /* SystemManagerBase.cpp */,
+				A8F9978D19FA961900F08369 /* SystemManagerBase.h */,
+			);
+			path = system;
 			sourceTree = "<group>";
 		};
 		A8F9FC3118C5683B00C48245 /* zf */ = {
@@ -476,12 +508,14 @@
 			files = (
 				A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */,
 				A8F9FC4D18C5683B00C48245 /* FontSequence.cpp in Sources */,
+				A8F9978F19FA961900F08369 /* SystemManagerBase.cpp in Sources */,
 				A8F9FC5018C5683B00C48245 /* LayoutCache.cpp in Sources */,
 				A8F9FC4E18C5683B00C48245 /* FontTexture.cpp in Sources */,
 				A8FBC4AD18E3B1A800F5BBEF /* FrameClock.cpp in Sources */,
 				A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */,
 				A8F9FC5118C5683B00C48245 /* LineLayout.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
+				A8F9978E19FA961900F08369 /* DisplayHelper.cpp in Sources */,
 				A82C90EC16E00B0500FF519C /* CinderApp.cpp in Sources */,
 				A82C90ED16E00B0500FF519C /* CinderSketchSimple.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
