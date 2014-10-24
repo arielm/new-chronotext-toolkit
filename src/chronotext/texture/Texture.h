@@ -10,6 +10,8 @@
 
 #include "chronotext/texture/TextureData.h"
 
+#include <exception>
+
 namespace chronotext
 {
     typedef std::shared_ptr<class Texture> TextureRef;
@@ -17,18 +19,10 @@ namespace chronotext
     class Texture
     {
     public:
-        class Exception : public std::exception
+        class Exception : public std::runtime_error
         {
-            std::string message;
-            
         public:
-            Exception(const std::string &what) throw() : message(what) {}
-            ~Exception() throw() {}
-            
-            const char* what() const throw()
-            {
-                return message.c_str();
-            }
+            Exception(const std::string &what) : std::runtime_error(what) {}
         };
         
         TextureRequest request;

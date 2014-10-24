@@ -21,18 +21,10 @@ namespace chronotext
     class InputSource
     {
     public:
-        class Exception : public std::exception
+        class Exception : public std::runtime_error
         {
-            std::string message;
-            
         public:
-            Exception(const std::string &what) throw() : message(what) {}
-            ~Exception() throw() {}
-            
-            const char* what() const throw()
-            {
-                return message.c_str();
-            }
+            Exception(const std::string &what) : std::runtime_error(what) {}
         };
         
         enum
