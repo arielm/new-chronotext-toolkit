@@ -43,11 +43,11 @@ void Sketch::setup()
     
     try
     {
-        throw EXCEPTION(Texture, "wow!");
+        textureManager.getTexture(InputSource::getResource("undefined.png"));
     }
-    catch (EXCEPTION_TYPE(Texture) &e)
+    catch (EXCEPTION_TYPE(InputSource) &e)
     {
-        LOGI << e.message(true) << endl;
+        LOGI << e << endl;
     }
     catch (exception &e)
     {
@@ -58,7 +58,7 @@ void Sketch::setup()
      * TESTING VARIOUS INFO STRUCTURES
      */
     
-    LOGI << "SYSTEM INFO: " << SystemManager::getSystemInfo() << endl;
+    LOGI << "SYSTEM INFO: " << SystemManager::getSystemInfo() << endl; // TODO: USE THE FORTHCOMING chr::Context INSTEAD OF SINGLETON PATTERNS
     LOGI << "DISPLAY INFO: " << getDisplayInfo() << endl;
     LOGI << "WINDOW INFO: " << getWindowInfo() << endl;
     

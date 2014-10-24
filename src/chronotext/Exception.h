@@ -11,8 +11,7 @@ namespace chronotext
     public:
         Exception(const std::string &type = "", const std::string &file = "", int line = 0, const std::string &what = "") throw()
         :
-        std::runtime_error(what),
-        what(what),
+        runtime_error(what),
         type(type),
         file(file),
         line(line)
@@ -20,42 +19,60 @@ namespace chronotext
         
         ~Exception() throw() {}
         
-        const std::string message(bool detailed = false)
+        const std::string& getType() const
         {
-            std::stringstream buffer;
-            
-            if (!type.empty())
+            return type;
+        }
+        
+        const std::string& getFile() const
+        {
+            return file;
+        }
+        
+        int getLine() const
+        {
+            return line;
+        }
+        
+        /*
+         * TODO: POSSIBILITY TO CONTROL THE LEVEL-OF-DETAILS
+         *
+         * OPTION 1: VIA "CUSTOM STREAM MANIPULATORS" (SEE: std::iomanip, setw, setFill. ETC.)
+         * OPTION 2: BY QUERYING THE std::ostream (POSSIBLY CASTABLE TO SOME FRIENDLY CLASS)
+         */
+        friend std::ostream& operator<<(std::ostream &lhs, const Exception &rhs)
+        {
+            if (!rhs.type.empty())
             {
-                buffer << type << "::";
+                lhs << rhs.type << "::";
             }
             
-            buffer << "Exception";
+            lhs << "Exception";
             
-            if (!what.empty())
+            if (rhs.what())
             {
-                buffer << ": " << what;
+                lhs << ": " << rhs.what();
             }
             
-            if (detailed)
+            if (false)
             {
-                if (!file.empty())
+                if (!rhs.file.empty())
                 {
-                    buffer << " [" << file;
+                    lhs << " [" << rhs.file;
                     
-                    if (line > 0)
+                    if (rhs.line > 0)
                     {
-                        buffer << " | LINE: " << line;
+                        lhs << " | LINE: " << rhs.line;
                     }
                     
-                    buffer << "]";
+                    lhs << "]";
                 }
             }
             
-            return buffer.str();
+            return lhs;
         }
         
     protected:
-        std::string what;
         std::string type;
         std::string file;
         int line;
