@@ -10,7 +10,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace chronotext
 {
@@ -48,9 +47,9 @@ namespace chronotext
     }
     
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
-    int DisplayHelper::getAALevel(AppNative *application)
+    int DisplayHelper::getAALevel(app::AppNative *application)
     {
-        auto renderer = static_pointer_cast<RendererGl>(application->getRenderer());
+        auto renderer = static_pointer_cast<app::RendererGl>(application->getRenderer());
 
         switch (renderer->getAntiAliasing())
         {
