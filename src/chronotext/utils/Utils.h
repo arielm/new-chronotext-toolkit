@@ -10,7 +10,6 @@
 
 #include "chronotext/InputSource.h"
 
-#include "cinder/app/App.h"
 #include "cinder/Utilities.h"
 #include "cinder/Xml.h"
 

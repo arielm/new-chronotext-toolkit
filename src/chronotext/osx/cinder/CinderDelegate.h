@@ -10,7 +10,7 @@
 
 #import "chronotext/cocoa/utils/NSString+JSON.h"
 
-#include "chronotext/cinder/CinderApp.h"
+#include "chronotext/app/cinder/CinderApp.h"
 
 @interface CinderDelegate : NSObject
 {
