@@ -6,12 +6,14 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/cinder/CinderSketchSimple.h"
-#include "chronotext/cinder/CinderApp.h"
+#include "chronotext/app/cinder/CinderSketchSimple.h"
+#include "chronotext/app/cinder/CinderApp.h"
 
 using namespace std;
 using namespace ci;
 using namespace ci::app;
+
+#define NATIVE_CONTEXT static_cast<CinderApp*>(context)
 
 namespace chronotext
 {
@@ -28,17 +30,17 @@ namespace chronotext
 
     bool CinderSketchSimple::isEmulated() const
     {
-        return static_cast<CinderApp*>(context)->isEmulated();
+        return NATIVE_CONTEXT->isEmulated();
     }
     
     DisplayInfo CinderSketchSimple::getDisplayInfo() const
     {
-        return static_cast<CinderApp*>(context)->getDisplayInfo();
+        return NATIVE_CONTEXT->getDisplayInfo();
     }
     
     WindowInfo CinderSketchSimple::getWindowInfo() const
     {
-        return static_cast<CinderApp*>(context)->getWindowInfo();
+        return NATIVE_CONTEXT->getWindowInfo();
     }
     
 #pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------

@@ -10,7 +10,7 @@
  * STUB FOR RUNNING A CinderSketch ON THE DESKTOP
  */
 
-#include "chronotext/cinder/CinderApp.h"
+#include "chronotext/app/cinder/CinderApp.h"
 
 #include "Sketch.h"
 

@@ -10,9 +10,9 @@
 
 #include "cinder/app/AppNative.h"
 
+#include "chronotext/app/system/EmulatedDevice.h"
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/InputSource.h"
-#include "chronotext/system/EmulatedDevice.h"
 
 namespace chronotext
 {

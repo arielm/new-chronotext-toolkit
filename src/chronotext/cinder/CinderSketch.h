@@ -27,7 +27,7 @@ namespace chronotext
     typedef CinderSketchComplex CinderSketch;
 }
 #else
-#include "chronotext/cinder/CinderSketchSimple.h"
+#include "chronotext/app/cinder/CinderSketchSimple.h"
 namespace chronotext
 {
     typedef CinderSketchSimple CinderSketch;
