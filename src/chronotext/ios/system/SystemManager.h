@@ -22,7 +22,7 @@ namespace chronotext
         SystemManager();
         void updateSystemInfo();
         
-        std::string getCompositeModelString();
+        std::string getDeviceString();
         
         std::string getModel();
         std::string getMachine();

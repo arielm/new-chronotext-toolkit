@@ -81,7 +81,7 @@ namespace chronotext
             lhs
             << "{"
             << "size: " << rhs.size
-            << ", aaLevel: " << rhs.aaLevel
+            << ", anti-alasing-level: " << rhs.aaLevel
             << "}";
             
             return lhs;

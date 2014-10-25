@@ -13,37 +13,37 @@ using namespace ci;
 
 namespace chronotext
 {
-    int DisplayHelper::getSizeFactor(const DisplayInfo &displayInfo)
+    DisplayInfo::SizeFactor DisplayHelper::getSizeFactor(const DisplayInfo &displayInfo)
     {
-        int diagonal = displayInfo.getDiagonal();
+        float diagonal = displayInfo.getDiagonal();
         
         if (diagonal > 0)
         {
             if (diagonal < 3.33f)
             {
-                return SIZE_FACTOR_PHONE_MINI;
+                return DisplayInfo::SIZE_FACTOR_PHONE_MINI;
             }
             if (diagonal < 4.5f)
             {
-                return SIZE_FACTOR_PHONE;
+                return DisplayInfo::SIZE_FACTOR_PHONE;
             }
             if (diagonal < 6.5f)
             {
-                return SIZE_FACTOR_PHONE_BIG;
+                return DisplayInfo::SIZE_FACTOR_PHONE_BIG;
             }
             if (diagonal < 9)
             {
-                return SIZE_FACTOR_TABLET_MINI;
+                return DisplayInfo::SIZE_FACTOR_TABLET_MINI;
             }
             if (diagonal < 11.5f)
             {
-                return SIZE_FACTOR_TABLET;
+                return DisplayInfo::SIZE_FACTOR_TABLET;
             }
             
-            return SIZE_FACTOR_TABLET_BIG;
+            return DisplayInfo::SIZE_FACTOR_TABLET_BIG;
         }
         
-        return SIZE_FACTOR_UNDEFINED;
+        return DisplayInfo::SIZE_FACTOR_UNDEFINED;
     }
     
 #if defined(CINDER_MAC) || defined(CINDER_MSW)

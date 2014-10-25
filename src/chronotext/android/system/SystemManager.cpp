@@ -59,7 +59,7 @@ namespace chronotext
         return getSystemProperty("ro.build.version.release");
     }
     
-    string SystemManager::getCompositeModelString()
+    string SystemManager::getDeviceString()
     {
         return systemInfo.model + " [" + systemInfo.manufacturer + "]";
     }

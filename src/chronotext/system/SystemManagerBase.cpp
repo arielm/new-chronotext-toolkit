@@ -10,7 +10,9 @@
 
 #include "chronotext/utils/Utils.h"
 
+#if !defined(ANDROID)
 #include "cinder/System.h"
+#endif
 
 using namespace std;
 using namespace ci;
@@ -19,7 +21,7 @@ namespace chronotext
 {
     class SystemManager;
 
-    int SystemManagerBase::getPlatform()
+    SystemInfo::Platform SystemManagerBase::getPlatform()
     {
 #if defined(CINDER_MAC)
         return SystemInfo::PLATFORM_OSX;
@@ -89,7 +91,7 @@ namespace chronotext
         systemInfo.platformString = getPlatformString();
 
         systemInfo.osVersionString = getOsVersionString();
-        systemInfo.compositeModelString = getCompositeModelString();
+        systemInfo.deviceString = getDeviceString();
     }
     
 #if defined(ANDROID)
@@ -104,7 +106,7 @@ namespace chronotext
     }
 #endif
     
-    string SystemManagerBase::getCompositeModelString()
+    string SystemManagerBase::getDeviceString()
     {
         return "";
     }

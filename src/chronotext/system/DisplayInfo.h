@@ -25,6 +25,18 @@ namespace chronotext
         }
         Orientation;
         
+        typedef enum
+        {
+            SIZE_FACTOR_UNDEFINED,
+            SIZE_FACTOR_PHONE_MINI,
+            SIZE_FACTOR_PHONE,
+            SIZE_FACTOR_PHONE_BIG,
+            SIZE_FACTOR_TABLET_MINI,
+            SIZE_FACTOR_TABLET,
+            SIZE_FACTOR_TABLET_BIG,
+        }
+        SizeFactor;
+        
         static DisplayInfo create(int width, int height, float contentScale = 1)
         {
             return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, 0);
@@ -105,7 +117,7 @@ namespace chronotext
             lhs
             << "{"
             << "size: " << rhs.fullSize
-            << ", contentScale: " << rhs.contentScale
+            << ", content-scale: " << rhs.contentScale
             << ", diagonal: " << rhs.diagonal
             << ", density: " << rhs.density
             << "}";

@@ -39,7 +39,7 @@ namespace chronotext
         void updateSystemInfo();
         
         std::string getOsVersionString();
-        std::string getCompositeModelString();
+        std::string getDeviceString();
         
         std::string getModel();
         std::string getManufacturer();

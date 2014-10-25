@@ -18,30 +18,31 @@ namespace chronotext
     class SystemInfoBase
     {
     public:
-        enum
+        typedef enum
         {
             PLATFORM_OSX,
             PLATFORM_WINDOW,
             PLATFORM_IOS,
             PLATFORM_ANDROID
-        };
+        }
+        Platform;
         
-        int platform;
+        Platform platform;
         std::string platformString;
 
         std::string osVersionString;
-        std::string compositeModelString;
+        std::string deviceString;
         
         friend std::ostream& operator<<(std::ostream &lhs, const SystemInfoBase &rhs)
         {
             lhs
             << "{"
             << "platform: " << rhs.platformString
-            << ", osVersion: " << rhs.osVersionString;
+            << ", os-version: " << rhs.osVersionString;
             
-            if (!rhs.compositeModelString.empty())
+            if (!rhs.deviceString.empty())
             {
-                lhs << ", model: '" << rhs.compositeModelString << "'";
+                lhs << ", device: '" << rhs.deviceString << "'";
             }
             
             lhs << "}";

@@ -53,7 +53,7 @@ namespace chronotext
         SystemManagerBase::updateSystemInfo();
     }
     
-    string SystemManager::getCompositeModelString()
+    string SystemManager::getDeviceString()
     {
         return systemInfo.model + " [" + systemInfo.machine + "]";
     }
@@ -67,6 +67,7 @@ namespace chronotext
      * - iPad
      * - iPad Simulator
      */
+    
     string SystemManager::getModel()
     {
         NSString *model = UIDevice.currentDevice.model;
@@ -99,6 +100,7 @@ namespace chronotext
     /*
      * REFERENCE: http://theiphonewiki.com/wiki/Models
      */
+    
     bool SystemManager::isPadMini()
     {
         if (systemInfo.machine == "iPad2,5") return true;

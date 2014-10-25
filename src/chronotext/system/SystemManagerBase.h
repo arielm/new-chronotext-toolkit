@@ -15,7 +15,7 @@ namespace chronotext
     class SystemManagerBase
     {
     public:
-        static int getPlatform();
+        static SystemInfo::Platform getPlatform();
         static std::string getPlatformString();
         
         static SystemManagerBase& instance();
@@ -30,6 +30,6 @@ namespace chronotext
         virtual void updateSystemInfo();
 
         virtual std::string getOsVersionString();
-        virtual std::string getCompositeModelString();
+        virtual std::string getDeviceString();
     };
 }
