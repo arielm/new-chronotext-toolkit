@@ -9,6 +9,7 @@
 #pragma once
 
 #include "chronotext/InputSource.h"
+#include "chronotext/Log.h"
 
 #include "cinder/Utilities.h"
 #include "cinder/Xml.h"
@@ -28,94 +29,6 @@
 
 namespace chronotext
 {
-#if defined(CINDER_MSW)
-    static ci::msw::dostream *CHROUT;
-#elif defined(CINDER_ANDROID)
-    static ci::android::dostream *CHROUT;
-#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-    static mac::dostream *CHROUT;
-#endif
-    
-    static inline std::ostream& chrout()
-    {
-#if defined(CINDER_MSW)
-        if (!CHROUT)
-        {
-            CHROUT = new ci::msw::dostream;
-        }
-        return *CHROUT;
-#elif defined(CINDER_ANDROID)
-        if (!CHROUT)
-        {
-            CHROUT = new ci::android::dostream;
-        }
-        return *CHROUT;
-#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-        if (!CHROUT)
-        {
-            CHROUT = new mac::dostream;
-        }
-        return *CHROUT;
-#else
-        return std::cout;
-#endif
-    }
-    
-    // ---
-    
-    static std::set<std::string> LOGGED_ONCE;
-
-    static void LOGI_ONCE(const std::string &msg)
-    {
-        if (!LOGGED_ONCE.count(msg))
-        {
-            LOGGED_ONCE.insert(msg);
-            chrout() << msg << std::endl;
-        }
-    }
-    
-    static inline void LOGD_ONCE(const std::string &msg)
-    {
-#if defined(DEBUG) || defined(FORCE_LOG)
-        LOGI_ONCE(msg);
-#endif
-    }
-    
-    // ---
-    
-    /*
-     * cout REDIRECTION, AS DESCRIBED IN http://www.cplusplus.com/reference/iostream/ios/rdbuf/
-     */
-    
-    static std::streambuf *coutBackup = NULL;
-    static std::ofstream coutFileStream;
-    
-    static void endCoutRedirection()
-    {
-        if (coutBackup)
-        {
-            chrout().rdbuf(coutBackup);
-            coutFileStream.close();
-            coutBackup = NULL;
-        }
-    }
-    
-    static void redirectCoutToFile(const ci::fs::path &filePath)
-    {
-        if (coutBackup)
-        {
-            endCoutRedirection();
-        }
-        
-        coutFileStream.open(filePath.string().c_str());
-        coutBackup = chrout().rdbuf();
-        
-        std::streambuf *psbuf = coutFileStream.rdbuf();
-        chrout().rdbuf(psbuf);
-    }
-    
-    // ---
-    
     template<typename T>
     static int search(T *array, T value, int min, int max)
     {
@@ -218,14 +131,3 @@ namespace chronotext
 }
 
 namespace chr = chronotext;
-
-#define LOGI chr::chrout()
-#define LOGI_IF(COND) (COND) && LOGI
-
-#if defined(DEBUG) || defined(FORCE_LOG)
-#define LOGD LOGI
-#define LOGD_IF(COND) LOGI_IF(COND)
-#else
-#define LOGD false && chr::chrout()
-#define LOGD_IF(COND) false && chr::chrout()
-#endif

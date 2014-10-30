@@ -11,7 +11,6 @@
 #include "chronotext/font/xf/TextHelper.h"
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/Utils.h"
-#include "chronotext/system/SystemManager.h"
 
 using namespace std;
 using namespace ci;
@@ -37,33 +36,6 @@ CinderSketch(context, delegate)
 
 void Sketch::setup()
 {
-    /*
-     * TESTING THE NEW EXCEPTION MECHANISM
-     */
-    
-    try
-    {
-        textureManager.getTexture(InputSource::getResource("undefined.png"));
-    }
-    catch (EXCEPTION_TYPE(InputSource) &e)
-    {
-        LOGI << e << endl;
-    }
-    catch (exception &e)
-    {
-        LOGI << e.what() << endl;
-    }
-    
-    /*
-     * TESTING VARIOUS INFO STRUCTURES
-     */
-    
-    LOGI << "SYSTEM INFO: " << SystemManager::getSystemInfo() << endl; // TODO: USE THE FORTHCOMING chr::Context INSTEAD OF SINGLETON PATTERNS
-    LOGI << "DISPLAY INFO: " << getDisplayInfo() << endl;
-    LOGI << "WINDOW INFO: " << getWindowInfo() << endl;
-    
-    // ---
-    
     dot = textureManager.getTexture("dot_112.png", true, TextureRequest::FLAGS_TRANSLUCENT);
     font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
     
