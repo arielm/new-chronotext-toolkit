@@ -22,7 +22,7 @@ using namespace chr;
     if (self = [super init])
     {
         view = (NSView*)cinderApp->getWindow()->getNative();
-        sketch = cinderApp->sketch;
+        sketch = cinderApp->getSketch();
     }
     
     return self;

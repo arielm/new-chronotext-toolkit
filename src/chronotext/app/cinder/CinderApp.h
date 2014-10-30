@@ -19,12 +19,13 @@ namespace chronotext
     class CinderApp : public ci::app::AppNative
     {
     public:
-        CinderSketch *sketch;
-
         CinderApp();
         virtual ~CinderApp() {}
-        
+
+        CinderSketch* getSketch();
+
         virtual CinderSketch* createSketch() = 0;
+        virtual void destroySketch();
         
         virtual void action(int actionId) {}
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
@@ -58,6 +59,8 @@ namespace chronotext
         bool loadEmulators(chr::InputSourceRef source);
         
     protected:
+        CinderSketch *sketch;
+
         bool emulated;
         EmulatedDevice emulatedDevice;
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;

@@ -27,6 +27,16 @@ namespace chronotext
     startCount(0),
     updateCount(0)
     {}
+
+    CinderSketch* CinderApp::getSketch()
+    {
+        return sketch;
+    }
+    
+    void CinderApp::destroySketch()
+    {
+        delete sketch;
+    }
     
     void CinderApp::sendMessageToSketch(int what, const string &body)
     {
@@ -64,7 +74,7 @@ namespace chronotext
         stop();
 
         sketch->shutdown();
-        delete sketch;
+        destroySketch();
     }
     
     void CinderApp::resize()
