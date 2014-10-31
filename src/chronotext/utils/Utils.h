@@ -19,14 +19,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-#if defined(CINDER_MSW)
-#include "cinder/msw/OutputDebugStringStream.h"
-#elif defined(CINDER_ANDROID)
-#include "cinder/android/LogStream.h"
-#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-#include "chronotext/utils/SyslogStringStream.h"
-#endif
-
 namespace chronotext
 {
     template<typename T>

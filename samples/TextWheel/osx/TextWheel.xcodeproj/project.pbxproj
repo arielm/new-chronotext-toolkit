@@ -104,6 +104,7 @@
 		A867AB87194B9AEF008EF66E /* QuadBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatchMap.h; sourceTree = "<group>"; };
 		A867AB88194B9AEF008EF66E /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
 		A867AB89194B9AEF008EF66E /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
+		A86902611A03029800D2C9F3 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextSpiral.cpp; path = ../src/TextSpiral.cpp; sourceTree = "<group>"; };
 		A8A883F318C6C0D200BC0BDB /* TextSpiral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSpiral.h; path = ../src/TextSpiral.h; sourceTree = "<group>"; };
@@ -361,6 +362,7 @@
 		A8985B3C16DA4EB300448A41 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
+				A86902611A03029800D2C9F3 /* Log.h */,
 				A8F9979119FA9BE000F08369 /* Exception.h */,
 				A853DFD418116D42006C2085 /* FileSystem.cpp */,
 				A853DFD518116D42006C2085 /* FileSystem.h */,

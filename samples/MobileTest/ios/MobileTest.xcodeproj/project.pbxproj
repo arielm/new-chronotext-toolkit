@@ -86,6 +86,7 @@
 		A853DFDA18116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		A853DFDB18116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		A85483B819CE12CD00B7866C /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
+		A86902621A0308F000D2C9F3 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		A87207FE18081CDE0055F0BA /* SubHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubHandler.h; sourceTree = "<group>"; };
 		A87207FF18081CDE0055F0BA /* SuperHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SuperHandler.cpp; sourceTree = "<group>"; };
 		A872080018081CDE0055F0BA /* SuperHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperHandler.h; sourceTree = "<group>"; };
@@ -346,6 +347,7 @@
 			isa = PBXGroup;
 			children = (
 				A8F9979219FAA06000F08369 /* Exception.h */,
+				A86902621A0308F000D2C9F3 /* Log.h */,
 				A853DFDA18116D42006C2085 /* FileSystem.cpp */,
 				A853DFDB18116D42006C2085 /* FileSystem.h */,
 				A8FA3BBE16E3AB8000367F97 /* InputSource.h */,

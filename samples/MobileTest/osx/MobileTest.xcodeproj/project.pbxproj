@@ -336,8 +336,8 @@
 		A8985B3C16DA4EB300448A41 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
-				A86901181A02A9BC00D2C9F3 /* Log.h */,
 				A8F9978319FA8ED300F08369 /* Exception.h */,
+				A86901181A02A9BC00D2C9F3 /* Log.h */,
 				A853DFD518116D42006C2085 /* FileSystem.h */,
 				A853DFD418116D42006C2085 /* FileSystem.cpp */,
 				A82C909816DFA58900FF519C /* InputSource.h */,

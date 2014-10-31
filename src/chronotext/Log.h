@@ -8,36 +8,29 @@
 
 #pragma once
 
+#include "cinder/Cinder.h"
+
+#if defined(CINDER_MSW)
+#include "cinder/msw/OutputDebugStringStream.h"
+#elif defined(CINDER_ANDROID)
+#include "cinder/android/LogStream.h"
+#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
+#include "chronotext/utils/SyslogStringStream.h"
+#endif
+
 namespace chronotext
 {
-#if defined(CINDER_MSW)
-    static ci::msw::dostream *CHROUT;
-#elif defined(CINDER_ANDROID)
-    static ci::android::dostream *CHROUT;
-#elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-    static mac::dostream *CHROUT;
-#endif
-    
-    static inline std::ostream& chrout()
+    static inline std::ostream& cout()
     {
 #if defined(CINDER_MSW)
-        if (!CHROUT)
-        {
-            CHROUT = new ci::msw::dostream;
-        }
-        return *CHROUT;
+        static ci::msw::dostream COUT;
+        return COUT;
 #elif defined(CINDER_ANDROID)
-        if (!CHROUT)
-        {
-            CHROUT = new ci::android::dostream;
-        }
-        return *CHROUT;
+        static ci::android::dostream COUT;
+        return COUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-        if (!CHROUT)
-        {
-            CHROUT = new mac::dostream;
-        }
-        return *CHROUT;
+        static mac::dostream COUT;
+        return COUT;
 #else
         return std::cout;
 #endif
@@ -46,15 +39,18 @@ namespace chronotext
 
 namespace chr = chronotext;
 
-#define LOGI chr::chrout()
-#define LOGI_IF(COND) (COND) && LOGI
-
-#if defined(DEBUG) || defined(FORCE_LOG)
-#define LOGD LOGI
-#define LOGD_IF(COND) LOGI_IF(COND)
+#if defined(DISCARD_LOGI)
+#define LOGI false && chr::cout()
+#define LOGI_IF(COND) false && chr::cout()
 #else
-#define LOGD false && chr::chrout()
-#define LOGD_IF(COND) false && chr::chrout()
+#define LOGI chr::cout()
+#define LOGI_IF(COND) (COND) && chr::cout()
 #endif
 
-// TODO: ADD LOGX AND LOGX_IF FOR "DATA REPORTING"
+#if defined(DEBUG) || defined(FORCE_LOGD)
+#define LOGD chr::cout()
+#define LOGD_IF(COND) (COND) && chr::cout()
+#else
+#define LOGD false && chr::cout()
+#define LOGD_IF(COND) false && chr::cout()
+#endif
