@@ -39,37 +39,40 @@
 
 namespace chronotext
 {
-    static inline std::ostream& cout()
+    namespace log
     {
+        static inline std::ostream& cout()
+        {
 #if defined(CINDER_MSW)
-        static ci::msw::dostream COUT;
-        return COUT;
+            static ci::msw::dostream COUT;
+            return COUT;
 #elif defined(CINDER_ANDROID)
-        static ci::android::dostream COUT;
-        return COUT;
+            static ci::android::dostream COUT;
+            return COUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-        static mac::dostream COUT;
-        return COUT;
+            static mac::dostream COUT;
+            return COUT;
 #else
-        return std::cout;
+            return std::cout;
 #endif
+        }
     }
 }
 
 namespace chr = chronotext;
 
 #if defined(DISCARD_LOGI)
-#define LOGI false && chr::cout()
-#define LOGI_IF(COND) false && chr::cout()
+#define LOGI false && chr::log::cout()
+#define LOGI_IF(COND) false && chr::log::cout()
 #else
-#define LOGI chr::cout()
-#define LOGI_IF(COND) (COND) && chr::cout()
+#define LOGI chr::log::cout()
+#define LOGI_IF(COND) (COND) && chr::log::cout()
 #endif
 
 #if defined(DEBUG) || defined(FORCE_LOGD)
-#define LOGD chr::cout()
-#define LOGD_IF(COND) (COND) && chr::cout()
+#define LOGD chr::log::cout()
+#define LOGD_IF(COND) (COND) && chr::log::cout()
 #else
-#define LOGD false && chr::cout()
-#define LOGD_IF(COND) false && chr::cout()
+#define LOGD false && chr::log::cout()
+#define LOGD_IF(COND) false && chr::log::cout()
 #endif
