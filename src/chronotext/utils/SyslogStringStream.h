@@ -8,10 +8,10 @@
 
 /*
  * REDIRECTION OF std::cout TO THE OSX CONSOLE (Applications/Utilities/Console.app)
- * SINCE OSX 10.8, THIS IS *NOT* OCCURING AUTOMATICALLY ANYMORE
+ * BEFORE OSX 10.8, THIS WAS OCCURING AUTOMATICALLY IN PARALLEL TO std::cout
  *
- * IN ORDER TO ACTIVATE IT:
- * THE FOLLOWING MACRO MUST BE DEFINED: FORCE_SYSLOG
+ * TO ACTIVATE IT: #define FORCE_SYSLOG
+ * IF ACTIVATED: std::count WILL NOT BE USED IN PARALLEL
  *
  * BASED ON:
  * https://github.com/cinder/Cinder/blob/master/include/cinder/msw/OutputDebugStringStream.h
@@ -54,7 +54,7 @@ namespace chronotext
         template<>
         inline void basic_debugbuf<char>::output_debug_string(const char *text)
         {
-            syslog(LOG_CONS, "%s", text); // WRITES TO OSX CONSOLE
+            syslog(LOG_CONS, "%s", text); // WRITES TO THE CONSOLE
         }
         
         template<class CharT, class TraitsT = std::char_traits<CharT>>

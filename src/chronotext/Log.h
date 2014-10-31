@@ -6,6 +6,23 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) ON ALL THE PLATFORMS:
+ *    - TAGS:
+ *      - LOG << TAG(foo) << "baz";
+ *    - TIME-STAMPS:
+ *      - LOG << TIMESTAMP << "baz";
+ *    - THREAD-ID
+ *      - LOG << THREAD_ID << "baz";
+ *    - FOR ANDROID: THE IMLEMENTATION SHOULD BE ADAPTED TO logcat
+ *
+ * 2) ADDITIONAL "LOG TARGETS":
+ *    - UNIX TERMINALS
+ *    - FILES
+ */
+
 #pragma once
 
 #include "cinder/Cinder.h"
@@ -17,6 +34,8 @@
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
 #include "chronotext/utils/SyslogStringStream.h"
 #endif
+
+#include <iostream>
 
 namespace chronotext
 {
