@@ -58,7 +58,7 @@ namespace chronotext
     {
         boost::mutex::scoped_lock lock(mtx);
 
-        log::cout() << endl;
+        log::cout() << manip;
         return *this;
     }
 }
