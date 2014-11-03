@@ -48,15 +48,15 @@ namespace chronotext
     
     Log& Log::operator<<(Tag tag)
     {
-        lock_guard<mutex> lg(mtx);
+        boost::mutex::scoped_lock lock(mtx);
         
         log::cout() << "[" << tag.value << "] ";
         return *this;
     }
     
-    Log& Log::operator<<(StdEndLine manip)
+    Log& Log::operator<<(ostream_manipulator manip)
     {
-        lock_guard<mutex> lg(mtx);
+        boost::mutex::scoped_lock lock(mtx);
 
         log::cout() << endl;
         return *this;

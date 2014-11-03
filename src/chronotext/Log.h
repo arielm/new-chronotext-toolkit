@@ -30,11 +30,12 @@
 
 #include <iostream>
 
+#include <boost/thread/mutex.hpp>
+
 /*
- * FROM: https://github.com/SuperV1234/SSVUtils/blob/master/include/SSVUtils/Core/Log/Log.hpp
+ * FROM: http://stackoverflow.com/a/1136617/50335
  */
-using CoutType = decltype(std::cout);
-using StdEndLine = CoutType&(CoutType&);
+typedef std::ostream& (*ostream_manipulator)(std::ostream&);
 
 namespace chronotext
 {
@@ -56,17 +57,17 @@ namespace chronotext
         template <class T>
         Log& operator<<(const T &value)
         {
-            std::lock_guard<std::mutex> lg(mtx);
+            boost::mutex::scoped_lock lock(mtx);
             
             log::cout() << value;
             return *this;
         }
-            
+        
         Log& operator<<(Tag tag);
-        Log& operator<<(StdEndLine manip);
+        Log& operator<<(ostream_manipulator manip);
         
     protected:
-        std::mutex mtx;
+        boost::mutex mtx;
     };
 }
 
