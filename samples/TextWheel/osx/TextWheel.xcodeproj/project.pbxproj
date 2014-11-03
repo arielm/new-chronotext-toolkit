@@ -36,6 +36,7 @@
 		A8A8841018C8DB8800BC0BDB /* es.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840D18C8DB8800BC0BDB /* es.txt */; };
 		A8A8841118C8DB8800BC0BDB /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840E18C8DB8800BC0BDB /* en.txt */; };
 		A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8A8841218C9329B00BC0BDB /* font-config.xml */; };
+		A8F595641A07784800877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595631A07784800877FB2 /* Log.cpp */; };
 		A8F9978E19FA961900F08369 /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9978519FA961900F08369 /* DisplayHelper.cpp */; };
 		A8F9978F19FA961900F08369 /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9978C19FA961900F08369 /* SystemManagerBase.cpp */; };
 		A8F997AC19FB377F00F08369 /* CinderApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F997A619FB377F00F08369 /* CinderApp.cpp */; };
@@ -116,6 +117,7 @@
 		A8A8840D18C8DB8800BC0BDB /* es.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = es.txt; path = ../resources/es.txt; sourceTree = "<group>"; };
 		A8A8840E18C8DB8800BC0BDB /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = en.txt; path = ../resources/en.txt; sourceTree = "<group>"; };
 		A8A8841218C9329B00BC0BDB /* font-config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "font-config.xml"; path = "../resources/font-config.xml"; sourceTree = "<group>"; };
+		A8F595631A07784800877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9978519FA961900F08369 /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
 		A8F9978619FA961900F08369 /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A8F9978719FA961900F08369 /* DisplayInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayInfo.h; sourceTree = "<group>"; };
@@ -362,8 +364,9 @@
 		A8985B3C16DA4EB300448A41 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
-				A86902611A03029800D2C9F3 /* Log.h */,
 				A8F9979119FA9BE000F08369 /* Exception.h */,
+				A86902611A03029800D2C9F3 /* Log.h */,
+				A8F595631A07784800877FB2 /* Log.cpp */,
 				A853DFD418116D42006C2085 /* FileSystem.cpp */,
 				A853DFD518116D42006C2085 /* FileSystem.h */,
 				A82C909816DFA58900FF519C /* InputSource.h */,
@@ -550,6 +553,7 @@
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
 				A8F9FC5318C5683B00C48245 /* TextItemizer.cpp in Sources */,
 				A8F9FC5418C5683B00C48245 /* VirtualFont.cpp in Sources */,
+				A8F595641A07784800877FB2 /* Log.cpp in Sources */,
 				A8F997AD19FB377F00F08369 /* CinderSketchSimple.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A8F9FC5218C5683B00C48245 /* scrptrun.cpp in Sources */,

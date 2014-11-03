@@ -42,6 +42,7 @@
 		A8B31AA119E8A83000127AAA /* emulators.json in Resources */ = {isa = PBXBuildFile; fileRef = A8B31AA019E8A83000127AAA /* emulators.json */; };
 		A8F2E312189E4FDE002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E30A189E4FDE002D5D75 /* Clock.cpp */; };
 		A8F2E314189E4FDE002D5D75 /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E30F189E4FDE002D5D75 /* FrameClock.cpp */; };
+		A8F595621A07783000877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595611A07783000877FB2 /* Log.cpp */; };
 		A8F997A119FB328F00F08369 /* CinderApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9979C19FB328F00F08369 /* CinderApp.cpp */; };
 		A8F997A219FB328F00F08369 /* CinderSketchSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9979E19FB328F00F08369 /* CinderSketchSimple.cpp */; };
 /* End PBXBuildFile section */
@@ -127,6 +128,7 @@
 		A8F2E30F189E4FDE002D5D75 /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
 		A8F2E310189E4FDE002D5D75 /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
 		A8F2E311189E4FDE002D5D75 /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
+		A8F595611A07783000877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9978319FA8ED300F08369 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8F9979C19FB328F00F08369 /* CinderApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderApp.cpp; sourceTree = "<group>"; };
 		A8F9979D19FB328F00F08369 /* CinderApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderApp.h; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 			children = (
 				A8F9978319FA8ED300F08369 /* Exception.h */,
 				A86901181A02A9BC00D2C9F3 /* Log.h */,
+				A8F595611A07783000877FB2 /* Log.cpp */,
 				A853DFD518116D42006C2085 /* FileSystem.h */,
 				A853DFD418116D42006C2085 /* FileSystem.cpp */,
 				A82C909816DFA58900FF519C /* InputSource.h */,
@@ -507,6 +510,7 @@
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
 				A802711319CC7B7C0072973D /* QuadMatrix.cpp in Sources */,
 				A802710519CC7B7C0072973D /* Font.cpp in Sources */,
+				A8F595621A07783000877FB2 /* Log.cpp in Sources */,
 				A8B31A8319E74BC500127AAA /* DisplayHelper.cpp in Sources */,
 				A8B31A9119E83CF400127AAA /* Application.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,

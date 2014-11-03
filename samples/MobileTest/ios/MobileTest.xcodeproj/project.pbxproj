@@ -35,6 +35,7 @@
 		A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */; };
 		A8F2E308189D3F47002D5D75 /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E305189D3F47002D5D75 /* stb_image.c */; };
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
+		A8F595661A07788300877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595651A07788300877FB2 /* Log.cpp */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
@@ -121,6 +122,7 @@
 		A8F2E317189E5234002D5D75 /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A8F2E318189E5234002D5D75 /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A8F2E31D189E5234002D5D75 /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
+		A8F595651A07788300877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9979219FAA06000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 			children = (
 				A8F9979219FAA06000F08369 /* Exception.h */,
 				A86902621A0308F000D2C9F3 /* Log.h */,
+				A8F595651A07788300877FB2 /* Log.cpp */,
 				A853DFDA18116D42006C2085 /* FileSystem.cpp */,
 				A853DFDB18116D42006C2085 /* FileSystem.h */,
 				A8FA3BBE16E3AB8000367F97 /* InputSource.h */,
@@ -543,6 +546,7 @@
 				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
+				A8F595661A07788300877FB2 /* Log.cpp in Sources */,
 				A8FBC45118E35F4100F5BBEF /* SystemManager.mm in Sources */,
 				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1916E3AB8000367F97 /* CinderSketchComplex.mm in Sources */,

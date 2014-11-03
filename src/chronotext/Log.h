@@ -11,12 +11,13 @@
  *
  * 1) ON ALL THE PLATFORMS:
  *    - TAGS:
- *      - LOG << TAG(foo) << "baz";
+ *      - LOG << TAG("foo") << "baz";
  *    - TIME-STAMPS:
  *      - LOG << TIMESTAMP << "baz";
  *    - THREAD-ID
  *      - LOG << THREAD_ID << "baz";
  *    - FOR ANDROID: THE IMPLEMENTATION SHOULD BE ADAPTED TO logcat
+ *    - NESTED INDENTATION SYSTEM
  *
  * 2) ADDITIONAL "LOG TARGETS":
  *    - UNIX TERMINALS
