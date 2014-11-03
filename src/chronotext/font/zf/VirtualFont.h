@@ -31,16 +31,15 @@ namespace chronotext
         class VirtualFont
         {
         public:
-            typedef enum
+            enum Style
             {
                 STYLE_REGULAR,
                 STYLE_BOLD,
                 STYLE_ITALIC,
                 STYLE_BOLD_ITALIC
-            }
-            Style;
+            };
             
-            typedef enum
+            enum Alignment
             {
                 ALIGN_MIDDLE,
                 ALIGN_LEFT,
@@ -48,8 +47,7 @@ namespace chronotext
                 ALIGN_TOP,
                 ALIGN_BASELINE,
                 ALIGN_BOTTOM
-            }
-            Alignment;
+            };
             
             struct Properties
             {

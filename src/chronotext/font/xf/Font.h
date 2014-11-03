@@ -26,7 +26,7 @@ namespace chronotext
         class Font
         {
         public:
-            typedef enum
+            enum Alignment
             {
                 ALIGN_MIDDLE,
                 ALIGN_LEFT,
@@ -34,8 +34,7 @@ namespace chronotext
                 ALIGN_TOP,
                 ALIGN_BASELINE,
                 ALIGN_BOTTOM
-            }
-            Alignment;
+            };
             
             struct Properties
             {

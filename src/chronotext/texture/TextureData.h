@@ -19,14 +19,13 @@ namespace chronotext
 {
     struct TextureData
     {
-        typedef enum
+        enum Type
         {
             TYPE_SURFACE,
             TYPE_IMAGE_SOURCE,
             TYPE_PVR,
             TYPE_DATA
-        }
-        Type;
+        };
         
         bool defined;
         Type type;

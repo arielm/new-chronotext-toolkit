@@ -32,14 +32,13 @@ namespace chronotext
             float distance; // DISTANCE TO CLOSEST-POINT ON PATH
         };
         
-        typedef enum
+        enum Mode
         {
             MODE_BOUNDED,
             MODE_LOOP,
             MODE_TANGENT,
             MODE_MODULO,
-        }
-        Mode;
+        };
         
         FollowablePath(int capacity = 0);
         FollowablePath(const std::vector<ci::Vec2f> &points);

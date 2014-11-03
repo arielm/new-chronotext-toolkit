@@ -16,13 +16,12 @@ namespace chronotext
 {
     struct TextureRequest
     {
-        typedef enum
+        enum Flags
         {
             FLAGS_NONE = 0,
             FLAGS_TRANSLUCENT = 1,
             FLAGS_POT = 2
-        }
-        Flags;
+        };
         
         InputSourceRef inputSource;
         bool useMipmap;

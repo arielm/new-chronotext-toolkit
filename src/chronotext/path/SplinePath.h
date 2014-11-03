@@ -32,12 +32,11 @@ namespace chronotext
     class SplinePath
     {
     public:
-        typedef enum
+        enum Type
         {
             TYPE_BSPLINE,
             TYPE_CATMULL_ROM
-        }
-        Type;
+        };
         
         SplinePath(int capacity = 0);
         SplinePath(const std::vector<ci::Vec2f> &points);

@@ -18,14 +18,13 @@ namespace chronotext
     class SystemInfoBase
     {
     public:
-        typedef enum
+        enum Platform
         {
             PLATFORM_OSX,
             PLATFORM_WINDOW,
             PLATFORM_IOS,
             PLATFORM_ANDROID
-        }
-        Platform;
+        };
         
         Platform platform;
         std::string platformString;

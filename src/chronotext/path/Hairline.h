@@ -8,12 +8,11 @@ namespace chronotext
     class Hairline
     {
     public:
-        typedef enum
+        enum Type
         {
             TYPE_NORMAL,
             TYPE_DASHED
-        }
-        Type;
+        };
         
         Hairline();
         Hairline(TextureManager &textureManager, Type type);

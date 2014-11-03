@@ -17,15 +17,14 @@ namespace chronotext
     public:
         constexpr static float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
         
-        typedef enum
+        enum Orientation
         {
             ORIENTATION_DEFAULT,
             ORIENTATION_PORTRAIT,
             ORIENTATION_LANDSCAPE
-        }
-        Orientation;
+        };
         
-        typedef enum
+        enum SizeFactor
         {
             SIZE_FACTOR_UNDEFINED,
             SIZE_FACTOR_PHONE_MINI,
@@ -34,8 +33,7 @@ namespace chronotext
             SIZE_FACTOR_TABLET_MINI,
             SIZE_FACTOR_TABLET,
             SIZE_FACTOR_TABLET_BIG,
-        }
-        SizeFactor;
+        };
         
         static DisplayInfo create(int width, int height, float contentScale = 1)
         {
