@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "chronotext/Exception.h"
 #include "chronotext/time/DefaultTimeBase.h"
 
 #include <memory>
@@ -54,5 +55,3 @@ namespace chronotext
         std::shared_ptr<Clock> master;
     };
 }
-
-namespace chr = chronotext;

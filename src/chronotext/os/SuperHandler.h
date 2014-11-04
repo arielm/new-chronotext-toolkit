@@ -18,7 +18,7 @@ namespace chronotext
     class SuperHandler : public Handler
     {
     public:
-        SuperHandler() : Handler() {}
+        SuperHandler();
         
         void addSubHandler(SubHandler *handler);
         void removeSubHandler(SubHandler *handler);
@@ -29,5 +29,3 @@ namespace chronotext
         std::list<SubHandler*> handlers;
     };
 }
-
-namespace chr = chronotext;

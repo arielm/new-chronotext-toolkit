@@ -11,7 +11,7 @@
  * http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Clock.html
  */
 
-#include "chronotext/time/Clock.h"
+#include "Clock.h"
 
 using namespace std;
 
@@ -19,13 +19,12 @@ namespace chronotext
 {
     Clock::Clock()
     :
+    timeBase(new DefaultTimeBase()),
     timeBaseIsOwned(true),
     mst(0),
     rate(1),
     state(STOPPED)
-    {
-        timeBase = new DefaultTimeBase();
-    }
+    {}
     
     Clock::Clock(TimeBase *timeBase)
     :
@@ -84,7 +83,7 @@ namespace chronotext
         }
         else
         {
-            throw;
+            throw EXCEPTION(Clock, "CLOCK SHOULD BE STOPPED");
         }
     }
     
@@ -101,7 +100,7 @@ namespace chronotext
         }
         else
         {
-            throw;
+            throw EXCEPTION(Clock, "CLOCK SHOULD BE STOPPED");
         }
     }
     

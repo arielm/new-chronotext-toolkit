@@ -46,5 +46,3 @@ namespace chronotext
         boost::asio::io_service *io;
     };
 }
-
-namespace chr = chronotext;

@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/os/Handler.h"
+#include "Handler.h"
 
 using namespace std;
 
@@ -14,7 +14,7 @@ namespace chronotext
 {
     Handler::Handler()
     :
-    io(NULL)
+    io(nullptr)
     {}
 
     void Handler::setIOService(boost::asio::io_service &io)

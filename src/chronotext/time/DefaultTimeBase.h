@@ -31,5 +31,3 @@ namespace chronotext
         ci::Timer timer;
     };
 }
-
-namespace chr = chronotext;

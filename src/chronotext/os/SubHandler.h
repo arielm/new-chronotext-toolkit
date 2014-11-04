@@ -18,5 +18,3 @@ namespace chronotext
         virtual bool handleSubMessage(const Message &message) = 0;
     };
 }
-
-namespace chr = chronotext;

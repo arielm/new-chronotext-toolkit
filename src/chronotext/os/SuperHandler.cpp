@@ -10,6 +10,11 @@
 
 namespace chronotext
 {
+    SuperHandler::SuperHandler()
+    :
+    Handler()
+    {}
+    
     void SuperHandler::addSubHandler(SubHandler *handler)
     {
         handlers.push_back(handler);
