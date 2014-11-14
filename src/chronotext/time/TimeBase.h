@@ -17,6 +17,8 @@ namespace chronotext
     public:
         virtual ~TimeBase() {}
         virtual double getTime() = 0;
+        
+        std::shared_ptr<TimeBase> ref() { return shared_from_this(); }
     };
 }
 

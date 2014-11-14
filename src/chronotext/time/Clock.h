@@ -11,6 +11,22 @@
  * http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Clock.html
  */
 
+/*
+ * PROBLEM: CREATING A Clock FROM A TimeBase WHICH IS NOT ENCLOSED IN A shared_ptr WILL CAUSE A CRASH
+ *
+ * SOLUTION: SIMILAR TO WHAT IS DONE IN cinder::Timeline
+ *
+ *
+ * TODO:
+ *
+ * 1) IMPLEMENT SOLUTION:
+ *    CLASSES EXTENDING TimeBase SHOULD HAVE A PROTECTED CONSTRUCTOR
+ *    AND A STATIC METHOD FOR CREATING INSTANCES ENCLOSED IN A shared_ptr
+ *
+ * 2) ULTIMATELY MERGE WITH:
+ *    https://github.com/arielm/new-chronotext-toolkit/commit/420ab71a823dc7e1e73a5d1d4f8a1d820c310d06
+ */
+
 #pragma once
 
 #include "chronotext/time/DefaultTimeBase.h"

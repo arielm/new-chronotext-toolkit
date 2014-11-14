@@ -28,5 +28,3 @@ namespace chronotext
         double frameTime;
     };
 }
-
-namespace chr = chronotext;
