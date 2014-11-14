@@ -19,7 +19,7 @@ namespace chronotext
     frameTime(0)
     {}
     
-    FrameClock::FrameClock(TimeBase *timeBase)
+    FrameClock::FrameClock(shared_ptr<TimeBase> timeBase)
     :
     Clock(timeBase),
     shouldSample(true),

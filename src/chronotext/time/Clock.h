@@ -15,11 +15,9 @@
 
 #include "chronotext/time/DefaultTimeBase.h"
 
-#include <memory>
-
 namespace chronotext
 {
-    class Clock : public TimeBase, public std::enable_shared_from_this<Clock>
+    class Clock : public TimeBase
     {
     public:
         enum
@@ -29,10 +27,7 @@ namespace chronotext
         };
 
         Clock();
-        Clock(TimeBase *timeBase);
-        Clock(std::shared_ptr<Clock> master);
-        
-        virtual ~Clock();
+        Clock(std::shared_ptr<TimeBase> timeBase);
         
         virtual void start();
         virtual void stop();
@@ -48,11 +43,6 @@ namespace chronotext
         double tbst;
         int state;
         
-        TimeBase *timeBase;
-        bool timeBaseIsOwned;
-        
-        std::shared_ptr<Clock> master;
+        std::shared_ptr<TimeBase> timeBase;
     };
 }
-
-namespace chr = chronotext;

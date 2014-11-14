@@ -19,41 +19,20 @@ namespace chronotext
 {
     Clock::Clock()
     :
-    timeBaseIsOwned(true),
-    mst(0),
-    rate(1),
-    state(STOPPED)
-    {
-        timeBase = new DefaultTimeBase();
-    }
-    
-    Clock::Clock(TimeBase *timeBase)
-    :
-    timeBase(timeBase),
-    timeBaseIsOwned(false),
+    timeBase(new DefaultTimeBase()),
     mst(0),
     rate(1),
     state(STOPPED)
     {}
     
-    Clock::Clock(shared_ptr<Clock> master)
+    Clock::Clock(shared_ptr<TimeBase> timeBase)
     :
-    timeBase(master.get()),
-    timeBaseIsOwned(false),
-    master(master),
+    timeBase(timeBase),
     mst(0),
     rate(1),
     state(STOPPED)
     {
         start();
-    }
-    
-    Clock::~Clock()
-    {
-        if (timeBaseIsOwned)
-        {
-            delete timeBase;
-        }
     }
     
     void Clock::start()

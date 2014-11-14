@@ -8,9 +8,11 @@
 
 #pragma once
 
+#include <memory>
+
 namespace chronotext
 {
-    class TimeBase
+    class TimeBase : public std::enable_shared_from_this<TimeBase>
     {
     public:
         virtual ~TimeBase() {}
