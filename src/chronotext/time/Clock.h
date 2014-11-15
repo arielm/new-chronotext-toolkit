@@ -36,7 +36,7 @@ namespace chronotext
     class Clock : public TimeBase
     {
     public:
-        enum
+        enum State
         {
             STOPPED,
             STARTED
@@ -47,17 +47,23 @@ namespace chronotext
         
         virtual void start();
         virtual void stop();
+        
         virtual double getTime();
         virtual void setTime(double now);
-        virtual int getState();
+        
+        virtual double getRate();
         virtual void setRate(double factor);
+        
+        virtual State getState();
+        
         virtual void restart();
+        virtual void reset();
         
     protected:
         double mst;
         double rate;
         double tbst;
-        int state;
+        State state;
         
         std::shared_ptr<TimeBase> timeBase;
     };
