@@ -13,7 +13,7 @@
 /*
  *  TODO:
  *
- * 1) TRY TO USE boost::this_thread::sleep() INSTEAD cinder::sleep()
+ * 1) TRY TO USE boost::this_thread::sleep() INSTEAD OF cinder::sleep()
  *    REQUIREMENTS: MUST BE TESTED ON OSX / iOS / WINDOWS / ANDROID
  */
 
