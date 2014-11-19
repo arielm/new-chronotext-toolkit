@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -21,7 +21,7 @@ namespace chronotext
     started(false),
     ended(false),
     cancelRequired(false),
-    synchronized(false),
+    synchronous(false),
     manager(nullptr)
     {}
     
@@ -41,12 +41,12 @@ namespace chronotext
         {
             if (manager)
             {
+                synchronous = forceSync;
                 started = true;
                 
-                if (forceSync)
+                if (synchronous)
                 {
-                    synchronized = true;
-                    run();
+                    performRun();
                 }
                 else
                 {
@@ -64,7 +64,7 @@ namespace chronotext
     {
         boost::mutex::scoped_lock lock(_mutex);
         
-        if (started && !synchronized && !cancelRequired)
+        if (!synchronous && !cancelRequired && started)
         {
             cancelRequired = true;
             return true;
@@ -81,21 +81,43 @@ namespace chronotext
     
     void Task::performDetach()
     {
-        if (_thread.joinable())
+        if (!synchronous)
         {
-            _thread.detach();
+            if (_thread.joinable())
+            {
+                _thread.detach();
+            }
         }
     }
     
     void Task::performRun()
     {
-        ThreadSetup forCocoa;
-        
-        run();
+        if (synchronous)
+        {
+            run();
+        }
+        else
+        {
+            ThreadSetup forCocoa; // XXX: MANDATORY CALL (USED FOR OSX AND iOS, DUMMY ON OTHER PLATFORMS)
+            run();
+        }
         
         started = false;
         ended = true;
         
-        manager->post([=]{ manager->taskEnded(this); });
+        if (synchronous)
+        {
+            manager->taskEnded(this);
+        }
+        else
+        {
+            manager->post([=]{ manager->taskEnded(this); }, false); // TODO: DOUBLE-CHECK LAMBDA
+        }
+    }
+    
+    template <typename F>
+    bool Task::post(F &&fn)
+    {
+        return manager->post(forward<F>(fn), synchronous);
     }
 }

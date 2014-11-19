@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -13,8 +13,19 @@
 /*
  *  TODO:
  *
- * 1) TRY TO USE boost::this_thread::sleep() INSTEAD OF cinder::sleep()
- *    REQUIREMENTS: MUST BE TESTED ON OSX / iOS / WINDOWS / ANDROID
+ * 1) TEST FURTHER:
+ *    - NEW WAY TO RUN SYNCHRONOUS TASKS VIA performRun
+ *    - IS NEW Task::post PROPERLY ACCESSIBLE FROM SUB-CLASSES?
+ *
+ * 2) TRY TO USE REPLACE cinder::sleep() BY:
+ *    - boost::this_thread::sleep()
+ *    - OR EVEN BETTER: A PURE STL SOLUTION
+ *
+ * 3) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_log
+ *
+ * 4) SEE IF THE NEW C++11 thread_local CAN BE USED FOR THE FOLLOWING 
+ *    - bool cancelRequired
+ *    - TaskManager *manager
  */
 
 #pragma once
@@ -34,17 +45,13 @@ namespace chronotext
         virtual ~Task();
         
         virtual void run() = 0;
-        void sleep(float milliseconds);
-        
-        friend class TaskManager;
+        virtual void sleep(float milliseconds);
         
     protected:
         bool started;
         bool ended;
         bool cancelRequired;
-        bool synchronized;
-        
-        TaskManager *manager;
+        bool synchronous;
         
         std::thread _thread;
         boost::mutex _mutex;
@@ -55,6 +62,13 @@ namespace chronotext
         
         void performRun();
         void performDetach();
+        
+        template <typename F>
+        bool post(F &&fn);
+        
+    private:
+        friend class TaskManager;
+        TaskManager *manager; // TODO: SHOULD BE A shared_ptr (I.E. OBTAINED VIA shared_from_this)
     };
 }
 

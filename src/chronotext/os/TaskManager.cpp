@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -14,7 +14,7 @@ namespace chronotext
 {
     TaskManager::TaskManager()
     :
-    lastId(0),
+    lastId(-1),
     io(nullptr)
     {}
     
@@ -25,6 +25,8 @@ namespace chronotext
     
     int TaskManager::addTask(shared_ptr<Task> task)
     {
+        boost::mutex::scoped_lock lock(_mutex);
+        
         if (!task->manager)
         {
             task->manager = this;
@@ -32,24 +34,26 @@ namespace chronotext
             
             return lastId;
         }
-        else
-        {
-            return 0;
-        }
-    }
-    
-    bool TaskManager::startTask(shared_ptr<Task> task, bool forceSync)
-    {
-        return startTask(addTask(task), forceSync);
+        
+        return -1;
     }
     
     bool TaskManager::startTask(int taskId, bool forceSync)
     {
-        auto entry = tasks.find(taskId);
+        boost::mutex::scoped_lock lock(_mutex);
         
-        if (entry != tasks.end())
+        auto element = tasks.find(taskId);
+        
+        if (element != tasks.end())
         {
-            return entry->second->start(forceSync);
+            if (forceSync)
+            {
+                return element->second->start(true);
+            }
+            else if (io)
+            {
+                return post([=]{ element->second->start(false); }, false); // TODO: TEST
+            }
         }
         
         return false;
@@ -57,11 +61,13 @@ namespace chronotext
     
     bool TaskManager::cancelTask(int taskId)
     {
-        auto entry = tasks.find(taskId);
+        boost::mutex::scoped_lock lock(_mutex);
         
-        if (entry != tasks.end())
+        auto element = tasks.find(taskId);
+        
+        if (element != tasks.end())
         {
-            return entry->second->cancel();
+            return element->second->cancel(); // NO-OP FOR SYNCHRONOUS TASKS
         }
         
         return false;
@@ -69,12 +75,12 @@ namespace chronotext
     
     void TaskManager::taskEnded(Task *task)
     {
-        for (auto entry : tasks)
+        for (auto &element : tasks)
         {
-            if (entry.second.get() == task)
+            if (task == element.second.get())
             {
-                task->performDetach();
-                tasks.erase(entry.first);
+                task->performDetach(); // NO-OP FOR SYNCHRONOUS TASKS
+                tasks.erase(element.first);
                 return;
             }
         }
