@@ -19,11 +19,11 @@
  *
  * 2) TRY TO USE REPLACE cinder::sleep() BY:
  *    - boost::this_thread::sleep()
- *    - OR EVEN BETTER: A PURE STL SOLUTION
+ *    - OR EVEN BETTER: A PURE C++11 SOLUTION
  *
- * 3) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_log
+ * 3) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_lock
  *
- * 4) SEE IF THE NEW C++11 thread_local CAN BE USED FOR THE FOLLOWING 
+ * 4) SEE IF THE NEW C++11 thread_local CAN BE USED FOR THE FOLLOWING:
  *    - bool cancelRequired
  *    - TaskManager *manager
  */
@@ -68,7 +68,7 @@ namespace chronotext
         
     private:
         friend class TaskManager;
-        TaskManager *manager; // TODO: SHOULD BE A shared_ptr (I.E. OBTAINED VIA shared_from_this)
+        TaskManager *manager; // TODO: SHOULD BE A shared_ptr (PRE-CONDITION: NO (PUBLIC) WAY TO CREATE A NON-SHARED TaskManager, CF Cinder::Timeline)
     };
 }
 
