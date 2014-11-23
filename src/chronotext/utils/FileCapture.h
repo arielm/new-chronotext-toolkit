@@ -72,7 +72,7 @@ namespace chronotext
             }
         }
         
-        std::string flushAsString(bool truncateLast = false, size_t bufferSize = DEFAULT_BUFFER_SIZE) const
+        std::string flushAsString(bool trimTrailing = false, size_t bufferSize = DEFAULT_BUFFER_SIZE) const
         {
             if (initialized)
             {
@@ -85,9 +85,14 @@ namespace chronotext
                 
                 size_t length = strlen(buffer.get());
                 
-                if (truncateLast && (length < bufferSize))
+                if (trimTrailing && (length < bufferSize))
                 {
-                    buffer[length - 1] = 0;
+                    while ((length > 0) && (buffer[length - 1] == '\n'))
+                    {
+                        length--;
+                    }
+                    
+                    buffer[length] = 0;
                 }
                 
                 return std::string(buffer.get());
