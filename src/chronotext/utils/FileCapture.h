@@ -41,7 +41,7 @@ namespace chronotext
         initialized(false),
         target(target)
         {
-            int target_fd = fileno(target);
+            target_fd = fileno(target);
             
             if (target_fd >= 0)
             {
@@ -64,8 +64,6 @@ namespace chronotext
         {
             if (initialized)
             {
-                fflush(target);
-                
                 close(pipe_fd[1]);
                 dup2(backup_fd, target_fd); // RESTORING TARGET
                 close(backup_fd); // RELEASING TARGET DUPLICATE
@@ -78,7 +76,7 @@ namespace chronotext
             {
                 auto buffer = std::unique_ptr<char[]>(new char[bufferSize]()); // ZERO-FILLED
                 
-                fflush(target);
+                fflush(target); // XXX: NECESSARY?
                 read(pipe_fd[0], buffer.get(), bufferSize);
                 
                 // ---
