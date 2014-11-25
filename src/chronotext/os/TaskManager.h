@@ -38,26 +38,18 @@ namespace chronotext
     class TaskManager
     {
     public:
-        TaskManager();
+        TaskManager(boost::asio::io_service &io);
         
         template <typename F>
-        inline bool post(F &&fn, bool forceSync = false)
+        inline void post(F &&fn, bool forceSync = false)
         {
             if (forceSync)
             {
                 fn();
-                return true;
-            }
-            else if (io)
-            {
-                io->post(std::forward<F>(fn));
-                return true;
             }
             
-            return false;
+            io.post(std::forward<F>(fn));
         }
-        
-        void setIOService(boost::asio::io_service &io);
         
         /*
          * RETURN -1 IF THE TASK CAN'T BE ADDED
@@ -96,8 +88,8 @@ namespace chronotext
     protected:
         friend class Task;
 
+        boost::asio::io_service &io;
         boost::mutex _mutex;
-        boost::asio::io_service *io;
         
         int lastId;
         std::map<int, std::shared_ptr<Task>> tasks;
