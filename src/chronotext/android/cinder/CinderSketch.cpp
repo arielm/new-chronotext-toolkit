@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/android/cinder/CinderSketchComplex.h"
+#include "chronotext/android/cinder/CinderSketch.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
 
 using namespace std;
@@ -15,7 +15,7 @@ using namespace ci::app;
 
 namespace chronotext
 {
-    CinderSketchComplex::CinderSketchComplex(void *context, void *delegate)
+    CinderSketch::CinderSketch(void *context, void *delegate)
     :
     CinderSketchBase(),
     context(static_cast<CinderDelegate*>(context)),
@@ -26,56 +26,56 @@ namespace chronotext
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
-    ostream& CinderSketchComplex::console()
+    ostream& CinderSketch::console()
     {
         return context->console();
     }
     
-    boost::asio::io_service& CinderSketchComplex::io_service() const
+    boost::asio::io_service& CinderSketch::io_service() const
     {
         return context->io_service();
     }
     
-    double CinderSketchComplex::getElapsedSeconds() const
+    double CinderSketch::getElapsedSeconds() const
     {
         return context->getElapsedSeconds();
     }
     
-    uint32_t CinderSketchComplex::getElapsedFrames() const
+    uint32_t CinderSketch::getElapsedFrames() const
     {
         return context->getElapsedFrames();
     }
 
-    bool CinderSketchComplex::isEmulated() const
+    bool CinderSketch::isEmulated() const
     {
         return context->isEmulated();
     }
     
-    DisplayInfo CinderSketchComplex::getDisplayInfo() const
+    DisplayInfo CinderSketch::getDisplayInfo() const
     {
         return context->getDisplayInfo();
     }
     
-    WindowInfo CinderSketchComplex::getWindowInfo() const
+    WindowInfo CinderSketch::getWindowInfo() const
     {
         return context->getWindowInfo();
     }
     
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
 
-    void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
+    void CinderSketch::enableAccelerometer(float updateFrequency, float filterFactor)
     {
         context->enableAccelerometer(updateFrequency, filterFactor);
     }
     
-    void CinderSketchComplex::disableAccelerometer()
+    void CinderSketch::disableAccelerometer()
     {
         context->disableAccelerometer();
     }
     
 #pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
     
-    void CinderSketchComplex::action(int actionId)
+    void CinderSketch::action(int actionId)
     {
         if (delegate)
         {
@@ -83,7 +83,7 @@ namespace chronotext
         }
     }
 
-    void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
+    void CinderSketch::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)
         {

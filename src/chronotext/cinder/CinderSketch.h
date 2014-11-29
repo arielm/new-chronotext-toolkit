@@ -11,21 +11,9 @@
 #include "cinder/Cinder.h"
 
 #if defined(CINDER_COCOA_TOUCH)
-#include "chronotext/ios/cinder/CinderSketchComplex.h"
-namespace chronotext
-{
-    typedef CinderSketchComplex CinderSketch;
-}
+#include "chronotext/ios/cinder/CinderSketch.h"
 #elif defined(CINDER_ANDROID)
-#include "chronotext/android/cinder/CinderSketchComplex.h"
-namespace chronotext
-{
-    typedef CinderSketchComplex CinderSketch;
-}
+#include "chronotext/android/cinder/CinderSketch.h"
 #else
-#include "chronotext/app/cinder/CinderSketchSimple.h"
-namespace chronotext
-{
-    typedef CinderSketchSimple CinderSketch;
-}
+#include "chronotext/app/cinder/CinderSketch.h"
 #endif

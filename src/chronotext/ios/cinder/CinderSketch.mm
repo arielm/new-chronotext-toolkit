@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/ios/cinder/CinderSketchComplex.h"
+#include "chronotext/ios/cinder/CinderSketch.h"
 
 #import "CinderDelegate.h"
 
@@ -26,7 +26,7 @@ namespace chronotext
         return static_cast<CinderDelegate*>(delegate);
     }
     
-    CinderSketchComplex::CinderSketchComplex(void *context, void *delegate)
+    CinderSketch::CinderSketch(void *context, void *delegate)
     :
     CinderSketchBase(),
     context(context),
@@ -38,39 +38,39 @@ namespace chronotext
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
     
-    boost::asio::io_service& CinderSketchComplex::io_service() const
+    boost::asio::io_service& CinderSketch::io_service() const
     {
         return *(getContext(context)).io;
     }
     
-    double CinderSketchComplex::getElapsedSeconds() const
+    double CinderSketch::getElapsedSeconds() const
     {
         return getContext(context).elapsedSeconds;
     }
     
-    uint32_t CinderSketchComplex::getElapsedFrames() const
+    uint32_t CinderSketch::getElapsedFrames() const
     {
         return getContext(context).elapsedFrames;
     }
     
-    bool CinderSketchComplex::isEmulated() const
+    bool CinderSketch::isEmulated() const
     {
         return getContext(context).emulated;
     }
     
-    DisplayInfo CinderSketchComplex::getDisplayInfo() const
+    DisplayInfo CinderSketch::getDisplayInfo() const
     {
         return getContext(context).displayInfo;
     }
     
-    WindowInfo CinderSketchComplex::getWindowInfo() const
+    WindowInfo CinderSketch::getWindowInfo() const
     {
         return getContext(context).windowInfo;
     }
 
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
     
-    void CinderSketchComplex::enableAccelerometer(float updateFrequency, float filterFactor)
+    void CinderSketch::enableAccelerometer(float updateFrequency, float filterFactor)
     {
         getContext(context).accelFilter = AccelEvent::Filter(filterFactor);
         
@@ -83,14 +83,14 @@ namespace chronotext
         [[UIAccelerometer sharedAccelerometer] setDelegate:getContext(context)];
     }
     
-    void CinderSketchComplex::disableAccelerometer()
+    void CinderSketch::disableAccelerometer()
     {
         [[UIAccelerometer sharedAccelerometer] setDelegate:nil];
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
 
-    void CinderSketchComplex::touchesBegan(TouchEvent event)
+    void CinderSketch::touchesBegan(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
         {
@@ -98,7 +98,7 @@ namespace chronotext
         }
     }
     
-    void CinderSketchComplex::touchesMoved(TouchEvent event)
+    void CinderSketch::touchesMoved(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
         {
@@ -106,7 +106,7 @@ namespace chronotext
         }
     }
     
-    void CinderSketchComplex::touchesEnded(TouchEvent event)
+    void CinderSketch::touchesEnded(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
         {
@@ -116,7 +116,7 @@ namespace chronotext
     
 #pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
     
-    void CinderSketchComplex::action(int actionId)
+    void CinderSketch::action(int actionId)
     {
         if (delegate)
         {
@@ -124,7 +124,7 @@ namespace chronotext
         }
     }
     
-    void CinderSketchComplex::sendMessageToDelegate(int what, const string &body)
+    void CinderSketch::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)
         {
@@ -134,7 +134,7 @@ namespace chronotext
             }
             else
             {
-                [getDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.c_str()]];
+                [getDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
             }
         }
     }

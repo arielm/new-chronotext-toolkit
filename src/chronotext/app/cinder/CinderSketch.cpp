@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/app/cinder/CinderSketchSimple.h"
+#include "chronotext/app/cinder/CinderSketch.h"
 #include "chronotext/app/cinder/CinderApp.h"
 
 using namespace std;
@@ -17,7 +17,7 @@ using namespace ci::app;
 
 namespace chronotext
 {
-    CinderSketchSimple::CinderSketchSimple(void *context, void *delegate)
+    CinderSketch::CinderSketch(void *context, void *delegate)
     :
     CinderSketchBase(),
     context(static_cast<AppNative*>(context)),
@@ -28,24 +28,24 @@ namespace chronotext
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
-    bool CinderSketchSimple::isEmulated() const
+    bool CinderSketch::isEmulated() const
     {
         return NATIVE_CONTEXT->isEmulated();
     }
     
-    DisplayInfo CinderSketchSimple::getDisplayInfo() const
+    DisplayInfo CinderSketch::getDisplayInfo() const
     {
         return NATIVE_CONTEXT->getDisplayInfo();
     }
     
-    WindowInfo CinderSketchSimple::getWindowInfo() const
+    WindowInfo CinderSketch::getWindowInfo() const
     {
         return NATIVE_CONTEXT->getWindowInfo();
     }
     
 #pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
     
-    void CinderSketchSimple::action(int actionId)
+    void CinderSketch::action(int actionId)
     {
         if (delegate)
         {
@@ -53,7 +53,7 @@ namespace chronotext
         }
     }
     
-    void CinderSketchSimple::sendMessageToDelegate(int what, const string &body)
+    void CinderSketch::sendMessageToDelegate(int what, const string &body)
     {
         if (delegate)
         {

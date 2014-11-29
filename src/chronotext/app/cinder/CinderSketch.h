@@ -16,10 +16,10 @@ namespace chronotext
 {
     class CinderApp;
     
-    class CinderSketchSimple : public CinderSketchBase
+    class CinderSketch : public CinderSketchBase
     {
     public:
-        CinderSketchSimple(void *context, void *delegate = nullptr);
+        CinderSketch(void *context, void *delegate = nullptr);
         
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
