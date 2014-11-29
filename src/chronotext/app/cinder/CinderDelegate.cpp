@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/app/cinder/CinderApp.h"
+#include "chronotext/app/cinder/CinderDelegate.h"
 #include "chronotext/system/DisplayHelper.h"
 #include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/Utils.h"
@@ -19,7 +19,7 @@ using namespace ci::app;
 
 namespace chronotext
 {
-    CinderApp::CinderApp()
+    CinderDelegate::CinderDelegate()
     :
     AppNative(),
     sketch(nullptr),
@@ -28,28 +28,28 @@ namespace chronotext
     updateCount(0)
     {}
 
-    CinderSketch* CinderApp::getSketch()
+    CinderSketch* CinderDelegate::getSketch()
     {
         return sketch;
     }
     
-    void CinderApp::destroySketch()
+    void CinderDelegate::destroySketch()
     {
         delete sketch;
     }
     
-    void CinderApp::sendMessageToSketch(int what, const string &body)
+    void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
         sketch->sendMessage(Message(what, body));
     }
     
-    void CinderApp::applyDefaultSettings(Settings *settings)
+    void CinderDelegate::applyDefaultSettings(Settings *settings)
     {
         settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
         settings->enableHighDensityDisplay();
     }
 
-    void CinderApp::setup()
+    void CinderDelegate::setup()
     {
         sketch = createSketch();
         
@@ -59,7 +59,7 @@ namespace chronotext
         // ---
         
         /*
-         * App::privateUpdate__ HACKING: SEE COMMENT IN CinderApp::update
+         * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update
          */
         io_service().post([this]{ sketch->clock().update(); });
         
@@ -69,7 +69,7 @@ namespace chronotext
         sketch->setup();
     }
     
-    void CinderApp::shutdown()
+    void CinderDelegate::shutdown()
     {
         stop();
 
@@ -77,7 +77,7 @@ namespace chronotext
         destroySketch();
     }
     
-    void CinderApp::resize()
+    void CinderDelegate::resize()
     {
         /*
          * RESIZING IS NOT SUPPORTED WHEN EMULATING
@@ -94,7 +94,7 @@ namespace chronotext
         }
     }
     
-    void CinderApp::update()
+    void CinderDelegate::update()
     {
         /*
          * App::privateUpdate__ HACKING:
@@ -118,7 +118,7 @@ namespace chronotext
         updateCount++;
     }
     
-    void CinderApp::draw()
+    void CinderDelegate::draw()
     {
         if (updateCount == 0)
         {
@@ -128,44 +128,44 @@ namespace chronotext
         sketch->draw();
     }
     
-    bool CinderApp::isEmulated() const
+    bool CinderDelegate::isEmulated() const
     {
         return emulated;
     }
     
-    WindowInfo CinderApp::getWindowInfo() const
+    WindowInfo CinderDelegate::getWindowInfo() const
     {
         return emulated ? emulatedDevice.windowInfo : realWindowInfo;
     }
     
-    DisplayInfo CinderApp::getDisplayInfo() const
+    DisplayInfo CinderDelegate::getDisplayInfo() const
     {
         return emulated ? emulatedDevice.displayInfo : realDisplayInfo;
     }
     
 #pragma mark ---------------------------------------- INPUT ----------------------------------------
 
-    void CinderApp::accelerated(AccelEvent event)
+    void CinderDelegate::accelerated(AccelEvent event)
     {
         sketch->accelerated(event);
     }
     
-    void CinderApp::mouseDown(MouseEvent event)
+    void CinderDelegate::mouseDown(MouseEvent event)
     {
         sketch->addTouch(0, event.getX(), event.getY());
     }
     
-    void CinderApp::mouseDrag(MouseEvent event)
+    void CinderDelegate::mouseDrag(MouseEvent event)
     {
         sketch->updateTouch(0, event.getX(), event.getY());
     }
     
-    void CinderApp::mouseUp(MouseEvent event)
+    void CinderDelegate::mouseUp(MouseEvent event)
     {
         sketch->removeTouch(0, event.getX(), event.getY());
     }
     
-    void CinderApp::touchesBegan(TouchEvent event)
+    void CinderDelegate::touchesBegan(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
         {
@@ -173,7 +173,7 @@ namespace chronotext
         }
     }
     
-    void CinderApp::touchesMoved(TouchEvent event)
+    void CinderDelegate::touchesMoved(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
         {
@@ -181,7 +181,7 @@ namespace chronotext
         }
     }
     
-    void CinderApp::touchesEnded(TouchEvent event)
+    void CinderDelegate::touchesEnded(TouchEvent event)
     {
         for (auto &touch : event.getTouches())
         {
@@ -195,7 +195,7 @@ namespace chronotext
      * TODO: ADDITIONAL CARE IS REQUIRED FOR "SIMULATED" CONTENT-SCALE AND ANTI-ALIASING
      */
     
-    void CinderApp::emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation)
+    void CinderDelegate::emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation)
     {
         emulated = true;
         emulatedDevice = device; // COPYING, IN ORDER TO ALLOW ROTATION
@@ -213,7 +213,7 @@ namespace chronotext
         settings->setResizable(false);
     }
     
-    bool CinderApp::emulate(Settings *settings, const string &deviceKey, DisplayInfo::Orientation orientation)
+    bool CinderDelegate::emulate(Settings *settings, const string &deviceKey, DisplayInfo::Orientation orientation)
     {
         auto it = emulators.find(deviceKey);
         
@@ -226,7 +226,7 @@ namespace chronotext
         return false;
     }
     
-    bool CinderApp::loadEmulators(InputSourceRef source)
+    bool CinderDelegate::loadEmulators(InputSourceRef source)
     {
         emulators.clear();
         
@@ -268,7 +268,7 @@ namespace chronotext
             }
             else
             {
-                throw EXCEPTION(CinderApp, "EMULATOR: " + emulatorKey + ": display MUST HAVE A diagonal OR density");
+                throw EXCEPTION(CinderDelegate, "EMULATOR: " + emulatorKey + ": display MUST HAVE A diagonal OR density");
             }
             
             // ---
@@ -296,7 +296,7 @@ namespace chronotext
 
 #pragma mark ---------------------------------------- MISC ----------------------------------------
     
-    void CinderApp::updateRealDisplayInfo()
+    void CinderDelegate::updateRealDisplayInfo()
     {
         float contentScale = getWindowContentScale();
         Vec2i baseSize = getWindowSize() / contentScale;
@@ -304,18 +304,18 @@ namespace chronotext
         realDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
     }
     
-    void CinderApp::updateRealWindowInfo()
+    void CinderDelegate::updateRealWindowInfo()
     {
         realWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
     }
     
-    void CinderApp::start()
+    void CinderDelegate::start()
     {
         sketch->clock().start();
         sketch->start(CinderSketch::FLAG_APP_SHOWN);
     }
     
-    void CinderApp::stop()
+    void CinderDelegate::stop()
     {
         sketch->clock().stop();
         sketch->stop(CinderSketch::FLAG_APP_HIDDEN);

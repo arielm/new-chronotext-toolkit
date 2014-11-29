@@ -7,13 +7,13 @@
  */
 
 #include "chronotext/app/cinder/CinderSketch.h"
-#include "chronotext/app/cinder/CinderApp.h"
+#include "chronotext/app/cinder/CinderDelegate.h"
 
 using namespace std;
 using namespace ci;
 using namespace ci::app;
 
-#define NATIVE_CONTEXT static_cast<CinderApp*>(context)
+#define NATIVE_CONTEXT static_cast<CinderDelegate*>(context)
 
 namespace chronotext
 {
@@ -21,7 +21,7 @@ namespace chronotext
     :
     CinderSketchBase(),
     context(static_cast<AppNative*>(context)),
-    delegate(static_cast<CinderApp*>(delegate)),
+    delegate(static_cast<CinderDelegate*>(delegate)),
     mClock(new FrameClock()),
     mTimeline(Timeline::create())
     {}

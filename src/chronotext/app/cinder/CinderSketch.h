@@ -14,7 +14,7 @@
 
 namespace chronotext
 {
-    class CinderApp;
+    class CinderDelegate;
     
     class CinderSketch : public CinderSketchBase
     {
@@ -39,7 +39,7 @@ namespace chronotext
         
     protected:
         ci::app::AppNative *context;
-        CinderApp *delegate;
+        CinderDelegate *delegate;
         
         std::shared_ptr<chr::FrameClock> mClock;
         ci::TimelineRef mTimeline;

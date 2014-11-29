@@ -8,28 +8,25 @@
 
 #pragma once
 
-#include "cinder/app/AppNative.h"
-
 #include "chronotext/app/system/EmulatedDevice.h"
-#include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/cinder/CinderDelegateBase.h"
 #include "chronotext/InputSource.h"
+
+#include "cinder/app/AppNative.h"
 
 namespace chronotext
 {
-    class CinderApp : public ci::app::AppNative
+    class CinderDelegate : public ci::app::AppNative, public CinderDelegateBase
     {
     public:
-        CinderApp();
-        virtual ~CinderApp() {}
+        CinderDelegate();
+        virtual ~CinderDelegate() {}
 
-        CinderSketch* getSketch();
+        virtual CinderSketch* getSketch();
+        virtual void sendMessageToSketch(int what, const std::string &body);
 
         virtual CinderSketch* createSketch() = 0;
         virtual void destroySketch();
-        
-        virtual void action(int actionId) {}
-        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
-        virtual void sendMessageToSketch(int what, const std::string &body);
         
         void applyDefaultSettings(Settings *settings);
         
