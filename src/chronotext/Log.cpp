@@ -21,23 +21,20 @@ using namespace ci;
 
 namespace chronotext
 {
-    namespace log
+    ostream& Log::cout()
     {
-        std::ostream& cout()
-        {
 #if defined(CINDER_MSW)
-            static msw::dostream COUT;
-            return COUT;
+        static msw::dostream COUT;
+        return COUT;
 #elif defined(CINDER_ANDROID)
-            static android::dostream COUT;
-            return COUT;
+        static android::dostream COUT;
+        return COUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-            static mac::dostream COUT;
-            return COUT;
+        static mac::dostream COUT;
+        return COUT;
 #else
-            return std::cout;
+        return std::cout;
 #endif
-        }
     }
     
     Log& Log::instance()
@@ -46,19 +43,11 @@ namespace chronotext
         return instance;
     }
     
-    Log& Log::operator<<(Tag tag)
-    {
-        boost::mutex::scoped_lock lock(mtx);
-        
-        log::cout() << "[" << tag.value << "] ";
-        return *this;
-    }
-    
     Log& Log::operator<<(ostream_manipulator manip)
     {
         boost::mutex::scoped_lock lock(mtx);
 
-        log::cout() << manip;
+        Log::cout() << manip;
         return *this;
     }
 }
