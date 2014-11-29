@@ -7,6 +7,10 @@
  */
 
 /*
+ * DEPRECATED / IN SYNC WITH MobileLifecycleRework BRANCH
+ */
+
+/*
  * PLAYING "MONOCLE MAN" ANIMATION EXPORTED FROM FLASH USING THE GRAPEFRUKT EXPORTER:
  * http://prototyprally.com/introducing-the-grapefrukt-asset-exporter
  * https://github.com/zaphire/Monocle-Engine/tree/master/Content/Flash

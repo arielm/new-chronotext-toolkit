@@ -7,6 +7,10 @@
  */
 
 /*
+ * DEPRECATED / IN SYNC WITH MobileLifecycleRework BRANCH
+ */
+
+/*
  * FEATURES:
  *
  * 1) DEMONSTRATES HOW TO USE ZFont'S TAGGING-SYSTEM:
@@ -37,10 +41,9 @@ class Sketch : public chr::CinderSketch
     StyledLineLayout layout;
 
 public:
-    Sketch(void *context, void *delegate = NULL);
+    Sketch(void *context, void *delegate = nullptr);
     
-    void setup(bool renewContext);
-    void event(int id);
+    void setup();
     void resize();
     void draw();
     

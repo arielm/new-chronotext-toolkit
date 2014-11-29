@@ -23,31 +23,28 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (!renewContext)
-    {
-        fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-        
-        font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
-        font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
-        
-        styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
-        styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));
-        styleSheet[2] = StyledLineLayout::Style(font1, ColorA(1, 0, 0, 0.75f));
-                              
-        // ---
-        
-        TextLine line;
-        line.addChunk("Spouse and ", 0);
-        line.addChunk("helpmate", 1);
-        line.addChunk(" of אָדָם קַדְמוֹן: Heva, ", 0);
-        line.addChunk("naked", 2);
-        line.addChunk(" Eve", 0);
-        
-        fontManager.itemizer.processLine(line);
-        layout = StyledLineLayout(line, styleSheet);
-    }
+    fontManager.loadConfig(InputSource::getResource("font-config.xml"));
+    
+    font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
+    font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
+    
+    styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
+    styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));
+    styleSheet[2] = StyledLineLayout::Style(font1, ColorA(1, 0, 0, 0.75f));
+    
+    // ---
+    
+    TextLine line;
+    line.addChunk("Spouse and ", 0);
+    line.addChunk("helpmate", 1);
+    line.addChunk(" of אָדָם קַדְמוֹן: Heva, ", 0);
+    line.addChunk("naked", 2);
+    line.addChunk(" Eve", 0);
+    
+    fontManager.itemizer.processLine(line);
+    layout = StyledLineLayout(line, styleSheet);
     
     // ---
     
@@ -56,16 +53,6 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            fontManager.discardTextures();
-            break;
-    }
 }
 
 void Sketch::resize()

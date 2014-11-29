@@ -7,6 +7,10 @@
  */
 
 /*
+ * DEPRECATED / IN SYNC WITH MobileLifecycleRework BRANCH
+ */
+
+/*
  * GENERATING A FEW FONTS (SAVED IN THE DOCUMENTS FOLDER)
  *
  *

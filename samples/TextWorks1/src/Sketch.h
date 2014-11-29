@@ -7,6 +7,10 @@
  */
 
 /*
+ * DEPRECATED / IN SYNC WITH MobileLifecycleRework BRANCH
+ */
+
+/*
  * FEATURES:
  *
  * 1) DEMONSTRATES HOW TO DRAW CRISP TEXT
@@ -25,10 +29,9 @@ class Sketch : public chr::CinderSketch
     std::shared_ptr<chr::ZFont> font;
 
 public:
-    Sketch(void *context, void *delegate = NULL);
+    Sketch(void *context, void *delegate = nullptr);
     
-    void setup(bool renewContext);
-    void event(int id);
+    void setup();
     void draw();
     
     void drawAlignedText(chr::ZFont &font, const std::string &text, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);

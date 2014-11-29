@@ -6,6 +6,10 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * DEPRECATED / IN SYNC WITH MobileLifecycleRework BRANCH
+ */
+
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"

@@ -24,16 +24,13 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (!renewContext)
-    {
-        auto windowInfo = getWindowInfo();
-        float scale = windowInfo.density / 160;
-        
-        fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-        font = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(scale * FONT_SIZE).setCrisp());
-    }
+    auto windowInfo = getWindowInfo();
+    float scale = windowInfo.density / 160;
+    
+    fontManager.loadConfig(InputSource::getResource("font-config.xml"));
+    font = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(scale * FONT_SIZE).setCrisp());
     
     // ---
     
@@ -42,16 +39,6 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            fontManager.discardTextures();
-            break;
-    }
 }
 
 void Sketch::draw()
