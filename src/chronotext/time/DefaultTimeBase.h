@@ -17,17 +17,19 @@ namespace chronotext
     class DefaultTimeBase : public TimeBase
     {
     public:
-        DefaultTimeBase()
-        {
-            timer.start();
-        }
-        
+        static std::shared_ptr<DefaultTimeBase> create() { return std::shared_ptr<DefaultTimeBase>(new DefaultTimeBase()); } // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+
         double getTime()
         {
             return timer.getSeconds();
         }
         
     protected:
+        DefaultTimeBase()
+        {
+            timer.start();
+        }
+
         ci::Timer timer;
     };
 }

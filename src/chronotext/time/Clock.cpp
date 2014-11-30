@@ -14,7 +14,7 @@ namespace chronotext
 {
     Clock::Clock()
     :
-    timeBase(new DefaultTimeBase),
+    timeBase(DefaultTimeBase::create()),
     mst(0),
     rate(1),
     state(STOPPED)

@@ -19,7 +19,7 @@ namespace chronotext
     class CinderSketch : public CinderSketchBase
     {
     public:
-        CinderSketch(void *context = nullptr, void *delegate = nullptr);
+        CinderSketch();
         
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }

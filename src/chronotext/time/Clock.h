@@ -12,19 +12,9 @@
  */
 
 /*
- * PROBLEM: CREATING A Clock FROM A TimeBase WHICH IS NOT ENCLOSED IN A shared_ptr WILL CAUSE A CRASH
+ * PROBLEM: CREATING A Clock FROM A TimeBase WHICH IS NOT ENCLOSED IN A shared_ptr WOULD CAUSE A CRASH
  *
- * SOLUTION: SIMILAR TO WHAT IS DONE IN cinder::Timeline
- *
- *
- * TODO:
- *
- * 1) IMPLEMENT SOLUTION:
- *    CLASSES EXTENDING TimeBase SHOULD HAVE A PROTECTED CONSTRUCTOR
- *    AND A STATIC METHOD FOR CREATING INSTANCES ENCLOSED IN A shared_ptr
- *
- * 2) ULTIMATELY MERGE WITH:
- *    https://github.com/arielm/new-chronotext-toolkit/commit/420ab71a823dc7e1e73a5d1d4f8a1d820c310d06
+ * SOLUTION: ENFORCING CREATION AS shared_ptr (SIMILAR TO WHAT IS DONE IN cinder::Timeline)
  */
 
 #pragma once
@@ -37,15 +27,14 @@ namespace chronotext
     class Clock : public TimeBase
     {
     public:
+        static std::shared_ptr<Clock> create() { return std::shared_ptr<Clock>(new Clock()); } // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+
         enum State
         {
             STOPPED,
             STARTED
         };
 
-        Clock();
-        Clock(std::shared_ptr<TimeBase> timeBase);
-        
         virtual void start();
         virtual void stop();
         
@@ -67,5 +56,8 @@ namespace chronotext
         State state;
         
         std::shared_ptr<TimeBase> timeBase;
+        
+        Clock();
+        Clock(std::shared_ptr<TimeBase> timeBase);
     };
 }

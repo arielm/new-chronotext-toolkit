@@ -15,12 +15,12 @@ using namespace ci::app;
 
 namespace chronotext
 {
-    CinderSketch::CinderSketch(void *context, void *delegate)
+    CinderSketch::CinderSketch()
     :
     CinderSketchBase(),
     context(nullptr),
     delegate(nullptr),
-    mClock(new FrameClock()),
+    mClock(FrameClock::create()),
     mTimeline(Timeline::create())
     {}
     

@@ -15,8 +15,7 @@ namespace chronotext
     class FrameClock : public Clock
     {
     public:
-        FrameClock();
-        FrameClock(std::shared_ptr<TimeBase> timeBase);
+        static std::shared_ptr<FrameClock> create() { return std::shared_ptr<FrameClock>(new FrameClock()); } // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
         
         double getTime();
         void setTime(double now);
@@ -26,5 +25,8 @@ namespace chronotext
     protected:
         bool shouldSample;
         double frameTime;
+        
+        FrameClock();
+        FrameClock(std::shared_ptr<TimeBase> timeBase);
     };
 }

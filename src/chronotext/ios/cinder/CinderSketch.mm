@@ -31,7 +31,7 @@ namespace chronotext
     CinderSketchBase(),
     context(nullptr),
     delegate(nullptr),
-    mClock(new FrameClock()),
+    mClock(FrameClock::create()),
     mTimeline(Timeline::create())
     {}
     
