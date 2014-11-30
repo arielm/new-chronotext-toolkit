@@ -16,10 +16,10 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 
-const bool DEBUG_MESSAGES = false;
-
 namespace chronotext
 {
+    bool CinderDelegate::LOG_VERBOSE = false;
+    
     CinderDelegate::CinderDelegate()
     {
         /*
@@ -405,15 +405,23 @@ namespace chronotext
         callVoidMethodOnJavaListener("action", "(I)V", actionId);
     }
     
+    /*
+     * TODO: FORMAT body FOR LOG
+     *
+     * 1) LEADING AND TRAILING WHITE-SPACE TRIMMED
+     * 2) LINE-BREAKS AND TABS REPLACED BY SPACES
+     * 3) TEXT-LENGTH LIMITED
+     */
+    
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
-        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
-        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
+        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.data()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
-        LOGI_IF(DEBUG_MESSAGES) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
         sketch->sendMessage(Message(what, body));
     }
     

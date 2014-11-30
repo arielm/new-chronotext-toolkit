@@ -6,6 +6,17 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) USE FORTHCOMING chr::context FOR STORING GLOBALS
+ *    - E.G. JavaVM* chr::context::vm
+ *
+ * 2) CHECK IF IT'S POSSBILE TO MODERNIZE JNI USAGE:
+ *    - E.G. USING "METHOD TABLES":
+ *      http://sbcgamesdev.blogspot.co.il/2012/12/using-jnionload-in-adroid-ndk.html
+ */
+
 #include <jni.h>
 
 #include "chronotext/android/cinder/CinderDelegate.h"
@@ -93,10 +104,6 @@ void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject 
 
 void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)
 {
-    /*
-     * TODO: (RE)TEST
-     */
-
     if (body)
     {
         const char *chars = env->GetStringUTFChars(body, nullptr);

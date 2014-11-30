@@ -31,6 +31,8 @@ namespace chronotext
         };
         
     public:
+        static bool LOG_VERBOSE;
+        
         CinderDelegate();
         virtual ~CinderDelegate();
         
