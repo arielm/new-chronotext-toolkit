@@ -7,7 +7,10 @@
  */
 
 /*
- * IN SYNC WITH ContextRework BRANCH / COMMIT eaae916
+ * IN SYNC WITH ContextRework BRANCH
+ *
+ * OSX AND IOS: HEAD
+ * ANDROID: COMMIT eaae916
  */
 
 #pragma once

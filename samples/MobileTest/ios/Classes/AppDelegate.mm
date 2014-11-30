@@ -9,8 +9,6 @@
 #import "AppDelegate.h"
 #import "GLViewController.h"
 
-#include "Sketch.h"
-
 @implementation AppDelegate
 
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
@@ -22,7 +20,6 @@
         nil]];
     
     viewController.cinderDelegate = self;
-    self.sketch = new Sketch(self);
     
     window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     window.backgroundColor = [UIColor blackColor];
@@ -42,11 +39,3 @@
 }
 
 @end
-
-int main(int argc, char *argv[])
-{
-    @autoreleasepool
-    {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
-    }
-}
