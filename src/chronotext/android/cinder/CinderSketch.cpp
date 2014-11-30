@@ -8,6 +8,7 @@
 
 #include "chronotext/android/cinder/CinderSketch.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
+#include "cinder/app/AppAndroid.h"
 
 using namespace std;
 using namespace ci;
@@ -73,7 +74,7 @@ namespace chronotext
         context->disableAccelerometer();
     }
     
-#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
+#pragma mark ---------------------------------------- DELEGATION ----------------------------------------
     
     void CinderSketch::action(int actionId)
     {
@@ -89,5 +90,15 @@ namespace chronotext
         {
             delegate->receiveMessageFromSketch(what, body);
         }
+    }
+    
+    CinderDelegate* CinderSketch::getDelegate() const
+    {
+        return delegate;
+    }
+    
+    void CinderSketch::setDelegate(CinderDelegate *delegate)
+    {
+        this->delegate = delegate;
     }
 }

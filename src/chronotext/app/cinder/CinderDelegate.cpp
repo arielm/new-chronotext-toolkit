@@ -22,16 +22,18 @@ namespace chronotext
     CinderDelegate::CinderDelegate()
     :
     AppNative(),
+    sketch(nullptr),
     emulated(false),
     startCount(0),
     updateCount(0)
     {
-        /*
-         * TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
-         */
-        
-        sketch = createSketch();
-        sketch->context = this;
+        setSketch(createSketch());
+    }
+    
+    void CinderDelegate::applyDefaultSettings(Settings *settings)
+    {
+        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
+        settings->enableHighDensityDisplay();
     }
 
     CinderSketch* CinderDelegate::getSketch()
@@ -39,15 +41,26 @@ namespace chronotext
         return sketch;
     }
     
+    void CinderDelegate::setSketch(CinderSketch *newSketch)
+    {
+        if (sketch)
+        {
+            destroySketch(sketch);
+            sketchDestroyed(sketch);
+            sketch = nullptr;
+        }
+        
+        if (newSketch)
+        {
+            sketch = newSketch;
+            sketch->context = this; // TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
+            sketchCreated(sketch);
+        }
+    }
+    
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
         sketch->sendMessage(Message(what, body));
-    }
-    
-    void CinderDelegate::applyDefaultSettings(Settings *settings)
-    {
-        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
-        settings->enableHighDensityDisplay();
     }
 
     void CinderDelegate::setup()
@@ -73,7 +86,7 @@ namespace chronotext
         stop();
 
         sketch->shutdown();
-        destroySketch(sketch);
+        setSketch(nullptr);
     }
     
     void CinderDelegate::resize()

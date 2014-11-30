@@ -37,6 +37,7 @@ namespace chronotext
         virtual ~CinderDelegate();
         
         virtual CinderSketch* getSketch();
+        virtual void setSketch(CinderSketch *sketch);
         
         virtual void action(int actionId);
         virtual void receiveMessageFromSketch(int what, const std::string &body);

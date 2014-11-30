@@ -17,7 +17,7 @@ class Application : public chr::CinderDelegate
 public:
     void prepareSettings(Settings *settings)
     {
-        CinderDelegate::prepareSettings(settings);
+        CinderDelegate::applyDefaultSettings(settings);
         
         if (loadEmulators(chr::InputSource::getResource("emulators.json")))
         {

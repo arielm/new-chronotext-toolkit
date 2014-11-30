@@ -22,10 +22,12 @@ namespace chronotext
         CinderDelegate();
         virtual ~CinderDelegate() {}
 
+        virtual void applyDefaultSettings(Settings *settings);
+
         virtual CinderSketch* getSketch();
+        virtual void setSketch(CinderSketch *sketch);
+
         virtual void sendMessageToSketch(int what, const std::string &body = "");
-        
-        void applyDefaultSettings(Settings *settings);
         
         void setup();
         void shutdown();

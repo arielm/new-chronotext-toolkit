@@ -33,9 +33,12 @@ namespace chronotext
         bool isEmulated() const;
         DisplayInfo getDisplayInfo() const;
         WindowInfo getWindowInfo() const;
-        
+
         void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");
+        
+        CinderDelegate* getDelegate() const;
+        void setDelegate(CinderDelegate *delegate);
         
     protected:
         friend class CinderDelegate;

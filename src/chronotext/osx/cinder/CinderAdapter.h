@@ -10,18 +10,18 @@
 
 #import "chronotext/cocoa/utils/NSString+JSON.h"
 
-#include "chronotext/app/cinder/CinderApp.h"
+#include "chronotext/app/cinder/CinderDelegate.h"
 
-@interface CinderDelegate : NSObject
+@interface CinderAdapter : NSObject
 {
-    NSView *view;
     chr::CinderSketch *sketch;
+    NSView *view;
 }
 
-@property (nonatomic, readonly) NSView *view;
 @property (nonatomic, readonly) chr::CinderSketch *sketch;
+@property (nonatomic, readonly) NSView *view;
 
-- (id) initWithCinderApp:(chr::CinderApp*)cinderApp;
+- (id) initWithCinderDelegate:(chr::CinderDelegate*)delegate;
 
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;

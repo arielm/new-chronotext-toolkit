@@ -18,6 +18,10 @@ public:
     virtual void action(int actionId) {}
     virtual void receiveMessageFromSketch(int what, const std::string &body) {}
     virtual void sendMessageToSketch(int what, const std::string &body = "") {}
-    
+
+    virtual void sketchCreated(chr::CinderSketch *sketch) {}
+    virtual void sketchDestroyed(chr::CinderSketch *sketch) {}
+
     virtual chr::CinderSketch* getSketch() = 0;
+    virtual void setSketch(chr::CinderSketch *sketch) = 0;
 };

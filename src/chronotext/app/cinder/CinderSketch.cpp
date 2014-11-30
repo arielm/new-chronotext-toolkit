@@ -43,7 +43,7 @@ namespace chronotext
         return NATIVE_CONTEXT->getWindowInfo();
     }
     
-#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
+#pragma mark ---------------------------------------- DELEGATION ----------------------------------------
     
     void CinderSketch::action(int actionId)
     {
@@ -59,6 +59,16 @@ namespace chronotext
         {
             delegate->receiveMessageFromSketch(what, body);
         }
+    }
+    
+    CinderDelegate* CinderSketch::getDelegate() const
+    {
+        return delegate;
+    }
+    
+    void CinderSketch::setDelegate(CinderDelegate *delegate)
+    {
+        this->delegate = delegate;
     }
 }
 

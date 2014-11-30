@@ -6,23 +6,23 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import "CinderDelegate.h"
+#import "CinderAdapter.h"
 
 using namespace std;
 using namespace ci;
 using namespace chr;
 
-@implementation CinderDelegate
+@implementation CinderAdapter
 
-@synthesize view;
 @synthesize sketch;
+@synthesize view;
 
-- (id) initWithCinderApp:(CinderApp*)cinderApp
+- (id) initWithCinderDelegate:(CinderDelegate*)delegate
 {
     if (self = [super init])
     {
-        view = (NSView*)cinderApp->getWindow()->getNative();
-        sketch = cinderApp->getSketch();
+        sketch = delegate->getSketch();
+        view = reinterpret_cast<NSView*>(delegate->getWindow()->getNative());
     }
     
     return self;

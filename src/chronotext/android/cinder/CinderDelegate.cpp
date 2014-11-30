@@ -21,13 +21,10 @@ namespace chronotext
     bool CinderDelegate::LOG_VERBOSE = false;
     
     CinderDelegate::CinderDelegate()
+    :
+    sketch(nullptr)
     {
-        /*
-         * TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
-         */
-        
-        sketch = createSketch();
-        sketch->context = sketch->delegate = this;
+        setSketch(createSketch());
     }
     
     CinderDelegate::~CinderDelegate()
@@ -38,6 +35,23 @@ namespace chronotext
     CinderSketch* CinderDelegate::getSketch()
     {
         return sketch;
+    }
+    
+    void CinderDelegate::setSketch(CinderSketch *newSketch)
+    {
+        if (sketch)
+        {
+            destroySketch(sketch);
+            sketchDestroyed(sketch);
+            sketch = nullptr;
+        }
+        
+        if (newSketch)
+        {
+            sketch = newSketch;
+            sketch->context = sketch->delegate = this; // TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
+            sketchCreated(sketch);
+        }
     }
     
     /*
@@ -115,7 +129,7 @@ namespace chronotext
         destroySensorEventQueue();
         
         sketch->shutdown();
-        destroySketch(sketch);
+        setSketch(nullptr);
     }
     
     void CinderDelegate::resize(int width, int height)

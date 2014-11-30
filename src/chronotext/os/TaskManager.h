@@ -38,7 +38,10 @@ namespace chronotext
     class TaskManager : public std::enable_shared_from_this<TaskManager>
     {
     public:
-        static std::shared_ptr<TaskManager> create(boost::asio::io_service &io) { return std::shared_ptr<TaskManager>(new TaskManager(io)); } // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+        static std::shared_ptr<TaskManager> create(boost::asio::io_service &io)
+        {
+            return std::shared_ptr<TaskManager>(new TaskManager(io)); // XXX: std::make_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+        }
 
         template <typename F>
         inline void post(F &&fn, bool forceSync = false)
