@@ -24,11 +24,11 @@ namespace chronotext
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
         
-        std::ostream& console() { return context->console(); }
-        boost::asio::io_service& io_service() const { return context->io_service(); }
+        std::ostream& console();
+        boost::asio::io_service& io_service() const;
         
-        double getElapsedSeconds() const { return context->getElapsedSeconds(); }
-        uint32_t getElapsedFrames() const { return context->getElapsedFrames(); }
+        double getElapsedSeconds() const;
+        uint32_t getElapsedFrames() const;
 
         bool isEmulated() const;
         DisplayInfo getDisplayInfo() const;
@@ -43,7 +43,7 @@ namespace chronotext
     protected:
         friend class CinderDelegate;
 
-        ci::app::AppNative *context;
+        CinderDelegate *context;
         CinderDelegate *delegate;
         
         std::shared_ptr<chr::FrameClock> mClock;

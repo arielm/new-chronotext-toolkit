@@ -13,8 +13,6 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 
-#define NATIVE_CONTEXT static_cast<CinderDelegate*>(context)
-
 namespace chronotext
 {
     CinderSketch::CinderSketch()
@@ -27,20 +25,40 @@ namespace chronotext
     {}
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
-
+    
+    ostream& CinderSketch::console()
+    {
+        return context->console();
+    }
+    
+    boost::asio::io_service& CinderSketch::io_service() const
+    {
+        return context->io_service();
+    }
+    
+    double CinderSketch::getElapsedSeconds() const
+    {
+        return context->getElapsedSeconds();
+    }
+    
+    uint32_t CinderSketch::getElapsedFrames() const
+    {
+        return context->getElapsedFrames();
+    }
+    
     bool CinderSketch::isEmulated() const
     {
-        return NATIVE_CONTEXT->isEmulated();
+        return context->isEmulated();
     }
     
     DisplayInfo CinderSketch::getDisplayInfo() const
     {
-        return NATIVE_CONTEXT->getDisplayInfo();
+        return context->getDisplayInfo();
     }
     
     WindowInfo CinderSketch::getWindowInfo() const
     {
-        return NATIVE_CONTEXT->getWindowInfo();
+        return context->getWindowInfo();
     }
     
 #pragma mark ---------------------------------------- DELEGATION ----------------------------------------
