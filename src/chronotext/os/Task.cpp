@@ -37,6 +37,8 @@ namespace chronotext
     
     bool Task::start(bool forceSync)
     {
+        boost::mutex::scoped_lock lock(_mutex);
+        
         if (!started && !ended)
         {
             if (manager)
@@ -50,7 +52,7 @@ namespace chronotext
                 }
                 else
                 {
-                    _thread = thread(&Task::performRun, this);
+                    manager->post([=]{ _thread = thread(&Task::performRun, this); }, false); // TODO: TEST
                 }
                 
                 return true;
@@ -71,6 +73,12 @@ namespace chronotext
         }
         
         return false;
+    }
+
+    bool Task::hasStarted()
+    {
+        boost::mutex::scoped_lock lock(_mutex);
+        return started || ended;
     }
     
     bool Task::isCancelRequired()
@@ -116,8 +124,8 @@ namespace chronotext
     }
     
     template <typename F>
-    bool Task::post(F &&fn)
+    void Task::post(F &&fn)
     {
-        return manager->post(forward<F>(fn), synchronous);
+        manager->post(forward<F>(fn), synchronous);
     }
 }

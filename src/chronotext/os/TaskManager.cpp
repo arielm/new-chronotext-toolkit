@@ -24,7 +24,7 @@ namespace chronotext
         
         if (!task->manager)
         {
-            task->manager = this;
+            task->manager = shared_from_this();
             tasks[++lastId] = task;
             
             return lastId;
@@ -41,13 +41,7 @@ namespace chronotext
         
         if (element != tasks.end())
         {
-            if (forceSync)
-            {
-                return element->second->start(true);
-            }
-
-            post([=]{ element->second->start(false); }, false); // TODO: TEST
-            return true;
+            return element->second->start(true);
         }
         
         return false;

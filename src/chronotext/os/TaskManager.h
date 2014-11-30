@@ -35,11 +35,11 @@
 
 namespace chronotext
 {
-    class TaskManager
+    class TaskManager : public std::enable_shared_from_this<TaskManager>
     {
     public:
-        TaskManager(boost::asio::io_service &io);
-        
+        static std::shared_ptr<TaskManager> create(boost::asio::io_service &io) { return std::shared_ptr<TaskManager>(new TaskManager(io)); } // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+
         template <typename F>
         inline void post(F &&fn, bool forceSync = false)
         {
@@ -52,12 +52,11 @@ namespace chronotext
         }
         
         /*
-         * RETURN -1 IF THE TASK CAN'T BE ADDED
+         * RETURNS -1 IF THE TASK CAN'T BE ADDED
          *
          * CAUSE:
          *
-         * THE TASK HAS ALREADY BEEN ADDED (NO MATTER IF IT'S ALREADY STARTED, OF EVEN IF IT HAS ENDED)
-         * I.E. TASKS ARE NOT REUSABLE
+         * - THE TASK HAS ALREADY BEEN ADDED (I.E. TASKS ARE NOT REUSABLE)
          */
         int addTask(std::shared_ptr<Task> task);
         
@@ -67,7 +66,7 @@ namespace chronotext
          * CAUSES:
          *
          * - NO TASK IS REGISTERED WITH THIS ID
-         * - ASYNCHRONOUS TASKS ONLY: IO-SERVICE HAS NOT BEEN DEFINED
+         * - THE TASK HAS ALREADY BEEN STARTED
          */
         bool startTask(int taskId, bool forceSync = false);
 
@@ -80,8 +79,12 @@ namespace chronotext
          * RETURNS FALSE IF THE TASK CAN'T BE HINTED FOR CANCELLATION
          *
          * CAUSES:
+         *
+         * - CANCELLING IS IRRELEVANT (SYNCHRONOUS TASKS ONLY)
          * - NO TASK IS REGISTERED WITH THIS ID
-         * - SYNCHRONOUS TASKS ONLY: CANCELLING IS IRRELEVANT
+         * - THE TASK HAS NOT YET BEEN STARTED
+         * - THE TASK HAS ALREADY ENDED
+         * - CANCELLATION IS ALREADY UNDERGOING
          */
         bool cancelTask(int taskId);
         
@@ -94,6 +97,8 @@ namespace chronotext
         int lastId;
         std::map<int, std::shared_ptr<Task>> tasks;
         
+        TaskManager(boost::asio::io_service &io);
+
         void taskEnded(Task *task);
     };
 }
