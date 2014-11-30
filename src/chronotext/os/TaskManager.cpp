@@ -12,16 +12,11 @@ using namespace std;
 
 namespace chronotext
 {
-    TaskManager::TaskManager()
+    TaskManager::TaskManager(boost::asio::io_service &io)
     :
-    lastId(-1),
-    io(nullptr)
+    io(io),
+    lastId(-1)
     {}
-    
-    void TaskManager::setIOService(boost::asio::io_service &io)
-    {
-        this->io = &io;
-    }
     
     int TaskManager::addTask(shared_ptr<Task> task)
     {
@@ -50,10 +45,9 @@ namespace chronotext
             {
                 return element->second->start(true);
             }
-            else if (io)
-            {
-                return post([=]{ element->second->start(false); }, false); // TODO: TEST
-            }
+
+            post([=]{ element->second->start(false); }, false); // TODO: TEST
+            return true;
         }
         
         return false;
