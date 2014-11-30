@@ -8,14 +8,14 @@
 
 #pragma once
 
-#include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/cinder/CinderDelegateBase.h"
 
 #include <jni.h>
 #include <android/sensor.h>
 
 namespace chronotext
 {
-    class CinderDelegate
+    class CinderDelegate : public CinderDelegateBase
     {
         enum
         {
@@ -31,14 +31,14 @@ namespace chronotext
         };
         
     public:
-        CinderSketch *sketch;
-
         CinderDelegate();
         virtual ~CinderDelegate();
         
+        virtual CinderSketch* getSketch();
+        
         virtual void action(int actionId);
         virtual void receiveMessageFromSketch(int what, const std::string &body);
-        virtual void sendMessageToSketch(int what, const std::string &body);
+        virtual void sendMessageToSketch(int what, const std::string &body = "");
         
         void prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
         
@@ -80,6 +80,8 @@ namespace chronotext
         jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
         
     protected:
+        CinderSketch *sketch;
+
         JavaVM *mJavaVM;
         jobject mJavaContext;
         jobject mJavaListener;

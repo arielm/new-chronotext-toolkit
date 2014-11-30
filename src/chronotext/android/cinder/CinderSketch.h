@@ -19,7 +19,7 @@ namespace chronotext
     class CinderSketch : public CinderSketchBase
     {
     public:
-        CinderSketch(void *context, void *delegate = nullptr);
+        CinderSketch(void *context = nullptr, void *delegate = nullptr);
         
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
@@ -41,10 +41,15 @@ namespace chronotext
         void sendMessageToDelegate(int what, const std::string &body = "");
         
     protected:
+        friend class CinderDelegate;
+        
         CinderDelegate *context;
         CinderDelegate *delegate;
         
         std::shared_ptr<chr::FrameClock> mClock;
         ci::TimelineRef mTimeline;
     };
+    
+    CinderSketch* createSketch();
+    void destroySketch(CinderSketch *sketch);
 }

@@ -21,18 +21,29 @@ const bool DEBUG_MESSAGES = false;
 namespace chronotext
 {
     CinderDelegate::CinderDelegate()
-    :
-    sketch(nullptr)
-    {}
+    {
+        /*
+         * TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
+         */
+        
+        sketch = createSketch();
+        sketch->context = sketch->delegate = this;
+    }
     
     CinderDelegate::~CinderDelegate()
     {
         LOGI << "~CinderDelegate()" << endl;
     }
     
+    CinderSketch* CinderDelegate::getSketch()
+    {
+        return sketch;
+    }
+    
     /*
      * CALLED BEFORE THE RENDERER'S THREAD IS CREATED
      */
+    
     void CinderDelegate::prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
         mJavaVM = javaVM;
@@ -104,7 +115,7 @@ namespace chronotext
         destroySensorEventQueue();
         
         sketch->shutdown();
-        delete sketch;
+        destroySketch(sketch);
     }
     
     void CinderDelegate::resize(int width, int height)
@@ -241,6 +252,7 @@ namespace chronotext
     /*
      * TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
      */
+    
     int CinderDelegate::getDisplayRotation()
     {
         JNIEnv *env = getJNIEnv();

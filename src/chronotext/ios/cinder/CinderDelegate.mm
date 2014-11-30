@@ -78,6 +78,15 @@ using namespace chr;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+        
+        // ---
+        
+        /*
+         * TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
+         */
+        
+        sketch = chr::createSketch();
+        sketch->context = self;
     }
     
     return self;
@@ -89,7 +98,7 @@ using namespace chr;
     [self stopIOService];
     
     sketch->shutdown();
-    delete sketch;
+    chr::destroySketch(sketch);
     
     [super dealloc];
 }

@@ -17,11 +17,11 @@ using namespace ci::app;
 
 namespace chronotext
 {
-    CinderSketch::CinderSketch(void *context, void *delegate)
+    CinderSketch::CinderSketch()
     :
     CinderSketchBase(),
-    context(static_cast<AppNative*>(context)),
-    delegate(static_cast<CinderDelegate*>(delegate)),
+    context(nullptr),
+    delegate(nullptr),
     mClock(new FrameClock()),
     mTimeline(Timeline::create())
     {}
@@ -61,3 +61,5 @@ namespace chronotext
         }
     }
 }
+
+#undef NATIVE_CONTEXT

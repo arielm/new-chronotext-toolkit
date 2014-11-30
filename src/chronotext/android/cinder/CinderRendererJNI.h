@@ -12,12 +12,6 @@
 
 extern "C"
 {
-    /*
-     * THIS IS THE "STUB" FUNCTION:
-     * IT SHOULD RETURN CinderDelegate WITH A PROPERLY DEFINED CinderSketch
-     */
-    chr::CinderDelegate* createDelegate();
-
     void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
 
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
@@ -39,6 +33,7 @@ chr::CinderDelegate *gDelegate;
 /*
  * WARNING: THIS IS *NOT* CALLED EACH TIME THE APPLICATION STARTS
  */
+
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
     gJavaVM = vm;
@@ -48,9 +43,10 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 /*
  * MUST BE CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
  */
+
 void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
-    gDelegate = createDelegate();
+    gDelegate = new chr::CinderDelegate();
     gDelegate->prelaunch(gJavaVM, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
@@ -97,14 +93,18 @@ void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject 
 
 void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)
 {
+    /*
+     * TODO: (RE)TEST
+     */
+
     if (body)
     {
         const char *chars = env->GetStringUTFChars(body, nullptr);
-        gDelegate->sendMessageToSketch(what, std::string(chars));
+        gDelegate->sendMessageToSketch(what, chars);
         env->ReleaseStringUTFChars(body, chars);
     }
     else
     {
-        gDelegate->sendMessageToSketch(what, "");
+        gDelegate->sendMessageToSketch(what);
     }
 }

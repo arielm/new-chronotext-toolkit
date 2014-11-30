@@ -23,10 +23,7 @@ namespace chronotext
         virtual ~CinderDelegate() {}
 
         virtual CinderSketch* getSketch();
-        virtual void sendMessageToSketch(int what, const std::string &body);
-
-        virtual CinderSketch* createSketch() = 0;
-        virtual void destroySketch();
+        virtual void sendMessageToSketch(int what, const std::string &body = "");
         
         void applyDefaultSettings(Settings *settings);
         

@@ -18,8 +18,8 @@ namespace chronotext
     CinderSketch::CinderSketch(void *context, void *delegate)
     :
     CinderSketchBase(),
-    context(static_cast<CinderDelegate*>(context)),
-    delegate(static_cast<CinderDelegate*>(delegate)),
+    context(nullptr),
+    delegate(nullptr),
     mClock(new FrameClock()),
     mTimeline(Timeline::create())
     {}

@@ -26,11 +26,11 @@ namespace chronotext
         return static_cast<CinderDelegate*>(delegate);
     }
     
-    CinderSketch::CinderSketch(void *context, void *delegate)
+    CinderSketch::CinderSketch()
     :
     CinderSketchBase(),
-    context(context),
-    delegate(delegate),
+    context(nullptr),
+    delegate(nullptr),
     mClock(new FrameClock()),
     mTimeline(Timeline::create())
     {}
@@ -40,7 +40,7 @@ namespace chronotext
     
     boost::asio::io_service& CinderSketch::io_service() const
     {
-        return *(getContext(context)).io;
+        return *(getContext(context).io);
     }
     
     double CinderSketch::getElapsedSeconds() const

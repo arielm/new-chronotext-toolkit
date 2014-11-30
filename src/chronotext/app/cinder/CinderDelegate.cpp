@@ -22,20 +22,21 @@ namespace chronotext
     CinderDelegate::CinderDelegate()
     :
     AppNative(),
-    sketch(nullptr),
     emulated(false),
     startCount(0),
     updateCount(0)
-    {}
+    {
+        /*
+         * TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
+         */
+        
+        sketch = createSketch();
+        sketch->context = this;
+    }
 
     CinderSketch* CinderDelegate::getSketch()
     {
         return sketch;
-    }
-    
-    void CinderDelegate::destroySketch()
-    {
-        delete sketch;
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
@@ -51,8 +52,6 @@ namespace chronotext
 
     void CinderDelegate::setup()
     {
-        sketch = createSketch();
-        
         updateRealDisplayInfo();
         updateRealWindowInfo();
         
@@ -74,7 +73,7 @@ namespace chronotext
         stop();
 
         sketch->shutdown();
-        destroySketch();
+        destroySketch(sketch);
     }
     
     void CinderDelegate::resize()

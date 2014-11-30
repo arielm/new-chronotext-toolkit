@@ -17,7 +17,7 @@ public:
     
     virtual void action(int actionId) {}
     virtual void receiveMessageFromSketch(int what, const std::string &body) {}
-    virtual void sendMessageToSketch(int what, const std::string &body) {}
+    virtual void sendMessageToSketch(int what, const std::string &body = "") {}
     
     virtual chr::CinderSketch* getSketch() = 0;
 };

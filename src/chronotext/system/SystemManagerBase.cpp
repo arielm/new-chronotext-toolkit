@@ -32,7 +32,7 @@ namespace chronotext
 #elif defined(CINDER_ANDROID)
         return SystemInfo::PLATFORM_ANDROID;
 #endif
-        throw EXCEPTION(SystemManager, "UNDEFINED PLATFORM");
+        throw EXCEPTION(SystemManager, "UNSUPPORTED PLATFORM");
     }
     
     string SystemManagerBase::getPlatformString()
