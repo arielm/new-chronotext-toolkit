@@ -29,9 +29,9 @@ const float FINGERS_DISTANCE = 22; // DP
 const float FRICTION = 0.01f;
 const float DT = 1.0f;
 
-Sketch::Sketch(void *context, void *delegate)
+Sketch::Sketch()
 :
-CinderSketch(context, delegate)
+CinderSketch()
 {}
 
 void Sketch::setup()
