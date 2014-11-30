@@ -16,7 +16,7 @@ namespace chronotext
     {
     public:
         FrameClock();
-        FrameClock(TimeBase *timeBase);
+        FrameClock(std::shared_ptr<TimeBase> timeBase);
         
         double getTime();
         void setTime(double now);

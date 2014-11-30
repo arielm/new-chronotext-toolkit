@@ -6,11 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * INSPIRED BY javax.media.Clock
- * http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Clock.html
- */
-
 #include "Clock.h"
 
 using namespace std;
@@ -19,40 +14,20 @@ namespace chronotext
 {
     Clock::Clock()
     :
-    timeBase(new DefaultTimeBase()),
-    timeBaseIsOwned(true),
+    timeBase(new DefaultTimeBase),
     mst(0),
     rate(1),
     state(STOPPED)
     {}
     
-    Clock::Clock(TimeBase *timeBase)
+    Clock::Clock(shared_ptr<TimeBase> timeBase)
     :
     timeBase(timeBase),
-    timeBaseIsOwned(false),
-    mst(0),
-    rate(1),
-    state(STOPPED)
-    {}
-    
-    Clock::Clock(shared_ptr<Clock> master)
-    :
-    timeBase(master.get()),
-    timeBaseIsOwned(false),
-    master(master),
     mst(0),
     rate(1),
     state(STOPPED)
     {
         start();
-    }
-    
-    Clock::~Clock()
-    {
-        if (timeBaseIsOwned)
-        {
-            delete timeBase;
-        }
     }
     
     void Clock::start()
@@ -87,9 +62,9 @@ namespace chronotext
         }
     }
     
-    int Clock::getState()
+    double Clock::getRate()
     {
-        return state;
+        return rate;
     }
     
     void Clock::setRate(double factor)
@@ -104,10 +79,21 @@ namespace chronotext
         }
     }
     
+    Clock::State Clock::getState()
+    {
+        return state;
+    }
+    
     void Clock::restart()
     {
         stop();
         setTime(0);
         start();
+    }
+    
+    void Clock::reset()
+    {
+        stop();
+        setTime(0);
     }
 }
