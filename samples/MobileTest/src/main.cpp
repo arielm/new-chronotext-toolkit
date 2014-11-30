@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 #pragma mark ---------------------------------------- ANDROID ----------------------------------------
 
-#include <jni.h>
+#include "chronotext/android/cinder/CinderRendererJNI.h"
 
 extern "C"
 {

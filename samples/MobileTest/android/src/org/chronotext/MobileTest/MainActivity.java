@@ -53,6 +53,10 @@ public class MainActivity extends Activity
     }
   }
 
+  /*
+   * THE FOLLOWING ARE NOT MANDATORY (CURRENTLY USED FOR DEBUGGING PURPOSES)
+   */
+
   @Override
   protected void onStart()
   {
