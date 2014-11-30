@@ -26,6 +26,9 @@
  * 4) SEE IF THE NEW C++11 std::thread_local CAN BE USED FOR THE FOLLOWING "STORAGE":
  *    - bool cancelRequired
  *    - std::shared_ptr<TaskManager> manager
+ *
+ * 5) IMPLEMENT THREAD ATTACHMENT/DETACHMENT TO/FROM JAVA ON ANDROID
+ *    - STUDY JNI'S AttachCurrentThread / DetachCurrentThread
  */
 
 #pragma once

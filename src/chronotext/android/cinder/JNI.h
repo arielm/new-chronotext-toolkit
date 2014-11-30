@@ -9,12 +9,13 @@
 /*
  * TODO:
  *
- * 1) USE FORTHCOMING chr::context FOR STORING GLOBALS
+ * 1) USE THE FORTHCOMING chr::context FOR STORING GLOBALS
  *    - E.G. JavaVM* chr::context::vm
  *
  * 2) CHECK IF IT'S POSSBILE TO MODERNIZE JNI USAGE:
  *    - E.G. USING "METHOD TABLES":
- *      http://sbcgamesdev.blogspot.co.il/2012/12/using-jnionload-in-adroid-ndk.html
+ *      - http://sbcgamesdev.blogspot.co.il/2012/12/using-jnionload-in-adroid-ndk.html
+ *    - MORE JNI WISDOM HERE: http://developer.android.com/training/articles/perf-jni.html
  */
 
 #include <jni.h>

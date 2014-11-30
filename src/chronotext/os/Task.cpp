@@ -104,9 +104,17 @@ namespace chronotext
         {
             run();
         }
-        else
+        else if (!isCancelRequired())
         {
-            ThreadSetup forCocoa; // XXX: MANDATORY CALL (USED FOR OSX AND iOS, DUMMY ON OTHER PLATFORMS)
+            /*
+             * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
+             *
+             * THIS IS PURPOSELY IN A BLOCK, IN ORDER FOR ThreadSetup TO "EXPIRE" RIGHT AFTER run()
+             *
+             * TODO: A SIMILAR SYSTEM IS NECESSARY ON ANDROID FOR ATTACHING/DETACHING THE THREAD TO/FROM JAVA
+             */
+            
+            ThreadSetup forCocoa;
             run();
         }
         
