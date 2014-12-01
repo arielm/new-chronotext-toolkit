@@ -8,23 +8,23 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
-
-#if defined(CINDER_COCOA_TOUCH)
-
-#include "chronotext/ios/system/SystemInfo.h"
-
-#elif defined(CINDER_ANDROID)
-
-#include "chronotext/android/system/SystemInfo.h"
-
-#else
-
-#include "chronotext/system/SystemInfoBase.h"
-
 namespace chronotext
 {
-    typedef SystemInfoBase SystemInfo;
+    struct MemoryInfo
+    {
+        uint64_t available;
+        uint64_t total;
+        uint64_t used;
+        int warningLevel;
+        
+        MemoryInfo()
+        :
+        available(0),
+        total(0),
+        used(0),
+        warningLevel(0)
+        {}
+    };
 }
 
-#endif
+namespace chr = chronotext;

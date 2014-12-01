@@ -79,6 +79,7 @@ namespace chronotext
         jlong callLongMethodOnJavaListener(const char *name, const char *sig, ...);
         jfloat callFloatMethodOnJavaListener(const char *name, const char *sig, ...);
         jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
+        jobject callObjectMethodOnJavaListener(const char *name, const char *sig, ...);
         
     protected:
         CinderSketch *sketch;

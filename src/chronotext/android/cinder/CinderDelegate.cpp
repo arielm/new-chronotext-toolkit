@@ -56,14 +56,14 @@ namespace chronotext
     }
     
     /*
-     * CALLED BEFORE THE RENDERER'S THREAD IS CREATED
+     * CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
      */
     
     void CinderDelegate::prelaunch(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
         mJavaContext = javaContext;
         mJavaListener = javaListener;
-        mJavaDisplay = javaDisplay; // TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
+        mJavaDisplay = javaDisplay; // TODO: SHOULD BE PART OF DisplayHelper?
         
         displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
         
@@ -106,16 +106,23 @@ namespace chronotext
         env->ReleaseStringUTFChars(packageCodePathString, apkPath);
     }
     
+    /*
+     * CALLED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
+     */
+    
     void CinderDelegate::setup(int width, int height)
     {
         windowInfo = WindowInfo(width, height);
         
         // ---
         
+        /*
+         * BOTH ARE ASSOCIATED WITH THE RENDERER'S THREAD
+         */
         createSensorEventQueue();
         startIOService();
         
-        sketch->setIOService(*io);
+        sketch->Handler::setIOService(*io);
         sketch->timeline().stepTo(0);
         
         sketch->setup();
@@ -262,12 +269,12 @@ namespace chronotext
     }
     
     /*
-     * TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
+     * TODO: SHOULD BE PART OF DisplayHelper?
      */
     
     int CinderDelegate::getDisplayRotation()
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
         return env->CallIntMethod(mJavaDisplay, getRotationMethod);
     }
@@ -428,7 +435,7 @@ namespace chronotext
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
         LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
-        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, java::getJNIEnv()->NewStringUTF(body.data()));
+        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jvm::env()->NewStringUTF(body.data()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
@@ -441,7 +448,7 @@ namespace chronotext
 
     void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -454,7 +461,7 @@ namespace chronotext
     
     jboolean CinderDelegate::callBooleanMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -469,7 +476,7 @@ namespace chronotext
     
     jchar CinderDelegate::callCharMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -484,7 +491,7 @@ namespace chronotext
     
     jint CinderDelegate::callIntMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -499,7 +506,7 @@ namespace chronotext
     
     jlong CinderDelegate::callLongMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -514,7 +521,7 @@ namespace chronotext
     
     jfloat CinderDelegate::callFloatMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -529,7 +536,7 @@ namespace chronotext
     
     jdouble CinderDelegate::callDoubleMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = java::getJNIEnv();
+        JNIEnv *env = jvm::env();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -537,6 +544,21 @@ namespace chronotext
         va_list args;
         va_start(args, sig);
         jdouble ret = env->CallDoubleMethod(mJavaListener, method, args);
+        va_end(args);
+        
+        return ret;
+    }
+    
+    jobject CinderDelegate::callObjectMethodOnJavaListener(const char *name, const char *sig, ...)
+    {
+        JNIEnv *env = jvm::env();
+        
+        jclass cls = env->GetObjectClass(mJavaListener);
+        jmethodID method = env->GetMethodID(cls, name, sig);
+        
+        va_list args;
+        va_start(args, sig);
+        jobject ret = env->CallObjectMethodV(mJavaListener, method, args);
         va_end(args);
         
         return ret;

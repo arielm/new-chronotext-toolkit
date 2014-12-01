@@ -151,7 +151,7 @@ using namespace chr;
 
     [self startIOService];
 
-    sketch->setIOService(*io);
+    sketch->Handler::setIOService(*io);
     sketch->timeline().stepTo(0);
     
     sketch->setup();

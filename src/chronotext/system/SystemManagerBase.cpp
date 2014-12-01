@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,7 +11,9 @@
 #include "chronotext/utils/Utils.h"
 
 #if !defined(ANDROID)
+
 #include "cinder/System.h"
+
 #endif
 
 using namespace std;
@@ -24,13 +26,13 @@ namespace chronotext
     SystemInfo::Platform SystemManagerBase::getPlatform()
     {
 #if defined(CINDER_MAC)
-        return SystemInfo::PLATFORM_OSX;
+        return SystemInfo::Platform::OSX;
 #elif defined(CINDER_MSW)
-        return SystemInfo::PLATFORM_WINDOW;
+        return SystemInfo::Platform::WINDOW;
 #elif defined(CINDER_COCOA_TOUCH)
-        return SystemInfo::PLATFORM_IOS;
+        return SystemInfo::Platform::IOS;
 #elif defined(CINDER_ANDROID)
-        return SystemInfo::PLATFORM_ANDROID;
+        return SystemInfo::Platform::ANDROID;
 #endif
         throw EXCEPTION(SystemManager, "UNSUPPORTED PLATFORM");
     }
@@ -49,24 +51,27 @@ namespace chronotext
         return instance;
     }
     
-    SystemInfo SystemManagerBase::getSystemInfo()
-    {
-        return instance().systemInfo;
-    }
-
     SystemManagerBase::SystemManagerBase()
     {
         updateSystemInfo();
     }
 
-#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
+    SystemInfo SystemManagerBase::getSystemInfo()
+    {
+        return instance().systemInfo;
+    }
 
+#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
+    
 #if defined(ANDROID)
+    
     string SystemManagerBase::getIpAddress(bool maskForBroadcast)
     {
         return "";
     }
+    
 #else
+    
     string SystemManagerBase::getIpAddress(bool maskForBroadcast)
     {
         string host = System::getIpAddress();
@@ -81,6 +86,7 @@ namespace chronotext
         
         return host;
     }
+    
 #endif
     
 #pragma mark ---------------------------------------- SystemInfo ----------------------------------------
@@ -95,15 +101,19 @@ namespace chronotext
     }
     
 #if defined(ANDROID)
+    
     string SystemManagerBase::getOsVersionString()
     {
         return "";
     }
+    
 #else
+    
     string SystemManagerBase::getOsVersionString()
     {
-        return toString(System::getOsMajorVersion()) + "." + toString(System::getOsMinorVersion()) + "." + toString(System::getOsBugFixVersion());
+        return ci::toString(System::getOsMajorVersion()) + "." + ci::toString(System::getOsMinorVersion()) + "." + ci::toString(System::getOsBugFixVersion());
     }
+    
 #endif
     
     string SystemManagerBase::getDeviceString()

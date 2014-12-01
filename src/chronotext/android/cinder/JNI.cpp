@@ -18,15 +18,15 @@ using namespace chr;
 
 namespace chronotext
 {
-    namespace java
+    namespace jvm
     {
         JavaVM *vm = nullptr;
         
-        JNIEnv* getJNIEnv()
+        JNIEnv* env()
         {
-            JNIEnv *env = nullptr;
+            JNIEnv *env_ = nullptr;
             
-            auto err = vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_4);
+            auto err = vm->GetEnv(reinterpret_cast<void**>(&env_), JNI_VERSION_1_4);
             
             if (err == JNI_EDETACHED)
             {
@@ -37,13 +37,18 @@ namespace chronotext
                 LOGE("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
             }
             
-            if (env)
+            if (env_)
             {
-                return env;
+                return env_;
             }
             
             throw runtime_error("INVALID JNI ENV");
         }
+    }
+    
+    namespace context
+    {
+        CinderDelegate *delegate = nullptr;
     }
 }
 
@@ -53,13 +58,11 @@ namespace chronotext
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-    java::vm = vm;
+    jvm::vm = vm;
     return JNI_VERSION_1_4;
 }
 
 #pragma mark ---------------------------------------- NATIVE METHODS ----------------------------------------
-
-chr::CinderDelegate *gDelegate = nullptr; // TODO: USE NAMESPACE
 
 /*
  * MUST BE CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
@@ -67,51 +70,55 @@ chr::CinderDelegate *gDelegate = nullptr; // TODO: USE NAMESPACE
 
 void Java_org_chronotext_cinder_CinderDelegate_prelaunch(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
-    gDelegate = new CinderDelegate();
-    gDelegate->prelaunch(env, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    context::delegate = new CinderDelegate();
+    context::delegate->prelaunch(env, env->NewGlobalRef(context), env->NewGlobalRef(listener), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
+
+/*
+ * MUST BE CALLED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
+ */
 
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    gDelegate->setup(width, height);
+    context::delegate->setup(width, height);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
 {
-    gDelegate->shutdown();
+    context::delegate->shutdown();
     
-    delete gDelegate;
-    gDelegate = nullptr;
+    delete context::delegate;
+    context::delegate = nullptr;
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    gDelegate->resize(width, height);
+    context::delegate->resize(width, height);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
 {
-    gDelegate->event(eventId);
+    context::delegate->event(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 {
-    gDelegate->draw();
+    context::delegate->draw();
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    gDelegate->addTouch(index, x, y);
+    context::delegate->addTouch(index, x, y);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    gDelegate->updateTouch(index, x, y);
+    context::delegate->updateTouch(index, x, y);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    gDelegate->removeTouch(index, x, y);
+    context::delegate->removeTouch(index, x, y);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)
@@ -119,12 +126,12 @@ void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject 
     if (body)
     {
         const char *chars = env->GetStringUTFChars(body, nullptr);
-        gDelegate->sendMessageToSketch(what, chars);
+        context::delegate->sendMessageToSketch(what, chars);
         env->ReleaseStringUTFChars(body, chars);
     }
     else
     {
-        gDelegate->sendMessageToSketch(what);
+        context::delegate->sendMessageToSketch(what);
     }
 }
 

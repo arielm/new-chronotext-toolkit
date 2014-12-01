@@ -75,7 +75,7 @@ namespace chronotext
          */
         io_service().post([this]{ sketch->clock().update(); });
         
-        sketch->setIOService(io_service());
+        sketch->Handler::setIOService(io_service());
         sketch->timeline().stepTo(0);
         
         sketch->setup();

@@ -12,7 +12,12 @@ import org.chronotext.gl.GLView;
 import org.chronotext.utils.DisplayUtils;
 import org.chronotext.utils.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
@@ -182,6 +187,27 @@ public class CinderDelegate extends Handler
   public void sendMessageToSketch(int what, String body)
   {
     mView.sendMessage(what, body);
+  }
+
+  // ---------------------------------------- QUERIES (TO BE CALLED FROM ANY THREAD ATTACHED TO JAVA) ----------------------------------------
+
+  public String getMemoryInfo()
+  {
+    MemoryInfo memoryInfo = new MemoryInfo();
+    ((ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryInfo(memoryInfo);
+
+    JSONObject json = new JSONObject();
+
+    try 
+    {
+      json.put("availMem", memoryInfo.availMem);
+      json.put("threshold", memoryInfo.threshold);
+      json.put("lowMemory", memoryInfo.lowMemory);
+    } 
+    catch (JSONException e) 
+    {}
+
+    return json.toString();
   }
 
   // ---------------------------------------- JNI ----------------------------------------
