@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
+#include "chronotext/android/cinder/JNI.h"
 #include "chronotext/FileSystem.h"
 #include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/accel/AccelEvent.h"
@@ -58,9 +59,8 @@ namespace chronotext
      * CALLED BEFORE THE RENDERER'S THREAD IS CREATED
      */
     
-    void CinderDelegate::prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
+    void CinderDelegate::prelaunch(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
-        mJavaVM = javaVM;
         mJavaContext = javaContext;
         mJavaListener = javaListener;
         mJavaDisplay = javaDisplay; // TODO: SHOULD BE PART OF SystemManager (OR DisplayManager)
@@ -68,9 +68,7 @@ namespace chronotext
         displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
         
         // ---
-        
-        JNIEnv *env = getJNIEnv();
-        
+
         jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(mJavaContext), "getAssets", "()Landroid/content/res/AssetManager;");
         AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(mJavaContext, getAssetsMethod));
         
@@ -444,13 +442,14 @@ namespace chronotext
     JNIEnv* CinderDelegate::getJNIEnv()
     {
         JNIEnv *env = nullptr;
-        int err = mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
+        int err = system::vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_4);
         
         if (err == JNI_EDETACHED)
         {
             throw runtime_error("CURRENT THREAD NOT ATTACHED TO JAVA VM");
         }
-        else if (err == JNI_EVERSION)
+        
+        if (err == JNI_EVERSION)
         {
             throw runtime_error("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
         }

@@ -43,7 +43,7 @@ namespace chronotext
         virtual void receiveMessageFromSketch(int what, const std::string &body);
         virtual void sendMessageToSketch(int what, const std::string &body = "");
         
-        void prelaunch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
+        void prelaunch(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void setup(int width, int height);
         void shutdown();
@@ -85,7 +85,6 @@ namespace chronotext
     protected:
         CinderSketch *sketch;
 
-        JavaVM *mJavaVM;
         jobject mJavaContext;
         jobject mJavaListener;
         jobject mJavaDisplay;
