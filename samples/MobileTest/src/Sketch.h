@@ -7,7 +7,11 @@
  */
 
 /*
- * IN SYNC WITH ContextRework BRANCH / COMMIT d24d1e4
+ * IN SYNC WITH ContextRework BRANCH
+ *
+ * OSX: HEAD (5110b2d)
+ * IOS: HEAD (5110b2d)
+ * ANDROID: HEAD (5110b2d)
  */
 
 #pragma once

@@ -1,8 +1,8 @@
-#include "cinder/Cinder.h"
-
-#if defined(CINDER_COCOA_TOUCH)
+#include "chronotext/cinder/main.h"
 
 #pragma mark ----------------------------------------   IOS   ----------------------------------------
+
+#if defined(CINDER_COCOA_TOUCH)
 
 #include "AppDelegate.h"
 
@@ -14,29 +14,13 @@ int main(int argc, char *argv[])
     }
 }
 
-#elif defined(CINDER_ANDROID)
-
-#pragma mark ---------------------------------------- ANDROID ----------------------------------------
-
-#include "chronotext/android/cinder/JNI.h"
-
-extern "C"
-{
-	void android_main(struct android_app *state)
-    {}
-}
+#pragma mark ---------------------------------------- DESKTOP ----------------------------------------
 
 #elif defined(CINDER_MAC) || defined(CINDER_MSW)
-
-#pragma mark ---------------------------------------- DESKTOP ----------------------------------------
 
 #include "Application.h"
 
 CINDER_APP_NATIVE(Application, ci::app::RendererGl(ci::app::RendererGl::AA_NONE))
-
-#else
-
-#error UNSUPPORTED PLATFORM
 
 #endif
 
