@@ -42,8 +42,10 @@ extern "C"
 
 namespace chronotext
 {
-    namespace system
+    namespace java
     {
         extern JavaVM *vm;
+        
+        JNIEnv* getJNIEnv();
     }
 }

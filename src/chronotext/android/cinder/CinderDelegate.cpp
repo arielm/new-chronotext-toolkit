@@ -267,7 +267,7 @@ namespace chronotext
     
     int CinderDelegate::getDisplayRotation()
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
         return env->CallIntMethod(mJavaDisplay, getRotationMethod);
     }
@@ -428,7 +428,7 @@ namespace chronotext
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
         LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
-        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.data()));
+        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, java::getJNIEnv()->NewStringUTF(body.data()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
@@ -437,29 +437,11 @@ namespace chronotext
         sketch->sendMessage(Message(what, body));
     }
     
-#pragma mark ---------------------------------------- JNI ----------------------------------------
+#pragma mark ---------------------------------------- JAVA LISTENER ----------------------------------------
 
-    JNIEnv* CinderDelegate::getJNIEnv()
-    {
-        JNIEnv *env = nullptr;
-        int err = system::vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_4);
-        
-        if (err == JNI_EDETACHED)
-        {
-            throw runtime_error("CURRENT THREAD NOT ATTACHED TO JAVA VM");
-        }
-        
-        if (err == JNI_EVERSION)
-        {
-            throw runtime_error("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
-        }
-        
-        return env;
-    }
-    
     void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -472,7 +454,7 @@ namespace chronotext
     
     jboolean CinderDelegate::callBooleanMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -487,7 +469,7 @@ namespace chronotext
     
     jchar CinderDelegate::callCharMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -502,7 +484,7 @@ namespace chronotext
     
     jint CinderDelegate::callIntMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -517,7 +499,7 @@ namespace chronotext
     
     jlong CinderDelegate::callLongMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -532,7 +514,7 @@ namespace chronotext
     
     jfloat CinderDelegate::callFloatMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
@@ -547,7 +529,7 @@ namespace chronotext
     
     jdouble CinderDelegate::callDoubleMethodOnJavaListener(const char *name, const char *sig, ...)
     {
-        JNIEnv *env = getJNIEnv();
+        JNIEnv *env = java::getJNIEnv();
         
         jclass cls = env->GetObjectClass(mJavaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);

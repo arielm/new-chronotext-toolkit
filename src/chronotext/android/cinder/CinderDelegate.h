@@ -72,8 +72,6 @@ namespace chronotext
 
         // ---
         
-        JNIEnv* getJNIEnv();
-        
         void callVoidMethodOnJavaListener(const char *name, const char *sig, ...);
         jboolean callBooleanMethodOnJavaListener(const char *name, const char *sig, ...);
         jchar callCharMethodOnJavaListener(const char *name, const char *sig, ...);
