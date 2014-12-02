@@ -12,6 +12,7 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderDelegate.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderSketch.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/JNI.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/system/SystemManager.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/system/MemoryManager.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/FileSystem.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/InputSource.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Handler.cpp

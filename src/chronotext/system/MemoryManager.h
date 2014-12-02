@@ -8,26 +8,26 @@
 
 #pragma once
 
-#include <cstdint>
+#include "cinder/Cinder.h"
+
+#if defined(CINDER_COCOA)
+
+#include "chronotext/cocoa/system/MemoryManager.h"
+
+#elif defined(CINDER_ANDROID)
+
+#include "chronotext/android/system/MemoryManager.h"
+
+#else
+
+#include "chronotext/system/MemoryManagerBase.h"
 
 namespace chronotext
 {
     namespace memory
     {
-        struct Info
-        {
-            int64_t free;
-            int64_t total;
-            int64_t used;
-            
-            Info(int64_t free = -1, int64_t total = -1, int64_t used = -1)
-            :
-            free(free),
-            total(total),
-            used(used)
-            {}
-        };
+        typedef ManagerBase Manager;
     }
 }
 
-namespace chr = chronotext;
+#endif

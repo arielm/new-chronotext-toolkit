@@ -6,28 +6,31 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * CURRENTLY DUMMY IMPLEMENTATION:
+ *
+ * 1) NECESSARY PLACEHOLDER ON WINDOWS
+ *
+ * 2) NECESSARY BASE FOR "COMPLEX MULTI-PLATFORM INHERITANCE" (CF MemoryManager)
+ */
+
 #pragma once
 
-#include <cstdint>
+#include "chronotext/system/MemoryInfo.h"
 
 namespace chronotext
 {
     namespace memory
     {
-        struct Info
+        Info getInfo();
+
+        // ---
+        
+        class ManagerBase
         {
-            int64_t free;
-            int64_t total;
-            int64_t used;
-            
-            Info(int64_t free = -1, int64_t total = -1, int64_t used = -1)
-            :
-            free(free),
-            total(total),
-            used(used)
-            {}
+        protected:
+            ManagerBase() {}
+            ~ManagerBase() {}
         };
     }
 }
-
-namespace chr = chronotext;
