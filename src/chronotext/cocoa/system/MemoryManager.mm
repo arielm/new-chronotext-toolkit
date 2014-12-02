@@ -8,6 +8,8 @@
 
 #include "MemoryManager.h"
 
+#include "chronotext/system/SystemManager.h"
+
 #import <sys/sysctl.h>
 #import <mach/host_info.h>
 #import <mach/mach_host.h>
@@ -56,11 +58,14 @@ namespace chronotext
             task_info(mach_task_self(), TASK_BASIC_INFO_64, (task_info_t)&info, &size);
             
             /*
+             * MEASUREMENTS SEEM RELIABLE ON IOS, BUT NOT ON OSX (PROBABLY A SIDE-EFFECT OF "MODERN DESKTOP MEMORY MANAGEMENT")
+             *
              * TODO:
              *
-             * 1) "USED MEMORY" IS CURRENTLY NOT ACCURATE
-             *    - OSX: HIGHER THAN WHAT SHOWN BY "INSTRUMENTS"
-             *    - IOS: TO BE FURTHER INVESTIGATED
+             * 1) INVESTIGATE ON OSX:
+             *    - "FREE AND USED MEMORY": SEEMS TO BE AFFECTED BY OTHER FACTORS THAN WHAT "WE" ALLOCATE:
+             *      - MAYBE: LIBRARY LOADING?
+             *    - "USED MEMORY": HIGHER THAN WHAT SHOWN BY "INSTRUMENTS"
              *
              * 2) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED
              *    - CURRENTLY: NOT USEFUL
@@ -70,11 +75,14 @@ namespace chronotext
             int64_t totalMemory = (vmstat.wire_count + vmstat.active_count + vmstat.inactive_count + vmstat.free_count) * pagesize;
             int64_t usedMemory = info.resident_size;
             
-#if defined(CINDER_COCOA_TOUCH)
-            return Info(freeMemory, totalMemory + usedMemory, usedMemory);
-#else
-            return Info(freeMemory, totalMemory, usedMemory);
-#endif
+            if (system::getPlatform() == system::PLATFORM_IOS)
+            {
+                return Info(freeMemory, totalMemory + usedMemory, usedMemory);
+            }
+            else
+            {
+                return Info(freeMemory, totalMemory, usedMemory);
+            }
         }
         
         // ---

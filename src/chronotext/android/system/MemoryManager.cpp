@@ -14,33 +14,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+ * TODO:
+ *
+ * 1) SEE TODO'S IN getInfo()
+ *
+ * 2) IMPLEMENT "AUTOMATIC MEMORY WARNING":
+ *    - OPTION 1:
+ *      - VIA ANDROID'S MemoryInfo STRUCTURE:
+ *        - http://developer.android.com/reference/android/app/ActivityManager.MemoryInfo.html
+ *    - OPTION 2:
+ *      - VIA ANDROID'S onTrimMemory() CALLBACK:
+ *        - http://developer.android.com/reference/android/content/ComponentCallbacks2.html
+ *
+ *
+ * ADDITIONAL REFERENCES:
+ *
+ * - http://stackoverflow.com/a/18894037/50335
+ * - http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/com/android/server/am/ActivityManagerService.java#5404
+ * - http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/com/android/server/am/ProcessList.java#ProcessList.getMemLevel%28int%29
+ * - http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/com/android/internal/util/MemInfoReader.java
+ *
+ *
+ * TESTABLE VIA TERMINAL WHEN ANDROID DEVICE IS CONNECTED:
+ *
+ * - adb shell cat /proc/meminfo
+ * - adb shell cat /sys/module/lowmemorykiller/parameters/minfree
+ */
+
 namespace chronotext
 {
     namespace memory
     {
         /*
          * SOURCE: https://android.googlesource.com/platform/frameworks/base/+/master/core/jni/android_util_Process.cpp
-         *
-         * ADDITIONAL REFERENCES:
-         *
-         * - adb shell cat /proc/meminfo
-         * - http://stackoverflow.com/a/18894037/50335
-         * - http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/com/android/server/am/ActivityManagerService.java#5404
-         * - http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/com/android/server/am/ProcessList.java#ProcessList.getMemLevel%28int%29
          */
         
         static jlong getFreeMemoryImpl(const char* const sums[], const size_t sumsLen[], size_t num)
         {
             int fd = open("/proc/meminfo", O_RDONLY);
             if (fd < 0) {
-                fprintf(stderr, "UNABLE TO OPEN /proc/meminfo");
+                fprintf(stderr, "UNABLE TO OPEN /proc/meminfo"); // XXX
                 return -1;
             }
             char buffer[256];
             const int len = read(fd, buffer, sizeof(buffer)-1);
             close(fd);
             if (len < 0) {
-                fprintf(stderr, "UNABLE TO READ /proc/meminfo");
+                fprintf(stderr, "UNABLE TO READ /proc/meminfo"); // XXX
                 return -1;
             }
             buffer[len] = 0;
@@ -88,7 +109,14 @@ namespace chronotext
         Info getInfo()
         {
             /*
-             * TODO: FIND A WAY TO GET "USED MEMORY"
+             * "FREE MEMORY" SEEMS RELIABLE
+             *
+             * TODO:
+             *
+             * 1) FIND A WAY TO GRASP "USED MEMORY"
+             *
+             * 2) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED
+             *    - CURRENTLY: NOT USEFUL
              */
             
             int64_t freeMemory = getFreeMemory();
