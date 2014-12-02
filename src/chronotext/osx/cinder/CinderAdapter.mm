@@ -22,6 +22,9 @@ using namespace chr;
     if (self = [super init])
     {
         sketch = delegate->getSketch();
+        assert(sketch);
+        
+        assert(delegate->getWindow());
         view = reinterpret_cast<NSView*>(delegate->getWindow()->getNative());
     }
     

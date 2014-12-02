@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -22,20 +22,12 @@ namespace chronotext
     CinderDelegate::CinderDelegate()
     :
     AppNative(),
-    sketch(nullptr),
-    emulated(false),
     startCount(0),
-    updateCount(0)
-    {
-        setSketch(createSketch());
-    }
+    updateCount(0),
+    sketch(nullptr),
+    emulated(false)
+    {}
     
-    void CinderDelegate::applyDefaultSettings(Settings *settings)
-    {
-        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
-        settings->enableHighDensityDisplay();
-    }
-
     CinderSketch* CinderDelegate::getSketch()
     {
         return sketch;
@@ -62,9 +54,30 @@ namespace chronotext
     {
         sketch->sendMessage(Message(what, body));
     }
+    
+    // ---
+    
+    void CinderDelegate::applyDefaultSettings(Settings *settings)
+    {
+        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
+        settings->enableHighDensityDisplay();
+    }
 
+    void CinderDelegate::prepareSettings(Settings *settings)
+    {
+        applyDefaultSettings(settings);
+    }
+
+    // ---
+    
     void CinderDelegate::setup()
     {
+        /*
+         * SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
+         * OTHERWISE: POTENTIAL HEIRS LIKE osx/cinder/CinderAdapter WILL CRASH
+         */
+        setSketch(createSketch());
+        
         updateRealDisplayInfo();
         updateRealWindowInfo();
         
@@ -84,7 +97,7 @@ namespace chronotext
     void CinderDelegate::shutdown()
     {
         stop();
-
+        
         sketch->shutdown();
         setSketch(nullptr);
     }
@@ -156,7 +169,7 @@ namespace chronotext
     }
     
 #pragma mark ---------------------------------------- INPUT ----------------------------------------
-
+    
     void CinderDelegate::accelerated(AccelEvent event)
     {
         sketch->accelerated(event);
@@ -305,7 +318,7 @@ namespace chronotext
         
         return !emulators.empty();
     }
-
+    
 #pragma mark ---------------------------------------- MISC ----------------------------------------
     
     void CinderDelegate::updateRealDisplayInfo()

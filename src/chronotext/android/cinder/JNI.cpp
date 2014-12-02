@@ -2,16 +2,12 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
-
-#include <android/log.h>
-
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "cinder", __VA_ARGS__))
 
 using namespace std;
 using namespace chr;
@@ -30,11 +26,11 @@ namespace chronotext
             
             if (err == JNI_EDETACHED)
             {
-                LOGE("CURRENT THREAD NOT ATTACHED TO JAVA VM");
+                CI_LOGE("CURRENT THREAD NOT ATTACHED TO JAVA VM");
             }
             else if (err == JNI_EVERSION)
             {
-                LOGE("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
+                CI_LOGE("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
             }
             
             if (env_)
@@ -89,6 +85,8 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
     
     delete context::delegate;
     context::delegate = nullptr;
+    
+    CI_LOGI("SHUTDOWN");
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)

@@ -2,20 +2,20 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
-#include "chronotext/cinder/CinderDelegateBase.h"
+#include "chronotext/cinder/CinderSketch.h"
 
 #include <jni.h>
 #include <android/sensor.h>
 
 namespace chronotext
 {
-    class CinderDelegate : public CinderDelegateBase
+    class CinderDelegate
     {
         enum
         {
@@ -34,7 +34,10 @@ namespace chronotext
         static bool LOG_VERBOSE;
         
         CinderDelegate();
-        virtual ~CinderDelegate();
+        virtual ~CinderDelegate() {}
+        
+        virtual void sketchCreated(CinderSketch *sketch) {}
+        virtual void sketchDestroyed(CinderSketch *sketch) {}
         
         virtual CinderSketch* getSketch();
         virtual void setSketch(CinderSketch *sketch);

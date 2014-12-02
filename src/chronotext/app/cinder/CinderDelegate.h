@@ -2,39 +2,44 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
 #include "chronotext/app/system/EmulatedDevice.h"
-#include "chronotext/cinder/CinderDelegateBase.h"
+#include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/InputSource.h"
 
 #include "cinder/app/AppNative.h"
 
 namespace chronotext
 {
-    class CinderDelegate : public ci::app::AppNative, public CinderDelegateBase
+    class CinderDelegate : public ci::app::AppNative
     {
     public:
         CinderDelegate();
-        virtual ~CinderDelegate() {}
 
-        virtual void applyDefaultSettings(Settings *settings);
+        virtual void sketchCreated(CinderSketch *sketch) {}
+        virtual void sketchDestroyed(CinderSketch *sketch) {}
 
         virtual CinderSketch* getSketch();
         virtual void setSketch(CinderSketch *sketch);
-
+        
+        virtual void action(int actionId) {}
+        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         virtual void sendMessageToSketch(int what, const std::string &body = "");
+
+        virtual void applyDefaultSettings(Settings *settings);
+        void prepareSettings(Settings *settings) override;
+
+        void setup() override;
+        void shutdown() override;
+        void resize() override;
         
-        void setup();
-        void shutdown();
-        void resize();
-        
-        void update();
-        void draw();
+        void update() override;
+        void draw() override;
 
         void accelerated(AccelEvent event);
 
@@ -57,15 +62,15 @@ namespace chronotext
     protected:
         CinderSketch *sketch;
 
+        int startCount;
+        int updateCount;
+
         bool emulated;
         EmulatedDevice emulatedDevice;
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
         
         DisplayInfo realDisplayInfo;
         WindowInfo realWindowInfo;
-        
-        int startCount;
-        int updateCount;
 
         void updateRealDisplayInfo();
         void updateRealWindowInfo();
