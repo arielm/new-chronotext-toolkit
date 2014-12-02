@@ -7,11 +7,17 @@
  */
 
 /*
- * CURRENTLY DUMMY IMPLEMENTATION:
+ * DUMMY IMPLEMENTATION:
  *
- * 1) NECESSARY PLACEHOLDER ON WINDOWS
+ * 1) NECESSARY PLACEHOLDER ON WINDOWS (NOT IMPLEMENTED YET)
  *
  * 2) NECESSARY BASE FOR "COMPLEX MULTI-PLATFORM INHERITANCE" (CF MemoryManager)
+ */
+
+/*
+ * DEVELOPED AND TESTED VIA THE ContextRework PROJECT IN THE chronotext-playground REPOSITORY:
+ *
+ * https://github.com/arielm/chronotext-playground/blob/e4ec36e252db9e9b759bbaf5439700e76421f7cb/Sketches/ContextRework/src/TestingMemory.h
  */
 
 #pragma once

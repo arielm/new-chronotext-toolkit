@@ -63,7 +63,7 @@ namespace chronotext
              * TODO:
              *
              * 1) INVESTIGATE ON OSX:
-             *    - "FREE AND USED MEMORY": SEEMS TO BE AFFECTED BY OTHER FACTORS THAN WHAT "WE" ALLOCATE:
+             *    - "FREE AND USED MEMORY": SEEM TO BE AFFECTED BY OTHER FACTORS THAN WHAT "WE" ALLOCATE:
              *      - MAYBE: LIBRARY LOADING?
              *    - "USED MEMORY": HIGHER THAN WHAT SHOWN BY "INSTRUMENTS"
              *

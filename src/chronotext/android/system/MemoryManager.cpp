@@ -109,7 +109,7 @@ namespace chronotext
         Info getInfo()
         {
             /*
-             * "FREE MEMORY" SEEMS RELIABLE
+             * "FREE MEMORY" SEEMS RELIABLE, BUT IS LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
              *
              * TODO:
              *
