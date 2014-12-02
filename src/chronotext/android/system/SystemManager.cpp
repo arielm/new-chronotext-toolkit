@@ -10,6 +10,7 @@
 
 #include "chronotext/utils/Utils.h"
 
+#include <sys/system_properties.h>
 #include <sys/utsname.h>
 
 using namespace std;
@@ -17,60 +18,71 @@ using namespace ci;
 
 namespace chronotext
 {
-    SystemManager& SystemManager::instance()
+    namespace system
     {
-        static SystemManager instance;
-        return instance;
-    }
-    
-    SystemInfo SystemManager::getSystemInfo()
-    {
-        return instance().systemInfo;
-    }
-    
-    SystemManager::SystemManager()
-    {
-        updateSystemInfo();
-    }
-    
-#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
-    
-    string SystemManager::getIpAddress(bool maskForBroadcast)
-    {
-        return "";
-    }
-    
-#pragma mark ---------------------------------------- SystemInfo ----------------------------------------
+        string getProperty(const char *name)
+        {
+            static char tmp[256];
+            auto len = __system_property_get(name, tmp);
+            
+            return string(tmp, len);
+        }
 
-    void SystemManager::updateSystemInfo()
-    {
-        /*
-         * XXX: ORDER OF EXECUTION MATTERS!
-         */
+        Info getInfo()
+        {
+            return Manager::instance()->info;
+        }
         
-        systemInfo.model = getModel();
-        systemInfo.manufacturer = getManufacturer();
-
-        SystemManagerBase::updateSystemInfo();
-    }
-    
-    string SystemManager::getOsVersionString()
-    {
-        return getSystemProperty("ro.build.version.release");
-    }
-    
-    string SystemManager::getDeviceString()
-    {
-        return systemInfo.model + " [" + systemInfo.manufacturer + "]";
-    }
-    
-    string SystemManager::getModel()
-    {
-        return getSystemProperty("ro.product.model");
-    }
-    
-    string SystemManager::getManufacturer()
-    {
-        return getSystemProperty("ro.product.manufacturer");
+        Manager* Manager::instance()
+        {
+            static Manager instance; // XXX
+            return &instance;
+        }
+        
+        Manager::Manager()
+        {
+            updateInfo();
+        }
+        
+#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
+        
+        string Manager::getIpAddress(bool maskForBroadcast)
+        {
+            return "";
+        }
+        
+#pragma mark ---------------------------------------- INFO ----------------------------------------
+        
+        void Manager::updateInfo()
+        {
+            /*
+             * XXX: ORDER OF EXECUTION MATTERS!
+             */
+            
+            info.model = getModel();
+            info.manufacturer = getManufacturer();
+            
+            ManagerBase::updateInfo();
+        }
+        
+        string Manager::getOsVersionString()
+        {
+            return getProperty("ro.build.version.release");
+        }
+        
+        string Manager::getDeviceString()
+        {
+            return info.model + " [" + info.manufacturer + "]";
+        }
+        
+        string Manager::getModel()
+        {
+            return getProperty("ro.product.model");
+        }
+        
+        string Manager::getManufacturer()
+        {
+            return getProperty("ro.product.manufacturer");
+        }
     }
 }

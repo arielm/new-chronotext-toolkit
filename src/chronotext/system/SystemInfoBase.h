@@ -15,40 +15,43 @@
 
 namespace chronotext
 {
-    class SystemInfoBase
+    namespace system
     {
-    public:
         enum Platform
         {
-            OSX,
-            WINDOW,
-            IOS,
-            ANDROID
+            PLATFORM_OSX,
+            PLATFORM_WINDOW,
+            PLATFORM_IOS,
+            PLATFORM_ANDROID
         };
         
-        Platform platform;
-        std::string platformString;
-
-        std::string osVersionString;
-        std::string deviceString;
-        
-        friend std::ostream& operator<<(std::ostream &lhs, const SystemInfoBase &rhs)
+        class InfoBase
         {
-            lhs
-            << "{"
-            << "platform: " << rhs.platformString
-            << ", os-version: " << rhs.osVersionString;
+        public:
+            Platform platform;
+            std::string platformString;
             
-            if (!rhs.deviceString.empty())
+            std::string osVersionString;
+            std::string deviceString;
+            
+            friend std::ostream& operator<<(std::ostream &lhs, const InfoBase &rhs)
             {
-                lhs << ", device: '" << rhs.deviceString << "'";
+                lhs
+                << "{"
+                << "platform: " << rhs.platformString
+                << ", os-version: " << rhs.osVersionString;
+                
+                if (!rhs.deviceString.empty())
+                {
+                    lhs << ", device: '" << rhs.deviceString << "'";
+                }
+                
+                lhs << "}";
+                
+                return lhs;
             }
-            
-            lhs << "}";
-            
-            return lhs;
-        }
-    };
+        };
+    }
 }
 
 namespace chr = chronotext;

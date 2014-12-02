@@ -12,25 +12,28 @@
 
 namespace chronotext
 {
-    class SystemManager : public SystemManagerBase
+    namespace system
     {
-    public:
-        static SystemManager& instance();
-        static SystemInfo getSystemInfo();
-        
-    protected:
-        SystemManager();
-        void updateSystemInfo();
-        
-        std::string getDeviceString();
-        
-        std::string getModel();
-        std::string getMachine();
-        
-        bool isPodTouch();
-        bool isIPhone();
-        bool isPad();
-        bool isPadMini();
-        bool isSimulator();
-    };
+        class Manager : public ManagerBase
+        {
+        public:
+            static Manager* instance();
+            
+        protected:
+            Manager();
+            
+            void updateInfo();
+            
+            std::string getDeviceString();
+            
+            std::string getModel();
+            std::string getMachine();
+            
+            bool isPodTouch();
+            bool isIPhone();
+            bool isPad();
+            bool isPadMini();
+            bool isSimulator();
+        };
+    }
 }

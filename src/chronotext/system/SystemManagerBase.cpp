@@ -21,103 +21,110 @@ using namespace ci;
 
 namespace chronotext
 {
-    class SystemManager;
-
-    SystemInfo::Platform SystemManagerBase::getPlatform()
+    namespace system
     {
-#if defined(CINDER_MAC)
-        return SystemInfo::Platform::OSX;
-#elif defined(CINDER_MSW)
-        return SystemInfo::Platform::WINDOW;
-#elif defined(CINDER_COCOA_TOUCH)
-        return SystemInfo::Platform::IOS;
-#elif defined(CINDER_ANDROID)
-        return SystemInfo::Platform::ANDROID;
-#endif
-        throw EXCEPTION(SystemManager, "UNSUPPORTED PLATFORM");
-    }
-    
-    string SystemManagerBase::getPlatformString()
-    {
-        static const string PLATFORM_NAMES[4] = {"OSX", "Windows", "iOS", "Android"};
-        return PLATFORM_NAMES[getPlatform()];
-    }
-    
-    // ---
-
-    SystemManagerBase& SystemManagerBase::instance()
-    {
-        static SystemManagerBase instance;
-        return instance;
-    }
-    
-    SystemManagerBase::SystemManagerBase()
-    {
-        updateSystemInfo();
-    }
-
-    SystemInfo SystemManagerBase::getSystemInfo()
-    {
-        return instance().systemInfo;
-    }
-
-#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
-    
-#if defined(ANDROID)
-    
-    string SystemManagerBase::getIpAddress(bool maskForBroadcast)
-    {
-        return "";
-    }
-    
-#else
-    
-    string SystemManagerBase::getIpAddress(bool maskForBroadcast)
-    {
-        string host = System::getIpAddress();
+        class Manager;
         
-        if (maskForBroadcast)
+        Platform getPlatform()
         {
-            if (host.rfind('.') != string::npos)
-            {
-                host.replace(host.rfind('.') + 1, 3, "255");
-            }
+#if defined(CINDER_MAC)
+            return PLATFORM_OSX;
+#elif defined(CINDER_MSW)
+            return PLATFORM_WINDOW;
+#elif defined(CINDER_COCOA_TOUCH)
+            return PLATFORM_IOS;
+#elif defined(CINDER_ANDROID)
+            return PLATFORM_ANDROID;
+#endif
+            throw EXCEPTION(Manager, "UNSUPPORTED PLATFORM");
         }
         
-        return host;
-    }
-    
+        string getPlatformString()
+        {
+            static const string PLATFORM_NAMES[4] = {"OSX", "Windows", "iOS", "Android"};
+            return PLATFORM_NAMES[getPlatform()];
+        }
+        
+#if defined(CINDER_MAC) || defined(CINDER_MSW)
+        
+        Info getInfo()
+        {
+            return ManagerBase::instance()->info;
+        }
+        
 #endif
-    
-#pragma mark ---------------------------------------- SystemInfo ----------------------------------------
-    
-    void SystemManagerBase::updateSystemInfo()
-    {
-        systemInfo.platform = getPlatform();
-        systemInfo.platformString = getPlatformString();
-
-        systemInfo.osVersionString = getOsVersionString();
-        systemInfo.deviceString = getDeviceString();
-    }
-    
+        
+        // ---
+        
+        ManagerBase* ManagerBase::instance()
+        {
+            static ManagerBase instance; // XXX
+            return &instance;
+        }
+        
+        ManagerBase::ManagerBase()
+        {
+            updateInfo();
+        }
+        
+#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
+        
 #if defined(ANDROID)
-    
-    string SystemManagerBase::getOsVersionString()
-    {
-        return "";
-    }
-    
+        
+        string ManagerBase::getIpAddress(bool maskForBroadcast)
+        {
+            return "";
+        }
+        
 #else
-    
-    string SystemManagerBase::getOsVersionString()
-    {
-        return ci::toString(System::getOsMajorVersion()) + "." + ci::toString(System::getOsMinorVersion()) + "." + ci::toString(System::getOsBugFixVersion());
-    }
-    
+        
+        string ManagerBase::getIpAddress(bool maskForBroadcast)
+        {
+            string host = System::getIpAddress();
+            
+            if (maskForBroadcast)
+            {
+                if (host.rfind('.') != string::npos)
+                {
+                    host.replace(host.rfind('.') + 1, 3, "255");
+                }
+            }
+            
+            return host;
+        }
+        
 #endif
-    
-    string SystemManagerBase::getDeviceString()
-    {
-        return "";
+        
+#pragma mark ---------------------------------------- INFO ----------------------------------------
+        
+        void ManagerBase::updateInfo()
+        {
+            info.platform = getPlatform();
+            info.platformString = getPlatformString();
+            
+            info.osVersionString = getOsVersionString();
+            info.deviceString = getDeviceString();
+        }
+        
+#if defined(ANDROID)
+        
+        string ManagerBase::getOsVersionString()
+        {
+            return "";
+        }
+        
+#else
+        
+        string ManagerBase::getOsVersionString()
+        {
+            return ci::toString(System::getOsMajorVersion()) + "." + ci::toString(System::getOsMinorVersion()) + "." + ci::toString(System::getOsBugFixVersion());
+        }
+        
+#endif
+        
+        string ManagerBase::getDeviceString()
+        {
+            return "";
+        }
     }
 }

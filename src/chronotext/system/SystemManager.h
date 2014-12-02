@@ -24,7 +24,10 @@
 
 namespace chronotext
 {
-    typedef SystemManagerBase SystemManager;
+    namespace system
+    {
+        typedef ManagerBase Manager;
+    }
 }
 
 #endif

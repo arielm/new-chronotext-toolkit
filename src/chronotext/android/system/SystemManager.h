@@ -10,38 +10,34 @@
 
 #include "chronotext/system/SystemManagerBase.h"
 
-#include <sys/system_properties.h>
-
 namespace chronotext
 {
-    class SystemManager : public SystemManagerBase
+    namespace system
     {
-    public:
         /*
          * THE SAME PROPERTIES THAT CAN BE QUERIED VIA ADB, E.G.
          * adb shell getprop ro.product.manufacturer
          */
-        static std::string getSystemProperty(const char *name)
-        {
-            static char tmp[256];
-            auto len = __system_property_get(name, tmp);
-            
-            return std::string(tmp, len);
-        }
         
-        static SystemManager& instance();
-        static SystemInfo getSystemInfo();
-        
-        std::string getIpAddress(bool maskForBroadcast = false); // TODO
+        std::string getProperty(const char *name);
 
-    protected:
-        SystemManager();
-        void updateSystemInfo();
-        
-        std::string getOsVersionString();
-        std::string getDeviceString();
-        
-        std::string getModel();
-        std::string getManufacturer();
-    };
+        class Manager : public ManagerBase
+        {
+        public:
+            static Manager* instance();
+            
+            std::string getIpAddress(bool maskForBroadcast = false); // TODO
+            
+        protected:
+            Manager();
+            
+            void updateInfo();
+            
+            std::string getOsVersionString();
+            std::string getDeviceString();
+            
+            std::string getModel();
+            std::string getManufacturer();
+        };
+    }
 }

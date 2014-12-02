@@ -12,16 +12,19 @@
 
 namespace chronotext
 {
-    class SystemInfo : public SystemInfoBase
+    namespace system
     {
-    public:
-        std::string model;
-        std::string machine;
-        
-        bool isPodTouch;
-        bool isIPhone;
-        bool isPad;
-        bool isPadMini;
-        bool isSimulator;
-    };
+        class Info : public InfoBase
+        {
+        public:
+            std::string model;
+            std::string machine;
+            
+            bool isPodTouch;
+            bool isIPhone;
+            bool isPad;
+            bool isPadMini;
+            bool isSimulator;
+        };
+    }
 }

@@ -12,26 +12,32 @@
 
 namespace chronotext
 {
-    class SystemManagerBase
+    namespace system
     {
-    public:
-        static SystemInfo::Platform getPlatform();
-        static std::string getPlatformString();
-        
-        static SystemManagerBase& instance();
-        static SystemInfo getSystemInfo();
+        Platform getPlatform();
+        std::string getPlatformString();
 
-        virtual std::string getIpAddress(bool maskForBroadcast = false);
-        
-    protected:
-        SystemInfo systemInfo;
+        Info getInfo();
 
-        SystemManagerBase();
-        ~SystemManagerBase() {}
+        // ---
         
-        virtual void updateSystemInfo();
+        class ManagerBase
+        {
+        public:
+            Info info;
 
-        virtual std::string getOsVersionString();
-        virtual std::string getDeviceString();
-    };
+            static ManagerBase* instance();
+            
+            virtual std::string getIpAddress(bool maskForBroadcast = false);
+            
+        protected:
+            ManagerBase();
+            ~ManagerBase() {}
+            
+            virtual void updateInfo();
+            
+            virtual std::string getOsVersionString();
+            virtual std::string getDeviceString();
+        };
+    }
 }

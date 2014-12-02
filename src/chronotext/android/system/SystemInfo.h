@@ -12,10 +12,13 @@
 
 namespace chronotext
 {
-    class SystemInfo : public SystemInfoBase
+    namespace system
     {
-    public:
-        std::string model;
-        std::string manufacturer;
-    };
+        class Info : public InfoBase
+        {
+        public:
+            std::string model;
+            std::string manufacturer;
+        };
+    }
 }

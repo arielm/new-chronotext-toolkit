@@ -17,104 +17,107 @@ using namespace ci;
 
 namespace chronotext
 {
-    SystemManager& SystemManager::instance()
+    namespace system
     {
-        static SystemManager instance;
-        return instance;
-    }
-    
-    SystemInfo SystemManager::getSystemInfo()
-    {
-        return instance().systemInfo;
-    }
-    
-    SystemManager::SystemManager()
-    {
-        updateSystemInfo();
-    }
-    
-#pragma mark ---------------------------------------- SystemInfo ----------------------------------------
-
-    void SystemManager::updateSystemInfo()
-    {
+        Info getInfo()
+        {
+            return Manager::instance()->info;
+        }
+        
+        Manager* Manager::instance()
+        {
+            static Manager instance; // XXX
+            return &instance;
+        }
+        
+        Manager::Manager()
+        {
+            updateInfo();
+        }
+        
+#pragma mark ---------------------------------------- INFO ----------------------------------------
+        
+        void Manager::updateInfo()
+        {
+            /*
+             * XXX: ORDER OF EXECUTION MATTERS!
+             */
+            
+            info.model = getModel();
+            info.machine = getMachine();
+            
+            info.isPodTouch = isPodTouch();
+            info.isIPhone = isIPhone();
+            info.isPad = isPad();
+            info.isPadMini = isPadMini();
+            info.isSimulator = isSimulator();
+            
+            ManagerBase::updateInfo();
+        }
+        
+        string Manager::getDeviceString()
+        {
+            return info.model + " [" + info.machine + "]";
+        }
+        
         /*
-         * XXX: ORDER OF EXECUTION MATTERS!
+         * SHOULD RETURN ONE THE FOLLOWING:
+         *
+         * - iPod touch
+         * - iPhone
+         * - iPhone Simulator
+         * - iPad
+         * - iPad Simulator
          */
         
-        systemInfo.model = getModel();
-        systemInfo.machine = getMachine();
+        string Manager::getModel()
+        {
+            NSString *model = UIDevice.currentDevice.model;
+            return [model UTF8String];
+        }
         
-        systemInfo.isPodTouch = isPodTouch();
-        systemInfo.isIPhone = isIPhone();
-        systemInfo.isPad = isPad();
-        systemInfo.isPadMini = isPadMini();
-        systemInfo.isSimulator = isSimulator();
-
-        SystemManagerBase::updateSystemInfo();
-    }
-    
-    string SystemManager::getDeviceString()
-    {
-        return systemInfo.model + " [" + systemInfo.machine + "]";
-    }
-    
-    /*
-     * SHOULD RETURN ONE THE FOLLOWING:
-     *
-     * - iPod touch
-     * - iPhone
-     * - iPhone Simulator
-     * - iPad
-     * - iPad Simulator
-     */
-    
-    string SystemManager::getModel()
-    {
-        NSString *model = UIDevice.currentDevice.model;
-        return [model UTF8String];
-    }
-    
-    string SystemManager::getMachine()
-    {
-        struct utsname systemInfo;
-        uname(&systemInfo);
+        string Manager::getMachine()
+        {
+            struct utsname systemInfo;
+            uname(&systemInfo);
+            
+            return string(systemInfo.machine);
+        }
         
-        return string(systemInfo.machine);
-    }
-    
-    bool SystemManager::isPodTouch()
-    {
-        return boost::starts_with(systemInfo.model , "iPod touch");
-    }
-    
-    bool SystemManager::isIPhone()
-    {
-        return boost::starts_with(systemInfo.model , "iPhone");
-    }
-    
-    bool SystemManager::isPad()
-    {
-        return boost::starts_with(systemInfo.model , "iPad");
-    }
-    
-    /*
-     * REFERENCE: http://theiphonewiki.com/wiki/Models
-     */
-    
-    bool SystemManager::isPadMini()
-    {
-        if (systemInfo.machine == "iPad2,5") return true;
-        if (systemInfo.machine == "iPad2,6") return true;
-        if (systemInfo.machine == "iPad2,7") return true;
-        if (systemInfo.machine == "iPad4,4") return true;
-        if (systemInfo.machine == "iPad4,5") return true;
-        if (systemInfo.machine == "iPad4,6") return true;
+        bool Manager::isPodTouch()
+        {
+            return boost::starts_with(info.model , "iPod touch");
+        }
         
-        return false;
-    }
-    
-    bool SystemManager::isSimulator()
-    {
-        return boost::ends_with(systemInfo.model , "Simulator");
+        bool Manager::isIPhone()
+        {
+            return boost::starts_with(info.model , "iPhone");
+        }
+        
+        bool Manager::isPad()
+        {
+            return boost::starts_with(info.model , "iPad");
+        }
+        
+        /*
+         * REFERENCE: http://theiphonewiki.com/wiki/Models
+         */
+        
+        bool Manager::isPadMini()
+        {
+            if (info.machine == "iPad2,5") return true;
+            if (info.machine == "iPad2,6") return true;
+            if (info.machine == "iPad2,7") return true;
+            if (info.machine == "iPad4,4") return true;
+            if (info.machine == "iPad4,5") return true;
+            if (info.machine == "iPad4,6") return true;
+            
+            return false;
+        }
+        
+        bool Manager::isSimulator()
+        {
+            return boost::ends_with(info.model , "Simulator");
+        }
     }
 }

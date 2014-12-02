@@ -24,7 +24,10 @@
 
 namespace chronotext
 {
-    typedef SystemInfoBase SystemInfo;
+    namespace system
+    {
+        typedef InfoBase Info;
+    }
 }
 
 #endif
