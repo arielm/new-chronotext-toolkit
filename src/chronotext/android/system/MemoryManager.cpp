@@ -8,11 +8,11 @@
 
 #include "MemoryManager.h"
 
+#include "chronotext/Log.h"
 #include "chronotext/android/cinder/JNI.h"
+#include "chronotext/android/cinder/CinderDelegate.h"
 
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "cinder/Json.h"
 
 /*
  * TODO:
@@ -21,10 +21,10 @@
  *
  * 2) IMPLEMENT "AUTOMATIC MEMORY WARNING":
  *    - OPTION 1:
- *      - VIA ANDROID'S MemoryInfo STRUCTURE:
+ *      - VIA ActivityManager.MemoryInfo STRUCTURE:
  *        - http://developer.android.com/reference/android/app/ActivityManager.MemoryInfo.html
  *    - OPTION 2:
- *      - VIA ANDROID'S onTrimMemory() CALLBACK:
+ *      - VIA ComponentCallbacks2.onTrimMemory() CALLBACK:
  *        - http://developer.android.com/reference/android/content/ComponentCallbacks2.html
  *
  *
@@ -42,89 +42,60 @@
  * - adb shell cat /sys/module/lowmemorykiller/parameters/minfree
  */
 
+/*
+ * PREVIOUS TESTABLE MILESTONE: USING C++ FOR QUERYING "FREE MEMORY" INSTEAD OF JAVA
+ *
+ * - https://github.com/arielm/new-chronotext-toolkit/blob/ffa9f658e609f13bf969a17fc76beba3dbe22735/src/chronotext/android/system/MemoryManager.cpp
+ * - https://github.com/arielm/chronotext-playground/blob/486d4c4ac02a5e471ed5a1b1cc1cee16bc1044fe/Sketches/ContextRework/src/TestingMemory.h
+ */
+
+using namespace std;
+using namespace ci;
+
 namespace chronotext
 {
     namespace memory
     {
         /*
-         * SOURCE: https://android.googlesource.com/platform/frameworks/base/+/master/core/jni/android_util_Process.cpp
+         * "FREE MEMORY" SEEMS RELIABLE, BUT IS LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
+         *
+         * TODO:
+         *
+         * 1) INFER "RATIO" BY MEASURING THE FREE MEMORY AS CLOSE AS APP-STARTUP
          */
         
-        static jlong getFreeMemoryImpl(const char* const sums[], const size_t sumsLen[], size_t num)
-        {
-            int fd = open("/proc/meminfo", O_RDONLY);
-            if (fd < 0) {
-                fprintf(stderr, "UNABLE TO OPEN /proc/meminfo"); // XXX
-                return -1;
-            }
-            char buffer[256];
-            const int len = read(fd, buffer, sizeof(buffer)-1);
-            close(fd);
-            if (len < 0) {
-                fprintf(stderr, "UNABLE TO READ /proc/meminfo"); // XXX
-                return -1;
-            }
-            buffer[len] = 0;
-            size_t numFound = 0;
-            jlong mem = 0;
-            char* p = buffer;
-            while (*p && numFound < num) {
-                int i = 0;
-                while (sums[i]) {
-                    if (strncmp(p, sums[i], sumsLen[i]) == 0) {
-                        p += sumsLen[i];
-                        while (*p == ' ') p++;
-                        char* num = p;
-                        while (*p >= '0' && *p <= '9') p++;
-                        if (*p != 0) {
-                            *p = 0;
-                            p++;
-                            if (*p == 0) p--;
-                        }
-                        mem += atoll(num) * 1024;
-                        numFound++;
-                        break;
-                    }
-                    i++;
-                }
-                p++;
-            }
-            return numFound > 0 ? mem : -1;
-        }
-        
-        static jlong getFreeMemory()
-        {
-            static const char* const sums[] = { "MemFree:", "Cached:", NULL };
-            static const size_t sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), 0 };
-            return getFreeMemoryImpl(sums, sumsLen, 2);
-        }
-        
-        static jlong getTotalMemory()
-        {
-            static const char* const sums[] = { "MemTotal:", NULL };
-            static const size_t sumsLen[] = { strlen("MemTotal:"), 0 };
-            return getFreeMemoryImpl(sums, sumsLen, 1);
-        }
-
         Info getInfo()
         {
             /*
-             * "FREE MEMORY" SEEMS RELIABLE, BUT IS LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
+             * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
              *
-             * TODO:
-             *
-             * 1) FIND A WAY TO GRASP "USED MEMORY"
-             *
-             * 2) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED:
-             *    - CURRENTLY:
-             *      - NOT AVAILABLE (VIA JAVA'S ActivieManager.MemoryInfo) BEFORE API 16
-             *      - NOT USEFUL ANYWAY
+             * TODO: ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN chronotext/os/Task
              */
             
-            int64_t freeMemory = getFreeMemory();
-            int64_t totalMemory = getTotalMemory();
+            jstring query = (jstring)context::delegate->callObjectMethodOnJavaListener("getMemoryInfo", "()Ljava/lang/String;");
             
-            return Info(freeMemory, totalMemory);
+            if (query)
+            {
+                JNIEnv *env = jvm::env();
+
+                const char *chars = env->GetStringUTFChars(query, nullptr);
+                JsonTree memoryInfo(chars);
+                env->ReleaseStringUTFChars(query, chars);
+                
+                auto availMem = memoryInfo["availMem"].getValue<int64_t>();
+                auto threshold = memoryInfo["threshold"].getValue<int64_t>();
+                auto lowMemory = memoryInfo["lowMemory"].getValue<bool>();
+
+                // ---
+                
+                int64_t freeMemory = availMem - threshold;
+                int64_t usedMemory = -1;
+                double ratio = 0;
+                
+                return Info(freeMemory, usedMemory, ratio);
+            }
+            
+            return Info();
         }
         
         // ---

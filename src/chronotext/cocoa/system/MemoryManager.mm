@@ -16,6 +16,13 @@
 #import <mach/task_info.h>
 #import <mach/task.h>
 
+/*
+ * PREVIOUS TESTABLE MILESTONE:
+ *
+ * - https://github.com/arielm/new-chronotext-toolkit/blob/ffa9f658e609f13bf969a17fc76beba3dbe22735/src/chronotext/android/system/MemoryManager.cpp
+ * - https://github.com/arielm/chronotext-playground/blob/486d4c4ac02a5e471ed5a1b1cc1cee16bc1044fe/Sketches/ContextRework/src/TestingMemory.h
+ */
+
 namespace chronotext
 {
     namespace memory
@@ -67,40 +74,39 @@ namespace chronotext
             // ---
             
             /*
-             * MEASUREMENTS SEEM RELIABLE ON IOS, BUT NOT ON OSX
+             * MEASUREMENTS SEEM RELIABLE ON IOS, BUT NOT TOTALLY ON OSX
              *
              *
              * TODO:
              *
              * 1) INVESTIGATE ON IOS:
              *    "FREE MEMORY":
-             *    - NOT PROPERLY UPDATED ANYMORE WHEN APPROACHING "LOW LIMITS" (~8 MB ON IPAD 1)
+             *    - NOT PROPERLY UPDATED ANYMORE ONCE APPROACHING "LOW LIMITS" (~8 MB ON IPAD 1)
              *
              * 2) INVESTIGATE ON OSX:
              *    - "FREE MEMORY": TOTALLY CHAOTIC BEHAVIOR (PROBABLY A SIDE-EFFECT OF "MODERN DESKTOP MEMORY MANAGEMENT")
+             *    - "TOTAL MEMORY":
+             *      - NOT ACCURATE AND USELESS
              *    - "USED MEMORY":
              *      - BIGGER BY A FACTOR OF ~3
              *        - COMPARED TO WHAT'S SHOWN IN "INSTRUMENTS" A EXPECTED CONSUMPTION:
              *        - TESTED ON OSX 10.9.5 / 64-BIT BUILD
-             *
-             * 3) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED
-             *    - CURRENTLY:
-             *      - PROBABLY NOT ACCURATE
-             *      - NOT USEFUL ANYWAY
              */
             
             int64_t freeMemory = vmstat.free_count * pagesize;
-            int64_t totalMemory = (vmstat.wire_count + vmstat.active_count + vmstat.inactive_count + vmstat.free_count) * pagesize;
             int64_t usedMemory = info.resident_size;
+            double ratio = 0;
             
             if (system::getPlatform() == system::PLATFORM_IOS)
             {
-                return Info(freeMemory, totalMemory + usedMemory, usedMemory);
+                ratio = usedMemory / double(freeMemory + usedMemory);
             }
-            else
+            else if (system::getPlatform() == system::PLATFORM_OSX)
             {
-                return Info(freeMemory, totalMemory, usedMemory / 3); // XXX: SEE EARLIER COMMENTS
+                usedMemory /= 3; // XXX
             }
+            
+            return Info(freeMemory, usedMemory, ratio);
         }
         
         // ---

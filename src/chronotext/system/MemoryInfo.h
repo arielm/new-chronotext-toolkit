@@ -17,14 +17,14 @@ namespace chronotext
         struct Info
         {
             int64_t free;
-            int64_t total;
             int64_t used;
+            double ratio;
             
-            Info(int64_t free = -1, int64_t total = -1, int64_t used = -1)
+            Info(int64_t free = -1, int64_t used = -1, double ratio = 0)
             :
             free(free),
-            total(total),
-            used(used)
+            used(used),
+            ratio(ratio)
             {}
         };
     }
