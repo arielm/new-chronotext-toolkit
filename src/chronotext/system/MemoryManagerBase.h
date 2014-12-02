@@ -16,8 +16,13 @@
 
 /*
  * DEVELOPED AND TESTED VIA THE ContextRework PROJECT IN THE chronotext-playground REPOSITORY:
+ * - https://github.com/arielm/chronotext-playground/blob/e4ec36e252db9e9b759bbaf5439700e76421f7cb/Sketches/ContextRework/src/TestingMemory.h
  *
- * https://github.com/arielm/chronotext-playground/blob/e4ec36e252db9e9b759bbaf5439700e76421f7cb/Sketches/ContextRework/src/TestingMemory.h
+ *
+ * ADDITIONAL PLATFORM-RELATED INFO:
+ *
+ * - chronotext/cocoa/system/MemoryManager.mm
+ * - chronotext/android/system/MemoryManager.cpp
  */
 
 #pragma once

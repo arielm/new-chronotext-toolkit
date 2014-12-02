@@ -115,8 +115,10 @@ namespace chronotext
              *
              * 1) FIND A WAY TO GRASP "USED MEMORY"
              *
-             * 2) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED
-             *    - CURRENTLY: NOT USEFUL
+             * 2) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED:
+             *    - CURRENTLY:
+             *      - NOT AVAILABLE (VIA JAVA'S ActivieManager.MemoryInfo) BEFORE API 16
+             *      - NOT USEFUL ANYWAY
              */
             
             int64_t freeMemory = getFreeMemory();

@@ -21,7 +21,10 @@ namespace chronotext
     namespace memory
     {
         /*
-         * REFERENCE: http://stackoverflow.com/a/6095158/50335
+         * REFERENCES:
+         *
+         * - http://stackoverflow.com/a/23123849/50335
+         * - http://miknight.blogspot.co.il/2005/11/resident-set-size-in-mac-os-x.html
          */
 
         Info getInfo()
@@ -42,9 +45,9 @@ namespace chronotext
             // ---
             
             vm_statistics_data_t vmstat;
-            mach_msg_type_number_t count = HOST_VM_INFO_COUNT;
+            mach_msg_type_number_t vmstat_count = HOST_VM_INFO_COUNT;
             
-            if (host_statistics(mach_host_self(), HOST_VM_INFO, (host_info_t)&vmstat, &count) != KERN_SUCCESS)
+            if (host_statistics(mach_host_self(), HOST_VM_INFO, (host_info_t)&vmstat, &vmstat_count) != KERN_SUCCESS)
             {
                 fprintf(stderr, "host_statistics FAILURE");
                 return Info();
@@ -52,23 +55,38 @@ namespace chronotext
             
             // ---
             
-            task_basic_info_64_data_t info;
-            unsigned size = sizeof(info);
+            task_basic_info info;
+            mach_msg_type_number_t info_count = TASK_BASIC_INFO_COUNT;
             
-            task_info(mach_task_self(), TASK_BASIC_INFO_64, (task_info_t)&info, &size);
+            if (task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&info, &info_count) != KERN_SUCCESS)
+            {
+                fprintf(stderr, "task_info FAILURE");
+                return Info();
+            }
+            
+            // ---
             
             /*
-             * MEASUREMENTS SEEM RELIABLE ON IOS, BUT NOT ON OSX (PROBABLY A SIDE-EFFECT OF "MODERN DESKTOP MEMORY MANAGEMENT")
+             * MEASUREMENTS SEEM RELIABLE ON IOS, BUT NOT ON OSX
+             *
              *
              * TODO:
              *
-             * 1) INVESTIGATE ON OSX:
-             *    - "FREE AND USED MEMORY": SEEM TO BE AFFECTED BY OTHER FACTORS THAN WHAT "WE" ALLOCATE:
-             *      - MAYBE: LIBRARY LOADING?
-             *    - "USED MEMORY": HIGHER THAN WHAT SHOWN BY "INSTRUMENTS"
+             * 1) INVESTIGATE ON IOS:
+             *    "FREE MEMORY":
+             *    - NOT PROPERLY UPDATED ANYMORE WHEN APPROACHING "LOW LIMITS" (~8 MB ON IPAD 1)
              *
-             * 2) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED
-             *    - CURRENTLY: NOT USEFUL
+             * 2) INVESTIGATE ON OSX:
+             *    - "FREE MEMORY": TOTALLY CHAOTIC BEHAVIOR (PROBABLY A SIDE-EFFECT OF "MODERN DESKTOP MEMORY MANAGEMENT")
+             *    - "USED MEMORY":
+             *      - BIGGER BY A FACTOR OF ~3
+             *        - COMPARED TO WHAT'S SHOWN IN "INSTRUMENTS" A EXPECTED CONSUMPTION:
+             *        - TESTED ON OSX 10.9.5 / 64-BIT BUILD
+             *
+             * 3) DECIDE IF "TOTAL MEMORY" WORTHS BEING USED
+             *    - CURRENTLY:
+             *      - PROBABLY NOT ACCURATE
+             *      - NOT USEFUL ANYWAY
              */
             
             int64_t freeMemory = vmstat.free_count * pagesize;
@@ -81,7 +99,7 @@ namespace chronotext
             }
             else
             {
-                return Info(freeMemory, totalMemory, usedMemory);
+                return Info(freeMemory, totalMemory, usedMemory / 3); // XXX: SEE EARLIER COMMENTS
             }
         }
         
