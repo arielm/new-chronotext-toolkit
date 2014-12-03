@@ -7,6 +7,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CHR_SRC)
 
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Log.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/DisplayHelper.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/Context.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/SystemManagerBase.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderDelegate.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderSketch.cpp

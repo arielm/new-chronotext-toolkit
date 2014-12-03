@@ -6,6 +6,24 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) TODOS IN getInfo()
+ *
+ * 2) CHECK HOW IT PERFORMS WITH MULTIPLE THREADS
+ *    - task_info.resident_size IS APPARENTLY THREAD-SPECIFIC
+ *    - SOME INTEGRATION WITH TaskManager MIGHT BE NECESSARY
+ *    - ETC.
+ */
+
+/*
+ * PREVIOUS TESTABLE MILESTONE:
+ *
+ * - https://github.com/arielm/new-chronotext-toolkit/blob/ffa9f658e609f13bf969a17fc76beba3dbe22735/src/chronotext/android/system/MemoryManager.cpp
+ * - https://github.com/arielm/chronotext-playground/blob/486d4c4ac02a5e471ed5a1b1cc1cee16bc1044fe/Sketches/ContextRework/src/TestingMemory.h
+ */
+
 #include "MemoryManager.h"
 
 #include "chronotext/system/SystemManager.h"
@@ -15,13 +33,6 @@
 #import <mach/mach_host.h>
 #import <mach/task_info.h>
 #import <mach/task.h>
-
-/*
- * PREVIOUS TESTABLE MILESTONE:
- *
- * - https://github.com/arielm/new-chronotext-toolkit/blob/ffa9f658e609f13bf969a17fc76beba3dbe22735/src/chronotext/android/system/MemoryManager.cpp
- * - https://github.com/arielm/chronotext-playground/blob/486d4c4ac02a5e471ed5a1b1cc1cee16bc1044fe/Sketches/ContextRework/src/TestingMemory.h
- */
 
 namespace chronotext
 {
@@ -89,7 +100,7 @@ namespace chronotext
              *      - NOT ACCURATE AND USELESS
              *    - "USED MEMORY":
              *      - BIGGER BY A FACTOR OF ~3
-             *        - COMPARED TO WHAT'S SHOWN IN "INSTRUMENTS" A EXPECTED CONSUMPTION:
+             *        - COMPARED TO WHAT'S SHOWN IN "INSTRUMENTS" OR THE EXPECTED CONSUMPTION
              *        - TESTED ON OSX 10.9.5 / 64-BIT BUILD
              */
             

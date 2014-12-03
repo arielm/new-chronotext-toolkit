@@ -7,9 +7,9 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
+#include "chronotext/system/Context.h"
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/FileSystem.h"
-#include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 #include "chronotext/utils/Utils.h"
 
@@ -100,9 +100,7 @@ namespace chronotext
         
         // ---
         
-        /*
-         * TODO: INIT CONTEXT
-         */
+        context::init(); // TODO: HANDLE FAILURE
         
         setSketch(createSketch());
     }
@@ -137,9 +135,7 @@ namespace chronotext
         sketch->shutdown();
         setSketch(nullptr);
         
-        /*
-         * TODO: UN-INIT CONTEXT
-         */
+        context::uninit();
     }
     
     void CinderDelegate::resize(int width, int height)

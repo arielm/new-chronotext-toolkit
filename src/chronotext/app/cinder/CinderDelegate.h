@@ -31,7 +31,8 @@ namespace chronotext
         virtual void sendMessageToSketch(int what, const std::string &body = "");
 
         virtual void applyDefaultSettings(Settings *settings);
-        void prepareSettings(Settings *settings) override;
+        virtual void applySettings(Settings *settings) {}
+        void prepareSettings(Settings *settings) final;
 
         void setup() override;
         void shutdown() override;

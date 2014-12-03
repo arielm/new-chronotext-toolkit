@@ -24,16 +24,16 @@ namespace chronotext
         class ManagerBase
         {
         public:
-            Info info;
+            Info info; // XXX
 
-            static ManagerBase* instance();
+            virtual ~ManagerBase() {}
             
             virtual std::string getIpAddress(bool maskForBroadcast = false);
             
-        protected:
-            ManagerBase();
-            ~ManagerBase() {}
+            bool init();
+            void uninit();
             
+        protected:
             virtual void updateInfo();
             
             virtual std::string getOsVersionString();

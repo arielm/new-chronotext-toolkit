@@ -8,6 +8,7 @@
 
 #include "SystemManagerBase.h"
 
+#include "chronotext/system/Context.h"
 #include "chronotext/utils/Utils.h"
 
 #if !defined(ANDROID)
@@ -23,8 +24,6 @@ namespace chronotext
 {
     namespace system
     {
-        class Manager;
-        
         Platform getPlatform()
         {
 #if defined(CINDER_MAC)
@@ -45,26 +44,19 @@ namespace chronotext
             return PLATFORM_NAMES[getPlatform()];
         }
         
-#if defined(CINDER_MAC) || defined(CINDER_MSW)
-        
         Info getInfo()
         {
-            return ManagerBase::instance()->info;
+            return context::systemManager()->info;
         }
         
-#endif
-        
-        // ---
-        
-        ManagerBase* ManagerBase::instance()
-        {
-            static ManagerBase instance; // XXX
-            return &instance;
-        }
-        
-        ManagerBase::ManagerBase()
+        bool ManagerBase::init() // TODO: CHECK IF ALREADY INITIALIZED
         {
             updateInfo();
+            return true;
+        }
+        
+        void ManagerBase::uninit()
+        {
         }
         
 #pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------

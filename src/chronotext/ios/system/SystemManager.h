@@ -17,14 +17,11 @@ namespace chronotext
         class Manager : public ManagerBase
         {
         public:
-            static Manager* instance();
             
         protected:
-            Manager();
+            void updateInfo() override;
             
-            void updateInfo();
-            
-            std::string getDeviceString();
+            std::string getDeviceString() override;
             
             std::string getModel();
             std::string getMachine();

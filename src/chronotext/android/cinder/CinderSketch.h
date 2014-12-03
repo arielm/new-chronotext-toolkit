@@ -49,7 +49,4 @@ namespace chronotext
         std::shared_ptr<chr::FrameClock> mClock;
         ci::TimelineRef mTimeline;
     };
-    
-    CinderSketch* createSketch();
-    void destroySketch(CinderSketch *sketch);
 }

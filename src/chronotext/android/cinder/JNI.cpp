@@ -132,5 +132,3 @@ void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject 
         context::delegate->sendMessageToSketch(what);
     }
 }
-
-#undef LOGE

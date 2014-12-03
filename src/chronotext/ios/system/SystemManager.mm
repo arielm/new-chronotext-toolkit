@@ -19,24 +19,6 @@ namespace chronotext
 {
     namespace system
     {
-        Info getInfo()
-        {
-            return Manager::instance()->info;
-        }
-        
-        Manager* Manager::instance()
-        {
-            static Manager instance; // XXX
-            return &instance;
-        }
-        
-        Manager::Manager()
-        {
-            updateInfo();
-        }
-        
-#pragma mark ---------------------------------------- INFO ----------------------------------------
-        
         void Manager::updateInfo()
         {
             /*

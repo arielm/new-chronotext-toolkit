@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/app/cinder/CinderDelegate.h"
+#include "chronotext/system/Context.h"
 #include "chronotext/system/DisplayHelper.h"
 #include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/Utils.h"
@@ -66,15 +67,18 @@ namespace chronotext
     void CinderDelegate::prepareSettings(Settings *settings)
     {
         applyDefaultSettings(settings);
+        applySettings(settings);
+        
+        /*
+         * TODO: CONSIDER INITIALIZING CONTEXT FROM HERE
+         */
     }
 
     // ---
     
     void CinderDelegate::setup()
     {
-        /*
-         * TODO: INIT CONTEXT
-         */
+        context::init(); // TODO: HANDLE FAILURE
         
         /*
          * SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
@@ -105,9 +109,7 @@ namespace chronotext
         sketch->shutdown();
         setSketch(nullptr);
         
-        /*
-         * TODO: UN-INIT CONTEXT
-         */
+        context::uninit();
     }
     
     void CinderDelegate::resize()
