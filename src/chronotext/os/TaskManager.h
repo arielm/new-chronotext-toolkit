@@ -44,14 +44,16 @@ namespace chronotext
         }
 
         template <typename F>
-        inline void post(F &&fn, bool forceSync = false)
+        inline void post(const F &fn, bool forceSync = false)
         {
             if (forceSync)
             {
                 fn();
             }
-            
-            io.post(std::forward<F>(fn));
+            else
+            {
+                io.post(fn);
+            }
         }
         
         /*

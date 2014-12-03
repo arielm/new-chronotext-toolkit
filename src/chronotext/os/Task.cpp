@@ -132,8 +132,8 @@ namespace chronotext
     }
     
     template <typename F>
-    void Task::post(F &&fn)
+    void Task::post(const F &fn)
     {
-        manager->post(forward<F>(fn), synchronous);
+        manager->post(fn, synchronous);
     }
 }

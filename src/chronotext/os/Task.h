@@ -17,17 +17,19 @@
  *    - NEW WAY TO RUN SYNCHRONOUS TASKS VIA performRun
  *    - IS NEW Task::post PROPERLY ACCESSIBLE FROM SUB-CLASSES?
  *
- * 2) TRY TO REPLACE cinder::sleep() BY:
+ * 2) SEE TODOS IN os/Handler REGARDING PostBase CLASS
+ *
+ * 3) TRY TO REPLACE cinder::sleep() BY:
  *    - boost::this_thread::sleep()
  *    - OR EVEN BETTER: A PURE C++11 STL SOLUTION
  *
- * 3) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_lock
+ * 4) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_lock
  *
- * 4) SEE IF THE NEW C++11 std::thread_local CAN BE USED FOR THE FOLLOWING "STORAGE":
+ * 5) SEE IF THE NEW C++11 std::thread_local CAN BE USED FOR THE FOLLOWING "STORAGE":
  *    - bool cancelRequired
  *    - std::shared_ptr<TaskManager> manager
  *
- * 5) IMPLEMENT THREAD ATTACHMENT/DETACHMENT TO/FROM JAVA ON ANDROID
+ * 6) IMPLEMENT THREAD ATTACHMENT/DETACHMENT TO/FROM JAVA ON ANDROID
  *    - STUDY JNI'S AttachCurrentThread / DetachCurrentThread
  */
 
@@ -73,7 +75,7 @@ namespace chronotext
         void performDetach();
         
         template <typename F>
-        void post(F &&fn);
+        void post(const F &fn);
     };
 }
 
