@@ -7,9 +7,12 @@
  */
 
 #include "chronotext/font/zf/FontManager.h"
+#include "chronotext/system/SystemManager.h"
 #include "chronotext/utils/Utils.h"
 
 #include "cinder/gl/gl.h"
+
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 using namespace ci;
@@ -18,34 +21,12 @@ namespace chronotext
 {
     namespace zf
     {
-        enum
-        {
-            PLATFORM_OSX,
-            PLATFORM_WINDOW,
-            PLATFORM_IOS,
-            PLATFORM_ANDROID
-        };
-        
-        const string PLATFORM_NAMES[4] = {"osx", "windows", "ios", "android"};
-        
         FontManager::FontManager()
         :
         ftHelper(make_shared<FreetypeHelper>()),
         itemizer(langHelper),
         hasDefaultFont(false)
-        {
-#if defined(CINDER_MAC)
-            platform = PLATFORM_OSX;
-#elif defined(CINDER_MSW)
-            platform = PLATFORM_WINDOW;
-#elif defined(CINDER_COCOA_TOUCH)
-            platform = PLATFORM_IOS;
-#elif defined(CINDER_ANDROID)
-            platform = PLATFORM_ANDROID;
-#else
-            assert(false);
-#endif
-        }
+        {}
         
         void FontManager::loadConfig(InputSourceRef source)
         {
@@ -98,7 +79,7 @@ namespace chronotext
                             {
                                 auto os = refElement->getAttributeValue<string>("os", "");
                                 
-                                if (os == PLATFORM_NAMES[platform])
+                                if (boost::iequals(os, system::platformName()))
                                 {
                                     auto uri = refElement->getAttributeValue<string>("uri", "");
                                     

@@ -18,7 +18,7 @@ namespace chronotext
 {
     namespace system
     {
-        Platform getPlatform()
+        Platform platform()
         {
 #if defined(CINDER_MAC)
             return PLATFORM_OSX;
@@ -32,13 +32,13 @@ namespace chronotext
             throw EXCEPTION(Manager, "UNSUPPORTED PLATFORM");
         }
         
-        string getPlatformString()
+        string platformName()
         {
             static const string PLATFORM_NAMES[4] = {"OSX", "Windows", "iOS", "Android"};
-            return PLATFORM_NAMES[getPlatform()];
+            return PLATFORM_NAMES[platform()];
         }
         
-        Info getInfo()
+        Info info()
         {
             return context::systemManager()->info;
         }
@@ -58,8 +58,8 @@ namespace chronotext
         
         void ManagerBase::updateInfo()
         {
-            info.platform = getPlatform();
-            info.platformString = getPlatformString();
+            info.platform = platform();
+            info.platformString = platformName();
             
             info.osVersionString = getOsVersionString();
             info.deviceString = getDeviceString();

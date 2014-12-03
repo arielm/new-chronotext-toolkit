@@ -20,7 +20,7 @@ namespace chronotext
 {
     namespace system
     {
-        string android::getProperty(const char *name)
+        string android::property(const char *name)
         {
             static char tmp[256];
             auto len = __system_property_get(name, tmp);
@@ -63,7 +63,7 @@ namespace chronotext
         
         string Manager::getOsVersionString()
         {
-            return android::getProperty("ro.build.version.release");
+            return android::property("ro.build.version.release");
         }
         
         string Manager::getDeviceString()
@@ -73,12 +73,12 @@ namespace chronotext
         
         string Manager::getModel()
         {
-            return android::getProperty("ro.product.model");
+            return android::property("ro.product.model");
         }
         
         string Manager::getManufacturer()
         {
-            return android::getProperty("ro.product.manufacturer");
+            return android::property("ro.product.manufacturer");
         }
     }
 }

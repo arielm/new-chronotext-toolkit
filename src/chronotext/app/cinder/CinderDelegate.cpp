@@ -8,8 +8,6 @@
 
 #include "chronotext/app/cinder/CinderDelegate.h"
 #include "chronotext/system/Context.h"
-#include "chronotext/system/DisplayHelper.h"
-#include "chronotext/system/SystemInfo.h"
 #include "chronotext/utils/Utils.h"
 
 #include "cinder/Json.h"

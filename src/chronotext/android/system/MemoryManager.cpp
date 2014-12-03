@@ -8,7 +8,6 @@
 
 #include "MemoryManager.h"
 
-#include "chronotext/system/Context.h"
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
 
@@ -17,7 +16,7 @@
 /*
  * TODO:
  *
- * 1) SEE TODO'S IN updateInfo()
+ * 1) SEE TODO'S IN getInfo()
  *
  * 2) IMPLEMENT "AUTOMATIC MEMORY WARNING":
  *    - OPTION 1:
@@ -76,7 +75,7 @@ namespace chronotext
          * 1) INFER "RATIO" BY MEASURING THE FREE MEMORY AS CLOSE AS APP-STARTUP
          */
         
-        Info Manager::updateInfo()
+        Info Manager::getInfo()
         {
             /*
              * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD

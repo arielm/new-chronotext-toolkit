@@ -92,8 +92,6 @@ namespace chronotext
             friend class VirtualFont;
             
         protected:
-            int platform;
-            
             bool hasDefaultFont;
             std::string defaultFontName;
             VirtualFont::Style defaultFontStyle;

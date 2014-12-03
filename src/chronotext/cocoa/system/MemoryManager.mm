@@ -9,7 +9,7 @@
 /*
  * TODO:
  *
- * 1) TODOS BELOW
+ * 1) TODOS IN getInfo()
  *
  * 2) CHECK HOW IT PERFORMS WITH MULTIPLE THREADS
  *    - task_info.resident_size IS APPARENTLY THREAD-SPECIFIC
@@ -59,7 +59,7 @@ namespace chronotext
          * - http://miknight.blogspot.co.il/2005/11/resident-set-size-in-mac-os-x.html
          */
 
-        Info Manager::updateInfo()
+        Info Manager::getInfo()
         {
             int mib[6];
             mib[0] = CTL_HW;
@@ -122,11 +122,11 @@ namespace chronotext
             int64_t usedMemory = info.resident_size;
             double ratio = 0;
             
-            if (system::getPlatform() == system::PLATFORM_IOS)
+            if (system::platform() == system::PLATFORM_IOS)
             {
                 ratio = usedMemory / double(freeMemory + usedMemory);
             }
-            else if (system::getPlatform() == system::PLATFORM_OSX)
+            else if (system::platform() == system::PLATFORM_OSX)
             {
                 usedMemory /= 3; // XXX
             }

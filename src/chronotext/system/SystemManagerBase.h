@@ -14,17 +14,17 @@ namespace chronotext
 {
     namespace system
     {
-        Platform getPlatform();
-        std::string getPlatformString();
+        Platform platform();
+        std::string platformName();
 
-        Info getInfo();
+        Info info();
 
         // ---
         
         class ManagerBase
         {
         public:
-            Info info; // TODO: SHOULD BE PROTECTED
+            Info info; // XXX: NOT ACCESSIBLE FROM system::info() IF PROTECTED
 
             virtual ~ManagerBase() {}
             

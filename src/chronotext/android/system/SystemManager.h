@@ -29,7 +29,7 @@ namespace chronotext
              * adb shell getprop ro.product.manufacturer
              */
             
-            std::string getProperty(const char *name);
+            std::string property(const char *name);
         }
         
         class Manager : public ManagerBase

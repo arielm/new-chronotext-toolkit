@@ -20,6 +20,7 @@
 
 #include "chronotext/system/SystemManager.h"
 #include "chronotext/system/MemoryManager.h"
+#include "chronotext/system/DisplayHelper.h"
 
 namespace chronotext
 {

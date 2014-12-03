@@ -17,22 +17,22 @@ namespace chronotext
 {
     namespace memory
     {
-        Info getInfo()
+        Info info()
         {
-            return context::memoryManager()->updateInfo();
+            return context::memoryManager()->getInfo();
         }
         
         // ---
         
         bool ManagerBase::init()
         {
-            LOGI << "MEMORY INFO: " << updateInfo() << endl;
+            LOGI << "MEMORY INFO: " << getInfo() << endl;
             return true;
         }
         
         void ManagerBase::uninit()
         {
-            LOGI << "MEMORY INFO: " << updateInfo() << endl;
+            LOGI << "MEMORY INFO: " << getInfo() << endl;
         }
     }
 }

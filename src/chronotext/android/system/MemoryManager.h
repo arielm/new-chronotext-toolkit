@@ -28,7 +28,7 @@ namespace chronotext
             Manager();
             ~Manager() override;
             
-            Info updateInfo() override;
+            Info getInfo() override;
         };
     }
 }

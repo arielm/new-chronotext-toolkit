@@ -25,7 +25,7 @@ namespace chronotext
 {
     namespace memory
     {
-        Info getInfo();
+        Info info();
 
         // ---
         
@@ -37,7 +37,7 @@ namespace chronotext
             virtual bool init();
             virtual void uninit();
 
-            virtual Info updateInfo() = 0;
+            virtual Info getInfo() = 0;
         };
     }
 }
