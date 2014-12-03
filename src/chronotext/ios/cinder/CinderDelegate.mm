@@ -81,12 +81,8 @@ using namespace chr;
         
         // ---
         
-        /*
-         * TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
-         */
-        
         sketch = chr::createSketch();
-        sketch->context = self;
+        sketch->setDelegate(self);
     }
     
     return self;
@@ -286,6 +282,7 @@ using namespace chr;
     
     switch (viewController.interfaceOrientation)
     {
+        case UIDeviceOrientationUnknown:
         case UIInterfaceOrientationPortrait:
         case UIInterfaceOrientationPortraitUpsideDown:
             size.x = view.frame.size.width;
@@ -323,6 +320,7 @@ using namespace chr;
     
     switch (viewController.interfaceOrientation)
     {
+        case UIDeviceOrientationUnknown:
         case UIInterfaceOrientationPortrait:
             ax = +acceleration.x;
             ay = +acceleration.y;

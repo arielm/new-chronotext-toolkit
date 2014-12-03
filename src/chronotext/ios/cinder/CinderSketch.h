@@ -42,11 +42,12 @@ namespace chronotext
         void action(int actionId);
         void sendMessageToDelegate(int what, const std::string &body = "");
         
-//  protected:
-        void *context;
-        void *delegate;
+        void* getDelegate() const;
+        void setDelegate(void *delegate);
         
     protected:
+        void *delegate;
+        
         std::shared_ptr<chr::FrameClock> mClock;
         ci::TimelineRef mTimeline;
     };

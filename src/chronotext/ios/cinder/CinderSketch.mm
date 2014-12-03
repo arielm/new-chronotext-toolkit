@@ -16,63 +16,67 @@ using namespace app;
 
 namespace chronotext
 {
-    static CinderDelegate* getContext(void *context)
-    {
-        return static_cast<CinderDelegate*>(context);
-    }
-    
-    static CinderDelegate* getDelegate(void *delegate)
-    {
-        return static_cast<CinderDelegate*>(delegate);
-    }
-    
     CinderSketch::CinderSketch()
     :
     CinderSketchBase(),
-    context(nullptr),
     delegate(nullptr),
     mClock(FrameClock::create()),
     mTimeline(Timeline::create())
     {}
     
+    void* CinderSketch::getDelegate() const
+    {
+        return delegate;
+    }
+    
+    void CinderSketch::setDelegate(void *delegate)
+    {
+        this->delegate = delegate;
+    }
+    
+    static CinderDelegate* castToDelegate(void *delegate)
+    {
+        return static_cast<CinderDelegate*>(delegate);
+    }
+
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
     
     boost::asio::io_service& CinderSketch::io_service() const
     {
-        return *(getContext(context).io);
+        return *(castToDelegate(delegate).io);
     }
     
     double CinderSketch::getElapsedSeconds() const
     {
-        return getContext(context).elapsedSeconds;
+        return castToDelegate(delegate).elapsedSeconds;
     }
     
     uint32_t CinderSketch::getElapsedFrames() const
     {
-        return getContext(context).elapsedFrames;
+        return castToDelegate(delegate).elapsedFrames;
     }
     
     bool CinderSketch::isEmulated() const
     {
-        return getContext(context).emulated;
+        return castToDelegate(delegate).emulated;
     }
     
     DisplayInfo CinderSketch::getDisplayInfo() const
     {
-        return getContext(context).displayInfo;
+        return castToDelegate(delegate).displayInfo;
     }
     
     WindowInfo CinderSketch::getWindowInfo() const
     {
-        return getContext(context).windowInfo;
+        return castToDelegate(delegate).windowInfo;
     }
 
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
     
     void CinderSketch::enableAccelerometer(float updateFrequency, float filterFactor)
     {
-        getContext(context).accelFilter = AccelEvent::Filter(filterFactor);
+        castToDelegate(delegate).accelFilter = AccelEvent::Filter(filterFactor);
         
         if (updateFrequency <= 0)
         {
@@ -80,7 +84,7 @@ namespace chronotext
         }
         
         [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1 / updateFrequency)];
-        [[UIAccelerometer sharedAccelerometer] setDelegate:getContext(context)];
+        [[UIAccelerometer sharedAccelerometer] setDelegate:castToDelegate(delegate)];
     }
     
     void CinderSketch::disableAccelerometer()
@@ -114,28 +118,22 @@ namespace chronotext
         }
     }
     
-#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
+#pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------
     
     void CinderSketch::action(int actionId)
     {
-        if (delegate)
-        {
-            [getDelegate(delegate) action:actionId];
-        }
+        [castToDelegate(delegate) action:actionId];
     }
     
     void CinderSketch::sendMessageToDelegate(int what, const string &body)
     {
-        if (delegate)
+        if (body.empty())
         {
-            if (body.empty())
-            {
-                [getDelegate(delegate) receiveMessageFromSketch:what body:nil];
-            }
-            else
-            {
-                [getDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
-            }
+            [castToDelegate(delegate) receiveMessageFromSketch:what body:nil];
+        }
+        else
+        {
+            [castToDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
         }
     }
 }

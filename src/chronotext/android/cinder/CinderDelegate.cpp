@@ -43,7 +43,7 @@ namespace chronotext
         if (newSketch)
         {
             sketch = newSketch;
-            sketch->context = sketch->delegate = this; // TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
+            sketch->setDelegate(this);
             sketchCreated(sketch);
         }
     }

@@ -45,7 +45,7 @@ namespace chronotext
         if (newSketch)
         {
             sketch = newSketch;
-            sketch->context = this; // TEMPORARY, UNTIL TRANSITION TO chr::context IS OVER
+            sketch->setDelegate(this);
             sketchCreated(sketch);
         }
     }
@@ -132,9 +132,6 @@ namespace chronotext
         /*
          * MUST BE CALLED BEFORE Sketch::update
          * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
-         *
-         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
          */
         double now = sketch->clock().getTime();
         
