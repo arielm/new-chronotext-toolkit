@@ -35,7 +35,7 @@ enum
 
 @property (nonatomic, assign) GLKView *view;
 @property (nonatomic, assign) GLViewController *viewController;
-@property (nonatomic, assign) chr::CinderSketch *sketch;
+@property (nonatomic, readonly) chr::CinderSketch *sketch;
 @property (nonatomic, assign) AccelEvent::Filter accelFilter;
 @property (nonatomic, readonly) std::shared_ptr<boost::asio::io_service> &io;
 @property (nonatomic, readonly) chr::DisplayInfo displayInfo;

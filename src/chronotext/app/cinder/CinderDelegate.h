@@ -21,12 +21,11 @@ namespace chronotext
     public:
         CinderDelegate();
 
+        CinderSketch* getSketch();
+
         virtual void sketchCreated(CinderSketch *sketch) {}
         virtual void sketchDestroyed(CinderSketch *sketch) {}
 
-        virtual CinderSketch* getSketch();
-        virtual void setSketch(CinderSketch *sketch);
-        
         virtual void action(int actionId) {}
         virtual void receiveMessageFromSketch(int what, const std::string &body) {}
         virtual void sendMessageToSketch(int what, const std::string &body = "");
@@ -71,6 +70,8 @@ namespace chronotext
         
         DisplayInfo realDisplayInfo;
         WindowInfo realWindowInfo;
+
+        void setSketch(CinderSketch *sketch);
 
         void updateRealDisplayInfo();
         void updateRealWindowInfo();

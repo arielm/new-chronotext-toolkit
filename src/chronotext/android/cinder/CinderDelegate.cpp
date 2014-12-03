@@ -100,6 +100,10 @@ namespace chronotext
         
         // ---
         
+        /*
+         * TODO: INIT CONTEXT
+         */
+        
         setSketch(createSketch());
     }
     
@@ -132,6 +136,10 @@ namespace chronotext
         
         sketch->shutdown();
         setSketch(nullptr);
+        
+        /*
+         * TODO: UN-INIT CONTEXT
+         */
     }
     
     void CinderDelegate::resize(int width, int height)
@@ -265,17 +273,6 @@ namespace chronotext
         return displayInfo;
     }
     
-    /*
-     * TODO: SHOULD BE PART OF DisplayHelper?
-     */
-    
-    int CinderDelegate::getDisplayRotation()
-    {
-        JNIEnv *env = jvm::env();
-        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
-        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
-    }
-    
 #pragma mark ---------------------------------------- IO SERVICE ----------------------------------------
 
     void CinderDelegate::startIOService()
@@ -384,7 +381,7 @@ namespace chronotext
     
     void CinderDelegate::handleAcceleration(ASensorEvent event)
     {
-        int displayRotation = getDisplayRotation(); // XXX
+        int displayRotation = getDisplayRotation();
 
         Vec3f transformed;
         canonicalToWorld(displayRotation, (float*)&event.acceleration.v, transformed);
@@ -395,6 +392,17 @@ namespace chronotext
         transformed *= Vec3f(-1, -1, +1) / ASENSOR_STANDARD_GRAVITY; // TODO: DOUBLE-CHECK Z AXIS
         
         sketch->accelerated(accelFilter.process(transformed));
+    }
+    
+    /*
+     * TODO: SHOULD BE PART OF DisplayHelper?
+     */
+    
+    int CinderDelegate::getDisplayRotation()
+    {
+        JNIEnv *env = jvm::env();
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
+        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------

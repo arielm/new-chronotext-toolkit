@@ -35,12 +35,11 @@ namespace chronotext
         
         CinderDelegate();
         virtual ~CinderDelegate() {}
-        
+
+        CinderSketch* getSketch();
+
         virtual void sketchCreated(CinderSketch *sketch) {}
         virtual void sketchDestroyed(CinderSketch *sketch) {}
-        
-        virtual CinderSketch* getSketch();
-        virtual void setSketch(CinderSketch *sketch);
         
         virtual void action(int actionId);
         virtual void receiveMessageFromSketch(int what, const std::string &body);
@@ -108,7 +107,7 @@ namespace chronotext
         
         AccelEvent::Filter accelFilter;
 
-        int getDisplayRotation();
+        void setSketch(CinderSketch *sketch);
 
         void start(int flags);
         void stop(int flags);
@@ -122,5 +121,6 @@ namespace chronotext
         void pollSensorEvents();
 
         void handleAcceleration(ASensorEvent event);
+        int getDisplayRotation();
     };
 }

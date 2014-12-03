@@ -73,6 +73,10 @@ namespace chronotext
     void CinderDelegate::setup()
     {
         /*
+         * TODO: INIT CONTEXT
+         */
+        
+        /*
          * SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
          * OTHERWISE: POTENTIAL HEIRS LIKE osx/cinder/CinderAdapter WILL CRASH
          */
@@ -100,6 +104,10 @@ namespace chronotext
         
         sketch->shutdown();
         setSketch(nullptr);
+        
+        /*
+         * TODO: UN-INIT CONTEXT
+         */
     }
     
     void CinderDelegate::resize()

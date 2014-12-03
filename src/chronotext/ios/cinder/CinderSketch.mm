@@ -71,7 +71,26 @@ namespace chronotext
     {
         return castToDelegate(delegate).windowInfo;
     }
-
+    
+#pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------
+    
+    void CinderSketch::action(int actionId)
+    {
+        [castToDelegate(delegate) action:actionId];
+    }
+    
+    void CinderSketch::sendMessageToDelegate(int what, const string &body)
+    {
+        if (body.empty())
+        {
+            [castToDelegate(delegate) receiveMessageFromSketch:what body:nil];
+        }
+        else
+        {
+            [castToDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
+        }
+    }
+    
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
     
     void CinderSketch::enableAccelerometer(float updateFrequency, float filterFactor)
@@ -115,25 +134,6 @@ namespace chronotext
         for (auto &touch : event.getTouches())
         {
             removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
-        }
-    }
-    
-#pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------
-    
-    void CinderSketch::action(int actionId)
-    {
-        [castToDelegate(delegate) action:actionId];
-    }
-    
-    void CinderSketch::sendMessageToDelegate(int what, const string &body)
-    {
-        if (body.empty())
-        {
-            [castToDelegate(delegate) receiveMessageFromSketch:what body:nil];
-        }
-        else
-        {
-            [castToDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
         }
     }
 }

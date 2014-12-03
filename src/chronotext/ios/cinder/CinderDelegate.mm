@@ -81,6 +81,10 @@ using namespace chr;
         
         // ---
         
+        /*
+         * TODO: INIT CONTEXT
+         */
+        
         sketch = chr::createSketch();
         sketch->setDelegate(self);
     }
@@ -95,6 +99,10 @@ using namespace chr;
     
     sketch->shutdown();
     chr::destroySketch(sketch);
+    
+    /*
+     * TODO: UN-INIT CONTEXT
+     */
     
     [super dealloc];
 }

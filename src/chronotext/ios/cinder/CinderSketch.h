@@ -19,6 +19,9 @@ namespace chronotext
     public:
         CinderSketch();
         
+        void* getDelegate() const;
+        void setDelegate(void *delegate);
+
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
         
@@ -32,18 +35,15 @@ namespace chronotext
         DisplayInfo getDisplayInfo() const;
         WindowInfo getWindowInfo() const;
 
+        void action(int actionId);
+        void sendMessageToDelegate(int what, const std::string &body = "");
+
         void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
         void disableAccelerometer();
 
         void touchesBegan(ci::app::TouchEvent event);
         void touchesMoved(ci::app::TouchEvent event);
         void touchesEnded(ci::app::TouchEvent event);
-
-        void action(int actionId);
-        void sendMessageToDelegate(int what, const std::string &body = "");
-        
-        void* getDelegate() const;
-        void setDelegate(void *delegate);
         
     protected:
         void *delegate;
