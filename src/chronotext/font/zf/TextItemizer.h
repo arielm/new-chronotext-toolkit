@@ -49,11 +49,11 @@ namespace chronotext
             static hb_script_t icuScriptToHB(UScriptCode script);
             static hb_direction_t icuDirectionToHB(UBiDiDirection direction);
 
-            TextItemizer(LangHelper &langHelper);
+            TextItemizer(std::shared_ptr<LangHelper> langHelper);
             void processLine(TextLine &line) const;
             
         protected:
-            LangHelper &langHelper;
+            std::shared_ptr<LangHelper> langHelper;
             
             void itemizeScriptAndLanguage(TextLine &line) const;
             void itemizeDirection(TextLine &line) const;

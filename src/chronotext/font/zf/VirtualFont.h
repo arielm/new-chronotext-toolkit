@@ -10,9 +10,9 @@
 
 #include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/font/zf/ActualFont.h"
-#include "chronotext/font/zf/LayoutCache.h"
-#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/font/zf/FontSequence.h"
+#include "chronotext/font/zf/LineLayout.h"
+#include "chronotext/font/zf/TextLine.h"
 
 #include <boost/range/iterator_range.hpp>
 
@@ -21,11 +21,12 @@
 
 namespace chronotext
 {
-    typedef class zf::VirtualFont ZFont;
-
     namespace zf
     {
         class FontManager;
+        class LayoutCache;
+        class TextItemizer;
+
         typedef std::vector<ActualFont*> FontSet;
         
         class VirtualFont
@@ -92,8 +93,8 @@ namespace chronotext
                 return Properties(baseSize, true, true, 1024);
             }
             
-            LayoutCache &layoutCache;
-            TextItemizer &itemizer;
+            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<TextItemizer> itemizer;
             
             ActualFont::Metrics getMetrics(const Cluster &cluster) const; // RETURNS THE SIZED METRICS OF THE ActualFont USED BY cluster
             ActualFont::Metrics getMetrics(const std::string &lang = "") const; // RETURNS THE SIZED METRICS OF THE FIRST ActualFont IN THE SET USED FOR lang
@@ -195,6 +196,8 @@ namespace chronotext
             bool clipQuad(Quad &quad, FontTexture *texture) const;
         };
     }
+    
+    typedef class zf::VirtualFont ZFont; // XXX
 }
 
 namespace chr = chronotext;

@@ -7,6 +7,8 @@
  */
 
 #include "chronotext/font/zf/FontManager.h"
+#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/system/SystemManager.h"
 #include "chronotext/utils/Utils.h"
 
@@ -17,6 +19,10 @@
 using namespace std;
 using namespace ci;
 
+//class LangHelper;
+//class LayoutCache;
+//class TextItemizer;
+
 namespace chronotext
 {
     namespace zf
@@ -24,7 +30,9 @@ namespace chronotext
         FontManager::FontManager()
         :
         ftHelper(make_shared<FreetypeHelper>()),
-        itemizer(langHelper),
+        langHelper(make_shared<LangHelper>()),
+        layoutCache(make_shared<LayoutCache>()),
+        itemizer(make_shared<TextItemizer>(langHelper)),
         hasDefaultFont(false)
         {}
         
@@ -281,7 +289,7 @@ namespace chronotext
         
         void FontManager::unload()
         {
-            layoutCache.clear();
+            layoutCache->clear();
             
             for (auto &it : actualFonts)
             {

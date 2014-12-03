@@ -8,6 +8,8 @@
 
 #include "chronotext/font/zf/VirtualFont.h"
 #include "chronotext/font/zf/FontManager.h"
+#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/TextItemizer.h"
 
 #include "cinder/gl/gl.h"
 
@@ -193,7 +195,7 @@ namespace chronotext
         LineLayout* VirtualFont::createLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
         {
             TextLine line(text, langHint, overallDirection);
-            itemizer.processLine(line);
+            itemizer->processLine(line);
             return createLineLayout(line, boost::make_iterator_range(line.runs));
         }
         
@@ -307,7 +309,7 @@ namespace chronotext
         
         shared_ptr<LineLayout> VirtualFont::getCachedLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
         {
-            return layoutCache.getLineLayout(this, text, langHint, overallDirection);
+            return layoutCache->getLineLayout(this, text, langHint, overallDirection);
         }
         
         void VirtualFont::preload(LineLayout &layout)

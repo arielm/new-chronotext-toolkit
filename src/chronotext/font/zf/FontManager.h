@@ -17,13 +17,18 @@ namespace chronotext
 {
     namespace zf
     {
+        class LangHelper;
+        class LayoutCache;
+        class TextItemizer;
+        
         class FontManager
         {
         public:
             std::shared_ptr<FreetypeHelper> ftHelper; // THE UNDERLYING FT_Library WILL BE DESTROYED AFTER ALL THE ActualFont INSTANCES
-            LangHelper langHelper;
-            LayoutCache layoutCache;
-            TextItemizer itemizer;
+            
+            std::shared_ptr<LangHelper> langHelper;
+            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<TextItemizer> itemizer;
             
             FontManager();
             
