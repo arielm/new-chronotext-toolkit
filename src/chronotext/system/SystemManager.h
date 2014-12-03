@@ -20,14 +20,6 @@
 
 #else
 
-#include "chronotext/system/SystemManagerBase.h"
-
-namespace chronotext
-{
-    namespace system
-    {
-        typedef ManagerBase Manager;
-    }
-}
+#include "chronotext/app/system/SystemManager.h"
 
 #endif

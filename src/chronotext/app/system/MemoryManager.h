@@ -8,15 +8,13 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
+#include "chronotext/system/MemoryManagerBase.h"
 
-#if !defined(CINDER_ANDROID)
+#if !defined(CINDER_MSW)
 
 #error UNSUPPORTED PLATFORM
 
 #endif
-
-#include "chronotext/system/MemoryManagerBase.h"
 
 namespace chronotext
 {

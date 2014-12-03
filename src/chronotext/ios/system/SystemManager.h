@@ -8,6 +8,14 @@
 
 #pragma once
 
+#include "cinder/Cinder.h"
+
+#if !defined(CINDER_COCOA_TOUCH)
+
+#error UNSUPPORTED PLATFORM
+
+#endif
+
 #include "chronotext/system/SystemManagerBase.h"
 
 namespace chronotext
@@ -17,10 +25,15 @@ namespace chronotext
         class Manager : public ManagerBase
         {
         public:
+            Manager();
+            ~Manager() override;
+            
+            std::string getIpAddress(bool maskForBroadcast = false); // TODO
             
         protected:
             void updateInfo() override;
             
+            std::string getOsVersionString() override;
             std::string getDeviceString() override;
             
             std::string getModel();

@@ -9,11 +9,17 @@
 #include "chronotext/Log.h"
 
 #if defined(CINDER_MSW)
+
 #include "cinder/msw/OutputDebugStringStream.h"
+
 #elif defined(CINDER_ANDROID)
+
 #include "cinder/android/LogStream.h"
+
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
+
 #include "chronotext/utils/SyslogStringStream.h"
+
 #endif
 
 using namespace std;
@@ -24,13 +30,13 @@ namespace chronotext
     ostream& Log::cout()
     {
 #if defined(CINDER_MSW)
-        static msw::dostream COUT;
+        static ci::msw::dostream COUT;
         return COUT;
 #elif defined(CINDER_ANDROID)
-        static android::dostream COUT;
+        static ci::android::dostream COUT;
         return COUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-        static mac::dostream COUT;
+        static ci::mac::dostream COUT;
         return COUT;
 #else
         return std::cout;

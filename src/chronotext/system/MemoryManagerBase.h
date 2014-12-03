@@ -7,14 +7,6 @@
  */
 
 /*
- * DUMMY IMPLEMENTATION:
- *
- * 1) NECESSARY PLACEHOLDER ON WINDOWS (NOT IMPLEMENTED YET)
- *
- * 2) NECESSARY BASE FOR "COMPLEX MULTI-PLATFORM INHERITANCE" (CF MemoryManager)
- */
-
-/*
  * DEVELOPED AND TESTED VIA THE ContextRework PROJECT IN THE chronotext-playground REPOSITORY:
  * https://github.com/arielm/chronotext-playground/blob/master/Sketches/ContextRework/src/TestingMemory.h
  *
@@ -39,9 +31,13 @@ namespace chronotext
         
         class ManagerBase
         {
-        protected:
-            ManagerBase() {}
-            ~ManagerBase() {}
+        public:
+            virtual ~ManagerBase() {}
+            
+            virtual bool init();
+            virtual void uninit();
+
+            virtual Info updateInfo() = 0;
         };
     }
 }

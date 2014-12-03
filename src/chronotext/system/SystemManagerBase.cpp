@@ -11,12 +11,6 @@
 #include "chronotext/system/Context.h"
 #include "chronotext/utils/Utils.h"
 
-#if !defined(ANDROID)
-
-#include "cinder/System.h"
-
-#endif
-
 using namespace std;
 using namespace ci;
 
@@ -48,46 +42,19 @@ namespace chronotext
         {
             return context::systemManager()->info;
         }
+
+        // ---
         
-        bool ManagerBase::init() // TODO: CHECK IF ALREADY INITIALIZED
+        bool ManagerBase::init()
         {
             updateInfo();
+            
+            LOGI << "SYSTEM INFO: " << info << endl;
+            
             return true;
         }
         
-        void ManagerBase::uninit()
-        {
-        }
-        
-#pragma mark ---------------------------------------- RUNTIME METHODS ----------------------------------------
-        
-#if defined(ANDROID)
-        
-        string ManagerBase::getIpAddress(bool maskForBroadcast)
-        {
-            return "";
-        }
-        
-#else
-        
-        string ManagerBase::getIpAddress(bool maskForBroadcast)
-        {
-            string host = System::getIpAddress();
-            
-            if (maskForBroadcast)
-            {
-                if (host.rfind('.') != string::npos)
-                {
-                    host.replace(host.rfind('.') + 1, 3, "255");
-                }
-            }
-            
-            return host;
-        }
-        
-#endif
-        
-#pragma mark ---------------------------------------- INFO ----------------------------------------
+        // ---
         
         void ManagerBase::updateInfo()
         {
@@ -96,27 +63,6 @@ namespace chronotext
             
             info.osVersionString = getOsVersionString();
             info.deviceString = getDeviceString();
-        }
-        
-#if defined(ANDROID)
-        
-        string ManagerBase::getOsVersionString()
-        {
-            return "";
-        }
-        
-#else
-        
-        string ManagerBase::getOsVersionString()
-        {
-            return ci::toString(System::getOsMajorVersion()) + "." + ci::toString(System::getOsMinorVersion()) + "." + ci::toString(System::getOsBugFixVersion());
-        }
-        
-#endif
-        
-        string ManagerBase::getDeviceString()
-        {
-            return "";
         }
     }
 }

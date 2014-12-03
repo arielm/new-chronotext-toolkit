@@ -9,7 +9,7 @@
 /*
  * TODO:
  *
- * 1) TODOS IN getInfo()
+ * 1) TODOS BELOW
  *
  * 2) CHECK HOW IT PERFORMS WITH MULTIPLE THREADS
  *    - task_info.resident_size IS APPARENTLY THREAD-SPECIFIC
@@ -26,7 +26,7 @@
 
 #include "MemoryManager.h"
 
-#include "chronotext/system/SystemManager.h"
+#include "chronotext/system/Context.h"
 
 #import <sys/sysctl.h>
 #import <mach/host_info.h>
@@ -34,10 +34,24 @@
 #import <mach/task_info.h>
 #import <mach/task.h>
 
+using namespace std;
+
 namespace chronotext
 {
     namespace memory
     {
+        Manager::Manager()
+        {
+            init();
+        }
+        
+        Manager::~Manager()
+        {
+            uninit();
+        }
+
+        // ---
+        
         /*
          * REFERENCES:
          *
@@ -45,7 +59,7 @@ namespace chronotext
          * - http://miknight.blogspot.co.il/2005/11/resident-set-size-in-mac-os-x.html
          */
 
-        Info getInfo()
+        Info Manager::updateInfo()
         {
             int mib[6];
             mib[0] = CTL_HW;
@@ -119,16 +133,5 @@ namespace chronotext
             
             return Info(freeMemory, usedMemory, ratio);
         }
-        
-        // ---
-        
-        Manager* Manager::instance()
-        {
-            static Manager instance; // XXX
-            return &instance;
-        }
-        
-        Manager::Manager()
-        {}
     }
 }

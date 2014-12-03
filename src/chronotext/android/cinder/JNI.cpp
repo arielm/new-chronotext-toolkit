@@ -14,7 +14,7 @@ using namespace chr;
 
 namespace chronotext
 {
-    namespace jvm
+    namespace jni
     {
         JavaVM *vm = nullptr;
         
@@ -54,7 +54,9 @@ namespace chronotext
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-    jvm::vm = vm;
+    CI_LOGI("ONLOAD");
+    
+    jni::vm = vm;
     return JNI_VERSION_1_4;
 }
 

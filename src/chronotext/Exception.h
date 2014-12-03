@@ -13,7 +13,7 @@
 
 namespace chronotext
 {
-    template<class Host>
+    template<typename T>
     class Exception : public std::runtime_error
     {
     public:
@@ -89,5 +89,5 @@ namespace chronotext
 
 namespace chr = chronotext;
 
-#define EXCEPTION(HOST, ...) chr::Exception<HOST>(#HOST, __FILE__, __LINE__, ##__VA_ARGS__)
-#define EXCEPTION_TYPE(HOST) chr::Exception<HOST>
+#define EXCEPTION(TYPE, ...) chr::Exception<TYPE>(#TYPE, __FILE__, __LINE__, ##__VA_ARGS__)
+#define EXCEPTION_TYPE(TYPE) chr::Exception<TYPE>

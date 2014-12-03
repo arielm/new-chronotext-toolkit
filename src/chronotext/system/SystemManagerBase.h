@@ -24,20 +24,20 @@ namespace chronotext
         class ManagerBase
         {
         public:
-            Info info; // XXX
+            Info info; // TODO: SHOULD BE PROTECTED
 
             virtual ~ManagerBase() {}
             
-            virtual std::string getIpAddress(bool maskForBroadcast = false);
-            
-            bool init();
-            void uninit();
-            
+            virtual bool init();
+            virtual void uninit() {}
+
+            virtual std::string getIpAddress(bool maskForBroadcast = false) = 0;
+
         protected:
             virtual void updateInfo();
             
-            virtual std::string getOsVersionString();
-            virtual std::string getDeviceString();
+            virtual std::string getOsVersionString() = 0;
+            virtual std::string getDeviceString() = 0;
         };
     }
 }

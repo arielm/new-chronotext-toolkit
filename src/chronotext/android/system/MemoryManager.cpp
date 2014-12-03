@@ -8,7 +8,7 @@
 
 #include "MemoryManager.h"
 
-#include "chronotext/Log.h"
+#include "chronotext/system/Context.h"
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
 
@@ -17,7 +17,7 @@
 /*
  * TODO:
  *
- * 1) SEE TODO'S IN getInfo()
+ * 1) SEE TODO'S IN updateInfo()
  *
  * 2) IMPLEMENT "AUTOMATIC MEMORY WARNING":
  *    - OPTION 1:
@@ -56,6 +56,18 @@ namespace chronotext
 {
     namespace memory
     {
+        Manager::Manager()
+        {
+            init();
+        }
+        
+        Manager::~Manager()
+        {
+            uninit();
+        }
+        
+        // ---
+        
         /*
          * "FREE MEMORY" SEEMS RELIABLE, BUT IS LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
          *
@@ -64,7 +76,7 @@ namespace chronotext
          * 1) INFER "RATIO" BY MEASURING THE FREE MEMORY AS CLOSE AS APP-STARTUP
          */
         
-        Info getInfo()
+        Info Manager::updateInfo()
         {
             /*
              * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
@@ -76,7 +88,7 @@ namespace chronotext
             
             if (query)
             {
-                JNIEnv *env = jvm::env();
+                JNIEnv *env = jni::env();
 
                 const char *chars = env->GetStringUTFChars(query, nullptr);
                 JsonTree memoryInfo(chars);
@@ -97,16 +109,5 @@ namespace chronotext
             
             return Info();
         }
-        
-        // ---
-        
-        Manager* Manager::instance()
-        {
-            static Manager instance; // XXX
-            return &instance;
-        }
-        
-        Manager::Manager()
-        {}
     }
 }

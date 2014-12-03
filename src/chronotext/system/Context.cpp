@@ -15,32 +15,16 @@ using namespace ci;
 
 namespace chronotext
 {
-    Context::Context()
-    {
-        LOGI << __PRETTY_FUNCTION__ << endl;
-        
-        context::init(); // TODO: HANDLE FAILURE
-    }
-    
-    Context::~Context()
-    {
-        LOGI << __PRETTY_FUNCTION__ << endl;
-        
-        context::uninit();
-    }
-}
-
-namespace chronotext
-{
     namespace context
     {
         namespace intern
         {
-            bool initialized = false;
+            std::shared_ptr<system::Manager> systemManager;
+            std::shared_ptr<memory::Manager> memoryManager;
             
             // ---
             
-            std::shared_ptr<system::Manager> systemManager;
+            bool initialized = false;
         }
         
         bool init()
@@ -48,11 +32,11 @@ namespace chronotext
             if (!intern::initialized)
             {
                 intern::systemManager = make_shared<system::Manager>();
+                intern::memoryManager = make_shared<memory::Manager>();
                 
-                if (intern::systemManager->init())
-                {
-                    intern::initialized = true;
-                }
+                // ---
+
+                intern::initialized = true;
             }
             
             return intern::initialized;
@@ -62,7 +46,7 @@ namespace chronotext
         {
             if (intern::initialized)
             {
-                intern::systemManager->uninit();
+                intern::memoryManager.reset();
                 intern::systemManager.reset();
                 
                 // ---
@@ -74,6 +58,11 @@ namespace chronotext
         system::Manager* systemManager()
         {
             return intern::systemManager.get();
+        }
+        
+        memory::Manager* memoryManager()
+        {
+            return intern::memoryManager.get();
         }
     }
 }

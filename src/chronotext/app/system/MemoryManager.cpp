@@ -6,29 +6,27 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#pragma once
-
-#include "cinder/Cinder.h"
-
-#if !defined(CINDER_ANDROID)
-
-#error UNSUPPORTED PLATFORM
-
-#endif
-
-#include "chronotext/system/MemoryManagerBase.h"
+#include "MemoryManager.h"
 
 namespace chronotext
 {
     namespace memory
     {
-        class Manager : public ManagerBase
+        Manager::Manager()
         {
-        public:
-            Manager();
-            ~Manager() override;
-            
-            Info updateInfo() override;
-        };
+            init();
+        }
+        
+        Manager::~Manager()
+        {
+            uninit();
+        }
+        
+        // ---
+        
+        Info Manager::updateInfo()
+        {
+            return Info();
+        }
     }
 }

@@ -42,13 +42,15 @@ extern "C"
 
 namespace chronotext
 {
-    class CinderDelegate;
-
-    namespace jvm
+    namespace jni
     {
         extern JavaVM *vm;
         JNIEnv* env();
     }
+    
+    // ---
+    
+    class CinderDelegate;
     
     namespace context
     {

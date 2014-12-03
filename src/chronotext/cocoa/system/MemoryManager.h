@@ -8,6 +8,14 @@
 
 #pragma once
 
+#include "cinder/Cinder.h"
+
+#if !defined(CINDER_COCOA)
+
+#error UNSUPPORTED PLATFORM
+
+#endif
+
 #include "chronotext/system/MemoryManagerBase.h"
 
 namespace chronotext
@@ -17,10 +25,10 @@ namespace chronotext
         class Manager : public ManagerBase
         {
         public:
-            static Manager* instance();
-            
-        protected:
             Manager();
+            ~Manager() override;
+            
+            Info updateInfo() override;
         };
     }
 }

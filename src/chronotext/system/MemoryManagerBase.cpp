@@ -8,17 +8,31 @@
 
 #include "MemoryManagerBase.h"
 
+#include "chronotext/system/Context.h"
+#include "chronotext/Log.h"
+
+using namespace std;
+
 namespace chronotext
 {
     namespace memory
     {
-#if defined(CINDER_MSW)
-        
         Info getInfo()
         {
-            return Info();
+            return context::memoryManager()->updateInfo();
         }
         
-#endif
+        // ---
+        
+        bool ManagerBase::init()
+        {
+            LOGI << "MEMORY INFO: " << updateInfo() << endl;
+            return true;
+        }
+        
+        void ManagerBase::uninit()
+        {
+            LOGI << "MEMORY INFO: " << updateInfo() << endl;
+        }
     }
 }

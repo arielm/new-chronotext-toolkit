@@ -10,7 +10,7 @@
 
 #include "cinder/Cinder.h"
 
-#if !defined(CINDER_ANDROID)
+#if !defined(CINDER_MAC) && !defined(CINDER_MSW)
 
 #error UNSUPPORTED PLATFORM
 
@@ -22,32 +22,17 @@ namespace chronotext
 {
     namespace system
     {
-        namespace android
-        {
-            /*
-             * THE SAME PROPERTIES THAT CAN BE QUERIED VIA ADB, E.G.
-             * adb shell getprop ro.product.manufacturer
-             */
-            
-            std::string getProperty(const char *name);
-        }
-        
         class Manager : public ManagerBase
         {
         public:
             Manager();
             ~Manager() override;
             
-            std::string getIpAddress(bool maskForBroadcast = false); // TODO
-            
+            std::string getIpAddress(bool maskForBroadcast) override;
+
         protected:
-            void updateInfo() override;
-            
             std::string getOsVersionString() override;
             std::string getDeviceString() override;
-            
-            std::string getModel();
-            std::string getManufacturer();
         };
     }
 }

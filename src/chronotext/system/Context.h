@@ -19,6 +19,7 @@
 // ---
 
 #include "chronotext/system/SystemManager.h"
+#include "chronotext/system/MemoryManager.h"
 
 namespace chronotext
 {
@@ -29,16 +30,10 @@ namespace chronotext
     
     // ---
 
-    class Context
-    {
-    public:
-        Context();
-        ~Context();
-    };
-
     namespace context
     {
         system::Manager* systemManager();
+        memory::Manager* memoryManager();
         
         bool init();
         void uninit();

@@ -10,6 +10,8 @@
 
 #include "chronotext/utils/Utils.h"
 
+#include "cinder/System.h"
+
 #include <sys/utsname.h>
 
 using namespace std;
@@ -19,6 +21,25 @@ namespace chronotext
 {
     namespace system
     {
+        Manager::Manager()
+        {
+            init();
+        }
+        
+        Manager::~Manager()
+        {
+            uninit();
+        }
+        
+        // ---
+        
+        string Manager::getIpAddress(bool maskForBroadcast)
+        {
+            return "";
+        }
+        
+        // ---
+
         void Manager::updateInfo()
         {
             /*
@@ -35,6 +56,11 @@ namespace chronotext
             info.isSimulator = isSimulator();
             
             ManagerBase::updateInfo();
+        }
+        
+        string Manager::getOsVersionString()
+        {
+            return ci::toString(System::getOsMajorVersion()) + "." + ci::toString(System::getOsMinorVersion()) + "." + ci::toString(System::getOsBugFixVersion());
         }
         
         string Manager::getDeviceString()

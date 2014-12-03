@@ -9,6 +9,11 @@
 #pragma once
 
 #include <cstdint>
+#include <iostream>
+#include <sstream>
+#include <iomanip> 
+
+using namespace std;
 
 namespace chronotext
 {
@@ -26,6 +31,49 @@ namespace chronotext
             used(used),
             ratio(ratio)
             {}
+            
+            friend ostream& operator<<(ostream &lhs, const Info &rhs)
+            {
+                lhs << "{";
+                
+                if (rhs.free > 0)
+                {
+                    lhs << "free: " << rhs.write(rhs.free);
+                }
+                
+                if (rhs.used > 0)
+                {
+                    lhs << ", used: " << rhs.write(rhs.used);
+                }
+                
+                if (rhs.ratio > 0)
+                {
+                    lhs << ", ratio: " << rhs.write(rhs.ratio);
+                }
+                
+                lhs << "}";
+                
+                return lhs;
+            }
+            
+            string write(int64_t bytes, int precision = 2, double unit = 1024 * 1024, const std::string &suffix = "") const
+            {
+                if (bytes < 0)
+                {
+                    return "";
+                }
+                
+                stringstream s;
+                
+                s << fixed << setprecision(precision) << bytes / unit;
+                
+                if (!suffix.empty())
+                {
+                    s << " " << suffix;
+                }
+                
+                return s.str();
+            }
         };
     }
 }
