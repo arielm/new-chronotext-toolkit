@@ -22,9 +22,9 @@ using namespace chr::zf;
 const float REFERENCE_H = 768;
 const float TEXT_SIZE = 20;
 
-Sketch::Sketch(void *context, void *delegate)
+Sketch::Sketch()
 :
-CinderSketch(context, delegate)
+CinderSketch()
 {}
 
 void Sketch::setup()

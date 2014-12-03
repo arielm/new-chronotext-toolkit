@@ -79,7 +79,7 @@ class Sketch : public chr::CinderSketch
     int currentLangIndex;
 
 public:
-    Sketch(void *context, void *delegate = nullptr);
+    Sketch();
     
     void setup();
     void resize();
