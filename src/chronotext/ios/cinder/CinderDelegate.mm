@@ -75,16 +75,22 @@ using namespace chr;
 {
     if (self = [super init])
     {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-        
-        // ---
+        /*
+         * UNLIKE THE OTHER PLATFORMS: DisplayInfo AND WindowInfo ARE NOT AVAILABLE AT THIS STAGE
+         */
         
         chr::context::init(); // TODO: HANDLE FAILURE
         
         sketch = chr::createSketch();
         sketch->setDelegate(self);
+        
+        // TODO: sketch->init()
+        
+        // ---
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     }
     
     return self;
@@ -98,7 +104,7 @@ using namespace chr;
     sketch->shutdown();
     chr::destroySketch(sketch);
     
-    chr::context::uninit();
+    chr::context::uninit(); // TODO: FOLLOW-UP
     
     [super dealloc];
 }
@@ -140,8 +146,9 @@ using namespace chr;
 - (void) setup
 {
     /*
-     * TODO: displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
+     * TODO: displayInfo AND displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
      */
+    
     [self updateDisplayInfo];
     
     windowInfo = WindowInfo([self windowSize], [self aaLevel]);
@@ -151,7 +158,7 @@ using namespace chr;
 
     [self startIOService];
 
-    sketch->Handler::setIOService(*io); // XXX
+    sketch->Handler::setIOService(*io); // TODO INSTEAD: A COMMON context::io() SHOULD BE USED BY Handler, TaskManager, ETC.
     sketch->timeline().stepTo(0);
     
     sketch->setup();
@@ -526,7 +533,7 @@ using namespace chr;
 {
     if (initialized)
     {
-        sketch->event(CinderSketch::EVENT_MEMORY_WARNING);
+        sketch->event(CinderSketch::EVENT_MEMORY_WARNING); // TODO: PASS THROUGH memory::Manager
     }
 }
 

@@ -11,11 +11,7 @@
  */
 
 /*
- * TODO:
- *
- * 1) io_service SHOULD BE STORED IN A PostBase CLASS EXTENDED BY Handler, TaskManager, ETC.
- *
- * 2) CinderSketch IMPLEMENTATIONS SHOULD NOT STORE io_service AS WELL (I.E. SINCE THEY INHERIT FROM Handler)
+ * TODO: A COMMON (NAMESPACE-STORED) context::io() SHOULD BE USED BY Handler, TaskManager, CinderSketch, ETC.
  */
 
 #pragma once

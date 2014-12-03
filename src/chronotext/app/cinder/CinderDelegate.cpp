@@ -68,26 +68,25 @@ namespace chronotext
     {
         applyDefaultSettings(settings);
         applySettings(settings);
-        
-        /*
-         * TODO: CONSIDER INITIALIZING CONTEXT FROM HERE
-         */
     }
 
     // ---
     
     void CinderDelegate::setup()
     {
+        updateRealDisplayInfo();
+        updateRealWindowInfo();
+
         context::init(); // TODO: HANDLE FAILURE
         
         /*
          * SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
          * OTHERWISE: POTENTIAL HEIRS LIKE osx/cinder/CinderAdapter WILL CRASH
          */
+        
         setSketch(createSketch());
         
-        updateRealDisplayInfo();
-        updateRealWindowInfo();
+        // TODO: sketch->init()
         
         // ---
         
@@ -96,7 +95,7 @@ namespace chronotext
          */
         io_service().post([this]{ sketch->clock().update(); });
         
-        sketch->Handler::setIOService(io_service());
+        sketch->Handler::setIOService(io_service()); // TODO: A COMMON (NAMESPACE-STORED) context::io() SHOULD BE USED BY Handler, TaskManager, CinderSketch, ETC.
         sketch->timeline().stepTo(0);
         
         sketch->setup();
@@ -109,7 +108,7 @@ namespace chronotext
         sketch->shutdown();
         setSketch(nullptr);
         
-        context::uninit();
+        context::uninit(); // TODO: FOLLOW-UP
     }
     
     void CinderDelegate::resize()

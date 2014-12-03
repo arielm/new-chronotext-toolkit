@@ -103,6 +103,8 @@ namespace chronotext
         context::init(); // TODO: HANDLE FAILURE
         
         setSketch(createSketch());
+        
+        // TODO: sketch->init()
     }
     
     /*
@@ -121,7 +123,7 @@ namespace chronotext
         createSensorEventQueue();
         startIOService();
         
-        sketch->Handler::setIOService(*io);
+        sketch->Handler::setIOService(*io); // TODO: A COMMON (NAMESPACE-STORED) context::io() SHOULD BE USED BY Handler, TaskManager, CinderSketch, ETC.
         sketch->timeline().stepTo(0);
         
         sketch->setup();
@@ -135,7 +137,7 @@ namespace chronotext
         sketch->shutdown();
         setSketch(nullptr);
         
-        context::uninit();
+        context::uninit(); // TODO: FOLLOW-UP
     }
     
     void CinderDelegate::resize(int width, int height)

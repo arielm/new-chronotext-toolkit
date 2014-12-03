@@ -17,8 +17,6 @@
  *    - NEW WAY TO RUN SYNCHRONOUS TASKS VIA performRun
  *    - IS NEW Task::post PROPERLY ACCESSIBLE FROM SUB-CLASSES?
  *
- * 2) SEE TODOS IN os/Handler REGARDING PostBase CLASS
- *
  * 3) TRY TO REPLACE cinder::sleep() BY:
  *    - boost::this_thread::sleep()
  *    - OR EVEN BETTER: A PURE C++11 STL SOLUTION
