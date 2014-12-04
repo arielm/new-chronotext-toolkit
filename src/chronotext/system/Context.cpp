@@ -8,7 +8,7 @@
 
 #include "Context.h"
 
-namespace chronotext
+namespace chr
 {
     namespace CONTEXT
     {

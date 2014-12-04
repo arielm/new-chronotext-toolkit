@@ -13,7 +13,7 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 
-namespace chronotext
+namespace chr
 {
     CinderSketch::CinderSketch()
     :

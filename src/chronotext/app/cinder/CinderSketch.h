@@ -12,7 +12,7 @@
 
 #include "cinder/app/AppNative.h"
 
-namespace chronotext
+namespace chr
 {
     class CinderDelegate;
     

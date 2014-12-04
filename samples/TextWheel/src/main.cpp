@@ -1,6 +1,6 @@
 #include "Sketch.h"
 
-namespace chronotext
+namespace chr
 {
     CinderSketch* createSketch()
     {

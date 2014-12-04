@@ -22,7 +22,7 @@
 
 #include "chronotext/system/SystemInfoBase.h"
 
-namespace chronotext
+namespace chr
 {
     namespace system
     {

@@ -10,7 +10,7 @@
 
 #include "cinder/Area.h"
 
-namespace chronotext
+namespace chr
 {
     struct WindowInfo
     {
@@ -88,5 +88,3 @@ namespace chronotext
         }
     };
 }
-
-namespace chr = chronotext;

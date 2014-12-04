@@ -14,7 +14,7 @@
 
 #include <string>
 
-namespace chronotext
+namespace chr
 {
     struct Message
     {
@@ -28,5 +28,3 @@ namespace chronotext
         {}
     };
 }
-
-namespace chr = chronotext;

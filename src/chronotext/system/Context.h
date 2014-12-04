@@ -6,10 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * WARNING: NEVER INCLUDE THIS FILE IN A HEADER!
- */
-
 #pragma once
 
 #include "cinder/Cinder.h"
@@ -30,7 +26,7 @@
 
 #include <boost/asio.hpp>
 
-namespace chronotext
+namespace chr
 {
     class CinderSketch;
     
@@ -46,8 +42,6 @@ namespace chronotext
         void shutdown();
     }
 }
-
-namespace chr = chronotext; // XXX
 
 namespace context
 {

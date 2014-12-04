@@ -11,7 +11,7 @@
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     DisplayInfo::SizeFactor DisplayHelper::getSizeFactor(const DisplayInfo &displayInfo)
     {

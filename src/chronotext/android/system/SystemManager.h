@@ -18,7 +18,7 @@
 
 #include "chronotext/system/SystemManagerBase.h"
 
-namespace chronotext
+namespace chr
 {
     namespace system
     {

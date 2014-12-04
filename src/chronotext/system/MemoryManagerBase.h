@@ -21,7 +21,7 @@
 
 #include "chronotext/system/MemoryInfo.h"
 
-namespace chronotext
+namespace chr
 {
     namespace memory
     {

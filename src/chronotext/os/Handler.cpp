@@ -12,7 +12,7 @@
 
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     bool Handler::sendMessage(const Message &message)
     {

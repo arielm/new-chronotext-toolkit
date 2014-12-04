@@ -12,7 +12,7 @@
 
 #include "cinder/app/TouchEvent.h"
 
-namespace chronotext
+namespace chr
 {
     class CinderSketch : public CinderSketchBase
     {

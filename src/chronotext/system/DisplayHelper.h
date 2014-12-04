@@ -17,7 +17,7 @@
 
 #endif
 
-namespace chronotext
+namespace chr
 {
     class DisplayHelper
     {

@@ -13,7 +13,7 @@
 using namespace std;
 using namespace chr;
 
-namespace chronotext
+namespace chr
 {
     namespace jni
     {

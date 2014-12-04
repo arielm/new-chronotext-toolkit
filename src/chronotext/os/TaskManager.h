@@ -33,7 +33,7 @@
 
 #include "chronotext/os/Task.h"
 
-namespace chronotext
+namespace chr
 {
     class TaskManager : public std::enable_shared_from_this<TaskManager>
     {

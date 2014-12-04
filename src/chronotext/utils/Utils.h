@@ -19,7 +19,7 @@
 
 #include <boost/algorithm/string.hpp>
 
-namespace chronotext
+namespace chr
 {
     template<typename T>
     static int search(T *array, T value, int min, int max)
@@ -57,10 +57,10 @@ namespace chronotext
     std::string wstringToUtf8(const std::wstring &s);
     std::wstring utf8ToWstring(const std::string &s);
 
-    template<typename T> T loadString(chr::InputSourceRef source);
-    template<typename T> std::vector<T> readLines(chr::InputSourceRef source);
+    template<typename T> T loadString(InputSourceRef source);
+    template<typename T> std::vector<T> readLines(InputSourceRef source);
     
-    std::vector<std::string> readInstructions(chr::InputSourceRef source);
+    std::vector<std::string> readInstructions(InputSourceRef source);
     
     std::string readTextFile(const ci::fs::path &filePath);
     void writeTextFile(const ci::fs::path &filePath, const std::string &text);
@@ -84,7 +84,7 @@ namespace chronotext
      *
      * USAGE:
      * std::vector<string> container = {"A", "B", "C", "D"};
-     * for (auto &item : chr::DirectionalRange(container, true)) { cout << item << endl; }
+     * for (auto &item : DirectionalRange(container, true)) { cout << item << endl; }
      *
      * BASED ON: http://stackoverflow.com/a/14920606/50335
      * ADAPTED IN ORDER TO RETURN A REFERENCE INSTEAD OF AN ITERATOR
@@ -98,7 +98,7 @@ namespace chronotext
         bool reverse;
         
         typedef decltype(container.begin()) I;
-        typedef typename std::iterator_traits<I>::reference R; // WORKS FOR CONST AND NON-CONST STD CONTAINERS
+        typedef typename std::iterator_traits<I>::reference R; // WORKS FOR CONST AND NON-CONST STL CONTAINERS
         
         struct InnerIterator
         {
@@ -123,5 +123,3 @@ namespace chronotext
     
 #endif
 }
-
-namespace chr = chronotext;

@@ -8,7 +8,7 @@
 
 #include "SuperHandler.h"
 
-namespace chronotext
+namespace chr
 {
     void SuperHandler::addSubHandler(SubHandler *handler)
     {

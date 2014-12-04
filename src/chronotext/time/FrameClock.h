@@ -10,7 +10,7 @@
 
 #include "chronotext/time/Clock.h"
 
-namespace chronotext
+namespace chr
 {
     class FrameClock : public Clock
     {

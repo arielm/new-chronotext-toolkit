@@ -22,7 +22,7 @@ using namespace boost::gregorian;
 using namespace boost::local_time;
 using namespace boost::posix_time;
 
-namespace chronotext
+namespace chr
 {
     string wstringToUtf8(const wstring &s)
     {

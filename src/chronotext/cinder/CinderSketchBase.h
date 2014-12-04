@@ -16,7 +16,7 @@
 
 #include "cinder/Timeline.h"
 
-namespace chronotext
+namespace chr
 {
     class CinderSketchBase : public SuperHandler
     {

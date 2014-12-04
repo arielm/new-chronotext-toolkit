@@ -10,7 +10,7 @@
 
 #include "chronotext/system/SystemInfo.h"
 
-namespace chronotext
+namespace chr
 {
     namespace system
     {

@@ -10,7 +10,7 @@
 
 #include <memory>
 
-namespace chronotext
+namespace chr
 {
     class TimeBase : public std::enable_shared_from_this<TimeBase>
     {
@@ -21,5 +21,3 @@ namespace chronotext
         std::shared_ptr<TimeBase> ref() { return shared_from_this(); }
     };
 }
-
-namespace chr = chronotext;

@@ -22,7 +22,7 @@
 #include "chronotext/Exception.h"
 #include "chronotext/time/DefaultTimeBase.h"
 
-namespace chronotext
+namespace chr
 {
     class Clock : public TimeBase
     {

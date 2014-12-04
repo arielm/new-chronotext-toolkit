@@ -37,7 +37,7 @@
 
 #include <boost/thread/mutex.hpp>
 
-namespace chronotext
+namespace chr
 {
     class TaskManager;
     
@@ -75,5 +75,3 @@ namespace chronotext
         bool post(const std::function<void()> &fn); // TODO: CHECK IF std::forward MAKES SENSE
     };
 }
-
-namespace chr = chronotext;

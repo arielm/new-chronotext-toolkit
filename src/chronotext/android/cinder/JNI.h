@@ -40,7 +40,7 @@ extern "C"
     void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body);
 }
 
-namespace chronotext
+namespace chr
 {
     namespace jni
     {

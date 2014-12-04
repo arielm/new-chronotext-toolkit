@@ -16,7 +16,7 @@
 
 #endif
 
-namespace chronotext
+namespace chr
 {
     namespace memory
     {

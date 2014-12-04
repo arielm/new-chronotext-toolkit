@@ -12,7 +12,7 @@
 
 #include "cinder/app/AppAndroid.h"
 
-namespace chronotext
+namespace chr
 {
     class CinderDelegate;
     

@@ -15,7 +15,7 @@
 #include <jni.h>
 #include <android/sensor.h>
 
-namespace chronotext
+namespace chr
 {
     class CinderDelegate
     {

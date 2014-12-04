@@ -13,7 +13,7 @@
 #include <string>
 #include <iostream>
 
-namespace chronotext
+namespace chr
 {
     namespace system
     {
@@ -53,5 +53,3 @@ namespace chronotext
         };
     }
 }
-
-namespace chr = chronotext;

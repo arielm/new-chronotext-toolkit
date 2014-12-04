@@ -10,7 +10,7 @@
 
 #include "cinder/Vector.h"
 
-namespace chronotext
+namespace chr
 {
     class DisplayInfo
     {
@@ -179,5 +179,3 @@ namespace chronotext
         }
     };
 }
-
-namespace chr = chronotext;

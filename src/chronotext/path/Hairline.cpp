@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     Hairline::Hairline()
     {}

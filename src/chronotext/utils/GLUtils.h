@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,7 +11,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Camera.h"
 
-namespace chronotext
+namespace chr
 {
     const ci::Matrix44f getPerspectiveMatrix(float fovy, float aspect, float zNear, float zFar);
     const ci::Matrix44f getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX = 0, float panY = 0, float zoom = 1);
@@ -32,5 +32,3 @@ namespace cinder
         inline void scale(float s) { glScalef(s, s, 1); }
     }
 }
-
-namespace chr = chronotext;

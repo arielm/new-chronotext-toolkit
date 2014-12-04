@@ -15,7 +15,7 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 
-namespace chronotext
+namespace chr
 {
     CinderDelegate::CinderDelegate()
     :
@@ -140,6 +140,10 @@ namespace chronotext
          * "POSTED" DURING CinderSketch::update ARE "POLLED"
          */
         io_service().post([this]{ sketch->clock().update(); });
+
+        // TODO: CALL memory::Manager::update()
+
+        // ---
         
         /*
          * MUST BE CALLED BEFORE Sketch::update
@@ -149,6 +153,7 @@ namespace chronotext
         
         sketch->update();
         sketch->timeline().stepTo(now); // WE CAN'T CONTROL THE APP'S TIMELINE SO WE NEED OUR OWN
+        
         updateCount++;
     }
     

@@ -14,7 +14,7 @@
 
 #include "chronotext/os/Message.h"
 
-namespace chronotext
+namespace chr
 {
     class Handler
     {

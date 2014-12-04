@@ -5,7 +5,7 @@
 using namespace ci;
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     void ShapeMesh::appendVertices(const Vec2f *vertices, size_t count)
     {

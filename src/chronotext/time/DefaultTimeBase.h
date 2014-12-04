@@ -12,7 +12,7 @@
 
 #include "cinder/Timer.h"
 
-namespace chronotext
+namespace chr
 {
     class DefaultTimeBase : public TimeBase
     {

@@ -8,7 +8,7 @@
 
 #include "MemoryManager.h"
 
-namespace chronotext
+namespace chr
 {
     namespace memory
     {
