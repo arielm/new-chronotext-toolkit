@@ -29,7 +29,7 @@ namespace chronotext
 #elif defined(CINDER_ANDROID)
             return PLATFORM_ANDROID;
 #endif
-            throw EXCEPTION(Manager, "UNSUPPORTED PLATFORM");
+            assert(false);
         }
         
         string platformName()

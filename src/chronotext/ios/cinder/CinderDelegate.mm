@@ -85,7 +85,7 @@ using namespace chr;
         sketch = chr::createSketch();
         sketch->setDelegate(self);
         
-        // TODO: sketch->init()
+        sketch->init(); // TODO: HANDLE FAILURE
         
         // ---
         
@@ -105,7 +105,10 @@ using namespace chr;
     chr::destroySketch(sketch);
 
     /*
-     * TODO: CHECK HOW "UNDERGOING" TASKS ARE HANDLED, ETC.
+     * TODO:
+     *
+     * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
+     * RELATED TODOS IN Context AND TaskManager
      */
     
     [self stopIOService];

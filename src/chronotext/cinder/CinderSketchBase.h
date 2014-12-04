@@ -48,6 +48,7 @@ namespace chronotext
         CinderSketchBase() : SuperHandler() {}
         virtual ~CinderSketchBase() {}
         
+        virtual bool init() { return true; }
         virtual void setup() {}
         virtual void shutdown() {}
 
@@ -75,15 +76,15 @@ namespace chronotext
         virtual uint32_t getElapsedFrames() const = 0;
 
         virtual bool isEmulated() const = 0;
-        virtual DisplayInfo getDisplayInfo() const = 0;
-        virtual WindowInfo getWindowInfo() const = 0;
+        virtual DisplayInfo displayInfo() const = 0;
+        virtual WindowInfo windowInfo() const = 0;
 
-        virtual ci::Vec2i getWindowSize() const { return getWindowInfo().getSize(); }
-        virtual int getWindowWidth() const { return getWindowInfo().getWidth(); };
-        virtual int getWindowHeight() const { return getWindowInfo().getHeight(); };
-        virtual ci::Area getWindowBounds() const { return getWindowInfo().getBounds(); };
-        virtual ci::Vec2f getWindowCenter() const { return getWindowInfo().getCenter(); };
-        virtual float getWindowAspectRatio() const { return getWindowInfo().getAspectRatio(); };
+        virtual ci::Vec2i getWindowSize() const { return windowInfo().getSize(); }
+        virtual int getWindowWidth() const { return windowInfo().getWidth(); };
+        virtual int getWindowHeight() const { return windowInfo().getHeight(); };
+        virtual ci::Area getWindowBounds() const { return windowInfo().getBounds(); };
+        virtual ci::Vec2f getWindowCenter() const { return windowInfo().getCenter(); };
+        virtual float getWindowAspectRatio() const { return windowInfo().getAspectRatio(); };
         
         virtual void action(int actionId) = 0;
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;

@@ -17,14 +17,16 @@
  *    - NEWLY ADDED LOCK-GUARD
  *    - NEW WAY TO START ASYNCHRONOUS TASKS VIA IO-SERVICE
  *
- * 2) CHECK WHY IT IS NECESSARY TO CALL Task::PerformDetach UPON TASK COMPLETION
+ * 2) PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS:
+ *    - RELATED TODOS IN Context AND CinderDelegate
+ *
+ * 3) CHECK WHY IT IS NECESSARY TO CALL Task::PerformDetach UPON TASK COMPLETION
  *    - E.G. INSTEAD OF RELYING ON thread::join()
  *    - NECESSARY: SIMULATING EXTREME CASES (E.G. "EMPTY" ASYNCHRONOUS TASK, ETC.)
  *
- * 3) TRY TO RELY ON NEW C++11 FEATURES LIKE std::future AND std::async
+ * 4) TRY TO RELY ON NEW C++11 FEATURES LIKE std::future AND std::async
  *
- * 4) CREATE TESTS AND SAMPLES PROJECTS:
- *    - REQUIREMENTS: MUST WORK AT LEAST ON OSX, iOS AND ANDROID
+ * 5) CREATE TESTS AND SAMPLES PROJECTS
  */
 
 #pragma once
@@ -44,7 +46,9 @@ namespace chronotext
         /*
          * RETURNS FALSE IF THE MESSAGE CAN'T BE SENT
          *
-         * E.G. WHILE THE CONTEXT IS BEING SHUT-DOWN
+         * E.G. IF THE CONTEXT IS BEING SHUT-DOWN
+         *
+         * REQUIREMENT SHARED WITH os/Handler
          */
         bool post(const std::function<void()> &fn, bool forceSync = false); // TODO: CHECK IF std::forward MAKES SENSE
         

@@ -32,6 +32,12 @@ namespace chronotext
         return sketch;
     }
     
+    /*
+     * XXX: SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
+     *
+     * OTHERWISE: POTENTIAL EXTENDERS LIKE osx/cinder/CinderAdapter WILL CRASH
+     */
+    
     void CinderDelegate::setSketch(CinderSketch *newSketch)
     {
         if (sketch)
@@ -77,14 +83,8 @@ namespace chronotext
 
         context::init(); // TODO: HANDLE FAILURE
         
-        /*
-         * setSketch() SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
-         * OTHERWISE: POTENTIAL HEIRS LIKE osx/cinder/CinderAdapter WILL CRASH
-         */
-        
         setSketch(createSketch());
-        
-        // TODO: sketch->init()
+        sketch->init(); // TODO: HANDLE FAILURE
         
         // ---
 
@@ -105,6 +105,13 @@ namespace chronotext
         
         sketch->shutdown();
         setSketch(nullptr);
+        
+        /*
+         * TODO:
+         *
+         * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
+         * RELATED TODOS IN Context AND TaskManager
+         */
         
         context::shutdown();
     }
@@ -162,12 +169,12 @@ namespace chronotext
         return emulated;
     }
     
-    WindowInfo CinderDelegate::getWindowInfo() const
+    WindowInfo CinderDelegate::windowInfo() const
     {
         return emulated ? emulatedDevice.windowInfo : realWindowInfo;
     }
     
-    DisplayInfo CinderDelegate::getDisplayInfo() const
+    DisplayInfo CinderDelegate::displayInfo() const
     {
         return emulated ? emulatedDevice.displayInfo : realDisplayInfo;
     }

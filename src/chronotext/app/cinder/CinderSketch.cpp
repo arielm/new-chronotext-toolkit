@@ -19,8 +19,8 @@ namespace chronotext
     :
     CinderSketchBase(),
     delegate(nullptr),
-    mClock(FrameClock::create()),
-    mTimeline(Timeline::create())
+    clock_(FrameClock::create()),
+    timeline_(Timeline::create())
     {}
     
     CinderDelegate* CinderSketch::getDelegate() const
@@ -34,6 +34,16 @@ namespace chronotext
     }
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
+    
+    FrameClock& CinderSketch::clock() const
+    {
+        return *clock_;
+    }
+    
+    Timeline& CinderSketch::timeline() const
+    {
+        return *timeline_;
+    }
     
     double CinderSketch::getElapsedSeconds() const
     {
@@ -50,14 +60,14 @@ namespace chronotext
         return delegate->isEmulated();
     }
     
-    DisplayInfo CinderSketch::getDisplayInfo() const
+    DisplayInfo CinderSketch::displayInfo() const
     {
-        return delegate->getDisplayInfo();
+        return delegate->displayInfo();
     }
     
-    WindowInfo CinderSketch::getWindowInfo() const
+    WindowInfo CinderSketch::windowInfo() const
     {
-        return delegate->getWindowInfo();
+        return delegate->windowInfo();
     }
     
 #pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------

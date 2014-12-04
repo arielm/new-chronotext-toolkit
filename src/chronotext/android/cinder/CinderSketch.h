@@ -24,26 +24,26 @@ namespace chronotext
         CinderDelegate* getDelegate() const;
         void setDelegate(CinderDelegate *delegate);
 
-        chr::FrameClock& clock() const { return *mClock; }
-        ci::Timeline& timeline() const { return *mTimeline; }
+        chr::FrameClock& clock() const override;
+        ci::Timeline& timeline() const override;
         
-        double getElapsedSeconds() const;
-        uint32_t getElapsedFrames() const;
+        double getElapsedSeconds() const override;
+        uint32_t getElapsedFrames() const override;
         
-        bool isEmulated() const;
-        DisplayInfo getDisplayInfo() const;
-        WindowInfo getWindowInfo() const;
+        bool isEmulated() const override;
+        DisplayInfo displayInfo() const override;
+        WindowInfo windowInfo() const override;
         
-        void action(int actionId);
-        void sendMessageToDelegate(int what, const std::string &body = "");
+        void action(int actionId) override;
+        void sendMessageToDelegate(int what, const std::string &body = "") override;
 
-        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
+        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) override;
+        void disableAccelerometer() override;
 
     protected:
         CinderDelegate *delegate;
         
-        std::shared_ptr<chr::FrameClock> mClock;
-        ci::TimelineRef mTimeline;
+        std::shared_ptr<chr::FrameClock> clock_;
+        ci::TimelineRef timeline_;
     };
 }

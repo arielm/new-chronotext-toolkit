@@ -19,14 +19,6 @@ namespace chronotext
     lastId(-1)
     {}
     
-    /*
-     * TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
-     *
-     * E.G. THE CONTEXT IS BEING SHUT-DOWN...
-     *
-     * REQUIREMENT IN SYNC WITH os/TaskManager
-     */
-    
     bool TaskManager::post(const function<void()> &fn, bool forceSync)
     {
         if (forceSync)
@@ -37,7 +29,8 @@ namespace chronotext
         else
         {
             context::io().post(fn);
-            return true; // XXX
+            
+            return true; // TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
         }
     }
     

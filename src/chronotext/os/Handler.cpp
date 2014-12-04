@@ -14,25 +14,17 @@ using namespace std;
 
 namespace chronotext
 {
-    /*
-     * TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
-     *
-     * E.G. THE CONTEXT IS BEING SHUT-DOWN...
-     *
-     * REQUIREMENT IN SYNC WITH os/TaskManager
-     */
-
     bool Handler::sendMessage(const Message &message)
     {
         /*
          * TODO:
          *
          * OPTION 1: CONSIDER USING C++11 LAMBDA INSTEAD OF bind
-         *
          * OPTION 2: return context::post([=]{ handleMessage(message); });
          */
         
         context::io().post(bind(&Handler::handleMessage, this, message));
-        return true; // XXX
+        
+        return true; // TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
     }
 }

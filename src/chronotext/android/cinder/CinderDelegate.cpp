@@ -58,7 +58,7 @@ namespace chronotext
         mJavaListener = javaListener;
         mJavaDisplay = javaDisplay; // TODO: SHOULD BE PART OF DisplayHelper?
         
-        displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
+        displayInfo_ = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
         
         // ---
 
@@ -104,7 +104,7 @@ namespace chronotext
         
         setSketch(createSketch());
         
-        // TODO: sketch->init()
+        sketch->init(); // TODO: HANDLE FAILURE
     }
     
     /*
@@ -113,7 +113,7 @@ namespace chronotext
     
     void CinderDelegate::setup(int width, int height)
     {
-        windowInfo = WindowInfo(width, height);
+        windowInfo_ = WindowInfo(width, height);
         
         // ---
         
@@ -134,7 +134,10 @@ namespace chronotext
         setSketch(nullptr);
 
         /*
-         * TODO: CHECK HOW "UNDERGOING" TASKS ARE HANDLED, ETC.
+         * TODO:
+         *
+         * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
+         * RELATED TODOS IN Context AND TaskManager
          */
         
         stopIOService();
@@ -143,7 +146,7 @@ namespace chronotext
     
     void CinderDelegate::resize(int width, int height)
     {
-        windowInfo.size = Vec2i(width, height); // TODO: WE COULD FILTER SPURIOUS RESIZE EVENT LIKE IN ios/cinder/CinderDelegate.mm
+        windowInfo_.size = Vec2i(width, height); // TODO: WE COULD FILTER SPURIOUS RESIZE EVENT LIKE IN ios/cinder/CinderDelegate.mm
         sketch->resize();
     }
     
@@ -247,14 +250,14 @@ namespace chronotext
         return false;
     }
     
-    WindowInfo CinderDelegate::getWindowInfo() const
+    WindowInfo CinderDelegate::windowInfo() const
     {
-        return windowInfo;
+        return windowInfo_;
     }
     
-    DisplayInfo CinderDelegate::getDisplayInfo() const
+    DisplayInfo CinderDelegate::displayInfo() const
     {
-        return displayInfo;
+        return displayInfo_;
     }
     
 #pragma mark ---------------------------------------- IO SERVICE ----------------------------------------

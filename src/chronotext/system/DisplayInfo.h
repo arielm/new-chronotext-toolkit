@@ -24,7 +24,7 @@ namespace chronotext
             ORIENTATION_LANDSCAPE
         };
         
-        enum SizeFactor
+        enum SizeFactor // TODO: MOVE TO system/DisplayHelper
         {
             SIZE_FACTOR_UNDEFINED,
             SIZE_FACTOR_PHONE_MINI,

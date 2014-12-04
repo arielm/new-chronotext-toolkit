@@ -21,6 +21,13 @@ namespace chronotext
     public:
         virtual ~Handler() {}
 
+        /*
+         * RETURNS FALSE IF THE MESSAGE CAN'T BE SENT
+         *
+         * E.G. IF THE CONTEXT IS BEING SHUT-DOWN
+         *
+         * REQUIREMENT SHARED WITH os/TaskManager
+         */
         bool sendMessage(const Message &message);
 
         virtual void handleMessage(const Message &message) {}

@@ -61,8 +61,8 @@ namespace chronotext
         uint32_t getElapsedFrames() const;
 
         bool isEmulated() const;
-        WindowInfo getWindowInfo() const;
-        DisplayInfo getDisplayInfo() const;
+        WindowInfo windowInfo() const;
+        DisplayInfo displayInfo() const;
 
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
         void disableAccelerometer();
@@ -89,11 +89,9 @@ namespace chronotext
         jobject mJavaListener;
         jobject mJavaDisplay;
         
-        DisplayInfo displayInfo;
-        WindowInfo windowInfo;
+        DisplayInfo displayInfo_;
+        WindowInfo windowInfo_;
 
-        std::shared_ptr<ci::android::dostream> mOutputStream;
-        
         ci::Timer mTimer;
         uint32_t mFrameCount;
         

@@ -52,8 +52,8 @@ namespace chronotext
         void touchesEnded(ci::app::TouchEvent event);
         
         bool isEmulated() const;
-        WindowInfo getWindowInfo() const;
-        DisplayInfo getDisplayInfo() const;
+        WindowInfo windowInfo() const;
+        DisplayInfo displayInfo() const;
         
         void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);

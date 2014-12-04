@@ -23,6 +23,7 @@ namespace chronotext
             std::shared_ptr<memory::Manager> memoryManager;
             
             boost::asio::io_service *io = nullptr;
+            std::shared_ptr<TaskManager> taskManager;
             
             // ---
             
@@ -50,6 +51,7 @@ namespace chronotext
             if (!intern::setup && init())
             {
                 intern::io = &io;
+                intern::taskManager = TaskManager::create();
                 
                 // ---
                 
@@ -64,6 +66,13 @@ namespace chronotext
                 intern::memoryManager.reset();
                 intern::systemManager.reset();
                 
+                /*
+                 * TODO:
+                 *
+                 * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
+                 * RELATED TODOS IN CinderDelegate AND TaskManager
+                 */
+                intern::taskManager.reset();
                 intern::io = nullptr;
                 
                 // ---
@@ -82,10 +91,15 @@ namespace chronotext
         {
             return intern::memoryManager.get();
         }
-        
+
         boost::asio::io_service& io()
         {
             return *intern::io;
+        }
+        
+        TaskManager* taskManager()
+        {
+            return intern::taskManager.get();
         }
     }
 }

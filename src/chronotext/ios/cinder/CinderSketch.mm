@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -20,8 +20,8 @@ namespace chronotext
     :
     CinderSketchBase(),
     delegate(nullptr),
-    mClock(FrameClock::create()),
-    mTimeline(Timeline::create())
+    clock_(FrameClock::create()),
+    timeline_(Timeline::create())
     {}
     
     void* CinderSketch::getDelegate() const
@@ -41,6 +41,16 @@ namespace chronotext
 
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
+    FrameClock& CinderSketch::clock() const
+    {
+        return *clock_;
+    }
+    
+    Timeline& CinderSketch::timeline() const
+    {
+        return *timeline_;
+    }
+
     double CinderSketch::getElapsedSeconds() const
     {
         return castToDelegate(delegate).elapsedSeconds;
@@ -56,12 +66,12 @@ namespace chronotext
         return castToDelegate(delegate).emulated;
     }
     
-    DisplayInfo CinderSketch::getDisplayInfo() const
+    DisplayInfo CinderSketch::displayInfo() const
     {
         return castToDelegate(delegate).displayInfo;
     }
     
-    WindowInfo CinderSketch::getWindowInfo() const
+    WindowInfo CinderSketch::windowInfo() const
     {
         return castToDelegate(delegate).windowInfo;
     }

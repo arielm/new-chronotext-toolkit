@@ -21,6 +21,7 @@
 #include "chronotext/system/SystemManager.h"
 #include "chronotext/system/MemoryManager.h"
 #include "chronotext/system/DisplayHelper.h"
+#include "chronotext/os/TaskManager.h"
 
 #include <boost/asio.hpp>
 
@@ -39,6 +40,7 @@ namespace chronotext
         memory::Manager* memoryManager();
         
         boost::asio::io_service& io();
+        TaskManager* taskManager();
         
         // ---
         
