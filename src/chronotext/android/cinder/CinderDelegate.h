@@ -33,7 +33,7 @@ namespace chr
         };
         
     public:
-        static bool LOG_VERBOSE;
+        static bool VERBOSE;
         
         CinderDelegate();
         virtual ~CinderDelegate() {}
@@ -85,22 +85,22 @@ namespace chr
     protected:
         CinderSketch *sketch;
 
-        jobject mJavaContext;
-        jobject mJavaListener;
-        jobject mJavaDisplay;
+        jobject javaContext_;
+        jobject javaListener_;
+        jobject javaDisplay_;
         
         DisplayInfo displayInfo_;
         WindowInfo windowInfo_;
 
-        ci::Timer mTimer;
-        uint32_t mFrameCount;
+        ci::Timer timer;
+        uint32_t frameCount;
         
         std::shared_ptr<boost::asio::io_service> io;
         std::shared_ptr<boost::asio::io_service::work> ioWork;
         
-        ASensorManager *mSensorManager;
-        const ASensor *mAccelerometerSensor;
-        ASensorEventQueue *mSensorEventQueue;
+        ASensorManager *sensorManager;
+        const ASensor *accelerometerSensor;
+        ASensorEventQueue *sensorEventQueue;
         
         AccelEvent::Filter accelFilter;
 

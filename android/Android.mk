@@ -5,9 +5,9 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/blocks/Freetype/include
 CHR_SRC = $(CINDER_PATH)/blocks/new-chronotext-toolkit/src
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CHR_SRC)
 
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Context.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Log.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/DisplayHelper.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/Context.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/SystemManagerBase.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/MemoryManagerBase.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderDelegate.cpp

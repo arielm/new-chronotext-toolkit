@@ -26,7 +26,7 @@
 
 #include "MemoryManager.h"
 
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 
 #import <sys/sysctl.h>
 #import <mach/host_info.h>

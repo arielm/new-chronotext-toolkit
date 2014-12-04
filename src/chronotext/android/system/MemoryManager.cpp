@@ -10,7 +10,7 @@
 
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 
 #include "cinder/Json.h"
 

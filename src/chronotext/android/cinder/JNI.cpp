@@ -8,10 +8,7 @@
 
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/system/Context.h"
-
-using namespace std;
-using namespace chr;
+#include "chronotext/Context.h"
 
 namespace chr
 {
@@ -49,8 +46,13 @@ namespace chr
     }
 }
 
+#pragma mark ---------------------------------------- JNI ----------------------------------------
+
+using namespace std;
+using namespace chr;
+
 /*
- * WARNING: THIS IS *NOT* CALLED EACH TIME THE APPLICATION STARTS
+ * WARNING: THIS IS *NOT* NECESSARILY CALLED EACH TIME THE APPLICATION STARTS
  */
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
@@ -60,8 +62,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
     jni::vm = vm;
     return JNI_VERSION_1_4;
 }
-
-#pragma mark ---------------------------------------- NATIVE METHODS ----------------------------------------
 
 /*
  * MUST BE CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED

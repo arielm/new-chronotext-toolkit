@@ -8,13 +8,18 @@
 
 #include "SystemManagerBase.h"
 
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
+    system::Info systemInfo()
+    {
+        return context::systemManager()->info;
+    }
+    
     namespace system
     {
         Platform platform()
@@ -35,11 +40,6 @@ namespace chr
         {
             static const string PLATFORM_NAMES[4] = {"OSX", "Windows", "iOS", "Android"};
             return PLATFORM_NAMES[platform()];
-        }
-        
-        Info info()
-        {
-            return context::systemManager()->info;
         }
 
         // ---

@@ -12,12 +12,12 @@
 
 namespace chr
 {
+    system::Info systemInfo();
+    
     namespace system
     {
         Platform platform();
         std::string platformName();
-
-        Info info();
 
         // ---
         

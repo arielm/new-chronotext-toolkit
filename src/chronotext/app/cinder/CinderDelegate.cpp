@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/app/cinder/CinderDelegate.h"
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 
 #include "cinder/Json.h"
 

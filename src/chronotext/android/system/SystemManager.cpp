@@ -8,7 +8,7 @@
 
 #include "SystemManager.h"
 
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/Utils.h"
 
 #include <sys/system_properties.h>
@@ -21,7 +21,7 @@ namespace chr
 {
     namespace system
     {
-        string android::property(const char *name)
+        string android::getProperty(const char *name)
         {
             static char tmp[256];
             auto len = __system_property_get(name, tmp);
@@ -64,7 +64,7 @@ namespace chr
         
         string Manager::getOsVersionString()
         {
-            return android::property("ro.build.version.release");
+            return android::getProperty("ro.build.version.release");
         }
         
         string Manager::getDeviceString()
@@ -74,12 +74,12 @@ namespace chr
         
         string Manager::getModel()
         {
-            return android::property("ro.product.model");
+            return android::getProperty("ro.product.model");
         }
         
         string Manager::getManufacturer()
         {
-            return android::property("ro.product.manufacturer");
+            return android::getProperty("ro.product.manufacturer");
         }
     }
 }

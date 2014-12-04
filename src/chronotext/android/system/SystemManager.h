@@ -29,7 +29,7 @@ namespace chr
              * adb shell getprop ro.product.manufacturer
              */
             
-            std::string property(const char *name);
+            std::string getProperty(const char *name);
         }
         
         class Manager : public ManagerBase

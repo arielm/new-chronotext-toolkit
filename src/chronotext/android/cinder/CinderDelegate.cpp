@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/FileSystem.h"
 #include "chronotext/utils/accel/AccelEvent.h"
@@ -19,7 +19,7 @@ using namespace ci::app;
 
 namespace chr
 {
-    bool CinderDelegate::LOG_VERBOSE = false;
+    bool CinderDelegate::VERBOSE = false;
     
     CinderDelegate::CinderDelegate()
     :
@@ -54,23 +54,23 @@ namespace chr
     
     void CinderDelegate::prelaunch(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
-        mJavaContext = javaContext;
-        mJavaListener = javaListener;
-        mJavaDisplay = javaDisplay; // TODO: SHOULD BE PART OF DisplayHelper?
+        javaContext_ = javaContext;
+        javaListener_ = javaListener;
+        javaDisplay_ = javaDisplay; // TODO: SHOULD BE PART OF DisplayHelper?
         
         displayInfo_ = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
         
         // ---
 
-        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(mJavaContext), "getAssets", "()Landroid/content/res/AssetManager;");
-        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(mJavaContext, getAssetsMethod));
+        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(javaContext_), "getAssets", "()Landroid/content/res/AssetManager;");
+        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(javaContext_, getAssetsMethod));
         
         FileSystem::setAndroidAssetManager(assetManager);
         
         // ---
         
-        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(mJavaContext), "getFilesDir", "()Ljava/io/File;");
-        jobject filesDirObject = env->CallObjectMethod(mJavaContext, getFilesDirMethod);
+        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext_), "getFilesDir", "()Ljava/io/File;");
+        jobject filesDirObject = env->CallObjectMethod(javaContext_, getFilesDirMethod);
         jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
         jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
         
@@ -91,8 +91,8 @@ namespace chr
         
         // ---
         
-        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(mJavaContext), "getPackageCodePath", "()Ljava/lang/String;");
-        jstring packageCodePathString = (jstring)env->CallObjectMethod(mJavaContext, getPackageCodePathMethod);
+        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(javaContext_), "getPackageCodePath", "()Ljava/lang/String;");
+        jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext_, getPackageCodePathMethod);
         
         const char *apkPath = env->GetStringUTFChars(packageCodePathString, nullptr);
         FileSystem::setAndroidApkPath(apkPath);
@@ -193,9 +193,9 @@ namespace chr
     
     void CinderDelegate::start(int flags)
     {
-        mFrameCount = 0;
+        frameCount = 0;
         
-        mTimer.start();
+        timer.start();
         sketch->clock().start();
         
         sketch->start(flags);
@@ -203,7 +203,7 @@ namespace chr
     
     void CinderDelegate::stop(int flags)
     {
-        mTimer.stop();
+        timer.stop();
         sketch->clock().stop();
         
         sketch->stop(flags);
@@ -227,7 +227,7 @@ namespace chr
         
         sketch->update();
         sketch->timeline().stepTo(now);
-        mFrameCount++;
+        frameCount++;
 
         sketch->draw();
     }
@@ -236,12 +236,12 @@ namespace chr
     
     double CinderDelegate::getElapsedSeconds() const
     {
-        return mTimer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
+        return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
     }
     
     uint32_t CinderDelegate::getElapsedFrames() const
     {
-        return mFrameCount;
+        return frameCount;
     }
     
     bool CinderDelegate::isEmulated() const
@@ -288,21 +288,21 @@ namespace chr
             looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
         }
         
-        mSensorManager = ASensorManager_getInstance();
-        mAccelerometerSensor = ASensorManager_getDefaultSensor(mSensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, nullptr, nullptr);
+        sensorManager = ASensorManager_getInstance();
+        accelerometerSensor = ASensorManager_getDefaultSensor(sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        sensorEventQueue = ASensorManager_createEventQueue(sensorManager, looper, 3, nullptr, nullptr);
     }
     
     void CinderDelegate::destroySensorEventQueue()
     {
-        ASensorManager_destroyEventQueue(mSensorManager, mSensorEventQueue);
+        ASensorManager_destroyEventQueue(sensorManager, sensorEventQueue);
     }
     
     void CinderDelegate::pollSensorEvents()
     {
         ASensorEvent event;
         
-        while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
+        while (ASensorEventQueue_getEvents(sensorEventQueue, &event, 1) > 0)
         {
             if (event.type == ASENSOR_TYPE_ACCELEROMETER)
             {
@@ -349,20 +349,20 @@ namespace chr
         accelFilter = AccelEvent::Filter(filterFactor);
         
         int delay = 1000000 / updateFrequency;
-        int min = ASensor_getMinDelay(mAccelerometerSensor);
+        int min = ASensor_getMinDelay(accelerometerSensor);
         
         if (delay < min)
         {
             delay = min;
         }
         
-        ASensorEventQueue_enableSensor(mSensorEventQueue, mAccelerometerSensor);
-        ASensorEventQueue_setEventRate(mSensorEventQueue, mAccelerometerSensor, delay);
+        ASensorEventQueue_enableSensor(sensorEventQueue, accelerometerSensor);
+        ASensorEventQueue_setEventRate(sensorEventQueue, accelerometerSensor, delay);
     }
     
     void CinderDelegate::disableAccelerometer()
     {
-        ASensorEventQueue_disableSensor(mSensorEventQueue, mAccelerometerSensor);
+        ASensorEventQueue_disableSensor(sensorEventQueue, accelerometerSensor);
     }
     
     void CinderDelegate::handleAcceleration(ASensorEvent event)
@@ -387,8 +387,8 @@ namespace chr
     int CinderDelegate::getDisplayRotation()
     {
         JNIEnv *env = jni::env();
-        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(mJavaDisplay), "getRotation", "()I");
-        return env->CallIntMethod(mJavaDisplay, getRotationMethod);
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(javaDisplay_), "getRotation", "()I");
+        return env->CallIntMethod(javaDisplay_, getRotationMethod);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -425,13 +425,13 @@ namespace chr
     
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
-        LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
+        LOGI_IF(VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
         callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::env()->NewStringUTF(body.data()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
-        LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
+        LOGI_IF(VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
         sketch->sendMessage(Message(what, body));
     }
     
@@ -441,12 +441,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        env->CallVoidMethodV(mJavaListener, method, args);
+        env->CallVoidMethodV(javaListener_, method, args);
         va_end(args);
     }
     
@@ -454,12 +454,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jboolean ret = env->CallBooleanMethodV(mJavaListener, method, args);
+        jboolean ret = env->CallBooleanMethodV(javaListener_, method, args);
         va_end(args);
         
         return ret;
@@ -469,12 +469,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jchar ret = env->CallCharMethodV(mJavaListener, method, args);
+        jchar ret = env->CallCharMethodV(javaListener_, method, args);
         va_end(args);
         
         return ret;
@@ -484,12 +484,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jint ret = env->CallIntMethodV(mJavaListener, method, args);
+        jint ret = env->CallIntMethodV(javaListener_, method, args);
         va_end(args);
         
         return ret;
@@ -499,12 +499,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jlong ret = env->CallLongMethodV(mJavaListener, method, args);
+        jlong ret = env->CallLongMethodV(javaListener_, method, args);
         va_end(args);
         
         return ret;
@@ -514,12 +514,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jfloat ret = env->CallFloatMethodV(mJavaListener, method, args);
+        jfloat ret = env->CallFloatMethodV(javaListener_, method, args);
         va_end(args);
         
         return ret;
@@ -529,12 +529,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jdouble ret = env->CallDoubleMethod(mJavaListener, method, args);
+        jdouble ret = env->CallDoubleMethod(javaListener_, method, args);
         va_end(args);
         
         return ret;
@@ -544,12 +544,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(mJavaListener);
+        jclass cls = env->GetObjectClass(javaListener_);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jobject ret = env->CallObjectMethodV(mJavaListener, method, args);
+        jobject ret = env->CallObjectMethodV(javaListener_, method, args);
         va_end(args);
         
         return ret;

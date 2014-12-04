@@ -14,7 +14,7 @@
 #import "CinderDelegate.h"
 #import "GLViewController.h"
 
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
 #include <map>
@@ -228,7 +228,7 @@ using namespace chr;
 
 - (BOOL) emulated
 {
-    return system::info().isSimulator;
+    return systemInfo().isSimulator;
 }
 
 #pragma mark ---------------------------------------- IO SERVICE ----------------------------------------
@@ -279,7 +279,7 @@ using namespace chr;
     }
     else if (magSize == 1024 * 768)
     {
-        if (system::info().isPadMini)
+        if (systemInfo().isPadMini)
         {
             diagonal = 7.90f; // IPAD MINI
         }

@@ -8,21 +8,19 @@
 
 #include "MemoryManagerBase.h"
 
-#include "chronotext/system/Context.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 
 namespace chr
 {
+    memory::Info memoryInfo()
+    {
+        return context::memoryManager()->getInfo();
+    }
+    
     namespace memory
     {
-        Info info()
-        {
-            return context::memoryManager()->getInfo();
-        }
-        
-        // ---
-        
         bool ManagerBase::init()
         {
             LOGI << "MEMORY INFO: " << getInfo() << endl;

@@ -23,12 +23,10 @@
 
 namespace chr
 {
+    memory::Info memoryInfo();
+
     namespace memory
     {
-        Info info();
-
-        // ---
-        
         class ManagerBase
         {
         public:
