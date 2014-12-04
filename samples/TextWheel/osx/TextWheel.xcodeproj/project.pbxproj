@@ -39,6 +39,7 @@
 		A85977801A2FD6400080C906 /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A859777A1A2FD6400080C906 /* NSDictionary+DefautValues.m */; };
 		A85977811A2FD6400080C906 /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A859777C1A2FD6400080C906 /* NSMutableDictionary+Merge.m */; };
 		A85977821A2FD6400080C906 /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A859777E1A2FD6400080C906 /* NSString+JSON.m */; };
+		A85977841A309FEF0080C906 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A85977831A309FEF0080C906 /* Application.cpp */; };
 		A867AB8A194B9AEF008EF66E /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A867AB88194B9AEF008EF66E /* QuadMatrix.cpp */; };
 		A8A883F418C6C0D200BC0BDB /* TextSpiral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */; };
 		A8A8840718C8CBBE00BC0BDB /* ja.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840418C8CBBE00BC0BDB /* ja.txt */; };
@@ -143,6 +144,7 @@
 		A859777C1A2FD6400080C906 /* NSMutableDictionary+Merge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Merge.m"; sourceTree = "<group>"; };
 		A859777D1A2FD6400080C906 /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
 		A859777E1A2FD6400080C906 /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
+		A85977831A309FEF0080C906 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		A867AB85194B9AEF008EF66E /* Quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quad.h; sourceTree = "<group>"; };
 		A867AB86194B9AEF008EF66E /* QuadBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatch.h; sourceTree = "<group>"; };
 		A867AB87194B9AEF008EF66E /* QuadBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatchMap.h; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				A85977481A2FC1350080C906 /* Application.h */,
+				A85977831A309FEF0080C906 /* Application.cpp */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				A8F9FC5418C5683B00C48245 /* VirtualFont.cpp in Sources */,
 				A85977441A2FC0E50080C906 /* main.cpp in Sources */,
 				A8F595641A07784800877FB2 /* Log.cpp in Sources */,
+				A85977841A309FEF0080C906 /* Application.cpp in Sources */,
 				A859776D1A2FC1D40080C906 /* TaskManager.cpp in Sources */,
 				A85977661A2FC1C70080C906 /* MemoryManagerBase.cpp in Sources */,
 				A85977551A2FC1920080C906 /* SystemManager.cpp in Sources */,

@@ -10,7 +10,7 @@
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/system/SystemManager.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Log.h"
 
 #include "cinder/gl/gl.h"
 
@@ -18,10 +18,6 @@
 
 using namespace std;
 using namespace ci;
-
-//class LangHelper;
-//class LayoutCache;
-//class TextItemizer;
 
 namespace chronotext
 {
@@ -40,7 +36,7 @@ namespace chronotext
         {
             if (!globalMap.empty() || !aliases.empty() || hasDefaultFont)
             {
-                throw EXCEPTION(zf::FontManager, "FONT-CONFIG ALREADY DEFINED");
+                throw EXCEPTION(FontManager, "FONT-CONFIG ALREADY DEFINED");
             }
             else
             {
@@ -176,7 +172,7 @@ namespace chronotext
             /*
              * SHOULD NOT OCCUR, UNLESS NO "DEFAULT FONT" IS DEFINED
              */
-            throw invalid_argument(string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
+            throw EXCEPTION(FontManager, string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
         }
         
         shared_ptr<VirtualFont> FontManager::getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties)
@@ -239,7 +235,7 @@ namespace chronotext
                     return font;
                 }
                 
-                throw invalid_argument("INVALID FONT-DEFINITION: " + source->getURI());
+                throw EXCEPTION(FontManager, "INVALID FONT-DEFINITION: " + source->getURI());
             }
         }
         
