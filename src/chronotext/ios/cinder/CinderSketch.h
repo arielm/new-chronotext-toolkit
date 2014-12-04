@@ -25,9 +25,6 @@ namespace chronotext
         chr::FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
         
-        std::ostream& console() { return std::cout; }
-        boost::asio::io_service& io_service() const;
-        
         double getElapsedSeconds() const;
         uint32_t getElapsedFrames() const;
         

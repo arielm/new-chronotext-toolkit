@@ -10,6 +10,8 @@
 
 #include "chronotext/cinder/CinderSketch.h"
 
+#include <boost/asio.hpp>
+
 #include <jni.h>
 #include <android/sensor.h>
 
@@ -55,9 +57,6 @@ namespace chronotext
 
         void draw();
         
-        std::ostream& console();
-        boost::asio::io_service& io_service() const;
-
         double getElapsedSeconds() const;
         uint32_t getElapsedFrames() const;
 

@@ -22,9 +22,12 @@ namespace chronotext
             std::shared_ptr<system::Manager> systemManager;
             std::shared_ptr<memory::Manager> memoryManager;
             
+            boost::asio::io_service *io = nullptr;
+            
             // ---
             
             bool initialized = false;
+            bool setup = false;
         }
         
         bool init()
@@ -42,15 +45,30 @@ namespace chronotext
             return intern::initialized;
         }
         
-        void uninit()
+        void setup(boost::asio::io_service &io)
         {
-            if (intern::initialized)
+            if (!intern::setup && init())
+            {
+                intern::io = &io;
+                
+                // ---
+                
+                intern::setup = true;
+            }
+        }
+        
+        void shutdown()
+        {
+            if (intern::setup)
             {
                 intern::memoryManager.reset();
                 intern::systemManager.reset();
                 
+                intern::io = nullptr;
+                
                 // ---
                 
+                intern::setup = false;
                 intern::initialized = false;
             }
         }
@@ -63,6 +81,11 @@ namespace chronotext
         memory::Manager* memoryManager()
         {
             return intern::memoryManager.get();
+        }
+        
+        boost::asio::io_service& io()
+        {
+            return *intern::io;
         }
     }
 }

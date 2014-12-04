@@ -73,7 +73,7 @@ namespace chronotext
         void performDetach();
         
         template <typename F>
-        void post(const F &fn);
+        void post(const F &fn); // TODO: SHOULD RETURN A BOOLEAN
     };
 }
 

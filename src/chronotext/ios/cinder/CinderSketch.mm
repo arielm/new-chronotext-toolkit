@@ -41,12 +41,6 @@ namespace chronotext
 
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
-    
-    boost::asio::io_service& CinderSketch::io_service() const
-    {
-        return *(castToDelegate(delegate).io);
-    }
-    
     double CinderSketch::getElapsedSeconds() const
     {
         return castToDelegate(delegate).elapsedSeconds;

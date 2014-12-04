@@ -19,6 +19,8 @@
 
 #include <map>
 
+#include <boost/asio.hpp>
+
 using namespace std;
 using namespace ci;
 using namespace app;
@@ -65,7 +67,6 @@ using namespace chr;
 @synthesize viewController;
 @synthesize sketch;
 @synthesize accelFilter;
-@synthesize io;
 @synthesize displayInfo;
 @synthesize windowInfo;
 @synthesize initialized;
@@ -76,7 +77,7 @@ using namespace chr;
     if (self = [super init])
     {
         /*
-         * UNLIKE THE OTHER PLATFORMS: DisplayInfo AND WindowInfo ARE NOT AVAILABLE AT THIS STAGE
+         * UNLIKE ON OTHER PLATFORMS: DisplayInfo AND WindowInfo ARE NOT AVAILABLE AT THIS STAGE
          */
         
         chr::context::init(); // TODO: HANDLE FAILURE
@@ -99,12 +100,16 @@ using namespace chr;
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self stopIOService];
     
     sketch->shutdown();
     chr::destroySketch(sketch);
+
+    /*
+     * TODO: CHECK HOW "UNDERGOING" TASKS ARE HANDLED, ETC.
+     */
     
-    chr::context::uninit(); // TODO: FOLLOW-UP
+    [self stopIOService];
+    chr::context::shutdown();
     
     [super dealloc];
 }
@@ -157,11 +162,11 @@ using namespace chr;
     // ---
 
     [self startIOService];
+    context::setup(*io);
 
-    sketch->Handler::setIOService(*io); // TODO INSTEAD: A COMMON context::io() SHOULD BE USED BY Handler, TaskManager, ETC.
     sketch->timeline().stepTo(0);
-    
     sketch->setup();
+    
     initialized = YES;
 }
 

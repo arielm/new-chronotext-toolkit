@@ -117,27 +117,28 @@ namespace chronotext
         
         // ---
         
-        /*
-         * BOTH ARE ASSOCIATED WITH THE RENDERER'S THREAD
-         */
         createSensorEventQueue();
+        
         startIOService();
+        context::setup(*io);
         
-        sketch->Handler::setIOService(*io); // TODO: A COMMON (NAMESPACE-STORED) context::io() SHOULD BE USED BY Handler, TaskManager, CinderSketch, ETC.
         sketch->timeline().stepTo(0);
-        
         sketch->setup();
     }
     
     void CinderDelegate::shutdown()
     {
-        stopIOService();
         destroySensorEventQueue();
         
         sketch->shutdown();
         setSketch(nullptr);
+
+        /*
+         * TODO: CHECK HOW "UNDERGOING" TASKS ARE HANDLED, ETC.
+         */
         
-        context::uninit(); // TODO: FOLLOW-UP
+        stopIOService();
+        context::shutdown();
     }
     
     void CinderDelegate::resize(int width, int height)
@@ -230,21 +231,6 @@ namespace chronotext
     }
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
-
-    ostream& CinderDelegate::console()
-    {
-        if (!mOutputStream)
-        {
-            mOutputStream = make_shared<android::dostream>();
-        }
-        
-        return *mOutputStream;
-    }
-    
-    boost::asio::io_service& CinderDelegate::io_service() const
-    {
-        return *io;
-    }
     
     double CinderDelegate::getElapsedSeconds() const
     {

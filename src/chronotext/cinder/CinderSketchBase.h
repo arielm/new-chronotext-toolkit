@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -15,8 +15,6 @@
 #include "chronotext/utils/accel/AccelEvent.h"
 
 #include "cinder/Timeline.h"
-
-#include <boost/asio.hpp>
 
 namespace chronotext
 {
@@ -73,9 +71,6 @@ namespace chronotext
         virtual chr::FrameClock& clock() const = 0;
         virtual ci::Timeline& timeline() const = 0;
 
-        virtual std::ostream& console() = 0;
-        virtual boost::asio::io_service& io_service() const = 0;
-        
         virtual double getElapsedSeconds() const = 0;
         virtual uint32_t getElapsedFrames() const = 0;
 

@@ -22,6 +22,8 @@
 #include "chronotext/system/MemoryManager.h"
 #include "chronotext/system/DisplayHelper.h"
 
+#include <boost/asio.hpp>
+
 namespace chronotext
 {
     class CinderSketch;
@@ -36,8 +38,14 @@ namespace chronotext
         system::Manager* systemManager();
         memory::Manager* memoryManager();
         
+        boost::asio::io_service& io();
+        
+        // ---
+        
         bool init();
-        void uninit();
+        
+        void setup(boost::asio::io_service &io);
+        void shutdown();
     };
 }
 

@@ -197,7 +197,7 @@ namespace chronotext
         };
     }
     
-    typedef class zf::VirtualFont ZFont; // XXX
+    typedef class zf::VirtualFont ZFont;
 }
 
 namespace chr = chronotext;

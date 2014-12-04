@@ -15,11 +15,11 @@
 
 #include "chronotext/font/zf/LineLayout.h"
 
+#include <memory>
+
 #include <boost/bimap.hpp>
 #include <boost/bimap/list_of.hpp>
 #include <boost/bimap/set_of.hpp>
-
-#include <memory>
 
 namespace chronotext
 {

@@ -35,6 +35,8 @@
 #include "chronotext/font/zf/LangHelper.h"
 #include "chronotext/font/zf/TextLine.h"
 
+#include <memory>
+
 #include "unicode/unistr.h"
 #include "unicode/uscript.h"
 #include "unicode/ubidi.h"

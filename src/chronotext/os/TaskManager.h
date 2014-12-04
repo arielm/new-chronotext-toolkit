@@ -45,6 +45,11 @@ namespace chronotext
             return std::shared_ptr<TaskManager>(new TaskManager(io)); // XXX: std::make_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
         }
 
+        /*
+         * TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
+         *
+         * E.G. THE CONTEXT IS BEING SHUT-DOWN...
+         */
         template <typename F>
         inline void post(const F &fn, bool forceSync = false)
         {
@@ -98,7 +103,7 @@ namespace chronotext
     protected:
         friend class Task;
 
-        boost::asio::io_service &io;
+        boost::asio::io_service &io; // XXX
         boost::mutex _mutex;
         
         int lastId;

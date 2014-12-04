@@ -78,7 +78,7 @@ namespace chronotext
         context::init(); // TODO: HANDLE FAILURE
         
         /*
-         * SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
+         * setSketch() SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
          * OTHERWISE: POTENTIAL HEIRS LIKE osx/cinder/CinderAdapter WILL CRASH
          */
         
@@ -87,15 +87,15 @@ namespace chronotext
         // TODO: sketch->init()
         
         // ---
-        
+
+        context::setup(io_service());
+
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update
          */
         io_service().post([this]{ sketch->clock().update(); });
         
-        sketch->Handler::setIOService(io_service()); // TODO: A COMMON (NAMESPACE-STORED) context::io() SHOULD BE USED BY Handler, TaskManager, CinderSketch, ETC.
         sketch->timeline().stepTo(0);
-        
         sketch->setup();
     }
     
@@ -106,7 +106,7 @@ namespace chronotext
         sketch->shutdown();
         setSketch(nullptr);
         
-        context::uninit(); // TODO: FOLLOW-UP
+        context::shutdown();
     }
     
     void CinderDelegate::resize()

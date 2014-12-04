@@ -35,16 +35,6 @@ namespace chronotext
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
     
-    ostream& CinderSketch::console()
-    {
-        return delegate->console();
-    }
-    
-    boost::asio::io_service& CinderSketch::io_service() const
-    {
-        return delegate->io_service();
-    }
-    
     double CinderSketch::getElapsedSeconds() const
     {
         return delegate->getElapsedSeconds();
