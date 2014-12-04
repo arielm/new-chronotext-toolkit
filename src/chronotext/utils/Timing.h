@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Log.h"
 
 #include "cinder/Timer.h"
 

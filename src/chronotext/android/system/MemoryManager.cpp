@@ -10,6 +10,7 @@
 
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/android/cinder/CinderDelegate.h"
+#include "chronotext/system/Context.h"
 
 #include "cinder/Json.h"
 
@@ -83,7 +84,7 @@ namespace chronotext
              * TODO: ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN chronotext/os/Task
              */
             
-            jstring query = (jstring)context::delegate->callObjectMethodOnJavaListener("getMemoryInfo", "()Ljava/lang/String;");
+            jstring query = (jstring)CONTEXT::delegate->callObjectMethodOnJavaListener("getMemoryInfo", "()Ljava/lang/String;");
             
             if (query)
             {

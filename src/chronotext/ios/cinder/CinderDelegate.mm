@@ -80,7 +80,7 @@ using namespace chr;
          * UNLIKE ON OTHER PLATFORMS: DisplayInfo AND WindowInfo ARE NOT AVAILABLE AT THIS STAGE
          */
         
-        chr::context::init(); // TODO: HANDLE FAILURE
+        chr::CONTEXT::init(); // TODO: HANDLE FAILURE
         
         sketch = chr::createSketch();
         sketch->setDelegate(self);
@@ -110,9 +110,8 @@ using namespace chr;
      * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
      * RELATED TODOS IN Context AND TaskManager
      */
-    
     [self stopIOService];
-    chr::context::shutdown();
+    chr::CONTEXT::shutdown();
     
     [super dealloc];
 }
@@ -165,7 +164,7 @@ using namespace chr;
     // ---
 
     [self startIOService];
-    context::setup(*io);
+    CONTEXT::setup(*io);
 
     sketch->timeline().stepTo(0);
     sketch->setup();

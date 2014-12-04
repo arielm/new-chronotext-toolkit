@@ -8,6 +8,7 @@
 
 #include "SystemManager.h"
 
+#include "chronotext/system/Context.h"
 #include "chronotext/utils/Utils.h"
 
 #include <sys/system_properties.h>

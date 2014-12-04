@@ -6,6 +6,10 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * WARNING: NEVER INCLUDE THIS FILE IN A HEADER!
+ */
+
 #pragma once
 
 #include "cinder/Cinder.h"
@@ -22,6 +26,7 @@
 #include "chronotext/system/MemoryManager.h"
 #include "chronotext/system/DisplayHelper.h"
 #include "chronotext/os/TaskManager.h"
+#include "chronotext/Log.h"
 
 #include <boost/asio.hpp>
 
@@ -33,22 +38,22 @@ namespace chronotext
     void destroySketch(CinderSketch *sketch);
     
     // ---
-
-    namespace context
+    
+    namespace CONTEXT
     {
-        system::Manager* systemManager();
-        memory::Manager* memoryManager();
-        
-        boost::asio::io_service& io();
-        TaskManager* taskManager();
-        
-        // ---
-        
         bool init();
-        
-        void setup(boost::asio::io_service &io);
+        void setup(boost::asio::io_service &io_service);
         void shutdown();
-    };
+    }
 }
 
-namespace chr = chronotext;
+namespace chr = chronotext; // XXX
+
+namespace context
+{
+    chr::system::Manager* systemManager();
+    chr::memory::Manager* memoryManager();
+    
+    boost::asio::io_service& io_service();
+    chr::TaskManager* taskManager();
+};

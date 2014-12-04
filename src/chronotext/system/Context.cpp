@@ -8,21 +8,16 @@
 
 #include "Context.h"
 
-#include "chronotext/Log.h"
-
-using namespace std;
-using namespace ci;
-
 namespace chronotext
 {
-    namespace context
+    namespace CONTEXT
     {
         namespace intern
         {
             std::shared_ptr<system::Manager> systemManager;
             std::shared_ptr<memory::Manager> memoryManager;
             
-            boost::asio::io_service *io = nullptr;
+            boost::asio::io_service *io_service = nullptr;
             std::shared_ptr<TaskManager> taskManager;
             
             // ---
@@ -46,11 +41,11 @@ namespace chronotext
             return intern::initialized;
         }
         
-        void setup(boost::asio::io_service &io)
+        void setup(boost::asio::io_service &io_service)
         {
             if (!intern::setup && init())
             {
-                intern::io = &io;
+                intern::io_service = &io_service;
                 intern::taskManager = TaskManager::create();
                 
                 // ---
@@ -73,7 +68,7 @@ namespace chronotext
                  * RELATED TODOS IN CinderDelegate AND TaskManager
                  */
                 intern::taskManager.reset();
-                intern::io = nullptr;
+                intern::io_service = nullptr;
                 
                 // ---
                 
@@ -81,25 +76,28 @@ namespace chronotext
                 intern::initialized = false;
             }
         }
-        
-        system::Manager* systemManager()
-        {
-            return intern::systemManager.get();
-        }
-        
-        memory::Manager* memoryManager()
-        {
-            return intern::memoryManager.get();
-        }
+    }
+}
 
-        boost::asio::io_service& io()
-        {
-            return *intern::io;
-        }
-        
-        TaskManager* taskManager()
-        {
-            return intern::taskManager.get();
-        }
+namespace context
+{
+    chr::system::Manager* systemManager()
+    {
+        return chr::CONTEXT::intern::systemManager.get();
+    }
+    
+    chr::memory::Manager* memoryManager()
+    {
+        return chr::CONTEXT::intern::memoryManager.get();
+    }
+    
+    boost::asio::io_service& io_service()
+    {
+        return *chr::CONTEXT::intern::io_service;
+    }
+    
+    chr::TaskManager* taskManager()
+    {
+        return chr::CONTEXT::intern::taskManager.get();
     }
 }

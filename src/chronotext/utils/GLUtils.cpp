@@ -6,8 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+#include "chronotext/Log.h"
 #include "chronotext/utils/GLUtils.h"
-#include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
 
 using namespace std;

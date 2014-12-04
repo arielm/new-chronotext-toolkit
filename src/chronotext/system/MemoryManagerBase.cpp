@@ -9,7 +9,6 @@
 #include "MemoryManagerBase.h"
 
 #include "chronotext/system/Context.h"
-#include "chronotext/Log.h"
 
 using namespace std;
 

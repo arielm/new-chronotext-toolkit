@@ -52,7 +52,7 @@ namespace chronotext
     
     class CinderDelegate;
     
-    namespace context
+    namespace CONTEXT
     {
         extern CinderDelegate *delegate;
     }

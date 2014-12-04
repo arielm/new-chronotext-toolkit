@@ -14,7 +14,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace chr;
 
 /*
  See http://www.microsoft.com/typography/otspec/name.htm for a list of some

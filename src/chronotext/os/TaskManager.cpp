@@ -28,7 +28,7 @@ namespace chronotext
         }
         else
         {
-            context::io().post(fn);
+            context::io_service().post(fn);
             
             return true; // TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
         }

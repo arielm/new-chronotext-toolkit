@@ -9,7 +9,6 @@
 #include "SystemManagerBase.h"
 
 #include "chronotext/system/Context.h"
-#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;

@@ -23,7 +23,7 @@ namespace chronotext
          * OPTION 2: return context::post([=]{ handleMessage(message); });
          */
         
-        context::io().post(bind(&Handler::handleMessage, this, message));
+        context::io_service().post(bind(&Handler::handleMessage, this, message));
         
         return true; // TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
     }

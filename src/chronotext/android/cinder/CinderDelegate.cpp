@@ -100,11 +100,11 @@ namespace chronotext
         
         // ---
         
-        context::init(); // TODO: HANDLE FAILURE
+        CONTEXT::init(); // TODO: HANDLE FAILURE
         
         setSketch(createSketch());
         
-        sketch->init(); // TODO: HANDLE FAILURE
+        CONTEXT::init(); // TODO: HANDLE FAILURE
     }
     
     /*
@@ -120,7 +120,7 @@ namespace chronotext
         createSensorEventQueue();
         
         startIOService();
-        context::setup(*io);
+        CONTEXT::setup(*io);
         
         sketch->timeline().stepTo(0);
         sketch->setup();
@@ -139,9 +139,8 @@ namespace chronotext
          * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
          * RELATED TODOS IN Context AND TaskManager
          */
-        
         stopIOService();
-        context::shutdown();
+        CONTEXT::shutdown();
     }
     
     void CinderDelegate::resize(int width, int height)

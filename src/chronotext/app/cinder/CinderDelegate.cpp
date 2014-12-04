@@ -8,7 +8,6 @@
 
 #include "chronotext/app/cinder/CinderDelegate.h"
 #include "chronotext/system/Context.h"
-#include "chronotext/utils/Utils.h"
 
 #include "cinder/Json.h"
 
@@ -81,14 +80,14 @@ namespace chronotext
         updateRealDisplayInfo();
         updateRealWindowInfo();
 
-        context::init(); // TODO: HANDLE FAILURE
+        CONTEXT::init(); // TODO: HANDLE FAILURE
         
         setSketch(createSketch());
         sketch->init(); // TODO: HANDLE FAILURE
         
         // ---
 
-        context::setup(io_service());
+        CONTEXT::setup(io_service());
 
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update
@@ -112,8 +111,7 @@ namespace chronotext
          * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
          * RELATED TODOS IN Context AND TaskManager
          */
-        
-        context::shutdown();
+        CONTEXT::shutdown();
     }
     
     void CinderDelegate::resize()
