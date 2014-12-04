@@ -8,15 +8,38 @@
 
 #include "TaskManager.h"
 
+#include "chronotext/system/Context.h"
+
 using namespace std;
 
 namespace chronotext
 {
-    TaskManager::TaskManager(boost::asio::io_service &io)
+    TaskManager::TaskManager()
     :
-    io(io),
     lastId(-1)
     {}
+    
+    /*
+     * TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
+     *
+     * E.G. THE CONTEXT IS BEING SHUT-DOWN...
+     *
+     * REQUIREMENT IN SYNC WITH os/TaskManager
+     */
+    
+    bool TaskManager::post(const function<void()> &fn, bool forceSync)
+    {
+        if (forceSync)
+        {
+            fn();
+            return true;
+        }
+        else
+        {
+            context::io().post(fn);
+            return true; // XXX
+        }
+    }
     
     int TaskManager::addTask(shared_ptr<Task> task)
     {

@@ -72,8 +72,7 @@ namespace chronotext
         void performRun();
         void performDetach();
         
-        template <typename F>
-        void post(const F &fn); // TODO: SHOULD RETURN A BOOLEAN
+        bool post(const std::function<void()> &fn); // TODO: CHECK IF std::forward MAKES SENSE
     };
 }
 

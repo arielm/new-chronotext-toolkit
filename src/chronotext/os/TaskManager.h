@@ -17,15 +17,13 @@
  *    - NEWLY ADDED LOCK-GUARD
  *    - NEW WAY TO START ASYNCHRONOUS TASKS VIA IO-SERVICE
  *
- * 2) A COMMON (NAMESPACE-STORED) context::io() SHOULD BE USED BY Handler, TaskManager, CinderSketch, ETC.
- *
- * 3) CHECK WHY IT IS NECESSARY TO CALL Task::PerformDetach UPON TASK COMPLETION
+ * 2) CHECK WHY IT IS NECESSARY TO CALL Task::PerformDetach UPON TASK COMPLETION
  *    - E.G. INSTEAD OF RELYING ON thread::join()
  *    - NECESSARY: SIMULATING EXTREME CASES (E.G. "EMPTY" ASYNCHRONOUS TASK, ETC.)
  *
- * 4) TRY TO RELY ON NEW C++11 FEATURES LIKE std::future AND std::async
+ * 3) TRY TO RELY ON NEW C++11 FEATURES LIKE std::future AND std::async
  *
- * 5) CREATE TESTS AND SAMPLES PROJECTS:
+ * 4) CREATE TESTS AND SAMPLES PROJECTS:
  *    - REQUIREMENTS: MUST WORK AT LEAST ON OSX, iOS AND ANDROID
  */
 
@@ -33,35 +31,22 @@
 
 #include "chronotext/os/Task.h"
 
-#include <boost/asio.hpp>
-
 namespace chronotext
 {
     class TaskManager : public std::enable_shared_from_this<TaskManager>
     {
     public:
-        static std::shared_ptr<TaskManager> create(boost::asio::io_service &io)
+        static std::shared_ptr<TaskManager> create()
         {
-            return std::shared_ptr<TaskManager>(new TaskManager(io)); // XXX: std::make_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+            return std::shared_ptr<TaskManager>(new TaskManager()); // XXX: std::make_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
         }
 
         /*
-         * TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
+         * RETURNS FALSE IF THE MESSAGE CAN'T BE SENT
          *
-         * E.G. THE CONTEXT IS BEING SHUT-DOWN...
+         * E.G. WHILE THE CONTEXT IS BEING SHUT-DOWN
          */
-        template <typename F>
-        inline void post(const F &fn, bool forceSync = false)
-        {
-            if (forceSync)
-            {
-                fn();
-            }
-            else
-            {
-                io.post(fn);
-            }
-        }
+        bool post(const std::function<void()> &fn, bool forceSync = false); // TODO: CHECK IF std::forward MAKES SENSE
         
         /*
          * RETURNS -1 IF THE TASK CAN'T BE ADDED
@@ -103,13 +88,11 @@ namespace chronotext
     protected:
         friend class Task;
 
-        boost::asio::io_service &io; // XXX
-        boost::mutex _mutex;
-        
         int lastId;
         std::map<int, std::shared_ptr<Task>> tasks;
+        boost::mutex _mutex;
         
-        TaskManager(boost::asio::io_service &io);
+        TaskManager();
 
         void taskEnded(Task *task);
     };

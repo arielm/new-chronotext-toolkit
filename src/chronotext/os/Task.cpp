@@ -49,13 +49,12 @@ namespace chronotext
                 if (synchronous)
                 {
                     performRun();
+                    return true;
                 }
                 else
                 {
-                    manager->post([=]{ _thread = thread(&Task::performRun, this); }, false); // TODO: TEST
+                    return manager->post([=]{ _thread = thread(&Task::performRun, this); }, false); // TODO: TEST
                 }
-                
-                return true;
             }
         }
         
@@ -131,9 +130,8 @@ namespace chronotext
         }
     }
     
-    template <typename F>
-    void Task::post(const F &fn)
+    bool Task::post(const function<void()> &fn)
     {
-        manager->post(fn, synchronous);
+        return manager->post(fn, synchronous);
     }
 }

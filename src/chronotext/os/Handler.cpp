@@ -18,6 +18,8 @@ namespace chronotext
      * TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
      *
      * E.G. THE CONTEXT IS BEING SHUT-DOWN...
+     *
+     * REQUIREMENT IN SYNC WITH os/TaskManager
      */
 
     bool Handler::sendMessage(const Message &message)
@@ -31,7 +33,6 @@ namespace chronotext
          */
         
         context::io().post(bind(&Handler::handleMessage, this, message));
-        
         return true; // XXX
     }
 }
