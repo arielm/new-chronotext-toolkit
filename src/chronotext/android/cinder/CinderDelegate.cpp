@@ -149,47 +149,32 @@ namespace chr
         sketch->resize();
     }
     
-    void CinderDelegate::event(int eventId)
+    void CinderDelegate::draw()
     {
-        switch (eventId)
-        {
-            case EVENT_RESUMED:
-                start(CinderSketch::REASON_APP_RESUMED);
-                break;
-                
-            case EVENT_SHOWN:
-                start(CinderSketch::REASON_APP_SHOWN);
-                break;
-                
-            case EVENT_PAUSED:
-                stop(CinderSketch::REASON_APP_PAUSED);
-                break;
-                
-            case EVENT_HIDDEN:
-                stop(CinderSketch::REASON_APP_HIDDEN);
-                break;
-                
-            case EVENT_CONTEXT_LOST:
-                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
-                break;
-                
-            case EVENT_CONTEXT_RENEWED:
-                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
-                break;
-                
-            case EVENT_BACKGROUND:
-                sketch->event(CinderSketch::EVENT_BACKGROUND);
-                break;
-                
-            case EVENT_FOREGROUND:
-                sketch->event(CinderSketch::EVENT_FOREGROUND);
-                break;
-                
-            case EVENT_BACK_KEY:
-                sketch->event(CinderSketch::EVENT_BACK_KEY);
-                break;
-        }
+        sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
+
+        pollSensorEvents(); // WHERE accelerated IS INVOKED
+        pollIOService(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
+        
+        /*
+         * MUST BE CALLED BEFORE Sketch::update
+         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+         *
+         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
+         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
+         */
+        double now = sketch->clock().getTime();
+        
+        // TODO: CALL memory::Manager::update()
+
+        sketch->update();
+        sketch->timeline().stepTo(now);
+        frameCount++;
+
+        sketch->draw();
     }
+    
+#pragma mark ---------------------------------------- LIFECYCLE ----------------------------------------
     
     void CinderDelegate::start(CinderSketch::Reason reason)
     {
@@ -207,29 +192,6 @@ namespace chr
         sketch->clock().stop();
         
         sketch->stop(reason);
-    }
-    
-    void CinderDelegate::draw()
-    {
-        sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-
-        pollSensorEvents(); // WHERE accelerated IS INVOKED
-        pollIOService(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
-        
-        /*
-         * MUST BE CALLED BEFORE Sketch::update
-         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
-         *
-         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
-         */
-        double now = sketch->clock().getTime();
-        
-        sketch->update();
-        sketch->timeline().stepTo(now);
-        frameCount++;
-
-        sketch->draw();
     }
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
@@ -408,8 +370,50 @@ namespace chr
         sketch->removeTouch(index, x, y);
     }
     
-#pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------
+#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
 
+    void CinderDelegate::event(int eventId)
+    {
+        switch (eventId)
+        {
+            case EVENT_RESUMED:
+                start(CinderSketch::REASON_APP_RESUMED);
+                break;
+                
+            case EVENT_SHOWN:
+                start(CinderSketch::REASON_APP_SHOWN);
+                break;
+                
+            case EVENT_PAUSED:
+                stop(CinderSketch::REASON_APP_PAUSED);
+                break;
+                
+            case EVENT_HIDDEN:
+                stop(CinderSketch::REASON_APP_HIDDEN);
+                break;
+                
+            case EVENT_CONTEXT_LOST:
+                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
+                break;
+                
+            case EVENT_CONTEXT_RENEWED:
+                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
+                break;
+                
+            case EVENT_BACKGROUND:
+                sketch->event(CinderSketch::EVENT_BACKGROUND);
+                break;
+                
+            case EVENT_FOREGROUND:
+                sketch->event(CinderSketch::EVENT_FOREGROUND);
+                break;
+                
+            case EVENT_BACK_KEY:
+                sketch->event(CinderSketch::EVENT_BACK_KEY);
+                break;
+        }
+    }
+    
     void CinderDelegate::action(int actionId)
     {
         callVoidMethodOnJavaListener("action", "(I)V", actionId);
@@ -426,17 +430,50 @@ namespace chr
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
         LOGI_IF(VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
+        
         callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::env()->NewStringUTF(body.data()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
         LOGI_IF(VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
+        
         sketch->sendMessage(Message(what, body));
     }
     
 #pragma mark ---------------------------------------- JAVA LISTENER ----------------------------------------
 
+    /*
+     * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
+     *
+     * TODO:
+     *
+     * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
+     *
+     * 2) ADD THREAD-LOCK
+     */
+    
+    JsonTree CinderDelegate::jsonQuery(const char *methodName)
+    {
+        const string &query = jni::toString((jstring)callObjectMethodOnJavaListener(methodName, "()Ljava/lang/String;"));
+        
+        if (!query.empty())
+        {
+            try
+            {
+                return JsonTree(query);
+            }
+            catch (exception &e)
+            {
+                LOGD << "JSON-QUERY FAILED | REASON: " << e.what() << endl; // LOG: WARNING
+            }
+        }
+        
+        return JsonTree();
+    }
+
+    // ---
+    
     void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();

@@ -152,7 +152,7 @@ public class CinderDelegate extends Handler
     }
   }
 
-  // ---------------------------------------- MESSAGING SYSTEM ----------------------------------------
+  // ---------------------------------------- SKETCH / DELEGATE COMMUNICATION ----------------------------------------
 
   /*
    * THIS IS RECEIVED ON THE RENDERER'S THREAD

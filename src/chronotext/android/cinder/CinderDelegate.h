@@ -10,6 +10,8 @@
 
 #include "chronotext/cinder/CinderSketch.h"
 
+#include "cinder/Json.h"
+
 #include <boost/asio.hpp>
 
 #include <jni.h>
@@ -52,21 +54,20 @@ namespace chr
 
         CinderSketch* getSketch();
 
-        virtual void sketchCreated(CinderSketch *sketch) {}
-        virtual void sketchDestroyed(CinderSketch *sketch) {}
+        void sketchCreated(CinderSketch *sketch) {}
+        void sketchDestroyed(CinderSketch *sketch) {}
+
+        void event(int eventId);
+        void action(int actionId);
         
-        virtual void action(int actionId);
-        virtual void receiveMessageFromSketch(int what, const std::string &body);
-        virtual void sendMessageToSketch(int what, const std::string &body = "");
+        void receiveMessageFromSketch(int what, const std::string &body);
+        void sendMessageToSketch(int what, const std::string &body = "");
         
         void init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
-        
         void setup(int width, int height);
         void shutdown();
 
         void resize(int width, int height);
-        void event(int eventId);
-
         void draw();
         
         double getElapsedSeconds() const;
@@ -84,6 +85,8 @@ namespace chr
         void removeTouch(int index, float x, float y);
 
         // ---
+        
+        ci::JsonTree jsonQuery(const char *methodName);
         
         void callVoidMethodOnJavaListener(const char *name, const char *sig, ...);
         jboolean callBooleanMethodOnJavaListener(const char *name, const char *sig, ...);

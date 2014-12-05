@@ -11,11 +11,15 @@
 #include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 
+using namespace std;
+
 namespace chr
 {
     namespace jni
     {
         JavaVM *vm = nullptr;
+        
+        // ---
         
         JNIEnv* env()
         {
@@ -39,6 +43,25 @@ namespace chr
             
             throw runtime_error("INVALID JNI ENV");
         }
+        
+        string toString(jstring s)
+        {
+            if (s)
+            {
+                JNIEnv *env_ = env();
+                
+                const char *chars = env_->GetStringUTFChars(s, nullptr);
+                
+                if (chars)
+                {
+                    string tmp(chars);
+                    env_->ReleaseStringUTFChars(s, chars);
+                    return tmp;
+                }
+            }
+            
+            return "";
+        }
     }
     
     namespace CONTEXT
@@ -49,7 +72,6 @@ namespace chr
 
 #pragma mark ---------------------------------------- JNI ----------------------------------------
 
-using namespace std;
 using namespace chr;
 
 /*
@@ -93,14 +115,11 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
     CI_LOGI("SHUTDOWN");
 }
 
+// ---
+
 void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)
 {
     CONTEXT::delegate->resize(width, height);
-}
-
-void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
-{
-    CONTEXT::delegate->event(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
@@ -108,19 +127,11 @@ void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
     CONTEXT::delegate->draw();
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
-{
-    CONTEXT::delegate->addTouch(index, x, y);
-}
+// ---
 
-void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
 {
-    CONTEXT::delegate->updateTouch(index, x, y);
-}
-
-void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
-{
-    CONTEXT::delegate->removeTouch(index, x, y);
+    CONTEXT::delegate->event(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)
@@ -135,4 +146,21 @@ void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject 
     {
         CONTEXT::delegate->sendMessageToSketch(what);
     }
+}
+
+// ---
+
+void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+{
+    CONTEXT::delegate->addTouch(index, x, y);
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+{
+    CONTEXT::delegate->updateTouch(index, x, y);
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+{
+    CONTEXT::delegate->removeTouch(index, x, y);
 }
