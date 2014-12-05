@@ -14,17 +14,17 @@ namespace chr
     {
         Manager::Manager()
         {
-            init();
+            setup();
         }
         
         Manager::~Manager()
         {
-            uninit();
+            shutdown();
         }
         
         // ---
         
-        Info Manager::updateInfo()
+        Info Manager::getInfo()
         {
             return Info();
         }

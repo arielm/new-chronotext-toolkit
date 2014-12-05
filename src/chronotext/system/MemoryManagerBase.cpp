@@ -18,18 +18,4 @@ namespace chr
     {
         return context::memoryManager()->getInfo();
     }
-    
-    namespace memory
-    {
-        bool ManagerBase::setup()
-        {
-            LOGI << "MEMORY INFO: " << getInfo() << endl;
-            return true;
-        }
-        
-        void ManagerBase::shutdown()
-        {
-            LOGI << "MEMORY INFO: " << getInfo() << endl;
-        }
-    }
 }

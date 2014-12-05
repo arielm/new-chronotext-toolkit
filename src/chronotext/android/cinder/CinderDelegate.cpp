@@ -465,7 +465,7 @@ namespace chr
             }
             catch (exception &e)
             {
-                LOGD << "JSON-QUERY FAILED | REASON: " << e.what() << endl; // LOG: WARNING
+                LOGI << "JSON-QUERY FAILED | REASON: " << e.what() << endl; // LOG: WARNING
             }
         }
         

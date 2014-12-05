@@ -26,7 +26,7 @@ namespace chr
             Manager();
             ~Manager() override;
             
-            Info updateInfo() override;
+            Info getInfo() override;
         };
     }
 }

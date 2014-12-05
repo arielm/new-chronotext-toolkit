@@ -13,17 +13,37 @@
 #include "chronotext/Context.h"
 
 /*
+ * MEMORY-MEASUREMENT SEEMS RELIABLE
+ *
+ *
+ * FINDINGS:
+ *
+ * 1) FREE MEMORY:
+ *    - WORKS AS INTENDED, BUT:
+ *      - NOT PROPERLY UPDATED DURING "WARMUP":
+ *        - LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
+ *
+ * 2) TOTAL MEMORY:
+ *    - NOT ACCESSIBLE VIA JAVA UNTIL API 16
+ *      - SEE "PREVIOUS TESTABLE MILESTONE" BELOW ON HOW TO QUERY IT VIA C++
+ *    - BUT IN ANY CASE:
+ *      - THIS VALUE IS USELESS
+ *
+ *
  * TODO:
  *
- * 1) SEE TODO'S IN getInfo()
- *
- * 2) IMPLEMENT "AUTOMATIC MEMORY WARNING":
+ * 1) IMPLEMENT "AUTOMATIC MEMORY WARNING":
  *    - OPTION 1:
  *      - VIA ActivityManager.MemoryInfo STRUCTURE:
- *        - http://developer.android.com/reference/android/app/ActivityManager.MemoryInfo.html
+ *        http://developer.android.com/reference/android/app/ActivityManager.MemoryInfo.html
  *    - OPTION 2:
  *      - VIA ComponentCallbacks2.onTrimMemory() CALLBACK:
- *        - http://developer.android.com/reference/android/content/ComponentCallbacks2.html
+ *        http://developer.android.com/reference/android/content/ComponentCallbacks2.html
+ *
+ * 2) ALLOW COMPARISON BETWEEN 2 MemoryInfo VALUES
+ *    - TO BE DONE IN memory::Manager, PER PLATFORM, INSTEAD OF IN MemoryInfo)
+ *
+ * 3) MEASURE DURING memory::Manager::update AND "WARN" CinderDelegate IF NECESSARY
  *
  *
  * ADDITIONAL REFERENCES:
@@ -34,7 +54,7 @@
  * - http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/com/android/internal/util/MemInfoReader.java
  *
  *
- * TESTABLE VIA TERMINAL WHEN ANDROID DEVICE IS CONNECTED:
+ * TO QUERY VIA TERMINAL WHEN ANDROID DEVICE IS CONNECTED:
  *
  * - adb shell cat /proc/meminfo
  * - adb shell cat /sys/module/lowmemorykiller/parameters/minfree
@@ -56,12 +76,24 @@ namespace chr
     {
         Manager::Manager()
         {
-            setup();
+            setup(); // XXX: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
         }
         
         Manager::~Manager()
         {
-            shutdown();
+            shutdown(); // XXX: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
+        }
+        
+        void Manager::setup()
+        {
+            initial = getInfo();
+            
+            LOGI << "MEMORY INFO: " << initial << endl; // LOG: VERBOSE
+        }
+        
+        void Manager::shutdown()
+        {
+            LOGI << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
         }
         
         // ---
@@ -70,6 +102,9 @@ namespace chr
          * "FREE MEMORY" SEEMS RELIABLE, BUT IS LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
          *
          * TODO:
+         *
+         * 1) INVESTIGATE:
+         *    -
          *
          * 1) COMPARISON BETWEEN 2 MemoryInfo VALUES (DONE IN memory::Manager, PER PLATFORM, INSTEAD OF IN MemoryInfo)
          *
@@ -94,6 +129,7 @@ namespace chr
                 // ---
                 
                 freeMemory = availMem - threshold;
+                usedMemory = initial.free - freeMemory; // XXX
             }
             catch (exception &e)
             {}

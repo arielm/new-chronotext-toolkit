@@ -28,7 +28,13 @@ namespace chr
             Manager();
             ~Manager() override;
             
+            void setup() override;
+            void shutdown() override;
+            
             Info getInfo() override;
+            
+        protected:
+            Info initial;
         };
     }
 }

@@ -32,8 +32,8 @@ namespace chr
         public:
             virtual ~ManagerBase() {}
             
-            virtual bool setup();
-            virtual void shutdown();
+            virtual void setup() {}
+            virtual void shutdown() {}
 
             virtual Info getInfo() = 0;
         };

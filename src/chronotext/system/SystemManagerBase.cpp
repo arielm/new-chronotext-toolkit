@@ -44,13 +44,11 @@ namespace chr
 
         // ---
         
-        bool ManagerBase::setup()
+        void ManagerBase::setup()
         {
             updateInfo();
             
-            LOGI << "SYSTEM INFO: " << info << endl;
-            
-            return true;
+            LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
         }
         
         // ---

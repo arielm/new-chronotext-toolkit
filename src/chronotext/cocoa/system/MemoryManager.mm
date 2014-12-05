@@ -7,14 +7,34 @@
  */
 
 /*
+ * MEMORY-MEASUREMENT SEEM RELIABLE ON IOS, LESS ON OSX
+ *
+ *
+ * FINDINGS:
+ *
+ * 1) task_info.resident_size IS THE RIGHT WAY TO MEASURE "USED MEMORY", BUT:
+ *    - IT SEEMS TO BE PER-THREAD
+ *    - IT IS BIGGER BY A FACTOR OF ~3 ON OSX:
+ *      - COMPARED TO WHAT'S SHOWN IN "INSTRUMENTS" OR TO THE EXPECTED CONSUMPTION
+ *      - TESTED ON OSX 10.9.5 / 64-BIT BUILD
+ *
+ * 2) IOS:
+ *    - FREE MEMORY:
+ *      - WORKS AS INTENDED, BUT:
+ *        - NOT PROPERLY UPDATED ONCE APPROACHING "LOW LIMITS" (~8 MB ON IPAD 1)
+ *
+ * 3) OSX:
+ *    - FREE MEMORY:
+ *      - TOTALLY CHAOTIC BEHAVIOR (PROBABLY A SIDE-EFFECT OF "MODERN DESKTOP MEMORY MANAGEMENT")
+ *    - TOTAL MEMORY:
+ *      - NOT ACCURATE AND USELESS
+ *
+ *
  * TODO:
  *
- * 1) TODOS IN getInfo()
+ * 1) INVESTIGATE task_info.resident_size FURTHER
  *
- * 2) CHECK HOW IT PERFORMS WITH MULTIPLE THREADS
- *    - task_info.resident_size IS APPARENTLY THREAD-SPECIFIC
- *    - SOME INTEGRATION WITH TaskManager MIGHT BE NECESSARY
- *    - ETC.
+ * 2) DEFINE THE POTENTIALLY-NECESSARY INTEGRATION WITH os/TaskManager
  */
 
 /*
@@ -42,14 +62,24 @@ namespace chr
     {
         Manager::Manager()
         {
-            setup();
+            setup(); // XXX: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
         }
         
         Manager::~Manager()
         {
-            shutdown();
+            shutdown(); // XXX: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
         }
 
+        void Manager::setup()
+        {
+            LOGI << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
+        }
+        
+        void Manager::shutdown()
+        {
+            LOGI << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
+        }
+        
         // ---
         
         /*
@@ -97,26 +127,6 @@ namespace chr
             }
             
             // ---
-            
-            /*
-             * MEASUREMENTS SEEM RELIABLE ON IOS, BUT NOT TOTALLY ON OSX
-             *
-             *
-             * TODO:
-             *
-             * 1) INVESTIGATE ON IOS:
-             *    "FREE MEMORY":
-             *    - NOT PROPERLY UPDATED ANYMORE ONCE APPROACHING "LOW LIMITS" (~8 MB ON IPAD 1)
-             *
-             * 2) INVESTIGATE ON OSX:
-             *    - "FREE MEMORY": TOTALLY CHAOTIC BEHAVIOR (PROBABLY A SIDE-EFFECT OF "MODERN DESKTOP MEMORY MANAGEMENT")
-             *    - "TOTAL MEMORY":
-             *      - NOT ACCURATE AND USELESS
-             *    - "USED MEMORY":
-             *      - BIGGER BY A FACTOR OF ~3
-             *        - COMPARED TO WHAT'S SHOWN IN "INSTRUMENTS" OR THE EXPECTED CONSUMPTION
-             *        - TESTED ON OSX 10.9.5 / 64-BIT BUILD
-             */
             
             int64_t freeMemory = -1;
             int64_t usedMemory = -1;
