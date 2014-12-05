@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/InputSource.h"
+#include "chronotext/FileHelper.h"
 
 #include "cinder/app/App.h"
 #include "cinder/Utilities.h"
@@ -23,7 +24,7 @@ namespace chr
         source->filePathHint = relativePath.string();
         
 #if defined(CINDER_COCOA)
-        source->filePath = FileSystem::getResourcePath(relativePath);
+        source->filePath = FileHelper::getResourcePath(relativePath);
 #endif
         
         return source;
@@ -58,7 +59,7 @@ namespace chr
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
         source->filePath = app::getAssetPath(relativePath);
 #elif defined(CINDER_COCOA_TOUCH)
-        source->filePath = FileSystem::getResourcePath("assets" / relativePath);
+        source->filePath = FileHelper::getResourcePath("assets" / relativePath);
 #endif
         
         return source;
@@ -179,12 +180,12 @@ namespace chr
             case TYPE_RESOURCE:
             {
 #if defined(CINDER_ANDROID)
-                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), filePathHint.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), filePathHint.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), filePathHint);
+                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), filePathHint);
                 }
                 else
                 {
@@ -230,12 +231,12 @@ namespace chr
             {
 #if defined(CINDER_ANDROID)
                 string resourcePath = ("assets" / relativePath).string();
-                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), resourcePath);
+                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), resourcePath);
                 }
                 else
                 {

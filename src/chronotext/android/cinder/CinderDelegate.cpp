@@ -9,7 +9,6 @@
 #include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
-#include "chronotext/FileSystem.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 #include "chronotext/utils/Utils.h"
 
@@ -65,7 +64,7 @@ namespace chr
         jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(javaContext_), "getAssets", "()Landroid/content/res/AssetManager;");
         AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(javaContext_, getAssetsMethod));
         
-        FileSystem::setAndroidAssetManager(assetManager);
+        FileHelper::setAndroidAssetManager(assetManager);
         
         // ---
         
@@ -75,7 +74,7 @@ namespace chr
         jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
         
         const char *internalDataPath = env->GetStringUTFChars(absolutePathString, nullptr);
-        FileSystem::setAndroidInternalDataPath(internalDataPath);
+        FileHelper::setAndroidInternalDataPath(internalDataPath);
         env->ReleaseStringUTFChars(absolutePathString, internalDataPath);
         
         // ---
@@ -86,7 +85,7 @@ namespace chr
         absolutePathString = (jstring)env->CallObjectMethod(externalStorageDirectoryObject, getAbsolutePathMethod);
         
         const char *externalDataPath = env->GetStringUTFChars(absolutePathString, nullptr);
-        FileSystem::setAndroidExternalDataPath(externalDataPath);
+        FileHelper::setAndroidExternalDataPath(externalDataPath);
         env->ReleaseStringUTFChars(absolutePathString, externalDataPath);
         
         // ---
@@ -95,7 +94,7 @@ namespace chr
         jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext_, getPackageCodePathMethod);
         
         const char *apkPath = env->GetStringUTFChars(packageCodePathString, nullptr);
-        FileSystem::setAndroidApkPath(apkPath);
+        FileHelper::setAndroidApkPath(apkPath);
         env->ReleaseStringUTFChars(packageCodePathString, apkPath);
         
         // ---

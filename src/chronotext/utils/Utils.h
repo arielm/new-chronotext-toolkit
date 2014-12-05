@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "chronotext/FileHelper.h"
 #include "chronotext/InputSource.h"
 #include "chronotext/Log.h"
 

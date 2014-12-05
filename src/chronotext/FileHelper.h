@@ -6,6 +6,21 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) USE NAMESPACE INSTEAD OF STATIC CLASS, E.G.
+ *
+ *    - auto bytes = filesystem::availableStorage()
+ *    - auto filePath = filesystem::cocoa::resourcePath()
+ *    - auto assetManager = filesystem::android::assetManager()
+ *
+ * 2) MOVE UTILITIY FUNCTIONS TO utils/FileUtils, E.G.
+ *
+ *    - FileUtils::normalizePath()
+ *    - FileUtils::getFolderOrCreateIt()
+ */
+
 #pragma once
 
 #include "cinder/Filesystem.h"
@@ -19,7 +34,7 @@
 
 namespace chr
 {
-    class FileSystem
+    class FileHelper
     {
     public:
         static int64_t getAvailableStorage(const ci::fs::path &folderPath = ci::fs::path());

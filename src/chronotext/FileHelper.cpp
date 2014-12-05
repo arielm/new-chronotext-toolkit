@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/FileSystem.h"
+#include "FileHelper.h"
 
 #include "cinder/app/App.h"
 
@@ -19,7 +19,7 @@ namespace chr
     /*
      * TODO: TEST ON WINDOWS
      */
-    int64_t FileSystem::getAvailableStorage(const fs::path &folderPath)
+    int64_t FileHelper::getAvailableStorage(const fs::path &folderPath)
     {
         fs::path target;
         
@@ -46,7 +46,7 @@ namespace chr
      * PATH NORMALIZATION WITHOUT THE NEED FOR FILES TO EXIST
      * REFERENCE: http://stackoverflow.com/a/12797413/50335
      */
-    fs::path FileSystem::normalizePath(const fs::path &absolutePath)
+    fs::path FileHelper::normalizePath(const fs::path &absolutePath)
     {
         fs::path::iterator it = absolutePath.begin();
         fs::path result = *it++;
@@ -70,7 +70,7 @@ namespace chr
      * PATH RELATIVIZATION WITHOUT THE NEED FOR FILES TO EXIST
      * REFERENCE: http://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path
      */
-    fs::path FileSystem::relativizePath(const fs::path &from, const fs::path &to)
+    fs::path FileHelper::relativizePath(const fs::path &from, const fs::path &to)
     {
         fs::path a_From = fs::absolute(from);
         fs::path a_To = fs::absolute(to);
@@ -99,7 +99,7 @@ namespace chr
         return ret;
     }
     
-    bool FileSystem::arePathsRelative(const fs::path &ancestor, const fs::path &heir)
+    bool FileHelper::arePathsRelative(const fs::path &ancestor, const fs::path &heir)
     {
         if (ancestor.empty())
         {
@@ -123,7 +123,7 @@ namespace chr
         }
     }
     
-    fs::path FileSystem::getFolderOrCreateIt(const fs::path &folderPath)
+    fs::path FileHelper::getFolderOrCreateIt(const fs::path &folderPath)
     {
         if (!fs::exists(folderPath))
         {
@@ -134,7 +134,7 @@ namespace chr
     }
     
 #if defined(CINDER_COCOA)
-    fs::path FileSystem::getResourcePath()
+    fs::path FileHelper::getResourcePath()
     {
 #if defined(CINDER_COCOA_TOUCH)
         CFBundleRef bundle = CFBundleGetMainBundle();
@@ -160,10 +160,10 @@ namespace chr
 #endif
     
 #if defined(CINDER_COCOA)
-    fs::path FileSystem::getResourcePath(const fs::path &relativePath)
+    fs::path FileHelper::getResourcePath(const fs::path &relativePath)
     {
 #if defined(CINDER_COCOA_TOUCH)
-        return FileSystem::getResourcePath() / relativePath;
+        return FileHelper::getResourcePath() / relativePath;
 #else
         return App::getResourcePath(relativePath);
 #endif
@@ -172,42 +172,42 @@ namespace chr
     
 #if defined(CINDER_ANDROID)
     
-    void FileSystem::setAndroidAssetManager(AAssetManager *assetManager)
+    void FileHelper::setAndroidAssetManager(AAssetManager *assetManager)
     {
         gAssetManager = assetManager;
     }
     
-    AAssetManager* FileSystem::getAndroidAssetManager()
+    AAssetManager* FileHelper::getAndroidAssetManager()
     {
         return gAssetManager;
     }
     
-    void FileSystem::setAndroidInternalDataPath(const string &dataPath)
+    void FileHelper::setAndroidInternalDataPath(const string &dataPath)
     {
         gInternalDataPath = fs::path(dataPath);
     }
     
-    fs::path FileSystem::getAndroidInternalDataPath()
+    fs::path FileHelper::getAndroidInternalDataPath()
     {
         return gInternalDataPath;
     }
     
-    void FileSystem::setAndroidExternalDataPath(const string &dataPath)
+    void FileHelper::setAndroidExternalDataPath(const string &dataPath)
     {
         gExternalDataPath = fs::path(dataPath);
     }
     
-    fs::path FileSystem::getAndroidExternalDataPath()
+    fs::path FileHelper::getAndroidExternalDataPath()
     {
         return gExternalDataPath;
     }
     
-    void FileSystem::setAndroidApkPath(const string &apkPath)
+    void FileHelper::setAndroidApkPath(const string &apkPath)
     {
         gApkPath = fs::path(apkPath);
     }
     
-    fs::path FileSystem::getAndroidApkPath()
+    fs::path FileHelper::getAndroidApkPath()
     {
         return gApkPath;
     }

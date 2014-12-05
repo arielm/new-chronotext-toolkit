@@ -9,7 +9,6 @@
 #pragma once
 
 #include "chronotext/Exception.h"
-#include "chronotext/FileSystem.h"
 
 #include "cinder/DataSource.h"
 
