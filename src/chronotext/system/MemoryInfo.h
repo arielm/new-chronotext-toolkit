@@ -8,10 +8,7 @@
 
 #pragma once
 
-#include <cstdint>
-#include <iostream>
-#include <sstream>
-#include <iomanip> 
+#include "chronotext/utils/Utils.h"
 
 using namespace std;
 
@@ -48,7 +45,7 @@ namespace chr
                 
                 if (rhs.ratio > 0)
                 {
-                    lhs << ", ratio: " << rhs.write(rhs.ratio);
+                    lhs << ", ratio: " << percent(rhs.ratio);
                 }
                 
                 lhs << "}";

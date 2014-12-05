@@ -16,8 +16,9 @@
 #include "cinder/Utilities.h"
 #include "cinder/Xml.h"
 
+#include <sstream>
 #include <fstream>
-#include <set>
+#include <iomanip>
 
 #include <boost/algorithm/string.hpp>
 
