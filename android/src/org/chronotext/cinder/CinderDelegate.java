@@ -47,7 +47,7 @@ public class CinderDelegate extends Handler
     mRenderer = new CinderRenderer();
     mView = new GLView(activity);
 
-    prelaunch(); // WILL CREATE THE C++ CinderDelegate
+    init(); // WILL CREATE THE C++ CinderDelegate
     mView.setRenderer(mRenderer); // WILL START THE RENDERER'S THREAD
   }
 
@@ -57,14 +57,14 @@ public class CinderDelegate extends Handler
     mHandler = handler;
   }
 
-  public void prelaunch()
+  public void init()
   {
     Display display = DisplayUtils.getDisplay(mActivity);
     Point displaySize = DisplayUtils.getRealSize(display);
     float displayDensity = DisplayUtils.getRealDensity(display);
 
-    Utils.LOGD("CinderDelegate.prelaunch: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
-    prelaunch(mActivity, this, display, displaySize.x, displaySize.y, displayDensity);
+    Utils.LOGD("CinderDelegate.init: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+    init(mActivity, this, display, displaySize.x, displaySize.y, displayDensity);
   }
 
   public Activity getActivity()
@@ -212,5 +212,5 @@ public class CinderDelegate extends Handler
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  public native void prelaunch(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
+  public native void init(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
 }

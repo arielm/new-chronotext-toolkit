@@ -52,7 +52,7 @@ namespace chr
      * CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
      */
     
-    void CinderDelegate::prelaunch(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
+    void CinderDelegate::init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
         javaContext_ = javaContext;
         javaListener_ = javaListener;

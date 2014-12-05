@@ -19,6 +19,9 @@ namespace chr
 {
     class CinderDelegate
     {
+        /*
+         * PARALLEL TO org.chronotext.cinder.CinderDelegate.java
+         */
         enum
         {
             EVENT_RESUMED = 1,
@@ -47,7 +50,7 @@ namespace chr
         virtual void receiveMessageFromSketch(int what, const std::string &body);
         virtual void sendMessageToSketch(int what, const std::string &body = "");
         
-        void prelaunch(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
+        void init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void setup(int width, int height);
         void shutdown();

@@ -44,7 +44,7 @@ namespace chr
 
         // ---
         
-        bool ManagerBase::init()
+        bool ManagerBase::setup()
         {
             updateInfo();
             

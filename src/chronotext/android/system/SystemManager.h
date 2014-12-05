@@ -38,7 +38,7 @@ namespace chr
             Manager();
             ~Manager() override;
             
-            std::string getIpAddress(bool maskForBroadcast = false); // TODO
+            std::string getIpAddress(bool maskForBroadcast = false) override; // TODO
             
         protected:
             void updateInfo() override;

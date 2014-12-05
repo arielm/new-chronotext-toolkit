@@ -42,12 +42,12 @@ namespace chr
     {
         Manager::Manager()
         {
-            init();
+            setup();
         }
         
         Manager::~Manager()
         {
-            uninit();
+            shutdown();
         }
 
         // ---

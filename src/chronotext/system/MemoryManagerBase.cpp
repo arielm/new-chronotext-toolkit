@@ -21,13 +21,13 @@ namespace chr
     
     namespace memory
     {
-        bool ManagerBase::init()
+        bool ManagerBase::setup()
         {
             LOGI << "MEMORY INFO: " << getInfo() << endl;
             return true;
         }
         
-        void ManagerBase::uninit()
+        void ManagerBase::shutdown()
         {
             LOGI << "MEMORY INFO: " << getInfo() << endl;
         }

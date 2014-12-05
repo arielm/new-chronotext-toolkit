@@ -21,24 +21,27 @@ namespace chr
 {
     namespace system
     {
-        string android::getProperty(const char *name)
+        namespace android
         {
-            static char tmp[256];
-            auto len = __system_property_get(name, tmp);
-            
-            return string(tmp, len);
+            string getProperty(const char *name)
+            {
+                static char tmp[256];
+                auto len = __system_property_get(name, tmp);
+                
+                return string(tmp, len);
+            }
         }
         
         // ---
         
         Manager::Manager()
         {
-            init();
+            setup();
         }
         
         Manager::~Manager()
         {
-            uninit();
+            shutdown();
         }
         
         // ---

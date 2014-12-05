@@ -18,6 +18,9 @@ import org.chronotext.utils.Utils;
 
 public class CinderRenderer extends GLRenderer
 {
+  /*
+   * PARALLEL TO chronotext/cinder/CinderSketch/CinderDelegate.h
+   */
   public static final int EVENT_RESUMED = 1;
   public static final int EVENT_SHOWN = 2;
   public static final int EVENT_PAUSED = 3;

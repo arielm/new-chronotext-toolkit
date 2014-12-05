@@ -28,8 +28,8 @@ namespace chr
 
             virtual ~ManagerBase() {}
             
-            virtual bool init();
-            virtual void uninit() {}
+            virtual bool setup();
+            virtual void shutdown() {}
 
             virtual std::string getIpAddress(bool maskForBroadcast = false) = 0;
 
