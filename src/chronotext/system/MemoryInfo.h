@@ -20,13 +20,11 @@ namespace chr
         {
             int64_t free;
             int64_t used;
-            double ratio;
             
-            Info(int64_t free = -1, int64_t used = -1, double ratio = 0)
+            Info(int64_t free = -1, int64_t used = -1)
             :
             free(free),
-            used(used),
-            ratio(ratio)
+            used(used)
             {}
             
             friend ostream& operator<<(ostream &lhs, const Info &rhs)
@@ -40,12 +38,19 @@ namespace chr
                 
                 if (rhs.used > 0)
                 {
-                    lhs << ", used: " << rhs.write(rhs.used);
+                    if (rhs.free > 0)
+                    {
+                        lhs << ", ";
+                    }
+                    
+                    lhs << "used: " << rhs.write(rhs.used);
                 }
                 
-                if (rhs.ratio > 0)
+                if ((rhs.free > 0) && (rhs.used > 0))
                 {
-                    lhs << ", ratio: " << percent(rhs.ratio);
+                    double ratio = rhs.used / double(rhs.free + rhs.used);
+                    
+                    lhs << ", ratio: " << percent(ratio);
                 }
                 
                 lhs << "}";

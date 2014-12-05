@@ -142,10 +142,6 @@ namespace chr
          */
         io_service().post([this]{ sketch->clock().update(); });
 
-        // TODO: CALL memory::Manager::update()
-
-        // ---
-        
         /*
          * MUST BE CALLED BEFORE Sketch::update
          * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE

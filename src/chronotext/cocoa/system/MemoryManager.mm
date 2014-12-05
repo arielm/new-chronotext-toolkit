@@ -118,20 +118,20 @@ namespace chr
              *        - TESTED ON OSX 10.9.5 / 64-BIT BUILD
              */
             
-            int64_t freeMemory = vmstat.free_count * pagesize;
-            int64_t usedMemory = info.resident_size;
-            double ratio = 0;
+            int64_t freeMemory = -1;
+            int64_t usedMemory = -1;
             
             if (system::platform() == system::PLATFORM_IOS)
             {
-                ratio = usedMemory / double(freeMemory + usedMemory);
+                freeMemory = vmstat.free_count * pagesize;
+                usedMemory = info.resident_size;
             }
             else if (system::platform() == system::PLATFORM_OSX)
             {
-                usedMemory /= 3; // XXX
+                usedMemory = info.resident_size / 3; // XXX
             }
             
-            return Info(freeMemory, usedMemory, ratio);
+            return Info(freeMemory, usedMemory);
         }
     }
 }

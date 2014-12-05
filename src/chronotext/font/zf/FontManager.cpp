@@ -10,11 +10,9 @@
 #include "chronotext/font/zf/LayoutCache.h"
 #include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/system/SystemManager.h"
-#include "chronotext/Log.h"
+#include "chronotext/utils/Utils.h"
 
 #include "cinder/gl/gl.h"
-
-#include <boost/algorithm/string.hpp>
 
 using namespace std;
 using namespace ci;

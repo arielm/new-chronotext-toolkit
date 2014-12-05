@@ -12,8 +12,6 @@
 #include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 
-#include "cinder/Json.h"
-
 /*
  * TODO:
  *
@@ -73,41 +71,34 @@ namespace chr
          *
          * TODO:
          *
-         * 1) INFER "RATIO" BY MEASURING THE FREE MEMORY AS CLOSE AS APP-STARTUP
+         * 1) COMPARISON BETWEEN 2 MemoryInfo VALUES (DONE IN memory::Manager, PER PLATFORM, INSTEAD OF IN MemoryInfo)
+         *
+         * 2) IMPLEMENT MemoryInfo::warningLevel
+         *
+         * 3) MEASURE DURING update AND "WARN" CinderDelegate WHEN NECESSARY
          */
         
         Info Manager::getInfo()
         {
-            /*
-             * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
-             *
-             * TODO: ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN chronotext/os/Task
-             */
+            int64_t freeMemory = -1;
+            int64_t usedMemory = -1;
             
-            jstring query = (jstring)CONTEXT::delegate->callObjectMethodOnJavaListener("getMemoryInfo", "()Ljava/lang/String;");
-            
-            if (query)
+            try
             {
-                JNIEnv *env = jni::env();
-
-                const char *chars = env->GetStringUTFChars(query, nullptr);
-                JsonTree memoryInfo(chars);
-                env->ReleaseStringUTFChars(query, chars);
+                const JsonTree &query = CONTEXT::delegate->jsonQuery("getMemoryInfo");
                 
-                auto availMem = memoryInfo["availMem"].getValue<int64_t>();
-                auto threshold = memoryInfo["threshold"].getValue<int64_t>();
-                auto lowMemory = memoryInfo["lowMemory"].getValue<bool>();
-
+                auto availMem = query["availMem"].getValue<int64_t>();
+                auto threshold = query["threshold"].getValue<int64_t>();
+                auto lowMemory = query["lowMemory"].getValue<bool>();
+                
                 // ---
                 
-                int64_t freeMemory = availMem - threshold;
-                int64_t usedMemory = -1;
-                double ratio = 0;
-                
-                return Info(freeMemory, usedMemory, ratio);
+                freeMemory = availMem - threshold;
             }
+            catch (exception &e)
+            {}
             
-            return Info();
+            return Info(freeMemory, usedMemory);
         }
     }
 }
