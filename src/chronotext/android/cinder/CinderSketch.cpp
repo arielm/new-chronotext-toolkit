@@ -6,7 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/android/cinder/CinderSketch.h"
+#include "CinderSketch.h"
+
 #include "chronotext/android/cinder/CinderDelegate.h"
 
 using namespace std;

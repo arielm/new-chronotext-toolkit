@@ -8,9 +8,10 @@
 
 #pragma once
 
-#include "chronotext/FileHelper.h"
-#include "chronotext/InputSource.h"
 #include "chronotext/Log.h"
+#include "chronotext/InputSource.h"
+#include "chronotext/system/FileHelper.h"
+#include "chronotext/system/DisplayHelper.h"
 
 #include "cinder/Utilities.h"
 #include "cinder/Xml.h"

@@ -7,7 +7,8 @@
  */
 
 #include "Task.h"
-#include "TaskManager.h"
+
+#include "chronotext/os/TaskManager.h"
 
 #include "cinder/Utilities.h"
 

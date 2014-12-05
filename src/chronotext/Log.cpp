@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/Log.h"
+#include "Log.h"
 
 #if defined(CINDER_MSW)
 
