@@ -58,24 +58,19 @@ namespace chr
                 return lhs;
             }
             
-            string write(int64_t bytes, int precision = 2, double unit = 1024 * 1024, const std::string &suffix = "") const
+            static string write(int64_t bytes, int precision = 2, double unit = 1024 * 1024, const std::string &suffix = "")
             {
-                if (bytes < 0)
+                if (bytes <= 0)
                 {
                     return "";
                 }
                 
                 stringstream s;
-                
-                s << fixed << setprecision(precision) << bytes / unit;
-                
-                if (!suffix.empty())
-                {
-                    s << " " << suffix;
-                }
-                
+                s << fixed << setprecision(precision) << bytes / unit << suffix;
                 return s.str();
             }
         };
     }
+    
+    typedef memory::Info MemoryInfo;
 }

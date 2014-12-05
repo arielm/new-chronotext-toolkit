@@ -23,7 +23,7 @@
 
 namespace chr
 {
-    memory::Info memoryInfo();
+    memory::Info getMemoryInfo();
 
     namespace memory
     {
@@ -36,6 +36,11 @@ namespace chr
             virtual void shutdown() {}
 
             virtual Info getInfo() = 0;
+            
+            /*
+             * HOW MUCH MEMORY WAS USED BETWEEN "BEFORE" AND "AFTER"
+             */
+            virtual int64_t compare(const Info &before, const Info &after) { return 0; }
         };
     }
 }

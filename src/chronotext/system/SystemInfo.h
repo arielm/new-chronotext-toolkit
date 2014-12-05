@@ -31,3 +31,8 @@ namespace chr
 }
 
 #endif
+
+namespace chr
+{
+    typedef system::Info SystemInfo;
+}

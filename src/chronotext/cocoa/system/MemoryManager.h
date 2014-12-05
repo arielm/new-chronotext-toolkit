@@ -32,6 +32,7 @@ namespace chr
             void shutdown() override;
             
             Info getInfo() override;
+            int64_t compare(const Info &before, const Info &after) override;
         };
     }
 }

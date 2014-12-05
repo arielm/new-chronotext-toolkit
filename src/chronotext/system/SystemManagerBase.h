@@ -12,7 +12,7 @@
 
 namespace chr
 {
-    system::Info systemInfo();
+    system::Info getSystemInfo();
     
     namespace system
     {

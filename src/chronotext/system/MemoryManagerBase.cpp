@@ -14,7 +14,7 @@ using namespace std;
 
 namespace chr
 {
-    memory::Info memoryInfo()
+    memory::Info getMemoryInfo()
     {
         return context::memoryManager()->getInfo();
     }

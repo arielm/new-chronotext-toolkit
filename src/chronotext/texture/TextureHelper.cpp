@@ -9,6 +9,7 @@
 #include "chronotext/texture/TextureHelper.h"
 #include "chronotext/texture/Texture.h"
 #include "chronotext/texture/PVRHelper.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
 
@@ -20,6 +21,9 @@ using namespace ci;
 
 namespace chr
 {
+    bool TextureHelper::VERBOSE = true; // XXX
+    bool TextureHelper::PROBE_MEMORY = true; // XXX
+
     gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(InputSource::getResource(resourceName), useMipmap, flags);
@@ -97,13 +101,22 @@ namespace chr
         
         if (!textureData.undefined())
         {
-            gl::Texture::Format format = textureData.request.getFormat();
+            MemoryInfo memoryBefore;
+            
+            if (PROBE_MEMORY)
+            {
+                memoryBefore = getMemoryInfo();
+            }
+
+            // ---
             
             /*
              * NECESSARY IN ORDER TO CLEANUP EVENTUAL ERRORS
              */
             while(glGetError() != GL_NO_ERROR)
             {}
+
+            auto format = textureData.request.getFormat();
             
             switch (textureData.type)
             {
@@ -134,11 +147,22 @@ namespace chr
             {
                 texture->setDeallocator(&TextureHelper::textureDeallocator, texture.get());
                 
-                LOGD <<
+                // ---
+                
+                uint64_t delta = 0;
+                
+                if (PROBE_MEMORY)
+                {
+                    auto memoryAfter = getMemoryInfo();
+                    delta = context::memoryManager()->compare(memoryBefore, memoryAfter);
+                }
+                
+                LOGI_IF(VERBOSE) <<
                 "TEXTURE UPLOADED: " <<
                 textureData.request.inputSource->getFilePathHint() << " | " <<
                 texture->getId() << " | " <<
-                texture->getWidth() << "x" << texture->getHeight() <<
+                texture->getWidth() << "x" << texture->getHeight() << " | " <<
+                MemoryInfo::write(delta, 2, 1024 * 1024, " MB") <<
                 endl;
             }
         }
@@ -245,7 +269,7 @@ namespace chr
     {
         gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
         
-        LOGD <<
+        LOGI_IF(VERBOSE) <<
         "TEXTURE DISCARDED: " <<
         texture->getId() <<
         endl;

@@ -228,7 +228,7 @@ using namespace chr;
 
 - (BOOL) emulated
 {
-    return systemInfo().isSimulator;
+    return getSystemInfo().isSimulator;
 }
 
 #pragma mark ---------------------------------------- IO SERVICE ----------------------------------------
@@ -279,7 +279,7 @@ using namespace chr;
     }
     else if (magSize == 1024 * 768)
     {
-        if (systemInfo().isPadMini)
+        if (getSystemInfo().isPadMini)
         {
             diagonal = 7.90f; // IPAD MINI
         }

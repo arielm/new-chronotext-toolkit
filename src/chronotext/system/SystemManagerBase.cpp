@@ -15,7 +15,7 @@ using namespace ci;
 
 namespace chr
 {
-    system::Info systemInfo()
+    system::Info getSystemInfo()
     {
         return context::systemManager()->info;
     }

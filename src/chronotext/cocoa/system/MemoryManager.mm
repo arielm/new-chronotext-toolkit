@@ -7,16 +7,13 @@
  */
 
 /*
- * MEMORY-MEASUREMENT SEEM RELIABLE ON IOS, LESS ON OSX
+ * MEMORY-MEASUREMENT SEEMS RELIABLE ON IOS, LESS ON OSX
  *
  *
  * FINDINGS:
  *
  * 1) task_info.resident_size IS THE RIGHT WAY TO MEASURE "USED MEMORY", BUT:
  *    - IT SEEMS TO BE PER-THREAD
- *    - IT IS BIGGER BY A FACTOR OF ~3 ON OSX:
- *      - COMPARED TO WHAT'S SHOWN IN "INSTRUMENTS" OR TO THE EXPECTED CONSUMPTION
- *      - TESTED ON OSX 10.9.5 / 64-BIT BUILD
  *
  * 2) IOS:
  *    - FREE MEMORY:
@@ -32,9 +29,8 @@
  *
  * TODO:
  *
- * 1) INVESTIGATE task_info.resident_size FURTHER
- *
- * 2) DEFINE THE POTENTIALLY-NECESSARY INTEGRATION WITH os/TaskManager
+ * 1) INVESTIGATE task_info.resident_size FURTHER:
+ *    - THE PER-THREAD NATURE MAY REQUIRE A SOLUTION INTEGRATED WITH os/TaskManager
  */
 
 /*
@@ -129,19 +125,24 @@ namespace chr
             // ---
             
             int64_t freeMemory = -1;
-            int64_t usedMemory = -1;
+            int64_t usedMemory = info.resident_size;
             
             if (system::platform() == system::PLATFORM_IOS)
             {
                 freeMemory = vmstat.free_count * pagesize;
-                usedMemory = info.resident_size;
-            }
-            else if (system::platform() == system::PLATFORM_OSX)
-            {
-                usedMemory = info.resident_size / 3; // XXX
             }
             
             return Info(freeMemory, usedMemory);
+        }
+        
+        int64_t Manager::compare(const Info &before, const Info &after)
+        {
+            if ((before.used > 0) && (after.used > 0))
+            {
+                return after.used - before.used;
+            }
+   
+            return 0;
         }
     }
 }

@@ -19,9 +19,7 @@
  * FINDINGS:
  *
  * 1) FREE MEMORY:
- *    - WORKS AS INTENDED, BUT:
- *      - NOT PROPERLY UPDATED DURING "WARMUP":
- *        - LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
+ *    - WORKS AS INTENDED
  *
  * 2) TOTAL MEMORY:
  *    - NOT ACCESSIBLE VIA JAVA UNTIL API 16
@@ -98,21 +96,6 @@ namespace chr
         
         // ---
         
-        /*
-         * "FREE MEMORY" SEEMS RELIABLE, BUT IS LIKELY AFFECTED BY "EXTERNAL FACTORS" (E.G. LIBRARY LOADING)
-         *
-         * TODO:
-         *
-         * 1) INVESTIGATE:
-         *    -
-         *
-         * 1) COMPARISON BETWEEN 2 MemoryInfo VALUES (DONE IN memory::Manager, PER PLATFORM, INSTEAD OF IN MemoryInfo)
-         *
-         * 2) IMPLEMENT MemoryInfo::warningLevel
-         *
-         * 3) MEASURE DURING update AND "WARN" CinderDelegate WHEN NECESSARY
-         */
-        
         Info Manager::getInfo()
         {
             int64_t freeMemory = -1;
@@ -129,12 +112,30 @@ namespace chr
                 // ---
                 
                 freeMemory = availMem - threshold;
-                usedMemory = initial.free - freeMemory; // XXX
+                
+                // ---
+                
+                auto delta = compare(initial, Info(freeMemory));
+                
+                if (delta > 0)
+                {
+                    usedMemory = delta;
+                }
             }
             catch (exception &e)
             {}
             
             return Info(freeMemory, usedMemory);
+        }
+        
+        int64_t Manager::compare(const Info &before, const Info &after)
+        {
+            if ((before.free > 0) && (after.free > 0))
+            {
+                return before.free - after.free;
+            }
+            
+            return 0;
         }
     }
 }
