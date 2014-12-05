@@ -125,12 +125,12 @@ using namespace chr;
     
     if (reason == REASON_VIEW_WILL_APPEAR)
     {
-        sketch->start(CinderSketch::FLAG_APP_SHOWN);
+        sketch->start(CinderSketch::REASON_APP_SHOWN);
         active = YES;
     }
     else
     {
-        sketch->start(CinderSketch::FLAG_APP_RESUMED);
+        sketch->start(CinderSketch::REASON_APP_RESUMED);
     }
 }
 
@@ -141,12 +141,12 @@ using namespace chr;
     
     if (reason == REASON_VIEW_WILL_DISAPPEAR)
     {
-        sketch->stop(CinderSketch::FLAG_APP_HIDDEN);
+        sketch->stop(CinderSketch::REASON_APP_HIDDEN);
         active = NO;
     }
     else
     {
-        sketch->stop(CinderSketch::FLAG_APP_PAUSED);
+        sketch->stop(CinderSketch::REASON_APP_PAUSED);
     }
 }
 

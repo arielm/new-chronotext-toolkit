@@ -19,7 +19,7 @@ namespace chr
     class InputSource
     {
     public:
-        enum
+        enum Type
         {
             TYPE_RESOURCE,
             TYPE_RESOURCE_MSW,
@@ -73,7 +73,7 @@ namespace chr
         static InputSourceRef getFileInDocuments(const ci::fs::path &relativePath);
         static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath);
 
-        InputSource(int type)
+        InputSource(Type type)
         :
         type(type)
         {}

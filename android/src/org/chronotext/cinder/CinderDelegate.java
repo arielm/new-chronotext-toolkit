@@ -28,6 +28,9 @@ import android.view.View;
 
 public class CinderDelegate extends Handler
 {
+  /*
+   * PARALLEL TO chronotext/cinder/CinderSketch/CinderDelegate.h
+   */
   public static final int ACTION_CAPTURE_BACK_KEY = 1;
   public static final int ACTION_RELEASE_BACK_KEY = 2;
 

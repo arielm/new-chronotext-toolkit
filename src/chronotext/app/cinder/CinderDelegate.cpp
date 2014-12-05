@@ -334,7 +334,7 @@ namespace chr
         return !emulators.empty();
     }
     
-#pragma mark ---------------------------------------- MISC ----------------------------------------
+#pragma mark ---------------------------------------- LIFECYCLE ----------------------------------------
     
     void CinderDelegate::updateRealDisplayInfo()
     {
@@ -352,13 +352,13 @@ namespace chr
     void CinderDelegate::start()
     {
         sketch->clock().start();
-        sketch->start(CinderSketch::FLAG_APP_SHOWN);
+        sketch->start(CinderSketch::REASON_APP_SHOWN);
     }
     
     void CinderDelegate::stop()
     {
         sketch->clock().stop();
-        sketch->stop(CinderSketch::FLAG_APP_HIDDEN);
+        sketch->stop(CinderSketch::REASON_APP_HIDDEN);
         
         LOGI << "AVERAGE FRAME-RATE: " << getAverageFps() << " FPS" << endl;
     }

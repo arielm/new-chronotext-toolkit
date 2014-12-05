@@ -20,7 +20,7 @@ namespace chr
     class CinderDelegate
     {
         /*
-         * PARALLEL TO org.chronotext.cinder.CinderDelegate.java
+         * PARALLEL TO org.chronotext.cinder.CinderRenderer.java
          */
         enum
         {
@@ -33,6 +33,15 @@ namespace chr
             EVENT_BACKGROUND = 7,
             EVENT_FOREGROUND = 8,
             EVENT_BACK_KEY = 9
+        };
+        
+        /*
+         * PARALLEL TO org.chronotext.cinder.CinderDelegate.java
+         */
+        enum
+        {
+            ACTION_CAPTURE_BACK_KEY = 1,
+            ACTION_RELEASE_BACK_KEY = 2
         };
         
     public:
@@ -109,8 +118,8 @@ namespace chr
 
         void setSketch(CinderSketch *sketch);
 
-        void start(int flags);
-        void stop(int flags);
+        void start(CinderSketch::Reason reason);
+        void stop(CinderSketch::Reason reason);
         
         void startIOService();
         void stopIOService();

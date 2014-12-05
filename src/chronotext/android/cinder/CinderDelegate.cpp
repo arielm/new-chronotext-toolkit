@@ -154,19 +154,19 @@ namespace chr
         switch (eventId)
         {
             case EVENT_RESUMED:
-                start(CinderSketch::FLAG_APP_RESUMED);
+                start(CinderSketch::REASON_APP_RESUMED);
                 break;
                 
             case EVENT_SHOWN:
-                start(CinderSketch::FLAG_APP_SHOWN);
+                start(CinderSketch::REASON_APP_SHOWN);
                 break;
                 
             case EVENT_PAUSED:
-                stop(CinderSketch::FLAG_APP_PAUSED);
+                stop(CinderSketch::REASON_APP_PAUSED);
                 break;
                 
             case EVENT_HIDDEN:
-                stop(CinderSketch::FLAG_APP_HIDDEN);
+                stop(CinderSketch::REASON_APP_HIDDEN);
                 break;
                 
             case EVENT_CONTEXT_LOST:
@@ -191,22 +191,22 @@ namespace chr
         }
     }
     
-    void CinderDelegate::start(int flags)
+    void CinderDelegate::start(CinderSketch::Reason reason)
     {
         frameCount = 0;
         
         timer.start();
         sketch->clock().start();
         
-        sketch->start(flags);
+        sketch->start(reason);
     }
     
-    void CinderDelegate::stop(int flags)
+    void CinderDelegate::stop(CinderSketch::Reason reason)
     {
         timer.stop();
         sketch->clock().stop();
         
-        sketch->stop(flags);
+        sketch->stop(reason);
     }
     
     void CinderDelegate::draw()

@@ -21,15 +21,15 @@ namespace chr
     class CinderSketchBase : public SuperHandler
     {
     public:
-        enum
+        enum Reason
         {
-            FLAG_APP_SHOWN,
-            FLAG_APP_HIDDEN,
-            FLAG_APP_RESUMED,
-            FLAG_APP_PAUSED
+            REASON_APP_SHOWN,
+            REASON_APP_HIDDEN,
+            REASON_APP_RESUMED,
+            REASON_APP_PAUSED
         };
         
-        enum
+        enum Event
         {
             EVENT_FOREGROUND,
             EVENT_BACKGROUND,
@@ -37,12 +37,6 @@ namespace chr
             EVENT_CONTEXT_LOST,
             EVENT_CONTEXT_RENEWED,
             EVENT_BACK_KEY
-        };
-        
-        enum
-        {
-            ACTION_CAPTURE_BACK_KEY = 1,
-            ACTION_RELEASE_BACK_KEY
         };
         
         CinderSketchBase() : SuperHandler() {}
@@ -53,10 +47,10 @@ namespace chr
         virtual void shutdown() {}
 
         virtual void resize() {}
-        virtual void event(int eventId) {}
+        virtual void event(Event event) {}
         
-        virtual void start(int flags) {}
-        virtual void stop(int flags) {}
+        virtual void start(Reason reason) {}
+        virtual void stop(Reason reason) {}
 
         virtual void update() {}
         virtual void draw() {}
