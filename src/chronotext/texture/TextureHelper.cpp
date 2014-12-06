@@ -152,9 +152,12 @@ namespace chr
             }
             else if (texture)
             {
-                texture->setDeallocator(&TextureHelper::textureDeallocator, texture.get());
+                auto key = texture.get();
                 
-                probes[texture.get()] = MemoryProbe({memoryInfo[0], memoryInfo[1], -1, getTextureMemoryUsage(textureData)});
+                texture->setDeallocator(&TextureHelper::textureDeallocator, key);
+
+                auto memoryUsage = getTextureMemoryUsage(textureData);
+                probes[key] = MemoryProbe({textureData.request, memoryUsage, memoryInfo[0], memoryInfo[1]});
             }
         }
         
@@ -379,7 +382,7 @@ namespace chr
         return Vec2i::zero();
     }
     
-    size_t TextureHelper::getTextureMemoryUsage(const TextureData &textureData, bool useMipmap)
+    size_t TextureHelper::getTextureMemoryUsage(const TextureData &textureData)
     {
         size_t memoryUsage = 0;
         
@@ -437,7 +440,7 @@ namespace chr
                 }
             }
             
-            if (useMipmap)
+            if (textureData.request.useMipmap)
             {
                 memoryUsage *= 1.33f; // TODO: VERIFY
             }

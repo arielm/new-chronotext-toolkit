@@ -22,8 +22,9 @@ namespace chr
 
         struct MemoryProbe
         {
-            MemoryInfo memoryInfo[3];
+            TextureRequest textureRequest;
             size_t memoryUsage;
+            MemoryInfo memoryInfo[3];
         };
         
         static MemoryInfo memoryInfo[2];
@@ -39,7 +40,7 @@ namespace chr
         static ci::gl::TextureRef uploadTextureData(const TextureData &textureData);
         
         static ci::Vec2i getTextureSize(const TextureData &textureData);
-        static size_t getTextureMemoryUsage(const TextureData &textureData, bool useMipmap = false);
+        static size_t getTextureMemoryUsage(const TextureData &textureData);
         
         // ---
         
