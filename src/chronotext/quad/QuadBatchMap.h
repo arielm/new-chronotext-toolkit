@@ -23,6 +23,7 @@ namespace chr
             std::map<T*, std::unique_ptr<QuadBatch>> map;
             
             QuadBatchMap() {}
+            QuadBatchMap(const QuadBatchMap &other) = delete; // QuadBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
             
             void clear()
             {
@@ -78,9 +79,6 @@ namespace chr
                     it.second->flush(indices, useColor);
                 }
             }
-            
-        private:
-            QuadBatchMap(const QuadBatchMap &that); // MAKES IT EXPLICIT: QuadBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
         };
     }
 }

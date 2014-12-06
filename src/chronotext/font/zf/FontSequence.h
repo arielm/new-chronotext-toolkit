@@ -22,6 +22,7 @@ namespace chr
             float anisotropy;
             
             FontSequence() {}
+            FontSequence(const FontSequence &other) = delete; // FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
             
         protected:
             std::vector<std::unique_ptr<QuadBatchMap<FontTexture>>> maps;
@@ -33,9 +34,6 @@ namespace chr
             void replay(const uint16_t *indices);
             
             friend class VirtualFont;
-            
-        private:
-            FontSequence(const FontSequence &that); // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
         };
     }
 }

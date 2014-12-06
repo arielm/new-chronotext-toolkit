@@ -74,7 +74,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    rotation = getElapsedSeconds() * 0.1f;
+    rotation = clock().getTime() * 0.1f;
 }
 
 void Sketch::draw()
@@ -92,7 +92,7 @@ void Sketch::draw()
     gl::color(1, 0, 0, 0.125f);
     spiral.drawWire();
     
-    font->replaySequence(sequences[languages[currentLangIndex]]);
+    font->replaySequence(*sequences[languages[currentLangIndex]]);
 }
 
 void Sketch::addVersion(const string &lang)
@@ -114,12 +114,12 @@ void Sketch::addVersion(const string &lang)
     
     // ---
     
-    sequences.emplace(lang); // CONSTRUCTS A NEW FontSequence INTO THE MAP
+    sequences[lang] = unique_ptr<FontSequence>(new FontSequence);
     
     float offsetX = 3000; // XXX
     float offsetY = font->getOffsetY(*layout, ZFont::ALIGN_MIDDLE);
     
-    font->beginSequence(sequences[lang]);
+    font->beginSequence(*sequences[lang]);
     spiral.drawText(*font, *layout, offsetX, offsetY);
     font->endSequence();
 }

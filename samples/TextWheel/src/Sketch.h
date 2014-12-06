@@ -7,7 +7,7 @@
  */
 
 /*
- * IN SYNC WITH ContextRework BRANCH / COMMIT 58fb4c9
+ * IN SYNC WITH ContextRework BRANCH / COMMIT 2cbdbf9
  */
 
 /*
@@ -71,7 +71,7 @@ class Sketch : public chr::CinderSketch
 
     std::vector<std::string> languages;
     std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> layouts;
-    std::map<std::string, chr::zf::FontSequence> sequences;
+    std::map<std::string, std::unique_ptr<chr::zf::FontSequence>> sequences;
 
     float scale;
     float rotation;
