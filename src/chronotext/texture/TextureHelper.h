@@ -6,27 +6,24 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * TODO:
- *
- * 1) CHECK TextureHelper::uploadTextureData() WITH "TYPE_IMAGE_SOURCE", AS IT MAY CONSUME MORE MEMORY THAN NECESSARY
- *
- * 2) MEMORY-PROBE TEXTURE-DISCARDING
- *
- * 3) MOVE LOGGING AND "SECOND PART" OF MEMORY-PROBING FROM TextureHelper TO Texture
- */
-
 #pragma once
 
 #include "chronotext/texture/TextureData.h"
+#include "chronotext/system/MemoryInfo.h"
 
 namespace chr
 {
     class TextureHelper
     {
     public:
-        static bool VERBOSE;
+        struct MemoryProbe
+        {
+            MemoryInfo memoryInfo[3];
+            size_t memoryUsage;
+        };
+        
         static bool PROBE_MEMORY;
+        static MemoryProbe memoryProbe;
 
         static ci::gl::TextureRef loadTexture(const std::string &resourceName, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         static ci::gl::TextureRef loadTexture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
@@ -34,6 +31,11 @@ namespace chr
         
         static TextureData fetchTextureData(const TextureRequest &textureRequest);
         static ci::gl::TextureRef uploadTextureData(const TextureData &textureData);
+        
+        static ci::Vec2i getTextureSize(const TextureData &textureData);
+        static size_t getTextureMemoryUsage(const TextureData &textureData, bool useMipmap = false);
+        
+        // ---
         
         static void bindTexture(ci::gl::Texture *texture);
         static void beginTexture(ci::gl::Texture *texture);

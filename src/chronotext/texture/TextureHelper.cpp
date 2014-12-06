@@ -21,8 +21,8 @@ using namespace ci;
 
 namespace chr
 {
-    bool TextureHelper::VERBOSE = true; // XXX
     bool TextureHelper::PROBE_MEMORY = true; // XXX
+    TextureHelper::MemoryProbe TextureHelper::memoryProbe;
 
     gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
@@ -44,7 +44,7 @@ namespace chr
         }
         else if ((textureRequest.maxSize.x > 0) && (textureRequest.maxSize.y > 0))
         {
-            const Vec2i size = textureData.getSize();
+            const Vec2i size = getTextureSize(textureData);
             
             if ((size.x > textureRequest.maxSize.x) || (size.y > textureRequest.maxSize.y))
             {
@@ -57,11 +57,16 @@ namespace chr
     
     TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest)
     {
+        if (PROBE_MEMORY)
+        {
+            memoryProbe.memoryInfo[0] = getMemoryInfo();
+        }
+        
         if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.gz"))
         {
             if (textureRequest.inputSource->isFile())
             {
-                return TextureData(textureRequest, PVRHelper::decompressPVRGZ(textureRequest.inputSource->getFilePath()));
+                return TextureData(textureRequest, PVRHelper::decompressGZ(textureRequest.inputSource->getFilePath()));
             }
             else
             {
@@ -70,7 +75,7 @@ namespace chr
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
         {
-            return TextureData(textureRequest, PVRHelper::decompressPVRCCZ(textureRequest.inputSource->loadDataSource()));
+            return TextureData(textureRequest, PVRHelper::decompressCCZ(textureRequest.inputSource->loadDataSource()));
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr"))
         {
@@ -101,14 +106,11 @@ namespace chr
         
         if (!textureData.undefined())
         {
-            MemoryInfo memoryBefore;
-            
             if (PROBE_MEMORY)
             {
-                memoryBefore = getMemoryInfo();
+                memoryProbe.memoryInfo[1] = getMemoryInfo();
+                memoryProbe.memoryUsage = getTextureMemoryUsage(textureData);
             }
-
-            // ---
             
             /*
              * NECESSARY IN ORDER TO CLEANUP EVENTUAL ERRORS
@@ -130,7 +132,7 @@ namespace chr
                     break;
                     
                 case TextureData::TYPE_PVR:
-                    texture = PVRHelper::getPVRTexture(textureData.buffer, format.hasMipmapping(), format.getWrapS(), format.getWrapT());
+                    texture = PVRHelper::loadTexture(textureData.buffer, format.hasMipmapping(), format.getWrapS(), format.getWrapT());
                     break;
                     
                 case TextureData::TYPE_DATA:
@@ -146,24 +148,6 @@ namespace chr
             else if (texture)
             {
                 texture->setDeallocator(&TextureHelper::textureDeallocator, texture.get());
-                
-                // ---
-                
-                uint64_t delta = 0;
-                
-                if (PROBE_MEMORY)
-                {
-                    auto memoryAfter = getMemoryInfo();
-                    delta = context::memoryManager()->compare(memoryBefore, memoryAfter);
-                }
-                
-                LOGI_IF(VERBOSE) <<
-                "TEXTURE UPLOADED: " <<
-                textureData.request.inputSource->getFilePathHint() << " | " <<
-                texture->getId() << " | " <<
-                texture->getWidth() << "x" << texture->getHeight() << " | " <<
-                MemoryInfo::write(delta, 2, 1024 * 1024, " MB") <<
-                endl;
             }
         }
         
@@ -194,6 +178,7 @@ namespace chr
     /*
      * XXX: INCLUDES WORKAROUND FOR ci::gl::Texture::getCleanWidth() AND CO. WHICH ARE NOT WORKING ON GL-ES
      */
+    
     void TextureHelper::drawTextureFromCenter(gl::Texture *texture)
     {
         drawTexture(texture, texture->getWidth() * texture->getMaxU() * 0.5f, texture->getHeight() * texture->getMaxV() * 0.5f);
@@ -202,6 +187,7 @@ namespace chr
     /*
      * XXX: INCLUDES WORKAROUND FOR ci::gl::Texture::getCleanWidth() AND CO. WHICH ARE NOT WORKING ON GL-ES
      */
+    
     void TextureHelper::drawTexture(gl::Texture *texture, float rx, float ry)
     {
         float u = texture->getMaxU();
@@ -267,17 +253,18 @@ namespace chr
     
     void TextureHelper::textureDeallocator(void *refcon)
     {
-        gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
+//      gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
         
-        LOGI_IF(VERBOSE) <<
-        "TEXTURE DISCARDED: " <<
-        texture->getId() <<
-        endl;
+        if (PROBE_MEMORY)
+        {
+            memoryProbe.memoryInfo[2] = getMemoryInfo();
+        }
     }
     
     /*
      * BASED ON https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/gl/Texture.cpp#L478-490
      */
+    
     TextureData TextureHelper::fetchTranslucentTextureData(const TextureRequest &textureRequest)
     {
         Surface surface(loadImage(textureRequest.inputSource->loadDataSource()));
@@ -354,5 +341,95 @@ namespace chr
         {
             return TextureData(textureRequest, src);
         }
+    }
+    
+    Vec2i TextureHelper::getTextureSize(const TextureData &textureData)
+    {
+        if (!textureData.undefined())
+        {
+            switch (textureData.type)
+            {
+                case TextureData::TYPE_SURFACE:
+                    return textureData.surface.getSize();
+                    
+                case TextureData::TYPE_IMAGE_SOURCE:
+                    return Vec2i(textureData.imageSource->getWidth(), textureData.imageSource->getHeight());
+                    
+                case TextureData::TYPE_PVR:
+                    return PVRHelper::getTextureSize(textureData.buffer);
+                    
+                case TextureData::TYPE_DATA:
+                    return Vec2i(textureData.width, textureData.height);
+            }
+        }
+        
+        return Vec2i::zero();
+    }
+    
+    size_t TextureHelper::getTextureMemoryUsage(const TextureData &textureData, bool useMipmap)
+    {
+        size_t memoryUsage = 0;
+        
+        if (!textureData.undefined())
+        {
+            switch (textureData.type)
+            {
+                case TextureData::TYPE_SURFACE:
+                {
+                    auto size = textureData.surface.getSize();
+                    auto channelOrder = ImageIo::ChannelOrder(textureData.surface.getChannelOrder().getImageIoChannelOrder());
+                    memoryUsage = size.x * size.y * ImageIo::channelOrderNumChannels(channelOrder);
+                    break;
+                }
+                    
+                case TextureData::TYPE_IMAGE_SOURCE:
+                {
+                    auto size = Vec2i(textureData.imageSource->getWidth(), textureData.imageSource->getHeight());
+                    auto channelOrder = textureData.imageSource->getChannelOrder();
+                    memoryUsage = size.x * size.y * ImageIo::channelOrderNumChannels(channelOrder) * ImageIo::dataTypeBytes(textureData.imageSource->getDataType());
+                    break;
+                }
+                    
+                case TextureData::TYPE_PVR:
+                {
+                    memoryUsage = PVRHelper::getTextureMemoryUsage(textureData.buffer); // TODO: VERIFY
+                    break;
+                }
+                    
+                case TextureData::TYPE_DATA:
+                {
+                    int bpp = 0;
+                    
+                    switch (textureData.glInternalFormat)
+                    {
+                        case GL_ALPHA:
+                        case GL_LUMINANCE:
+                            bpp = 1;
+                            break;
+                            
+                        case GL_LUMINANCE_ALPHA:
+                            bpp = 2;
+                            break;
+                            
+                        case GL_RGB:
+                            bpp = 3; // XXX: USUALLY TAKES 4
+                            break;
+                            
+                        case GL_RGBA:
+                            bpp = 4;
+                            break;
+                    }
+                    
+                    memoryUsage = textureData.width * textureData.height * bpp;
+                }
+            }
+            
+            if (useMipmap)
+            {
+                memoryUsage *= 1.33f; // TODO: VERIFY
+            }
+        }
+        
+        return memoryUsage;
     }
 }

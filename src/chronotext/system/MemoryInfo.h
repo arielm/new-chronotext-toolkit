@@ -50,7 +50,7 @@ namespace chr
                 {
                     double ratio = rhs.used / double(rhs.free + rhs.used);
                     
-                    lhs << ", ratio: " << percent(ratio);
+                    lhs << ", percent: " << percent(ratio);
                 }
                 
                 lhs << "}";
@@ -58,7 +58,7 @@ namespace chr
                 return lhs;
             }
             
-            static string write(int64_t bytes, int precision = 2, double unit = 1024 * 1024, const std::string &suffix = "")
+            static string write(int64_t bytes, int precision = 1, double unit = 1024 * 1024, const std::string &suffix = "M")
             {
                 if (bytes <= 0)
                 {

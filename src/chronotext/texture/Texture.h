@@ -18,11 +18,15 @@ namespace chr
     class Texture
     {
     public:
+        static bool VERBOSE;
+
         TextureRequest request;
         
         Texture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         Texture(const TextureRequest &textureRequest);
         Texture(const TextureData &textureData);
+        
+        ~Texture();
         
         void discard();
         void reload();
@@ -55,12 +59,13 @@ namespace chr
     protected:
         ci::gl::TextureRef target;
         
-        uint32_t id;
+        uint32_t textureId;
         int width;
         int height;
         float maxU;
         float maxV;
         
         void setTarget(ci::gl::TextureRef texture);
+        void resetTarget();
     };
 }

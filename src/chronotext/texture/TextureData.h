@@ -95,28 +95,5 @@ namespace chr
         {
             return !defined;
         }
-        
-        ci::Vec2i getSize() const
-        {
-            if (defined)
-            {
-                switch (type)
-                {
-                    case TextureData::TYPE_SURFACE:
-                        return surface.getSize();
-                        
-                    case TextureData::TYPE_IMAGE_SOURCE:
-                        return ci::Vec2i(imageSource->getWidth(), imageSource->getHeight());
-                        
-                    case TextureData::TYPE_PVR:
-                        return PVRHelper::getPVRTextureSize(buffer);
-                        
-                    case TextureData::TYPE_DATA:
-                        return ci::Vec2i(width, height);
-                }
-            }
-            
-            return ci::Vec2i::zero();
-        }
     };
 }

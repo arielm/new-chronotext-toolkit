@@ -81,7 +81,7 @@ namespace chr
     /*
      * BASED ON http://www.codeandweb.com/blog/2011/05/03/loading-gzip-compressed-pvr-textures-without-realloc
      */
-    Buffer PVRHelper::decompressPVRGZ(const fs::path &filePath)
+    Buffer PVRHelper::decompressGZ(const fs::path &filePath)
     {
         gzFile file = gzopen(filePath.string().data(), "rb");
         if (!file)
@@ -126,7 +126,7 @@ namespace chr
     /*
      * BASED ON https://github.com/cocos2d/cocos2d-iphone/blob/develop/cocos2d/Support/ZipUtils.m
      */
-    Buffer PVRHelper::decompressPVRCCZ(DataSourceRef dataSource)
+    Buffer PVRHelper::decompressCCZ(DataSourceRef dataSource)
     {
         Buffer tmp = dataSource->getBuffer();
         
@@ -173,7 +173,7 @@ namespace chr
         return buffer;
     }
     
-    gl::TextureRef PVRHelper::getPVRTexture(const Buffer &buffer, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    gl::TextureRef PVRHelper::loadTexture(const Buffer &buffer, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
         PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
         
@@ -256,9 +256,15 @@ namespace chr
         return gl::Texture::create(GL_TEXTURE_2D, name, width, height, false);
     }
     
-    Vec2i PVRHelper::getPVRTextureSize(const Buffer &buffer)
+    Vec2i PVRHelper::getTextureSize(const Buffer &buffer)
     {
         PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
         return Vec2i(header->width, header->height);
+    }
+    
+    size_t PVRHelper::getTextureMemoryUsage(const Buffer &buffer)
+    {
+        PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
+        return header->width * header->height * header->bpp;
     }
 }

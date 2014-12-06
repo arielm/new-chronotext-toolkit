@@ -8,12 +8,15 @@
 
 #include "chronotext/texture/Texture.h"
 #include "chronotext/texture/TextureHelper.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
+    bool Texture::VERBOSE = true; // XXX
+
     Texture::Texture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
     :
     request(TextureRequest(inputSource, useMipmap, flags))
@@ -35,12 +38,14 @@ namespace chr
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
     
+    Texture::~Texture()
+    {
+        resetTarget();
+    }
+    
     void Texture::discard()
     {
-        if (target)
-        {
-            target.reset();
-        }
+        resetTarget();
     }
     
     void Texture::reload()
@@ -64,12 +69,12 @@ namespace chr
     
     int Texture::getId() const
     {
-        return id;
+        return textureId;
     }
     
     void Texture::bind()
     {
-        glBindTexture(GL_TEXTURE_2D, id);
+        glBindTexture(GL_TEXTURE_2D, textureId);
     }
     
     void Texture::begin()
@@ -78,7 +83,7 @@ namespace chr
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, id);
+        glBindTexture(GL_TEXTURE_2D, textureId);
     }
     
     void Texture::end()
@@ -197,12 +202,75 @@ namespace chr
     
     void Texture::setTarget(ci::gl::TextureRef texture)
     {
-        target = texture;
-        
-        id = texture->getId();
-        width = texture->getWidth();
-        height = texture->getHeight();
-        maxU = texture->getMaxU();
-        maxV = texture->getMaxV();
+        if (!target)
+        {
+            target = texture;
+            
+            // ---
+            
+            string memoryStats;
+            
+            if (VERBOSE && TextureHelper::PROBE_MEMORY)
+            {
+                auto memoryInfo = getMemoryInfo();
+                const auto &memoryProbe = TextureHelper::memoryProbe;
+                
+                auto delta1 = context::memoryManager()->compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
+                auto delta2 = context::memoryManager()->compare(memoryProbe.memoryInfo[1], memoryInfo);
+                
+                memoryStats = " | " +
+                MemoryInfo::write(memoryProbe.memoryUsage) + ", " +
+                MemoryInfo::write(delta1) + ", " +
+                MemoryInfo::write(delta2);
+            }
+            
+            // ---
+            
+            textureId = texture->getId();
+            width = texture->getWidth();
+            height = texture->getHeight();
+            maxU = texture->getMaxU();
+            maxV = texture->getMaxV();
+            
+            // ---
+            
+            LOGI_IF(VERBOSE) <<
+            "TEXTURE UPLOADED: " <<
+            request.inputSource->getFilePathHint() << " | " <<
+            textureId << " | " <<
+            width << "x" << height <<
+            memoryStats <<
+            endl;
+        }
+    }
+    
+    void Texture::resetTarget()
+    {
+        if (target)
+        {
+            auto previousId = getId();
+            
+            target.reset();
+            
+            // ---
+            
+            string memoryStats;
+            
+            if (VERBOSE && TextureHelper::PROBE_MEMORY)
+            {
+                auto memoryInfo = getMemoryInfo();
+                const auto &memoryProbe = TextureHelper::memoryProbe;
+                
+                auto delta = -context::memoryManager()->compare(memoryProbe.memoryInfo[2], memoryInfo);
+                
+                memoryStats = " | " + MemoryInfo::write(delta);
+            }
+            
+            LOGI_IF(VERBOSE) <<
+            "TEXTURE DISCARDED: " <<
+            previousId <<
+            memoryStats <<
+            endl;
+        }
     }
 }

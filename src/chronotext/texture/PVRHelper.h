@@ -38,10 +38,12 @@ namespace chr
     class PVRHelper
     {
     public:
-        static ci::Buffer decompressPVRGZ(const ci::fs::path &filePath);
-        static ci::Buffer decompressPVRCCZ(ci::DataSourceRef dataSource);
+        static ci::Buffer decompressGZ(const ci::fs::path &filePath);
+        static ci::Buffer decompressCCZ(ci::DataSourceRef dataSource);
         
-        static ci::gl::TextureRef getPVRTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
-        static ci::Vec2i getPVRTextureSize(const ci::Buffer &buffer);
+        static ci::gl::TextureRef loadTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+        
+        static ci::Vec2i getTextureSize(const ci::Buffer &buffer);
+        static size_t getTextureMemoryUsage(const ci::Buffer &buffer);
     };
 }
