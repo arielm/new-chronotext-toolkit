@@ -213,7 +213,7 @@ namespace chr
             if (VERBOSE && TextureHelper::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
-                const auto &memoryProbe = TextureHelper::memoryProbe;
+                const auto &memoryProbe = TextureHelper::probes[texture.get()];
                 
                 auto delta1 = context::memoryManager()->compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
                 auto delta2 = context::memoryManager()->compare(memoryProbe.memoryInfo[1], memoryInfo);
@@ -248,7 +248,8 @@ namespace chr
     {
         if (target)
         {
-            auto previousId = getId();
+            auto previousTargetPointer = target.get();
+            auto previousTextureId = getId();
             
             target.reset();
             
@@ -259,16 +260,18 @@ namespace chr
             if (VERBOSE && TextureHelper::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
-                const auto &memoryProbe = TextureHelper::memoryProbe;
+                const auto &memoryProbe = TextureHelper::probes[previousTargetPointer];
                 
                 auto delta = -context::memoryManager()->compare(memoryProbe.memoryInfo[2], memoryInfo);
                 
-                memoryStats = " | " + MemoryInfo::write(delta);
+                memoryStats = " | " +
+                MemoryInfo::write(memoryProbe.memoryUsage) + ", " +
+                MemoryInfo::write(delta);
             }
             
             LOGI_IF(VERBOSE) <<
             "TEXTURE DISCARDED: " <<
-            previousId <<
+            previousTextureId <<
             memoryStats <<
             endl;
         }

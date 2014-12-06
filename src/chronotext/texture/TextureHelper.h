@@ -11,20 +11,26 @@
 #include "chronotext/texture/TextureData.h"
 #include "chronotext/system/MemoryInfo.h"
 
+#include <map>
+
 namespace chr
 {
     class TextureHelper
     {
     public:
+        static bool PROBE_MEMORY;
+
         struct MemoryProbe
         {
             MemoryInfo memoryInfo[3];
             size_t memoryUsage;
         };
         
-        static bool PROBE_MEMORY;
-        static MemoryProbe memoryProbe;
+        static MemoryInfo memoryInfo[2];
+        static std::map<ci::gl::Texture*, MemoryProbe> probes;
 
+        // ---
+        
         static ci::gl::TextureRef loadTexture(const std::string &resourceName, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         static ci::gl::TextureRef loadTexture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         static ci::gl::TextureRef loadTexture(const TextureRequest &textureRequest);

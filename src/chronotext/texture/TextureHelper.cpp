@@ -22,8 +22,12 @@ using namespace ci;
 namespace chr
 {
     bool TextureHelper::PROBE_MEMORY = true; // XXX
-    TextureHelper::MemoryProbe TextureHelper::memoryProbe;
+    
+    MemoryInfo TextureHelper::memoryInfo[2];
+    map<gl::Texture*, TextureHelper::MemoryProbe> TextureHelper::probes;
 
+    // ---
+    
     gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(InputSource::getResource(resourceName), useMipmap, flags);
@@ -55,11 +59,13 @@ namespace chr
         return uploadTextureData(textureData);
     }
     
+    // ---
+    
     TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest)
     {
         if (PROBE_MEMORY)
         {
-            memoryProbe.memoryInfo[0] = getMemoryInfo();
+            memoryInfo[0] = getMemoryInfo();
         }
         
         if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.gz"))
@@ -108,8 +114,7 @@ namespace chr
         {
             if (PROBE_MEMORY)
             {
-                memoryProbe.memoryInfo[1] = getMemoryInfo();
-                memoryProbe.memoryUsage = getTextureMemoryUsage(textureData);
+                memoryInfo[1] = getMemoryInfo();
             }
             
             /*
@@ -148,11 +153,15 @@ namespace chr
             else if (texture)
             {
                 texture->setDeallocator(&TextureHelper::textureDeallocator, texture.get());
+                
+                probes[texture.get()] = MemoryProbe({memoryInfo[0], memoryInfo[1], -1, getTextureMemoryUsage(textureData)});
             }
         }
         
         return texture;
     }
+    
+    // ---
     
     void TextureHelper::bindTexture(gl::Texture *texture)
     {
@@ -251,13 +260,15 @@ namespace chr
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
     
+    // ---
+    
     void TextureHelper::textureDeallocator(void *refcon)
     {
-//      gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
+        gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
         
         if (PROBE_MEMORY)
         {
-            memoryProbe.memoryInfo[2] = getMemoryInfo();
+            probes[texture].memoryInfo[2] = getMemoryInfo();
         }
     }
     
@@ -342,6 +353,8 @@ namespace chr
             return TextureData(textureRequest, src);
         }
     }
+    
+    // ---
     
     Vec2i TextureHelper::getTextureSize(const TextureData &textureData)
     {
