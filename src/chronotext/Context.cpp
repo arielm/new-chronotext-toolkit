@@ -23,6 +23,7 @@ namespace chr
             // ---
             
             bool initialized = false;
+            bool setup = false;
         }
         
         bool init()
@@ -42,16 +43,20 @@ namespace chr
         
         void setup(boost::asio::io_service &io_service)
         {
-            if (!intern::initialized && init())
+            if (!intern::setup && init())
             {
                 intern::io_service = &io_service;
                 intern::taskManager = TaskManager::create();
+                
+                // ---
+                
+                intern::setup = true;
             }
         }
         
         void shutdown()
         {
-            if (intern::initialized)
+            if (intern::initialized && intern::setup)
             {
                 intern::memoryManager.reset();
                 intern::systemManager.reset();
@@ -68,6 +73,7 @@ namespace chr
                 // ---
                 
                 intern::initialized = false;
+                intern::setup = false;
             }
         }
     }

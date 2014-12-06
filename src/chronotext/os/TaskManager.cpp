@@ -57,7 +57,7 @@ namespace chr
         
         if (element != tasks.end())
         {
-            return element->second->start(true);
+            return element->second->start(forceSync);
         }
         
         return false;
