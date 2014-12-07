@@ -16,7 +16,7 @@ namespace chr
     Sprite::Sprite()
     {}
     
-    Sprite::Sprite(TextureRef texture)
+    Sprite::Sprite(Texture::Ref texture)
     :
     texture(texture),
     ox(0),
@@ -31,7 +31,7 @@ namespace chr
         h = oh = texture->getCleanHeight();
     }
     
-    Sprite::Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2)
+    Sprite::Sprite(Texture::Ref texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2)
     :
     texture(texture),
     w(w),

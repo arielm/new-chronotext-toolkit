@@ -27,13 +27,13 @@ namespace chr
     class TextureAtlas
     {
     public:
-        TextureRef texture;
+        Texture::Ref texture;
         
         TextureAtlas(TextureManager &textureManager, const std::string &resourceName, bool useMipmap = false);
         TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap = false);
         
-        SpriteRef getSprite(const std::string &path) const;
-        std::vector<SpriteRef> getAnimationSprites(const std::string &path) const;
+        Sprite::Ref getSprite(const std::string &path) const;
+        std::vector<Sprite::Ref> getAnimationSprites(const std::string &path) const;
         
         void beginTexture();
         void endTexture();
@@ -43,7 +43,7 @@ namespace chr
         
     protected:
         TextureManager &textureManager;
-        std::map<std::string, SpriteRef> sprites;
+        std::map<std::string, Sprite::Ref> sprites;
         
         void init(InputSourceRef inputSource, bool useMipmap);
     };

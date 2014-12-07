@@ -13,17 +13,17 @@ using namespace ci;
 
 namespace chr
 {
-    TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Ref TextureManager::getTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Ref TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(TextureRequest(inputSource, useMipmap, flags));
     }
     
-    TextureRef TextureManager::getTexture(const TextureRequest &textureRequest)
+    Texture::Ref TextureManager::getTexture(const TextureRequest &textureRequest)
     {
         auto it = textures.find(textureRequest);
         
@@ -40,7 +40,7 @@ namespace chr
         }
     }
     
-    bool TextureManager::remove(TextureRef texture)
+    bool TextureManager::remove(Texture::Ref texture)
     {
         for (auto it = textures.begin(); it != textures.end(); ++it)
         {

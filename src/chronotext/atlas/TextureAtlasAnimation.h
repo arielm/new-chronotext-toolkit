@@ -15,7 +15,7 @@ namespace chr
     class TextureAtlasAnimation
     {
     public:
-        std::vector<SpriteRef> sprites;
+        std::vector<Sprite::Ref> sprites;
         
         TextureAtlasAnimation(TextureAtlas &atlas, const std::string &path, float fps = 24, bool looping = false, bool reverse = false);
         TextureAtlasAnimation(TextureAtlas &atlas, const std::string &path, float fps, bool looping, int firstFrameIndex, int lastFrameIndex);

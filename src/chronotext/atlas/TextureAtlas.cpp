@@ -80,13 +80,13 @@ namespace chr
         }
     }
     
-    SpriteRef TextureAtlas::getSprite(const string &path) const
+    Sprite::Ref TextureAtlas::getSprite(const string &path) const
     {
         auto it = sprites.find(path);
         
         if (it == sprites.end())
         {
-            return SpriteRef();
+            return Sprite::Ref();
         }
         else
         {
@@ -94,9 +94,9 @@ namespace chr
         }
     }
     
-    vector<SpriteRef> TextureAtlas::getAnimationSprites(const string &path) const
+    vector<Sprite::Ref> TextureAtlas::getAnimationSprites(const string &path) const
     {
-        vector<SpriteRef> animationSprites;
+        vector<Sprite::Ref> animationSprites;
         string pattern = path + "%d";
         
         for (auto &it : sprites)

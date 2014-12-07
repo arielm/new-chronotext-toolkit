@@ -13,12 +13,12 @@
 
 namespace chr
 {
-    typedef std::shared_ptr<class Texture> TextureRef;
-    
     class Texture
     {
     public:
         static bool VERBOSE;
+
+        typedef std::shared_ptr<class Texture> Ref;
 
         TextureRequest request;
         
@@ -35,14 +35,6 @@ namespace chr
         void uploadTextureData(const TextureData &textureData);
         
         int getId() const;
-        void bind();
-        
-        void begin();
-        void end();
-        
-        void drawFromCenter();
-        void draw(float rx = 0, float ry = 0);
-        void drawInRect(const ci::Rectf &rect, float ox = 0, float oy = 0);
         
         int getWidth() const;
         int getHeight() const;
@@ -55,6 +47,14 @@ namespace chr
         float getMaxU() const;
         float getMaxV() const;
         ci::Vec2f getMaxUV() const;
+        
+        void bind();
+        void begin();
+        void end();
+        
+        void drawFromCenter();
+        void draw(float rx = 0, float ry = 0);
+        void drawInRect(const ci::Rectf &rect, float ox = 0, float oy = 0);
         
     protected:
         ci::gl::TextureRef target;
