@@ -10,8 +10,6 @@
 
 #include "chronotext/utils/Utils.h"
 
-using namespace std;
-
 namespace chr
 {
     namespace memory
@@ -27,7 +25,7 @@ namespace chr
             used(used)
             {}
             
-            friend ostream& operator<<(ostream &lhs, const Info &rhs)
+            friend std::ostream& operator<<(std::ostream &lhs, const Info &rhs)
             {
                 lhs << "{";
                 
@@ -58,15 +56,15 @@ namespace chr
                 return lhs;
             }
             
-            static string write(int64_t bytes, int precision = 1, double unit = 1024 * 1024, const std::string &suffix = "M")
+            static std::string write(int64_t bytes, int precision = 1, double unit = 1024 * 1024, const std::string &suffix = "M")
             {
                 if (bytes <= 0)
                 {
                     return "";
                 }
                 
-                stringstream s;
-                s << fixed << setprecision(precision) << bytes / unit << suffix;
+                std::stringstream s;
+                s << std::fixed << std::setprecision(precision) << bytes / unit << suffix;
                 return s.str();
             }
         };

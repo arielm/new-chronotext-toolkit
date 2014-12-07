@@ -30,8 +30,8 @@ namespace chr
         {
             if (!intern::initialized)
             {
-                intern::systemManager = make_shared<system::Manager>();
-                intern::memoryManager = make_shared<memory::Manager>();
+                intern::systemManager = std::make_shared<system::Manager>();
+                intern::memoryManager = std::make_shared<memory::Manager>();
                 
                 // ---
 
