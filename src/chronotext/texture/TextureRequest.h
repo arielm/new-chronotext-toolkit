@@ -23,7 +23,7 @@ namespace chr
             FLAGS_POT = 2
         };
         
-        InputSourceRef inputSource;
+        InputSource::Ref inputSource;
         bool useMipmap;
         Flags flags;
         GLenum wrapS;
@@ -33,7 +33,7 @@ namespace chr
         TextureRequest()
         {}
         
-        TextureRequest(InputSourceRef inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
+        TextureRequest(InputSource::Ref inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
         :
         inputSource(inputSource),
         useMipmap(useMipmap),

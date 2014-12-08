@@ -57,7 +57,7 @@ namespace chr
         
         void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
-        bool loadEmulators(chr::InputSourceRef source);
+        bool loadEmulators(chr::InputSource::Ref source);
         
     protected:
         CinderSketch *sketch;

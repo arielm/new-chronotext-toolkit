@@ -16,6 +16,8 @@
 #include "cinder/Utilities.h"
 #include "cinder/Xml.h"
 
+#include <map>
+#include <set>
 #include <sstream>
 #include <fstream>
 #include <iomanip>
@@ -60,10 +62,10 @@ namespace chr
     std::string wstringToUtf8(const std::wstring &s);
     std::wstring utf8ToWstring(const std::string &s);
 
-    template<typename T> T loadString(InputSourceRef source);
-    template<typename T> std::vector<T> readLines(InputSourceRef source);
+    template<typename T> T loadString(InputSource::Ref source);
+    template<typename T> std::vector<T> readLines(InputSource::Ref source);
     
-    std::vector<std::string> readInstructions(InputSourceRef source);
+    std::vector<std::string> readInstructions(InputSource::Ref source);
     
     std::string readTextFile(const ci::fs::path &filePath);
     void writeTextFile(const ci::fs::path &filePath, const std::string &text);

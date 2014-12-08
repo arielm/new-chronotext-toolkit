@@ -18,7 +18,7 @@ namespace chr
         return getTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    Texture::Ref TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Ref TextureManager::getTexture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(TextureRequest(inputSource, useMipmap, flags));
     }

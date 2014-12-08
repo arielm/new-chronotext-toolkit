@@ -22,14 +22,14 @@ namespace chr
         init(InputSource::getResource(resourceName), useMipmap);
     }
     
-    TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap)
+    TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap)
     :
     textureManager(textureManager)
     {
         init(inputSource, useMipmap);
     }
     
-    void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
+    void TextureAtlas::init(InputSource::Ref inputSource, bool useMipmap)
     {
         XmlTree doc(inputSource->loadDataSource());
         
@@ -102,7 +102,7 @@ namespace chr
         for (auto &it : sprites)
         {
             int i = -1;
-            sscanf(it.first.c_str(), pattern.c_str(), &i);
+            sscanf(it.first.data(), pattern.data(), &i);
             
             if (i != -1)
             {

@@ -19,7 +19,7 @@ namespace chr
     {
     public:
         Texture::Ref getTexture(const std::string &resourceName, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
-        Texture::Ref getTexture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
+        Texture::Ref getTexture(InputSource::Ref inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         Texture::Ref getTexture(const TextureRequest &textureRequest);
         
         bool remove(Texture::Ref texture);

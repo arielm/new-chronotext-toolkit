@@ -30,7 +30,7 @@ namespace chr
         Texture::Ref texture;
         
         TextureAtlas(TextureManager &textureManager, const std::string &resourceName, bool useMipmap = false);
-        TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap = false);
+        TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap = false);
         
         Sprite::Ref getSprite(const std::string &path) const;
         std::vector<Sprite::Ref> getAnimationSprites(const std::string &path) const;
@@ -45,6 +45,6 @@ namespace chr
         TextureManager &textureManager;
         std::map<std::string, Sprite::Ref> sprites;
         
-        void init(InputSourceRef inputSource, bool useMipmap);
+        void init(InputSource::Ref inputSource, bool useMipmap);
     };
 }

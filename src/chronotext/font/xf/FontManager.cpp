@@ -76,7 +76,7 @@ namespace chr
         
         // ---
         
-        FontTexture::FontTexture(FontAtlas *atlas, InputSourceRef inputSource)
+        FontTexture::FontTexture(FontAtlas *atlas, InputSource::Ref inputSource)
         :
         width(atlas->width),
         height(atlas->height),
@@ -176,7 +176,7 @@ namespace chr
         
         // ---
         
-        std::shared_ptr<Font> FontManager::getCachedFont(InputSourceRef inputSource, const Font::Properties &properties)
+        std::shared_ptr<Font> FontManager::getCachedFont(InputSource::Ref inputSource, const Font::Properties &properties)
         {
             auto uri = inputSource->getURI();
             
@@ -230,7 +230,7 @@ namespace chr
             discardUnusedTextures();
         }
         
-        void FontManager::unload(InputSourceRef inputSource)
+        void FontManager::unload(InputSource::Ref inputSource)
         {
             for (auto it = fonts.begin(); it != fonts.end();)
             {
@@ -318,7 +318,7 @@ namespace chr
             }
         }
         
-        std::pair<FontData*, FontAtlas*> FontManager::fetchFontDataAndAtlas(InputSourceRef source)
+        std::pair<FontData*, FontAtlas*> FontManager::fetchFontDataAndAtlas(InputSource::Ref source)
         {
             auto in = source->loadDataSource()->createStream(); // CAN THROW
             

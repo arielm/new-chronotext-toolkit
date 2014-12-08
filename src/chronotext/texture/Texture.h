@@ -18,11 +18,11 @@ namespace chr
     public:
         static bool VERBOSE;
 
-        typedef std::shared_ptr<class Texture> Ref;
+        typedef std::shared_ptr<Texture> Ref;
 
         TextureRequest request;
         
-        Texture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
+        Texture(InputSource::Ref inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         Texture(const TextureRequest &textureRequest);
         Texture(const TextureData &textureData);
         

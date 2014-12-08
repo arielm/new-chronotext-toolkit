@@ -202,7 +202,7 @@ namespace chr
         }
         else
         {
-            return atof(accum.c_str());
+            return atof(accum.data());
         }
     }
 }

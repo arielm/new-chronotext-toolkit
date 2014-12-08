@@ -15,7 +15,7 @@ namespace chr
     class Sprite
     {
     public:
-        typedef std::shared_ptr<class Sprite> Ref;
+        typedef std::shared_ptr<Sprite> Ref;
 
         Texture::Ref texture;
         

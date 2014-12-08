@@ -18,7 +18,7 @@ using namespace ci;
 
 namespace chr
 {
-    InputSourceRef InputSource::getResource(const ci::fs::path &relativePath)
+    InputSource::Ref InputSource::getResource(const ci::fs::path &relativePath)
     {
         auto source = make_shared<InputSource>(TYPE_RESOURCE);
         source->relativePath = relativePath;
@@ -36,7 +36,7 @@ namespace chr
         return InputSource::getResource(relativePath)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
+    InputSource::Ref InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
     {
         auto source = make_shared<InputSource>(TYPE_RESOURCE_MSW);
         source->mswID = mswID;
@@ -51,7 +51,7 @@ namespace chr
         return InputSource::getResource(resourceName, mswID, mswType)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getAsset(const fs::path &relativePath)
+    InputSource::Ref InputSource::getAsset(const fs::path &relativePath)
     {
         auto source = make_shared<InputSource>(TYPE_ASSET);
         source->relativePath = relativePath;
@@ -76,7 +76,7 @@ namespace chr
      * THERE IS PROBABLY A BETTER WAY TO HANDLE THE PARSING,
      * BUT Boost.Regex IS CURRENTLY NOT AN OPTION ON COCOA
      */
-    InputSourceRef InputSource::get(const string &uri)
+    InputSource::Ref InputSource::get(const string &uri)
     {
         string scheme;
         string path;
@@ -147,7 +147,7 @@ namespace chr
         return InputSource::get(uri)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFile(const fs::path &filePath)
+    InputSource::Ref InputSource::getFile(const fs::path &filePath)
     {
         auto source = make_shared<InputSource>(TYPE_FILE);
         source->filePath = filePath;
@@ -161,7 +161,7 @@ namespace chr
         return InputSource::getFile(filePath)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFileInDocuments(const fs::path &relativePath)
+    InputSource::Ref InputSource::getFileInDocuments(const fs::path &relativePath)
     {
         auto source = InputSource::getFile(getDocumentsDirectory() / relativePath);
         source->relativePath = relativePath;
@@ -181,7 +181,7 @@ namespace chr
             case TYPE_RESOURCE:
             {
 #if defined(CINDER_ANDROID)
-                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), filePathHint.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), filePathHint.data(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
@@ -232,7 +232,7 @@ namespace chr
             {
 #if defined(CINDER_ANDROID)
                 string resourcePath = ("assets" / relativePath).string();
-                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.data(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
@@ -259,7 +259,7 @@ namespace chr
         return DataSourceRef();
     }
     
-    InputSourceRef InputSource::getSubSource(const fs::path &subPath)
+    InputSource::Ref InputSource::getSubSource(const fs::path &subPath)
     {
         if (type == TYPE_RESOURCE_MSW)
         {
@@ -282,7 +282,7 @@ namespace chr
             }
         }
         
-        return InputSourceRef();
+        return InputSource::Ref();
     }
     
     bool InputSource::isFile() const

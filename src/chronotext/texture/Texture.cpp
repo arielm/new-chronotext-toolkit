@@ -17,7 +17,7 @@ namespace chr
 {
     bool Texture::VERBOSE = true; // XXX
 
-    Texture::Texture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Texture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     :
     request(TextureRequest(inputSource, useMipmap, flags))
     {

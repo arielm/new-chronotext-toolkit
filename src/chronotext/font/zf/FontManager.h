@@ -39,7 +39,7 @@ namespace chr
              *
              * NOT MANDATORY, BUT SHOULD BE DEFINED ONLY ONCE
              */
-            void loadConfig(InputSourceRef source);
+            void loadConfig(InputSource::Ref source);
             
             /*
              * HIGHER-LEVEL METHOD, REQUIRING A FONT-CONFIG
@@ -61,7 +61,7 @@ namespace chr
             /*
              * LOWER-LEVEL METHOD, FOR ACCESSING A FONT DIRECTLY VIA ITS XML-DEFINITION
              */
-            std::shared_ptr<VirtualFont> getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties);
+            std::shared_ptr<VirtualFont> getCachedFont(InputSource::Ref source, const VirtualFont::Properties &properties);
             
             /*
              * CLEARS THE FONT RESOURCES (HARFBUZZ AND FREETYPE RELATED) AND DISCARDS THE GLYPH TEXTURES

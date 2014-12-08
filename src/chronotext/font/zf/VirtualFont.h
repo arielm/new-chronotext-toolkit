@@ -21,6 +21,8 @@
 
 namespace chr
 {
+    typedef class zf::VirtualFont ZFont;
+
     namespace zf
     {
         class FontManager;
@@ -196,6 +198,4 @@ namespace chr
             bool clipQuad(Quad &quad, FontTexture *texture) const;
         };
     }
-    
-    typedef class zf::VirtualFont ZFont;
 }

@@ -29,7 +29,7 @@ namespace chr
         public:
             struct Descriptor
             {
-                InputSourceRef source;
+                InputSource::Ref source;
                 int faceIndex;
                 float scale;
                 bool forceMemoryLoad;
@@ -37,7 +37,7 @@ namespace chr
                 Descriptor()
                 {}
                 
-                Descriptor(InputSourceRef source, int faceIndex = 0, float scale = 1, bool forceMemoryLoad = false)
+                Descriptor(InputSource::Ref source, int faceIndex = 0, float scale = 1, bool forceMemoryLoad = false)
                 :
                 source(source),
                 faceIndex(faceIndex),

@@ -262,7 +262,7 @@ namespace chr
         return false;
     }
     
-    bool CinderDelegate::loadEmulators(InputSourceRef source)
+    bool CinderDelegate::loadEmulators(InputSource::Ref source)
     {
         emulators.clear();
         

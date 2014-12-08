@@ -33,7 +33,7 @@ namespace chr
         return loadTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    gl::TextureRef TextureHelper::loadTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
+    gl::TextureRef TextureHelper::loadTexture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(TextureRequest(inputSource, useMipmap, flags));
     }

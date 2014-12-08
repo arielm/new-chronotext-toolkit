@@ -61,9 +61,9 @@ namespace chr
             int width;
             int height;
             uint32_t id;
-            InputSourceRef inputSource;
+            InputSource::Ref inputSource;
             
-            FontTexture(FontAtlas *atlas, InputSourceRef inputSource);
+            FontTexture(FontAtlas *atlas, InputSource::Ref inputSource);
             ~FontTexture();
             
             void upload(FontAtlas *atlas);
@@ -78,10 +78,10 @@ namespace chr
         class FontManager
         {
         public:
-            std::shared_ptr<Font> getCachedFont(InputSourceRef inputSource, const Font::Properties &properties);
+            std::shared_ptr<Font> getCachedFont(InputSource::Ref inputSource, const Font::Properties &properties);
             
             void unload(std::shared_ptr<Font> font);
-            void unload(InputSourceRef inputSource);
+            void unload(InputSource::Ref inputSource);
             void unload();
             
             void discardTextures();
@@ -103,7 +103,7 @@ namespace chr
             std::vector<uint16_t> indices;
             
             void discardUnusedTextures();
-            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
+            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSource::Ref source);
             
             const std::vector<uint16_t>& getIndices(int capacity);
         };

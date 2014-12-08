@@ -42,7 +42,7 @@ namespace chr
         protected:
             int sync()
             {
-                output_debug_string(this->str().c_str());
+                output_debug_string(this->str().data());
                 this->str(std::basic_string<CharT>()); // CLEARS THE STRING BUFFER
                 
                 return 0;
