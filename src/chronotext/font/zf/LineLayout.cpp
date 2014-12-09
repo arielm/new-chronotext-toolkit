@@ -19,7 +19,7 @@ namespace chr
         :
         codepoint(codepoint),
         position(position),
-        glyph(NULL)
+        glyph(nullptr)
         {}
         
         Cluster::Cluster(ActualFont *font, int tag, hb_codepoint_t codepoint, const Vec2f &offset, float advance)

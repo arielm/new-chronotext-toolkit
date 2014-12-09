@@ -7,8 +7,6 @@
  */
 
 #include "chronotext/font/zf/FontManager.h"
-#include "chronotext/font/zf/LayoutCache.h"
-#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/system/SystemManager.h"
 #include "chronotext/utils/Utils.h"
 
@@ -342,7 +340,7 @@ namespace chr
                     LOGD << e.what() << " - " << descriptor.source->getURI() << endl;
                 }
                 
-                return NULL;
+                return nullptr;
             }
         }
         

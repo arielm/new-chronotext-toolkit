@@ -37,8 +37,8 @@ namespace chr
             :
             useMipmap(useMipmap),
             padding(padding),
-            ftGlyph(NULL),
-            data(NULL)
+            ftGlyph(nullptr),
+            data(nullptr)
             {
                 if (codepoint > 0)
                 {
@@ -61,7 +61,7 @@ namespace chr
                             else
                             {
                                 FT_Done_Glyph(ftGlyph);
-                                ftGlyph = NULL;
+                                ftGlyph = nullptr;
                             }
                         }
                     }
@@ -97,7 +97,7 @@ namespace chr
                 }
                 else
                 {
-                    return NULL;
+                    return nullptr;
                 }
             }
             
@@ -110,7 +110,7 @@ namespace chr
                     memcpy(data, ftSlot->bitmap.buffer, dataSize);
                     
                     FT_Done_Glyph(ftGlyph);
-                    ftGlyph = NULL;
+                    ftGlyph = nullptr;
                 }
             }
             

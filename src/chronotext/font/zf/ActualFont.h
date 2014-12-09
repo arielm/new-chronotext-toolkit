@@ -85,7 +85,7 @@ namespace chr
                 
                 Glyph()
                 :
-                texture(NULL)
+                texture(nullptr)
                 {}
                 
                 Glyph(FontTexture *texture, ci::Vec2f offset, ci::Vec2f size)

@@ -227,11 +227,11 @@ namespace chr
                         averageCount++;
                         
                         run.apply(line.text, buffer);
-                        hb_shape(font->hbFont, buffer, NULL, 0);
+                        hb_shape(font->hbFont, buffer, nullptr, 0);
                         
                         auto glyphCount = hb_buffer_get_length(buffer);
-                        auto glyphInfos = hb_buffer_get_glyph_infos(buffer, NULL);
-                        auto glyphPositions = hb_buffer_get_glyph_positions(buffer, NULL);
+                        auto glyphInfos = hb_buffer_get_glyph_infos(buffer, nullptr);
+                        auto glyphPositions = hb_buffer_get_glyph_positions(buffer, nullptr);
                         
                         bool hasMissingGlyphs = false;
                         

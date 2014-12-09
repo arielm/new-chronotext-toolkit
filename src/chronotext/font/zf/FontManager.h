@@ -9,6 +9,8 @@
 #pragma once
 
 #include "chronotext/font/zf/VirtualFont.h"
+#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/InputSource.h"
 
 #include "cinder/Xml.h"
@@ -17,15 +19,10 @@ namespace chr
 {
     namespace zf
     {
-        class LangHelper;
-        class LayoutCache;
-        class TextItemizer;
-        
         class FontManager
         {
         public:
             std::shared_ptr<FreetypeHelper> ftHelper; // THE UNDERLYING FT_Library WILL BE DESTROYED AFTER ALL THE ActualFont INSTANCES
-            
             std::shared_ptr<LangHelper> langHelper;
             std::shared_ptr<LayoutCache> layoutCache;
             std::shared_ptr<TextItemizer> itemizer;
