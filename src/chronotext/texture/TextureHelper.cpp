@@ -46,11 +46,11 @@ namespace chr
         {
             throw EXCEPTION(Texture, "TEXTURE IS UNDEFINED");
         }
-        else if ((textureRequest.maxSize.x > 0) && (textureRequest.maxSize.y > 0))
+        else
         {
             const Vec2i size = getTextureSize(textureData);
             
-            if ((size.x > textureRequest.maxSize.x) || (size.y > textureRequest.maxSize.y))
+            if (isOverSized(textureRequest, size))
             {
                 throw EXCEPTION(Texture, "TEXTURE IS OVER-SIZED (" + toString(size.x) + "x" + toString(size.y) + ")");
             }
@@ -275,6 +275,16 @@ namespace chr
         }
     }
     
+    bool TextureHelper::isOverSized(const TextureRequest &textureRequest, const Vec2i &size)
+    {
+        if ((textureRequest.maxSize.x > 0) && (textureRequest.maxSize.y > 0))
+        {
+            return (size.x > textureRequest.maxSize.x) || (size.y > textureRequest.maxSize.y);
+        }
+        
+        return false;
+    }
+    
     /*
      * BASED ON https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/gl/Texture.cpp#L478-490
      */
@@ -284,33 +294,41 @@ namespace chr
         Surface surface(loadImage(textureRequest.inputSource->loadDataSource()));
         
         Channel8u &channel = surface.getChannel(0);
-        shared_ptr<uint8_t> data;
+        int width = channel.getWidth();
+        int height = channel.getHeight();
         
-        if ((channel.getIncrement() != 1) || (channel.getRowBytes() != channel.getWidth() * sizeof(uint8_t)))
+        if (isOverSized(textureRequest, channel.getSize()))
         {
-            data = shared_ptr<uint8_t>(new uint8_t[channel.getWidth() * channel.getHeight()], checked_array_deleter<uint8_t>());
-            uint8_t *dest = data.get();
-            int8_t inc = channel.getIncrement();
-            int32_t width = channel.getWidth();
-            int32_t height = channel.getHeight();
-            
-            for (int y = 0; y < height; ++y)
-            {
-                const uint8_t *src = channel.getData(0, y);
-                
-                for (int x = 0; x < width; ++x)
-                {
-                    *dest++ = *src;
-                    src += inc;
-                }
-            }
+            return TextureData(textureRequest, nullptr, 0, 0, width, height);
         }
         else
         {
-            data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
+            shared_ptr<uint8_t> data;
+            
+            if ((channel.getIncrement() != 1) || (channel.getRowBytes() != width * sizeof(uint8_t)))
+            {
+                data = shared_ptr<uint8_t>(new uint8_t[width * height], checked_array_deleter<uint8_t>());
+                uint8_t *dest = data.get();
+                int8_t inc = channel.getIncrement();
+                
+                for (int y = 0; y < height; ++y)
+                {
+                    const uint8_t *src = channel.getData(0, y);
+                    
+                    for (int x = 0; x < width; ++x)
+                    {
+                        *dest++ = *src;
+                        src += inc;
+                    }
+                }
+            }
+            else
+            {
+                data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
+            }
+            
+            return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, width, height);
         }
-        
-        return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, channel.getWidth(), channel.getHeight());
     }
     
     TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &textureRequest)
@@ -325,35 +343,42 @@ namespace chr
         int srcWidth = src.getWidth();
         int srcHeight = src.getHeight();
         
-        int dstWidth = nextPowerOfTwo(srcWidth);
-        int dstHeight = nextPowerOfTwo(srcHeight);
-        
-        if ((srcWidth != dstWidth) || (srcHeight != dstHeight))
+        if (isOverSized(textureRequest, src.getSize()))
         {
-            Surface dst(dstWidth, dstHeight, src.hasAlpha(), src.getChannelOrder());
-            
-            /*
-             * NO NEED TO CLEAR THE WHOLE SURFACE
-             */
-            ip::fill(&dst, ColorA::zero(), Area(srcWidth + 1, 0, dstWidth, srcHeight));
-            ip::fill(&dst, ColorA::zero(), Area(0, srcHeight + 1, srcWidth, dstHeight));
-            ip::fill(&dst, ColorA::zero(), Area(srcWidth + 1, srcHeight + 1, dstWidth, dstHeight));
-            
-            dst.copyFrom(src, Area(0, 0, srcWidth, srcHeight), Vec2i::zero());
-            
-            /*
-             * DUPLICATING THE RIGHT AND BOTTOM EDGES:
-             * NECESSARY TO AVOID BORDER ARTIFACTS WHEN THE
-             * TEXTURE IS NOT DRAWN AT ITS ORIGINAL SCALE
-             */
-            dst.copyFrom(src, Area(srcWidth - 1, 0, srcWidth, srcHeight), Vec2i(1, 0));
-            dst.copyFrom(src, Area(0, srcHeight - 1, srcWidth, srcHeight), Vec2i(0, 1));
-            
-            return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
+            return TextureData(textureRequest, nullptr, 0, 0, srcWidth, srcHeight);
         }
         else
         {
-            return TextureData(textureRequest, src);
+            int dstWidth = nextPowerOfTwo(srcWidth);
+            int dstHeight = nextPowerOfTwo(srcHeight);
+            
+            if ((srcWidth != dstWidth) || (srcHeight != dstHeight))
+            {
+                Surface dst(dstWidth, dstHeight, src.hasAlpha(), src.getChannelOrder());
+                
+                /*
+                 * NO NEED TO CLEAR THE WHOLE SURFACE
+                 */
+                ip::fill(&dst, ColorA::zero(), Area(srcWidth + 1, 0, dstWidth, srcHeight));
+                ip::fill(&dst, ColorA::zero(), Area(0, srcHeight + 1, srcWidth, dstHeight));
+                ip::fill(&dst, ColorA::zero(), Area(srcWidth + 1, srcHeight + 1, dstWidth, dstHeight));
+                
+                dst.copyFrom(src, Area(0, 0, srcWidth, srcHeight), Vec2i::zero());
+                
+                /*
+                 * DUPLICATING THE RIGHT AND BOTTOM EDGES:
+                 * NECESSARY TO AVOID BORDER ARTIFACTS WHEN THE
+                 * TEXTURE IS NOT DRAWN AT ITS ORIGINAL SCALE
+                 */
+                dst.copyFrom(src, Area(srcWidth - 1, 0, srcWidth, srcHeight), Vec2i(1, 0));
+                dst.copyFrom(src, Area(0, srcHeight - 1, srcWidth, srcHeight), Vec2i(0, 1));
+                
+                return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
+            }
+            else
+            {
+                return TextureData(textureRequest, src);
+            }
         }
     }
     
@@ -414,6 +439,11 @@ namespace chr
                     
                 case TextureData::TYPE_DATA:
                 {
+                    /*
+                     * ASSUMING THAT THE GL-TYPE IS "GL_UNSIGNED_BYTE"
+                     * AND HANDLING ONLY A LIMITED SET OF GL-INTERNAL-FORMATS...
+                     */
+                    
                     int bpp = 0;
                     
                     switch (textureData.glInternalFormat)
@@ -426,11 +456,8 @@ namespace chr
                         case GL_LUMINANCE_ALPHA:
                             bpp = 2;
                             break;
-                            
+
                         case GL_RGB:
-                            bpp = 3; // XXX: USUALLY TAKES 4
-                            break;
-                            
                         case GL_RGBA:
                             bpp = 4;
                             break;

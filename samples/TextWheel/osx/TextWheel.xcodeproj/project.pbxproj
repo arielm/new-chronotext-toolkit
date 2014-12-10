@@ -687,7 +687,6 @@
 					"\"$(CINDER_PATH)/blocks/hb-icu/lib/osx/libhb.a\"",
 				);
 				PRODUCT_NAME = TextWheel;
-				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -715,7 +714,6 @@
 				);
 				PRODUCT_NAME = TextWheel;
 				STRIP_INSTALLED_PRODUCT = YES;
-				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

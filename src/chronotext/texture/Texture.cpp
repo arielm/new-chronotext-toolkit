@@ -50,10 +50,7 @@ namespace chr
     
     void Texture::reload()
     {
-        if (!target)
-        {
-            setTarget(TextureHelper::loadTexture(request));
-        }
+        setTarget(TextureHelper::loadTexture(request));
     }
     
     TextureData Texture::fetchTextureData()
@@ -169,6 +166,12 @@ namespace chr
             auto previousTextureId = getId();
             
             target.reset();
+            
+            textureId = 0;
+            width = 0;
+            height = 0;
+            maxU = 0;
+            maxV = 0;
             
             // ---
             

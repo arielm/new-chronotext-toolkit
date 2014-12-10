@@ -6,6 +6,24 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) PROBE (CPU) TIME AS WELL
+ *
+ * 2) FAIL EARLIER WHEN "MAX-SIZE" IS EXCEEDED:
+ *    - CURRENTLY NECESSARY IN:
+ *      - fetchTextureData() WHEN CALLING PVRHelper::decompressGZ() OR PVRHelper::decompressCCZ
+ *        - TRIVIAL: THE INFO LIES IN THE "PVR HEADER"
+ *      - fetchTranslucentTextureData() AND fetchPowerOfTwoTextureData()
+ *        - NON TRIVIAL:
+ *          - CINDER'S IMAGE-IO PROTOCOL DOES NOT SEEM TO BE ADAPTED:
+ *            - I.E. THERE SHOULD BE USER-DEFINABLE CALLBACK, INVOKED AS SOON IMAGE-HEADER IS PARSED
+ *              - OBVIOUSLY: MOST OF THE IMAGE-LOADING SOLUTIONS (E.G. stb_image) ALLOW TO "GUESS" IMAGE-SIZE BEFORE FULLY LOADING IT
+ *
+ * 3) MOVE bindTexture(), drawTexture(), ETC. TO utils/gl/GLUtils.h
+ */
+
 #pragma once
 
 #include "chronotext/texture/TextureData.h"
@@ -54,6 +72,8 @@ namespace chr
         
     protected:
         static void textureDeallocator(void *refcon);
+        static bool isOverSized(const TextureRequest &textureRequest, const ci::Vec2i &size);
+
         static TextureData fetchTranslucentTextureData(const TextureRequest &textureRequest);
         static TextureData fetchPowerOfTwoTextureData(const TextureRequest &textureRequest);
     };
