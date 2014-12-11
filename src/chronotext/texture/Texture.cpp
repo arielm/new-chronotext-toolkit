@@ -50,7 +50,10 @@ namespace chr
     
     void Texture::reload()
     {
-        setTarget(TextureHelper::loadTexture(request));
+        if (!target)
+        {
+            setTarget(TextureHelper::loadTexture(request));
+        }
     }
     
     TextureData Texture::fetchTextureData()
