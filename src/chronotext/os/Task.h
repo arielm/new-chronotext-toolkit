@@ -13,21 +13,18 @@
 /*
  *  TODO:
  *
- * 1) TEST FURTHER:
- *    - NEW WAY TO RUN SYNCHRONOUS TASKS VIA performRun
- *    - IS NEW Task::post PROPERLY ACCESSIBLE FROM SUB-CLASSES?
+ * 1) TEST AND DEVELOP FURTHER:
+ *    - SEE MANY "INNER" TODOS IN TaskManger AND Task
  *
- * 3) TRY TO REPLACE cinder::sleep() BY:
+ * 2) TRY TO REPLACE cinder::sleep() BY:
  *    - boost::this_thread::sleep()
- *    - OR EVEN BETTER: A PURE C++11 STL SOLUTION
+ *    - OR A PURE C++11 STL SOLUTION
  *
- * 4) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_lock
+ * 3) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_lock
  *
- * 5) SEE IF THE NEW C++11 std::thread_local CAN BE USED FOR THE FOLLOWING "STORAGE":
- *    - bool cancelRequired
- *    - std::shared_ptr<TaskManager> manager
+ * 4) SEE IF THE NEW C++11 std::thread_local CAN BE USED
  *
- * 6) IMPLEMENT THREAD ATTACHMENT/DETACHMENT TO/FROM JAVA ON ANDROID
+ * 5) IMPLEMENT THREAD ATTACHMENT/DETACHMENT TO/FROM JAVA ON ANDROID
  *    - STUDY JNI'S AttachCurrentThread / DetachCurrentThread
  */
 
@@ -44,34 +41,50 @@ namespace chr
     class Task
     {
     public:
-        Task();
-        virtual ~Task();
+        static const bool VERBOSE;
         
+        /*
+         * TODO: AVOID "MANDATORY CONSTRUCTOR"
+         *
+         * I.E. ANOTHER METHOD SHOULD BE USED TO INITIALIZE THE DEFAULT-VALUES
+         */
+        Task();
+        
+        virtual bool init() { return true; }
+        virtual void shutdown() {}
         virtual void run() = 0;
-        virtual void sleep(float milliseconds);
+        
+        int getId() const;
+        bool canBeRemoved();
+        bool isCancelRequired();
+        
+        void sleep(float milliseconds);
         
     protected:
-        friend class TaskManager;
-
+        int taskId;
+        std::shared_ptr<TaskManager> manager;
+        
         bool synchronous;
         bool started;
         bool ended;
         bool cancelRequired;
         
-        std::shared_ptr<TaskManager> manager;
-        
         std::thread _thread;
         boost::mutex _mutex;
         
-        bool start(bool forceSync);
+        virtual ~Task();
+        
+        bool post(std::function<void()> &&fn);
+        
+    private:
+        friend class TaskManager;
+        
+        bool start();
         bool cancel();
+        void detach();
         
-        bool hasStarted();
-        bool isCancelRequired();
-        
+        bool performInit(std::shared_ptr<TaskManager> manager, int taskId);
+        void performShutdown();
         void performRun();
-        void performDetach();
-        
-        bool post(const std::function<void()> &fn); // TODO: CHECK IF std::forward MAKES SENSE
     };
 }

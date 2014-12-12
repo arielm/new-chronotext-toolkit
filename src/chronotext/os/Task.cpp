@@ -10,25 +10,46 @@
 
 #include "chronotext/os/TaskManager.h"
 
-#include "cinder/Utilities.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
+    const bool Task::VERBOSE = true;
+    
     Task::Task()
     :
+    taskId(0),
+    synchronous(false),
     started(false),
     ended(false),
-    cancelRequired(false),
-    synchronous(false),
-    manager(nullptr)
+    cancelRequired(false)
     {}
     
     Task::~Task()
     {
-        performDetach(); // OTHERWISE: OSX APPLICATION CAN CRASH UPON WINDOW CLOSING, ETC.
+        LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+        
+        detach(); // OTHERWISE: OSX APPLICATION MAY CRASH, E.G. WHEN SHUT-DOWN VIA WINDOW-CLOSE-BUTTON
+    }
+    
+    int Task::getId() const
+    {
+        return taskId;
+    }
+    
+    bool Task::canBeRemoved()
+    {
+        boost::mutex::scoped_lock lock(_mutex);
+        return started && !cancelRequired;
+    }
+    
+    bool Task::isCancelRequired()
+    {
+        boost::mutex::scoped_lock lock(_mutex);
+        return cancelRequired;
     }
     
     void Task::sleep(float milliseconds)
@@ -36,29 +57,47 @@ namespace chr
         ci::sleep(milliseconds);
     }
     
-    bool Task::start(bool forceSync)
+    // ---
+    
+    bool Task::post(function<void()> &&fn)
+    {
+        /*
+         * ASSERTION: INVOKED ON THE TASK'S THREAD
+         */
+        
+        if (manager && started)
+        {
+            return manager->post(forward<function<void()>>(fn), synchronous);
+        }
+        
+        return false;
+    }
+    
+    // ---
+    
+    bool Task::start()
     {
         boost::mutex::scoped_lock lock(_mutex);
         
-        if (!started && !ended)
+        if (!synchronous && !started && !ended)
         {
             if (manager)
             {
-                synchronous = forceSync;
-                started = true;
+                started = true; // TENTATIVELY...
                 
-                if (synchronous)
+                if (manager->post([=]{ _thread = thread(&Task::performRun, this); }, false)) // TODO: TEST
                 {
-                    performRun();
+                    LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [SUCCESS] | " << taskId << " | " << this << endl;
                     return true;
                 }
                 else
                 {
-                    return manager->post([=]{ _thread = thread(&Task::performRun, this); }, false); // TODO: TEST
+                    started = false;
                 }
             }
         }
         
+        LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [FAILURE] | " << taskId << " | " << this << endl;
         return false;
     }
     
@@ -68,29 +107,24 @@ namespace chr
         
         if (!synchronous && !cancelRequired && started)
         {
+            LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [SUCCESS] | " << taskId << " | " << this << endl;
+            
             cancelRequired = true;
             return true;
         }
         
+        LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [FAILURE] | " << taskId << " | " << this << endl;
         return false;
     }
-
-    bool Task::hasStarted()
-    {
-        boost::mutex::scoped_lock lock(_mutex);
-        return started || ended;
-    }
     
-    bool Task::isCancelRequired()
-    {
-        boost::mutex::scoped_lock lock(_mutex);
-        return cancelRequired;
-    }
-    
-    void Task::performDetach()
+    void Task::detach()
     {
         if (!synchronous)
         {
+            /*
+             * ASSERTION: FOLLOWING IS SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED (TODO: VERIFY)
+             */
+            
             if (_thread.joinable())
             {
                 _thread.detach();
@@ -98,41 +132,78 @@ namespace chr
         }
     }
     
+    bool Task::performInit(shared_ptr<TaskManager> manager, int taskId)
+    {
+        boost::mutex::scoped_lock lock(_mutex);
+        
+        if (!Task::manager)
+        {
+            if (init())
+            {
+                Task::manager = manager;
+                Task::taskId = taskId;
+                
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     void Task::performRun()
     {
-        if (synchronous)
+        if (!synchronous)
         {
-            run();
-        }
-        else if (!isCancelRequired())
-        {
-            /*
-             * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
-             *
-             * THIS IS PURPOSELY IN A BLOCK, IN ORDER FOR ThreadSetup TO "EXPIRE" RIGHT AFTER run()
-             *
-             * TODO: A SIMILAR SYSTEM IS NECESSARY ON ANDROID FOR ATTACHING/DETACHING THE THREAD TO/FROM JAVA
-             */
+            LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
             
-            ThreadSetup forCocoa;
-            run();
-        }
-        
-        started = false;
-        ended = true;
-        
-        if (synchronous)
-        {
-            manager->taskEnded(this);
-        }
-        else
-        {
-            manager->post([=]{ manager->taskEnded(this); }, false); // TODO: DOUBLE-CHECK LAMBDA
+            if (!isCancelRequired())
+            {
+                /*
+                 * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
+                 *
+                 * TODO: A SIMILAR SYSTEM IS NECESSARY ON ANDROID FOR ATTACHING/DETACHING THE THREAD TO/FROM JAVA
+                 */
+                ThreadSetup forCocoa;
+                
+                run();
+            }
+            
+            started = false;
+            ended = true;
+            
+            /*
+             * NECESSARY IN ORDER TO WAIT FOR THE LAMBDAS WHICH
+             * MAY HAVE BEEN POSTED BY DURING Task::run()
+             */
+            manager->post([=]{ manager->endTask(taskId); });
+            
+            LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << taskId << " | " << this << endl;
+            
+            /*
+             * TODO:
+             *
+             * INVESTIGATE IN WHICH "STATE" IS THE THREAD
+             * UNTIL Task::performShutdown() IS INVOKED
+             *
+             * SHOULD WE BE IN A "WAIT STATE" UNTIL THEN?
+             */
         }
     }
     
-    bool Task::post(const function<void()> &fn)
+    /*
+     * OPTION 1: INVOKED ON ANY THREAD (TODO: VERIFY), FROM TaskManager::cancelTask()
+     * OPTION 2: INVOKED ON THE IO-THREAD, FROM TaskManager::endTask()
+     */
+    
+    void Task::performShutdown()
     {
-        return manager->post(fn, synchronous);
+        LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+        
+        shutdown();
+        
+        /*
+         * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
+         */
+        detach();
     }
 }
