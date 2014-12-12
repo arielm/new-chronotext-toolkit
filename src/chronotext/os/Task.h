@@ -55,7 +55,9 @@ namespace chr
         virtual void run() = 0;
         
         int getId() const;
-        bool canBeRemoved();
+        
+        bool hasStarted();
+        bool hasEnded();
         bool isCancelRequired();
         
         void sleep(float milliseconds);
@@ -79,7 +81,7 @@ namespace chr
     private:
         friend class TaskManager;
         
-        bool start();
+        void start();
         bool cancel();
         void detach();
         

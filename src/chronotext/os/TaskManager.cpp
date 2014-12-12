@@ -17,17 +17,20 @@ namespace chr
     TaskManager::TaskManager()
     :
     taskCount(0)
-    {}
+    {
+        threadId = this_thread::get_id();
+    }
     
     Task* TaskManager::getTask(int taskId)
     {
-        boost::mutex::scoped_lock lock(_mutex);
-        
-        auto element = tasks.find(taskId);
-        
-        if (element != tasks.end())
+        if (isThreadSafe())
         {
-            return element->second.get();
+            auto element = tasks.find(taskId);
+            
+            if (element != tasks.end())
+            {
+                return element->second.get();
+            }
         }
         
         return nullptr;
@@ -35,12 +38,13 @@ namespace chr
     
     int TaskManager::registerTask(shared_ptr<Task> task)
     {
-        boost::mutex::scoped_lock lock(_mutex);
-        
-        if (task->performInit(shared_from_this(), taskCount + 1))
+        if (isThreadSafe())
         {
-            tasks[++taskCount] = task;
-            return taskCount;
+            if (task->performInit(shared_from_this(), taskCount + 1))
+            {
+                tasks[++taskCount] = task;
+                return taskCount;
+            }
         }
         
         return 0;
@@ -48,43 +52,37 @@ namespace chr
     
     bool TaskManager::addTask(int taskId, bool forceSync)
     {
-        boost::mutex::scoped_lock lock(_mutex);
-        
-        auto element = tasks.find(taskId);
-        
-        if (element != tasks.end())
+        if (isThreadSafe())
         {
-            auto task = element->second.get();
+            auto element = tasks.find(taskId);
             
-            if (forceSync)
+            if (element != tasks.end())
             {
-                /*
-                 * TODO: ENSURE IT IS INVOKED ON THE IO-THREAD
-                 */
+                auto task = element->second.get();
                 
-                task->synchronous = true;
-                task->started = true;
-                
-                task->run();
-                
-                task->started = false;
-                task->ended = false;
-                
-                task->performShutdown();
-                tasks.erase(element);
-                
-                return true;
-            }
-            else
-            {
-                /*
-                 * TODO:
-                 *
-                 * START IF "CONCURRENT-THREAD-QUOTA" IS NOT EXCEEDED
-                 * OTHERWISE: POSTPONE
-                 */
-                
-                return task->start();
+                if (forceSync)
+                {
+                    task->synchronous = true;
+                    
+                    task->started = true;
+                    task->run();
+                    task->ended = false;
+                    
+                    task->performShutdown();
+                    tasks.erase(element);
+                    
+                    return true;
+                }
+                else if (!task->hasStarted())
+                {
+                    /*
+                     * TODO: START ONLY IF "CONCURRENT-THREAD-QUOTA" IS NOT EXCEEDED
+                     *
+                     * OTHERWISE: POSTPONE...
+                     */
+                    
+                    return post([=]{ task->start(); }, false);
+                }
             }
         }
         
@@ -93,24 +91,25 @@ namespace chr
     
     bool TaskManager::cancelTask(int taskId)
     {
-        boost::mutex::scoped_lock lock(_mutex);
-        
-        auto element = tasks.find(taskId);
-        
-        if (element != tasks.end())
+        if (isThreadSafe())
         {
-            auto task = element->second;
+            auto element = tasks.find(taskId);
             
-            if (task->canBeRemoved())
+            if (element != tasks.end())
             {
-                task->performShutdown();
-                tasks.erase(element);
+                auto task = element->second;
                 
-                return true;
-            }
-            else
-            {
-                return element->second->cancel();
+                if (!task->hasStarted())
+                {
+                    task->performShutdown();
+                    tasks.erase(element);
+                    
+                    return true;
+                }
+                else
+                {
+                    return element->second->cancel();
+                }
             }
         }
         
@@ -119,19 +118,24 @@ namespace chr
     
     // ---
     
+    bool TaskManager::isThreadSafe()
+    {
+        return threadId == this_thread::get_id();
+    }
+    
+    // ---
+    
     bool TaskManager::post(function<void()> &&fn, bool forceSync)
     {
         if (forceSync)
         {
-            /*
-             * ASSERTION: INVOKED ON THE IO-THREAD
-             */
-            
-            fn();
-            return true;
+            if (isThreadSafe())
+            {
+                fn();
+                return true;
+            }
         }
-        
-        if (true) // TODO: SHOULD BE FALSE IF IO-SERVICE IS NOT DEFINED OR IF THE CONTEXT IS BEING SHUT-DOWN
+        else if (true) // TODO: SHOULD BE FALSE IF THE CONTEXT IS BEING SHUT-DOWN
         {
             context::io_service().post(fn);
             return true;
@@ -141,11 +145,13 @@ namespace chr
     }
     
     /*
-     * INVOKED ON THE IO-THREAD, FOLLOWING "POST" FROM Task::performRun()
+     * POSTED FROM Task::performRun()
      */
     
     void TaskManager::endTask(int taskId)
     {
+        assert(isThreadSafe());
+        
         auto element = tasks.find(taskId);
         
         if (element != tasks.end())

@@ -40,10 +40,16 @@ namespace chr
         return taskId;
     }
     
-    bool Task::canBeRemoved()
+    bool Task::hasStarted()
     {
         boost::mutex::scoped_lock lock(_mutex);
-        return started && !cancelRequired;
+        return started;
+    }
+    
+    bool Task::hasEnded()
+    {
+        boost::mutex::scoped_lock lock(_mutex);
+        return ended;
     }
     
     bool Task::isCancelRequired()
@@ -59,61 +65,48 @@ namespace chr
     
     // ---
     
+    /*
+     * ASSERTION: INVOKED ON THE TASK'S THREAD
+     */
+    
     bool Task::post(function<void()> &&fn)
     {
-        /*
-         * ASSERTION: INVOKED ON THE TASK'S THREAD
-         */
-        
-        if (manager && started)
-        {
-            return manager->post(forward<function<void()>>(fn), synchronous);
-        }
-        
-        return false;
+        return manager->post(forward<function<void()>>(fn), synchronous);
     }
     
     // ---
     
-    bool Task::start()
+    /*
+     * POSTED FROM TaskManager::addTask()
+     */
+    
+    void Task::start()
     {
-        boost::mutex::scoped_lock lock(_mutex);
-        
-        if (!synchronous && !started && !ended)
+        if (!synchronous && !started)
         {
-            if (manager)
-            {
-                started = true; // TENTATIVELY...
-                
-                if (manager->post([=]{ _thread = thread(&Task::performRun, this); }, false)) // TODO: TEST
-                {
-                    LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [SUCCESS] | " << taskId << " | " << this << endl;
-                    return true;
-                }
-                else
-                {
-                    started = false;
-                }
-            }
+            LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+            
+            started = true;
+            _thread = thread(&Task::performRun, this);
         }
-        
-        LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [FAILURE] | " << taskId << " | " << this << endl;
-        return false;
     }
+    
+    /*
+     * INVOKED ON THE IO-THREAD, FROM TaskManager::cancelTask()
+     */
     
     bool Task::cancel()
     {
-        boost::mutex::scoped_lock lock(_mutex);
+        boost::mutex::scoped_lock lock(_mutex); // TODO: DOUBLE-CHECK IF REALLY NECESSARY
         
         if (!synchronous && !cancelRequired && started)
         {
-            LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [SUCCESS] | " << taskId << " | " << this << endl;
+            LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
             cancelRequired = true;
             return true;
         }
         
-        LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [FAILURE] | " << taskId << " | " << this << endl;
         return false;
     }
     
@@ -122,7 +115,7 @@ namespace chr
         if (!synchronous)
         {
             /*
-             * ASSERTION: FOLLOWING IS SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED (TODO: VERIFY)
+             * ASSERTION: THE FOLLOWING IS SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED (TODO: VERIFY)
              */
             
             if (_thread.joinable())
@@ -134,7 +127,7 @@ namespace chr
     
     bool Task::performInit(shared_ptr<TaskManager> manager, int taskId)
     {
-        boost::mutex::scoped_lock lock(_mutex);
+        boost::mutex::scoped_lock lock(_mutex); // TODO: DOUBLE-CHECK IF REALLY NECESSARY
         
         if (!Task::manager)
         {
@@ -150,9 +143,13 @@ namespace chr
         return false;
     }
     
+    /*
+     * ASSERTION: INVOKED ON THE TASK'S THREAD
+     */
+    
     void Task::performRun()
     {
-        if (!synchronous)
+        if (started && !ended)
         {
             LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
             
@@ -168,7 +165,6 @@ namespace chr
                 run();
             }
             
-            started = false;
             ended = true;
             
             /*
@@ -191,19 +187,22 @@ namespace chr
     }
     
     /*
-     * OPTION 1: INVOKED ON ANY THREAD (TODO: VERIFY), FROM TaskManager::cancelTask()
-     * OPTION 2: INVOKED ON THE IO-THREAD, FROM TaskManager::endTask()
+     * OPTION 1: INVOKED ON ANY THREAD, FROM TaskManager::cancelTask()
+     * OPTION 2: POSTED FROM FROM TaskManager::endTask()
      */
     
     void Task::performShutdown()
     {
-        LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
-        
-        shutdown();
-        
-        /*
-         * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
-         */
-        detach();
+        if (!started || ended)
+        {
+            LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+            
+            shutdown();
+            
+            /*
+             * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
+             */
+            detach();
+        }
     }
 }

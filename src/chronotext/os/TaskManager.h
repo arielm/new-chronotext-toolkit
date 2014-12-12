@@ -39,7 +39,12 @@ namespace chr
         }
         
         /*
-         * THE RETURNED POINTER IS NOT INTENDED FOR STORAGE
+         * RETURNS NULL IF:
+         *
+         * - NOT INVOKED ON THE IO-THREAD
+         * - NO TASK IS REGISTERED WITH THIS ID
+         *
+         * NOTE: THE RETURNED POINTER IS NOT INTENDED FOR STORAGE
          */
         Task* getTask(int taskId);
         
@@ -48,7 +53,8 @@ namespace chr
          *
          * CAUSES:
          *
-         * - THE TASK IS ALREADY REGISTERED (NOTE: TASKS ARE NOT REUSABLE)
+         * - NOT INVOKED ON THE IO-THREAD
+         * - THE TASK IS ALREADY REGISTERED (TASKS ARE NOT REUSABLE)
          * - Task::init() RETURNED FALSE
          */
         int registerTask(std::shared_ptr<Task> task);
@@ -58,6 +64,7 @@ namespace chr
          *
          * CAUSES:
          *
+         * - NOT INVOKED ON THE IO-THREAD
          * - NO TASK IS REGISTERED WITH THIS ID
          * - THE TASK HAS ALREADY BEEN ADDED
          * - IO-SERVICE IS NOT DEFINED
@@ -71,10 +78,11 @@ namespace chr
         }
         
         /*
-         * RETURNS FALSE IF THE TASK CAN'T BE CANCELLED
+         * RETURNS FALSE IF THE TASK CAN'T BE CANCELLED (OR REMOVED IF NOT YET STARTED)
          *
          * CAUSES:
          *
+         * - NOT INVOKED ON THE IO-THREAD
          * - NO TASK IS REGISTERED WITH THIS ID
          *
          * ASYNCHRONOUS TASKS ONLY:
@@ -83,10 +91,12 @@ namespace chr
         bool cancelTask(int taskId);
         
     protected:
+        std::thread::id threadId;
+        
         int taskCount;
         std::map<int, std::shared_ptr<Task>> tasks;
         
-        boost::mutex _mutex;
+        bool isThreadSafe();
         
     private:
         friend class Task;
@@ -101,6 +111,9 @@ namespace chr
          *
          * - IO-SERVICE IS NOT DEFINED
          * - THE CONTEXT IS BEING SHUT-DOWN (TODO)
+         *
+         * SYNCHRONOUS TASKS ONLY:
+         * - NOT INVOKED ON THE IO-THREAD
          */
         bool post(std::function<void()> &&fn, bool forceSync = false);
         
