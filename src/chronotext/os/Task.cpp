@@ -19,10 +19,9 @@ namespace chr
 {
     const bool Task::VERBOSE = true;
     
-    Task::Task()
+    Task::State::State()
     :
-    taskId(0),
-    synchronous(false),
+    initialized(false),
     started(false),
     ended(false),
     cancelRequired(false)
@@ -37,25 +36,25 @@ namespace chr
     
     int Task::getId() const
     {
-        return taskId;
+        return state.initialized ? 0 : taskId;
     }
     
     bool Task::hasStarted()
     {
         boost::mutex::scoped_lock lock(_mutex);
-        return started;
+        return state.started;
     }
     
     bool Task::hasEnded()
     {
         boost::mutex::scoped_lock lock(_mutex);
-        return ended;
+        return state.ended;
     }
     
     bool Task::isCancelRequired()
     {
         boost::mutex::scoped_lock lock(_mutex);
-        return cancelRequired;
+        return state.cancelRequired;
     }
     
     void Task::sleep(float milliseconds)
@@ -77,17 +76,32 @@ namespace chr
     // ---
     
     /*
-     * POSTED FROM TaskManager::addTask()
+     * INVOKED ON THE IO-THREAD, FROM TaskManager::addTask()
      */
     
-    void Task::start()
+    void Task::start(bool forceSync)
     {
-        if (!synchronous && !started)
+        if (!state.started)
         {
             LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
-            started = true;
-            _thread = thread(&Task::performRun, this);
+            synchronous = forceSync;
+            
+            if (synchronous)
+            {
+                state.started = true;
+                run();
+                state.ended = true;
+            }
+            else
+            {
+                state.started = true;
+                _thread = thread(&Task::performRun, this);
+            }
+        }
+        else
+        {
+            assert(false);
         }
     }
     
@@ -95,29 +109,29 @@ namespace chr
      * INVOKED ON THE IO-THREAD, FROM TaskManager::cancelTask()
      */
     
-    bool Task::cancel()
+    void Task::cancel()
     {
-        boost::mutex::scoped_lock lock(_mutex); // TODO: DOUBLE-CHECK IF REALLY NECESSARY
-        
-        if (!synchronous && !cancelRequired && started)
+        if (!synchronous && state.started)
         {
             LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
-            cancelRequired = true;
-            return true;
+            boost::mutex::scoped_lock lock(_mutex);
+            state.cancelRequired = true;
         }
-        
-        return false;
+        else
+        {
+            assert(false);
+        }
     }
+    
+    /*
+     * ASSERTION: SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED (TODO: VERIFY)
+     */
     
     void Task::detach()
     {
         if (!synchronous)
         {
-            /*
-             * ASSERTION: THE FOLLOWING IS SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED (TODO: VERIFY)
-             */
-            
             if (_thread.joinable())
             {
                 _thread.detach();
@@ -125,17 +139,22 @@ namespace chr
         }
     }
     
+    /*
+     * INVOKED ON THE IO-THREAD, FROM TaskManager::registerTask()
+     */
+    
     bool Task::performInit(shared_ptr<TaskManager> manager, int taskId)
     {
-        boost::mutex::scoped_lock lock(_mutex); // TODO: DOUBLE-CHECK IF REALLY NECESSARY
-        
-        if (!Task::manager)
+        if (!state.initialized)
         {
             if (init())
             {
+                LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+                
                 Task::manager = manager;
                 Task::taskId = taskId;
                 
+                state.initialized = true;
                 return true;
             }
         }
@@ -149,7 +168,7 @@ namespace chr
     
     void Task::performRun()
     {
-        if (started && !ended)
+        if (state.started && !state.ended)
         {
             LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
             
@@ -165,7 +184,7 @@ namespace chr
                 run();
             }
             
-            ended = true;
+            state.ended = true;
             
             /*
              * NECESSARY IN ORDER TO WAIT FOR THE LAMBDAS WHICH
@@ -184,16 +203,22 @@ namespace chr
              * SHOULD WE BE IN A "WAIT STATE" UNTIL THEN?
              */
         }
+        else
+        {
+            assert(false);
+        }
     }
     
     /*
-     * OPTION 1: INVOKED ON ANY THREAD, FROM TaskManager::cancelTask()
-     * OPTION 2: POSTED FROM FROM TaskManager::endTask()
+     * INVOKED ON THE IO-THREAD
+     *
+     * OPTION 1: FROM TaskManager::cancelTask()
+     * OPTION 2: FROM TaskManager::endTask()
      */
     
     void Task::performShutdown()
     {
-        if (!started || ended)
+        if (!state.started || state.ended)
         {
             LOGD_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
@@ -203,6 +228,10 @@ namespace chr
              * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
              */
             detach();
+        }
+        else
+        {
+            assert(false);
         }
     }
 }

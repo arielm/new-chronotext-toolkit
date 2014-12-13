@@ -40,6 +40,14 @@ namespace chr
     {
         if (isThreadSafe())
         {
+            for (auto &element : tasks)
+            {
+                if (element.second == task)
+                {
+                    return 0;
+                }
+            }
+            
             if (task->performInit(shared_from_this(), taskCount + 1))
             {
                 tasks[++taskCount] = task;
@@ -58,31 +66,36 @@ namespace chr
             
             if (element != tasks.end())
             {
-                auto task = element->second.get();
-                
-                if (forceSync)
+                if (!startedTasks.count(taskId))
                 {
-                    task->synchronous = true;
+                    auto task = element->second;
                     
-                    task->started = true;
-                    task->run();
-                    task->ended = false;
-                    
-                    task->performShutdown();
-                    tasks.erase(element);
+                    if (forceSync)
+                    {
+                        task->start(true);
+                        
+                        task->performShutdown();
+                        tasks.erase(element);
+                    }
+                    else
+                    {
+                        /*
+                         * TODO:
+                         *
+                         * 1) START ONLY IF "CONCURRENT-THREAD-QUOTA" IS NOT EXCEEDED
+                         *    OTHERWISE: POSTPONE...
+                         *
+                         * 2) MAYBE ALLOW TASKS TO REQUIRE "POSTPONING"?
+                         *    E.G. VIA SOME ENUM RETURNED BY Task::performStart()
+                         */
+                        
+                        startedTasks.insert(taskId);
+                        task->start(false);
+                    }
                     
                     return true;
                 }
-                else if (!task->hasStarted())
-                {
-                    /*
-                     * TODO: START ONLY IF "CONCURRENT-THREAD-QUOTA" IS NOT EXCEEDED
-                     *
-                     * OTHERWISE: POSTPONE...
-                     */
-                    
-                    return post([=]{ task->start(); }, false);
-                }
+                
             }
         }
         
@@ -99,17 +112,17 @@ namespace chr
             {
                 auto task = element->second;
                 
-                if (!task->hasStarted())
+                if (startedTasks.count(taskId))
                 {
-                    task->performShutdown();
-                    tasks.erase(element);
-                    
-                    return true;
+                    element->second->cancel();
                 }
                 else
                 {
-                    return element->second->cancel();
+                    task->performShutdown();
+                    tasks.erase(element);
                 }
+                
+                return true;
             }
         }
         

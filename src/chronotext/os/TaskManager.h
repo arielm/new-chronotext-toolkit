@@ -28,6 +28,9 @@
 
 #include "chronotext/os/Task.h"
 
+#include <map>
+#include <set>
+
 namespace chr
 {
     class TaskManager : public std::enable_shared_from_this<TaskManager>
@@ -92,9 +95,10 @@ namespace chr
         
     protected:
         std::thread::id threadId;
-        
         int taskCount;
+        
         std::map<int, std::shared_ptr<Task>> tasks;
+        std::set<int> startedTasks;
         
         bool isThreadSafe();
         

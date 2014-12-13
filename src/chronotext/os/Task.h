@@ -43,12 +43,15 @@ namespace chr
     public:
         static const bool VERBOSE;
         
-        /*
-         * TODO: AVOID "MANDATORY CONSTRUCTOR"
-         *
-         * I.E. ANOTHER METHOD SHOULD BE USED TO INITIALIZE THE DEFAULT-VALUES
-         */
-        Task();
+        struct State
+        {
+            bool initialized;
+            bool started;
+            bool ended;
+            bool cancelRequired;
+            
+            State();
+        };
         
         virtual bool init() { return true; }
         virtual void shutdown() {}
@@ -63,13 +66,11 @@ namespace chr
         void sleep(float milliseconds);
         
     protected:
-        int taskId;
-        std::shared_ptr<TaskManager> manager;
+        State state;
         
+        std::shared_ptr<TaskManager> manager;
+        int taskId;
         bool synchronous;
-        bool started;
-        bool ended;
-        bool cancelRequired;
         
         std::thread _thread;
         boost::mutex _mutex;
@@ -81,8 +82,8 @@ namespace chr
     private:
         friend class TaskManager;
         
-        void start();
-        bool cancel();
+        void start(bool forceSync = false);
+        void cancel();
         void detach();
         
         bool performInit(std::shared_ptr<TaskManager> manager, int taskId);
