@@ -14,25 +14,17 @@
  *  TODO:
  *
  * 1) TEST AND DEVELOP FURTHER:
- *    - SEE MANY "INNER" TODOS IN TaskManger AND Task
+ *    - SEE "INNER" TODOS IN TaskManager AND Task
  *
- * 2) TRY TO REPLACE cinder::sleep() BY:
- *    - boost::this_thread::sleep()
- *    - OR A PURE C++11 STL SOLUTION
+ * 2) SEE IF THE NEW C++11 std::thread_local CAN BE USED
  *
- * 3) TRY TO USE std::mutex AND std::lock_guard INSTEAD OF boost::mutex AND boost::mutex::scoped_lock
- *
- * 4) SEE IF THE NEW C++11 std::thread_local CAN BE USED
- *
- * 5) IMPLEMENT THREAD ATTACHMENT/DETACHMENT TO/FROM JAVA ON ANDROID
+ * 3) IMPLEMENT THREAD ATTACHMENT/DETACHMENT TO/FROM JAVA ON ANDROID
  *    - STUDY JNI'S AttachCurrentThread / DetachCurrentThread
  */
 
 #pragma once
 
 #include "cinder/Thread.h"
-
-#include <boost/thread/mutex.hpp>
 
 namespace chr
 {
@@ -41,7 +33,7 @@ namespace chr
     class Task
     {
     public:
-        static const bool VERBOSE;
+        static bool VERBOSE;
         
         struct State
         {
@@ -63,7 +55,7 @@ namespace chr
         bool hasEnded();
         bool isCancelRequired();
         
-        void sleep(float milliseconds);
+        static void sleep(double seconds);
         
     protected:
         State state;
@@ -73,7 +65,7 @@ namespace chr
         bool synchronous;
         
         std::thread _thread;
-        boost::mutex _mutex;
+        std::mutex _mutex;
         
         virtual ~Task();
         

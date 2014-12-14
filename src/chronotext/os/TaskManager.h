@@ -14,7 +14,7 @@
  * TODO:
  *
  * 1) TEST AND DEVELOP FURTHER:
- *    - SEE MANY "INNER" TODOS IN TaskManger AND Task
+ *    - SEE "INNER" TODOS IN TaskManager AND Task
  *
  * 2) PROPERLY HANDLE THE TERMINATION OF RUNNING-TASKS WHEN CONTEXT IS BEING SHUT-DOWN
  *    - SEE RELATED TODOS IN Context AND CinderDelegate
@@ -30,12 +30,15 @@
 
 #include <map>
 #include <set>
+#include <queue>
 
 namespace chr
 {
     class TaskManager : public std::enable_shared_from_this<TaskManager>
     {
     public:
+        static int MAX_CONCURRENT_THREADS;
+
         static std::shared_ptr<TaskManager> create()
         {
             return std::shared_ptr<TaskManager>(new TaskManager()); // XXX: std::make_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
@@ -99,6 +102,8 @@ namespace chr
         
         std::map<int, std::shared_ptr<Task>> tasks;
         std::set<int> startedTasks;
+        std::set<int> postponedTasks;
+        std::queue<int> taskQueue;
         
         bool isThreadSafe();
         
@@ -122,5 +127,6 @@ namespace chr
         bool post(std::function<void()> &&fn, bool forceSync = false);
         
         void endTask(int taskId);
+        void nextTask();
     };
 }

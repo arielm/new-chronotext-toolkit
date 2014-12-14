@@ -14,6 +14,8 @@ using namespace std;
 
 namespace chr
 {
+    int TaskManager::MAX_CONCURRENT_THREADS = 4; // XXX: RAW MECHANISM, AS FOR NOW
+    
     TaskManager::TaskManager()
     :
     taskCount(0)
@@ -66,7 +68,7 @@ namespace chr
             
             if (element != tasks.end())
             {
-                if (!startedTasks.count(taskId))
+                if (!startedTasks.count(taskId) && !postponedTasks.count(taskId))
                 {
                     auto task = element->second;
                     
@@ -82,15 +84,20 @@ namespace chr
                         /*
                          * TODO:
                          *
-                         * 1) START ONLY IF "CONCURRENT-THREAD-QUOTA" IS NOT EXCEEDED
-                         *    OTHERWISE: POSTPONE...
-                         *
-                         * 2) MAYBE ALLOW TASKS TO REQUIRE "POSTPONING"?
-                         *    E.G. VIA SOME ENUM RETURNED BY Task::performStart()
+                         * 1) ALLOW TASKS TO "REQUIRE" POSTPONING?
+                         *    E.G. VIA SOME ENUM RETURNED BY Task::start()
                          */
                         
-                        startedTasks.insert(taskId);
-                        task->start(false);
+                        if ((MAX_CONCURRENT_THREADS > 0) && (startedTasks.size() >= MAX_CONCURRENT_THREADS))
+                        {
+                            postponedTasks.insert(taskId);
+                            taskQueue.push(taskId);
+                        }
+                        else
+                        {
+                            startedTasks.insert(taskId);
+                            task->start(false);
+                        }
                     }
                     
                     return true;
@@ -119,7 +126,9 @@ namespace chr
                 else
                 {
                     task->performShutdown();
+                    
                     tasks.erase(element);
+                    postponedTasks.erase(taskId);
                 }
                 
                 return true;
@@ -170,7 +179,40 @@ namespace chr
         if (element != tasks.end())
         {
             element->second->performShutdown();
+            
             tasks.erase(element);
+            startedTasks.erase(taskId);
+        }
+        else
+        {
+            assert(false);
+        }
+        
+        nextTask();
+    }
+    
+    void TaskManager::nextTask()
+    {
+        assert(isThreadSafe());
+
+        if (!taskQueue.empty())
+        {
+            int taskId = taskQueue.front();
+            
+            auto element = tasks.find(taskId);
+
+            if (element != tasks.end())
+            {
+                postponedTasks.erase(taskId);
+                taskQueue.pop();
+                
+                startedTasks.insert(taskId);
+                element->second->start(false);
+            }
+            else
+            {
+                assert(false);
+            }
         }
     }
 }

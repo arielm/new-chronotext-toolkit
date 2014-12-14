@@ -49,8 +49,8 @@ namespace chr
     
     Log::~Log()
     {
-        static mutex mtx;
-        lock_guard<mutex> lock(mtx);
+        static mutex _mutex;
+        lock_guard<mutex> lock(_mutex);
         
         Log::cout() << ss.rdbuf() << std::flush;
     }
