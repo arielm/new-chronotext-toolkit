@@ -28,11 +28,8 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
-
+#include <sstream>
 #include <iostream>
-
-#include <boost/thread/mutex.hpp>
 
 namespace chr
 {
@@ -42,39 +39,37 @@ namespace chr
         typedef std::ostream& (*ostream_manipulator)(std::ostream&); // FROM: http://stackoverflow.com/a/1136617/50335
 
         static std::ostream& cout();
-        static Log& instance();
+        
+        ~Log();
         
         template <typename T>
         Log& operator<<(const T &value)
         {
-            boost::mutex::scoped_lock lock(mtx);
-            
-            Log::cout() << value;
+            ss << value;
             return *this;
         }
         
         Log& operator<<(ostream_manipulator manip);
         
+        explicit operator bool() const { return true; }
+        
     protected:
-        boost::mutex mtx;
+        std::stringstream ss;
     };
 }
 
 #if defined(DISCARD_LOGI)
-#define LOGI false && chr::Log::cout()
-#define LOGI_IF(COND) false && chr::Log::cout()
+#define LOGI false && chr::Log()
+#define LOGI_IF(COND) false && chr::Log()
 #else
-#define LOGI chr::Log::cout()
-#define LOGI_IF(COND) (COND) && chr::Log::cout()
+#define LOGI chr::Log()
+#define LOGI_IF(COND) (COND) && chr::Log()
 #endif
 
 #if defined(DEBUG) || defined(FORCE_LOGD)
-#define LOGD chr::Log::cout()
-#define LOGD_IF(COND) (COND) && chr::Log::cout()
+#define LOGD chr::Log()
+#define LOGD_IF(COND) (COND) && chr::Log()
 #else
-#define LOGD false && chr::Log::cout()
-#define LOGD_IF(COND) false && chr::Log::cout()
+#define LOGD false && chr::Log()
+#define LOGD_IF(COND) false && chr::Log()
 #endif
-
-#define LOG chr::Log::instance()
-#define LOG_IF (COND) (COND) && chr::Log::instance()

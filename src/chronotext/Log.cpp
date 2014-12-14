@@ -8,6 +8,8 @@
 
 #include "Log.h"
 
+#include "cinder/Cinder.h"
+
 #if defined(CINDER_MSW)
 
 #include "cinder/msw/OutputDebugStringStream.h"
@@ -21,6 +23,8 @@
 #include "chronotext/utils/SyslogStringStream.h"
 
 #endif
+
+#include <mutex>
 
 using namespace std;
 using namespace ci;
@@ -43,17 +47,17 @@ namespace chr
 #endif
     }
     
-    Log& Log::instance()
+    Log::~Log()
     {
-        static Log instance;
-        return instance;
+        static mutex mtx;
+        lock_guard<mutex> lock(mtx);
+        
+        Log::cout() << ss.rdbuf() << std::flush;
     }
     
     Log& Log::operator<<(ostream_manipulator manip)
     {
-        boost::mutex::scoped_lock lock(mtx);
-
-        Log::cout() << manip;
+        ss << manip;
         return *this;
     }
 }
