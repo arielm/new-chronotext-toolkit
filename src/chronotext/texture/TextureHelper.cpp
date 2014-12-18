@@ -417,9 +417,7 @@ namespace chr
             {
                 case TextureData::TYPE_SURFACE:
                 {
-                    auto size = textureData.surface.getSize();
-                    auto channelOrder = ImageIo::ChannelOrder(textureData.surface.getChannelOrder().getImageIoChannelOrder());
-                    memoryUsage = size.x * size.y * ImageIo::channelOrderNumChannels(channelOrder);
+                    memoryUsage = textureData.surface.getHeight() * textureData.surface.getRowBytes(); // TODO: VERIFY
                     break;
                 }
                     
@@ -427,7 +425,8 @@ namespace chr
                 {
                     auto size = Vec2i(textureData.imageSource->getWidth(), textureData.imageSource->getHeight());
                     auto channelOrder = textureData.imageSource->getChannelOrder();
-                    memoryUsage = size.x * size.y * ImageIo::channelOrderNumChannels(channelOrder) * ImageIo::dataTypeBytes(textureData.imageSource->getDataType());
+                    auto dataType = textureData.imageSource->getDataType();
+                    memoryUsage = size.x * size.y * ImageIo::channelOrderNumChannels(channelOrder) * ImageIo::dataTypeBytes(dataType);
                     break;
                 }
                     
