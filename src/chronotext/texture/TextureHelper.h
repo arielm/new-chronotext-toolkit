@@ -60,16 +60,6 @@ namespace chr
         static ci::Vec2i getTextureSize(const TextureData &textureData);
         static size_t getTextureMemoryUsage(const TextureData &textureData);
         
-        // ---
-        
-        static void bindTexture(ci::gl::Texture *texture);
-        static void beginTexture(ci::gl::Texture *texture);
-        static void endTexture();
-        
-        static void drawTextureFromCenter(ci::gl::Texture *texture);
-        static void drawTexture(ci::gl::Texture *texture, float rx = 0, float ry = 0);
-        static void drawTextureInRect(ci::gl::Texture *texture, const ci::Rectf &rect, float ox = 0, float oy = 0);
-        
     protected:
         static void textureDeallocator(void *refcon);
         static bool isOverSized(const TextureRequest &textureRequest, const ci::Vec2i &size);
