@@ -34,7 +34,7 @@ namespace chr
         unchecked::utf32to8(s.data(), s.data() + s.size(), back_inserter(tmp));
 #endif
         
-        return string(tmp.data(), tmp.size());
+        return tmp.data();
     }
     
     wstring utf8ToWstring(const string &s)
@@ -47,41 +47,45 @@ namespace chr
         unchecked::utf8to32(s.data(), s.data() + s.size(), back_inserter(tmp));
 #endif
         
-        return wstring(tmp.data(), tmp.size());
+        return tmp.data();
     }
     
-    template<> string loadString<string>(InputSource::Ref source)
+    template <>
+    string loadString<string>(InputSource::Ref source)
     {
         Buffer buffer(source->loadDataSource());
-        return string(static_cast<const char*>(buffer.getData()), buffer.getDataSize());
+        return static_cast<const char*>(buffer.getData());
     }
     
-    template<> wstring loadString<wstring>(InputSource::Ref source)
+    template <>
+    wstring loadString<wstring>(InputSource::Ref source)
     {
         return utf8ToWstring(loadString<string>(source));
     }
     
-    template<> vector<std::string> readLines<string>(InputSource::Ref source)
+    template <>
+    vector<std::string> readLines<string>(InputSource::Ref source)
     {
         vector<string> lines;
         IStreamRef in = source->loadDataSource()->createStream();
         
         while (!in->isEof())
         {
-            lines.push_back(in->readLine());
+            lines.emplace_back(in->readLine());
         }
         
         return lines;
     }
     
-    template<> vector<wstring> readLines<wstring>(InputSource::Ref source)
+    template <>
+    vector<wstring> readLines<wstring>(InputSource::Ref source)
     {
         vector<wstring> lines;
         IStreamRef in = source->loadDataSource()->createStream();
         
         while (!in->isEof())
         {
-            lines.push_back(utf8ToWstring(in->readLine()));
+            lines.emplace_back(utf8ToWstring(in->readLine()));
         }
         
         return lines;
@@ -114,16 +118,12 @@ namespace chr
     {
         fs::ofstream out(filePath);
         out << text;
-        out.close();
     }
     
     void writeXmlFile(const fs::path &filePath, const XmlTree &tree)
     {
-        auto doc = tree.createRapidXmlDoc(true);
-        std::ostringstream ss;
-        ss << *doc;
-        
-        writeTextFile(filePath, ss.str());
+        fs::ofstream out(filePath);
+        out << *tree.createRapidXmlDoc(true);
     }
     
     // ---
@@ -144,6 +144,7 @@ namespace chr
     /*
      * REFERENCE: http://stackoverflow.com/a/10096779/50335
      */
+    
     string prettyBytes(uint64_t numBytes, int precision)
     {
         const char *abbrevs[] = { "TB", "GB", "MB", "KB" };
@@ -164,7 +165,8 @@ namespace chr
         }
         
         stringstream s;
-        s << numBytes << " Bytes";
+        s << numBytes << " B";
+        
         return s.str();
     }
     

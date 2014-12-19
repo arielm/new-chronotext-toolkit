@@ -45,6 +45,7 @@ namespace chr
             {
                 min = max = mid;
             }
+            
             mid = (min + max) >> 1;
         }
         
@@ -52,9 +53,9 @@ namespace chr
     }
     
     template<typename T>
-    static inline int search(const std::vector<T> &array, float value, int min, int max)
+    static inline int search(const std::vector<T> &array, T value, int min, int max)
     {
-        return search((T*)array.data(), value, min, max);
+        return search(const_cast<T*>(array.data()), value, min, max);
     }
     
     // ---
@@ -62,8 +63,11 @@ namespace chr
     std::string wstringToUtf8(const std::wstring &s);
     std::wstring utf8ToWstring(const std::string &s);
 
-    template<typename T> T loadString(InputSource::Ref source);
-    template<typename T> std::vector<T> readLines(InputSource::Ref source);
+    template<typename T>
+    T loadString(InputSource::Ref source);
+    
+    template<typename T>
+    std::vector<T> readLines(InputSource::Ref source);
     
     std::vector<std::string> readInstructions(InputSource::Ref source);
     
