@@ -34,7 +34,7 @@ namespace chr
         unchecked::utf32to8(s.data(), s.data() + s.size(), back_inserter(tmp));
 #endif
         
-        return tmp.data();
+        return string(tmp.data(), tmp.size());
     }
     
     wstring utf8ToWstring(const string &s)
@@ -47,7 +47,7 @@ namespace chr
         unchecked::utf8to32(s.data(), s.data() + s.size(), back_inserter(tmp));
 #endif
         
-        return tmp.data();
+        return wstring(tmp.data(), tmp.size());
     }
     
     template <>
