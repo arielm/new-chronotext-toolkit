@@ -18,6 +18,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace context;
 
 namespace chr
 {

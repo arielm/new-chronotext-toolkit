@@ -16,9 +16,12 @@
  * 1) TEST AND DEVELOP FURTHER:
  *    - SEE "INNER" TODOS IN TaskManager AND Task
  *
- * 2) TRY TO USE NEW C++11 FEATURES LIKE std::future, std::async OR std::thread_local
+ * 2) HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+ *    - SEE RELATED TODOS IN Context AND CinderDelegate
  *
- * 3) CREATE TESTS AND SAMPLES PROJECTS
+ * 3) TRY TO USE NEW C++11 FEATURES LIKE std::future, std::async OR std::thread_local
+ *
+ * 4) CREATE TESTS AND SAMPLES PROJECTS
  */
 
 #pragma once

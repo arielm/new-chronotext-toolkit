@@ -37,7 +37,7 @@ namespace chr
                 intern::memoryManager = make_shared<memory::Manager>();
                 
                 // ---
-
+                
                 intern::initialized = true;
             }
             
@@ -50,7 +50,7 @@ namespace chr
             {
                 intern::io_service = &io_service;
                 intern::threadId = this_thread::get_id();
-
+                
                 intern::taskManager = TaskManager::create();
                 
                 // ---
@@ -67,7 +67,10 @@ namespace chr
                 intern::systemManager.reset();
                 
                 /*
-                 * TODO: HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+                 * TODO:
+                 *
+                 * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+                 * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
                  */
                 intern::taskManager.reset();
                 intern::io_service = nullptr;
@@ -87,44 +90,45 @@ using namespace chr;
 
 namespace context
 {
-    system::Manager* systemManager()
+    system::Manager& systemManager()
     {
-        return intern::systemManager.get();
+        return *intern::systemManager.get();
     }
     
-    memory::Manager* memoryManager()
+    memory::Manager& memoryManager()
     {
-        return intern::memoryManager.get();
+        return *intern::memoryManager.get();
     }
     
-    TaskManager* taskManager()
+    TaskManager& taskManager()
     {
-        return intern::taskManager.get();
+        return *intern::taskManager.get();
     }
     
-    // ---
-    
-    bool isThreadSafe()
+    namespace os
     {
-        return intern::threadId == this_thread::get_id();
-    }
-    
-    bool post(function<void()> &&fn, bool forceSync)
-    {
-        if (forceSync)
+        bool isThreadSafe()
         {
-            if (isThreadSafe())
-            {
-                fn();
-                return true;
-            }
-        }
-        else if (intern::io_service)
-        {
-            intern::io_service->post(forward<function<void()>>(fn));
-            return true;
+            return intern::threadId == this_thread::get_id();
         }
         
-        return false;
+        bool post(function<void()> &&fn, bool forceSync)
+        {
+            if (forceSync)
+            {
+                if (isThreadSafe())
+                {
+                    fn();
+                    return true;
+                }
+            }
+            else if (intern::io_service)
+            {
+                intern::io_service->post(forward<function<void()>>(fn));
+                return true;
+            }
+            
+            return false;
+        }
     }
 }

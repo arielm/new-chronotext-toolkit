@@ -109,8 +109,8 @@ namespace chr
         /*
          * TODO:
          *
-         * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
-         * RELATED TODOS IN Context AND TaskManager
+         * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+         * - SEE RELATED TODOS IN Context AND TaskManager
          */
         CONTEXT::shutdown();
     }

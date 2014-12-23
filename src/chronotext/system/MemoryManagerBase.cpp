@@ -12,10 +12,10 @@
 
 using namespace std;
 
-namespace chr
+namespace context
 {
-    memory::Info getMemoryInfo()
+    chr::memory::Info getMemoryInfo()
     {
-        return context::memoryManager()->getInfo();
+        return memoryManager().getInfo();
     }
 }

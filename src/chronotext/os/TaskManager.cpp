@@ -11,6 +11,7 @@
 #include "chronotext/Context.h"
 
 using namespace std;
+using namespace context;
 
 namespace chr
 {
@@ -23,7 +24,7 @@ namespace chr
     
     Task* TaskManager::getTask(int taskId)
     {
-        if (context::isThreadSafe())
+        if (os::isThreadSafe())
         {
             auto element = tasks.find(taskId);
             
@@ -38,7 +39,7 @@ namespace chr
     
     int TaskManager::registerTask(shared_ptr<Task> task)
     {
-        if (context::isThreadSafe())
+        if (os::isThreadSafe())
         {
             for (auto &element : tasks)
             {
@@ -60,7 +61,7 @@ namespace chr
     
     bool TaskManager::addTask(int taskId, bool forceSync)
     {
-        if (context::isThreadSafe())
+        if (os::isThreadSafe())
         {
             auto element = tasks.find(taskId);
             
@@ -109,7 +110,7 @@ namespace chr
     
     bool TaskManager::cancelTask(int taskId)
     {
-        if (context::isThreadSafe())
+        if (os::isThreadSafe())
         {
             auto element = tasks.find(taskId);
             
@@ -144,7 +145,7 @@ namespace chr
     
     void TaskManager::endTask(int taskId)
     {
-        assert(context::isThreadSafe());
+        assert(os::isThreadSafe());
         
         auto element = tasks.find(taskId);
         
@@ -165,7 +166,7 @@ namespace chr
     
     void TaskManager::nextTask()
     {
-        assert(context::isThreadSafe());
+        assert(os::isThreadSafe());
 
         if (!taskQueue.empty())
         {

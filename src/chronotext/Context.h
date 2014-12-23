@@ -48,25 +48,32 @@ namespace chr
 
 namespace context
 {
-    chr::system::Manager* systemManager();
-    chr::memory::Manager* memoryManager();
-    chr::TaskManager* taskManager();
+    chr::system::Manager& systemManager();
+    chr::system::Info getSystemInfo();
     
-    /*
-     * RETURNS FALSE IF NOT INVOKED ON THE SKETCH-THREAD
-     */
-    bool isThreadSafe();
+    chr::memory::Manager& memoryManager();
+    chr::memory::Info getMemoryInfo();
     
-    /*
-     * RETURNS FALSE IF THE FUNCTION CAN'T BE POSTED
-     *
-     * CAUSES:
-     *
-     * - IO-SERVICE IS NOT DEFINED
-     * - THE CONTEXT IS BEING SHUT-DOWN (TODO)
-     *
-     * SYNCHRONOUS POSTING ONLY:
-     * - NOT INVOKED ON THE SKETCH-THREAD
-     */
-    bool post(std::function<void()> &&fn, bool forceSync = false);
+    chr::TaskManager& taskManager();
+    
+    namespace os
+    {
+        /*
+         * RETURNS FALSE IF NOT INVOKED ON THE SKETCH-THREAD
+         */
+        bool isThreadSafe();
+        
+        /*
+         * RETURNS FALSE IF THE FUNCTION CAN'T BE POSTED
+         *
+         * CAUSES:
+         *
+         * - IO-SERVICE IS NOT DEFINED
+         * - THE CONTEXT IS BEING SHUT-DOWN (TODO)
+         *
+         * SYNCHRONOUS POSTING ONLY:
+         * - NOT INVOKED ON THE SKETCH-THREAD
+         */
+        bool post(std::function<void()> &&fn, bool forceSync = false);
+    }
 };

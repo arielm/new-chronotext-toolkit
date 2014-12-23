@@ -25,6 +25,7 @@ using namespace std;
 using namespace ci;
 using namespace app;
 using namespace chr;
+using namespace context;
 
 @interface CinderDelegate ()
 {
@@ -107,8 +108,8 @@ using namespace chr;
     /*
      * TODO:
      *
-     * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
-     * RELATED TODOS IN Context AND TaskManager
+     * - PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
+     * - SEE RELATED TODOS IN Context AND TaskManager
      */
     [self stopIOService];
     chr::CONTEXT::shutdown();

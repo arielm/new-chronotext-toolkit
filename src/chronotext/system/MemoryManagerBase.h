@@ -23,8 +23,6 @@
 
 namespace chr
 {
-    memory::Info getMemoryInfo();
-
     namespace memory
     {
         class ManagerBase

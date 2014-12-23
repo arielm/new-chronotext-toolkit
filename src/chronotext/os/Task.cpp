@@ -9,13 +9,13 @@
 #include "Task.h"
 
 #include "chronotext/Context.h"
-#include "chronotext/os/TaskManager.h"
 #include "chronotext/utils/Utils.h"
 
 #include <chrono>
 
 using namespace std;
 using namespace ci;
+using namespace context;
 
 namespace chr
 {
@@ -74,9 +74,9 @@ namespace chr
      * ASSERTION: INVOKED ON THE TASK-THREAD
      */
     
-    inline bool Task::post(function<void()> &&fn)
+    bool Task::post(function<void()> &&fn)
     {
-        return context::post(forward<function<void()>>(fn), synchronous);
+        return os::post(forward<function<void()>>(fn), synchronous);
     }
     
     // ---
@@ -196,9 +196,9 @@ namespace chr
             /*
              * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED BY DURING Task::run()
              *
-             * TODO: CONSIDER USING LAMBDA INSTEAD OF bind
+             * TODO: CONSIDER USING A LAMBDA INSTEAD OF bind
              */
-            context::post(bind(&TaskManager::endTask, manager, taskId), false);
+            os::post(bind(&TaskManager::endTask, manager, taskId), false);
             
             LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << taskId << " | " << this << endl;
             

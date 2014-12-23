@@ -12,6 +12,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace context;
 
 namespace chr
 {
@@ -132,8 +133,8 @@ namespace chr
                 auto memoryInfo = getMemoryInfo();
                 const auto &memoryProbe = TextureHelper::probes[texture.get()];
                 
-                auto delta1 = context::memoryManager()->compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
-                auto delta2 = context::memoryManager()->compare(memoryProbe.memoryInfo[1], memoryInfo);
+                auto delta1 = memoryManager().compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
+                auto delta2 = memoryManager().compare(memoryProbe.memoryInfo[1], memoryInfo);
                 
                 memoryStats = " | " +
                 MemoryInfo::write(memoryProbe.memoryUsage) + ", " +
@@ -185,7 +186,7 @@ namespace chr
                 auto memoryInfo = getMemoryInfo();
                 const auto &memoryProbe = TextureHelper::probes[previousTargetPointer];
                 
-                auto delta = -context::memoryManager()->compare(memoryProbe.memoryInfo[2], memoryInfo);
+                auto delta = -memoryManager().compare(memoryProbe.memoryInfo[2], memoryInfo);
                 
                 memoryStats = " | " +
                 MemoryInfo::write(memoryProbe.memoryUsage) + ", " +

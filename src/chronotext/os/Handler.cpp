@@ -11,14 +11,15 @@
 #include "chronotext/Context.h"
 
 using namespace std;
+using namespace context;
 
 namespace chr
 {
     bool Handler::sendMessage(const Message &message)
     {
         /*
-         * TODO: CONSIDER USING LAMBDA INSTEAD OF bind
+         * TODO: CONSIDER USING A LAMBDA INSTEAD OF bind
          */
-        return context::post(bind(&Handler::handleMessage, this, message));
+        return os::post(bind(&Handler::handleMessage, this, message));
     }
 }

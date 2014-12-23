@@ -12,8 +12,6 @@
 
 namespace chr
 {
-    system::Info getSystemInfo();
-    
     namespace system
     {
         Platform platform();

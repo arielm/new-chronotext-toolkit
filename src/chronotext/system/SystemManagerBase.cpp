@@ -13,13 +13,16 @@
 using namespace std;
 using namespace ci;
 
+namespace context
+{
+    chr::system::Info getSystemInfo()
+    {
+        return systemManager().info;
+    }
+}
+
 namespace chr
 {
-    system::Info getSystemInfo()
-    {
-        return context::systemManager()->info;
-    }
-    
     namespace system
     {
         Platform platform()
