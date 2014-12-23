@@ -8,17 +8,19 @@
 
 #include "Context.h"
 
+using namespace std;
+
 namespace chr
 {
     namespace CONTEXT
     {
         namespace intern
         {
-            std::shared_ptr<system::Manager> systemManager;
-            std::shared_ptr<memory::Manager> memoryManager;
+            shared_ptr<system::Manager> systemManager;
+            shared_ptr<memory::Manager> memoryManager;
             
             boost::asio::io_service *io_service = nullptr;
-            std::shared_ptr<TaskManager> taskManager;
+            shared_ptr<TaskManager> taskManager;
             
             // ---
             
@@ -30,8 +32,8 @@ namespace chr
         {
             if (!intern::initialized)
             {
-                intern::systemManager = std::make_shared<system::Manager>();
-                intern::memoryManager = std::make_shared<memory::Manager>();
+                intern::systemManager = make_shared<system::Manager>();
+                intern::memoryManager = make_shared<memory::Manager>();
                 
                 // ---
 

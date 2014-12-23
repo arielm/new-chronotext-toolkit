@@ -14,7 +14,9 @@
 /*
  * PROBLEM: CREATING A Clock FROM A TimeBase WHICH IS NOT ENCLOSED IN A shared_ptr WOULD CAUSE A CRASH
  *
- * SOLUTION: ENFORCING CREATION AS shared_ptr (SIMILAR TO WHAT IS DONE IN cinder::Timeline)
+ * SOLUTION: ENFORCING CREATION AS shared_ptr
+ *
+ * REFERENCE: http://mortoray.com/2013/08/02/safely-using-enable_shared_from_this
  */
 
 #pragma once
@@ -27,9 +29,12 @@ namespace chr
     class Clock : public TimeBase
     {
     public:
-        static std::shared_ptr<Clock> create()
+        typedef std::shared_ptr<Clock> Ref;
+
+        template<typename... T>
+        static Ref create(T&&... args)
         {
-            return std::shared_ptr<Clock>(new Clock()); // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+            return Ref(new Clock(std::forward<T>(args)...));
         }
 
         enum State
@@ -41,7 +46,7 @@ namespace chr
         virtual void start();
         virtual void stop();
         
-        virtual double getTime();
+        virtual double getTime() override;
         virtual void setTime(double now);
         
         virtual double getRate();

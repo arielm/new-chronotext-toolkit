@@ -18,10 +18,8 @@
  *      - fetchTranslucentTextureData() AND fetchPowerOfTwoTextureData()
  *        - NON TRIVIAL:
  *          - CINDER'S IMAGE-IO PROTOCOL DOES NOT SEEM TO BE ADAPTED:
- *            - I.E. THERE SHOULD BE USER-DEFINABLE CALLBACK, INVOKED AS SOON IMAGE-HEADER IS PARSED
+ *            - I.E. THERE SHOULD BE SOME USER-DEFINABLE CALLBACK, INVOKED AS-SOON-AS THE IMAGE-HEADER IS PARSED
  *              - OBVIOUSLY: MOST OF THE IMAGE-LOADING SOLUTIONS (E.G. stb_image) ALLOW TO "GUESS" IMAGE-SIZE BEFORE FULLY LOADING IT
- *
- * 3) MOVE bindTexture(), drawTexture(), ETC. TO utils/gl/GLUtils.h
  */
 
 #pragma once

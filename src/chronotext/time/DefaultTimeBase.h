@@ -19,20 +19,20 @@ namespace chr
     public:
         static std::shared_ptr<DefaultTimeBase> create()
         {
-            return std::shared_ptr<DefaultTimeBase>(new DefaultTimeBase()); // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+            return std::shared_ptr<DefaultTimeBase>(new DefaultTimeBase());
         }
 
-        double getTime()
+        double getTime() final
         {
             return timer.getSeconds();
         }
         
     protected:
+        ci::Timer timer;
+
         DefaultTimeBase()
         {
             timer.start();
         }
-
-        ci::Timer timer;
     };
 }

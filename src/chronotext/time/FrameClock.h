@@ -15,13 +15,16 @@ namespace chr
     class FrameClock : public Clock
     {
     public:
-        static std::shared_ptr<FrameClock> create()
+        typedef std::shared_ptr<FrameClock> Ref;
+        
+        template<typename... T>
+        static Ref create(T&&... args)
         {
-            return std::shared_ptr<FrameClock>(new FrameClock()); // XXX: std::maked_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+            return Ref(new FrameClock(std::forward<T>(args)...));
         }
         
-        double getTime();
-        void setTime(double now);
+        double getTime() final;
+        void setTime(double now) final;
         
         void update();
         

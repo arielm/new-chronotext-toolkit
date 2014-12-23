@@ -41,7 +41,7 @@ namespace chr
 
         static std::shared_ptr<TaskManager> create()
         {
-            return std::shared_ptr<TaskManager>(new TaskManager()); // XXX: std::make_shared ONLY WORKS WITH PUBLIC CONSTRUCTORS
+            return std::shared_ptr<TaskManager>(new TaskManager());
         }
         
         /*
