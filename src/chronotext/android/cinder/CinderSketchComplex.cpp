@@ -20,7 +20,7 @@ namespace chronotext
     CinderSketchBase(),
     context(static_cast<CinderDelegate*>(context)),
     delegate(static_cast<CinderDelegate*>(delegate)),
-    mClock(new FrameClock()),
+    mClock(FrameClock::create()),
     mTimeline(Timeline::create())
     {}
     

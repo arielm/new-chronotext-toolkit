@@ -36,7 +36,7 @@ namespace chronotext
         float getWindowContentScale() const;
         WindowInfo getWindowInfo() const;
         
-        chr::FrameClock& clock() const { return *mClock; }
+        FrameClock& clock() const { return *mClock; }
         ci::Timeline& timeline() const { return *mTimeline; }
         
         void action(int actionId);
@@ -46,7 +46,7 @@ namespace chronotext
         ci::app::AppNative *context;
         CinderApp *delegate;
         
-        std::shared_ptr<chr::FrameClock> mClock;
+        FrameClock::Ref mClock;
         ci::TimelineRef mTimeline;
     };
 }

@@ -98,7 +98,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     [super loadView];
 
     glView = (GLKView*)self.view;
-    glView.context = [[[EAGLContext alloc] initWithAPI:[[properties objectForKey:kGLViewControllerPropertyRenderingAPI] intValue]] autorelease];
+    glView.context = [[[EAGLContext alloc] initWithAPI:(EAGLRenderingAPI)[[properties objectForKey:kGLViewControllerPropertyRenderingAPI] intValue]] autorelease];
     
     self.preferredFramesPerSecond = [[properties objectForKey:kGLViewControllerPropertyPreferredFramesPerSecond] intValue];
     self.view.multipleTouchEnabled = [[properties objectForKey:kGLViewControllerPropertyMultipleTouchEnabled] boolValue];
