@@ -17,10 +17,10 @@ namespace chr
     class Icon
     {
     public:
-        TextureRef texture;
+        Texture::Ref texture;
         float scale;
         
-        Icon(TextureRef texture, float scale = 1, float width = -1, float height = -1);
+        Icon(Texture::Ref texture, float scale = 1, float width = -1, float height = -1);
         
         float getWidth();
         float getHeight();

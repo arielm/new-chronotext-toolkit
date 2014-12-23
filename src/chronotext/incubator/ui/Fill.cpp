@@ -47,7 +47,7 @@ namespace chr
                 break;
                 
             case TYPE_GRADIENT:
-                drawVerticalGradient(bounds, color1, color2, v1, v2);
+                utils::gl::drawVerticalGradient(bounds, color1, color2, v1, v2);
                 break;
         }
     }

@@ -22,7 +22,7 @@ using namespace context;
 
 namespace chr
 {
-    bool TextureHelper::PROBE_MEMORY = true; // XXX
+    bool TextureHelper::PROBE_MEMORY = false;
     
     MemoryInfo TextureHelper::memoryInfo[2];
     map<gl::Texture*, TextureHelper::MemoryProbe> TextureHelper::probes;

@@ -7,9 +7,11 @@
  */
 
 #include "chronotext/font/xf/FontManager.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Log.h"
 
 #include "cinder/gl/gl.h"
+
+#include <set>
 
 using namespace ci;
 using namespace std;

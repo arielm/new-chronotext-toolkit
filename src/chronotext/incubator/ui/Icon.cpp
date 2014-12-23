@@ -12,7 +12,7 @@ using namespace ci;
 
 namespace chr
 {
-    Icon::Icon(TextureRef texture, float scale, float width, float height)
+    Icon::Icon(Texture::Ref texture, float scale, float width, float height)
     :
     texture(texture),
     scale(scale)
