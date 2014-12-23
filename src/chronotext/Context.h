@@ -50,7 +50,23 @@ namespace context
 {
     chr::system::Manager* systemManager();
     chr::memory::Manager* memoryManager();
-    
-    boost::asio::io_service& io_service();
     chr::TaskManager* taskManager();
+    
+    /*
+     * RETURNS FALSE IF NOT INVOKED ON THE SKETCH-THREAD
+     */
+    bool isThreadSafe();
+    
+    /*
+     * RETURNS FALSE IF THE FUNCTION CAN'T BE POSTED
+     *
+     * CAUSES:
+     *
+     * - IO-SERVICE IS NOT DEFINED
+     * - THE CONTEXT IS BEING SHUT-DOWN (TODO)
+     *
+     * SYNCHRONOUS POSTING ONLY:
+     * - NOT INVOKED ON THE SKETCH-THREAD
+     */
+    bool post(std::function<void()> &&fn, bool forceSync = false);
 };

@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED  BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -21,15 +21,16 @@ namespace chr
     public:
         virtual ~Handler() {}
 
+        virtual void handleMessage(const Message &message) {}
+
         /*
          * RETURNS FALSE IF THE MESSAGE CAN'T BE SENT
          *
-         * E.G. IF THE CONTEXT IS BEING SHUT-DOWN
+         * CAUSES:
          *
-         * REQUIREMENT SHARED WITH os/TaskManager
+         * - IO-SERVICE IS NOT DEFINED
+         * - THE CONTEXT IS BEING SHUT-DOWN (TODO)
          */
         bool sendMessage(const Message &message);
-
-        virtual void handleMessage(const Message &message) {}
     };
 }

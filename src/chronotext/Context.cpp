@@ -18,10 +18,11 @@ namespace chr
         {
             shared_ptr<system::Manager> systemManager;
             shared_ptr<memory::Manager> memoryManager;
-            
-            boost::asio::io_service *io_service = nullptr;
             shared_ptr<TaskManager> taskManager;
             
+            boost::asio::io_service *io_service = nullptr;
+            thread::id threadId;
+
             // ---
             
             bool initialized = false;
@@ -48,6 +49,8 @@ namespace chr
             if (!intern::setup && init())
             {
                 intern::io_service = &io_service;
+                intern::threadId = this_thread::get_id();
+
                 intern::taskManager = TaskManager::create();
                 
                 // ---
@@ -66,8 +69,8 @@ namespace chr
                 /*
                  * TODO:
                  *
-                 * PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
-                 * RELATED TODOS IN CinderDelegate AND TaskManager
+                 * - PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
+                 * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
                  */
                 intern::taskManager.reset();
                 intern::io_service = nullptr;
@@ -81,25 +84,50 @@ namespace chr
     }
 }
 
+// ---
+
+using namespace chr;
+
 namespace context
 {
-    chr::system::Manager* systemManager()
+    system::Manager* systemManager()
     {
-        return chr::CONTEXT::intern::systemManager.get();
+        return CONTEXT::intern::systemManager.get();
     }
     
-    chr::memory::Manager* memoryManager()
+    memory::Manager* memoryManager()
     {
-        return chr::CONTEXT::intern::memoryManager.get();
+        return CONTEXT::intern::memoryManager.get();
     }
     
-    boost::asio::io_service& io_service()
+    TaskManager* taskManager()
     {
-        return *chr::CONTEXT::intern::io_service;
+        return CONTEXT::intern::taskManager.get();
     }
     
-    chr::TaskManager* taskManager()
+    // ---
+    
+    bool isThreadSafe()
     {
-        return chr::CONTEXT::intern::taskManager.get();
+        return CONTEXT::intern::threadId == this_thread::get_id();
+    }
+    
+    bool post(function<void()> &&fn, bool forceSync)
+    {
+        if (forceSync)
+        {
+            if (isThreadSafe())
+            {
+                fn();
+                return true;
+            }
+        }
+        else if (CONTEXT::intern::io_service)
+        {
+            CONTEXT::intern::io_service->post(forward<function<void()>>(fn));
+            return true;
+        }
+        
+        return false;
     }
 }

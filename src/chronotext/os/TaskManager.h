@@ -97,7 +97,6 @@ namespace chr
         bool cancelTask(int taskId);
         
     protected:
-        std::thread::id threadId;
         int taskCount;
         
         std::map<int, std::shared_ptr<Task>> tasks;
@@ -105,26 +104,11 @@ namespace chr
         std::set<int> postponedTasks;
         std::queue<int> taskQueue;
         
-        bool isThreadSafe();
-        
     private:
         friend class Task;
         
         TaskManager();
         TaskManager(const TaskManager &other) = delete;
-        
-        /*
-         * RETURNS FALSE IF THE LAMBDA CAN'T BE POSTED
-         *
-         * CAUSES:
-         *
-         * - IO-SERVICE IS NOT DEFINED
-         * - THE CONTEXT IS BEING SHUT-DOWN (TODO)
-         *
-         * SYNCHRONOUS TASKS ONLY:
-         * - NOT INVOKED ON THE IO-THREAD
-         */
-        bool post(std::function<void()> &&fn, bool forceSync = false);
         
         void endTask(int taskId);
         void nextTask();

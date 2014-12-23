@@ -8,6 +8,7 @@
 
 #include "Task.h"
 
+#include "chronotext/Context.h"
 #include "chronotext/os/TaskManager.h"
 #include "chronotext/utils/Utils.h"
 
@@ -73,9 +74,9 @@ namespace chr
      * ASSERTION: INVOKED ON THE TASK-THREAD
      */
     
-    bool Task::post(function<void()> &&fn)
+    inline bool Task::post(function<void()> &&fn)
     {
-        return manager->post(forward<function<void()>>(fn), synchronous);
+        return context::post(forward<function<void()>>(fn), synchronous);
     }
     
     // ---
@@ -116,11 +117,12 @@ namespace chr
     
     void Task::cancel()
     {
+        lock_guard<mutex> lock(_mutex);
+
         if (!synchronous && state.started)
         {
             LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
-            lock_guard<mutex> lock(_mutex);
             state.cancelRequired = true;
         }
         else
@@ -192,9 +194,11 @@ namespace chr
             state.ended = true;
             
             /*
-             * IT IS NECESSARY TO WAIT FOR THE LAMBDAS WHICH MAY HAVE BEEN POSTED BY DURING Task::run()
+             * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED BY DURING Task::run()
+             *
+             * TODO: CONSIDER USING LAMBDA INSTEAD OF bind
              */
-            manager->post([=]{ manager->endTask(taskId); });
+            context::post(bind(&TaskManager::endTask, manager, taskId), false);
             
             LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << taskId << " | " << this << endl;
             

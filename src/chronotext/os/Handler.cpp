@@ -17,14 +17,8 @@ namespace chr
     bool Handler::sendMessage(const Message &message)
     {
         /*
-         * TODO:
-         *
-         * OPTION 1: CONSIDER USING C++11 LAMBDA INSTEAD OF bind
-         * OPTION 2: return context::post([=]{ handleMessage(message); });
+         * TODO: CONSIDER USING LAMBDA INSTEAD OF bind
          */
-        
-        context::io_service().post(bind(&Handler::handleMessage, this, message));
-        
-        return true; // TODO: SHOULD RETURN FALSE IF THE MESSAGE CAN'T BE SENT
+        return context::post(bind(&Handler::handleMessage, this, message));
     }
 }

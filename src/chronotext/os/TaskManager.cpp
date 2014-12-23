@@ -19,13 +19,11 @@ namespace chr
     TaskManager::TaskManager()
     :
     taskCount(0)
-    {
-        threadId = this_thread::get_id();
-    }
+    {}
     
     Task* TaskManager::getTask(int taskId)
     {
-        if (isThreadSafe())
+        if (context::isThreadSafe())
         {
             auto element = tasks.find(taskId);
             
@@ -40,7 +38,7 @@ namespace chr
     
     int TaskManager::registerTask(shared_ptr<Task> task)
     {
-        if (isThreadSafe())
+        if (context::isThreadSafe())
         {
             for (auto &element : tasks)
             {
@@ -62,7 +60,7 @@ namespace chr
     
     bool TaskManager::addTask(int taskId, bool forceSync)
     {
-        if (isThreadSafe())
+        if (context::isThreadSafe())
         {
             auto element = tasks.find(taskId);
             
@@ -84,8 +82,8 @@ namespace chr
                         /*
                          * TODO:
                          *
-                         * 1) ALLOW TASKS TO "REQUIRE" POSTPONING?
-                         *    E.G. VIA SOME ENUM RETURNED BY Task::start()
+                         * ALLOW TASKS TO "REQUIRE" POSTPONING?
+                         * E.G. VIA SOME ENUM RETURNED BY Task::start()
                          */
                         
                         if ((MAX_CONCURRENT_THREADS > 0) && (startedTasks.size() >= MAX_CONCURRENT_THREADS))
@@ -111,7 +109,7 @@ namespace chr
     
     bool TaskManager::cancelTask(int taskId)
     {
-        if (isThreadSafe())
+        if (context::isThreadSafe())
         {
             auto element = tasks.find(taskId);
             
@@ -140,39 +138,13 @@ namespace chr
     
     // ---
     
-    bool TaskManager::isThreadSafe()
-    {
-        return threadId == this_thread::get_id();
-    }
-    
-    // ---
-    
-    bool TaskManager::post(function<void()> &&fn, bool forceSync)
-    {
-        if (forceSync)
-        {
-            if (isThreadSafe())
-            {
-                fn();
-                return true;
-            }
-        }
-        else if (true) // TODO: SHOULD BE FALSE IF THE CONTEXT IS BEING SHUT-DOWN
-        {
-            context::io_service().post(fn);
-            return true;
-        }
-        
-        return false;
-    }
-    
     /*
      * POSTED FROM Task::performRun()
      */
     
     void TaskManager::endTask(int taskId)
     {
-        assert(isThreadSafe());
+        assert(context::isThreadSafe());
         
         auto element = tasks.find(taskId);
         
@@ -193,7 +165,7 @@ namespace chr
     
     void TaskManager::nextTask()
     {
-        assert(isThreadSafe());
+        assert(context::isThreadSafe());
 
         if (!taskQueue.empty())
         {
