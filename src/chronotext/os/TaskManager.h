@@ -16,12 +16,9 @@
  * 1) TEST AND DEVELOP FURTHER:
  *    - SEE "INNER" TODOS IN TaskManager AND Task
  *
- * 2) PROPERLY HANDLE THE TERMINATION OF RUNNING-TASKS WHEN CONTEXT IS BEING SHUT-DOWN
- *    - SEE RELATED TODOS IN Context AND CinderDelegate
+ * 2) TRY TO USE NEW C++11 FEATURES LIKE std::future, std::async OR std::thread_local
  *
- * 3) TRY TO USE NEW C++11 FEATURES LIKE std::future AND std::async
- *
- * 4) CREATE TESTS AND SAMPLES PROJECTS
+ * 3) CREATE TESTS AND SAMPLES PROJECTS
  */
 
 #pragma once
@@ -47,7 +44,7 @@ namespace chr
         /*
          * RETURNS NULL IF:
          *
-         * - NOT INVOKED ON THE IO-THREAD
+         * - NOT INVOKED ON THE SKETCH-THREAD
          * - NO TASK IS REGISTERED WITH THIS ID
          *
          * NOTE: THE RETURNED POINTER IS NOT INTENDED FOR STORAGE
@@ -59,7 +56,7 @@ namespace chr
          *
          * CAUSES:
          *
-         * - NOT INVOKED ON THE IO-THREAD
+         * - NOT INVOKED ON THE SKETCH-THREAD
          * - THE TASK IS ALREADY REGISTERED (TASKS ARE NOT REUSABLE)
          * - Task::init() RETURNED FALSE
          */
@@ -70,7 +67,7 @@ namespace chr
          *
          * CAUSES:
          *
-         * - NOT INVOKED ON THE IO-THREAD
+         * - NOT INVOKED ON THE SKETCH-THREAD
          * - NO TASK IS REGISTERED WITH THIS ID
          * - THE TASK HAS ALREADY BEEN ADDED
          * - IO-SERVICE IS NOT DEFINED
@@ -84,11 +81,11 @@ namespace chr
         }
         
         /*
-         * RETURNS FALSE IF THE TASK CAN'T BE CANCELLED (OR REMOVED IF NOT YET STARTED)
+         * RETURNS FALSE IF THE TASK CAN'T BE CANCELLED (OR CAN'T BE REMOVED IF NOT STARTED YET)
          *
          * CAUSES:
          *
-         * - NOT INVOKED ON THE IO-THREAD
+         * - NOT INVOKED ON THE SKETCH-THREAD
          * - NO TASK IS REGISTERED WITH THIS ID
          *
          * ASYNCHRONOUS TASKS ONLY:

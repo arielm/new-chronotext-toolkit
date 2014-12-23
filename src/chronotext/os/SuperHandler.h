@@ -18,6 +18,9 @@ namespace chr
     class SuperHandler : public Handler
     {
     public:
+        /*
+         * FIXME: UNSAFE
+         */
         void addSubHandler(SubHandler *handler);
         void removeSubHandler(SubHandler *handler);
         

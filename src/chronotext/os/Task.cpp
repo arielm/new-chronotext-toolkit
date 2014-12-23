@@ -82,7 +82,7 @@ namespace chr
     // ---
     
     /*
-     * INVOKED ON THE IO-THREAD, FROM TaskManager::addTask()
+     * INVOKED ON THE SKETCH-THREAD, FROM TaskManager::addTask()
      */
     
     void Task::start(bool forceSync)
@@ -112,7 +112,7 @@ namespace chr
     }
     
     /*
-     * INVOKED ON THE IO-THREAD, FROM TaskManager::cancelTask()
+     * INVOKED ON THE SKETCH-THREAD, FROM TaskManager::cancelTask()
      */
     
     void Task::cancel()
@@ -147,7 +147,7 @@ namespace chr
     }
     
     /*
-     * INVOKED ON THE IO-THREAD, FROM TaskManager::registerTask()
+     * INVOKED ON THE SKETCH-THREAD, FROM TaskManager::registerTask()
      */
     
     bool Task::performInit(shared_ptr<TaskManager> manager, int taskId)
@@ -217,7 +217,7 @@ namespace chr
     }
     
     /*
-     * INVOKED ON THE IO-THREAD
+     * INVOKED ON THE SKETCH-THREAD
      *
      * OPTION 1: FROM TaskManager::cancelTask()
      * OPTION 2: FROM TaskManager::endTask()

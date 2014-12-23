@@ -12,23 +12,23 @@ using namespace std;
 
 namespace chr
 {
+    namespace intern
+    {
+        shared_ptr<system::Manager> systemManager;
+        shared_ptr<memory::Manager> memoryManager;
+        shared_ptr<TaskManager> taskManager;
+        
+        boost::asio::io_service *io_service = nullptr;
+        thread::id threadId;
+        
+        // ---
+        
+        bool initialized = false;
+        bool setup = false;
+    }
+    
     namespace CONTEXT
     {
-        namespace intern
-        {
-            shared_ptr<system::Manager> systemManager;
-            shared_ptr<memory::Manager> memoryManager;
-            shared_ptr<TaskManager> taskManager;
-            
-            boost::asio::io_service *io_service = nullptr;
-            thread::id threadId;
-
-            // ---
-            
-            bool initialized = false;
-            bool setup = false;
-        }
-        
         bool init()
         {
             if (!intern::initialized)
@@ -67,10 +67,7 @@ namespace chr
                 intern::systemManager.reset();
                 
                 /*
-                 * TODO:
-                 *
-                 * - PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
-                 * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
+                 * TODO: HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
                  */
                 intern::taskManager.reset();
                 intern::io_service = nullptr;
@@ -92,24 +89,24 @@ namespace context
 {
     system::Manager* systemManager()
     {
-        return CONTEXT::intern::systemManager.get();
+        return intern::systemManager.get();
     }
     
     memory::Manager* memoryManager()
     {
-        return CONTEXT::intern::memoryManager.get();
+        return intern::memoryManager.get();
     }
     
     TaskManager* taskManager()
     {
-        return CONTEXT::intern::taskManager.get();
+        return intern::taskManager.get();
     }
     
     // ---
     
     bool isThreadSafe()
     {
-        return CONTEXT::intern::threadId == this_thread::get_id();
+        return intern::threadId == this_thread::get_id();
     }
     
     bool post(function<void()> &&fn, bool forceSync)
@@ -122,9 +119,9 @@ namespace context
                 return true;
             }
         }
-        else if (CONTEXT::intern::io_service)
+        else if (intern::io_service)
         {
-            CONTEXT::intern::io_service->post(forward<function<void()>>(fn));
+            intern::io_service->post(forward<function<void()>>(fn));
             return true;
         }
         
