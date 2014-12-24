@@ -1,4 +1,19 @@
-#include "chronotext/cinder/main.h"
+#include "chronotext/Context.h"
+
+#include "Sketch.h"
+
+namespace chr
+{
+    CinderSketch* createSketch()
+    {
+        return new Sketch();
+    }
+    
+    void destroySketch(CinderSketch *sketch)
+    {
+        delete sketch;
+    }
+}
 
 #pragma mark ----------------------------------------   IOS   ----------------------------------------
 
@@ -14,6 +29,18 @@ int main(int argc, char *argv[])
     }
 }
 
+#pragma mark ---------------------------------------- ANDROID ----------------------------------------
+
+#elif defined(CINDER_ANDROID)
+
+#include "chronotext/android/cinder/JNI.h"
+
+extern "C"
+{
+    void android_main(struct android_app *state)
+    {}
+}
+
 #pragma mark ---------------------------------------- DESKTOP ----------------------------------------
 
 #elif defined(CINDER_MAC) || defined(CINDER_MSW)
@@ -23,20 +50,3 @@ int main(int argc, char *argv[])
 CINDER_APP_NATIVE(Application, ci::app::RendererGl(ci::app::RendererGl::AA_NONE))
 
 #endif
-
-#pragma mark ---------------------------------------- SKETCH -----------------------------------------
-
-#include "Sketch.h"
-
-namespace chronotext
-{
-    CinderSketch* createSketch()
-    {
-        return new Sketch();
-    }
-    
-    void destroySketch(CinderSketch *sketch)
-    {
-        delete sketch;
-    }
-}

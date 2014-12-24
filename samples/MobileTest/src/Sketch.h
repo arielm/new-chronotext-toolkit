@@ -2,16 +2,16 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
  * IN SYNC WITH ContextRework BRANCH
  *
- * OSX: HEAD (5110b2d)
- * IOS: HEAD (5110b2d)
- * ANDROID: HEAD (5110b2d)
+ * OSX: COMMIT bf98e7c
+ * IOS: COMMIT bf98e7c
+ * ANDROID: COMMIT bf98e7c
  */
 
 #pragma once
@@ -44,16 +44,19 @@ public:
         {}
     };
     
-    Sketch();
+    Sketch()
+    :
+    CinderSketch()
+    {}
     
-    void setup();
+    void setup() final;
 
-    void event(int eventId);
-    void start(int flags);
-    void stop(int flags);
+    void event(Event event) final;
+    void start(Reason reason) final;
+    void stop(Reason reason) final;
 
-    void update();
-    void draw();
+    void update() final;
+    void draw() final;
     
     void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
     void drawText(const std::string &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
@@ -68,7 +71,7 @@ protected:
     chr::TextureManager textureManager;
     chr::xf::FontManager fontManager;
     
-    chr::TextureRef dot;
+    chr::Texture::Ref dot;
     std::shared_ptr<chr::XFont> font;
     
     float scale;

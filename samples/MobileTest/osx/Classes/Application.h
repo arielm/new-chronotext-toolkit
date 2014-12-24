@@ -10,15 +10,15 @@
  * STUB FOR RUNNING A CinderSketch ON THE DESKTOP
  */
 
+#pragma once
+
 #include "chronotext/app/cinder/CinderDelegate.h"
 
 class Application : public chr::CinderDelegate
 {
 public:
-    void prepareSettings(Settings *settings)
+    void applySettings(Settings *settings) override
     {
-        CinderDelegate::applyDefaultSettings(settings);
-        
         if (loadEmulators(chr::InputSource::getResource("emulators.json")))
         {
 //          emulate(settings, "IPHONE_3GS", chr::DisplayInfo::ORIENTATION_PORTRAIT);
