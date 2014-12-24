@@ -18,6 +18,11 @@ using namespace ci;
 
 namespace chr
 {
+    InputSource::InputSource(Type type)
+    :
+    type(type)
+    {}
+    
     InputSource::Ref InputSource::getResource(const ci::fs::path &relativePath)
     {
         auto source = make_shared<InputSource>(TYPE_RESOURCE);
@@ -322,6 +327,7 @@ namespace chr
         /*
          * COMPUTING THE VALUE ONLY ONCE ALLOWS FOR EFFICIENT USAGE IN std::map KEYS
          */
+        
         if (uri.empty())
         {
             switch (type)

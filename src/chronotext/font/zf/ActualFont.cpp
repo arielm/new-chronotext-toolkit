@@ -254,7 +254,7 @@ namespace chr
             {
                 for (auto &texture : textures)
                 {
-                    if (!texture->id)
+                    if (!texture->glId)
                     {
                         texture->upload(GlyphData(ftFace, texture->codepoint, useMipmap, padding));
                     }

@@ -21,13 +21,13 @@ namespace chr
     {
         enum Type
         {
+            TYPE_UNDEFINED,
             TYPE_SURFACE,
             TYPE_IMAGE_SOURCE,
             TYPE_PVR,
             TYPE_DATA
         };
         
-        bool defined;
         Type type;
         TextureRequest request;
         
@@ -50,12 +50,11 @@ namespace chr
         
         TextureData()
         :
-        defined(false)
+        type(TYPE_UNDEFINED)
         {}
         
         TextureData(const TextureRequest &request, const ci::Surface &surface, float maxU = 1, float maxV = 1)
         :
-        defined(true),
         type(TYPE_SURFACE),
         request(request),
         surface(surface),
@@ -65,7 +64,6 @@ namespace chr
         
         TextureData(const TextureRequest &request, ci::ImageSourceRef imageSource)
         :
-        defined(true),
         type(TYPE_IMAGE_SOURCE),
         request(request),
         imageSource(imageSource)
@@ -73,7 +71,6 @@ namespace chr
         
         TextureData(const TextureRequest &request, const ci::Buffer &buffer)
         :
-        defined(true),
         type(TYPE_PVR),
         request(request),
         buffer(buffer)
@@ -81,7 +78,6 @@ namespace chr
         
         TextureData(const TextureRequest &request, std::shared_ptr<uint8_t> data, GLenum glInternalFormat, GLenum glFormat, int width, int height)
         :
-        defined(true),
         type(TYPE_DATA),
         request(request),
         data(data),
@@ -90,10 +86,5 @@ namespace chr
         width(width),
         height(height)
         {}
-        
-        bool undefined() const
-        {
-            return !defined;
-        }
     };
 }

@@ -82,7 +82,7 @@ namespace chr
         :
         width(atlas->width),
         height(atlas->height),
-        id(0),
+        glId(0),
         inputSource(inputSource)
         {
             upload(atlas);
@@ -98,10 +98,10 @@ namespace chr
             assert(width == atlas->width);
             assert(height == atlas->height);
             
-            if (!id)
+            if (!glId)
             {
-                glGenTextures(1, &id);
-                glBindTexture(GL_TEXTURE_2D, id);
+                glGenTextures(1, &glId);
+                glBindTexture(GL_TEXTURE_2D, glId);
                 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -121,7 +121,7 @@ namespace chr
                 LOGD <<
                 "FONT UPLOADED: " <<
                 inputSource->getFilePathHint() << " | " <<
-                id << " | " <<
+                glId << " | " <<
                 width << "x" << height  <<
                 endl;
             }
@@ -129,23 +129,23 @@ namespace chr
         
         void FontTexture::discard()
         {
-            if (id)
+            if (glId)
             {
                 LOGD <<
                 "FONT DISCARDED: " <<
-                id <<
+                glId <<
                 endl;
                 
                 // ---
                 
-                glDeleteTextures(1, &id);
-                id = 0;
+                glDeleteTextures(1, &glId);
+                glId = 0;
             }
         }
         
         void FontTexture::reload()
         {
-            if (!id)
+            if (!glId)
             {
                 FontData *data;
                 FontAtlas *atlas;
@@ -161,19 +161,17 @@ namespace chr
         void FontTexture::bind()
         {
             reload();
-            glBindTexture(GL_TEXTURE_2D, id);
+            glBindTexture(GL_TEXTURE_2D, glId);
         }
         
         size_t FontTexture::getMemoryUsage() const
         {
-            if (id)
+            if (glId)
             {
-                return size_t(width * height * 1.333f);
+                return width * height * 1.33;
             }
-            else
-            {
-                return 0;
-            }
+            
+            return 0;
         }
         
         // ---

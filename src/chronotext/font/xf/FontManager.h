@@ -60,7 +60,7 @@ namespace chr
         {
             int width;
             int height;
-            uint32_t id;
+            uint32_t glId;
             InputSource::Ref inputSource;
             
             FontTexture(FontAtlas *atlas, InputSource::Ref inputSource);

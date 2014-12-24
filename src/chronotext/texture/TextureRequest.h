@@ -31,6 +31,11 @@ namespace chr
         ci::Vec2i maxSize;
         
         TextureRequest()
+        :
+        useMipmap(false),
+        flags(FLAGS_NONE),
+        wrapS(0),
+        wrapT(0)
         {}
         
         TextureRequest(InputSource::Ref inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
@@ -74,12 +79,17 @@ namespace chr
         {
             if (std::tie(useMipmap, flags, wrapS, wrapT) == std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT))
             {
-                return (inputSource->getURI() < rhs.inputSource->getURI());
+                if (inputSource && rhs.inputSource)
+                {
+                    return (inputSource->getURI() < rhs.inputSource->getURI());
+                }
             }
             else
             {
                 return std::tie(useMipmap, flags, wrapS, wrapT) < std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT);
             }
+            
+            return false;
         }
     };
 }

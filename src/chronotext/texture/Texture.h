@@ -21,6 +21,7 @@ namespace chr
         typedef std::shared_ptr<Texture> Ref;
 
         TextureRequest request;
+        uint32_t glId;
         
         Texture(InputSource::Ref inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
         Texture(const TextureRequest &textureRequest);
@@ -33,8 +34,6 @@ namespace chr
         
         TextureData fetchTextureData();
         void uploadTextureData(const TextureData &textureData);
-        
-        int getId() const;
         
         int getWidth() const;
         int getHeight() const;
@@ -59,7 +58,6 @@ namespace chr
     protected:
         ci::gl::TextureRef target;
         
-        uint32_t textureId;
         int width;
         int height;
         float maxU;

@@ -23,6 +23,7 @@ using namespace context;
 namespace chr
 {
     bool TextureHelper::PROBE_MEMORY = false;
+    bool TextureHelper::RGB_USE_4_CHANNELS = true;
     
     MemoryInfo TextureHelper::memoryInfo[2];
     map<gl::Texture*, TextureHelper::MemoryProbe> TextureHelper::probes;
@@ -43,7 +44,7 @@ namespace chr
     {
         TextureData textureData = fetchTextureData(textureRequest);
         
-        if (textureData.undefined())
+        if (textureData.type == TextureData::TYPE_UNDEFINED)
         {
             throw EXCEPTION(Texture, "TEXTURE IS UNDEFINED");
         }
@@ -111,7 +112,7 @@ namespace chr
     {
         gl::TextureRef texture;
         
-        if (!textureData.undefined())
+        if (textureData.type != TextureData::TYPE_UNDEFINED)
         {
             if (PROBE_MEMORY)
             {
@@ -145,6 +146,9 @@ namespace chr
                     format.setInternalFormat(textureData.glInternalFormat);
                     texture = gl::Texture::create(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
                     break;
+                    
+                default:
+                    assert(false); // UNREACHABLE
             }
             
             if (glGetError() == GL_OUT_OF_MEMORY)
@@ -288,90 +292,108 @@ namespace chr
     
     Vec2i TextureHelper::getTextureSize(const TextureData &textureData)
     {
-        if (!textureData.undefined())
+        switch (textureData.type)
         {
-            switch (textureData.type)
-            {
-                case TextureData::TYPE_SURFACE:
-                    return textureData.surface.getSize();
-                    
-                case TextureData::TYPE_IMAGE_SOURCE:
-                    return Vec2i(textureData.imageSource->getWidth(), textureData.imageSource->getHeight());
-                    
-                case TextureData::TYPE_PVR:
-                    return PVRHelper::getTextureSize(textureData.buffer);
-                    
-                case TextureData::TYPE_DATA:
-                    return Vec2i(textureData.width, textureData.height);
-            }
+            case TextureData::TYPE_SURFACE:
+                return textureData.surface.getSize();
+                
+            case TextureData::TYPE_IMAGE_SOURCE:
+                return Vec2i(textureData.imageSource->getWidth(), textureData.imageSource->getHeight());
+                
+            case TextureData::TYPE_PVR:
+                return PVRHelper::getTextureSize(textureData.buffer);
+                
+            case TextureData::TYPE_DATA:
+                return Vec2i(textureData.width, textureData.height);
+                
+            default:
+                return Vec2i::zero();
         }
-        
-        return Vec2i::zero();
     }
     
     size_t TextureHelper::getTextureMemoryUsage(const TextureData &textureData)
     {
         size_t memoryUsage = 0;
+        bool rgb = false;
         
-        if (!textureData.undefined())
+        switch (textureData.type)
         {
-            switch (textureData.type)
+            case TextureData::TYPE_SURFACE:
             {
-                case TextureData::TYPE_SURFACE:
-                {
-                    memoryUsage = textureData.surface.getHeight() * textureData.surface.getRowBytes(); // TODO: VERIFY
-                    break;
-                }
-                    
-                case TextureData::TYPE_IMAGE_SOURCE:
-                {
-                    auto size = Vec2i(textureData.imageSource->getWidth(), textureData.imageSource->getHeight());
-                    auto channelOrder = textureData.imageSource->getChannelOrder();
-                    auto dataType = textureData.imageSource->getDataType();
-                    memoryUsage = size.x * size.y * ImageIo::channelOrderNumChannels(channelOrder) * ImageIo::dataTypeBytes(dataType);
-                    break;
-                }
-                    
-                case TextureData::TYPE_PVR:
-                {
-                    memoryUsage = PVRHelper::getTextureMemoryUsage(textureData.buffer); // TODO: VERIFY
-                    break;
-                }
-                    
-                case TextureData::TYPE_DATA:
-                {
-                    /*
-                     * ASSUMING THAT THE GL-TYPE IS "GL_UNSIGNED_BYTE"
-                     * AND HANDLING ONLY A LIMITED SET OF GL-INTERNAL-FORMATS...
-                     */
-                    
-                    int bpp = 0;
-                    
-                    switch (textureData.glInternalFormat)
-                    {
-                        case GL_ALPHA:
-                        case GL_LUMINANCE:
-                            bpp = 1;
-                            break;
-                            
-                        case GL_LUMINANCE_ALPHA:
-                            bpp = 2;
-                            break;
-
-                        case GL_RGB:
-                        case GL_RGBA:
-                            bpp = 4;
-                            break;
-                    }
-                    
-                    memoryUsage = textureData.width * textureData.height * bpp;
-                }
+                auto size = getTextureSize(textureData);
+                auto rowBytes = textureData.surface.getRowBytes();
+                auto channelOrderNumChannels = ImageIo::channelOrderNumChannels(ImageIo::ChannelOrder(textureData.surface.getChannelOrder().getImageIoChannelOrder()));
+                
+                memoryUsage = size.y * rowBytes;
+                rgb = (channelOrderNumChannels == 3);
+                break;
             }
-            
-            if (textureData.request.useMipmap)
+                
+            case TextureData::TYPE_IMAGE_SOURCE:
             {
-                memoryUsage *= 1.33f; // TODO: VERIFY
+                auto size = getTextureSize(textureData);
+                auto dataTypeBytes = ImageIo::dataTypeBytes(textureData.imageSource->getDataType());
+                auto channelOrderNumChannels = ImageIo::channelOrderNumChannels(textureData.imageSource->getChannelOrder());
+                
+                memoryUsage = size.x * size.y * dataTypeBytes * channelOrderNumChannels;
+                rgb = (channelOrderNumChannels == 3);
+                break;
             }
+                
+            case TextureData::TYPE_PVR:
+            {
+                memoryUsage = PVRHelper::getTextureMemoryUsage(textureData.buffer); // TODO: VERIFY
+                break;
+            }
+                
+            case TextureData::TYPE_DATA:
+            {
+                /*
+                 * CURRENT LIMITATIONS:
+                 *
+                 * - ASSUMING THAT THE GL-TYPE IS "GL_UNSIGNED_BYTE"
+                 * - HANDLING ONLY A LIMITED SET OF GL-INTERNAL-FORMATS
+                 */
+                
+                int bpp = 0;
+                
+                switch (textureData.glInternalFormat)
+                {
+                    case GL_ALPHA:
+                    case GL_LUMINANCE:
+                        bpp = 8;
+                        break;
+                        
+                    case GL_LUMINANCE_ALPHA:
+                        bpp = 16;
+                        break;
+                        
+                    case GL_RGB:
+                        bpp = 24;
+                        break;
+                        
+                    case GL_RGBA:
+                        bpp = 32;
+                        break;
+                }
+                
+                memoryUsage = (textureData.width * textureData.height * bpp) >> 3;
+                rgb = (bpp == 24);
+            }
+                
+            default:
+                return 0;
+        }
+        
+        if (rgb && RGB_USE_4_CHANNELS)
+        {
+            memoryUsage *= 4;
+            memoryUsage /= 3;
+        }
+        
+        if (textureData.request.useMipmap)
+        {
+            memoryUsage *= 1.33;
         }
         
         return memoryUsage;

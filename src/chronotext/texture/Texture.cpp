@@ -16,25 +16,28 @@ using namespace context;
 
 namespace chr
 {
-    bool Texture::VERBOSE = true; // XXX
-
+    bool Texture::VERBOSE = false;
+    
     Texture::Texture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     :
-    request(TextureRequest(inputSource, useMipmap, flags))
+    request(TextureRequest(inputSource, useMipmap, flags)),
+    glId(0)
     {
         setTarget(TextureHelper::loadTexture(request));
     }
     
     Texture::Texture(const TextureRequest &textureRequest)
     :
-    request(textureRequest)
+    request(textureRequest),
+    glId(0)
     {
         setTarget(TextureHelper::loadTexture(request));
     }
     
     Texture::Texture(const TextureData &textureData)
     :
-    request(textureData.request)
+    request(textureData.request),
+    glId(0)
     {
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
@@ -68,11 +71,6 @@ namespace chr
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
     
-    int Texture::getId() const
-    {
-        return textureId;
-    }
-    
     int Texture::getWidth() const
     {
         return width;
@@ -90,12 +88,12 @@ namespace chr
     
     int Texture::getCleanWidth() const
     {
-        return int(width * maxU);
+        return width * maxU;
     }
     
     int Texture::getCleanHeight() const
     {
-        return int(height * maxV);
+        return height * maxV;
     }
     
     Vec2i Texture::getCleanSize() const
@@ -123,6 +121,7 @@ namespace chr
         if (!target)
         {
             target = texture;
+            glId = texture->getId();
             
             // ---
             
@@ -144,7 +143,6 @@ namespace chr
             
             // ---
             
-            textureId = texture->getId();
             width = texture->getWidth();
             height = texture->getHeight();
             maxU = texture->getMaxU();
@@ -155,7 +153,7 @@ namespace chr
             LOGI_IF(VERBOSE) <<
             "TEXTURE UPLOADED: " <<
             request.inputSource->getFilePathHint() << " | " <<
-            textureId << " | " <<
+            glId << " | " <<
             width << "x" << height <<
             memoryStats <<
             endl;
@@ -167,15 +165,10 @@ namespace chr
         if (target)
         {
             auto previousTargetPointer = target.get();
-            auto previousTextureId = getId();
+            auto previousGLId = glId;
             
             target.reset();
-            
-            textureId = 0;
-            width = 0;
-            height = 0;
-            maxU = 0;
-            maxV = 0;
+            glId = 0;
             
             // ---
             
@@ -195,7 +188,7 @@ namespace chr
             
             LOGI_IF(VERBOSE) <<
             "TEXTURE DISCARDED: " <<
-            previousTextureId <<
+            previousGLId <<
             memoryStats <<
             endl;
         }
@@ -203,7 +196,7 @@ namespace chr
     
     void Texture::bind()
     {
-        glBindTexture(GL_TEXTURE_2D, textureId);
+        glBindTexture(GL_TEXTURE_2D, glId);
     }
     
     void Texture::begin()
@@ -212,7 +205,7 @@ namespace chr
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, textureId);
+        glBindTexture(GL_TEXTURE_2D, glId);
     }
     
     void Texture::end()

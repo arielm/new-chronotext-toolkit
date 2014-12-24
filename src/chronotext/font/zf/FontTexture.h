@@ -27,7 +27,7 @@ namespace chr
             bool useMipmap;
             int width;
             int height;
-            uint32_t id;
+            uint32_t glId;
 
             FontTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData);
             ~FontTexture();

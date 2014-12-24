@@ -35,6 +35,7 @@ namespace chr
     {
     public:
         static bool PROBE_MEMORY;
+        static bool RGB_USE_4_CHANNELS;
 
         struct MemoryProbe
         {

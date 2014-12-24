@@ -21,6 +21,7 @@ namespace chr
 
         enum Type
         {
+            TYPE_UNDEFINED,
             TYPE_RESOURCE,
             TYPE_RESOURCE_MSW,
             TYPE_FILE,
@@ -73,10 +74,7 @@ namespace chr
         static InputSource::Ref getFileInDocuments(const ci::fs::path &relativePath);
         static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath);
 
-        InputSource(Type type)
-        :
-        type(type)
-        {}
+        InputSource(Type type = TYPE_UNDEFINED);
 
         ci::DataSourceRef loadDataSource();
         InputSource::Ref getSubSource(const ci::fs::path &subPath);

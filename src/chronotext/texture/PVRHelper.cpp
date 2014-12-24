@@ -8,6 +8,7 @@
 
 #include "chronotext/texture/PVRHelper.h"
 #include "chronotext/texture/Texture.h"
+#include "chronotext/utils/MathUtils.h"
 
 #include "cinder/Utilities.h"
 
@@ -72,11 +73,6 @@ namespace chr
         CCZ_COMPRESSION_GZIP,  // gzip format (not supported yet)
         CCZ_COMPRESSION_NONE,  // plain (not supported yet)
     };
-    
-    static bool isPOT(int n)
-    {
-        return (n && !(n & (n - 1)));
-    }
     
     /*
      * BASED ON http://www.codeandweb.com/blog/2011/05/03/loading-gzip-compressed-pvr-textures-without-realloc
@@ -180,7 +176,7 @@ namespace chr
         uint32_t width = header->width;
         uint32_t height = header->height;
         
-        if (!isPOT(width) || !isPOT(height))
+        if (!isPowerOfTwo(width) || !isPowerOfTwo(height))
         {
             throw EXCEPTION(Texture, "TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
         }
@@ -265,6 +261,6 @@ namespace chr
     size_t PVRHelper::getTextureMemoryUsage(const Buffer &buffer)
     {
         PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
-        return header->width * header->height * header->bpp;
+        return (header->width * header->height * header->bpp) >> 3; // TODO: VERIFY
     }
 }
