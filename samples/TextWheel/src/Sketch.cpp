@@ -55,7 +55,7 @@ void Sketch::setup()
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
     
-    if (windowInfo().aaLevel < 4)
+    if (getWindowInfo().aaLevel < 4)
     {
         glEnable(GL_LINE_SMOOTH);
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);

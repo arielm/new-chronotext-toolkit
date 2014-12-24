@@ -24,7 +24,7 @@ namespace chr
             ORIENTATION_LANDSCAPE
         };
         
-        enum SizeFactor // TODO: MOVE TO system/DisplayHelper
+        enum SizeFactor // TODO: MOVE TO system/DisplayHelper?
         {
             SIZE_FACTOR_UNDEFINED,
             SIZE_FACTOR_PHONE_MINI,
@@ -50,13 +50,17 @@ namespace chr
             return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, density);
         }
         
+        float contentScale;
+        float diagonal; // INCHES
+        float density; // DPI
+        ci::Vec2i size; // PIXELS
+        
         DisplayInfo()
         :
         contentScale(0),
         diagonal(0),
         density(0),
-        fullSize(ci::Vec2i::zero()),
-        aspectRatio(0),
+        size(ci::Vec2i::zero()),
         valid(false)
         {}
         
@@ -65,46 +69,25 @@ namespace chr
             if (valid)
             {
                 baseSize = baseSize.yx();
-                fullSize = fullSize.yx();
-                
-                aspectRatio = fullSize.x / float(fullSize.y);
+                size = size.yx();
             }
         }
         
-        float getContentScale() const
+        float aspectRatio() const
         {
-            return contentScale;
-        }
-
-        float getDiagonal() const
-        {
-            return diagonal; // INCHES
-        }
-        
-        float getDensity() const
-        {
-            return density; // DPI
-        }
-        
-        ci::Vec2i getSize() const
-        {
-            return fullSize; // PIXELS
-        }
-
-        float getAspectRatio() const
-        {
-            return aspectRatio;
-        }
-
-        Orientation getOrientation() const
-        {
-            if (aspectRatio > 1)
+            if (valid)
             {
-                return ORIENTATION_LANDSCAPE;
+                return size.x / float(size.y);
             }
-            if (aspectRatio > 0)
+            
+            return 0;
+        }
+        
+        Orientation orientation() const
+        {
+            if (valid)
             {
-                return ORIENTATION_PORTRAIT;
+                return (aspectRatio() > 1) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
             }
             
             return ORIENTATION_DEFAULT;
@@ -114,7 +97,7 @@ namespace chr
         {
             lhs
             << "{"
-            << "size: " << rhs.fullSize
+            << "size: " << rhs.size
             << ", content-scale: " << rhs.contentScale
             << ", diagonal: " << rhs.diagonal
             << ", density: " << rhs.density
@@ -125,13 +108,6 @@ namespace chr
         
     protected:
         ci::Vec2i baseSize;
-        float contentScale;
-        float diagonal;
-        float density;
-        
-        ci::Vec2i fullSize;
-        float aspectRatio;
-        
         bool valid;
         
         DisplayInfo(const ci::Vec2i &baseSize, float contentScale, float diagonal, float density)
@@ -151,15 +127,12 @@ namespace chr
                 contentScale = 0;
                 diagonal = 0;
                 density = 0;
-                
-                fullSize = ci::Vec2i::zero();
-                aspectRatio = 0;
+                size = ci::Vec2i::zero();
                 
                 return false;
             }
             
-            fullSize = baseSize * contentScale;
-            aspectRatio = fullSize.x / float(fullSize.y);
+            size = baseSize * contentScale;
             
             if ((diagonal == 0) && (density == 0))
             {
@@ -168,11 +141,11 @@ namespace chr
 
             if (diagonal == 0)
             {
-                diagonal = fullSize.length() / density;
+                diagonal = size.length() / density;
             }
             else if (density == 0)
             {
-                density = fullSize.length() / diagonal;
+                density = size.length() / diagonal;
             }
             
             return true;

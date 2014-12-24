@@ -22,15 +22,15 @@ namespace chr
             return WindowInfo(width, height, aaLevel);
         }
         
-        WindowInfo(int width, int height, int aaLevel = 0)
-        :
-        size(width, height),
-        aaLevel(aaLevel)
-        {}
-
         WindowInfo(const ci::Vec2i &size = ci::Vec2i::zero(), int aaLevel = 0)
         :
         size(size),
+        aaLevel(aaLevel)
+        {}
+        
+        WindowInfo(int width, int height, int aaLevel = 0)
+        :
+        size(width, height),
         aaLevel(aaLevel)
         {}
         
@@ -39,41 +39,19 @@ namespace chr
             size = size.yx();
         }
         
-        ci::Vec2i getSize() const
-        {
-            return size;
-        }
-        
-        float getWidth() const
-        {
-            return size.x;
-        }
-        
-        float getHeight() const
-        {
-            return size.y;
-        }
-        
-        ci::Area getBounds() const
+        ci::Area bounds() const
         {
             return ci::Area(0, 0, size.x, size.y);
         }
         
-        ci::Vec2f getCenter() const
+        ci::Vec2f center() const
         {
             return size * 0.5f;
         }
         
-        float getAspectRatio() const
+        float aspectRatio() const
         {
-            if (size.y > 0)
-            {
-                return size.x / float(size.y);
-            }
-            else
-            {
-                return 0;
-            }
+            return (size.y > 0) ? (size.x / float(size.y)) : 0;
         }
         
         friend std::ostream& operator<<(std::ostream &lhs, const WindowInfo &rhs)

@@ -31,8 +31,8 @@ namespace chr
         uint32_t getElapsedFrames() const override;
         
         bool isEmulated() const override;
-        DisplayInfo displayInfo() const override;
-        WindowInfo windowInfo() const override;
+        DisplayInfo getDisplayInfo() const override;
+        WindowInfo getWindowInfo() const override;
         
         void action(int actionId) override;
         void sendMessageToDelegate(int what, const std::string &body = "") override;

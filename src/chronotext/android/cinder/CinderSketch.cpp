@@ -30,7 +30,7 @@ namespace chr
     
     void CinderSketch::setDelegate(CinderDelegate *delegate)
     {
-        this->delegate = delegate;
+        CinderSketch::delegate = delegate;
     }
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
@@ -60,14 +60,14 @@ namespace chr
         return delegate->isEmulated();
     }
     
-    DisplayInfo CinderSketch::displayInfo() const
+    DisplayInfo CinderSketch::getDisplayInfo() const
     {
-        return delegate->displayInfo();
+        return delegate->getDisplayInfo();
     }
     
-    WindowInfo CinderSketch::windowInfo() const
+    WindowInfo CinderSketch::getWindowInfo() const
     {
-        return delegate->windowInfo();
+        return delegate->getWindowInfo();
     }
     
 #pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------

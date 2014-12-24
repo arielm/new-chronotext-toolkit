@@ -30,7 +30,7 @@ namespace chr
     
     void CinderSketch::setDelegate(void *delegate)
     {
-        this->delegate = delegate;
+        CinderSketch::delegate = delegate;
     }
     
     static CinderDelegate* castToDelegate(void *delegate)
@@ -65,12 +65,12 @@ namespace chr
         return castToDelegate(delegate).emulated;
     }
     
-    DisplayInfo CinderSketch::displayInfo() const
+    DisplayInfo CinderSketch::getDisplayInfo() const
     {
         return castToDelegate(delegate).displayInfo;
     }
     
-    WindowInfo CinderSketch::windowInfo() const
+    WindowInfo CinderSketch::getWindowInfo() const
     {
         return castToDelegate(delegate).windowInfo;
     }

@@ -33,7 +33,7 @@ void Sketch::setup()
     dot = textureManager.getTexture(InputSource::getResource("dot_112.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
     font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
     
-    scale = displayInfo().getDensity() / DisplayInfo::REFERENCE_DENSITY;
+    scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
     particle = Particle(getWindowCenter(), scale * DOT_RADIUS_DP);
     
     // ---

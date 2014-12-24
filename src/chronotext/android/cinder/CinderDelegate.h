@@ -74,8 +74,8 @@ namespace chr
         uint32_t getElapsedFrames() const;
 
         bool isEmulated() const;
-        WindowInfo windowInfo() const;
-        DisplayInfo displayInfo() const;
+        WindowInfo getWindowInfo() const;
+        DisplayInfo getDisplayInfo() const;
 
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
         void disableAccelerometer();

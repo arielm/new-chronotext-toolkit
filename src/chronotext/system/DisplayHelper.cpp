@@ -15,7 +15,7 @@ namespace chr
 {
     DisplayInfo::SizeFactor DisplayHelper::getSizeFactor(const DisplayInfo &displayInfo)
     {
-        float diagonal = displayInfo.getDiagonal();
+        float diagonal = displayInfo.diagonal;
         
         if (diagonal > 0)
         {

@@ -169,12 +169,12 @@ namespace chr
         return emulated;
     }
     
-    WindowInfo CinderDelegate::windowInfo() const
+    WindowInfo CinderDelegate::getWindowInfo() const
     {
         return emulated ? emulatedDevice.windowInfo : realWindowInfo;
     }
     
-    DisplayInfo CinderDelegate::displayInfo() const
+    DisplayInfo CinderDelegate::getDisplayInfo() const
     {
         return emulated ? emulatedDevice.displayInfo : realDisplayInfo;
     }
@@ -236,7 +236,7 @@ namespace chr
         emulated = true;
         emulatedDevice = device; // COPYING, IN ORDER TO ALLOW ROTATION
         
-        if (device.displayInfo.getOrientation() != orientation)
+        if (device.displayInfo.orientation() != orientation)
         {
             emulatedDevice.rotate();
         }

@@ -25,7 +25,7 @@ namespace chr
         :
         displayInfo(displayInfo)
         {
-            windowInfo.size = displayInfo.getSize();
+            windowInfo.size = displayInfo.size;
         }
         
         EmulatedDevice(const DisplayInfo &displayInfo, const WindowInfo &windowInfo)

@@ -211,12 +211,12 @@ namespace chr
         return false;
     }
     
-    WindowInfo CinderDelegate::windowInfo() const
+    WindowInfo CinderDelegate::getWindowInfo() const
     {
         return windowInfo_;
     }
     
-    DisplayInfo CinderDelegate::displayInfo() const
+    DisplayInfo CinderDelegate::getDisplayInfo() const
     {
         return displayInfo_;
     }
