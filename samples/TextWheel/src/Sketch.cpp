@@ -22,11 +22,6 @@ using namespace chr::zf;
 const float REFERENCE_H = 768;
 const float TEXT_SIZE = 20;
 
-Sketch::Sketch()
-:
-CinderSketch()
-{}
-
 void Sketch::setup()
 {
     fontManager.loadConfig(InputSource::getResource("font-config.xml"));

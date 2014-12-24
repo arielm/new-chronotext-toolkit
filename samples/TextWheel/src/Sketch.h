@@ -7,7 +7,7 @@
  */
 
 /*
- * IN SYNC WITH ContextRework BRANCH / COMMIT 5f26d2e
+ * IN SYNC WITH ContextRework BRANCH / COMMIT 95144e8
  */
 
 /*
@@ -64,29 +64,33 @@
 
 class Sketch : public chr::CinderSketch
 {
-    chr::zf::FontManager fontManager;
-
-    std::shared_ptr<chr::ZFont> font;
-    TextSpiral spiral;
-
-    std::vector<std::string> languages;
-    std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> layouts;
-    std::map<std::string, std::unique_ptr<chr::zf::FontSequence>> sequences;
-
-    float scale;
-    float rotation;
-    float direction;
-    int currentLangIndex;
-
 public:
-    Sketch();
+    Sketch()
+    :
+    CinderSketch()
+    {}
     
-    void setup();
-    void resize();
-    void update();
-    void draw();
+    void setup() final;
+    void resize() final;
+    void update() final;
+    void draw() final;
     
     void addVersion(const std::string &lang);
     void nextVersion();
     void previousVersion();
+    
+protected:
+    chr::zf::FontManager fontManager;
+    
+    std::shared_ptr<chr::ZFont> font;
+    TextSpiral spiral;
+    
+    std::vector<std::string> languages;
+    std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> layouts;
+    std::map<std::string, std::unique_ptr<chr::zf::FontSequence>> sequences;
+    
+    float scale;
+    float rotation;
+    float direction;
+    int currentLangIndex;
 };

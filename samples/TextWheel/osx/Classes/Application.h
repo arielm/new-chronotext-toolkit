@@ -19,9 +19,9 @@ class Sketch;
 class Application : public chr::CinderDelegate
 {
 public:
-    void applySettings(Settings *settings) override;
-    void sketchCreated(chr::CinderSketch *sketch) override;
-    void keyDown(ci::app::KeyEvent event) override;
+    void sketchCreated(chr::CinderSketch *sketch) final;
+    void applySettings(Settings *settings) final;
+    void keyDown(ci::app::KeyEvent event) final;
     
 protected:
     Sketch *target;

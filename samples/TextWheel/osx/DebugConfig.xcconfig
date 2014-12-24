@@ -1,0 +1,9 @@
+#include "Config.xcconfig"
+
+ONLY_ACTIVE_ARCH = YES
+GCC_OPTIMIZATION_LEVEL = 0
+GCC_DYNAMIC_NO_PIC = NO
+
+OTHER_LDFLAGS = -lz "$(CINDER_PATH)/lib/libcinder_d.a" "$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a" "$(CINDER_PATH)/blocks/hb-icu/lib/osx/libicu-common.a" "$(CINDER_PATH)/blocks/hb-icu/lib/osx/libhb.a"
+
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1
