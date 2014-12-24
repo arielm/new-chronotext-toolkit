@@ -18,7 +18,6 @@ namespace chr
 {
     CinderSketch::CinderSketch()
     :
-    CinderSketchBase(),
     delegate(nullptr),
     clock_(FrameClock::create()),
     timeline_(Timeline::create())

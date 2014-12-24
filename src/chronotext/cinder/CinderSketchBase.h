@@ -39,7 +39,6 @@ namespace chr
             EVENT_BACK_KEY
         };
         
-        CinderSketchBase() : SuperHandler() {}
         virtual ~CinderSketchBase() {}
         
         virtual bool init() { return true; }

@@ -18,7 +18,6 @@ namespace chr
 {
     CinderSketch::CinderSketch()
     :
-    CinderSketchBase(),
     delegate(nullptr),
     clock_(FrameClock::create()),
     timeline_(Timeline::create())
@@ -31,7 +30,7 @@ namespace chr
     
     void CinderSketch::setDelegate(CinderDelegate *delegate)
     {
-        this->delegate = delegate;
+        CinderSketch::delegate = delegate;
     }
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
