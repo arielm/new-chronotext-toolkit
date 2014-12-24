@@ -1,14 +1,10 @@
 #include "Config.xcconfig"
 
-// PROJECT
-
-DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
-
-OTHER_LDFLAGS = -lz "$(CINDER_PATH)/lib/libcinder.a"
-
-// TARGET
-
 GCC_OPTIMIZATION_LEVEL = 3
 GCC_GENERATE_DEBUGGING_SYMBOLS = NO
 GCC_FAST_MATH = YES
 STRIP_INSTALLED_PRODUCT = YES
+
+OTHER_LDFLAGS = -lz "$(CINDER_PATH)/lib/libcinder.a"
+
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
