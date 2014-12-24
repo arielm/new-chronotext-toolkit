@@ -65,7 +65,7 @@ void Sketch::event(Event event)
             
         case EVENT_CONTEXT_RENEWED:
         {
-            textureManager.reload(); // MANDATORY AFTER DISCARDING
+            textureManager.reload(); // MANDATORY AFTER DISCARDING (FIXME)
             fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
             
             /*
@@ -93,7 +93,7 @@ void Sketch::event(Event event)
             textureManager.discard();
             fontManager.discardTextures();
             
-            textureManager.reload(); // MANDATORY AFTER DISCARDING (XXX)
+            textureManager.reload(); // MANDATORY AFTER DISCARDING (FIXME)
             fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
             
             break;

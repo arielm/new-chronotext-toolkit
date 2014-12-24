@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -17,7 +17,7 @@
 class Application : public chr::CinderDelegate
 {
 public:
-    void applySettings(Settings *settings) override
+    void applySettings(Settings *settings) final
     {
         if (loadEmulators(chr::InputSource::getResource("emulators.json")))
         {
@@ -31,7 +31,7 @@ public:
         }
     }
     
-    void keyDown(ci::app::KeyEvent event)
+    void keyDown(ci::app::KeyEvent event) final
     {
         switch (event.getCode())
         {
