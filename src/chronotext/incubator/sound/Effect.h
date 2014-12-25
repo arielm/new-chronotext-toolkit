@@ -12,21 +12,20 @@
 
 #include "FMOD.hpp"
 
-#include <memory>
-
-typedef std::shared_ptr<class Effect> EffectRef;
-
 class Effect
 {
 public:
-    chr::InputSourceRef inputSource;
+    typedef std::shared_ptr<Effect> Ref;
+
+    chr::InputSource::Ref inputSource;
+    uint32_t effectId;
     FMOD::Sound *sound;
     
-    Effect(chr::InputSourceRef inputSource, FMOD::Sound *sound);
+    Effect(chr::InputSource::Ref inputSource, uint32_t effectId, FMOD::Sound *sound);
     ~Effect();
     
+    uint32_t getId() const;
+    
     double getDuration();
-
-protected:
-    double duration;
+    size_t getMemoryUsage();
 };

@@ -13,30 +13,24 @@
 using namespace std;
 using namespace chr;
 
-Effect::Effect(InputSourceRef inputSource, FMOD::Sound *sound)
+Effect::Effect(InputSource::Ref inputSource, uint32_t effectId, FMOD::Sound *sound)
 :
 inputSource(inputSource),
+effectId(effectId),
 sound(sound)
 {
-    unsigned int length;
-    sound->getLength(&length, FMOD_TIMEUNIT_MS);
-    
-    unsigned int memoryused;
-    sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, NULL);
-    
-    duration = length / 1000.0;
-    
     LOGD <<
     "EFFECT LOADED: " <<
     inputSource->getFilePathHint() << " | " <<
-    length / 1000.0 << "s | " <<
-    memoryused << " BYTES" <<
+    getDuration() << "s | " <<
+    prettyBytes(getMemoryUsage()) <<
     endl;
 }
 
 Effect::~Effect()
 {
     sound->release();
+    sound = nullptr;
     
     // ---
     
@@ -46,7 +40,33 @@ Effect::~Effect()
     endl;
 }
 
+uint32_t Effect::getId() const
+{
+    return effectId;
+}
+
 double Effect::getDuration()
 {
-    return duration;
+    if (sound)
+    {
+        unsigned int length;
+        sound->getLength(&length, FMOD_TIMEUNIT_MS);
+        
+        return length / 1000.0;
+    }
+    
+    return 0;
+}
+
+size_t Effect::getMemoryUsage()
+{
+    if (sound)
+    {
+        unsigned int memoryused;
+        sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr);
+        
+        return memoryused;
+    }
+    
+    return 0;
 }

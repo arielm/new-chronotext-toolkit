@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "chronotext/Exception.h"
 #include "chronotext/incubator/sound/Effect.h"
 
 #include <map>
@@ -16,7 +17,7 @@
 class SoundEngine
 {
 public:
-    enum
+    enum Type
     {
         EVENT_UNDEFINED,
         EVENT_STARTED,
@@ -24,11 +25,11 @@ public:
         EVENT_INTERRUPTED, // EFFECT AUTOMATICALLY STOPPED IN FAVOR OF A NEW EFFECT (I.E. WHEN NO FREE CHANNEL REMAIN)
         EVENT_COMPLETED
     };
-    
+
     struct Event
     {
-        int type;
-        EffectRef effect;
+        Type type;
+        Effect::Ref effect;
         int channelId;
         int playingId;
         
@@ -39,7 +40,7 @@ public:
         playingId(0)
         {}
         
-        Event(int type, EffectRef effect, int channelId, int playingId)
+        Event(Type type, Effect::Ref effect, int channelId, int playingId)
         :
         type(type),
         effect(effect),
@@ -63,7 +64,7 @@ public:
                 case EVENT_COMPLETED:
                     return "COMPLETED";
                     
-                default:
+                case EVENT_UNDEFINED:
                     return "";
             }
         }
@@ -83,24 +84,33 @@ public:
     class Listener
     {
     public:
+        virtual ~Listener() {}
         virtual void handleEvent(const Event &event) = 0;
     };
+  
+    // ---
     
     FMOD::System *system;
     FMOD::ChannelGroup *masterGroup;
-  
+
     SoundEngine();
     
     void setup(int maxChannels = 32);
     void shutdown();
-
+    
+    /*
+     * FIXME: UNSAFE
+     */
+    void addListener(Listener *listener);
+    void removeListener(Listener *listener);
+    
     /*
      * ON ANDROID (UNLIKE iOS):
      * IT IS NECESSARY TO CALL THESE UPON FOREGROUND/BACKGROUND SWITCHES
      */
     void pause();
     void resume();
-
+    
     /*
      * IT IS MANDATORY TO CALL UPDATE EACH FRAME,
      * OTHERWISE (AND AMONG OTHER THINGS):
@@ -108,31 +118,39 @@ public:
      */
     void update();
     
-    void addListener(Listener *listener);
-    void removeListener(Listener *listener);
-
-    void setMute(bool mute);
-    void setVolume(float volume);
+    Effect::Ref preloadEffect(chr::InputSource::Ref inputSource); // CAN THROW
+    bool unloadEffect(chr::InputSource::Ref inputSource);
     
-    EffectRef preloadEffect(chr::InputSourceRef inputSource);
-    void unloadEffect(EffectRef effect);
+    /*
+     * THE RETURNED POINTER IS NOT INTENDED FOR STORAGE
+     */
+    Effect* getEffect(chr::InputSource::Ref inputSource);
     
-    int playEffect(EffectRef effect, int loopCount = 0, float volume = 1);
-    bool stopEffect(int playingId);
-    bool stopEffects(EffectRef effect);
-    bool stopAllEffects();
+    int playEffect(int effectId, int loopCount = 0, float volume = 1);
     bool pauseEffect(int playingId);
     bool resumeEffect(int playingId);
+    bool stopEffect(int playingId);
+    bool stopEffects(int effectId);
+    bool stopAllEffects();
+
+    bool isMute();
+    void setMute(bool mute);
+
+    float getVolume();
+    void setVolume(float volume);
     
 protected:
-    std::map<std::string, EffectRef> effects;
-    std::map<int, std::pair<int, EffectRef>> playingEffects;
+    std::map<std::string, Effect::Ref> effects;
+    std::map<int, std::pair<int, int>> playingEffects;
     
     int playCount;
+    int effectCount;
+    
     std::set<Listener*> listeners;
     
-    EffectRef loadEffect(chr::InputSourceRef inputSource);
-    int nextPlayingId(EffectRef effect);
+    Effect* loadEffect(chr::InputSource::Ref inputSource);
     bool interruptChannel(int channelId);
-    void processEvent(const Event &event);
+    
+    Event createEvent(Type type, int effectId, int channelId, int playingId);
+    void dispatchEvent(const Event &event);
 };

@@ -52,27 +52,13 @@ ifdef CHR_USE_ZFONT
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/scrptrun.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/TextItemizer.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/VirtualFont.cpp
-else
+endif
+
+ifdef CHR_USE_XFONT
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/FontManager.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/Font.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/FontSequence.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/TextHelper.cpp
-endif
-
-ifdef CHR_USE_INCUBATOR_UI
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Button.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Container.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Fill.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/HorizontalLayout.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/HyperTextBox.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Icon.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Shape.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/TextBox.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/Touchable.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/TouchableLink.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/TouchGroup.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/VerticalLayout.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/ui/WordWrapper.cpp
 endif
 
 ifdef CHR_USE_INCUBATOR_SOUND
