@@ -16,8 +16,8 @@ namespace chr
     {
         void FontSequence::begin(bool useColor, float anisotropy)
         {
-            this->useColor = useColor;
-            this->anisotropy = anisotropy;
+            FontSequence::useColor = useColor;
+            FontSequence::anisotropy = anisotropy;
             
             maps.clear();
         }

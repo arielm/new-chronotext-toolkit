@@ -16,7 +16,7 @@ namespace chr
     {
         void FontSequence::begin(bool useColor)
         {
-            this->useColor = useColor;
+            FontSequence::useColor = useColor;
             batches.clear();
         }
         

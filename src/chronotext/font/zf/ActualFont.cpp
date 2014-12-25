@@ -276,7 +276,7 @@ namespace chr
         
         ActualFont::Glyph* ActualFont::fillQuad(Quad &quad, const Shape &shape, const Vec2f &position, float sizeRatio)
         {
-            auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout HAVE BEEN PREVIOUSLY PRELOADED
+            auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout IS LOADED
             
             if (!glyph)
             {

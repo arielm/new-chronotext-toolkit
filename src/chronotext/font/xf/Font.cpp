@@ -127,7 +127,7 @@ namespace chr
         
         void Font::setSize(float size)
         {
-            this->size = size;
+            Font::size = size;
             sizeRatio = size / baseSize;
         }
         
@@ -138,17 +138,17 @@ namespace chr
         
         void Font::setDirection(float direction)
         {
-            this->direction = direction;
+            Font::direction = direction;
         }
         
         void Font::setAxis(const Vec2f &axis)
         {
-            this->axis = axis;
+            Font::axis = axis;
         }
         
         void Font::setColor(const ColorA &color)
         {
-            this->color = color;
+            Font::color = color;
         }
         
         void Font::setColor(float r, float g, float b, float a)
@@ -161,7 +161,7 @@ namespace chr
         
         void Font::setClip(const Rectf &clipRect)
         {
-            this->clipRect = clipRect;
+            Font::clipRect = clipRect;
             hasClip = true;
         }
         
@@ -365,7 +365,7 @@ namespace chr
                 
                 if (sequence)
                 {
-                    this->sequence = sequence;
+                    Font::sequence = sequence;
                     sequence->begin(useColor);
                 }
                 

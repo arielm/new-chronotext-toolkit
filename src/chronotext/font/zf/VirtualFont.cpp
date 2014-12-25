@@ -322,7 +322,7 @@ namespace chr
                     
                     if (glyph && glyph->texture)
                     {
-                        glyph->texture->reload(); // JUST IN CASE THE GLYPH HAVE BEEN PREVIOUSLY DISCARDED
+                        glyph->texture->reload(); // JUST IN CASE THE GLYPH IS NOT LOADED
                     }
                 }
             }
@@ -330,7 +330,7 @@ namespace chr
         
         void VirtualFont::setSize(float size)
         {
-            this->size = size;
+            VirtualFont::size = size;
             sizeRatio = size / properties.baseSize;
         }
         
@@ -341,7 +341,7 @@ namespace chr
         
         void VirtualFont::setColor(const ColorA &color)
         {
-            this->color = color;
+            VirtualFont::color = color;
         }
         
         void VirtualFont::setColor(float r, float g, float b, float a)
@@ -354,7 +354,7 @@ namespace chr
         
         void VirtualFont::setClip(const Rectf &clipRect)
         {
-            this->clipRect = clipRect;
+            VirtualFont::clipRect = clipRect;
             hasClip = true;
         }
         
@@ -430,7 +430,7 @@ namespace chr
                 
                 if (sequence)
                 {
-                    this->sequence = sequence;
+                    VirtualFont::sequence = sequence;
                     sequence->begin(useColor, anisotropy);
                 }
                 

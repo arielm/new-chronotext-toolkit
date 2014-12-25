@@ -28,7 +28,7 @@ namespace chr
             static inline void drawTextInRect(Font &font, const std::wstring &text, float x1, float y1, float x2, float y2) { drawTextInRect(font, text, ci::Rectf(x1, y1, x2, y2)); }
             
             static void drawTransformedText(Font &font, const std::wstring &text, float x = 0, float y = 0);
-            static void drawTransformedText(Font &font, const std::wstring &text, const ci::Vec2f &position) { drawTransformedText(font, text, position.x, position.y); }
+            static inline void drawTransformedText(Font &font, const std::wstring &text, const ci::Vec2f &position) { drawTransformedText(font, text, position.x, position.y); }
             
             static float drawTextOnPath(Font &font, const std::wstring &text, const FollowablePath &path, float offsetX = 0, float offsetY = 0);
         };
