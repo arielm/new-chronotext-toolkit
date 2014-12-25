@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -14,7 +14,7 @@
 using namespace ci;
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     namespace xf
     {
@@ -127,7 +127,7 @@ namespace chronotext
         
         void Font::setSize(float size)
         {
-            this->size = size;
+            Font::size = size;
             sizeRatio = size / baseSize;
         }
         
@@ -138,17 +138,17 @@ namespace chronotext
         
         void Font::setDirection(float direction)
         {
-            this->direction = direction;
+            Font::direction = direction;
         }
         
         void Font::setAxis(const Vec2f &axis)
         {
-            this->axis = axis;
+            Font::axis = axis;
         }
         
         void Font::setColor(const ColorA &color)
         {
-            this->color = color;
+            Font::color = color;
         }
         
         void Font::setColor(float r, float g, float b, float a)
@@ -161,7 +161,7 @@ namespace chronotext
         
         void Font::setClip(const Rectf &clipRect)
         {
-            this->clipRect = clipRect;
+            Font::clipRect = clipRect;
             hasClip = true;
         }
         
@@ -365,7 +365,7 @@ namespace chronotext
                 
                 if (sequence)
                 {
-                    this->sequence = sequence;
+                    Font::sequence = sequence;
                     sequence->begin(useColor);
                 }
                 

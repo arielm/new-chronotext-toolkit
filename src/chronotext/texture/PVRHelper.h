@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -19,7 +19,7 @@
  * - ALLOWS FOR 16-BIT TEXTURES OR ALPHA TEXTURES
  * - NO ISSUES WITH ALPHA-PREMULTIPLICATION ON IOS
  *
- * REGARDING RAW PVR FILES 
+ * REGARDING RAW PVR FILES
  * - PROS: READING A RAW PVR FILE SHOULD ALWAYS BE THE FASTEST AND MOST-EFFICIENT CHOICE
  * - PROS: ON IOS AND ANDROID, THE APPLICATION-SIZE SHOULD BE THE SAME (BECAUSE THE DATA IN THE APPLICATION-PACKAGE IS ZIPPED)
  * - CONS: BIG APPLICATION SIZES ON OSX AND WINDOWS (BECAUSE THE DATA IN THE APPLICATION-PACKAGE IS NOT ZIPPED)
@@ -33,12 +33,17 @@
 #include "cinder/Filesystem.h"
 #include "cinder/gl/Texture.h"
 
-class PVRHelper
+namespace chr
 {
-public:
-    static ci::Buffer decompressPVRGZ(const ci::fs::path &filePath);
-    static ci::Buffer decompressPVRCCZ(ci::DataSourceRef dataSource);
-
-    static ci::gl::TextureRef getPVRTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
-    static ci::Vec2i getPVRTextureSize(const ci::Buffer &buffer);
-};
+    class PVRHelper
+    {
+    public:
+        static ci::Buffer decompressGZ(const ci::fs::path &filePath);
+        static ci::Buffer decompressCCZ(ci::DataSourceRef dataSource);
+        
+        static ci::gl::TextureRef loadTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+        
+        static ci::Vec2i getTextureSize(const ci::Buffer &buffer);
+        static size_t getTextureMemoryUsage(const ci::Buffer &buffer);
+    };
+}

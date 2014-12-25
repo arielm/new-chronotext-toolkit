@@ -30,18 +30,10 @@ CinderSketch(context, delegate),
 slaveClock(clock().shared_from_this())
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
-    {
-        hairline = Hairline(textureManager, Hairline::TYPE_NORMAL);
-        font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
-    }
+    hairline = Hairline(textureManager, Hairline::TYPE_NORMAL);
+    font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     
     // ---
     
@@ -50,17 +42,6 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            fontManager.discardTextures();
-            break;
-    }
 }
 
 void Sketch::resize()

@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -21,7 +21,7 @@
  * 3) LAYOUT CODE COULD BE MORE EFFECTIVE (I.E. NO NEED TO USE setLocation() TWICE)
  */
 
-namespace chronotext
+namespace chr
 {
     typedef std::shared_ptr<class VerticalLayout> VerticalLayoutRef;
     
@@ -44,5 +44,3 @@ namespace chronotext
         float contentHeight;
     };
 }
-
-namespace chr = chronotext;

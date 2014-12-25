@@ -2,17 +2,16 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
  * REDIRECTION OF std::cout TO THE OSX CONSOLE (Applications/Utilities/Console.app)
- * STARTING FROM OSX 10.8, THIS IS *NOT* OCCURING AUTOMATICALLY
+ * BEFORE OSX 10.8, THIS WAS OCCURING AUTOMATICALLY IN PARALLEL TO std::cout
  *
- * IN ORDER TO ACTIVATE IT:
- * 1) INCLUDE "chronotext/Utils.h"
- * 2) DEFINE THE FOLLOWING MACRO (E.G. IN Prefix.pch FILE): FORCE_SYSLOG
+ * TO ACTIVATE IT: #define FORCE_SYSLOG
+ * IF ACTIVATED: std::count WILL NOT BE USED IN PARALLEL
  *
  * BASED ON:
  * https://github.com/cinder/Cinder/blob/master/include/cinder/msw/OutputDebugStringStream.h
@@ -27,7 +26,7 @@
 
 #include <syslog.h>
 
-namespace chronotext
+namespace chr
 {
     namespace mac
     {
@@ -43,8 +42,8 @@ namespace chronotext
         protected:
             int sync()
             {
-                output_debug_string(this->str().c_str());
-                this->str(std::basic_string<CharT>()); // CLEAR THE STRING BUFFER
+                output_debug_string(this->str().data());
+                this->str(std::basic_string<CharT>()); // CLEARS THE STRING BUFFER
                 
                 return 0;
             }
@@ -55,8 +54,7 @@ namespace chronotext
         template<>
         inline void basic_debugbuf<char>::output_debug_string(const char *text)
         {
-            printf("%s", text); // OUTPUT TO XCode CONSOLE
-            syslog(LOG_CONS, "%s", text); // OUTPUT TO OSX CONSOLE
+            syslog(LOG_CONS, "%s", text); // WRITES TO THE CONSOLE
         }
         
         template<class CharT, class TraitsT = std::char_traits<CharT>>
@@ -77,5 +75,3 @@ namespace chronotext
         typedef basic_dostream<char> dostream;
     }
 }
-
-namespace chr = chronotext;

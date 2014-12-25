@@ -1,15 +1,24 @@
 /*
- * FROM SAFETYDANK'S FORK OF CINDER:
- * https://github.com/safetydank/Cinder/blob/cbd00824554251d5b5a803133d616b7f21d4b8d5/include/cinder/ImageSourceFileStbImage.h
+ * ADAPTED FROM SAFETYDANK'S FORK OF CINDER:
+ * https://github.com/safetydank/Cinder/blob/android-dev/include/cinder/ImageSourceFileStbImage.h
+ *
+ *
+ * MODIFICATIONS:
+ *
+ * 1) USING stb_image v1.46
+ *    https://github.com/nothings/stb
+ *
+ * 2) "FORCE_STB_FOR_PNG_AND_JPG" MACRO
  */
 
 #pragma once
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include "cinder/Cinder.h"
 #include "cinder/ImageIo.h"
 #include "cinder/Exception.h"
-
-#include "stb_image.h"
 
 namespace cinder {
 

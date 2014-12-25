@@ -3,7 +3,7 @@
 using namespace ci;
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     static void* memAllocator(void *userData, unsigned int size)
     {

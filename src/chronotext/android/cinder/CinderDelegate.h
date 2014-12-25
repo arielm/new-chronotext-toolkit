@@ -2,23 +2,28 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
+#include "chronotext/cinder/CinderSketch.h"
+
+#include "cinder/Json.h"
+
+#include <boost/asio.hpp>
+
 #include <jni.h>
 #include <android/sensor.h>
 
-#include "chronotext/cinder/CinderSketch.h"
-
-#include "cinder/android/LogStream.h"
-
-namespace chronotext
+namespace chr
 {
     class CinderDelegate
     {
+        /*
+         * PARALLEL TO org.chronotext.cinder.CinderRenderer.java
+         */
         enum
         {
             EVENT_RESUMED = 1,
@@ -32,64 +37,56 @@ namespace chronotext
             EVENT_BACK_KEY = 9
         };
         
-    public:
-        JavaVM *mJavaVM;
-        jobject mJavaContext;
-        jobject mJavaListener;
-        jobject mJavaDisplay;
-        
-        CinderSketch *sketch;
-        
-        CinderDelegate()
-        :
-        mLastAccel(ci::Vec3f::zero()),
-        mLastRawAccel(ci::Vec3f::zero())
-        {}
-        
-        virtual ~CinderDelegate()
+        /*
+         * PARALLEL TO org.chronotext.cinder.CinderDelegate.java
+         */
+        enum
         {
-            CI_LOGD("CinderDelegate DELETED");
-        }
+            ACTION_CAPTURE_BACK_KEY = 1,
+            ACTION_RELEASE_BACK_KEY = 2
+        };
         
-        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener, jobject javaDisplay);
+    public:
+        static bool VERBOSE;
         
-        void setup(int width, int height, float diagonal, float density);
+        CinderDelegate();
+        virtual ~CinderDelegate() {}
+
+        CinderSketch* getSketch();
+
+        void sketchCreated(CinderSketch *sketch) {}
+        void sketchDestroyed(CinderSketch *sketch) {}
+
+        void event(int eventId);
+        void action(int actionId);
+        
+        void receiveMessageFromSketch(int what, const std::string &body);
+        void sendMessageToSketch(int what, const std::string &body = "");
+        
+        void init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
+        void setup(int width, int height);
         void shutdown();
-        
-        void resize();
+
+        void resize(int width, int height);
         void draw();
         
-        void event(int eventId);
-        
+        double getElapsedSeconds() const;
+        uint32_t getElapsedFrames() const;
+
+        bool isEmulated() const;
+        WindowInfo getWindowInfo() const;
+        DisplayInfo getDisplayInfo() const;
+
+        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
+        void disableAccelerometer();
+
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
         void removeTouch(int index, float x, float y);
-        
-        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
-        
-        std::ostream& console();
-        boost::asio::io_service& io_service() const;
 
-        double getElapsedSeconds() const;
-        uint32_t getElapsedFrames() const;
+        // ---
         
-        int getWindowWidth() const;
-        int getWindowHeight() const;
-        ci::Vec2f getWindowCenter() const;
-        ci::Vec2i getWindowSize() const;
-        float getWindowAspectRatio() const;
-        ci::Area getWindowBounds() const;
-        float getWindowContentScale() const;
-        WindowInfo getWindowInfo() const;
-        
-        virtual void action(int actionId);
-        virtual void receiveMessageFromSketch(int what, const std::string &body);
-        virtual void sendMessageToSketch(int what, const std::string &body);
-        
-        // ---------------------------------------- JNI ----------------------------------------
-        
-        JNIEnv* getJNIEnv();
+        ci::JsonTree jsonQuery(const char *methodName);
         
         void callVoidMethodOnJavaListener(const char *name, const char *sig, ...);
         jboolean callBooleanMethodOnJavaListener(const char *name, const char *sig, ...);
@@ -98,40 +95,44 @@ namespace chronotext
         jlong callLongMethodOnJavaListener(const char *name, const char *sig, ...);
         jfloat callFloatMethodOnJavaListener(const char *name, const char *sig, ...);
         jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
+        jobject callObjectMethodOnJavaListener(const char *name, const char *sig, ...);
         
     protected:
-        std::shared_ptr<ci::android::dostream> mOutputStream;
+        CinderSketch *sketch;
+
+        jobject javaContext_;
+        jobject javaListener_;
+        jobject javaDisplay_;
         
-        WindowInfo mWindowInfo;
-        
-        ci::Timer mTimer;
-        uint32_t mFrameCount;
-        
-        float mAccelFilterFactor;
-        ci::Vec3f mLastAccel, mLastRawAccel;
-        
-        ASensorManager *mSensorManager;
-        const ASensor *mAccelerometerSensor;
-        ASensorEventQueue *mSensorEventQueue;
+        DisplayInfo displayInfo_;
+        WindowInfo windowInfo_;
+
+        ci::Timer timer;
+        uint32_t frameCount;
         
         std::shared_ptr<boost::asio::io_service> io;
         std::shared_ptr<boost::asio::io_service::work> ioWork;
         
-        static int sensorEventCallback(int fd, int events, void *data)
-        {
-            CinderDelegate *instance = (CinderDelegate*)data;
-            instance->processSensorEvents();
-            
-            return 1;
-        }
+        ASensorManager *sensorManager;
+        const ASensor *accelerometerSensor;
+        ASensorEventQueue *sensorEventQueue;
         
-        void start(int flags);
-        void stop(int flags);
+        AccelEvent::Filter accelFilter;
+
+        void setSketch(CinderSketch *sketch);
+
+        void start(CinderSketch::Reason reason);
+        void stop(CinderSketch::Reason reason);
         
+        void startIOService();
+        void stopIOService();
+        void pollIOService();
+        
+        void createSensorEventQueue();
+        void destroySensorEventQueue();
+        void pollSensorEvents();
+
+        void handleAcceleration(ASensorEvent event);
         int getDisplayRotation();
-        void processSensorEvents();
-        void accelerated(float x, float y, float z);
     };
 }
-
-namespace chr = chronotext;

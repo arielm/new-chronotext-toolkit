@@ -2,45 +2,54 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/texture/Texture.h"
 #include "chronotext/texture/TextureHelper.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
+using namespace context;
 
-namespace chronotext
+namespace chr
 {
-    Texture::Texture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
+    bool Texture::VERBOSE = false;
+    
+    Texture::Texture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     :
-    request(TextureRequest(inputSource, useMipmap, flags))
+    request(TextureRequest(inputSource, useMipmap, flags)),
+    glId(0)
     {
         setTarget(TextureHelper::loadTexture(request));
     }
     
     Texture::Texture(const TextureRequest &textureRequest)
     :
-    request(textureRequest)
+    request(textureRequest),
+    glId(0)
     {
         setTarget(TextureHelper::loadTexture(request));
     }
     
     Texture::Texture(const TextureData &textureData)
     :
-    request(textureData.request)
+    request(textureData.request),
+    glId(0)
     {
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
     
+    Texture::~Texture()
+    {
+        resetTarget();
+    }
+    
     void Texture::discard()
     {
-        if (target)
-        {
-            target.reset();
-        }
+        resetTarget();
     }
     
     void Texture::reload()
@@ -62,14 +71,132 @@ namespace chronotext
         setTarget(TextureHelper::uploadTextureData(textureData));
     }
     
-    int Texture::getId() const
+    int Texture::getWidth() const
     {
-        return id;
+        return width;
+    }
+    
+    int Texture::getHeight() const
+    {
+        return height;
+    }
+    
+    Vec2i Texture::getSize() const
+    {
+        return Vec2i(width, height);
+    }
+    
+    int Texture::getCleanWidth() const
+    {
+        return width * maxU;
+    }
+    
+    int Texture::getCleanHeight() const
+    {
+        return height * maxV;
+    }
+    
+    Vec2i Texture::getCleanSize() const
+    {
+        return Vec2i(width * maxU, height * maxV);
+    }
+    
+    float Texture::getMaxU() const
+    {
+        return maxU;
+    }
+    
+    float Texture::getMaxV() const
+    {
+        return maxV;
+    }
+    
+    Vec2f Texture::getMaxUV() const
+    {
+        return Vec2f(maxU, maxV);
+    }
+    
+    void Texture::setTarget(ci::gl::TextureRef texture)
+    {
+        if (!target)
+        {
+            target = texture;
+            glId = texture->getId();
+            
+            // ---
+            
+            string memoryStats;
+            
+            if (VERBOSE && TextureHelper::PROBE_MEMORY)
+            {
+                auto memoryInfo = getMemoryInfo();
+                const auto &memoryProbe = TextureHelper::probes[texture.get()];
+                
+                auto delta1 = memoryManager().compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
+                auto delta2 = memoryManager().compare(memoryProbe.memoryInfo[1], memoryInfo);
+                
+                memoryStats = " | " +
+                MemoryInfo::write(memoryProbe.memoryUsage) + ", " +
+                MemoryInfo::write(delta1) + ", " +
+                MemoryInfo::write(delta2);
+            }
+            
+            // ---
+            
+            width = texture->getWidth();
+            height = texture->getHeight();
+            maxU = texture->getMaxU();
+            maxV = texture->getMaxV();
+            
+            // ---
+            
+            LOGI_IF(VERBOSE) <<
+            "TEXTURE UPLOADED: " <<
+            request.inputSource->getFilePathHint() << " | " <<
+            glId << " | " <<
+            width << "x" << height <<
+            memoryStats <<
+            endl;
+        }
+    }
+    
+    void Texture::resetTarget()
+    {
+        if (target)
+        {
+            auto previousTargetPointer = target.get();
+            auto previousGLId = glId;
+            
+            target.reset();
+            glId = 0;
+            
+            // ---
+            
+            string memoryStats;
+            
+            if (VERBOSE && TextureHelper::PROBE_MEMORY)
+            {
+                auto memoryInfo = getMemoryInfo();
+                const auto &memoryProbe = TextureHelper::probes[previousTargetPointer];
+                
+                auto delta = -memoryManager().compare(memoryProbe.memoryInfo[2], memoryInfo);
+                
+                memoryStats = " | " +
+                MemoryInfo::write(memoryProbe.memoryUsage) + ", " +
+                MemoryInfo::write(delta);
+            }
+            
+            LOGI_IF(VERBOSE) <<
+            "TEXTURE DISCARDED: " <<
+            previousGLId <<
+            memoryStats <<
+            endl;
+        }
     }
     
     void Texture::bind()
     {
-        glBindTexture(GL_TEXTURE_2D, id);
+        glBindTexture(GL_TEXTURE_2D, glId);
     }
     
     void Texture::begin()
@@ -78,7 +205,7 @@ namespace chronotext
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, id);
+        glBindTexture(GL_TEXTURE_2D, glId);
     }
     
     void Texture::end()
@@ -148,61 +275,5 @@ namespace chronotext
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
         glVertexPointer(2, GL_FLOAT, 0, vertices);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    }
-    
-    int Texture::getWidth() const
-    {
-        return width;
-    }
-    
-    int Texture::getHeight() const
-    {
-        return height;
-    }
-    
-    Vec2i Texture::getSize() const
-    {
-        return Vec2i(width, height);
-    }
-    
-    int Texture::getCleanWidth() const
-    {
-        return int(width * maxU);
-    }
-    
-    int Texture::getCleanHeight() const
-    {
-        return int(height * maxV);
-    }
-    
-    Vec2i Texture::getCleanSize() const
-    {
-        return Vec2i(width * maxU, height * maxV);
-    }
-    
-    float Texture::getMaxU() const
-    {
-        return maxU;
-    }
-    
-    float Texture::getMaxV() const
-    {
-        return maxV;
-    }
-    
-    Vec2f Texture::getMaxUV() const
-    {
-        return Vec2f(maxU, maxV);
-    }
-    
-    void Texture::setTarget(ci::gl::TextureRef texture)
-    {
-        target = texture;
-        
-        id = texture->getId();
-        width = texture->getWidth();
-        height = texture->getHeight();
-        maxU = texture->getMaxU();
-        maxV = texture->getMaxV();
     }
 }

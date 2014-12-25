@@ -1,7 +1,7 @@
 
 package org.chronotext.MobileTest;
 
-import org.chronotext.Utils;
+import org.chronotext.utils.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -52,6 +52,10 @@ public class MainActivity extends Activity
       super.onBackPressed();
     }
   }
+
+  /*
+   * THE FOLLOWING IS NOT MANDATORY (CURRENTLY USED FOR DEBUGGING PURPOSES)
+   */
 
   @Override
   protected void onStart()

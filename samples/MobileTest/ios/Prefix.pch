@@ -3,4 +3,6 @@
 	#import <Foundation/Foundation.h>
 #endif
 
-#define CHR_COMPLEX
+//#define DISCARD_LOGI
+//#define FORCE_LOGD
+//#define FORCE_SYSLOG

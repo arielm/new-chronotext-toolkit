@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,7 +11,7 @@
 #include "chronotext/InputSource.h"
 #include "chronotext/font/xf/Font.h"
 
-namespace chronotext
+namespace chr
 {
     namespace xf
     {
@@ -60,10 +60,10 @@ namespace chronotext
         {
             int width;
             int height;
-            uint32_t id;
-            InputSourceRef inputSource;
+            uint32_t glId;
+            InputSource::Ref inputSource;
             
-            FontTexture(FontAtlas *atlas, InputSourceRef inputSource);
+            FontTexture(FontAtlas *atlas, InputSource::Ref inputSource);
             ~FontTexture();
             
             void upload(FontAtlas *atlas);
@@ -78,10 +78,10 @@ namespace chronotext
         class FontManager
         {
         public:
-            std::shared_ptr<Font> getCachedFont(InputSourceRef inputSource, const Font::Properties &properties);
+            std::shared_ptr<Font> getCachedFont(InputSource::Ref inputSource, const Font::Properties &properties);
             
             void unload(std::shared_ptr<Font> font);
-            void unload(InputSourceRef inputSource);
+            void unload(InputSource::Ref inputSource);
             void unload();
             
             void discardTextures();
@@ -103,11 +103,9 @@ namespace chronotext
             std::vector<uint16_t> indices;
             
             void discardUnusedTextures();
-            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
+            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSource::Ref source);
             
             const std::vector<uint16_t>& getIndices(int capacity);
         };
     }
 }
-
-namespace chr = chronotext;

@@ -2,11 +2,12 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/zf/FontManager.h"
+#include "chronotext/system/SystemManager.h"
 #include "chronotext/utils/Utils.h"
 
 #include "cinder/gl/gl.h"
@@ -14,44 +15,24 @@
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
-        enum
-        {
-            PLATFORM_OSX,
-            PLATFORM_WINDOW,
-            PLATFORM_IOS,
-            PLATFORM_ANDROID
-        };
-        
-        const string PLATFORM_NAMES[4] = {"osx", "windows", "ios", "android"};
-        
         FontManager::FontManager()
         :
         ftHelper(make_shared<FreetypeHelper>()),
-        itemizer(langHelper),
+        langHelper(make_shared<LangHelper>()),
+        layoutCache(make_shared<LayoutCache>()),
+        itemizer(make_shared<TextItemizer>(langHelper)),
         hasDefaultFont(false)
-        {
-#if defined(CINDER_MAC)
-            platform = PLATFORM_OSX;
-#elif defined(CINDER_MSW)
-            platform = PLATFORM_WINDOW;
-#elif defined(CINDER_COCOA_TOUCH)
-            platform = PLATFORM_IOS;
-#elif defined(CINDER_ANDROID)
-            platform = PLATFORM_ANDROID;
-#else
-            assert(false);
-#endif
-        }
+        {}
         
-        void FontManager::loadConfig(InputSourceRef source)
+        void FontManager::loadConfig(InputSource::Ref source)
         {
             if (!globalMap.empty() || !aliases.empty() || hasDefaultFont)
             {
-                throw runtime_error("FONT-CONFIG ALREADY DEFINED");
+                throw EXCEPTION(FontManager, "FONT-CONFIG ALREADY DEFINED");
             }
             else
             {
@@ -98,7 +79,7 @@ namespace chronotext
                             {
                                 auto os = refElement->getAttributeValue<string>("os", "");
                                 
-                                if (os == PLATFORM_NAMES[platform])
+                                if (boost::iequals(os, system::platformName()))
                                 {
                                     auto uri = refElement->getAttributeValue<string>("uri", "");
                                     
@@ -187,10 +168,10 @@ namespace chronotext
             /*
              * SHOULD NOT OCCUR, UNLESS NO "DEFAULT FONT" IS DEFINED
              */
-            throw invalid_argument(string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
+            throw EXCEPTION(FontManager, string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
         }
         
-        shared_ptr<VirtualFont> FontManager::getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties)
+        shared_ptr<VirtualFont> FontManager::getCachedFont(InputSource::Ref source, const VirtualFont::Properties &properties)
         {
             auto key = make_pair(source->getURI(), properties);
             auto it = virtualFonts.find(key);
@@ -250,7 +231,7 @@ namespace chronotext
                     return font;
                 }
                 
-                throw invalid_argument("INVALID FONT-DEFINITION: " + source->getURI());
+                throw EXCEPTION(FontManager, "INVALID FONT-DEFINITION: " + source->getURI());
             }
         }
         
@@ -300,7 +281,7 @@ namespace chronotext
         
         void FontManager::unload()
         {
-            layoutCache.clear();
+            layoutCache->clear();
             
             for (auto &it : actualFonts)
             {
@@ -359,7 +340,7 @@ namespace chronotext
                     LOGD << e.what() << " - " << descriptor.source->getURI() << endl;
                 }
                 
-                return NULL;
+                return nullptr;
             }
         }
         

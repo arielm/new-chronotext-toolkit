@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -14,7 +14,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace chr;
 
 /*
  See http://www.microsoft.com/typography/otspec/name.htm for a list of some
@@ -47,7 +46,7 @@ static const FT_ULong SPACE_SEPARATORS[] =
 
 static const size_t SPACE_SEPARATORS_COUNT = sizeof(SPACE_SEPARATORS) / sizeof(FT_ULong);
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -131,13 +130,13 @@ namespace chronotext
                 
                 if (error)
                 {
-                    throw runtime_error("FREETYPE: ERROR " + toString(error));
+                    throw EXCEPTION(ActualFont, "FREETYPE: ERROR " + toString(error));
                 }
                 
                 if (force_ucs2_charmap(ftFace))
                 {
                     FT_Done_Face(ftFace); ftFace = nullptr;
-                    throw runtime_error("HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
+                    throw EXCEPTION(ActualFont, "HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
                 
                 // ---
@@ -255,7 +254,7 @@ namespace chronotext
             {
                 for (auto &texture : textures)
                 {
-                    if (!texture->id)
+                    if (!texture->glId)
                     {
                         texture->upload(GlyphData(ftFace, texture->codepoint, useMipmap, padding));
                     }
@@ -277,7 +276,7 @@ namespace chronotext
         
         ActualFont::Glyph* ActualFont::fillQuad(Quad &quad, const Shape &shape, const Vec2f &position, float sizeRatio)
         {
-            auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout HAVE BEEN PREVIOUSLY PRELOADED
+            auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout IS LOADED
             
             if (!glyph)
             {

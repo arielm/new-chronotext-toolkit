@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -15,20 +15,19 @@
 #include "cinder/Surface.h"
 #include "cinder/ImageIo.h"
 
-namespace chronotext
+namespace chr
 {
     struct TextureData
     {
-        typedef enum
+        enum Type
         {
+            TYPE_UNDEFINED,
             TYPE_SURFACE,
             TYPE_IMAGE_SOURCE,
             TYPE_PVR,
             TYPE_DATA
-        }
-        Type;
+        };
         
-        bool defined;
         Type type;
         TextureRequest request;
         
@@ -51,12 +50,11 @@ namespace chronotext
         
         TextureData()
         :
-        defined(false)
+        type(TYPE_UNDEFINED)
         {}
         
         TextureData(const TextureRequest &request, const ci::Surface &surface, float maxU = 1, float maxV = 1)
         :
-        defined(true),
         type(TYPE_SURFACE),
         request(request),
         surface(surface),
@@ -66,7 +64,6 @@ namespace chronotext
         
         TextureData(const TextureRequest &request, ci::ImageSourceRef imageSource)
         :
-        defined(true),
         type(TYPE_IMAGE_SOURCE),
         request(request),
         imageSource(imageSource)
@@ -74,7 +71,6 @@ namespace chronotext
         
         TextureData(const TextureRequest &request, const ci::Buffer &buffer)
         :
-        defined(true),
         type(TYPE_PVR),
         request(request),
         buffer(buffer)
@@ -82,7 +78,6 @@ namespace chronotext
         
         TextureData(const TextureRequest &request, std::shared_ptr<uint8_t> data, GLenum glInternalFormat, GLenum glFormat, int width, int height)
         :
-        defined(true),
         type(TYPE_DATA),
         request(request),
         data(data),
@@ -91,35 +86,5 @@ namespace chronotext
         width(width),
         height(height)
         {}
-        
-        bool undefined() const
-        {
-            return !defined;
-        }
-        
-        ci::Vec2i getSize() const
-        {
-            if (defined)
-            {
-                switch (type)
-                {
-                    case TextureData::TYPE_SURFACE:
-                        return surface.getSize();
-                        
-                    case TextureData::TYPE_IMAGE_SOURCE:
-                        return ci::Vec2i(imageSource->getWidth(), imageSource->getHeight());
-                        
-                    case TextureData::TYPE_PVR:
-                        return PVRHelper::getPVRTextureSize(buffer);
-                        
-                    case TextureData::TYPE_DATA:
-                        return ci::Vec2i(width, height);
-                }
-            }
-            
-            return ci::Vec2i::zero();
-        }
     };
 }
-
-namespace chr = chronotext;

@@ -2,18 +2,20 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
 #include "chronotext/font/zf/VirtualFont.h"
+#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/InputSource.h"
 
 #include "cinder/Xml.h"
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -21,9 +23,9 @@ namespace chronotext
         {
         public:
             std::shared_ptr<FreetypeHelper> ftHelper; // THE UNDERLYING FT_Library WILL BE DESTROYED AFTER ALL THE ActualFont INSTANCES
-            LangHelper langHelper;
-            LayoutCache layoutCache;
-            TextItemizer itemizer;
+            std::shared_ptr<LangHelper> langHelper;
+            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<TextItemizer> itemizer;
             
             FontManager();
             
@@ -34,7 +36,7 @@ namespace chronotext
              *
              * NOT MANDATORY, BUT SHOULD BE DEFINED ONLY ONCE
              */
-            void loadConfig(InputSourceRef source);
+            void loadConfig(InputSource::Ref source);
             
             /*
              * HIGHER-LEVEL METHOD, REQUIRING A FONT-CONFIG
@@ -56,7 +58,7 @@ namespace chronotext
             /*
              * LOWER-LEVEL METHOD, FOR ACCESSING A FONT DIRECTLY VIA ITS XML-DEFINITION
              */
-            std::shared_ptr<VirtualFont> getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties);
+            std::shared_ptr<VirtualFont> getCachedFont(InputSource::Ref source, const VirtualFont::Properties &properties);
             
             /*
              * CLEARS THE FONT RESOURCES (HARFBUZZ AND FREETYPE RELATED) AND DISCARDS THE GLYPH TEXTURES
@@ -92,8 +94,6 @@ namespace chronotext
             friend class VirtualFont;
             
         protected:
-            int platform;
-            
             bool hasDefaultFont;
             std::string defaultFontName;
             VirtualFont::Style defaultFontStyle;
@@ -116,5 +116,3 @@ namespace chronotext
         };
     }
 }
-
-namespace chr = chronotext;

@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,19 +11,19 @@
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
-    TextureRef TextureManager::getTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Ref TextureManager::getTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(InputSource::getResource(resourceName), useMipmap, flags);
     }
     
-    TextureRef TextureManager::getTexture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Ref TextureManager::getTexture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(TextureRequest(inputSource, useMipmap, flags));
     }
     
-    TextureRef TextureManager::getTexture(const TextureRequest &textureRequest)
+    Texture::Ref TextureManager::getTexture(const TextureRequest &textureRequest)
     {
         auto it = textures.find(textureRequest);
         
@@ -40,7 +40,7 @@ namespace chronotext
         }
     }
     
-    bool TextureManager::remove(TextureRef texture)
+    bool TextureManager::remove(Texture::Ref texture)
     {
         for (auto it = textures.begin(); it != textures.end(); ++it)
         {

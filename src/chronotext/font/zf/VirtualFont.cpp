@@ -2,19 +2,23 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/zf/VirtualFont.h"
 #include "chronotext/font/zf/FontManager.h"
+#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/TextItemizer.h"
+
+#include "cinder/gl/gl.h"
 
 #include "cinder/gl/gl.h"
 
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -193,7 +197,7 @@ namespace chronotext
         LineLayout* VirtualFont::createLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
         {
             TextLine line(text, langHint, overallDirection);
-            itemizer.processLine(line);
+            itemizer->processLine(line);
             return createLineLayout(line, boost::make_iterator_range(line.runs));
         }
         
@@ -225,11 +229,11 @@ namespace chronotext
                         averageCount++;
                         
                         run.apply(line.text, buffer);
-                        hb_shape(font->hbFont, buffer, NULL, 0);
+                        hb_shape(font->hbFont, buffer, nullptr, 0);
                         
                         auto glyphCount = hb_buffer_get_length(buffer);
-                        auto glyphInfos = hb_buffer_get_glyph_infos(buffer, NULL);
-                        auto glyphPositions = hb_buffer_get_glyph_positions(buffer, NULL);
+                        auto glyphInfos = hb_buffer_get_glyph_infos(buffer, nullptr);
+                        auto glyphPositions = hb_buffer_get_glyph_positions(buffer, nullptr);
                         
                         bool hasMissingGlyphs = false;
                         
@@ -307,7 +311,7 @@ namespace chronotext
         
         shared_ptr<LineLayout> VirtualFont::getCachedLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
         {
-            return layoutCache.getLineLayout(this, text, langHint, overallDirection);
+            return layoutCache->getLineLayout(this, text, langHint, overallDirection);
         }
         
         void VirtualFont::preload(LineLayout &layout)
@@ -320,7 +324,7 @@ namespace chronotext
                     
                     if (glyph && glyph->texture)
                     {
-                        glyph->texture->reload(); // JUST IN CASE THE GLYPH HAVE BEEN PREVIOUSLY DISCARDED
+                        glyph->texture->reload(); // JUST IN CASE THE GLYPH IS NOT LOADED
                     }
                 }
             }
@@ -328,7 +332,7 @@ namespace chronotext
         
         void VirtualFont::setSize(float size)
         {
-            this->size = size;
+            VirtualFont::size = size;
             sizeRatio = size / properties.baseSize;
         }
         
@@ -339,7 +343,7 @@ namespace chronotext
         
         void VirtualFont::setColor(const ColorA &color)
         {
-            this->color = color;
+            VirtualFont::color = color;
         }
         
         void VirtualFont::setColor(float r, float g, float b, float a)
@@ -352,7 +356,7 @@ namespace chronotext
         
         void VirtualFont::setClip(const Rectf &clipRect)
         {
-            this->clipRect = clipRect;
+            VirtualFont::clipRect = clipRect;
             hasClip = true;
         }
         
@@ -428,7 +432,7 @@ namespace chronotext
                 
                 if (sequence)
                 {
-                    this->sequence = sequence;
+                    VirtualFont::sequence = sequence;
                     sequence->begin(useColor, anisotropy);
                 }
                 

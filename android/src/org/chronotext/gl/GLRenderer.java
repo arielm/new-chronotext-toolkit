@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -14,7 +14,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.chronotext.gl.Touch;
-import org.chronotext.Utils;
+import org.chronotext.utils.Utils;
 
 import android.opengl.GLSurfaceView;
 import android.view.View;
@@ -59,7 +59,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
     /*
      * IT IS IMPERATIVE TO CALL glViewport() UPON EACH onSurfaceChanged()
-     * EVEN IF IT SEEMS THAT THE LATTER IS CALLED FAR TOO OFTEN BY THE SYSTEM
+     * EVEN IF IT SEEMS THAT THE LATTER IS CALLED TOO OFTEN BY THE SYSTEM
      * OTHERWISE: THE GLView WILL BE DEFORMED IN SOME SITUATIONS (E.G. RETURNING FROM SLEEP AFTER AN ORIENTATION CHANGE)
      */
 
@@ -83,18 +83,23 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
     {
       if (contextRenewalRequest)
       {
+        contextRenewalRequest = false;
         contextRenewed();
-        resizeRequest = true;
+
+        resizeRequest = true; // ALREADY TRUE IN PRINCIPLE
       }
 
       if (setupRequest)
       {
+        setupRequest = false;
         setup(gl, viewportWidth, viewportHeight);
+
         initialized = true;
       }
 
       if (resizeRequest)
       {
+        resizeRequest = false;
         resize(gl, viewportWidth, viewportHeight);
       }
 
@@ -122,9 +127,6 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
       }
     }
 
-    contextRenewalRequest = false;
-    setupRequest = false;
-    resizeRequest = false;
     startRequest = false;
   }
 

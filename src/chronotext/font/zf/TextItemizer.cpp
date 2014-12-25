@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -22,7 +22,7 @@
 
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -41,7 +41,7 @@ namespace chronotext
             return (direction == UBIDI_RTL) ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
         }
         
-        TextItemizer::TextItemizer(LangHelper &langHelper)
+        TextItemizer::TextItemizer(std::shared_ptr<LangHelper> langHelper)
         :
         langHelper(langHelper)
         {}
@@ -88,7 +88,7 @@ namespace chronotext
                 auto code = scriptRun.getScriptCode();
                 
                 auto script = icuScriptToHB(code);
-                auto language = langHelper.detectLanguage(script, line.langHint);
+                auto language = langHelper->detectLanguage(script, line.langHint);
                 
                 line.scriptAndLanguageItems.emplace_back(start, end, make_pair(script, language));
             }

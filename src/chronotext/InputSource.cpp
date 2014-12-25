@@ -2,11 +2,13 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/InputSource.h"
+#include "InputSource.h"
+
+#include "chronotext/system/FileHelper.h"
 
 #include "cinder/app/App.h"
 #include "cinder/Utilities.h"
@@ -14,16 +16,21 @@
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
-    InputSourceRef InputSource::getResource(const ci::fs::path &relativePath)
+    InputSource::InputSource(Type type)
+    :
+    type(type)
+    {}
+    
+    InputSource::Ref InputSource::getResource(const ci::fs::path &relativePath)
     {
         auto source = make_shared<InputSource>(TYPE_RESOURCE);
         source->relativePath = relativePath;
         source->filePathHint = relativePath.string();
         
 #if defined(CINDER_COCOA)
-        source->filePath = FileSystem::getResourcePath(relativePath);
+        source->filePath = FileHelper::getResourcePath(relativePath);
 #endif
         
         return source;
@@ -34,7 +41,7 @@ namespace chronotext
         return InputSource::getResource(relativePath)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
+    InputSource::Ref InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
     {
         auto source = make_shared<InputSource>(TYPE_RESOURCE_MSW);
         source->mswID = mswID;
@@ -49,7 +56,7 @@ namespace chronotext
         return InputSource::getResource(resourceName, mswID, mswType)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getAsset(const fs::path &relativePath)
+    InputSource::Ref InputSource::getAsset(const fs::path &relativePath)
     {
         auto source = make_shared<InputSource>(TYPE_ASSET);
         source->relativePath = relativePath;
@@ -58,7 +65,7 @@ namespace chronotext
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
         source->filePath = app::getAssetPath(relativePath);
 #elif defined(CINDER_COCOA_TOUCH)
-        source->filePath = FileSystem::getResourcePath("assets" / relativePath);
+        source->filePath = FileHelper::getResourcePath("assets" / relativePath);
 #endif
         
         return source;
@@ -74,7 +81,7 @@ namespace chronotext
      * THERE IS PROBABLY A BETTER WAY TO HANDLE THE PARSING,
      * BUT Boost.Regex IS CURRENTLY NOT AN OPTION ON COCOA
      */
-    InputSourceRef InputSource::get(const string &uri)
+    InputSource::Ref InputSource::get(const string &uri)
     {
         string scheme;
         string path;
@@ -137,7 +144,7 @@ namespace chronotext
             }
         }
         
-        throw Exception("INVALID URI: " + uri);
+        throw EXCEPTION(InputSource, "INVALID URI: " + uri);
     }
     
     DataSourceRef InputSource::load(const string &uri)
@@ -145,7 +152,7 @@ namespace chronotext
         return InputSource::get(uri)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFile(const fs::path &filePath)
+    InputSource::Ref InputSource::getFile(const fs::path &filePath)
     {
         auto source = make_shared<InputSource>(TYPE_FILE);
         source->filePath = filePath;
@@ -159,7 +166,7 @@ namespace chronotext
         return InputSource::getFile(filePath)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFileInDocuments(const fs::path &relativePath)
+    InputSource::Ref InputSource::getFileInDocuments(const fs::path &relativePath)
     {
         auto source = InputSource::getFile(getDocumentsDirectory() / relativePath);
         source->relativePath = relativePath;
@@ -178,26 +185,17 @@ namespace chronotext
         {
             case TYPE_RESOURCE:
             {
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), filePathHint.c_str(), AASSET_MODE_STREAMING);
+#if defined(CINDER_ANDROID)
+                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), filePathHint.data(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), filePathHint);
+                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), filePathHint);
                 }
                 else
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
-                }
-#elif defined(CINDER_ANDROID)
-                try
-                {
-                    return app::loadResource(filePathHint); // TODO: TEST IF IT REALLY THROWS UPON ERROR
-                }
-                catch (exception &e)
-                {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
                 }
 #else
                 if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
@@ -206,7 +204,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + relativePath.string());
                 }
 #endif
             }
@@ -219,7 +217,7 @@ namespace chronotext
                 }
                 catch (exception &e)
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
                 }
             }
                 
@@ -231,33 +229,24 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception("FILE NOT FOUND: " + filePath.string());
+                    throw EXCEPTION(InputSource, "FILE NOT FOUND: " + filePath.string());
                 }
             }
                 
             case TYPE_ASSET:
             {
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
+#if defined(CINDER_ANDROID)
                 string resourcePath = ("assets" / relativePath).string();
-                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
+                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.data(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), resourcePath);
+                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), resourcePath);
                 }
                 else
                 {
-                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
-                }
-#elif defined(CINDER_ANDROID)
-                try
-                {
-                    return app::loadResource(("assets" / relativePath).string()); // TODO: TEST IF IT REALLY THROWS UPON ERROR
-                }
-                catch (exception &e)
-                {
-                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + relativePath.string());
                 }
 #else
                 if (!filePath.empty() && fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
@@ -266,7 +255,7 @@ namespace chronotext
                 }
                 else
                 {
-                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + relativePath.string());
                 }
 #endif
             }
@@ -275,7 +264,7 @@ namespace chronotext
         return DataSourceRef();
     }
     
-    InputSourceRef InputSource::getSubSource(const fs::path &subPath)
+    InputSource::Ref InputSource::getSubSource(const fs::path &subPath)
     {
         if (type == TYPE_RESOURCE_MSW)
         {
@@ -298,7 +287,7 @@ namespace chronotext
             }
         }
         
-        return InputSourceRef();
+        return InputSource::Ref();
     }
     
     bool InputSource::isFile() const
@@ -338,6 +327,7 @@ namespace chronotext
         /*
          * COMPUTING THE VALUE ONLY ONCE ALLOWS FOR EFFICIENT USAGE IN std::map KEYS
          */
+        
         if (uri.empty())
         {
             switch (type)

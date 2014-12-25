@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -13,7 +13,7 @@
 
 #include <map>
 
-namespace chronotext
+namespace chr
 {
     typedef class xf::Font XFont;
 
@@ -26,7 +26,7 @@ namespace chronotext
         class Font
         {
         public:
-            typedef enum
+            enum Alignment
             {
                 ALIGN_MIDDLE,
                 ALIGN_LEFT,
@@ -34,8 +34,7 @@ namespace chronotext
                 ALIGN_TOP,
                 ALIGN_BASELINE,
                 ALIGN_BOTTOM
-            }
-            Alignment;
+            };
             
             struct Properties
             {
@@ -180,5 +179,3 @@ namespace chronotext
         };
     }
 }
-
-namespace chr = chronotext;

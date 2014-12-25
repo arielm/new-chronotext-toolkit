@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -15,7 +15,7 @@
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -23,7 +23,7 @@ namespace chronotext
         :
         font(font),
         codepoint(codepoint),
-        id(0)
+        glId(0)
         {
             upload(glyphData);
         }
@@ -35,7 +35,7 @@ namespace chronotext
         
         void FontTexture::upload(const GlyphData &glyphData)
         {
-            if (!id && glyphData.isValid())
+            if (!glId && glyphData.isValid())
             {
                 auto glyphWidth = glyphData.width;
                 auto glyphHeight = glyphData.height;
@@ -58,8 +58,8 @@ namespace chronotext
                 
                 // ---
                 
-                glGenTextures(1, &id);
-                glBindTexture(GL_TEXTURE_2D, id);
+                glGenTextures(1, &glId);
+                glBindTexture(GL_TEXTURE_2D, glId);
                 
                 if (useMipmap)
                 {
@@ -94,16 +94,16 @@ namespace chronotext
         
         void FontTexture::discard()
         {
-            if (id)
+            if (glId)
             {
-                glDeleteTextures(1, &id);
-                id = 0;
+                glDeleteTextures(1, &glId);
+                glId = 0;
             }
         }
         
         void FontTexture::reload()
         {
-            if (!id)
+            if (!glId)
             {
                 font->reloadTexture(this);
             }
@@ -112,26 +112,22 @@ namespace chronotext
         void FontTexture::bind()
         {
             reload();
-            glBindTexture(GL_TEXTURE_2D, id);
+            glBindTexture(GL_TEXTURE_2D, glId);
         }
         
         size_t FontTexture::getMemoryUsage() const
         {
-            if (id)
+            if (glId)
             {
                 if (useMipmap)
                 {
-                    return size_t(width * height * 1.333f);
+                    return width * height * 1.33;
                 }
-                else
-                {
-                    return width * height;
-                }
+
+                return width * height;
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
     }
 }

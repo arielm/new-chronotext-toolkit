@@ -2,31 +2,44 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 package org.chronotext.cinder;
 
 import org.chronotext.gl.GLView;
-import org.chronotext.Utils;
+import org.chronotext.utils.DisplayUtils;
+import org.chronotext.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 
 public class CinderDelegate extends Handler
 {
+  /*
+   * PARALLEL TO chronotext/cinder/CinderSketch/CinderDelegate.h
+   */
   public static final int ACTION_CAPTURE_BACK_KEY = 1;
   public static final int ACTION_RELEASE_BACK_KEY = 2;
 
   protected Activity mActivity;
   protected Handler mHandler;
-
+  
   protected CinderRenderer mRenderer;
   protected GLView mView;
+
   protected boolean mBackKeyCaptured;
 
   public CinderDelegate(Activity activity)
@@ -34,9 +47,10 @@ public class CinderDelegate extends Handler
     mActivity = activity;
     mHandler = this;
 
-    mRenderer = new CinderRenderer(activity, this);
-
+    mRenderer = new CinderRenderer();
     mView = new GLView(activity);
+
+    init(); // WILL CREATE THE C++ CinderDelegate
     mView.setRenderer(mRenderer); // WILL START THE RENDERER'S THREAD
   }
 
@@ -44,6 +58,16 @@ public class CinderDelegate extends Handler
   {
     this(activity);
     mHandler = handler;
+  }
+
+  public void init()
+  {
+    Display display = DisplayUtils.getDisplay(mActivity);
+    Point displaySize = DisplayUtils.getRealSize(display);
+    float displayDensity = DisplayUtils.getRealDensity(display);
+
+    Utils.LOGD("CinderDelegate.init: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+    init(mActivity, this, display, displaySize.x, displaySize.y, displayDensity);
   }
 
   public Activity getActivity()
@@ -128,7 +152,7 @@ public class CinderDelegate extends Handler
     }
   }
 
-  // ---------------------------------------- MESSAGING SYSTEM ----------------------------------------
+  // ---------------------------------------- SKETCH / DELEGATE COMMUNICATION ----------------------------------------
 
   /*
    * THIS IS RECEIVED ON THE RENDERER'S THREAD
@@ -167,4 +191,29 @@ public class CinderDelegate extends Handler
   {
     mView.sendMessage(what, body);
   }
+
+  // ---------------------------------------- QUERIES (TO BE CALLED FROM ANY THREAD ATTACHED TO JAVA) ----------------------------------------
+
+  public String getMemoryInfo()
+  {
+    MemoryInfo memoryInfo = new MemoryInfo();
+    ((ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryInfo(memoryInfo);
+
+    JSONObject json = new JSONObject();
+
+    try 
+    {
+      json.put("availMem", memoryInfo.availMem);
+      json.put("threshold", memoryInfo.threshold);
+      json.put("lowMemory", memoryInfo.lowMemory);
+    } 
+    catch (JSONException e) 
+    {}
+
+    return json.toString();
+  }
+
+  // ---------------------------------------- JNI ----------------------------------------
+
+  public native void init(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
 }

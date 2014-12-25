@@ -1,0 +1,10 @@
+#include "Config.xcconfig"
+
+GCC_OPTIMIZATION_LEVEL = 3
+GCC_GENERATE_DEBUGGING_SYMBOLS = NO
+GCC_FAST_MATH = YES
+STRIP_INSTALLED_PRODUCT = YES
+
+OTHER_LDFLAGS = -lz "$(CINDER_PATH)/lib/libcinder.a" "$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a" "$(CINDER_PATH)/blocks/hb-icu/lib/osx/libicu-common.a" "$(CINDER_PATH)/blocks/hb-icu/lib/osx/libhb.a"
+
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym

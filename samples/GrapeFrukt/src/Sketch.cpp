@@ -26,26 +26,19 @@ Sketch::Sketch(void *context, void *delegate)
 CinderSketch(context, delegate)
 {}
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload();
-    }
-    else
-    {
 #if defined(CINDER_COCOA_TOUCH)
-        /*
-         * ImageSourceFileStbImage IS NECESSARY IN ORDER TO SOLVE THE "PREMULTIPLIED PNG CURSE" ON iOS
-         * REQUIRES THE FOLLOWING "USER-DEFINED SETTING" IN THE iOS XCode PROJECT:
-         * IPHONE_OPTIMIZE_OPTIONS = "-skip-PNGs";
-         */
-        ImageIoRegistrar::registerSourceType("png", ImageSourceFileStbImage::createRef, 1);
+    /*
+     * ImageSourceFileStbImage IS NECESSARY IN ORDER TO SOLVE THE "PREMULTIPLIED PNG CURSE" ON iOS
+     * REQUIRES THE FOLLOWING "USER-DEFINED SETTING" IN THE iOS XCode PROJECT:
+     * IPHONE_OPTIMIZE_OPTIONS = "-skip-PNGs";
+     */
+    ImageIoRegistrar::registerSourceType("png", ImageSourceFileStbImage::createRef, 1);
 #endif
-        
-        auto atlas = make_shared<TextureAtlas>(textureManager, InputSource::getResource("MonocleMan.xml"), true);
-        animation = Animation(atlas, InputSource::getResource("sheets.xml"), InputSource::getResource("animations.xml"), FPS);
-    }
+    
+    auto atlas = make_shared<TextureAtlas>(textureManager, InputSource::getResource("MonocleMan.xml"), true);
+    animation = Animation(atlas, InputSource::getResource("sheets.xml"), InputSource::getResource("animations.xml"), FPS);
     
     // ---
     
@@ -54,16 +47,6 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            break;
-    }
 }
 
 void Sketch::draw()

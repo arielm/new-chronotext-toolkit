@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -18,6 +18,24 @@ NSString* kGLViewControllerPropertyStencilFormat = @"kGLViewControllerPropertySt
 NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMultisample";
 
 @interface GLViewController ()
+{
+    NSMutableDictionary *properties;
+    int interfaceOrientationMask;
+    
+    BOOL setupRequest;
+    
+    BOOL resizeRequest;
+    int viewportWidth;
+    int viewportHeight;
+
+    BOOL started;
+    BOOL startRequest;
+    int startReason;
+    
+    int ticks;
+    NSTimeInterval t0;
+    NSTimeInterval elapsed;
+}
 
 - (void) startWithReason:(int)reason;
 - (void) stopWithReason:(int)reason;
@@ -80,7 +98,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     [super loadView];
 
     glView = (GLKView*)self.view;
-    glView.context = [[[EAGLContext alloc] initWithAPI:[[properties objectForKey:kGLViewControllerPropertyRenderingAPI] intValue]] autorelease];
+    glView.context = [[[EAGLContext alloc] initWithAPI:(EAGLRenderingAPI)[[properties objectForKey:kGLViewControllerPropertyRenderingAPI] intValue]] autorelease];
     
     self.preferredFramesPerSecond = [[properties objectForKey:kGLViewControllerPropertyPreferredFramesPerSecond] intValue];
     self.view.multipleTouchEnabled = [[properties objectForKey:kGLViewControllerPropertyMultipleTouchEnabled] boolValue];
@@ -99,8 +117,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
      * MUST TAKE PLACE BEFORE SETUP
      */
     [EAGLContext setCurrentContext:glView.context];
-
+    
     [cinderDelegate setup];
+    resizeRequest = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -137,18 +156,14 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (!started)
     {
-        ticks = 0;
-
         /*
          * MUST TAKE PLACE BEFORE START AND DRAW
          */
         [EAGLContext setCurrentContext:glView.context];
         
-        /*
-         * MUST TAKE PLACE BEFORE DRAW
-         */
-        [cinderDelegate startWithReason:reason];
         started = YES;
+        startRequest = YES;
+        startReason = reason;
     }
 }
 
@@ -159,30 +174,52 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         NSLog(@"AVERAGE FRAME-RATE: %f FRAMES PER SECOND", ticks / elapsed);
         
         [cinderDelegate stopWithReason:reason];
+        
         started = NO;
     }
 }
 
 - (void) update
 {
-    NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
-    
-    if (ticks == 0)
+    if (started)
     {
-        t0 = now;
+        if (resizeRequest)
+        {
+            resizeRequest = NO;
+            [cinderDelegate resize];
+        }
+        
+        if (startRequest)
+        {
+            [cinderDelegate startWithReason:startReason];
+        }
+        
+        // ---
+        
+        NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
+        
+        if (startRequest)
+        {
+            t0 = now;
+        }
+        
+        ticks++;
+        elapsed = now - t0;
+        
+        // ---
+        
+        [cinderDelegate update];
     }
     
-    ticks++;
-    elapsed = now - t0;
-    
-    // ---
-    
-    [cinderDelegate update];
+    startRequest = NO;
 }
 
 - (void) glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
-    [cinderDelegate draw];
+    if (started)
+    {
+        [cinderDelegate draw];
+    }
 }
 
 /*
@@ -195,8 +232,23 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 #pragma mark ---------------------------------------- ORIENTATION ----------------------------------------
 
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    /*
+     * WHEN ROTATING FROM PORTRAIT TO LANDSCAPE (OR VICE-VERSA):
+     *
+     * - THIS IS NECESSARY, OTHERWISE SCREEN WILL BE DEFORMED
+     *
+     * - CURRENTLY, THERE IS STILL A SHORT "STRETCH ARTEFACT" DURING ROTATION:
+     *   A MINOR ISSUE WHICH WON'T AFFECT MOST OF THE APPS, WHICH ARE
+     *   SUPPOSED TO BE EITHER LANDSCAPE RIGHT/LEFT, OR PORTAIT BOTTOM/UP
+     */
+    resizeRequest = YES;
+}
+
 /*
  * IMPORTANT:
+ *
  * - SUPPORTED ORIENTATIONS SHOULD ALSO BE LISTED IN Info.plist
  * - THE APP WILL START USING THE 1ST ORIENTATION IN THE LIST (Item 0)
  */

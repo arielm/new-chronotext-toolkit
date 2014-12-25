@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -10,37 +10,39 @@
 
 #include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/font/zf/ActualFont.h"
-#include "chronotext/font/zf/LayoutCache.h"
-#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/font/zf/FontSequence.h"
+#include "chronotext/font/zf/LineLayout.h"
+#include "chronotext/font/zf/TextLine.h"
 
 #include <boost/range/iterator_range.hpp>
 
 #include <set>
 #include <map>
 
-namespace chronotext
+namespace chr
 {
     typedef class zf::VirtualFont ZFont;
 
     namespace zf
     {
         class FontManager;
+        class LayoutCache;
+        class TextItemizer;
+
         typedef std::vector<ActualFont*> FontSet;
         
         class VirtualFont
         {
         public:
-            typedef enum
+            enum Style
             {
                 STYLE_REGULAR,
                 STYLE_BOLD,
                 STYLE_ITALIC,
                 STYLE_BOLD_ITALIC
-            }
-            Style;
+            };
             
-            typedef enum
+            enum Alignment
             {
                 ALIGN_MIDDLE,
                 ALIGN_LEFT,
@@ -48,8 +50,7 @@ namespace chronotext
                 ALIGN_TOP,
                 ALIGN_BASELINE,
                 ALIGN_BOTTOM
-            }
-            Alignment;
+            };
             
             struct Properties
             {
@@ -94,8 +95,8 @@ namespace chronotext
                 return Properties(baseSize, true, true, 1024);
             }
             
-            LayoutCache &layoutCache;
-            TextItemizer &itemizer;
+            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<TextItemizer> itemizer;
             
             ActualFont::Metrics getMetrics(const Cluster &cluster) const; // RETURNS THE SIZED METRICS OF THE ActualFont USED BY cluster
             ActualFont::Metrics getMetrics(const std::string &lang = "") const; // RETURNS THE SIZED METRICS OF THE FIRST ActualFont IN THE SET USED FOR lang
@@ -198,5 +199,3 @@ namespace chronotext
         };
     }
 }
-
-namespace chr = chronotext;

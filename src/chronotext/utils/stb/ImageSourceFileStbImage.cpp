@@ -1,8 +1,3 @@
-/*
- * FROM SAFETYDANK'S FORK OF CINDER:
- * https://github.com/safetydank/Cinder/blob/cbd00824554251d5b5a803133d616b7f21d4b8d5/src/cinder/ImageSourceFileStbImage.cpp
- */
-
 #include "ImageSourceFileStbImage.h"
 #include "cinder/Utilities.h"
 
@@ -15,7 +10,7 @@ static int _Read(void *user, char *data, int size)
 	return stream->readDataAvailable(data, size);
 }
 
-static void _Skip(void *user, unsigned n)
+static void _Skip(void *user, int n)
 {
 	IStream* stream = static_cast<IStream*>(user);
     stream->seekRelative(n);
@@ -82,8 +77,14 @@ void ImageSourceFileStbImage::load( ImageTargetRef target )
 
 void ImageSourceFileStbImage::registerSelf()
 {
+#if defined(FORCE_STB_FOR_PNG_AND_JPG)
+    ImageIoRegistrar::registerSourceType("png", ImageSourceFileStbImage::createRef, 1);
+    ImageIoRegistrar::registerSourceType("jpg", ImageSourceFileStbImage::createRef, 1);
+    ImageIoRegistrar::registerSourceType("jpeg", ImageSourceFileStbImage::createRef, 1);
+#else
 	const int32_t SOURCE_PRIORITY = 3;
 	ImageIoRegistrar::registerSourceGeneric( ImageSourceFileStbImage::createRef, SOURCE_PRIORITY );
+#endif
 }
 
 ImageSourceFileStbImage::~ImageSourceFileStbImage()

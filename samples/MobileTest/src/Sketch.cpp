@@ -2,56 +2,39 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "Sketch.h"
 
-#include "chronotext/utils/Utils.h"
-#include "chronotext/utils/GLUtils.h"
-#include "chronotext/utils/MathUtils.h"
 #include "chronotext/font/xf/TextHelper.h"
+#include "chronotext/utils/GLUtils.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
 using namespace chr;
 using namespace chr::xf;
 
-const float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
-
-const float DOT_RADIUS = 22; // DP
-const float DOT_SCALE = 112; // DEPENDS ON IMAGE
+const float DOT_RADIUS_DP = 22;
+const float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 
 const float FONT_SIZE = 24; // DP
 const float PADDING = 20; // DP
 
-const int FINGERS_CAPACITY = 10;
 const float FINGERS_DISTANCE = 22; // DP
 
 const float FRICTION = 0.01f;
 const float DT = 1.0f;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
-    {
-        dot = textureManager.getTexture("dot_112.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
-
-        scale = getWindowInfo().density / REFERENCE_DENSITY;
-        particle = Particle(getWindowCenter(), scale * DOT_RADIUS);
-    }
+    dot = textureManager.getTexture(InputSource::getResource("dot_112.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
+    font = fontManager.getCachedFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
+    
+    scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
+    particle = Particle(getWindowCenter(), scale * DOT_RADIUS_DP);
     
     // ---
     
@@ -62,25 +45,74 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::event(int id)
+void Sketch::event(Event event)
 {
-    switch (id)
+    switch (event)
     {
         case EVENT_CONTEXT_LOST:
+        {
+            /*
+             * DISCARDING: FOR RELEASING GL NAMES
+             *
+             * AT THIS STAGE: GL MEMORY HAS ALREADY BEEN INVALIDATED
+             */
+            
             textureManager.discard();
+            fontManager.discardTextures();
+            
+            break;
+        }
+            
+        case EVENT_CONTEXT_RENEWED:
+        {
+            textureManager.reload(); // MANDATORY AFTER DISCARDING (FIXME)
+            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
+            
+            /*
+             * DEFAULT GL STATES MUST BE RESTORED AS WELL
+             */
+            
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask(GL_FALSE);
+            
+            break;
+        }
+            
+        case EVENT_MEMORY_WARNING:
+        {
+            /*
+             * DISCARDING: FOR RELEASING GL MEMORY
+             *
+             * IN ORDER TO AVOID "INTERFERENCES" WITH GL NAMES:
+             * RELOADING MUST TAKE PLACE ONLY AFTER EVERYTHING HAVE BEEN DISCARDED
+             */
+            
+            textureManager.discard();
+            fontManager.discardTextures();
+            
+            textureManager.reload(); // MANDATORY AFTER DISCARDING (FIXME)
+            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
+            
+            break;
+        }
+            
+        default:
             break;
     }
 }
 
-void Sketch::start(int flags)
+void Sketch::start(Reason reason)
 {
     acceleration = Vec2f::zero();
-	enableAccelerometer(15);
+    enableAccelerometer(15);
 }
 
-void Sketch::stop(int flags)
+void Sketch::stop(Reason reason)
 {
-	disableAccelerometer();
+    disableAccelerometer();
 }
 
 void Sketch::update()
@@ -96,23 +128,23 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
     
     gl::color(Color::gray(0.5f));
-    drawGrid(getWindowBounds(), scale * FINGERS_DISTANCE * 2, Vec2f(0, clock().getTime() * 60));
-
+    utils::gl::drawGrid(getWindowBounds(), scale * FINGERS_DISTANCE * 2, Vec2f(0, clock().getTime() * 60));
+    
     // ---
     
     drawDot(particle.position, particle.radius, ColorA(1, 0, 0, 1));
     
-    wstring text = utf8ToWstring(toString(int(clock().getTime())));
+    string text = toString(int(clock().getTime()));
     drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
 }
 
 void Sketch::drawDot(const Vec2f &position, float radius, const ColorA &color)
 {
     gl::color(color);
-
+    
     glPushMatrix();
     gl::translate(position);
-    gl::scale(2 * radius / DOT_SCALE);
+    gl::scale(radius / DOT_RADIUS_PIXELS);
     
     dot->begin();
     dot->drawFromCenter();
@@ -121,17 +153,17 @@ void Sketch::drawDot(const Vec2f &position, float radius, const ColorA &color)
     glPopMatrix();
 }
 
-void Sketch::drawText(const wstring &text, const Vec2f &position, XFont::Alignment alignX, XFont::Alignment alignY, float fontSize, const ColorA &color)
+void Sketch::drawText(const string &text, const Vec2f &position, XFont::Alignment alignX, XFont::Alignment alignY, float fontSize, const ColorA &color)
 {
     font->setColor(color);
     font->setSize(fontSize);
     
-    TextHelper::drawAlignedText(*font, text, position, alignX, alignY);
+    TextHelper::drawAlignedText(*font, utf8ToWstring(text), position, alignX, alignY);
 }
 
 void Sketch::accelerated(AccelEvent event)
 {
-    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y); // FIXME: TAKE IN COUNT DEVICE ORIENTATION ON iOS
+    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y);
 }
 
 void Sketch::accumulateForces()

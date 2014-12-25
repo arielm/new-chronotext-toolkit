@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -13,7 +13,7 @@
 #include <map>
 #include <memory>
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -23,6 +23,7 @@ namespace chronotext
             std::map<T*, std::unique_ptr<QuadBatch>> map;
             
             QuadBatchMap() {}
+            QuadBatchMap(const QuadBatchMap &other) = delete; // QuadBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
             
             void clear()
             {
@@ -78,11 +79,6 @@ namespace chronotext
                     it.second->flush(indices, useColor);
                 }
             }
-            
-        private:
-            QuadBatchMap(const QuadBatchMap &that); // MAKES IT EXPLICIT: QuadBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
         };
     }
 }
-
-namespace chr = chronotext;

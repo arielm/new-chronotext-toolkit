@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,7 +11,7 @@
 #include "chronotext/font/xf/Font.h"
 #include "chronotext/path/FollowablePath.h"
 
-namespace chronotext
+namespace chr
 {
     namespace xf
     {
@@ -28,11 +28,9 @@ namespace chronotext
             static inline void drawTextInRect(Font &font, const std::wstring &text, float x1, float y1, float x2, float y2) { drawTextInRect(font, text, ci::Rectf(x1, y1, x2, y2)); }
             
             static void drawTransformedText(Font &font, const std::wstring &text, float x = 0, float y = 0);
-            static void drawTransformedText(Font &font, const std::wstring &text, const ci::Vec2f &position) { drawTransformedText(font, text, position.x, position.y); }
+            static inline void drawTransformedText(Font &font, const std::wstring &text, const ci::Vec2f &position) { drawTransformedText(font, text, position.x, position.y); }
             
             static float drawTextOnPath(Font &font, const std::wstring &text, const FollowablePath &path, float offsetX = 0, float offsetY = 0);
         };
     }
 }
-
-namespace chr = chronotext;

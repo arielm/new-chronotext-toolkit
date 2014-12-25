@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,12 +11,12 @@
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     Sprite::Sprite()
     {}
     
-    Sprite::Sprite(TextureRef texture)
+    Sprite::Sprite(Texture::Ref texture)
     :
     texture(texture),
     ox(0),
@@ -31,7 +31,7 @@ namespace chronotext
         h = oh = texture->getCleanHeight();
     }
     
-    Sprite::Sprite(TextureRef texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2)
+    Sprite::Sprite(Texture::Ref texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2)
     :
     texture(texture),
     w(w),

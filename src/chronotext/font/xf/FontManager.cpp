@@ -2,20 +2,23 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/xf/FontManager.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Log.h"
+
+#include "cinder/gl/gl.h"
+
+#include <set>
 
 #include "cinder/gl/gl.h"
 
 using namespace ci;
 using namespace std;
-using namespace chr;
 
-namespace chronotext
+namespace chr
 {
     namespace xf
     {
@@ -77,11 +80,11 @@ namespace chronotext
         
         // ---
         
-        FontTexture::FontTexture(FontAtlas *atlas, InputSourceRef inputSource)
+        FontTexture::FontTexture(FontAtlas *atlas, InputSource::Ref inputSource)
         :
         width(atlas->width),
         height(atlas->height),
-        id(0),
+        glId(0),
         inputSource(inputSource)
         {
             upload(atlas);
@@ -97,10 +100,10 @@ namespace chronotext
             assert(width == atlas->width);
             assert(height == atlas->height);
             
-            if (!id)
+            if (!glId)
             {
-                glGenTextures(1, &id);
-                glBindTexture(GL_TEXTURE_2D, id);
+                glGenTextures(1, &glId);
+                glBindTexture(GL_TEXTURE_2D, glId);
                 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -120,7 +123,7 @@ namespace chronotext
                 LOGD <<
                 "FONT UPLOADED: " <<
                 inputSource->getFilePathHint() << " | " <<
-                id << " | " <<
+                glId << " | " <<
                 width << "x" << height  <<
                 endl;
             }
@@ -128,23 +131,23 @@ namespace chronotext
         
         void FontTexture::discard()
         {
-            if (id)
+            if (glId)
             {
                 LOGD <<
                 "FONT DISCARDED: " <<
-                id <<
+                glId <<
                 endl;
                 
                 // ---
                 
-                glDeleteTextures(1, &id);
-                id = 0;
+                glDeleteTextures(1, &glId);
+                glId = 0;
             }
         }
         
         void FontTexture::reload()
         {
-            if (!id)
+            if (!glId)
             {
                 FontData *data;
                 FontAtlas *atlas;
@@ -160,24 +163,22 @@ namespace chronotext
         void FontTexture::bind()
         {
             reload();
-            glBindTexture(GL_TEXTURE_2D, id);
+            glBindTexture(GL_TEXTURE_2D, glId);
         }
         
         size_t FontTexture::getMemoryUsage() const
         {
-            if (id)
+            if (glId)
             {
-                return size_t(width * height * 1.333f);
+                return width * height * 1.33;
             }
-            else
-            {
-                return 0;
-            }
+            
+            return 0;
         }
         
         // ---
         
-        std::shared_ptr<Font> FontManager::getCachedFont(InputSourceRef inputSource, const Font::Properties &properties)
+        std::shared_ptr<Font> FontManager::getCachedFont(InputSource::Ref inputSource, const Font::Properties &properties)
         {
             auto uri = inputSource->getURI();
             
@@ -231,7 +232,7 @@ namespace chronotext
             discardUnusedTextures();
         }
         
-        void FontManager::unload(InputSourceRef inputSource)
+        void FontManager::unload(InputSource::Ref inputSource)
         {
             for (auto it = fonts.begin(); it != fonts.end();)
             {
@@ -319,7 +320,7 @@ namespace chronotext
             }
         }
         
-        std::pair<FontData*, FontAtlas*> FontManager::fetchFontDataAndAtlas(InputSourceRef source)
+        std::pair<FontData*, FontAtlas*> FontManager::fetchFontDataAndAtlas(InputSource::Ref source)
         {
             auto in = source->loadDataSource()->createStream(); // CAN THROW
             
@@ -328,7 +329,7 @@ namespace chronotext
             
             if (version != "XFONT.004")
             {
-                throw runtime_error("Font: WRONG FORMAT");
+                throw EXCEPTION(xf::FontManager, "WRONG FORMAT");
             }
             
             // ---

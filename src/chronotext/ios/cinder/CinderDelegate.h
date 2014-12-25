@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -14,8 +14,6 @@
 #include "chronotext/cinder/CinderSketch.h"
 
 #import "chronotext/cocoa/utils/NSString+JSON.h"
-
-#include <map>
 
 @class GLKView;
 @class GLViewController;
@@ -33,51 +31,32 @@ enum
     GLKView *view;
     GLViewController *viewController;
     chr::CinderSketch *sketch;
-    
-    std::map<UITouch*, uint32_t> touchIdMap;
-
-    float accelFilterFactor;
-    ci::Vec3f lastAccel, lastRawAccel;
-    
-    std::shared_ptr<boost::asio::io_service> io;
-    std::shared_ptr<boost::asio::io_service::work> ioWork;
-    
-    chr::WindowInfo windowInfo;
-    
-    ci::Timer timer;
-    uint32_t frameCount;
-    
-    BOOL initialized;
-    BOOL active;
 }
 
 @property (nonatomic, assign) GLKView *view;
 @property (nonatomic, assign) GLViewController *viewController;
-@property (nonatomic, assign) chr::CinderSketch *sketch;
-@property (nonatomic, assign) float accelFilterFactor;
-@property (nonatomic, readonly) std::shared_ptr<boost::asio::io_service> &io;
+@property (nonatomic, readonly) chr::CinderSketch *sketch;
+@property (nonatomic, assign) AccelEvent::Filter accelFilter;
+@property (nonatomic, readonly) chr::DisplayInfo displayInfo;
 @property (nonatomic, readonly) chr::WindowInfo windowInfo;
-@property (nonatomic, readonly) double elapsedSeconds;
-@property (nonatomic, readonly) uint32_t elapsedFrames;
 @property (nonatomic, readonly) BOOL initialized;
 @property (nonatomic, readonly) BOOL active;
+@property (nonatomic, readonly) double elapsedSeconds;
+@property (nonatomic, readonly) uint32_t elapsedFrames;
+@property (nonatomic, readonly) BOOL emulated;
 
 - (void) startWithReason:(int)reason;
 - (void) stopWithReason:(int)reason;
 
 - (void) setup;
+- (void) resize;
 - (void) update;
 - (void) draw;
 
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
-
-- (uint32_t) addTouchToMap:(UITouch*)touch;
-- (void) removeTouchFromMap:(UITouch*)touch;
-- (uint32_t) findTouchInMap:(UITouch*)touch;
-- (void) updateActiveTouches;
+- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
 
 - (void) action:(int)actionId;
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body;

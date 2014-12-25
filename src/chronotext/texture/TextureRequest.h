@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -12,19 +12,18 @@
 
 #include "cinder/gl/Texture.h"
 
-namespace chronotext
+namespace chr
 {
     struct TextureRequest
     {
-        typedef enum
+        enum Flags
         {
             FLAGS_NONE = 0,
             FLAGS_TRANSLUCENT = 1,
             FLAGS_POT = 2
-        }
-        Flags;
+        };
         
-        InputSourceRef inputSource;
+        InputSource::Ref inputSource;
         bool useMipmap;
         Flags flags;
         GLenum wrapS;
@@ -32,9 +31,14 @@ namespace chronotext
         ci::Vec2i maxSize;
         
         TextureRequest()
+        :
+        useMipmap(false),
+        flags(FLAGS_NONE),
+        wrapS(0),
+        wrapT(0)
         {}
         
-        TextureRequest(InputSourceRef inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
+        TextureRequest(InputSource::Ref inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
         :
         inputSource(inputSource),
         useMipmap(useMipmap),
@@ -75,14 +79,17 @@ namespace chronotext
         {
             if (std::tie(useMipmap, flags, wrapS, wrapT) == std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT))
             {
-                return (inputSource->getURI() < rhs.inputSource->getURI());
+                if (inputSource && rhs.inputSource)
+                {
+                    return (inputSource->getURI() < rhs.inputSource->getURI());
+                }
             }
             else
             {
                 return std::tie(useMipmap, flags, wrapS, wrapT) < std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT);
             }
+            
+            return false;
         }
     };
 }
-
-namespace chr = chronotext;
