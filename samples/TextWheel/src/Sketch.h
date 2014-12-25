@@ -7,7 +7,7 @@
  */
 
 /*
- * IN SYNC WITH ResRework BRANCH / COMMIT e3a7c9e
+ * IN SYNC WITH ResRework BRANCH / COMMIT 9231444
  */
 
 /*
@@ -25,7 +25,10 @@
  *
  * INSTRUCTIONS:
  *
- * PRESS THE RIGHT OR LEFT KEYS TO SWITCH BETWEEN LANGUAGES
+ * 1) PRESS THE RIGHT OR LEFT KEYS TO SWITCH BETWEEN LANGUAGES
+ *
+ * 2) PRESS U TO "UNLOAD" THE FONT-MANAGER:
+ *    - FROM THIS POINT: RESOURCES WILL BE RELOADED AND TEXTURES RECREATED ONLY WHEN NECESSARY
  *
  *
  * ADDITIONAL REQUIREMENTS:
@@ -65,6 +68,8 @@
 class Sketch : public chr::CinderSketch
 {
 public:
+    chr::zf::FontManager fontManager;
+
     Sketch()
     :
     CinderSketch()
@@ -80,8 +85,6 @@ public:
     void previousVersion();
     
 protected:
-    chr::zf::FontManager fontManager;
-    
     std::shared_ptr<chr::ZFont> font;
     TextSpiral spiral;
     

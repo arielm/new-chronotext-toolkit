@@ -39,5 +39,9 @@ void Application::keyDown(KeyEvent event)
         case KeyEvent::KEY_LEFT:
             target->previousVersion();
             break;
+        
+        case KeyEvent::KEY_u:
+            target->fontManager.unload();
+            break;
     }
 }
