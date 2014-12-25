@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/sound/AudioLoopImplMsw.h"
+#include "AudioLoopImplMsw.h"
 
 #define SAMPLE_RATE (44100)
 #define FRAMES_PER_BUFFER (512)

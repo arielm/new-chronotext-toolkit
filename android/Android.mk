@@ -61,7 +61,7 @@ ifdef CHR_USE_XFONT
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/TextHelper.cpp
 endif
 
-ifdef CHR_USE_INCUBATOR_SOUND
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/sound/Effect.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/incubator/sound/SoundEngine.cpp
+ifdef CHR_USE_FMOD_SOUND
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/sound/Effect.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/sound/SoundEngine.cpp
 endif

@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/sound/AudioLoopImplCocoa.h"
+#include "AudioLoopImplCocoa.h"
 
 #if TARGET_OS_IPHONE
 #define AUDIO_UNIT_COMPONENT_SUB_TYPE kAudioUnitSubType_RemoteIO
