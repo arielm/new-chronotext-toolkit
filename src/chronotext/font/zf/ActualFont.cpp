@@ -112,7 +112,7 @@ namespace chr
             }
         }
         
-        void ActualFont::reload()
+        bool ActualFont::reload()
         {
             if (!loaded)
             {
@@ -215,8 +215,11 @@ namespace chr
                 // ---
                 
                 loaded = true;
+                
                 LOGD << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
             }
+            
+            return loaded;
         }
         
         void ActualFont::unload()
@@ -224,6 +227,7 @@ namespace chr
             if (loaded)
             {
                 loaded = false;
+                
                 LOGD << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
                 
                 discardTextures();
@@ -248,9 +252,7 @@ namespace chr
         
         void ActualFont::reloadTextures()
         {
-            reload();
-            
-            if (loaded)
+            if (reload())
             {
                 for (auto &texture : textures)
                 {
@@ -307,9 +309,7 @@ namespace chr
         {
             Glyph *glyph = nullptr;
             
-            reload();
-            
-            if (loaded)
+            if (reload())
             {
                 auto entry = glyphs.find(codepoint);
                 
@@ -357,9 +357,7 @@ namespace chr
         
         void ActualFont::reloadTexture(FontTexture *texture)
         {
-            reload();
-            
-            if (loaded)
+            if (reload())
             {
                 texture->upload(GlyphData(ftFace, texture->codepoint, useMipmap, padding));
             }

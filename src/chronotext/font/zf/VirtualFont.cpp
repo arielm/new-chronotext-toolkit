@@ -215,9 +215,7 @@ namespace chr
                 
                 for (auto &font : getFontSet(run.language))
                 {
-                    font->reload();
-                    
-                    if (font->loaded)
+                    if (font->reload())
                     {
                         layout->maxHeight = std::max(layout->maxHeight, font->metrics.height);
                         layout->maxAscent = std::max(layout->maxAscent, font->metrics.ascent);

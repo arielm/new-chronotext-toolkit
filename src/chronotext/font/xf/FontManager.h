@@ -68,7 +68,7 @@ namespace chr
             
             void upload(FontAtlas *atlas);
             void discard();
-            void reload();
+            bool reload();
             void bind();
             
             size_t getMemoryUsage() const;

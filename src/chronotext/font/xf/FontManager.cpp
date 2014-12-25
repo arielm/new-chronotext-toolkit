@@ -145,7 +145,7 @@ namespace chr
             }
         }
         
-        void FontTexture::reload()
+        bool FontTexture::reload()
         {
             if (!glId)
             {
@@ -158,6 +158,8 @@ namespace chr
                 upload(atlas);
                 delete atlas;
             }
+            
+            return glId;
         }
         
         void FontTexture::bind()

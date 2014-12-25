@@ -156,7 +156,7 @@ namespace chr
             
             ActualFont(std::shared_ptr<FreetypeHelper> ftHelper, const Descriptor &descriptor, float baseSize, bool useMipmap);
             
-            void reload();
+            bool reload();
             void unload();
             void discardTextures();
             void reloadTextures();
