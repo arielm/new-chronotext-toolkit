@@ -49,7 +49,7 @@ namespace chr
                 
                 Properties& setCapacity(int slotCapacity)
 				{
-                    this->slotCapacity = slotCapacity;
+                    Properties::slotCapacity = slotCapacity;
                     return *this;
                 }
                 

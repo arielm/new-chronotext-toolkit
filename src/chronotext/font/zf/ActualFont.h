@@ -35,6 +35,11 @@ namespace chr
                 bool forceMemoryLoad;
                 
                 Descriptor()
+                :
+                source(InputSource::Ref()),
+                faceIndex(0),
+                scale(1),
+                forceMemoryLoad(false)
                 {}
                 
                 Descriptor(InputSource::Ref source, int faceIndex = 0, float scale = 1, bool forceMemoryLoad = false)
@@ -45,9 +50,9 @@ namespace chr
                 forceMemoryLoad(forceMemoryLoad)
                 {}
                 
-                bool empty()
+                bool undefined() const
                 {
-                    return !bool(source);
+                    return !source || source->undefined();
                 }
             };
             

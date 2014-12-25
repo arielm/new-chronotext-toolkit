@@ -322,6 +322,11 @@ namespace chr
         filePathHint = hint;
     }
     
+    bool InputSource::undefined() const
+    {
+        return type == TYPE_UNDEFINED;
+    }
+    
     string InputSource::getURI()
     {
         /*

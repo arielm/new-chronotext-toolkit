@@ -193,7 +193,7 @@ namespace chr
     
     void FollowablePath::setMode(Mode mode)
     {
-        this->mode = mode;
+        FollowablePath::mode = mode;
     }
     
     FollowablePath::Mode FollowablePath::getMode() const

@@ -85,6 +85,7 @@ namespace chr
         std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
 
+        bool undefined() const;
         std::string getURI();
 
     protected:
