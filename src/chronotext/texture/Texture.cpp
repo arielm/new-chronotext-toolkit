@@ -52,23 +52,14 @@ namespace chr
         resetTarget();
     }
     
-    void Texture::reload()
+    bool Texture::reload()
     {
         if (!target)
         {
             setTarget(TextureHelper::loadTexture(request));
         }
-    }
-    
-    TextureData Texture::fetchTextureData()
-    {
-        return TextureHelper::fetchTextureData(request);
-    }
-    
-    void Texture::uploadTextureData(const TextureData &textureData)
-    {
-        request = textureData.request;
-        setTarget(TextureHelper::uploadTextureData(textureData));
+        
+        return bool(target);
     }
     
     int Texture::getWidth() const
@@ -164,8 +155,8 @@ namespace chr
     {
         if (target)
         {
-            auto previousTargetPointer = target.get();
-            auto previousGLId = glId;
+            auto previousKey = target.get();
+            auto previousId = glId;
             
             target.reset();
             glId = 0;
@@ -177,7 +168,7 @@ namespace chr
             if (VERBOSE && TextureHelper::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
-                const auto &memoryProbe = TextureHelper::probes[previousTargetPointer];
+                const auto &memoryProbe = TextureHelper::probes[previousKey];
                 
                 auto delta = -memoryManager().compare(memoryProbe.memoryInfo[2], memoryInfo);
                 
@@ -188,7 +179,7 @@ namespace chr
             
             LOGI_IF(VERBOSE) <<
             "TEXTURE DISCARDED: " <<
-            previousGLId <<
+            previousId <<
             memoryStats <<
             endl;
         }

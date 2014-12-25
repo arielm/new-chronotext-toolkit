@@ -90,7 +90,6 @@ namespace chr
             /*
              * RETURNS THE MEMORY USED BY ALL THE GLYPH TEXTURE-ATLASES
              * CURRENTLY: "ALPHA" TEXTURES ARE USED (ONE BYTE PER PIXEL)
-             * NOTE THAT THE GPU MAY DECIDE TO USE MORE MEMORY INTERNALLY
              */
             size_t getTextureMemoryUsage() const;
             

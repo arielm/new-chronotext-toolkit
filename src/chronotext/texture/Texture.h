@@ -30,10 +30,7 @@ namespace chr
         ~Texture();
         
         void discard();
-        void reload();
-        
-        TextureData fetchTextureData();
-        void uploadTextureData(const TextureData &textureData);
+        bool reload();
         
         int getWidth() const;
         int getHeight() const;

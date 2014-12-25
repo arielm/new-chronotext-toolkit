@@ -34,7 +34,7 @@ namespace chr
             
             void upload(const GlyphData &glyphData);
             void discard();
-            void reload();
+            bool reload();
             void bind();
             
             size_t getMemoryUsage() const;

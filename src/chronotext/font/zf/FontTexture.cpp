@@ -101,12 +101,14 @@ namespace chr
             }
         }
         
-        void FontTexture::reload()
+        bool FontTexture::reload()
         {
             if (!glId)
             {
                 font->reloadTexture(this);
             }
+            
+            return glId;
         }
         
         void FontTexture::bind()

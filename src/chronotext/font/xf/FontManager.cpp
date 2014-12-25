@@ -13,8 +13,6 @@
 
 #include <set>
 
-#include "cinder/gl/gl.h"
-
 using namespace ci;
 using namespace std;
 

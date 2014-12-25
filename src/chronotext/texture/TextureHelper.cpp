@@ -173,11 +173,11 @@ namespace chr
     
     void TextureHelper::textureDeallocator(void *refcon)
     {
-        gl::Texture *texture = reinterpret_cast<gl::Texture*>(refcon);
+        auto key = reinterpret_cast<gl::Texture*>(refcon);
         
         if (PROBE_MEMORY)
         {
-            probes[texture].memoryInfo[2] = getMemoryInfo();
+            probes[key].memoryInfo[2] = getMemoryInfo();
         }
     }
     
