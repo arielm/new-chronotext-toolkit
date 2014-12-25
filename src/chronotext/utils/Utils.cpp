@@ -54,7 +54,7 @@ namespace chr
     string loadString<string>(InputSource::Ref source)
     {
         Buffer buffer(source->loadDataSource());
-        return static_cast<const char*>(buffer.getData());
+        return string(static_cast<const char*>(buffer.getData()), buffer.getDataSize());
     }
     
     template <>
@@ -114,13 +114,13 @@ namespace chr
         return string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
     }
     
-    void writeTextFile(const fs::path &filePath, const string &text)
+    void writeTextFile(const fs::path &filePath, const string &text) // TODO: (RE)TEST
     {
         fs::ofstream out(filePath);
         out << text;
     }
     
-    void writeXmlFile(const fs::path &filePath, const XmlTree &tree)
+    void writeXmlFile(const fs::path &filePath, const XmlTree &tree) // TODO: (RE)TEST
     {
         fs::ofstream out(filePath);
         out << *tree.createRapidXmlDoc(true);
@@ -150,7 +150,7 @@ namespace chr
         const char *abbrevs[] = { "TB", "GB", "MB", "KB" };
         const size_t numAbbrevs = sizeof(abbrevs) / sizeof(abbrevs[0]);
         
-        uint64_t maximum = pow(1024, numAbbrevs);
+        uint64_t maximum = pow(1024, numAbbrevs); // XXX
         
         for (size_t i = 0; i < numAbbrevs; ++i)
         {
