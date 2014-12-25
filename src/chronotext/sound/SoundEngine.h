@@ -125,11 +125,12 @@ namespace chr
         
         Effect::Ref getEffect(const Effect::Request &request);
         
-        int playEffect(int uniqueId, int loopCount = 0, float volume = 1);
+        int playEffect(Effect::Ref effect, int loopCount = 0, float volume = 1);
+        bool stopEffects(Effect::Ref effect);
+
         bool pauseEffect(int playingId);
         bool resumeEffect(int playingId);
         bool stopEffect(int playingId);
-        bool stopEffects(int uniqueId);
         bool stopAllEffects();
         
         bool isMute();

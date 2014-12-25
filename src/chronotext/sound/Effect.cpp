@@ -24,7 +24,7 @@ namespace chr
     sound(sound)
     {
         LOGI_IF(VERBOSE) <<
-        "EFFECT LOADED: " <<
+        "EFFECT CREATED: " <<
         request.inputSource->getFilePathHint() << " | " <<
         getDuration() << "s | " <<
         prettyBytes(getMemoryUsage()) <<
@@ -39,7 +39,7 @@ namespace chr
         // ---
         
         LOGI_IF(VERBOSE) <<
-        "EFFECT UNLOADED: " <<
+        "EFFECT DESTROYED: " <<
         request.inputSource->getFilePathHint() <<
         endl;
     }

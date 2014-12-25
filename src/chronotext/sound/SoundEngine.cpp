@@ -128,8 +128,8 @@ namespace chr
         
         if (element != effects.end())
         {
-            stopEffects(element->second->uniqueId);
-            effects.erase(element); // TODO INSTEAD: "DISCARD" EFFECT
+            stopEffects(element->second);
+            effects.erase(element); // TODO: "DISCARD" EFFECT INSTEAD
             
             return true;
         }
@@ -149,46 +149,72 @@ namespace chr
         return nullptr;
     }
     
-    int SoundEngine::playEffect(int uniqueId, int loopCount, float volume)
+    int SoundEngine::playEffect(Effect::Ref effect, int loopCount, float volume)
     {
-        for (auto &element : effects)
+        if (effect)
         {
-            if (element.second->uniqueId == uniqueId)
+            FMOD::Channel *channel;
+            system->playSound(FMOD_CHANNEL_FREE, effect->sound, true, &channel);
+            
+            if (loopCount)
             {
-                auto effect = element.second;
-                
-                FMOD::Channel *channel;
-                system->playSound(FMOD_CHANNEL_FREE, effect->sound, true, &channel);
-                
-                if (loopCount)
-                {
-                    channel->setLoopCount(loopCount);
-                    channel->setMode(FMOD_LOOP_NORMAL);
-                }
-                else
-                {
-                    channel->setMode(FMOD_LOOP_OFF);
-                }
-                
-                channel->setVolume(volume);
-                channel->setPaused(false);
-                
-                // ---
-                
-                int channelId;
-                channel->getIndex(&channelId);
-                
-                interruptChannel(channelId);
-                
-                int playingId = ++playCount;
-                playingEffects[playingId] = make_pair(channelId, uniqueId);
-                
-                dispatchEvent(Event(EVENT_STARTED, effect, channelId, playingId));
-                return playingId;
+                channel->setLoopCount(loopCount);
+                channel->setMode(FMOD_LOOP_NORMAL);
             }
+            else
+            {
+                channel->setMode(FMOD_LOOP_OFF);
+            }
+            
+            if (volume == 1)
+            {
+                channel->setVolume(effect->request.volume);
+            }
+            else
+            {
+                channel->setVolume(volume);
+            }
+            
+            channel->setPaused(false);
+            
+            // ---
+            
+            int channelId;
+            channel->getIndex(&channelId);
+            
+            interruptChannel(channelId);
+            
+            int playingId = ++playCount;
+            playingEffects[playingId] = make_pair(channelId, effect->uniqueId);
+            
+            dispatchEvent(Event(EVENT_STARTED, effect, channelId, playingId));
+            return playingId;
         }
         
         return 0;
+    }
+    
+    bool SoundEngine::stopEffects(Effect::Ref effect)
+    {
+        vector<int> playingIdsToStop;
+        
+        if (effect)
+        {
+            for (auto &element : playingEffects)
+            {
+                if (element.second.second == effect->uniqueId)
+                {
+                    playingIdsToStop.push_back(element.first);
+                }
+            }
+            
+            for (auto playingId : playingIdsToStop)
+            {
+                stopEffect(playingId);
+            }
+        }
+        
+        return (!playingIdsToStop.empty());
     }
     
     bool SoundEngine::pauseEffect(int playingId)
@@ -243,26 +269,6 @@ namespace chr
         }
         
         return false;
-    }
-    
-    bool SoundEngine::stopEffects(int uniqueId)
-    {
-        vector<int> playingIdsToStop;
-        
-        for (auto &element : playingEffects)
-        {
-            if (element.second.second == uniqueId)
-            {
-                playingIdsToStop.push_back(element.first);
-            }
-        }
-        
-        for (auto playingId : playingIdsToStop)
-        {
-            stopEffect(playingId);
-        }
-        
-        return (!playingIdsToStop.empty());
     }
     
     bool SoundEngine::stopAllEffects()
@@ -324,6 +330,8 @@ namespace chr
     
     Effect* SoundEngine::loadEffect(const Effect::Request &request)
     {
+        assert(!effects.count(request));
+        
         FMOD_RESULT result = FMOD_ERR_UNINITIALIZED;
         FMOD::Sound *sound = nullptr;
         
