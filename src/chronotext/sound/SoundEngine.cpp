@@ -74,7 +74,7 @@ namespace chr
             {
                 auto playingId = element.first;
                 auto channelId = element.second.first;
-                auto effectId = element.second.second;
+                auto uniqueId = element.second.second;
                 
                 FMOD::Channel *channel;
                 system->getChannel(channelId, &channel);
@@ -84,7 +84,7 @@ namespace chr
                 
                 if (!playing)
                 {
-                    completedEvents.emplace_back(createEvent(EVENT_COMPLETED, effectId, channelId, playingId));
+                    completedEvents.emplace_back(createEvent(EVENT_COMPLETED, uniqueId, channelId, playingId));
                 }
             }
             
@@ -106,65 +106,54 @@ namespace chr
         listeners.erase(listener);
     }
     
-    Effect::Ref SoundEngine::preloadEffect(InputSource::Ref inputSource)
+    Effect::Ref SoundEngine::preloadEffect(const Effect::Request &request)
     {
-        if (inputSource)
-        {
-            auto element = effects.find(inputSource->getURI());
-            
-            if (element == effects.end())
-            {
-                auto effect = Effect::Ref(loadEffect(inputSource)); // CAN THROW
-                effects[inputSource->getURI()] = effect;
-                return effect;
-            }
-            else
-            {
-                return element->second;
-            }
-        }
+        auto element = effects.find(request);
         
-        throw EXCEPTION(SoundEngine, "INVALID INPUT-SOURCE");
+        if (element == effects.end())
+        {
+            auto effect = Effect::Ref(loadEffect(request)); // CAN THROW
+            effects[request] = effect;
+            return effect;
+        }
+        else
+        {
+            return element->second;
+        }
     }
     
-    bool SoundEngine::unloadEffect(InputSource::Ref inputSource)
+    bool SoundEngine::unloadEffect(const Effect::Request &request)
     {
-        if (inputSource)
+        auto element = effects.find(request);
+        
+        if (element != effects.end())
         {
-            auto element = effects.find(inputSource->getURI());
+            stopEffects(element->second->uniqueId);
+            effects.erase(element); // TODO INSTEAD: "DISCARD" EFFECT
             
-            if (element != effects.end())
-            {
-                stopEffects(element->second->getId());
-                effects.erase(element);
-                
-                return true;
-            }
+            return true;
         }
         
         return false;
     }
     
-    Effect* SoundEngine::getEffect(InputSource::Ref inputSource)
+    Effect::Ref SoundEngine::getEffect(const Effect::Request &request)
     {
-        if (inputSource)
+        auto element = effects.find(request);
+        
+        if (element != effects.end())
         {
-            auto element = effects.find(inputSource->getURI());
-            
-            if (element != effects.end())
-            {
-                return element->second.get();
-            }
+            return element->second;
         }
         
         return nullptr;
     }
     
-    int SoundEngine::playEffect(int effectId, int loopCount, float volume)
+    int SoundEngine::playEffect(int uniqueId, int loopCount, float volume)
     {
         for (auto &element : effects)
         {
-            if (element.second->effectId == effectId)
+            if (element.second->uniqueId == uniqueId)
             {
                 auto effect = element.second;
                 
@@ -192,7 +181,7 @@ namespace chr
                 interruptChannel(channelId);
                 
                 int playingId = ++playCount;
-                playingEffects[playingId] = make_pair(channelId, effectId);
+                playingEffects[playingId] = make_pair(channelId, uniqueId);
                 
                 dispatchEvent(Event(EVENT_STARTED, effect, channelId, playingId));
                 return playingId;
@@ -241,14 +230,14 @@ namespace chr
         if (element != playingEffects.end())
         {
             auto channelId = element->second.first;
-            auto effectId = element->second.second;
+            auto uniqueId = element->second.second;
             
             FMOD::Channel *channel;
             system->getChannel(channelId, &channel);
             channel->stop();
             
             playingEffects.erase(element);
-            dispatchEvent(createEvent(EVENT_STOPPED, effectId, channelId, playingId));
+            dispatchEvent(createEvent(EVENT_STOPPED, uniqueId, channelId, playingId));
             
             return true;
         }
@@ -256,13 +245,13 @@ namespace chr
         return false;
     }
     
-    bool SoundEngine::stopEffects(int effectId)
+    bool SoundEngine::stopEffects(int uniqueId)
     {
         vector<int> playingIdsToStop;
         
         for (auto &element : playingEffects)
         {
-            if (element.second.second == effectId)
+            if (element.second.second == uniqueId)
             {
                 playingIdsToStop.push_back(element.first);
             }
@@ -333,20 +322,16 @@ namespace chr
         }
     }
     
-    Effect* SoundEngine::loadEffect(InputSource::Ref inputSource)
+    Effect* SoundEngine::loadEffect(const Effect::Request &request)
     {
         FMOD_RESULT result = FMOD_ERR_UNINITIALIZED;
         FMOD::Sound *sound = nullptr;
         
         if (system)
         {
-            if (inputSource->isFile())
+            if (request.forceMemoryLoad || !request.inputSource->isFile())
             {
-                result = system->createSound(inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
-            }
-            else
-            {
-                auto buffer = inputSource->loadDataSource()->getBuffer();
+                auto buffer = request.inputSource->loadDataSource()->getBuffer();
                 
                 FMOD_CREATESOUNDEXINFO exinfo;
                 memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
@@ -355,6 +340,10 @@ namespace chr
                 
                 result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
             }
+            else
+            {
+                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
+            }
         }
         
         if (result)
@@ -362,7 +351,7 @@ namespace chr
             throw EXCEPTION(SoundEngine, FMOD_ErrorString(result));
         }
         
-        return new Effect(inputSource, ++effectCount, sound);
+        return new Effect(request, ++effectCount, sound);
     }
     
     bool SoundEngine::interruptChannel(int channelId)
@@ -372,10 +361,10 @@ namespace chr
             if (element.second.first == channelId)
             {
                 auto playingId = element.first;
-                auto effectId = element.second.second;
+                auto uniqueId = element.second.second;
                 
                 playingEffects.erase(playingId);
-                dispatchEvent(createEvent(EVENT_INTERRUPTED, effectId, channelId, playingId));
+                dispatchEvent(createEvent(EVENT_INTERRUPTED, uniqueId, channelId, playingId));
                 
                 return true;
             }
@@ -384,11 +373,11 @@ namespace chr
         return false;
     }
     
-    SoundEngine::Event SoundEngine::createEvent(Type type, int effectId, int channelId, int playingId)
+    SoundEngine::Event SoundEngine::createEvent(Type type, int uniqueId, int channelId, int playingId)
     {
         for (auto &element : effects)
         {
-            if (element.second->effectId == effectId)
+            if (element.second->uniqueId == uniqueId)
             {
                 return Event(type, element.second, channelId, playingId);
             }

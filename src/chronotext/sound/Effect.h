@@ -17,16 +17,35 @@ namespace chr
     class Effect
     {
     public:
+        static bool VERBOSE;
+        
         typedef std::shared_ptr<Effect> Ref;
         
-        chr::InputSource::Ref inputSource;
-        uint32_t effectId;
+        struct Request
+        {
+            InputSource::Ref inputSource;
+            float volume;
+            bool forceMemoryLoad;
+            
+            Request(InputSource::Ref inputSource, float volume = 1, bool forceMemoryLoad = false)
+            :
+            inputSource(inputSource),
+            volume(volume),
+            forceMemoryLoad(forceMemoryLoad)
+            {}
+            
+            bool operator<(const Request &rhs) const
+            {
+                return (inputSource->getURI() < rhs.inputSource->getURI());
+            }
+        };
+        
+        Request request;
+        int uniqueId;
         FMOD::Sound *sound;
         
-        Effect(InputSource::Ref inputSource, uint32_t effectId, FMOD::Sound *sound);
+        Effect(const Request &request, int uniqueId, FMOD::Sound *sound);
         ~Effect();
-        
-        uint32_t getId() const;
         
         double getDuration();
         size_t getMemoryUsage();

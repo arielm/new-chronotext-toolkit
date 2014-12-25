@@ -52,7 +52,7 @@ namespace chr
                 
                 bool undefined() const
                 {
-                    return !source || source->undefined();
+                    return source->undefined();
                 }
             };
             

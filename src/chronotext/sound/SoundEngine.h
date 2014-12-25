@@ -66,7 +66,7 @@ namespace chr
                     case EVENT_COMPLETED:
                     return "COMPLETED";
                     
-                    case EVENT_UNDEFINED:
+                    default:
                     return "";
                 }
             }
@@ -75,7 +75,7 @@ namespace chr
             {
                 lhs <<
                 "EFFECT " << rhs.description() << ": " <<
-                rhs.effect->inputSource->getFilePathHint() <<
+                rhs.effect->request.inputSource->getFilePathHint() <<
                 " | CHANNEL: " << rhs.channelId <<
                 " | ID: " << rhs.playingId;
                 
@@ -120,19 +120,16 @@ namespace chr
          */
         void update();
         
-        Effect::Ref preloadEffect(InputSource::Ref inputSource); // CAN THROW
-        bool unloadEffect(InputSource::Ref inputSource);
+        Effect::Ref preloadEffect(const Effect::Request &request); // CAN THROW
+        bool unloadEffect(const Effect::Request &request);
         
-        /*
-         * THE RETURNED POINTER IS NOT INTENDED FOR STORAGE
-         */
-        Effect* getEffect(InputSource::Ref inputSource);
+        Effect::Ref getEffect(const Effect::Request &request);
         
-        int playEffect(int effectId, int loopCount = 0, float volume = 1);
+        int playEffect(int uniqueId, int loopCount = 0, float volume = 1);
         bool pauseEffect(int playingId);
         bool resumeEffect(int playingId);
         bool stopEffect(int playingId);
-        bool stopEffects(int effectId);
+        bool stopEffects(int uniqueId);
         bool stopAllEffects();
         
         bool isMute();
@@ -141,8 +138,8 @@ namespace chr
         float getVolume();
         void setVolume(float volume);
         
-        protected:
-        std::map<std::string, Effect::Ref> effects;
+    protected:
+        std::map<Effect::Request, Effect::Ref> effects;
         std::map<int, std::pair<int, int>> playingEffects;
         
         int playCount;
@@ -150,10 +147,11 @@ namespace chr
         
         std::set<Listener*> listeners;
         
-        Effect* loadEffect(InputSource::Ref inputSource);
+        Effect* loadEffect(const Effect::Request &request);
+        
         bool interruptChannel(int channelId);
         
-        Event createEvent(Type type, int effectId, int channelId, int playingId);
+        Event createEvent(Type type, int uniqueId, int channelId, int playingId);
         void dispatchEvent(const Event &event);
     };
 }

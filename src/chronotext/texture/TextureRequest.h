@@ -32,6 +32,7 @@ namespace chr
         
         TextureRequest()
         :
+        inputSource(InputSource::Ref()),
         useMipmap(false),
         flags(FLAGS_NONE),
         wrapS(0),
@@ -79,17 +80,12 @@ namespace chr
         {
             if (std::tie(useMipmap, flags, wrapS, wrapT) == std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT))
             {
-                if (inputSource && rhs.inputSource)
-                {
-                    return (inputSource->getURI() < rhs.inputSource->getURI());
-                }
+                return (inputSource->getURI() < rhs.inputSource->getURI());
             }
             else
             {
                 return std::tie(useMipmap, flags, wrapS, wrapT) < std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT);
             }
-            
-            return false;
         }
     };
 }

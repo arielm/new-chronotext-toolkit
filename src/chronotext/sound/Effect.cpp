@@ -15,15 +15,17 @@ using namespace std;
 
 namespace chr
 {
-    Effect::Effect(InputSource::Ref inputSource, uint32_t effectId, FMOD::Sound *sound)
+    bool Effect::VERBOSE = true; // XXX
+    
+    Effect::Effect(const Request &request, int uniqueId, FMOD::Sound *sound)
     :
-    inputSource(inputSource),
-    effectId(effectId),
+    request(request),
+    uniqueId(uniqueId),
     sound(sound)
     {
-        LOGD <<
+        LOGI_IF(VERBOSE) <<
         "EFFECT LOADED: " <<
-        inputSource->getFilePathHint() << " | " <<
+        request.inputSource->getFilePathHint() << " | " <<
         getDuration() << "s | " <<
         prettyBytes(getMemoryUsage()) <<
         endl;
@@ -36,15 +38,10 @@ namespace chr
         
         // ---
         
-        LOGD <<
+        LOGI_IF(VERBOSE) <<
         "EFFECT UNLOADED: " <<
-        inputSource->getFilePathHint() <<
+        request.inputSource->getFilePathHint() <<
         endl;
-    }
-    
-    uint32_t Effect::getId() const
-    {
-        return effectId;
     }
     
     double Effect::getDuration()
@@ -65,7 +62,7 @@ namespace chr
         if (sound)
         {
             unsigned int memoryused;
-            sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr);
+            sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr); // FIXME: NOT ALWAYS ACCURATE (ACCORDING TO DATA PRINTED BY DEBUG-VERSION OF FMOD...)
             
             return memoryused;
         }
