@@ -60,7 +60,7 @@ namespace chr
         float maxU;
         float maxV;
         
-        void setTarget(ci::gl::TextureRef texture);
+        void setTarget(ci::gl::TextureRef target);
         void resetTarget();
     };
 }

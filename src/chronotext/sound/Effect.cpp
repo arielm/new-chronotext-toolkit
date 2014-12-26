@@ -21,27 +21,14 @@ namespace chr
     :
     request(request),
     uniqueId(uniqueId),
-    sound(sound)
+    sound(nullptr)
     {
-        LOGI_IF(VERBOSE) <<
-        "EFFECT CREATED: " <<
-        request.inputSource->getFilePathHint() << " | " <<
-        getDuration() << "s | " <<
-        prettyBytes(getMemoryUsage()) <<
-        endl;
+        setSound(sound);
     }
     
     Effect::~Effect()
     {
-        sound->release();
-        sound = nullptr;
-        
-        // ---
-        
-        LOGI_IF(VERBOSE) <<
-        "EFFECT DESTROYED: " <<
-        request.inputSource->getFilePathHint() <<
-        endl;
+        resetSound();
     }
     
     double Effect::getDuration()
@@ -68,5 +55,38 @@ namespace chr
         }
         
         return 0;
+    }
+    
+    void Effect::setSound(FMOD::Sound *sound)
+    {
+        if (!Effect::sound)
+        {
+            Effect::sound = sound;
+            
+            // ---
+            
+            LOGI_IF(VERBOSE) <<
+            "EFFECT CREATED: " <<
+            request.inputSource->getFilePathHint() << " | " <<
+            getDuration() << "s | " <<
+            prettyBytes(getMemoryUsage()) <<
+            endl;
+        }
+    }
+    
+    void Effect::resetSound()
+    {
+        if (sound)
+        {
+            sound->release();
+            sound = nullptr;
+            
+            // ---
+            
+            LOGI_IF(VERBOSE) <<
+            "EFFECT DESTROYED: " <<
+            request.inputSource->getFilePathHint() <<
+            endl;
+        }
     }
 }

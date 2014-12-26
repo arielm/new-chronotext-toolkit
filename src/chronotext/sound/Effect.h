@@ -14,6 +14,8 @@
 
 namespace chr
 {
+    class SoundEngine;
+    
     class Effect
     {
     public:
@@ -49,5 +51,11 @@ namespace chr
         
         double getDuration();
         size_t getMemoryUsage();
+        
+    protected:
+        friend SoundEngine;
+        
+        void setSound(FMOD::Sound *sound);
+        void resetSound();
     };
 }

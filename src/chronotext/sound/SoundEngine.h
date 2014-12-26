@@ -115,23 +115,26 @@ namespace chr
         
         /*
          * IT IS MANDATORY TO CALL UPDATE EACH FRAME,
-         * OTHERWISE (AND AMONG OTHER THINGS):
-         * CHANNELS WON'T BE FREED UPON COMPLETION
+         * OTHERWISE (AND AMONG OTHER THINGS): CHANNELS WON'T BE FREED UPON COMPLETION
          */
         void update();
         
-        Effect::Ref preloadEffect(const Effect::Request &request); // CAN THROW
-        bool unloadEffect(const Effect::Request &request);
-        
-        Effect::Ref getEffect(const Effect::Request &request);
-        
-        int playEffect(Effect::Ref effect, int loopCount = 0, float volume = 1);
-        bool stopEffects(Effect::Ref effect);
+        Effect::Ref getEffect(const Effect::Request &request); // CAN THROW
+
+        void discardEffect(Effect::Ref effect);
+        void discardEffects();
+
+        bool reloadEffect(Effect::Ref effect); // CAN THROW
+        void reloadEffects(); // CAN THROW
+
+        void stopEffect(Effect::Ref effect);
+        void stopEffects();
+
+        int playEffect(Effect::Ref effect, int loopCount = 0, float volume = 1); // CAN THROW
 
         bool pauseEffect(int playingId);
         bool resumeEffect(int playingId);
         bool stopEffect(int playingId);
-        bool stopAllEffects();
         
         bool isMute();
         void setMute(bool mute);
@@ -148,11 +151,11 @@ namespace chr
         
         std::set<Listener*> listeners;
         
-        Effect* loadEffect(const Effect::Request &request);
-        
         bool interruptChannel(int channelId);
         
         Event createEvent(Type type, int uniqueId, int channelId, int playingId);
         void dispatchEvent(const Event &event);
+        
+        FMOD::Sound* createSound(const Effect::Request &request); // CAN THROW
     };
 }

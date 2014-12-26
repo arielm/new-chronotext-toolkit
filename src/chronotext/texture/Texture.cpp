@@ -107,12 +107,12 @@ namespace chr
         return Vec2f(maxU, maxV);
     }
     
-    void Texture::setTarget(ci::gl::TextureRef texture)
+    void Texture::setTarget(ci::gl::TextureRef target)
     {
-        if (!target)
+        if (!Texture::target)
         {
-            target = texture;
-            glId = texture->getId();
+            Texture::target = target;
+            glId = target->getId();
             
             // ---
             
@@ -121,7 +121,7 @@ namespace chr
             if (VERBOSE && TextureHelper::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
-                const auto &memoryProbe = TextureHelper::probes[texture.get()];
+                const auto &memoryProbe = TextureHelper::probes[target.get()];
                 
                 auto delta1 = memoryManager().compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
                 auto delta2 = memoryManager().compare(memoryProbe.memoryInfo[1], memoryInfo);
@@ -134,10 +134,10 @@ namespace chr
             
             // ---
             
-            width = texture->getWidth();
-            height = texture->getHeight();
-            maxU = texture->getMaxU();
-            maxV = texture->getMaxV();
+            width = target->getWidth();
+            height = target->getHeight();
+            maxU = target->getMaxU();
+            maxV = target->getMaxV();
             
             // ---
             
@@ -155,8 +155,8 @@ namespace chr
     {
         if (target)
         {
-            auto previousKey = target.get();
-            auto previousId = glId;
+            auto previousTarget = target.get();
+            auto previousGLId = glId;
             
             target.reset();
             glId = 0;
@@ -168,7 +168,7 @@ namespace chr
             if (VERBOSE && TextureHelper::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
-                const auto &memoryProbe = TextureHelper::probes[previousKey];
+                const auto &memoryProbe = TextureHelper::probes[previousTarget];
                 
                 auto delta = -memoryManager().compare(memoryProbe.memoryInfo[2], memoryInfo);
                 
@@ -179,7 +179,7 @@ namespace chr
             
             LOGI_IF(VERBOSE) <<
             "TEXTURE DISCARDED: " <<
-            previousId <<
+            previousGLId <<
             memoryStats <<
             endl;
         }

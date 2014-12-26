@@ -38,6 +38,11 @@ namespace chr
     {
         if (system)
         {
+            discardEffects();
+            
+            effects.clear();
+            playingEffects.clear();
+            
             system->close();
             system->release();
             system = nullptr;
@@ -106,13 +111,15 @@ namespace chr
         listeners.erase(listener);
     }
     
-    Effect::Ref SoundEngine::preloadEffect(const Effect::Request &request)
+    Effect::Ref SoundEngine::getEffect(const Effect::Request &request)
     {
         auto element = effects.find(request);
         
         if (element == effects.end())
         {
-            auto effect = Effect::Ref(loadEffect(request)); // CAN THROW
+            auto sound = createSound(request); // CALLED BEFORE effectCount IS INCREMENTED BECAUSE IT CAN THROW
+            
+            auto effect = make_shared<Effect>(request, ++effectCount, sound);
             effects[request] = effect;
             return effect;
         }
@@ -122,36 +129,85 @@ namespace chr
         }
     }
     
-    bool SoundEngine::unloadEffect(const Effect::Request &request)
+    void SoundEngine::discardEffect(Effect::Ref effect)
     {
-        auto element = effects.find(request);
-        
-        if (element != effects.end())
+        if (effect)
         {
-            stopEffects(element->second);
-            effects.erase(element); // TODO: "DISCARD" EFFECT INSTEAD
+            stopEffect(effect);
+            effect->resetSound();
+        }
+    }
+    
+    void SoundEngine::discardEffects()
+    {
+        for (auto &element : effects)
+        {
+            discardEffect(element.second);
+        }
+    }
+    
+    bool SoundEngine::reloadEffect(Effect::Ref effect)
+    {
+        if (effect)
+        {
+            if (!effect->sound)
+            {
+                effect->setSound(createSound(effect->request));
+            }
             
-            return true;
+            return effect->sound;
         }
         
         return false;
     }
     
-    Effect::Ref SoundEngine::getEffect(const Effect::Request &request)
+    void SoundEngine::reloadEffects()
     {
-        auto element = effects.find(request);
-        
-        if (element != effects.end())
+        for (auto &element : effects)
         {
-            return element->second;
+            reloadEffect(element.second);
+        }
+    }
+    
+    void SoundEngine::stopEffect(Effect::Ref effect)
+    {
+        if (effect)
+        {
+            vector<int> playingIdsToStop;
+
+            for (auto &element : playingEffects)
+            {
+                if (element.second.second == effect->uniqueId)
+                {
+                    playingIdsToStop.push_back(element.first);
+                }
+            }
+            
+            for (auto playingId : playingIdsToStop)
+            {
+                stopEffect(playingId);
+            }
+        }
+    }
+    
+    void SoundEngine::stopEffects()
+    {
+        vector<int> playingIdsToStop;
+        
+        for (auto &element : playingEffects)
+        {
+            playingIdsToStop.push_back(element.first);
         }
         
-        return nullptr;
+        for (auto &playingId : playingIdsToStop)
+        {
+            stopEffect(playingId);
+        }
     }
     
     int SoundEngine::playEffect(Effect::Ref effect, int loopCount, float volume)
     {
-        if (effect)
+        if (reloadEffect(effect))
         {
             FMOD::Channel *channel;
             system->playSound(FMOD_CHANNEL_FREE, effect->sound, true, &channel);
@@ -192,29 +248,6 @@ namespace chr
         }
         
         return 0;
-    }
-    
-    bool SoundEngine::stopEffects(Effect::Ref effect)
-    {
-        vector<int> playingIdsToStop;
-        
-        if (effect)
-        {
-            for (auto &element : playingEffects)
-            {
-                if (element.second.second == effect->uniqueId)
-                {
-                    playingIdsToStop.push_back(element.first);
-                }
-            }
-            
-            for (auto playingId : playingIdsToStop)
-            {
-                stopEffect(playingId);
-            }
-        }
-        
-        return (!playingIdsToStop.empty());
     }
     
     bool SoundEngine::pauseEffect(int playingId)
@@ -271,23 +304,6 @@ namespace chr
         return false;
     }
     
-    bool SoundEngine::stopAllEffects()
-    {
-        vector<int> playingIdsToStop;
-        
-        for (auto &element : playingEffects)
-        {
-            playingIdsToStop.push_back(element.first);
-        }
-        
-        for (auto &playingId : playingIdsToStop)
-        {
-            stopEffect(playingId);
-        }
-        
-        return (!playingIdsToStop.empty());
-    }
-    
     void SoundEngine::setMute(bool mute)
     {
         if (system)
@@ -326,40 +342,6 @@ namespace chr
         {
             masterGroup->setVolume(volume);
         }
-    }
-    
-    Effect* SoundEngine::loadEffect(const Effect::Request &request)
-    {
-        assert(!effects.count(request));
-        
-        FMOD_RESULT result = FMOD_ERR_UNINITIALIZED;
-        FMOD::Sound *sound = nullptr;
-        
-        if (system)
-        {
-            if (request.forceMemoryLoad || !request.inputSource->isFile())
-            {
-                auto buffer = request.inputSource->loadDataSource()->getBuffer();
-                
-                FMOD_CREATESOUNDEXINFO exinfo;
-                memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
-                exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
-                exinfo.length = buffer.getDataSize();
-                
-                result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
-            }
-            else
-            {
-                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
-            }
-        }
-        
-        if (result)
-        {
-            throw EXCEPTION(SoundEngine, FMOD_ErrorString(result));
-        }
-        
-        return new Effect(request, ++effectCount, sound);
     }
     
     bool SoundEngine::interruptChannel(int channelId)
@@ -403,5 +385,37 @@ namespace chr
                 listener->handleEvent(event);
             }
         }
+    }
+    
+    FMOD::Sound* SoundEngine::createSound(const Effect::Request &request)
+    {
+        FMOD_RESULT result = FMOD_ERR_UNINITIALIZED;
+        FMOD::Sound *sound = nullptr;
+        
+        if (system)
+        {
+            if (request.forceMemoryLoad || !request.inputSource->isFile())
+            {
+                auto buffer = request.inputSource->loadDataSource()->getBuffer();
+                
+                FMOD_CREATESOUNDEXINFO exinfo;
+                memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
+                exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
+                exinfo.length = buffer.getDataSize();
+                
+                result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
+            }
+            else
+            {
+                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
+            }
+        }
+        
+        if (result)
+        {
+            throw EXCEPTION(SoundEngine, FMOD_ErrorString(result));
+        }
+        
+        return sound;
     }
 }
