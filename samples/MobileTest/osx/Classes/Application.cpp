@@ -44,8 +44,8 @@ void Application::keyDown(KeyEvent event)
             quit();
             break;
         
-        case KeyEvent::KEY_d:
-            target->textureManager.discardTextures();
+        case KeyEvent::KEY_w:
+            target->event(CinderSketch::EVENT_MEMORY_WARNING);
             break;
     }
 }
