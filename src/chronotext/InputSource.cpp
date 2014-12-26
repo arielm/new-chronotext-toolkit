@@ -18,6 +18,8 @@ using namespace ci;
 
 namespace chr
 {
+    const string InputSource::EMPTY = "";
+    
     InputSource::InputSource(Type type)
     :
     type(type)
@@ -186,7 +188,7 @@ namespace chr
             case TYPE_RESOURCE:
             {
 #if defined(CINDER_ANDROID)
-                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), filePathHint.data(), AASSET_MODE_STREAMING);
+                auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), filePathHint.data(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
@@ -236,8 +238,8 @@ namespace chr
             case TYPE_ASSET:
             {
 #if defined(CINDER_ANDROID)
-                string resourcePath = ("assets" / relativePath).string();
-                AAsset* asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.data(), AASSET_MODE_STREAMING);
+                auto resourcePath = ("assets" / relativePath).string();
+                auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.data(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
@@ -261,7 +263,7 @@ namespace chr
             }
         }
         
-        return DataSourceRef();
+        return nullptr;
     }
     
     InputSource::Ref InputSource::getSubSource(const fs::path &subPath)
@@ -287,7 +289,7 @@ namespace chr
             }
         }
         
-        return InputSource::Ref();
+        return nullptr;
     }
     
     bool InputSource::isFile() const
@@ -322,13 +324,18 @@ namespace chr
         filePathHint = hint;
     }
     
-    bool InputSource::undefined() const
+    bool InputSource::isValid() const
     {
-        return type == TYPE_UNDEFINED;
+        return (this) && (type != TYPE_UNDEFINED); // INCLUDES EXTRA-CARE FOR NON-INITIALIZED InputSource::Refs
     }
     
-    string InputSource::getURI()
+    const string& InputSource::getURI()
     {
+        if (!this)
+        {
+            return EMPTY; // EXTRA-CARE FOR NON-INITIALIZED InputSource::Refs
+        }
+        
         /*
          * COMPUTING THE VALUE ONLY ONCE ALLOWS FOR EFFICIENT USAGE IN std::map KEYS
          */

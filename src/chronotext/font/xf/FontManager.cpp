@@ -180,7 +180,7 @@ namespace chr
         
         std::shared_ptr<Font> FontManager::getCachedFont(InputSource::Ref inputSource, const Font::Properties &properties)
         {
-            auto uri = inputSource->getURI();
+            const auto &uri = inputSource->getURI();
             
             auto key = make_pair(uri, properties);
             auto it1 = fonts.find(key);
@@ -189,33 +189,31 @@ namespace chr
             {
                 return it1->second;
             }
+            
+            FontData *data;
+            FontTexture *texture;
+            auto it2 = fontDataAndTextures.find(uri);
+            
+            if (it2 == fontDataAndTextures.end())
+            {
+                FontAtlas *atlas;
+                tie(data, atlas) = fetchFontDataAndAtlas(inputSource); // CAN THROW
+                
+                texture = new FontTexture(atlas, inputSource);
+                delete atlas;
+                
+                fontDataAndTextures[uri] = make_pair(unique_ptr<FontData>(data), unique_ptr<FontTexture>(texture));
+            }
             else
             {
-                FontData *data;
-                FontTexture *texture;
-                auto it2 = fontDataAndTextures.find(uri);
-                
-                if (it2 == fontDataAndTextures.end())
-                {
-                    FontAtlas *atlas;
-                    tie(data, atlas) = fetchFontDataAndAtlas(inputSource); // CAN THROW
-                    
-                    texture = new FontTexture(atlas, inputSource);
-                    delete atlas;
-                    
-                    fontDataAndTextures[uri] = make_pair(unique_ptr<FontData>(data), unique_ptr<FontTexture>(texture));
-                }
-                else
-                {
-                    data = it2->second.first.get();
-                    texture = it2->second.second.get();
-                }
-                
-                auto font = shared_ptr<Font>(new Font(*this, data, texture, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
-                fonts[key] = font;
-                
-                return font;
+                data = it2->second.first.get();
+                texture = it2->second.second.get();
             }
+            
+            auto font = shared_ptr<Font>(new Font(*this, data, texture, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
+            fonts[key] = font;
+            
+            return font;
         }
         
         void FontManager::unload(shared_ptr<Font> font)
@@ -257,9 +255,9 @@ namespace chr
         
         void FontManager::discardTextures()
         {
-            for (auto &it : fontDataAndTextures)
+            for (auto &element : fontDataAndTextures)
             {
-                it.second.second->discard();
+                element.second.second->discard();
             }
         }
         
@@ -267,14 +265,14 @@ namespace chr
         {
             set<FontTexture*> texturesInUse;
             
-            for (auto &it1 : fonts)
+            for (auto &element : fonts)
             {
-                auto &uri = it1.first.first;
-                auto it2 = fontDataAndTextures.find(uri);
+                const auto &uri = element.first.first;
+                auto it = fontDataAndTextures.find(uri);
                 
-                if (it2 != fontDataAndTextures.end())
+                if (it != fontDataAndTextures.end())
                 {
-                    texturesInUse.insert(it2->second.second.get());
+                    texturesInUse.insert(it->second.second.get());
                 }
             }
             
@@ -288,9 +286,9 @@ namespace chr
         {
             size_t total = 0;
             
-            for (auto &it : fontDataAndTextures)
+            for (auto &element : fontDataAndTextures)
             {
-                total += it.second.second->getMemoryUsage();
+                total += element.second.second->getMemoryUsage();
             }
             
             return total;
@@ -300,22 +298,22 @@ namespace chr
         {
             set<FontTexture*> texturesInUse;
             
-            for (auto &it1 : fonts)
+            for (auto &element : fonts)
             {
-                auto &uri = it1.first.first;
-                auto it2 = fontDataAndTextures.find(uri);
+                const auto &uri = element.first.first;
+                auto it = fontDataAndTextures.find(uri);
                 
-                if (it2 != fontDataAndTextures.end())
+                if (it != fontDataAndTextures.end())
                 {
-                    texturesInUse.insert(it2->second.second.get());
+                    texturesInUse.insert(it->second.second.get());
                 }
             }
             
-            for (auto &it : fontDataAndTextures)
+            for (auto &element : fontDataAndTextures)
             {
-                if (!texturesInUse.count(it.second.second.get()))
+                if (!texturesInUse.count(element.second.second.get()))
                 {
-                    it.second.second->discard();
+                    element.second.second->discard();
                 }
             }
         }

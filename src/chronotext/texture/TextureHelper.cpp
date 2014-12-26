@@ -157,12 +157,12 @@ namespace chr
             }
             else if (texture)
             {
-                auto key = texture.get();
+                auto target = texture.get();
                 
-                texture->setDeallocator(&TextureHelper::textureDeallocator, key);
+                texture->setDeallocator(&TextureHelper::textureDeallocator, target);
 
                 auto memoryUsage = getTextureMemoryUsage(textureData);
-                probes[key] = MemoryProbe({textureData.request, memoryUsage, memoryInfo[0], memoryInfo[1]});
+                probes[target] = MemoryProbe({textureData.request, memoryUsage, memoryInfo[0], memoryInfo[1]});
             }
         }
         
@@ -173,11 +173,11 @@ namespace chr
     
     void TextureHelper::textureDeallocator(void *refcon)
     {
-        auto key = reinterpret_cast<gl::Texture*>(refcon);
+        auto target = reinterpret_cast<gl::Texture*>(refcon);
         
         if (PROBE_MEMORY)
         {
-            probes[key].memoryInfo[2] = getMemoryInfo();
+            probes[target].memoryInfo[2] = getMemoryInfo();
         }
     }
     

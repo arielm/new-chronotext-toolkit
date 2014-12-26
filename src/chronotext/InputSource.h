@@ -74,6 +74,10 @@ namespace chr
         static InputSource::Ref getFileInDocuments(const ci::fs::path &relativePath);
         static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath);
 
+        static const std::string EMPTY;
+        
+        // ---
+        
         InputSource(Type type = TYPE_UNDEFINED);
 
         ci::DataSourceRef loadDataSource();
@@ -85,8 +89,8 @@ namespace chr
         std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
 
-        bool undefined() const;
-        std::string getURI();
+        bool isValid() const;
+        const std::string& getURI();
 
     protected:
         int type;

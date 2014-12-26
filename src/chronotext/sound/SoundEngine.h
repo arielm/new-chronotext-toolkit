@@ -19,11 +19,13 @@ namespace chr
     class SoundEngine
     {
     public:
+        static bool PROBE_MEMORY;
+        
         enum Type
         {
             EVENT_UNDEFINED,
             EVENT_STARTED,
-            EVENT_STOPPED, // EFFECT STOPPED BY USER
+            EVENT_STOPPED, // EFFECT STOPPED ON-DEMAND OR AUTOMATICALLY UPON SHUT-DOWN
             EVENT_INTERRUPTED, // EFFECT AUTOMATICALLY STOPPED IN FAVOR OF A NEW EFFECT (I.E. WHEN NO FREE CHANNEL REMAIN)
             EVENT_COMPLETED
         };
@@ -85,15 +87,12 @@ namespace chr
         
         class Listener
         {
-            public:
+        public:
             virtual ~Listener() {}
             virtual void handleEvent(const Event &event) = 0;
         };
         
         // ---
-        
-        FMOD::System *system;
-        FMOD::ChannelGroup *masterGroup;
         
         SoundEngine();
         
@@ -115,7 +114,7 @@ namespace chr
         
         /*
          * IT IS MANDATORY TO CALL UPDATE EACH FRAME,
-         * OTHERWISE (AND AMONG OTHER THINGS): CHANNELS WON'T BE FREED UPON COMPLETION
+         * OTHERWISE (AND AMONG OTHER THINGS): CHANNELS WON'T BE RELEASED UPON COMPLETION
          */
         void update();
         
@@ -143,6 +142,9 @@ namespace chr
         void setVolume(float volume);
         
     protected:
+        FMOD::System *system;
+        FMOD::ChannelGroup *masterGroup;
+
         std::map<Effect::Request, Effect::Ref> effects;
         std::map<int, std::pair<int, int>> playingEffects;
         

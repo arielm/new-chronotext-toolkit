@@ -113,9 +113,9 @@ namespace chr
     
     Effect::Ref SoundEngine::getEffect(const Effect::Request &request)
     {
-        auto element = effects.find(request);
+        auto it = effects.find(request);
         
-        if (element == effects.end())
+        if (it == effects.end())
         {
             auto sound = createSound(request); // CALLED BEFORE effectCount IS INCREMENTED BECAUSE IT CAN THROW
             
@@ -125,7 +125,7 @@ namespace chr
         }
         else
         {
-            return element->second;
+            return it->second;
         }
     }
     
@@ -284,18 +284,18 @@ namespace chr
     
     bool SoundEngine::stopEffect(int playingId)
     {
-        auto element = playingEffects.find(playingId);
+        auto it = playingEffects.find(playingId);
         
-        if (element != playingEffects.end())
+        if (it != playingEffects.end())
         {
-            auto channelId = element->second.first;
-            auto uniqueId = element->second.second;
+            auto channelId = it->second.first;
+            auto uniqueId = it->second.second;
             
             FMOD::Channel *channel;
             system->getChannel(channelId, &channel);
             channel->stop();
             
-            playingEffects.erase(element);
+            playingEffects.erase(it);
             dispatchEvent(createEvent(EVENT_STOPPED, uniqueId, channelId, playingId));
             
             return true;

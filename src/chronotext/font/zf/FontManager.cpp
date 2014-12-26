@@ -180,59 +180,57 @@ namespace chr
             {
                 return it->second;
             }
-            else
+            
+            XmlTree doc(source->loadDataSource()); // EARLY-THROW IF THE DOCUMENT IS MALFORMED
+            
+            /*
+             * THE FOLLOWING IS NOT SUPPOSED TO THROW...
+             * IN THE WORST-CASE: THE FONT WILL BE "EMPTY" OR "PARTIAL"
+             *
+             * TODO: THROW WHEN DOCUMENT IS INVALID?
+             */
+            if (doc.hasChild("VirtualFont"))
             {
-                XmlTree doc(source->loadDataSource()); // EARLY-THROW IF THE DOCUMENT IS MALFORMED
+                auto font = shared_ptr<VirtualFont>(new VirtualFont(*this, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
+                virtualFonts[key] = font;
                 
-                /*
-                 * THE FOLLOWING IS NOT SUPPOSED TO THROW...
-                 * IN THE WORST-CASE: THE FONT WILL BE "EMPTY" OR "PARTIAL"
-                 *
-                 * TODO: THROW WHEN DOCUMENT IS INVALID?
-                 */
-                if (doc.hasChild("VirtualFont"))
+                for (auto setElement = doc.begin("VirtualFont/Set"); setElement != doc.end(); ++setElement)
                 {
-                    auto font = shared_ptr<VirtualFont>(new VirtualFont(*this, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
-                    virtualFonts[key] = font;
+                    auto langList = splitLanguages(setElement->getAttributeValue<string>("lang", ""));
                     
-                    for (auto setElement = doc.begin("VirtualFont/Set"); setElement != doc.end(); ++setElement)
+                    for (auto &lang : langList)
                     {
-                        auto langList = splitLanguages(setElement->getAttributeValue<string>("lang", ""));
-                        
-                        for (auto &lang : langList)
+                        for (auto &variantElement : setElement->getChildren())
                         {
-                            for (auto &variantElement : setElement->getChildren())
+                            if (variantElement->getTag() == "Group")
                             {
-                                if (variantElement->getTag() == "Group")
+                                for (auto &refElement : variantElement->getChildren())
                                 {
-                                    for (auto &refElement : variantElement->getChildren())
+                                    auto descriptor = parseDescriptor(*refElement);
+                                    
+                                    if (descriptor.inputSource->isValid() && font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap)))
                                     {
-                                        auto descriptor = parseDescriptor(*refElement);
-                                        
-                                        if (!descriptor.undefined() && font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap)))
-                                        {
-                                            break;
-                                        }
+                                        break;
                                     }
                                 }
-                                else
+                            }
+                            else
+                            {
+                                auto descriptor = parseDescriptor(*variantElement);
+                                
+                                if (descriptor.inputSource->isValid())
                                 {
-                                    auto descriptor = parseDescriptor(*variantElement);
-                                    
-                                    if (!descriptor.undefined())
-                                    {
-                                        font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap));
-                                    }
+                                    font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap));
                                 }
                             }
                         }
                     }
-                    
-                    return font;
                 }
                 
-                throw EXCEPTION(FontManager, "INVALID FONT-DEFINITION: " + source->getURI());
+                return font;
             }
+            
+            throw EXCEPTION(FontManager, "INVALID FONT-DEFINITION: " + source->getURI());
         }
         
         void FontManager::unload(shared_ptr<VirtualFont> virtualFont)
@@ -259,22 +257,22 @@ namespace chr
             
             set<ActualFont*> actualFontsInUse;
             
-            for (auto &it1 : virtualFonts)
+            for (auto &element : virtualFonts)
             {
-                for (auto &it2 : it1.second->fontSetMap)
+                for (auto &fontSet : element.second->fontSetMap)
                 {
-                    for (auto &it3 : it2.second)
+                    for (auto &actualFont : fontSet.second)
                     {
-                        actualFontsInUse.insert(it3);
+                        actualFontsInUse.insert(actualFont);
                     }
                 }
             }
             
-            for (auto it = actualFonts.begin(); it != actualFonts.end(); ++it)
+            for (auto &element : actualFonts)
             {
-                if (!actualFontsInUse.count(it->second.get()))
+                if (!actualFontsInUse.count(element.second.get()))
                 {
-                    it->second->unload();
+                    element.second->unload();
                 }
             }
         }
@@ -283,25 +281,25 @@ namespace chr
         {
             layoutCache->clear();
             
-            for (auto &it : actualFonts)
+            for (auto &element : actualFonts)
             {
-                it.second->unload();
+                element.second->unload();
             }
         }
         
         void FontManager::discardTextures()
         {
-            for (auto &it : actualFonts)
+            for (auto &element : actualFonts)
             {
-                it.second->discardTextures();
+                element.second->discardTextures();
             }
         }
         
         void FontManager::reloadTextures()
         {
-            for (auto &it : actualFonts)
+            for (auto &element : actualFonts)
             {
-                it.second->reloadTextures();
+                element.second->reloadTextures();
             }
         }
         
@@ -309,9 +307,9 @@ namespace chr
         {
             size_t total = 0;
             
-            for (auto &it : actualFonts)
+            for (auto &element : actualFonts)
             {
-                total += it.second->getTextureMemoryUsage();
+                total += element.second->getTextureMemoryUsage();
             }
             
             return total;
@@ -320,28 +318,27 @@ namespace chr
         ActualFont* FontManager::getActualFont(const ActualFont::Descriptor &descriptor, float baseSize, bool useMipmap)
         {
             ActualFont::Key key(descriptor, baseSize, useMipmap);
+            
             auto it = actualFonts.find(key);
             
             if (it != actualFonts.end())
             {
                 return it->second.get();
             }
-            else
+            
+            try
             {
-                try
-                {
-                    auto font = new ActualFont(ftHelper, descriptor, baseSize, useMipmap);
-                    actualFonts[key] = unique_ptr<ActualFont>(font);
-                    
-                    return font;
-                }
-                catch (exception &e)
-                {
-                    LOGD << e.what() << " - " << descriptor.source->getURI() << endl;
-                }
+                auto font = new ActualFont(ftHelper, descriptor, baseSize, useMipmap);
+                actualFonts[key] = unique_ptr<ActualFont>(font);
                 
-                return nullptr;
+                return font;
             }
+            catch (exception &e)
+            {
+                LOGD << e.what() << " - " << descriptor.inputSource->getURI() << endl;
+            }
+            
+            return nullptr;
         }
         
         vector<string> FontManager::splitLanguages(const string &languages)

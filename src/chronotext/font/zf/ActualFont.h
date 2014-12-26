@@ -29,31 +29,25 @@ namespace chr
         public:
             struct Descriptor
             {
-                InputSource::Ref source;
+                InputSource::Ref inputSource;
                 int faceIndex;
                 float scale;
                 bool forceMemoryLoad;
                 
                 Descriptor()
                 :
-                source(InputSource::Ref()),
                 faceIndex(0),
                 scale(1),
                 forceMemoryLoad(false)
                 {}
                 
-                Descriptor(InputSource::Ref source, int faceIndex = 0, float scale = 1, bool forceMemoryLoad = false)
+                Descriptor(InputSource::Ref inputSource, int faceIndex = 0, float scale = 1, bool forceMemoryLoad = false)
                 :
-                source(source),
+                inputSource(inputSource),
                 faceIndex(faceIndex),
                 scale(scale),
                 forceMemoryLoad(forceMemoryLoad)
                 {}
-                
-                bool undefined() const
-                {
-                    return source->undefined();
-                }
             };
             
             struct Key
@@ -65,7 +59,7 @@ namespace chr
                 
                 Key(const Descriptor &descriptor, float baseSize, bool useMipmap)
                 :
-                uri(descriptor.source->getURI()),
+                uri(descriptor.inputSource->getURI()),
                 faceIndex(descriptor.faceIndex),
                 baseSize(baseSize * descriptor.scale),
                 useMipmap(useMipmap)

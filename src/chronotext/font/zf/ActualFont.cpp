@@ -118,14 +118,14 @@ namespace chr
             {
                 FT_Error error;
                 
-                if (descriptor.forceMemoryLoad || !descriptor.source->isFile())
+                if (descriptor.forceMemoryLoad || !descriptor.inputSource->isFile())
                 {
-                    memoryBuffer = descriptor.source->loadDataSource()->getBuffer();
+                    memoryBuffer = descriptor.inputSource->loadDataSource()->getBuffer();
                     error = FT_New_Memory_Face(ftHelper->getLib(), (FT_Byte*)memoryBuffer.getData(), memoryBuffer.getDataSize(), descriptor.faceIndex, &ftFace);
                 }
                 else
                 {
-                    error = FT_New_Face(ftHelper->getLib(), descriptor.source->getFilePath().c_str(), descriptor.faceIndex, &ftFace);
+                    error = FT_New_Face(ftHelper->getLib(), descriptor.inputSource->getFilePath().c_str(), descriptor.faceIndex, &ftFace);
                 }
                 
                 if (error)
@@ -311,9 +311,9 @@ namespace chr
             
             if (reload())
             {
-                auto entry = glyphs.find(codepoint);
+                auto it = glyphs.find(codepoint);
                 
-                if (entry == glyphs.end())
+                if (it == glyphs.end())
                 {
                     glyph = createGlyph(codepoint);
                     
@@ -333,7 +333,7 @@ namespace chr
                 }
                 else
                 {
-                    glyph = entry->second.get();
+                    glyph = it->second.get();
                 }
             }
             
