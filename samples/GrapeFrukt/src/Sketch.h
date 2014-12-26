@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -36,6 +36,18 @@
  * http://www.java-gaming.org/index.php?topic=27914.0
  */
 
+/*
+ * IN SYNC WITH ResReWork BRANCH
+ *
+ * OSX: COMMIT efc808b
+ * IOS: COMMIT efc808b
+ * ANDROID: COMMIT efc808b
+ */
+
+/*
+ * DESTKTOP ONLY: PRESS D TO "DISCARD" TEXTURES
+ */
+
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
@@ -44,12 +56,15 @@
 
 class Sketch : public chr::CinderSketch
 {
+public:
     chr::TextureManager textureManager;
     Animation animation;
     float scale;
 
-public:
-    Sketch(void *context, void *delegate = nullptr);
+    Sketch()
+    :
+    CinderSketch()
+    {}
     
     void setup();
     void draw();

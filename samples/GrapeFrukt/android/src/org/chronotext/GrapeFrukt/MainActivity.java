@@ -2,16 +2,18 @@
 package org.chronotext.GrapeFrukt;
 
 import org.chronotext.cinder.CinderDelegate;
-import org.chronotext.Utils;
+import org.chronotext.utils.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 
 public class MainActivity extends Activity
 {
   static
   {
+    Utils.DEBUG = true;
+    Utils.TAG = "cinder";
+
     System.loadLibrary("GrapeFrukt");
   }
 

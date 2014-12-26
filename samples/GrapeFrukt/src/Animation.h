@@ -61,7 +61,7 @@ class Animation
     
 public:
     Animation();
-    Animation(std::shared_ptr<chr::TextureAtlas> atlas, chr::InputSourceRef sheetInputSource, chr::InputSourceRef animationInputSource, float fps = 24);
+    Animation(std::shared_ptr<chr::TextureAtlas> atlas, chr::InputSource::Ref sheetInputSource, chr::InputSource::Ref animationInputSource, float fps = 24);
     
     int getFrameCount() const;
     float getDuration() const;
@@ -78,6 +78,6 @@ protected:
     std::map<std::string, std::unique_ptr<Item>> itemMap;
     std::vector<Item*> itemList;
 
-    void loadSheet(chr::InputSourceRef inputSource);
-    void loadAnimation(chr::InputSourceRef inputSource);
+    void loadSheet(chr::InputSource::Ref inputSource);
+    void loadAnimation(chr::InputSource::Ref inputSource);
 };

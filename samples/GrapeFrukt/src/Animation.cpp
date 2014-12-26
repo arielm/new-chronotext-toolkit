@@ -20,7 +20,7 @@ fps(1),
 frameCount(0)
 {}
 
-Animation::Animation(shared_ptr<TextureAtlas> atlas, InputSourceRef sheetInputSource, InputSourceRef animationInputSource, float fps)
+Animation::Animation(shared_ptr<TextureAtlas> atlas, InputSource::Ref sheetInputSource, InputSource::Ref animationInputSource, float fps)
 :
 atlas(atlas),
 fps(fps),
@@ -76,7 +76,7 @@ void Animation::play(double now)
     draw(t);
 }
 
-void Animation::loadSheet(InputSourceRef inputSource)
+void Animation::loadSheet(InputSource::Ref inputSource)
 {
     XmlTree doc(inputSource->loadDataSource());
     
@@ -88,7 +88,7 @@ void Animation::loadSheet(InputSourceRef inputSource)
         auto height = textureElement->getAttributeValue<float>("height");
         auto registrationPointX = textureElement->getAttributeValue<float>("registrationPointX");
         auto registrationPointY = textureElement->getAttributeValue<float>("registrationPointY");
-        int zIndex = textureElement->getAttributeValue<int>("zIndex", 0);
+        auto zIndex = textureElement->getAttributeValue<int>("zIndex", 0);
         
         auto item = new Item(path, width, height, registrationPointX, registrationPointY, zIndex);
         itemMap[name] = unique_ptr<Item>(item);
@@ -98,7 +98,7 @@ void Animation::loadSheet(InputSourceRef inputSource)
     std::sort(itemList.begin(), itemList.end(), Item::compareZIndex);
 }
 
-void Animation::loadAnimation(InputSourceRef inputSource)
+void Animation::loadAnimation(InputSource::Ref inputSource)
 {
     XmlTree doc(inputSource->loadDataSource());
     
