@@ -37,7 +37,7 @@ namespace chr
          * ANDROID: isFile() WILL RETURN false
          */
         static InputSource::Ref getResource(const ci::fs::path &relativePath);
-        static ci::DataSourceRef loadResource(const ci::fs::path &relativePath);
+        static ci::DataSourceRef loadResource(const ci::fs::path &relativePath); // CAN THROW
         
         /*
          * TO USE WITH THE "CINDER_RESOURCE" MACRO,
@@ -46,7 +46,7 @@ namespace chr
          * isFile() WILL RETURN false
          */
         static InputSource::Ref getResource(const std::string &resourceName, int mswID, const std::string &mswType);
-        static ci::DataSourceRef loadResource(const std::string &resourceName, int mswID, const std::string &mswType);
+        static ci::DataSourceRef loadResource(const std::string &resourceName, int mswID, const std::string &mswType); // CAN TRHOW
         
         /*
          * MSW AND OSX:
@@ -63,16 +63,16 @@ namespace chr
          * - isFile() WILL RETURN false
          */
         static InputSource::Ref getAsset(const ci::fs::path &relativePath);
-        static ci::DataSourceRef loadAsset(const ci::fs::path &relativePath);
+        static ci::DataSourceRef loadAsset(const ci::fs::path &relativePath); // CAN THROW
 
-        static InputSource::Ref get(const std::string &uri);
-        static ci::DataSourceRef load(const std::string &uri);
+        static InputSource::Ref get(const std::string &uri); // CAN THROW
+        static ci::DataSourceRef load(const std::string &uri); // CAN THROW
 
         static InputSource::Ref getFile(const ci::fs::path &filePath);
-        static ci::DataSourceRef loadFile(const ci::fs::path &filePath);
+        static ci::DataSourceRef loadFile(const ci::fs::path &filePath); // CAN THROW
 
         static InputSource::Ref getFileInDocuments(const ci::fs::path &relativePath);
-        static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath);
+        static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath); // CAN THROW
 
         static const std::string EMPTY;
         
@@ -80,8 +80,8 @@ namespace chr
         
         InputSource(Type type = TYPE_UNDEFINED);
 
-        ci::DataSourceRef loadDataSource();
-        InputSource::Ref getSubSource(const ci::fs::path &subPath);
+        ci::DataSourceRef loadDataSource(); // CAN THROW
+        InputSource::Ref getSubSource(const ci::fs::path &subPath); // CAN THROW
         
         bool isFile() const;
         ci::fs::path getFilePath() const;

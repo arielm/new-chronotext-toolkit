@@ -6,6 +6,26 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) INCORPORATE TextureRequest INTO Texture
+ *    - SHOULD BE: Texture::Request
+ *    - SIMILAR TO Effect::Request
+ *
+ * 2) ADD int tag TO TextureManager
+ *    - DEFAULT-VALUE: 0
+ *    - WILL ALLOW TO MAINTAIN SEVERAL "SETS OF TEXTURES"
+ *    - REQUIRED CHANGES TO THE API:
+ *      - TextureManager:
+ *        - void discardTextures(int tag = 0)
+ *        - bool reloadTextures(int tag = 0)
+ *
+ * 3) AVOID IF POSSIBLE:
+ *    - "EMPTY" Texture::Request
+ *    = "EMPTY" TextureData
+ */
+
 #pragma once
 
 #include "chronotext/texture/TextureHelper.h"

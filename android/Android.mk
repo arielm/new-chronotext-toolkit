@@ -21,15 +21,8 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Handler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/SuperHandler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Task.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/TaskManager.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/Hairline.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/FollowablePath.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/FXGDocument.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/ShapeMesh.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/ShapeTesselator.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/SplinePath.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/quad/QuadMatrix.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/PVRHelper.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/Sprite.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/Texture.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/TextureHelper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/TextureManager.cpp
@@ -38,8 +31,6 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/time/FrameClock.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/GLUtils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/MathUtils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/Utils.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlas.cpp
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasAnimation.cpp
 
 ifdef CHR_USE_ZFONT
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/ActualFont.cpp
@@ -59,6 +50,23 @@ ifdef CHR_USE_XFONT
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/Font.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/FontSequence.cpp
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/xf/TextHelper.cpp
+
+    CHR_USE_PATH := 1
+endif
+
+ifdef CHR_USE_PATH
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/Hairline.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/FollowablePath.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/FXGDocument.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/ShapeMesh.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/ShapeTesselator.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/path/SplinePath.cpp
+endif
+
+ifdef CHR_USE_ATLAS
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/Sprite.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlas.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/atlas/TextureAtlasAnimation.cpp
 endif
 
 ifdef CHR_USE_FMOD_SOUND

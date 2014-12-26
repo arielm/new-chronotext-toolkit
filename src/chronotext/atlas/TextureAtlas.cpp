@@ -15,21 +15,9 @@ using namespace std;
 
 namespace chr
 {
-    TextureAtlas::TextureAtlas(TextureManager &textureManager, const string &resourceName, bool useMipmap)
-    :
-    textureManager(textureManager)
-    {
-        init(InputSource::getResource(resourceName), useMipmap);
-    }
-    
     TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap)
     :
     textureManager(textureManager)
-    {
-        init(inputSource, useMipmap);
-    }
-    
-    void TextureAtlas::init(InputSource::Ref inputSource, bool useMipmap)
     {
         XmlTree doc(inputSource->loadDataSource());
         
@@ -84,25 +72,24 @@ namespace chr
     {
         auto it = sprites.find(path);
         
-        if (it == sprites.end())
-        {
-            return Sprite::Ref();
-        }
-        else
+        if (it != sprites.end())
         {
             return it->second;
         }
+        
+        return nullptr;
     }
     
     vector<Sprite::Ref> TextureAtlas::getAnimationSprites(const string &path) const
     {
         vector<Sprite::Ref> animationSprites;
+        
         string pattern = path + "%d";
         
         for (auto &it : sprites)
         {
             int i = -1;
-            sscanf(it.first.data(), pattern.data(), &i);
+            sscanf(it.first.data(), pattern.data(), &i); // XXX
             
             if (i != -1)
             {

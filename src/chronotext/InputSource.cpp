@@ -215,7 +215,7 @@ namespace chr
             {
                 try
                 {
-                    return app::loadResource(filePathHint, mswID, mswType); // TODO: TEST IF IT REALLY THROWS UPON ERROR
+                    return app::loadResource(filePathHint, mswID, mswType); // TODO: VERIFY IF IT THROWS UPON ERROR
                 }
                 catch (exception &e)
                 {
@@ -263,7 +263,7 @@ namespace chr
             }
         }
         
-        return nullptr;
+        throw EXCEPTION(InputSource, "INVALID INPUT-SOURCE");
     }
     
     InputSource::Ref InputSource::getSubSource(const fs::path &subPath)
@@ -289,7 +289,7 @@ namespace chr
             }
         }
         
-        return nullptr;
+        throw EXCEPTION(InputSource, "INVALID INPUT-SOURCE");
     }
     
     bool InputSource::isFile() const
@@ -344,6 +344,9 @@ namespace chr
         {
             switch (type)
             {
+                case TYPE_UNDEFINED:
+                    break;
+                
                 case TYPE_RESOURCE:
                     uri = "res://" + filePathHint;
                     break;

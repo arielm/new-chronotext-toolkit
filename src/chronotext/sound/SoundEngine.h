@@ -9,7 +9,10 @@
 /*
  * TODO:
  *
- * 1) PROBE MEMORY, AS IN TextureHelper
+ * 1) FIND A WAY TO ENFORCE THE CALLING OF pause() AND resume()
+ *    - NECESSARY TO CALL THESE UPON FOREGROUND/BACKGROUND SWITCHES ON ANDROID
+
+ * 2) PROBE MEMORY, AS IN TextureHelper
  */
 
 #pragma once

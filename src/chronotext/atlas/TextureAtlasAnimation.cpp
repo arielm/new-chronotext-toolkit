@@ -34,7 +34,7 @@ namespace chr
         
         if (sprites.empty())
         {
-            throw runtime_error("INVALID ANIMATION");
+            throw EXCEPTION(TextureAtlasAnimation, "INVALID ANIMATION");
         }
     }
     
@@ -48,7 +48,7 @@ namespace chr
         
         if (((firstFrameIndex < 0) || (firstFrameIndex >= tmp.size()) || ((lastFrameIndex < 0) || (lastFrameIndex >= tmp.size()))))
         {
-            throw runtime_error("OUT-OF-RANGE ANIMATION FRAMES");
+            throw EXCEPTION(TextureAtlasAnimation, "OUT-OF-RANGE ANIMATION FRAMES");
         }
         
         if (firstFrameIndex < lastFrameIndex)
@@ -68,7 +68,7 @@ namespace chr
         
         if (sprites.empty())
         {
-            throw runtime_error("INVALID ANIMATION");
+            throw EXCEPTION(TextureAtlasAnimation, "INVALID ANIMATION");
         }
     }
     

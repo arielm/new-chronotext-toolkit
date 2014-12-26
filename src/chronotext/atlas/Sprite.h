@@ -32,7 +32,6 @@ namespace chr
         float u2;
         float v2;
         
-        Sprite();
         Sprite(Texture::Ref texture); // IMAGE-BASED
         Sprite(Texture::Ref texture, float w, float h, float ox, float oy, float ow, float oh, bool rotated, float u1, float v1, float u2, float v2); // ATLAS-BASED
         

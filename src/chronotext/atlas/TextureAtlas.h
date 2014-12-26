@@ -16,9 +16,8 @@
 
 #pragma once
 
+#include "chronotext/atlas/Sprite.h"
 #include "chronotext/texture/TextureManager.h"
-#include "chronotext/texture/Sprite.h"
-#include "chronotext/InputSource.h"
 
 #include <map>
 
@@ -29,7 +28,6 @@ namespace chr
     public:
         Texture::Ref texture;
         
-        TextureAtlas(TextureManager &textureManager, const std::string &resourceName, bool useMipmap = false);
         TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap = false);
         
         Sprite::Ref getSprite(const std::string &path) const;
@@ -44,7 +42,5 @@ namespace chr
     protected:
         TextureManager &textureManager;
         std::map<std::string, Sprite::Ref> sprites;
-        
-        void init(InputSource::Ref inputSource, bool useMipmap);
     };
 }

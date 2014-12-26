@@ -6,16 +6,13 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/texture/Sprite.h"
+#include "Sprite.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
-    Sprite::Sprite()
-    {}
-    
     Sprite::Sprite(Texture::Ref texture)
     :
     texture(texture),
