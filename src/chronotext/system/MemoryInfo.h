@@ -56,7 +56,7 @@ namespace chr
                 return lhs;
             }
             
-            static std::string write(int64_t bytes, int precision = 1, double unit = 1024 * 1024, const std::string &suffix = "M")
+            static std::string write(int64_t bytes, int precision = 2, double unit = 1024 * 1024, const std::string &suffix = "M")
             {
                 if (bytes <= 0)
                 {

@@ -187,6 +187,7 @@ namespace chr
     
     void Texture::bind()
     {
+        reload();
         glBindTexture(GL_TEXTURE_2D, glId);
     }
     
@@ -196,7 +197,7 @@ namespace chr
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, glId);
+        bind();
     }
     
     void Texture::end()

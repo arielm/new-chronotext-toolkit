@@ -57,7 +57,7 @@ void Sketch::event(Event event)
              * AT THIS STAGE: GL MEMORY HAS ALREADY BEEN INVALIDATED
              */
             
-            textureManager.discard();
+            textureManager.discardTextures();
             fontManager.discardTextures();
             
             break;
@@ -65,7 +65,7 @@ void Sketch::event(Event event)
             
         case EVENT_CONTEXT_RENEWED:
         {
-            textureManager.reload(); // MANDATORY AFTER DISCARDING (FIXME)
+            textureManager.reloadTextures(); // NOT MANDATORY (TEXTURES ARE LAZILY RELOADED)
             fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
             
             /*
@@ -90,11 +90,8 @@ void Sketch::event(Event event)
              * RELOADING MUST TAKE PLACE ONLY AFTER EVERYTHING HAVE BEEN DISCARDED
              */
             
-            textureManager.discard();
+            textureManager.discardTextures();
             fontManager.discardTextures();
-            
-            textureManager.reload(); // MANDATORY AFTER DISCARDING (FIXME)
-            fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE LAZILY RELOADED)
             
             break;
         }

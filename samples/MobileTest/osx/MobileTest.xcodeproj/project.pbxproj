@@ -23,6 +23,7 @@
 		A802711319CC7B7C0072973D /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A802710319CC7B7C0072973D /* QuadMatrix.cpp */; };
 		A802711519CC7CFC0072973D /* dot_112.png in Resources */ = {isa = PBXBuildFile; fileRef = A802711419CC7CFC0072973D /* dot_112.png */; };
 		A8027DFA16E377AE00184149 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8027DF816E377AE00184149 /* icon.icns */; };
+		A8112BF01A4DA3EE0002CF68 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112BEF1A4DA3EE0002CF68 /* Application.cpp */; };
 		A82C909216DFA3B100FF519C /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908A16DFA3B100FF519C /* PVRHelper.cpp */; };
 		A82C909316DFA3B100FF519C /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908C16DFA3B100FF519C /* Texture.cpp */; };
 		A82C909416DFA3B100FF519C /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908E16DFA3B100FF519C /* TextureHelper.cpp */; };
@@ -83,6 +84,7 @@
 		A802710419CC7B7C0072973D /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
 		A802711419CC7CFC0072973D /* dot_112.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot_112.png; path = ../resources/dot_112.png; sourceTree = "<group>"; };
 		A8027DF816E377AE00184149 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		A8112BEF1A4DA3EE0002CF68 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		A82C908A16DFA3B100FF519C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A82C908B16DFA3B100FF519C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
 		A82C908C16DFA3B100FF519C /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 			isa = PBXGroup;
 			children = (
 				A874A4F31A2B2CDE009A60A0 /* Application.h */,
+				A8112BEF1A4DA3EE0002CF68 /* Application.cpp */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 			files = (
 				A82C909216DFA3B100FF519C /* PVRHelper.cpp in Sources */,
 				A8836D3E1A4AF8D2007733CE /* MemoryManagerBase.cpp in Sources */,
+				A8112BF01A4DA3EE0002CF68 /* Application.cpp in Sources */,
 				A82C909316DFA3B100FF519C /* Texture.cpp in Sources */,
 				A802710619CC7B7C0072973D /* FontManager.cpp in Sources */,
 				A82C909416DFA3B100FF519C /* TextureHelper.cpp in Sources */,

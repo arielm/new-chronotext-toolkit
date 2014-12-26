@@ -30,11 +30,6 @@ namespace chr
 
     // ---
     
-    gl::TextureRef TextureHelper::loadTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
-    {
-        return loadTexture(InputSource::getResource(resourceName), useMipmap, flags);
-    }
-    
     gl::TextureRef TextureHelper::loadTexture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return loadTexture(TextureRequest(inputSource, useMipmap, flags));
@@ -379,6 +374,7 @@ namespace chr
                 
                 memoryUsage = (textureData.width * textureData.height * bpp) >> 3;
                 rgb = (bpp == 24);
+                break;
             }
                 
             default:

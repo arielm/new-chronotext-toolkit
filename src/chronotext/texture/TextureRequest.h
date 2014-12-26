@@ -32,7 +32,6 @@ namespace chr
         
         TextureRequest()
         :
-        inputSource(InputSource::Ref()),
         useMipmap(false),
         flags(FLAGS_NONE),
         wrapS(0),

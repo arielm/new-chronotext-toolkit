@@ -7,11 +7,15 @@
  */
 
 /*
- * IN SYNC WITH ContextRework BRANCH
+ * IN SYNC WITH ResReWork BRANCH
  *
- * OSX: COMMIT bf98e7c
- * IOS: COMMIT bf98e7c
- * ANDROID: COMMIT bf98e7c
+ * OSX: COMMIT ?
+ * IOS: COMMIT ?
+ * ANDROID: COMMIT ?
+ */
+
+/*
+ * DESTKTOP ONLY: PRESS D TO "DISCARD" THE TEXTURES
  */
 
 #pragma once
@@ -44,6 +48,11 @@ public:
         {}
     };
     
+    // ---
+    
+    chr::TextureManager textureManager;
+    chr::xf::FontManager fontManager;
+    
     Sketch()
     :
     CinderSketch()
@@ -68,9 +77,6 @@ public:
     void satifsfyConstraints();
     
 protected:
-    chr::TextureManager textureManager;
-    chr::xf::FontManager fontManager;
-    
     chr::Texture::Ref dot;
     std::shared_ptr<chr::XFont> font;
     

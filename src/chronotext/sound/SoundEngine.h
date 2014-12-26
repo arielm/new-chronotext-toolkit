@@ -6,6 +6,12 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) PROBE MEMORY, AS IN TextureHelper
+ */
+
 #pragma once
 
 #include "chronotext/Exception.h"
@@ -19,8 +25,6 @@ namespace chr
     class SoundEngine
     {
     public:
-        static bool PROBE_MEMORY;
-        
         enum Type
         {
             EVENT_UNDEFINED,

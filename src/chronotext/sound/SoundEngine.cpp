@@ -115,18 +115,16 @@ namespace chr
     {
         auto it = effects.find(request);
         
-        if (it == effects.end())
-        {
-            auto sound = createSound(request); // CALLED BEFORE effectCount IS INCREMENTED BECAUSE IT CAN THROW
-            
-            auto effect = make_shared<Effect>(request, ++effectCount, sound);
-            effects[request] = effect;
-            return effect;
-        }
-        else
+        if (it != effects.end())
         {
             return it->second;
         }
+        
+        auto sound = createSound(request); // CALLED BEFORE effectCount IS INCREMENTED BECAUSE IT CAN THROW
+        auto effect = make_shared<Effect>(request, ++effectCount, sound);
+        effects[request] = effect;
+        
+        return effect;
     }
     
     void SoundEngine::discardEffect(Effect::Ref effect)

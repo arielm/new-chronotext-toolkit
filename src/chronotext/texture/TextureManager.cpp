@@ -6,18 +6,13 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/texture/TextureManager.h"
+#include "TextureManager.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
-    Texture::Ref TextureManager::getTexture(const string &resourceName, bool useMipmap, TextureRequest::Flags flags)
-    {
-        return getTexture(InputSource::getResource(resourceName), useMipmap, flags);
-    }
-    
     Texture::Ref TextureManager::getTexture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
     {
         return getTexture(TextureRequest(inputSource, useMipmap, flags));
@@ -31,47 +26,44 @@ namespace chr
         {
             return it->second;
         }
-        else
-        {
-            auto texture = make_shared<Texture>(textureRequest);
-            textures[textureRequest] = texture;
-            
-            return texture;
-        }
+        
+        auto texture = make_shared<Texture>(textureRequest);
+        textures[textureRequest] = texture;
+        
+        return texture;
     }
     
-    bool TextureManager::remove(Texture::Ref texture)
+    void TextureManager::discardTexture(Texture::Ref texture)
     {
-        for (auto it = textures.begin(); it != textures.end(); ++it)
+        if (texture)
         {
-            if (it->second == texture)
-            {
-                textures.erase(it);
-                return true;
-            }
+            texture->discard();
+        }
+    }
+
+    bool TextureManager::reloadTexture(Texture::Ref texture)
+    {
+        if (texture)
+        {
+            return texture->reload();
         }
         
         return false;
     }
     
-    void TextureManager::clear()
+    void TextureManager::discardTextures()
     {
-        textures.clear();
-    }
-    
-    void TextureManager::discard()
-    {
-        for (auto &it : textures)
+        for (auto &element : textures)
         {
-            it.second->discard();
+            element.second->discard();
         }
     }
     
-    void TextureManager::reload()
+    void TextureManager::reloadTextures()
     {
-        for (auto &it : textures)
+        for (auto &element : textures)
         {
-            it.second->reload();
+            element.second->reload();
         }
     }
 }
