@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -23,17 +23,12 @@ const float TEXT_SIZE = 18;
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
 const wstring text1 = L"followable-paths were born for motion";
 const wstring text2 = L"this peanut is a B-spline with 8 points";
 
 void Sketch::setup()
 {
-    dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
     font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     
     // ---
@@ -87,7 +82,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
+    double now = clock().getTime();
     
     offset1 = 300 + 250 * math<float>::sin(now * 1.25f);
     offset2 = now * 60;
