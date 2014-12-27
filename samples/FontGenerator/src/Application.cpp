@@ -21,6 +21,10 @@
  * - FrankRuehl - AVAILABLE ON WINDOWS (WITH HEBREW SUPPORT): http://www.microsoft.com/typography/fonts/font.aspx?FMID=1886
  */
 
+/*
+ * IN SYNC WITH ResRework BRANCH / COMMIT 81fee47
+ */
+
 #include "cinder/app/AppNative.h"
 
 #include "chronotext/font/xf/FontManager.h"
