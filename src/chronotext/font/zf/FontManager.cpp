@@ -96,7 +96,7 @@ namespace chr
             }
         }
         
-        shared_ptr<VirtualFont> FontManager::getCachedFont(const std::string &name, VirtualFont::Style style, const VirtualFont::Properties &properties)
+        shared_ptr<VirtualFont> FontManager::getFont(const std::string &name, VirtualFont::Style style, const VirtualFont::Properties &properties)
         {
             auto key = make_tuple(name, style, properties);
             auto it1 = shortcuts.find(key);
@@ -137,7 +137,7 @@ namespace chr
                 }
                 
                 auto uri = it3->second.first;
-                auto font = getCachedFont(InputSource::get(uri), VirtualFont::Properties(baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity)); // CAN THROW
+                auto font = getFont(InputSource::get(uri), VirtualFont::Properties(baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity)); // CAN THROW
                 
                 /*
                  * ALLOWING CACHING UPON FURTHER ACCESS
@@ -153,13 +153,13 @@ namespace chr
             {
                 if (name != defaultFontName)
                 {
-                    auto font = getCachedFont(defaultFontName, style, properties);
+                    auto font = getFont(defaultFontName, style, properties);
                     shortcuts[key] = font;
                     return font;
                 }
                 else if (style != defaultFontStyle)
                 {
-                    auto font = getCachedFont(defaultFontName, defaultFontStyle, properties);
+                    auto font = getFont(defaultFontName, defaultFontStyle, properties);
                     shortcuts[key] = font;
                     return font;
                 }
@@ -171,7 +171,7 @@ namespace chr
             throw EXCEPTION(FontManager, string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
         }
         
-        shared_ptr<VirtualFont> FontManager::getCachedFont(InputSource::Ref source, const VirtualFont::Properties &properties)
+        shared_ptr<VirtualFont> FontManager::getFont(InputSource::Ref source, const VirtualFont::Properties &properties)
         {
             auto key = make_pair(source->getURI(), properties);
             auto it = virtualFonts.find(key);

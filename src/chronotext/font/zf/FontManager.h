@@ -53,12 +53,12 @@ namespace chr
              * - MIPMAPS ARE ALLOWED
              * - VirtualFont::setSize() SHALL BE USED DURING THE FONT'S LIFE-CYCLE
              */
-            std::shared_ptr<VirtualFont> getCachedFont(const std::string &name, VirtualFont::Style style = VirtualFont::STYLE_REGULAR, const VirtualFont::Properties &properties = VirtualFont::Properties2d());
+            std::shared_ptr<VirtualFont> getFont(const std::string &name, VirtualFont::Style style = VirtualFont::STYLE_REGULAR, const VirtualFont::Properties &properties = VirtualFont::Properties2d());
             
             /*
              * LOWER-LEVEL METHOD, FOR ACCESSING A FONT DIRECTLY VIA ITS XML-DEFINITION
              */
-            std::shared_ptr<VirtualFont> getCachedFont(InputSource::Ref source, const VirtualFont::Properties &properties);
+            std::shared_ptr<VirtualFont> getFont(InputSource::Ref source, const VirtualFont::Properties &properties);
             
             /*
              * CLEARS THE FONT RESOURCES (HARFBUZZ AND FREETYPE RELATED) AND DISCARDS THE GLYPH TEXTURES

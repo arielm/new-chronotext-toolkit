@@ -178,7 +178,7 @@ namespace chr
         
         // ---
         
-        std::shared_ptr<Font> FontManager::getCachedFont(InputSource::Ref inputSource, const Font::Properties &properties)
+        std::shared_ptr<Font> FontManager::getFont(InputSource::Ref inputSource, const Font::Properties &properties)
         {
             const auto &uri = inputSource->getURI();
             

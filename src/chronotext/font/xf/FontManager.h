@@ -78,7 +78,7 @@ namespace chr
         class FontManager
         {
         public:
-            std::shared_ptr<Font> getCachedFont(InputSource::Ref inputSource, const Font::Properties &properties);
+            std::shared_ptr<Font> getFont(InputSource::Ref inputSource, const Font::Properties &properties);
             
             void unload(std::shared_ptr<Font> font);
             void unload(InputSource::Ref inputSource);
