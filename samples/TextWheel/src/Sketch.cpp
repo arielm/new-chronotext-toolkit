@@ -69,7 +69,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    rotation = clock().getTime() * 0.1f;
+    rotation = clock()->getTime() * 0.1f;
 }
 
 void Sketch::draw()

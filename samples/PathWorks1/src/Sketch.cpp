@@ -82,7 +82,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    double now = clock().getTime();
+    double now = clock()->getTime();
     
     offset1 = 300 + 250 * math<float>::sin(now * 1.25f);
     offset2 = now * 60;

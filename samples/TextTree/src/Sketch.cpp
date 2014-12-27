@@ -38,7 +38,7 @@ void Sketch::setup()
 
 void Sketch::update()
 {
-    double now = clock().getTime();
+    double now = clock()->getTime();
 
     r1 = oscillate(now, -3, +3, 0.75f);
     r2 = oscillate(now, 6, 24, 1.5f);

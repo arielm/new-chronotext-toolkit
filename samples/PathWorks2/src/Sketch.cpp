@@ -102,7 +102,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    offset = clock().getTime() * 40;
+    offset = clock()->getTime() * 40;
 }
 
 void Sketch::draw()

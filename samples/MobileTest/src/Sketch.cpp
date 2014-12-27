@@ -125,13 +125,13 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
     
     gl::color(Color::gray(0.5f));
-    utils::gl::drawGrid(getWindowBounds(), scale * FINGERS_DISTANCE * 2, Vec2f(0, clock().getTime() * 60));
+    utils::gl::drawGrid(getWindowBounds(), scale * FINGERS_DISTANCE * 2, Vec2f(0, clock()->getTime() * 60));
     
     // ---
     
     drawDot(particle.position, particle.radius, ColorA(1, 0, 0, 1));
     
-    string text = toString(int(clock().getTime()));
+    string text = toString(int(clock()->getTime()));
     drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
 }
 

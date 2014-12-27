@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -17,9 +17,9 @@
 /*
  * IN SYNC WITH ResReWork BRANCH
  *
- * OSX: COMMIT b33c7e3
- * IOS: COMMIT b33c7e3
- * ANDROID: COMMIT b33c7e3
+ * OSX: COMMIT 81fee47
+ * IOS: COMMIT 81fee47
+ * ANDROID: COMMIT 81fee47
  */
 
 #pragma once

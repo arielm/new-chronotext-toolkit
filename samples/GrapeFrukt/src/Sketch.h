@@ -39,9 +39,9 @@
 /*
  * IN SYNC WITH ResReWork BRANCH
  *
- * OSX: COMMIT efc808b
- * IOS: COMMIT efc808b
- * ANDROID: COMMIT efc808b
+ * OSX: COMMIT 81fee47
+ * IOS: COMMIT 81fee47
+ * ANDROID: COMMIT 81fee47
  */
 
 /*
