@@ -122,7 +122,7 @@ using namespace context;
     frameCount = 0;
     
     timer.start();
-    sketch->clock().start();
+    sketch->clock()->start();
     
     if (reason == REASON_VIEW_WILL_APPEAR)
     {
@@ -138,7 +138,7 @@ using namespace context;
 - (void) stopWithReason:(int)reason
 {
     timer.stop();
-    sketch->clock().stop();
+    sketch->clock()->stop();
     
     if (reason == REASON_VIEW_WILL_DISAPPEAR)
     {
@@ -188,7 +188,7 @@ using namespace context;
 
 - (void) update
 {
-    sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
+    sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
     [self pollIOService];
     
     /*
@@ -198,7 +198,7 @@ using namespace context;
      * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
      * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
      */
-    double now = sketch->clock().getTime();
+    double now = sketch->clock()->getTime();
     
     sketch->update();
     sketch->timeline().stepTo(now);

@@ -40,16 +40,6 @@ namespace chr
 
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
 
-    FrameClock& CinderSketch::clock() const
-    {
-        return *clock_;
-    }
-    
-    Timeline& CinderSketch::timeline() const
-    {
-        return *timeline_;
-    }
-
     double CinderSketch::getElapsedSeconds() const
     {
         return castToDelegate(delegate).elapsedSeconds;

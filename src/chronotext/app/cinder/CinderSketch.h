@@ -24,8 +24,8 @@ namespace chr
         CinderDelegate* getDelegate() const;
         void setDelegate(CinderDelegate *delegate);
 
-        chr::FrameClock& clock() const override;
-        ci::Timeline& timeline() const override;
+        inline chr::FrameClock::Ref clock() const final { return clock_; }
+        inline ci::Timeline& timeline() const final { return *timeline_; }
         
         double getElapsedSeconds() const override;
         uint32_t getElapsedFrames() const override;
@@ -40,7 +40,7 @@ namespace chr
     protected:
         CinderDelegate *delegate;
         
-        std::shared_ptr<chr::FrameClock> clock_;
+        chr::FrameClock::Ref clock_;
         ci::TimelineRef timeline_;
     };
 }

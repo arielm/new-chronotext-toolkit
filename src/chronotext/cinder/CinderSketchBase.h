@@ -62,7 +62,7 @@ namespace chr
         virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
         virtual void disableAccelerometer() {}
         
-        virtual chr::FrameClock& clock() const = 0;
+        virtual chr::FrameClock::Ref clock() const = 0;
         virtual ci::Timeline& timeline() const = 0;
 
         virtual double getElapsedSeconds() const = 0;

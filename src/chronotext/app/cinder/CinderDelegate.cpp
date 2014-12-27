@@ -93,7 +93,7 @@ namespace chr
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update
          */
-        io_service().post([this]{ sketch->clock().update(); });
+        io_service().post([this]{ sketch->clock()->update(); });
         
         sketch->timeline().stepTo(0);
         sketch->setup();
@@ -140,13 +140,13 @@ namespace chr
          * AND WE NEED THIS TO TAKE PLACE BEFORE THE FUNCTIONS
          * "POSTED" DURING CinderSketch::update ARE "POLLED"
          */
-        io_service().post([this]{ sketch->clock().update(); });
+        io_service().post([this]{ sketch->clock()->update(); });
 
         /*
          * MUST BE CALLED BEFORE Sketch::update
          * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
          */
-        double now = sketch->clock().getTime();
+        double now = sketch->clock()->getTime();
         
         sketch->update();
         sketch->timeline().stepTo(now); // WE CAN'T CONTROL THE APP'S TIMELINE SO WE NEED OUR OWN
@@ -347,13 +347,13 @@ namespace chr
     
     void CinderDelegate::start()
     {
-        sketch->clock().start();
+        sketch->clock()->start();
         sketch->start(CinderSketch::REASON_APP_SHOWN);
     }
     
     void CinderDelegate::stop()
     {
-        sketch->clock().stop();
+        sketch->clock()->stop();
         sketch->stop(CinderSketch::REASON_APP_HIDDEN);
         
         LOGI << "AVERAGE FRAME-RATE: " << getAverageFps() << " FPS" << endl;

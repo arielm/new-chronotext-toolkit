@@ -151,7 +151,7 @@ namespace chr
     
     void CinderDelegate::draw()
     {
-        sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
+        sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
 
         pollSensorEvents(); // WHERE accelerated IS INVOKED
         pollIOService(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
@@ -163,7 +163,7 @@ namespace chr
          * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
          * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
          */
-        double now = sketch->clock().getTime();
+        double now = sketch->clock()->getTime();
         
         // TODO: CALL memory::Manager::update()
 
@@ -181,7 +181,7 @@ namespace chr
         frameCount = 0;
         
         timer.start();
-        sketch->clock().start();
+        sketch->clock()->start();
         
         sketch->start(reason);
     }
@@ -189,7 +189,7 @@ namespace chr
     void CinderDelegate::stop(CinderSketch::Reason reason)
     {
         timer.stop();
-        sketch->clock().stop();
+        sketch->clock()->stop();
         
         sketch->stop(reason);
     }
