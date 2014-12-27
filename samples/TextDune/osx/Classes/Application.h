@@ -7,16 +7,16 @@
  */
 
 /*
- * STUB FOR RUNNING A CinderSketch ON iOS
+ * STUB FOR RUNNING A CinderSketch ON THE DESKTOP
  */
 
-#import <Foundation/Foundation.h>
+#pragma once
 
-#import "CinderDelegate.h"
+#include "chronotext/app/cinder/CinderDelegate.h"
 
-@interface AppDelegate : CinderDelegate <UIApplicationDelegate>
+class Application : public chr::CinderDelegate
 {
-    UIWindow *window;
-}
-
-@end
+public:
+    void applySettings(Settings *settings) final;
+    void keyDown(ci::app::KeyEvent event) final;
+};

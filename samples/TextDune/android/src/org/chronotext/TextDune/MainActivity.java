@@ -2,6 +2,7 @@
 package org.chronotext.TextDune;
 
 import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.utils.Utils;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -11,6 +12,9 @@ public class MainActivity extends Activity
 {
   static
   {
+    Utils.DEBUG = true;
+    Utils.TAG = "cinder";
+
     System.loadLibrary("TextDune");
   }
 
@@ -38,11 +42,20 @@ public class MainActivity extends Activity
     super.onResume();
     delegate.onResume();
   }
-
+  
   @Override
   protected void onDestroy()
   {
     super.onDestroy();
     delegate.onDestroy();
+  }
+
+  @Override
+  public void onBackPressed()
+  {
+    if (!delegate.onBackPressed())
+    {
+      super.onBackPressed();
+    }
   }
 }

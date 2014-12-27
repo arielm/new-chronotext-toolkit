@@ -55,7 +55,7 @@ protected:
     chr::Hairline hairline;
     std::vector<ci::Vec2f> vertices;
     
-    chr::Clock slaveClock;
+    chr::Clock::Ref slaveClock;
     float scale;
     float offset;
 };

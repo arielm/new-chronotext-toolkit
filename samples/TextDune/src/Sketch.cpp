@@ -52,7 +52,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    offset = 600 + 325 * math<float>::sin(slaveClock.getTime() * 1.75f);
+    offset = 600 + 325 * math<float>::sin(slaveClock->getTime() * 1.75f);
 }
 
 void Sketch::draw()
@@ -122,10 +122,10 @@ void Sketch::drawDune()
 
 void Sketch::addTouch(int index, float x, float y)
 {
-    slaveClock.stop();
+    slaveClock->stop();
 }
 
 void Sketch::removeTouch(int index, float x, float y)
 {
-    slaveClock.start();
+    slaveClock->start();
 }

@@ -1,0 +1,12 @@
+#include "Config.xcconfig"
+
+COPY_PHASE_STRIP = NO
+ONLY_ACTIVE_ARCH = YES
+GCC_OPTIMIZATION_LEVEL = 0
+GCC_DYNAMIC_NO_PIC = NO
+GCC_SYMBOLS_PRIVATE_EXTERN = NO
+
+OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*] = -lz "$(CINDER_PATH)/lib/libcinder-iphone-sim_d.a"
+OTHER_LDFLAGS[sdk=iphoneos*][arch=armv7] = -lz "$(CINDER_PATH)/lib/libcinder-iphone_d.a"
+
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1
