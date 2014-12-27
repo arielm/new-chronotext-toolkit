@@ -6,6 +6,14 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * IN SYNC WITH ResReWork BRANCH
+ *
+ * OSX: COMMIT b33c7e3
+ * IOS: COMMIT b33c7e3
+ * ANDROID: COMMIT b33c7e3
+ */
+
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
@@ -15,11 +23,25 @@
 
 class Sketch : public chr::CinderSketch
 {
+public:
+    Sketch()
+    :
+    CinderSketch()
+    {}
+    
+    void setup() final;
+    void resize() final;
+    void update() final;
+    void draw() final;
+    
+    void drawDotOnPath(const chr::FollowablePath &path);
+    
+protected:
     chr::TextureManager textureManager;
-
-    chr::TextureRef roadTexture;
-    chr::TextureRef checkerTexture;
-    chr::TextureRef dotTexture;
+    
+    chr::Texture::Ref roadTexture;
+    chr::Texture::Ref checkerTexture;
+    chr::Texture::Ref dotTexture;
     
     chr::FollowablePath roadPath;
     chr::TexturedTriangleStrip roadStrip;
@@ -34,14 +56,4 @@ class Sketch : public chr::CinderSketch
     
     float scale;
     float offset;
-    
-public:
-    Sketch(void *context, void *delegate = nullptr);
-    
-    void setup();
-    void resize();
-    void update();
-    void draw();
-    
-    void drawDotOnPath(const chr::FollowablePath &path);
 };

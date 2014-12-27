@@ -1,0 +1,9 @@
+#include "Config.xcconfig"
+
+COPY_PHASE_STRIP = YES
+GCC_OPTIMIZATION_LEVEL = 3
+OTHER_CFLAGS = -DNS_BLOCK_ASSERTIONS=1
+VALIDATE_PRODUCT = YES
+
+OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*] = -lz "$(CINDER_PATH)/lib/libcinder-iphone-sim.a"
+OTHER_LDFLAGS[sdk=iphoneos*][arch=armv7] = -lz "$(CINDER_PATH)/lib/libcinder-iphone.a"

@@ -20,20 +20,16 @@ using namespace chr;
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
 void Sketch::setup()
 {
     /*
      * THESE ARE MIPMAPPED TEXTURES:
      * SOME EMPTY-SPACE MUST BE LEFT AT THE EDGES IN ORDER TO AVOID ARTIFACTS WHEN SCALING-DOWN
      */
+    
     roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
     checkerTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-    dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
     
     // ---
     
@@ -100,14 +96,13 @@ void Sketch::resize()
      */
     for (auto &it : lys)
     {
-        it.second.stroke(it.first, scale * getWindowContentScale()); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
+        it.second.stroke(it.first, scale * getDisplayInfo().contentScale); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
     }
 }
 
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
-    offset = now * 40;
+    offset = clock().getTime() * 40;
 }
 
 void Sketch::draw()
@@ -147,7 +142,7 @@ void Sketch::draw()
     /*
      * RE-STROKING IS NECESSARY BOTH IN TERM OF POTENTIAL SCREEN-SIZE CHANGE AND IN TERM OF DASHED-LINE-OFFSET MOTION
      */
-    peanutHairline.stroke(peanutPath, scale * getWindowContentScale(), offset); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
+    peanutHairline.stroke(peanutPath, scale * getDisplayInfo().contentScale, offset); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
     peanutHairline.draw();
     
     drawDotOnPath(peanutPath);
