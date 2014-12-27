@@ -88,4 +88,3 @@ namespace chr
 }
 
 #define EXCEPTION(TYPE, ...) chr::Exception<TYPE>(#TYPE, __FILE__, __LINE__, ##__VA_ARGS__)
-#define EXCEPTION_TYPE(TYPE) chr::Exception<TYPE>
