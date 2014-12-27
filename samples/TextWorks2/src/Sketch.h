@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -18,6 +18,10 @@
  *      LINE-LAYOUT USING DIFFERENT FONTS AND COLORS
  */
 
+/*
+ * IN SYNC WITH ResRework BRANCH / COMMIT 81fee47
+ */
+
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
@@ -27,6 +31,19 @@
 
 class Sketch : public chr::CinderSketch
 {
+public:
+    Sketch()
+    :
+    CinderSketch()
+    {}
+    
+    void setup() final;
+    void resize() final;
+    void draw() final;
+    
+    void drawAlignedText(const StyledLineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
+    
+protected:
     chr::zf::FontManager fontManager;
     
     std::shared_ptr<chr::ZFont> font1;
@@ -35,14 +52,4 @@ class Sketch : public chr::CinderSketch
     float fontSize;
     std::map<int, StyledLineLayout::Style> styleSheet;
     StyledLineLayout layout;
-
-public:
-    Sketch(void *context, void *delegate = NULL);
-    
-    void setup(bool renewContext);
-    void event(int id);
-    void resize();
-    void draw();
-    
-    void drawAlignedText(const StyledLineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
 };
