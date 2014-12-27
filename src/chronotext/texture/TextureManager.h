@@ -9,11 +9,7 @@
 /*
  * TODO:
  *
- * 1) INCORPORATE TextureRequest INTO Texture
- *    - SHOULD BE: Texture::Request
- *    - SIMILAR TO Effect::Request
- *
- * 2) ADD int tag TO TextureManager
+ * 1) ADD int tag TO TextureManager
  *    - DEFAULT-VALUE: 0
  *    - WILL ALLOW TO MAINTAIN SEVERAL "SETS OF TEXTURES"
  *    - REQUIRED CHANGES TO THE API:
@@ -21,7 +17,7 @@
  *        - void discardTextures(int tag = 0)
  *        - bool reloadTextures(int tag = 0)
  *
- * 3) AVOID IF POSSIBLE:
+ * 2) AVOID IF POSSIBLE:
  *    - "EMPTY" Texture::Request
  *    = "EMPTY" TextureData
  */
@@ -38,8 +34,8 @@ namespace chr
     class TextureManager
     {
     public:
-        Texture::Ref getTexture(InputSource::Ref inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
-        Texture::Ref getTexture(const TextureRequest &textureRequest);
+        Texture::Ref getTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE);
+        Texture::Ref getTexture(const Texture::Request &request);
 
         void discardTexture(Texture::Ref texture);
         bool reloadTexture(Texture::Ref texture);
@@ -48,6 +44,6 @@ namespace chr
         void reloadTextures();
         
     protected:
-        std::map<TextureRequest, Texture::Ref> textures;
+        std::map<Texture::Request, Texture::Ref> textures;
     };
 }

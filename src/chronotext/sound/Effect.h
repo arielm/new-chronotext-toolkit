@@ -42,6 +42,8 @@ namespace chr
             }
         };
         
+        // ---
+        
         Request request;
         int uniqueId;
         FMOD::Sound *sound;

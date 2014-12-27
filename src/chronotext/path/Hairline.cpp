@@ -27,7 +27,7 @@ namespace chr
                 throw;
         }
         
-        texture = textureManager.getTexture(TextureRequest(InputSource::getResource(resourceName), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+        texture = textureManager.getTexture(Texture::Request(InputSource::getResource(resourceName), false, Texture::Request::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
     }
     
     void Hairline::stroke(const FollowablePath &path, float scale, float uOffset)

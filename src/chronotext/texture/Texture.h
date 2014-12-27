@@ -8,11 +8,14 @@
 
 #pragma once
 
-#include "chronotext/Exception.h"
-#include "chronotext/texture/TextureData.h"
+#include "chronotext/InputSource.h"
+
+#include "cinder/gl/Texture.h"
 
 namespace chr
 {
+    class TextureData;
+
     class Texture
     {
     public:
@@ -20,12 +23,88 @@ namespace chr
 
         typedef std::shared_ptr<Texture> Ref;
 
-        TextureRequest request;
+        struct Request
+        {
+            enum Flags
+            {
+                FLAGS_NONE = 0,
+                FLAGS_TRANSLUCENT = 1,
+                FLAGS_POT = 2
+            };
+            
+            InputSource::Ref inputSource;
+            bool useMipmap;
+            Flags flags;
+            GLenum wrapS;
+            GLenum wrapT;
+            ci::Vec2i maxSize;
+            
+            Request()
+            :
+            useMipmap(false),
+            flags(FLAGS_NONE),
+            wrapS(0),
+            wrapT(0)
+            {}
+            
+            Request(InputSource::Ref inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
+            :
+            inputSource(inputSource),
+            useMipmap(useMipmap),
+            flags(flags),
+            wrapS(GL_CLAMP_TO_EDGE),
+            wrapT(GL_CLAMP_TO_EDGE),
+            maxSize(0, 0)
+            {}
+            
+            ci::gl::Texture::Format getFormat() const
+            {
+                ci::gl::Texture::Format format;
+                format.setWrap(wrapS, wrapT);
+                
+                if (useMipmap)
+                {
+                    format.enableMipmapping(true);
+                    format.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+                }
+                
+                return format;
+            }
+            
+            Request& setWrap(GLenum s, GLenum t)
+            {
+                wrapS = s;
+                wrapT = t;
+                return *this;
+            }
+            
+            Request& setMaxSize(const ci::Vec2i &size)
+            {
+                maxSize = size;
+                return *this;
+            }
+            
+            bool operator<(const Request &rhs) const
+            {
+                if (std::tie(useMipmap, flags, wrapS, wrapT) == std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT))
+                {
+                    return (inputSource->getURI() < rhs.inputSource->getURI());
+                }
+                else
+                {
+                    return std::tie(useMipmap, flags, wrapS, wrapT) < std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT);
+                }
+            }
+        };
+        
+        // ---
+        
+        Request request;
         uint32_t glId;
         
-        Texture(InputSource::Ref inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
-        Texture(const TextureRequest &textureRequest);
-        Texture(const TextureData &textureData);
+        Texture(InputSource::Ref inputSource, bool useMipmap = false, Request::Flags flags = Request::FLAGS_NONE);
+        Texture(const Request &request);
+        Texture(const TextureData &data);
         
         ~Texture();
         

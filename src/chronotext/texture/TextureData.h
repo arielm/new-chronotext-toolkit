@@ -8,8 +8,7 @@
 
 #pragma once
 
-#include "chronotext/InputSource.h"
-#include "chronotext/texture/TextureRequest.h"
+#include "chronotext/texture/Texture.h"
 #include "chronotext/texture/PVRHelper.h"
 
 #include "cinder/Surface.h"
@@ -29,7 +28,7 @@ namespace chr
         };
         
         Type type;
-        TextureRequest request;
+        Texture::Request request;
         
         /*
          * NO SPECIAL-TREATMENT IS NECESSARY FOR surface AND buffer IN ORDER TO AVOID EXTRA DATA-COPYING
@@ -53,7 +52,7 @@ namespace chr
         type(TYPE_UNDEFINED)
         {}
         
-        TextureData(const TextureRequest &request, const ci::Surface &surface, float maxU = 1, float maxV = 1)
+        TextureData(const Texture::Request &request, const ci::Surface &surface, float maxU = 1, float maxV = 1)
         :
         type(TYPE_SURFACE),
         request(request),
@@ -62,21 +61,21 @@ namespace chr
         maxV(maxV)
         {}
         
-        TextureData(const TextureRequest &request, ci::ImageSourceRef imageSource)
+        TextureData(const Texture::Request &request, ci::ImageSourceRef imageSource)
         :
         type(TYPE_IMAGE_SOURCE),
         request(request),
         imageSource(imageSource)
         {}
         
-        TextureData(const TextureRequest &request, const ci::Buffer &buffer)
+        TextureData(const Texture::Request &request, const ci::Buffer &buffer)
         :
         type(TYPE_PVR),
         request(request),
         buffer(buffer)
         {}
         
-        TextureData(const TextureRequest &request, std::shared_ptr<uint8_t> data, GLenum glInternalFormat, GLenum glFormat, int width, int height)
+        TextureData(const Texture::Request &request, std::shared_ptr<uint8_t> data, GLenum glInternalFormat, GLenum glFormat, int width, int height)
         :
         type(TYPE_DATA),
         request(request),

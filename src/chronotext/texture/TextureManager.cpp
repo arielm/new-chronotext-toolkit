@@ -13,22 +13,22 @@ using namespace ci;
 
 namespace chr
 {
-    Texture::Ref TextureManager::getTexture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Ref TextureManager::getTexture(InputSource::Ref inputSource, bool useMipmap, Texture::Request::Flags flags)
     {
-        return getTexture(TextureRequest(inputSource, useMipmap, flags));
+        return getTexture(Texture::Request(inputSource, useMipmap, flags));
     }
     
-    Texture::Ref TextureManager::getTexture(const TextureRequest &textureRequest)
+    Texture::Ref TextureManager::getTexture(const Texture::Request &request)
     {
-        auto it = textures.find(textureRequest);
+        auto it = textures.find(request);
         
         if (it != textures.end())
         {
             return it->second;
         }
         
-        auto texture = make_shared<Texture>(textureRequest);
-        textures[textureRequest] = texture;
+        auto texture = make_shared<Texture>(request);
+        textures[request] = texture;
         
         return texture;
     }

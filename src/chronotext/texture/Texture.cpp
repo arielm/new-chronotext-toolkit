@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/texture/Texture.h"
+#include "chronotext/texture/TextureData.h"
 #include "chronotext/texture/TextureHelper.h"
 #include "chronotext/Context.h"
 
@@ -18,28 +19,28 @@ namespace chr
 {
     bool Texture::VERBOSE = false;
     
-    Texture::Texture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Texture(InputSource::Ref inputSource, bool useMipmap, Request::Flags flags)
     :
-    request(TextureRequest(inputSource, useMipmap, flags)),
+    request(Request(inputSource, useMipmap, flags)),
     glId(0)
     {
         setTarget(TextureHelper::loadTexture(request));
     }
     
-    Texture::Texture(const TextureRequest &textureRequest)
+    Texture::Texture(const Request &request)
     :
-    request(textureRequest),
+    request(request),
     glId(0)
     {
         setTarget(TextureHelper::loadTexture(request));
     }
     
-    Texture::Texture(const TextureData &textureData)
+    Texture::Texture(const TextureData &data)
     :
-    request(textureData.request),
+    request(data.request),
     glId(0)
     {
-        setTarget(TextureHelper::uploadTextureData(textureData));
+        setTarget(TextureHelper::uploadTextureData(data));
     }
     
     Texture::~Texture()

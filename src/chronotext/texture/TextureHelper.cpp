@@ -30,12 +30,12 @@ namespace chr
 
     // ---
     
-    gl::TextureRef TextureHelper::loadTexture(InputSource::Ref inputSource, bool useMipmap, TextureRequest::Flags flags)
+    gl::TextureRef TextureHelper::loadTexture(InputSource::Ref inputSource, bool useMipmap, Texture::Request::Flags flags)
     {
-        return loadTexture(TextureRequest(inputSource, useMipmap, flags));
+        return loadTexture(Texture::Request(inputSource, useMipmap, flags));
     }
     
-    gl::TextureRef TextureHelper::loadTexture(const TextureRequest &textureRequest)
+    gl::TextureRef TextureHelper::loadTexture(const Texture::Request &textureRequest)
     {
         TextureData textureData = fetchTextureData(textureRequest);
         
@@ -58,7 +58,7 @@ namespace chr
     
     // ---
     
-    TextureData TextureHelper::fetchTextureData(const TextureRequest &textureRequest)
+    TextureData TextureHelper::fetchTextureData(const Texture::Request &textureRequest)
     {
         if (PROBE_MEMORY)
         {
@@ -86,11 +86,11 @@ namespace chr
         }
         else
         {
-            if (textureRequest.flags & TextureRequest::FLAGS_TRANSLUCENT)
+            if (textureRequest.flags & Texture::Request::FLAGS_TRANSLUCENT)
             {
                 return TextureData(fetchTranslucentTextureData(textureRequest));
             }
-            else if (textureRequest.flags & TextureRequest::FLAGS_POT)
+            else if (textureRequest.flags & Texture::Request::FLAGS_POT)
             {
                 return TextureData(fetchPowerOfTwoTextureData(textureRequest));
             }
@@ -176,7 +176,7 @@ namespace chr
         }
     }
     
-    bool TextureHelper::isOverSized(const TextureRequest &textureRequest, const Vec2i &size)
+    bool TextureHelper::isOverSized(const Texture::Request &textureRequest, const Vec2i &size)
     {
         if ((textureRequest.maxSize.x > 0) && (textureRequest.maxSize.y > 0))
         {
@@ -190,7 +190,7 @@ namespace chr
      * BASED ON https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/gl/Texture.cpp#L478-490
      */
     
-    TextureData TextureHelper::fetchTranslucentTextureData(const TextureRequest &textureRequest)
+    TextureData TextureHelper::fetchTranslucentTextureData(const Texture::Request &textureRequest)
     {
         Surface surface(loadImage(textureRequest.inputSource->loadDataSource()));
         
@@ -232,7 +232,7 @@ namespace chr
         }
     }
     
-    TextureData TextureHelper::fetchPowerOfTwoTextureData(const TextureRequest &textureRequest)
+    TextureData TextureHelper::fetchPowerOfTwoTextureData(const Texture::Request &textureRequest)
     {
         /*
          * NO EXTRA DATA-COPYING WILL OCCUR BECAUSE ci::Surface
