@@ -3,15 +3,14 @@ include $(CLEAR_VARS)
 
 CINDER_PATH = ../../../../../../
 
-LOCAL_SRC_FILES := main.cpp
-
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../src
 FILE_LIST := $(wildcard $(LOCAL_PATH)/../../src/*.cpp)
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
+CHR_USE_XFONT := 1
 include $(LOCAL_PATH)/$(CINDER_PATH)/blocks/new-chronotext-toolkit/android/Android.mk
 
-LOCAL_CFLAGS := -DCHR_COMPLEX
+LOCAL_CFLAGS :=
 LOCAL_CFLAGS += -ffast-math -O3
 #LOCAL_CFLAGS += -g -DDEBUG
 

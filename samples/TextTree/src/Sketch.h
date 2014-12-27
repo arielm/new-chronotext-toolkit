@@ -2,8 +2,16 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
+ * IN SYNC WITH ResReWork BRANCH
+ *
+ * OSX: COMMIT b33c7e3
+ * IOS: COMMIT b33c7e3
+ * ANDROID: COMMIT b33c7e3
  */
 
 #pragma once
@@ -14,8 +22,21 @@
 
 class Sketch : public chr::CinderSketch
 {
+public:
+    Sketch()
+    :
+    CinderSketch()
+    {}
+    
+    void setup();
+    void update();
+    void draw();
+    
+    static float oscillate(double t, float min, float max, float freq);
+    
+protected:
     chr::TextureManager textureManager;
-    chr::TextureRef dot;
+    chr::Texture::Ref dot;
     
     chr::xf::FontManager fontManager;
     std::shared_ptr<chr::XFont> font;
@@ -25,13 +46,4 @@ class Sketch : public chr::CinderSketch
     float r3;
     float r4;
     float r5;
-    
-public:
-    Sketch(void *context, void *delegate = nullptr);
-    
-    void setup();
-    void update();
-    void draw();
-    
-    static float oscillate(double t, float min, float max, float freq);
 };

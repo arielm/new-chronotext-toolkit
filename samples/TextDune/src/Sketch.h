@@ -14,6 +14,14 @@
  * 3) http://chronotext.org/bookOfSand
  */
 
+/*
+ * IN SYNC WITH ResReWork BRANCH
+ *
+ * OSX: COMMIT b33c7e3
+ * IOS: COMMIT b33c7e3
+ * ANDROID: COMMIT b33c7e3
+ */
+
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
@@ -23,21 +31,8 @@
 
 class Sketch : public chr::CinderSketch
 {
-    chr::TextureManager textureManager;
-    chr::xf::FontManager fontManager;
-    
-    std::shared_ptr<chr::XFont> font;
-    
-    chr::FollowablePath path;
-    chr::Hairline hairline;
-    std::vector<ci::Vec2f> vertices;
-
-    chr::Clock slaveClock;
-    float scale;
-    float offset;
-    
 public:
-    Sketch(void *context, void *delegate = nullptr);
+    Sketch();
     
     void setup();
     void resize();
@@ -49,4 +44,18 @@ public:
     
     void addTouch(int index, float x, float y);
     void removeTouch(int index, float x, float y);
+    
+protected:
+    chr::TextureManager textureManager;
+    chr::xf::FontManager fontManager;
+    
+    std::shared_ptr<chr::XFont> font;
+    
+    chr::FollowablePath path;
+    chr::Hairline hairline;
+    std::vector<ci::Vec2f> vertices;
+    
+    chr::Clock slaveClock;
+    float scale;
+    float offset;
 };

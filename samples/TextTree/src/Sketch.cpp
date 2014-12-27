@@ -22,14 +22,9 @@ const float TEXT_SIZE = 20;
 const float DOT_SCALE = 0.2f;
 const float GROW_FACTOR = 1.133f;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
 void Sketch::setup()
 {
-    dot = textureManager.getTexture("dot.png", true, TextureRequest::FLAGS_TRANSLUCENT);
+    dot = textureManager.getTexture(InputSource::getResource("dot.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
     font = fontManager.getCachedFont(InputSource::getResource("American Typewriter_Regular_64.fnt"), XFont::Properties2d());
     
     // ---
@@ -43,7 +38,7 @@ void Sketch::setup()
 
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
+    double now = clock().getTime();
 
     r1 = oscillate(now, -3, +3, 0.75f);
     r2 = oscillate(now, 6, 24, 1.5f);

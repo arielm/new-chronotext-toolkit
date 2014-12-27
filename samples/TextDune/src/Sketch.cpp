@@ -24,10 +24,10 @@ const float GAP = 7;
 
 const wstring text = L"hell with sinus, text should move under the influence of physical forces!";
 
-Sketch::Sketch(void *context, void *delegate)
+Sketch::Sketch()
 :
-CinderSketch(context, delegate),
-slaveClock(clock().shared_from_this())
+CinderSketch(),
+slaveClock(Clock::create(clock()))
 {}
 
 void Sketch::setup()
