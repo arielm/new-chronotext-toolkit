@@ -22,7 +22,7 @@
  */
 
 /*
- * IN SYNC WITH ResRework BRANCH / COMMIT 81fee47
+ * IN SYNC WITH ResRework BRANCH / COMMIT 3132d21
  */
 
 #include "cinder/app/AppNative.h"
@@ -133,7 +133,7 @@ void Application::loadFontSafely(const string &fileName, float direction)
 {
     try
     {
-        auto font = fontManager.getCachedFont(InputSource::getFileInDocuments(fileName), XFont::Properties2d());
+        auto font = fontManager.getFont(InputSource::getFileInDocuments(fileName), XFont::Properties2d());
         font->setDirection(direction);
         fonts.push_back(font);
     }

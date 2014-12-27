@@ -33,7 +33,7 @@ slaveClock(Clock::create(clock()))
 void Sketch::setup()
 {
     hairline = Hairline(textureManager, Hairline::TYPE_NORMAL);
-    font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
+    font = fontManager.getFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     
     // ---
     

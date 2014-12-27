@@ -26,7 +26,7 @@ void Sketch::setup()
 {
     fontManager.loadConfig(InputSource::getResource("font-config.xml"));
     
-    font = fontManager.getCachedFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
+    font = fontManager.getFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
     

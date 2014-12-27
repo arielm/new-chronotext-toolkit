@@ -22,8 +22,8 @@ void Sketch::setup()
 {
     fontManager.loadConfig(InputSource::getResource("font-config.xml"));
     
-    font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
-    font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
+    font1 = fontManager.getFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
+    font2 = fontManager.getFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
     
     styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
     styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));

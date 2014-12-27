@@ -22,9 +22,10 @@ const string TEXT = "Spouse and helpmate of אָדָם קַדְמוֹן: Heva, n
 void Sketch::setup()
 {
     float scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
+    float fontSize = scale * FONT_SIZE;
     
     fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-    font = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(scale * FONT_SIZE).setCrisp());
+    font = fontManager.getFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(fontSize).setCrisp());
     
     // ---
     
