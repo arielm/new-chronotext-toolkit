@@ -78,8 +78,8 @@ namespace chr
     
     void CinderDelegate::setup()
     {
-        updateRealDisplayInfo();
-        updateRealWindowInfo();
+        updateActualDisplayInfo();
+        updateActualWindowInfo();
 
         CONTEXT::init(); // TODO: HANDLE FAILURE
         
@@ -122,7 +122,7 @@ namespace chr
          */
         assert(!(emulated && (startCount > 0)));
         
-        realWindowInfo.size = getWindowSize();
+        actualWindowInfo.size = getWindowSize();
         sketch->resize();
         
         if (startCount == 0)
@@ -171,12 +171,12 @@ namespace chr
     
     WindowInfo CinderDelegate::getWindowInfo() const
     {
-        return emulated ? emulatedDevice.windowInfo : realWindowInfo;
+        return emulated ? emulatedDevice.windowInfo : actualWindowInfo;
     }
     
     DisplayInfo CinderDelegate::getDisplayInfo() const
     {
-        return emulated ? emulatedDevice.displayInfo : realDisplayInfo;
+        return emulated ? emulatedDevice.displayInfo : actualDisplayInfo;
     }
     
 #pragma mark ---------------------------------------- INPUT ----------------------------------------
@@ -332,17 +332,17 @@ namespace chr
     
 #pragma mark ---------------------------------------- LIFECYCLE ----------------------------------------
     
-    void CinderDelegate::updateRealDisplayInfo()
+    void CinderDelegate::updateActualDisplayInfo()
     {
         float contentScale = getWindowContentScale();
-        Vec2i baseSize = getWindowSize() / contentScale;
+        Vec2i baseSize = getWindowSize() / contentScale; // XXX
         
-        realDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
+        actualDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
     }
     
-    void CinderDelegate::updateRealWindowInfo()
+    void CinderDelegate::updateActualWindowInfo()
     {
-        realWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
+        actualWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
     }
     
     void CinderDelegate::start()

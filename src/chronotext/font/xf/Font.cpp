@@ -88,7 +88,7 @@ namespace chr
         
         bool Font::isValid(wchar_t c) const
         {
-            return (glyphs.count(c) > 0);
+            return glyphs.count(c);
         }
         
         int Font::getGlyphIndex(wchar_t c) const
@@ -97,19 +97,15 @@ namespace chr
             {
                 return -2;
             }
-            else
+            
+            auto it = glyphs.find(c);
+            
+            if (it != glyphs.end())
             {
-                auto it = glyphs.find(c);
-                
-                if (it == glyphs.end())
-                {
-                    return -1; // SHALL WE USE A "MISSING GLYPH" AND RETURN ITS INDEX?
-                }
-                else
-                {
-                    return it->second;
-                }
+                return it->second;
             }
+            
+            return -1; // SHALL WE USE A "MISSING GLYPH" AND RETURN ITS INDEX?
         }
         
         wstring Font::getCharacters() const
@@ -117,9 +113,9 @@ namespace chr
             wstring characters;
             characters.reserve(glyphs.size());
             
-            for (auto it : glyphs)
+            for (auto &glyph : glyphs)
             {
-                characters.push_back(it.first);
+                characters.push_back(glyph.first);
             }
             
             return characters;
@@ -201,14 +197,13 @@ namespace chr
             {
                 return spaceAdvance * sizeRatio;
             }
-            else if (glyphIndex == -1)
+            
+            if (glyphIndex == -1)
             {
                 return 0;
             }
-            else
-            {
-                return advance[glyphIndex] * sizeRatio;
-            }
+            
+            return advance[glyphIndex] * sizeRatio;
         }
         
         float Font::getCharAdvance(wchar_t c) const
@@ -443,49 +438,47 @@ namespace chr
             {
                 return false;
             }
+            
+            if (direction * axis.x > 0)
+            {
+                quad.x1 = x + le[glyphIndex] * sizeRatio;
+                quad.x2 = quad.x1 + w[glyphIndex] * sizeRatio;
+            }
             else
             {
-                if (direction * axis.x > 0)
-                {
-                    quad.x1 = x + le[glyphIndex] * sizeRatio;
-                    quad.x2 = quad.x1 + w[glyphIndex] * sizeRatio;
-                }
-                else
-                {
-                    quad.x2 = x - le[glyphIndex] * sizeRatio;
-                    quad.x1 = quad.x2 - w[glyphIndex] * sizeRatio;
-                }
-                
-                if (axis.x > 0)
-                {
-                    quad.u1 = u1[glyphIndex];
-                    quad.u2 = u2[glyphIndex];
-                }
-                else
-                {
-                    quad.u1 = u2[glyphIndex];
-                    quad.u2 = u1[glyphIndex];
-                }
-                
-                if (axis.y > 0)
-                {
-                    quad.y1 = y - te[glyphIndex] * sizeRatio;
-                    quad.y2 = quad.y1 + h[glyphIndex] * sizeRatio;
-                    
-                    quad.v1 = v1[glyphIndex];
-                    quad.v2 = v2[glyphIndex];
-                }
-                else
-                {
-                    quad.y2 = y + te[glyphIndex] * sizeRatio;
-                    quad.y1 = quad.y2 - h[glyphIndex] * sizeRatio;
-                    
-                    quad.v1 = v2[glyphIndex];
-                    quad.v2 = v1[glyphIndex];
-                }
-                
-                return true;
+                quad.x2 = x - le[glyphIndex] * sizeRatio;
+                quad.x1 = quad.x2 - w[glyphIndex] * sizeRatio;
             }
+            
+            if (axis.x > 0)
+            {
+                quad.u1 = u1[glyphIndex];
+                quad.u2 = u2[glyphIndex];
+            }
+            else
+            {
+                quad.u1 = u2[glyphIndex];
+                quad.u2 = u1[glyphIndex];
+            }
+            
+            if (axis.y > 0)
+            {
+                quad.y1 = y - te[glyphIndex] * sizeRatio;
+                quad.y2 = quad.y1 + h[glyphIndex] * sizeRatio;
+                
+                quad.v1 = v1[glyphIndex];
+                quad.v2 = v2[glyphIndex];
+            }
+            else
+            {
+                quad.y2 = y + te[glyphIndex] * sizeRatio;
+                quad.y1 = quad.y2 - h[glyphIndex] * sizeRatio;
+                
+                quad.v1 = v2[glyphIndex];
+                quad.v2 = v1[glyphIndex];
+            }
+            
+            return true;
         }
         
         bool Font::clipQuad(Quad &quad) const

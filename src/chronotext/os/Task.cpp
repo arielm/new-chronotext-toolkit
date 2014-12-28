@@ -121,7 +121,10 @@ namespace chr
 
         if (!synchronous && state.started)
         {
-            LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+            if (!state.cancelRequired)
+            {
+                LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+            }
             
             state.cancelRequired = true;
         }
@@ -179,7 +182,7 @@ namespace chr
         {
             LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
             
-            if (!isCancelRequired())
+            if (!isCancelRequired()) // TODO: CHECK IF THIS CONDITION MAKES SENSE
             {
                 /*
                  * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
@@ -194,7 +197,7 @@ namespace chr
             state.ended = true;
             
             /*
-             * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED BY DURING Task::run()
+             * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED DURING Task::run()
              *
              * TODO: CONSIDER USING A LAMBDA INSTEAD OF bind
              */

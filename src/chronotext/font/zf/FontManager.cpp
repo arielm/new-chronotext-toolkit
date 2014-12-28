@@ -257,9 +257,9 @@ namespace chr
             
             set<ActualFont*> actualFontsInUse;
             
-            for (auto &element : virtualFonts)
+            for (auto &virtualFont : virtualFonts)
             {
-                for (auto &fontSet : element.second->fontSetMap)
+                for (auto &fontSet : virtualFont.second->fontSetMap)
                 {
                     for (auto &actualFont : fontSet.second)
                     {
@@ -268,11 +268,11 @@ namespace chr
                 }
             }
             
-            for (auto &element : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                if (!actualFontsInUse.count(element.second.get()))
+                if (!actualFontsInUse.count(actualFont.second.get()))
                 {
-                    element.second->unload();
+                    actualFont.second->unload();
                 }
             }
         }
@@ -281,25 +281,25 @@ namespace chr
         {
             layoutCache->clear();
             
-            for (auto &element : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                element.second->unload();
+                actualFont.second->unload();
             }
         }
         
         void FontManager::discardTextures()
         {
-            for (auto &element : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                element.second->discardTextures();
+                actualFont.second->discardTextures();
             }
         }
         
         void FontManager::reloadTextures()
         {
-            for (auto &element : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                element.second->reloadTextures();
+                actualFont.second->reloadTextures();
             }
         }
         
@@ -307,9 +307,9 @@ namespace chr
         {
             size_t total = 0;
             
-            for (auto &element : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                total += element.second->getTextureMemoryUsage();
+                total += actualFont.second->getTextureMemoryUsage();
             }
             
             return total;

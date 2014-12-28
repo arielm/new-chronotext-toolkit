@@ -265,9 +265,9 @@ namespace chr
         {
             set<FontTexture*> texturesInUse;
             
-            for (auto &element : fonts)
+            for (auto &font : fonts)
             {
-                const auto &uri = element.first.first;
+                const auto &uri = font.first.first;
                 auto it = fontDataAndTextures.find(uri);
                 
                 if (it != fontDataAndTextures.end())
@@ -298,9 +298,9 @@ namespace chr
         {
             set<FontTexture*> texturesInUse;
             
-            for (auto &element : fonts)
+            for (auto &font : fonts)
             {
-                const auto &uri = element.first.first;
+                const auto &uri = font.first.first;
                 auto it = fontDataAndTextures.find(uri);
                 
                 if (it != fontDataAndTextures.end())

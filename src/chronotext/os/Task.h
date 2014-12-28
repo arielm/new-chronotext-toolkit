@@ -42,7 +42,9 @@ namespace chr
             
             State();
         };
-        
+
+        static void sleep(double seconds);
+
         virtual bool init() { return true; }
         virtual void shutdown() {}
         virtual void run() = 0;
@@ -52,8 +54,6 @@ namespace chr
         bool hasStarted();
         bool hasEnded();
         bool isCancelRequired();
-        
-        static void sleep(double seconds);
         
     protected:
         State state;

@@ -41,7 +41,7 @@ namespace chr
         
         void TextHelper::drawTransformedText(Font &font, const std::wstring &text, float x, float y)
         {
-            float direction = font.getDirection();
+            auto direction = font.getDirection();
             auto matrix = font.getMatrix();
             
             if (x != 0)
@@ -63,8 +63,8 @@ namespace chr
         
         float TextHelper::drawTextOnPath(Font &font, const wstring &text, const FollowablePath &path, float offsetX, float offsetY)
         {
-            float sampleSize = 0.5f * font.getSize();
-            float direction = font.getDirection();
+            auto sampleSize = 0.5f * font.getSize();
+            auto direction = font.getDirection();
             auto matrix = font.getMatrix();
             
             font.beginSequence();
@@ -72,7 +72,7 @@ namespace chr
             for (auto c : text)
             {
                 auto glyphIndex = font.getGlyphIndex(c);
-                float half = 0.5f * font.getGlyphAdvance(glyphIndex) * direction;
+                auto half = 0.5f * font.getGlyphAdvance(glyphIndex) * direction;
                 offsetX += half;
                 
                 if (glyphIndex >= 0)

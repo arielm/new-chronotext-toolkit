@@ -69,13 +69,13 @@ namespace chr
         EmulatedDevice emulatedDevice;
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
         
-        DisplayInfo realDisplayInfo;
-        WindowInfo realWindowInfo;
+        DisplayInfo actualDisplayInfo;
+        WindowInfo actualWindowInfo;
 
         void setSketch(CinderSketch *sketch);
 
-        void updateRealDisplayInfo();
-        void updateRealWindowInfo();
+        void updateActualDisplayInfo();
+        void updateActualWindowInfo();
         
         void start();
         void stop();

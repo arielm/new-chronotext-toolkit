@@ -43,14 +43,14 @@
 
 - (BOOL) canBecomeKeyWindow
 {
-    [self.parentWindow becomeKeyWindow]; // TRICK TO AVOID THE CinderWindow TO APPEAR UNFOCUSED WHEN INTERACTING WITH CONTROLS ON THE OverlayWindow
+    [self.parentWindow becomeKeyWindow]; // TRICK TO AVOID THE CinderWindow TO APPEAR UNFOCUSED WHEN INTERACTING WITH NSViews ON THE OverlayWindow
     return YES;
 }
 
 - (void) windowWillClose:(NSNotification*)notification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self close]; // WILL RELEASE THE NSWindow (AND ALL THE NSView'S INSIDE)
+    [self close]; // WILL RELEASE THE NSWindow (AND ALL THE NSViews INSIDE)
 }
 
 @end

@@ -9,7 +9,7 @@
 /*
  * TODO:
  *
- * 1) ADD int tag TO TextureManager
+ * 1) ADD int tag TO Texture::Request
  *    - DEFAULT-VALUE: 0
  *    - WILL ALLOW TO MAINTAIN SEVERAL "SETS OF TEXTURES"
  *    - REQUIRED CHANGES TO THE API:
