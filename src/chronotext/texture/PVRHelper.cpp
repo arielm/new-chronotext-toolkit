@@ -6,7 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/texture/PVRHelper.h"
+#include "PVRHelper.h"
+
 #include "chronotext/texture/Texture.h"
 #include "chronotext/utils/MathUtils.h"
 

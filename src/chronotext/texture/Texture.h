@@ -9,13 +9,12 @@
 #pragma once
 
 #include "chronotext/InputSource.h"
+#include "chronotext/texture/PVRHelper.h"
 
-#include "cinder/gl/Texture.h"
+#include "cinder/ImageIo.h"
 
 namespace chr
 {
-    class TextureData;
-
     class Texture
     {
     public:
@@ -97,6 +96,78 @@ namespace chr
             }
         };
         
+        struct Data
+        {
+            enum Type
+            {
+                TYPE_UNDEFINED,
+                TYPE_SURFACE,
+                TYPE_IMAGE_SOURCE,
+                TYPE_PVR,
+                TYPE_DATA
+            };
+            
+            Type type;
+            Request request;
+            
+            /*
+             * NO SPECIAL-TREATMENT IS NECESSARY FOR surface AND buffer IN ORDER TO AVOID EXTRA DATA-COPYING
+             * SINCE ci::Surface AND ci::Buffer EMULATE shared_ptr INTERNALLY
+             */
+            ci::Surface surface;
+            ci::ImageSourceRef imageSource;
+            ci::Buffer buffer;
+            std::shared_ptr<uint8_t> data;
+            
+            float maxU;
+            float maxV;
+            
+            GLenum glInternalFormat;
+            GLenum glFormat;
+            int width;
+            int height;
+            
+            Data(const Request &request)
+            :
+            type(TYPE_UNDEFINED),
+            request(request)
+            {}
+            
+            Data(const Request &request, const ci::Surface &surface, float maxU = 1, float maxV = 1)
+            :
+            type(TYPE_SURFACE),
+            request(request),
+            surface(surface),
+            maxU(maxU),
+            maxV(maxV)
+            {}
+            
+            Data(const Request &request, ci::ImageSourceRef imageSource)
+            :
+            type(TYPE_IMAGE_SOURCE),
+            request(request),
+            imageSource(imageSource)
+            {}
+            
+            Data(const Request &request, const ci::Buffer &buffer)
+            :
+            type(TYPE_PVR),
+            request(request),
+            buffer(buffer)
+            {}
+            
+            Data(const Request &request, std::shared_ptr<uint8_t> data, GLenum glInternalFormat, GLenum glFormat, int width, int height)
+            :
+            type(TYPE_DATA),
+            request(request),
+            data(data),
+            glInternalFormat(glInternalFormat),
+            glFormat(glFormat),
+            width(width),
+            height(height)
+            {}
+        };
+        
         // ---
         
         Request request;
@@ -104,7 +175,7 @@ namespace chr
         
         Texture(InputSource::Ref inputSource, bool useMipmap = false, Request::Flags flags = Request::FLAGS_NONE);
         Texture(const Request &request);
-        Texture(const TextureData &data);
+        Texture(const Data &data);
         
         ~Texture();
         

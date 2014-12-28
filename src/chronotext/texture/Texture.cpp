@@ -6,8 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/texture/Texture.h"
-#include "chronotext/texture/TextureData.h"
+#include "Texture.h"
+
 #include "chronotext/texture/TextureHelper.h"
 #include "chronotext/Context.h"
 
@@ -35,7 +35,7 @@ namespace chr
         setTarget(TextureHelper::loadTexture(request));
     }
     
-    Texture::Texture(const TextureData &data)
+    Texture::Texture(const Data &data)
     :
     request(data.request),
     glId(0)

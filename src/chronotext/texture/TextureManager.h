@@ -25,7 +25,6 @@
 #pragma once
 
 #include "chronotext/texture/TextureHelper.h"
-#include "chronotext/texture/Texture.h"
 
 #include <map>
 

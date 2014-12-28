@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "chronotext/texture/TextureData.h"
+#include "chronotext/texture/Texture.h"
 #include "chronotext/system/MemoryInfo.h"
 
 #include <map>
@@ -39,7 +39,7 @@ namespace chr
 
         struct MemoryProbe
         {
-            Texture::Request textureRequest;
+            Texture::Request textureRequest2;
             size_t memoryUsage;
             MemoryInfo memoryInfo[3];
         };
@@ -52,17 +52,17 @@ namespace chr
         static ci::gl::TextureRef loadTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE);
         static ci::gl::TextureRef loadTexture(const Texture::Request &textureRequest);
         
-        static TextureData fetchTextureData(const Texture::Request &textureRequest);
-        static ci::gl::TextureRef uploadTextureData(const TextureData &textureData);
+        static Texture::Data fetchTextureData(const Texture::Request &textureRequest);
+        static ci::gl::TextureRef uploadTextureData(const Texture::Data &textureData);
         
-        static ci::Vec2i getTextureSize(const TextureData &textureData);
-        static size_t getTextureMemoryUsage(const TextureData &textureData);
+        static ci::Vec2i getTextureSize(const Texture::Data &textureData);
+        static size_t getTextureMemoryUsage(const Texture::Data &textureData);
         
     protected:
         static void textureDeallocator(void *refcon);
         static bool isOverSized(const Texture::Request &textureRequest, const ci::Vec2i &size);
 
-        static TextureData fetchTranslucentTextureData(const Texture::Request &textureRequest);
-        static TextureData fetchPowerOfTwoTextureData(const Texture::Request &textureRequest);
+        static Texture::Data fetchTranslucentTextureData(const Texture::Request &textureRequest);
+        static Texture::Data fetchPowerOfTwoTextureData(const Texture::Request &textureRequest);
     };
 }

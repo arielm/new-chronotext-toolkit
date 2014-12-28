@@ -92,8 +92,8 @@ namespace chr
         float x2 = x1 + w;
         float y2 = y1 + h;
         
-        GLfloat vertices[4][2];
-        GLfloat coords[4][2];
+        float vertices[4][2];
+        float coords[4][2];
         
         if (rotated)
         {

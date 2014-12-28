@@ -6,14 +6,12 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/texture/TextureHelper.h"
-#include "chronotext/texture/Texture.h"
-#include "chronotext/texture/PVRHelper.h"
+#include "TextureHelper.h"
+
 #include "chronotext/Context.h"
 #include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
 
-#include "cinder/ImageIo.h"
 #include "cinder/ip/Fill.h"
 
 using namespace std;
@@ -37,9 +35,9 @@ namespace chr
     
     gl::TextureRef TextureHelper::loadTexture(const Texture::Request &textureRequest)
     {
-        TextureData textureData = fetchTextureData(textureRequest);
+        auto textureData = fetchTextureData(textureRequest);
         
-        if (textureData.type == TextureData::TYPE_UNDEFINED)
+        if (textureData.type == Texture::Data::TYPE_UNDEFINED)
         {
             throw EXCEPTION(Texture, "TEXTURE IS UNDEFINED");
         }
@@ -58,7 +56,7 @@ namespace chr
     
     // ---
     
-    TextureData TextureHelper::fetchTextureData(const Texture::Request &textureRequest)
+    Texture::Data TextureHelper::fetchTextureData(const Texture::Request &textureRequest)
     {
         if (PROBE_MEMORY)
         {
@@ -69,7 +67,7 @@ namespace chr
         {
             if (textureRequest.inputSource->isFile())
             {
-                return TextureData(textureRequest, PVRHelper::decompressGZ(textureRequest.inputSource->getFilePath()));
+                return Texture::Data(textureRequest, PVRHelper::decompressGZ(textureRequest.inputSource->getFilePath()));
             }
             else
             {
@@ -78,36 +76,36 @@ namespace chr
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.ccz"))
         {
-            return TextureData(textureRequest, PVRHelper::decompressCCZ(textureRequest.inputSource->loadDataSource()));
+            return Texture::Data(textureRequest, PVRHelper::decompressCCZ(textureRequest.inputSource->loadDataSource()));
         }
         else if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr"))
         {
-            return TextureData(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
+            return Texture::Data(textureRequest, textureRequest.inputSource->loadDataSource()->getBuffer());
         }
         else
         {
             if (textureRequest.flags & Texture::Request::FLAGS_TRANSLUCENT)
             {
-                return TextureData(fetchTranslucentTextureData(textureRequest));
+                return Texture::Data(fetchTranslucentTextureData(textureRequest));
             }
             else if (textureRequest.flags & Texture::Request::FLAGS_POT)
             {
-                return TextureData(fetchPowerOfTwoTextureData(textureRequest));
+                return Texture::Data(fetchPowerOfTwoTextureData(textureRequest));
             }
             else
             {
-                return TextureData(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
+                return Texture::Data(textureRequest, loadImage(textureRequest.inputSource->loadDataSource()));
             }
         }
         
-        return TextureData();
+        return Texture::Data(textureRequest);
     }
     
-    gl::TextureRef TextureHelper::uploadTextureData(const TextureData &textureData)
+    gl::TextureRef TextureHelper::uploadTextureData(const Texture::Data &textureData)
     {
         gl::TextureRef texture;
         
-        if (textureData.type != TextureData::TYPE_UNDEFINED)
+        if (textureData.type != Texture::Data::TYPE_UNDEFINED)
         {
             if (PROBE_MEMORY)
             {
@@ -124,20 +122,20 @@ namespace chr
             
             switch (textureData.type)
             {
-                case TextureData::TYPE_SURFACE:
+                case Texture::Data::TYPE_SURFACE:
                     texture = gl::Texture::create(textureData.surface, format);
                     texture->setCleanTexCoords(textureData.maxU, textureData.maxV);
                     break;
                     
-                case TextureData::TYPE_IMAGE_SOURCE:
+                case Texture::Data::TYPE_IMAGE_SOURCE:
                     texture = gl::Texture::create(textureData.imageSource, format);
                     break;
                     
-                case TextureData::TYPE_PVR:
+                case Texture::Data::TYPE_PVR:
                     texture = PVRHelper::loadTexture(textureData.buffer, format.hasMipmapping(), format.getWrapS(), format.getWrapT());
                     break;
                     
-                case TextureData::TYPE_DATA:
+                case Texture::Data::TYPE_DATA:
                     format.setInternalFormat(textureData.glInternalFormat);
                     texture = gl::Texture::create(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
                     break;
@@ -190,7 +188,7 @@ namespace chr
      * BASED ON https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/gl/Texture.cpp#L478-490
      */
     
-    TextureData TextureHelper::fetchTranslucentTextureData(const Texture::Request &textureRequest)
+    Texture::Data TextureHelper::fetchTranslucentTextureData(const Texture::Request &textureRequest)
     {
         Surface surface(loadImage(textureRequest.inputSource->loadDataSource()));
         
@@ -200,7 +198,7 @@ namespace chr
         
         if (isOverSized(textureRequest, channel.getSize()))
         {
-            return TextureData(textureRequest, nullptr, 0, 0, width, height);
+            return Texture::Data(textureRequest, nullptr, 0, 0, width, height);
         }
         else
         {
@@ -228,11 +226,11 @@ namespace chr
                 data = shared_ptr<uint8_t>(channel.getData(), checked_array_deleter<uint8_t>());
             }
             
-            return TextureData(textureRequest, data, GL_ALPHA, GL_ALPHA, width, height);
+            return Texture::Data(textureRequest, data, GL_ALPHA, GL_ALPHA, width, height);
         }
     }
     
-    TextureData TextureHelper::fetchPowerOfTwoTextureData(const Texture::Request &textureRequest)
+    Texture::Data TextureHelper::fetchPowerOfTwoTextureData(const Texture::Request &textureRequest)
     {
         /*
          * NO EXTRA DATA-COPYING WILL OCCUR BECAUSE ci::Surface
@@ -246,7 +244,7 @@ namespace chr
         
         if (isOverSized(textureRequest, src.getSize()))
         {
-            return TextureData(textureRequest, nullptr, 0, 0, srcWidth, srcHeight);
+            return Texture::Data(textureRequest, nullptr, 0, 0, srcWidth, srcHeight);
         }
         else
         {
@@ -274,31 +272,31 @@ namespace chr
                 dst.copyFrom(src, Area(srcWidth - 1, 0, srcWidth, srcHeight), Vec2i(1, 0));
                 dst.copyFrom(src, Area(0, srcHeight - 1, srcWidth, srcHeight), Vec2i(0, 1));
                 
-                return TextureData(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
+                return Texture::Data(textureRequest, dst, srcWidth / float(dstWidth), srcHeight / float(dstHeight));
             }
             else
             {
-                return TextureData(textureRequest, src);
+                return Texture::Data(textureRequest, src);
             }
         }
     }
     
     // ---
     
-    Vec2i TextureHelper::getTextureSize(const TextureData &textureData)
+    Vec2i TextureHelper::getTextureSize(const Texture::Data &textureData)
     {
         switch (textureData.type)
         {
-            case TextureData::TYPE_SURFACE:
+            case Texture::Data::TYPE_SURFACE:
                 return textureData.surface.getSize();
                 
-            case TextureData::TYPE_IMAGE_SOURCE:
+            case Texture::Data::TYPE_IMAGE_SOURCE:
                 return Vec2i(textureData.imageSource->getWidth(), textureData.imageSource->getHeight());
                 
-            case TextureData::TYPE_PVR:
+            case Texture::Data::TYPE_PVR:
                 return PVRHelper::getTextureSize(textureData.buffer);
                 
-            case TextureData::TYPE_DATA:
+            case Texture::Data::TYPE_DATA:
                 return Vec2i(textureData.width, textureData.height);
                 
             default:
@@ -306,14 +304,14 @@ namespace chr
         }
     }
     
-    size_t TextureHelper::getTextureMemoryUsage(const TextureData &textureData)
+    size_t TextureHelper::getTextureMemoryUsage(const Texture::Data &textureData)
     {
         size_t memoryUsage = 0;
         bool rgb = false;
         
         switch (textureData.type)
         {
-            case TextureData::TYPE_SURFACE:
+            case Texture::Data::TYPE_SURFACE:
             {
                 auto size = getTextureSize(textureData);
                 auto rowBytes = textureData.surface.getRowBytes();
@@ -324,7 +322,7 @@ namespace chr
                 break;
             }
                 
-            case TextureData::TYPE_IMAGE_SOURCE:
+            case Texture::Data::TYPE_IMAGE_SOURCE:
             {
                 auto size = getTextureSize(textureData);
                 auto dataTypeBytes = ImageIo::dataTypeBytes(textureData.imageSource->getDataType());
@@ -335,13 +333,13 @@ namespace chr
                 break;
             }
                 
-            case TextureData::TYPE_PVR:
+            case Texture::Data::TYPE_PVR:
             {
                 memoryUsage = PVRHelper::getTextureMemoryUsage(textureData.buffer); // TODO: VERIFY
                 break;
             }
                 
-            case TextureData::TYPE_DATA:
+            case Texture::Data::TYPE_DATA:
             {
                 /*
                  * CURRENT LIMITATIONS:
