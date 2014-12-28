@@ -9,9 +9,9 @@
 /*
  * IN SYNC WITH ResReWork BRANCH
  *
- * OSX: COMMIT 2ae1614
- * IOS: COMMIT 2ae1614
- * ANDROID: COMMIT 2ae1614
+ * OSX: COMMIT 491949c
+ * IOS: COMMIT 491949c
+ * ANDROID: COMMIT 491949c
  */
 
 /*
@@ -36,8 +36,7 @@ public:
         float radius;
         float mass;
         
-        Particle()
-        {}
+        Particle() = default;
         
         Particle(const ci::Vec2f &position, float radius, float mass = 1)
         :
@@ -53,11 +52,6 @@ public:
     chr::TextureManager textureManager;
     chr::xf::FontManager fontManager;
     
-    Sketch()
-    :
-    CinderSketch()
-    {}
-    
     void setup() final;
 
     void event(Event event) final;
@@ -70,7 +64,7 @@ public:
     void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
     void drawText(const std::string &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
     
-    void accelerated(AccelEvent event);
+    void accelerated(AccelEvent event) final;
     
     void accumulateForces();
     void verlet();

@@ -39,13 +39,13 @@
 /*
  * IN SYNC WITH ResReWork BRANCH
  *
- * OSX: COMMIT 2ae1614
- * IOS: COMMIT 2ae1614
- * ANDROID: COMMIT 2ae1614
+ * OSX: COMMIT 491949c
+ * IOS: COMMIT 491949c
+ * ANDROID: COMMIT 491949c
  */
 
 /*
- * DESTKTOP ONLY: PRESS D TO "DISCARD" TEXTURES
+ * DESTKTOP ONLY: PRESS D TO "DISCARD TEXTURES"
  */
 
 #pragma once
@@ -58,14 +58,11 @@ class Sketch : public chr::CinderSketch
 {
 public:
     chr::TextureManager textureManager;
+
+    void setup() final;
+    void draw() final;
+    
+protected:
     Animation animation;
     float scale;
-
-    Sketch()
-    :
-    CinderSketch()
-    {}
-    
-    void setup();
-    void draw();
 };

@@ -15,7 +15,7 @@
  */
 
 /*
- * IN SYNC WITH ResRework BRANCH / COMMIT 2ae1614
+ * IN SYNC WITH ResRework BRANCH / COMMIT 491949c
  */
 
 #pragma once
@@ -26,11 +26,6 @@
 class Sketch : public chr::CinderSketch
 {
 public:
-    Sketch()
-    :
-    CinderSketch()
-    {}
-    
     void setup() final;
     void draw() final;
     

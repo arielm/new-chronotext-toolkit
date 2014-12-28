@@ -17,9 +17,9 @@
 /*
  * IN SYNC WITH ResReWork BRANCH
  *
- * OSX: COMMIT 2ae1614
- * IOS: COMMIT 2ae1614
- * ANDROID: COMMIT 2ae1614
+ * OSX: COMMIT 491949c
+ * IOS: COMMIT 491949c
+ * ANDROID: COMMIT 491949c
  */
 
 #pragma once
@@ -34,16 +34,16 @@ class Sketch : public chr::CinderSketch
 public:
     Sketch();
     
-    void setup();
-    void resize();
-    void update();
-    void draw();
+    void setup() final;
+    void resize() final;
+    void update() final;
+    void draw() final;
     
     void updateDune();
     void drawDune();
     
-    void addTouch(int index, float x, float y);
-    void removeTouch(int index, float x, float y);
+    void addTouch(int index, float x, float y) final;
+    void removeTouch(int index, float x, float y) final;
     
 protected:
     chr::TextureManager textureManager;

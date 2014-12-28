@@ -7,7 +7,7 @@
  */
 
 /*
- * IN SYNC WITH ResRework BRANCH / COMMIT 2ae1614
+ * IN SYNC WITH ResRework BRANCH / COMMIT 491949c
  */
 
 /*
@@ -70,11 +70,6 @@ class Sketch : public chr::CinderSketch
 public:
     chr::zf::FontManager fontManager;
 
-    Sketch()
-    :
-    CinderSketch()
-    {}
-    
     void setup() final;
     void resize() final;
     void update() final;
