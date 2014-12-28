@@ -15,7 +15,7 @@
  */
 
 /*
- * IN SYNC WITH ResRework BRANCH / COMMIT 491949c
+ * IN SYNC WITH develop BRANCH / COMMIT 4e05b6a
  */
 
 #pragma once
