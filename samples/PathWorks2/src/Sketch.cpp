@@ -27,9 +27,9 @@ void Sketch::setup()
      * SOME EMPTY-SPACE MUST BE LEFT AT THE EDGES IN ORDER TO AVOID ARTIFACTS WHEN SCALING-DOWN
      */
     
-    roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-    checkerTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
+    roadTexture = textureManager.getTexture(Texture::Request(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+    checkerTexture = textureManager.getTexture(Texture::Request(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
     
     // ---
     

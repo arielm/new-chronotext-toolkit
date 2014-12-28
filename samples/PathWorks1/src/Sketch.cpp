@@ -28,7 +28,7 @@ const wstring text2 = L"this peanut is a B-spline with 8 points";
 
 void Sketch::setup()
 {
-    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
+    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
     font = fontManager.getFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
     
     // ---

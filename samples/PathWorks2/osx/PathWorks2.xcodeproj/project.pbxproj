@@ -178,8 +178,6 @@
 		A8836D961A4B08EB007733CE /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8836D971A4B08EB007733CE /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A8836D981A4B08EB007733CE /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
-		A8EC39CC178584A000837298 /* TextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureData.h; sourceTree = "<group>"; };
-		A8EC39CD178584A000837298 /* TextureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureRequest.h; sourceTree = "<group>"; };
 		A8F2E30A189E4FDE002D5D75 /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
 		A8F2E30B189E4FDE002D5D75 /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A8F2E30C189E4FDE002D5D75 /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
@@ -480,12 +478,10 @@
 				A82C908A16DFA3B100FF519C /* PVRHelper.cpp */,
 				A82C908D16DFA3B100FF519C /* Texture.h */,
 				A82C908C16DFA3B100FF519C /* Texture.cpp */,
-				A8EC39CC178584A000837298 /* TextureData.h */,
 				A82C908F16DFA3B100FF519C /* TextureHelper.h */,
 				A82C908E16DFA3B100FF519C /* TextureHelper.cpp */,
 				A82C909116DFA3B100FF519C /* TextureManager.h */,
 				A82C909016DFA3B100FF519C /* TextureManager.cpp */,
-				A8EC39CD178584A000837298 /* TextureRequest.h */,
 			);
 			path = texture;
 			sourceTree = "<group>";

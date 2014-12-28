@@ -24,7 +24,7 @@ const float GROW_FACTOR = 1.133f;
 
 void Sketch::setup()
 {
-    dot = textureManager.getTexture(InputSource::getResource("dot.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
+    dot = textureManager.getTexture(InputSource::getResource("dot.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
     font = fontManager.getFont(InputSource::getResource("American Typewriter_Regular_64.fnt"), XFont::Properties2d());
     
     // ---

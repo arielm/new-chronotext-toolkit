@@ -16,10 +16,6 @@
  *      - TextureManager:
  *        - void discardTextures(int tag = 0)
  *        - bool reloadTextures(int tag = 0)
- *
- * 2) AVOID IF POSSIBLE:
- *    - "EMPTY" Texture::Request
- *    = "EMPTY" TextureData
  */
 
 #pragma once

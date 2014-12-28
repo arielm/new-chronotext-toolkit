@@ -30,7 +30,7 @@ const float DT = 1.0f;
 
 void Sketch::setup()
 {
-    dot = textureManager.getTexture(InputSource::getResource("dot_112.png"), true, TextureRequest::FLAGS_TRANSLUCENT);
+    dot = textureManager.getTexture(InputSource::getResource("dot_112.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
     font = fontManager.getFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
     
     scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
