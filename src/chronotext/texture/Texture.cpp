@@ -21,11 +21,8 @@ namespace chr
     
     Texture::Texture(InputSource::Ref inputSource, bool useMipmap, Request::Flags flags)
     :
-    request(Request(inputSource, useMipmap, flags)),
-    glId(0)
-    {
-        setTarget(TextureHelper::loadTexture(request));
-    }
+    Texture(Request(inputSource, useMipmap, flags))
+    {}
     
     Texture::Texture(const Request &request)
     :

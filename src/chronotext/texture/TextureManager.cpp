@@ -51,19 +51,25 @@ namespace chr
         return false;
     }
     
-    void TextureManager::discardTextures()
+    void TextureManager::discardTextures(int tag)
     {
         for (auto &element : textures)
         {
-            element.second->discard();
+            if (tag == element.second->request.tag)
+            {
+                element.second->discard();
+            }
         }
     }
     
-    void TextureManager::reloadTextures()
+    void TextureManager::reloadTextures(int tag)
     {
         for (auto &element : textures)
         {
-            element.second->reload();
+            if (tag == element.second->request.tag)
+            {
+                element.second->reload();
+            }
         }
     }
 }

@@ -31,23 +31,20 @@ namespace chr
                 FLAGS_POT = 2
             };
             
+            int tag;
             InputSource::Ref inputSource;
+            
             bool useMipmap;
             Flags flags;
             GLenum wrapS;
             GLenum wrapT;
             ci::Vec2i maxSize;
             
-            Request()
-            :
-            useMipmap(false),
-            flags(FLAGS_NONE),
-            wrapS(0),
-            wrapT(0)
-            {}
+            Request() = default;
             
             Request(InputSource::Ref inputSource, bool useMipmap = false, Flags flags = FLAGS_NONE)
             :
+            tag(0),
             inputSource(inputSource),
             useMipmap(useMipmap),
             flags(flags),
@@ -56,18 +53,10 @@ namespace chr
             maxSize(0, 0)
             {}
             
-            ci::gl::Texture::Format getFormat() const
+            Request& setTag(int tag)
             {
-                ci::gl::Texture::Format format;
-                format.setWrap(wrapS, wrapT);
-                
-                if (useMipmap)
-                {
-                    format.enableMipmapping(true);
-                    format.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
-                }
-                
-                return format;
+                Request::tag = tag;
+                return *this;
             }
             
             Request& setWrap(GLenum s, GLenum t)
@@ -93,6 +82,20 @@ namespace chr
                 {
                     return std::tie(useMipmap, flags, wrapS, wrapT) < std::tie(rhs.useMipmap, rhs.flags, rhs.wrapS, rhs.wrapT);
                 }
+            }
+            
+            ci::gl::Texture::Format getFormat() const
+            {
+                ci::gl::Texture::Format format;
+                format.setWrap(wrapS, wrapT);
+                
+                if (useMipmap)
+                {
+                    format.enableMipmapping(true);
+                    format.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+                }
+                
+                return format;
             }
         };
         

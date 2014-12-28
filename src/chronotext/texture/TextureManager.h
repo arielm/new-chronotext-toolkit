@@ -6,18 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * TODO:
- *
- * 1) ADD int tag TO Texture::Request
- *    - DEFAULT-VALUE: 0
- *    - WILL ALLOW TO MAINTAIN SEVERAL "SETS OF TEXTURES"
- *    - REQUIRED CHANGES TO THE API:
- *      - TextureManager:
- *        - void discardTextures(int tag = 0)
- *        - bool reloadTextures(int tag = 0)
- */
-
 #pragma once
 
 #include "chronotext/texture/TextureHelper.h"
@@ -35,8 +23,8 @@ namespace chr
         void discardTexture(Texture::Ref texture);
         bool reloadTexture(Texture::Ref texture);
         
-        void discardTextures();
-        void reloadTextures();
+        void discardTextures(int tag = 0);
+        void reloadTextures(int tag = 0);
         
     protected:
         std::map<Texture::Request, Texture::Ref> textures;
