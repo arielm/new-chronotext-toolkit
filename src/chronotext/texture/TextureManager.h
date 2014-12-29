@@ -17,14 +17,19 @@ namespace chr
     class TextureManager
     {
     public:
-        Texture::Ref getTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE);
-        Texture::Ref getTexture(const Texture::Request &request);
-
+        inline Texture::Ref getTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE)
+        {
+            return getTexture(Texture::Request(inputSource, useMipmap, flags));
+        }
+        
+        Texture::Ref getTexture(const Texture::Request &request); // CAN THROW
+        Texture::Ref findTexture(const Texture::Request &request) const;
+        
         void discardTexture(Texture::Ref texture);
-        bool reloadTexture(Texture::Ref texture);
+        bool reloadTexture(Texture::Ref texture); // CAN THROW
         
         void discardTextures(int tag = 0);
-        void reloadTextures(int tag = 0);
+        void reloadTextures(int tag = 0); // CAN THROW
         
     protected:
         std::map<Texture::Request, Texture::Ref> textures;

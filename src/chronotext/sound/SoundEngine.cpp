@@ -126,6 +126,18 @@ namespace chr
         
         return effect;
     }
+
+    Effect::Ref SoundEngine::findEffect(const Effect::Request &request) const
+    {
+        auto it = effects.find(request);
+        
+        if (it != effects.end())
+        {
+            return it->second;
+        }
+        
+        return nullptr;
+    }
     
     void SoundEngine::discardEffect(Effect::Ref effect)
     {

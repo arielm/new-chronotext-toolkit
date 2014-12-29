@@ -15,7 +15,7 @@ using namespace std;
 
 namespace chr
 {
-    bool Effect::VERBOSE = true; // XXX
+    bool Effect::VERBOSE = false;
     
     Effect::Effect(const Request &request, int uniqueId, FMOD::Sound *sound)
     :
@@ -31,7 +31,7 @@ namespace chr
         resetSound();
     }
     
-    double Effect::getDuration()
+    double Effect::getDuration() const
     {
         if (sound)
         {
@@ -44,7 +44,7 @@ namespace chr
         return 0;
     }
     
-    size_t Effect::getMemoryUsage()
+    size_t Effect::getMemoryUsage() const
     {
         if (sound)
         {

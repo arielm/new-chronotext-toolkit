@@ -126,7 +126,8 @@ namespace chr
         void update();
         
         Effect::Ref getEffect(const Effect::Request &request); // CAN THROW
-
+        Effect::Ref findEffect(const Effect::Request &request) const;
+        
         void discardEffect(Effect::Ref effect);
         void discardEffects();
 

@@ -51,8 +51,8 @@ namespace chr
         Effect(const Request &request, int uniqueId, FMOD::Sound *sound);
         ~Effect();
         
-        double getDuration();
-        size_t getMemoryUsage();
+        double getDuration() const;
+        size_t getMemoryUsage() const;
         
     protected:
         friend SoundEngine;

@@ -13,11 +13,6 @@ using namespace ci;
 
 namespace chr
 {
-    Texture::Ref TextureManager::getTexture(InputSource::Ref inputSource, bool useMipmap, Texture::Request::Flags flags)
-    {
-        return getTexture(Texture::Request(inputSource, useMipmap, flags));
-    }
-    
     Texture::Ref TextureManager::getTexture(const Texture::Request &request)
     {
         auto it = textures.find(request);
@@ -31,6 +26,18 @@ namespace chr
         textures[request] = texture;
         
         return texture;
+    }
+    
+    Texture::Ref TextureManager::findTexture(const Texture::Request &request) const
+    {
+        auto it = textures.find(request);
+        
+        if (it != textures.end())
+        {
+            return it->second;
+        }
+        
+        return nullptr;
     }
     
     void TextureManager::discardTexture(Texture::Ref texture)

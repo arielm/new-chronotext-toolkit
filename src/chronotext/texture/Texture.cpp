@@ -26,11 +26,8 @@ namespace chr
     
     Texture::Texture(const Request &request)
     :
-    request(request),
-    glId(0)
-    {
-        setTarget(TextureHelper::loadTexture(request));
-    }
+    Texture(TextureHelper::fetchTextureData(request))
+    {}
     
     Texture::Texture(const Data &data)
     :
@@ -38,6 +35,7 @@ namespace chr
     glId(0)
     {
         setTarget(TextureHelper::uploadTextureData(data));
+        memoryUsage = TextureHelper::getTextureMemoryUsage(data);
     }
     
     Texture::~Texture()
@@ -103,6 +101,11 @@ namespace chr
     Vec2f Texture::getMaxUV() const
     {
         return Vec2f(maxU, maxV);
+    }
+    
+    size_t Texture::getMemoryUsage() const
+    {
+        return memoryUsage;
     }
     
     void Texture::setTarget(ci::gl::TextureRef target)

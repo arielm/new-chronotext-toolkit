@@ -66,9 +66,10 @@ namespace chr
                 return *this;
             }
             
-            Request& setMaxSize(const ci::Vec2i &size)
+            Request& setMaxSize(int width, int height)
             {
-                maxSize = size;
+                maxSize.x = width;
+                maxSize.y = height;
                 return *this;
             }
             
@@ -197,6 +198,8 @@ namespace chr
         float getMaxV() const;
         ci::Vec2f getMaxUV() const;
         
+        size_t getMemoryUsage() const;
+        
         void bind();
         void begin();
         void end();
@@ -207,6 +210,7 @@ namespace chr
         
     protected:
         ci::gl::TextureRef target;
+        size_t memoryUsage;
         
         int width;
         int height;
