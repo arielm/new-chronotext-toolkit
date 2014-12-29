@@ -44,7 +44,7 @@ namespace chr
         return 0;
     }
     
-    size_t Effect::getMemoryUsage() const
+    int64_t Effect::getMemoryUsage() const
     {
         if (sound)
         {

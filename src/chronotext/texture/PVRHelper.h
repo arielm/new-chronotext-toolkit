@@ -44,6 +44,6 @@ namespace chr
         static ci::gl::TextureRef loadTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
         
         static ci::Vec2i getTextureSize(const ci::Buffer &buffer);
-        static size_t getTextureMemoryUsage(const ci::Buffer &buffer);
+        static int64_t getTextureMemoryUsage(const ci::Buffer &buffer);
     };
 }

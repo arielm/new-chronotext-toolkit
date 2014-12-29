@@ -264,9 +264,9 @@ namespace chr
             }
         }
         
-        size_t ActualFont::getTextureMemoryUsage() const
+        int64_t ActualFont::getTextureMemoryUsage() const
         {
-            size_t total = 0;
+            int64_t total = 0;
             
             for (auto &texture : textures)
             {

@@ -259,7 +259,7 @@ namespace chr
         return Vec2i(header->width, header->height);
     }
     
-    size_t PVRHelper::getTextureMemoryUsage(const Buffer &buffer)
+    int64_t PVRHelper::getTextureMemoryUsage(const Buffer &buffer)
     {
         PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
         return (header->width * header->height * header->bpp) >> 3; // TODO: VERIFY

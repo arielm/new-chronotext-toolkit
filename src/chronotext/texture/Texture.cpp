@@ -103,7 +103,7 @@ namespace chr
         return Vec2f(maxU, maxV);
     }
     
-    size_t Texture::getMemoryUsage() const
+    int64_t Texture::getMemoryUsage() const
     {
         return memoryUsage;
     }

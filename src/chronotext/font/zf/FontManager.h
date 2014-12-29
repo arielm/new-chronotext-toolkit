@@ -88,7 +88,7 @@ namespace chr
              * RETURNS THE MEMORY USED BY ALL THE GLYPH TEXTURES
              * CURRENTLY: "ALPHA" TEXTURES ARE USED (ONE BYTE PER PIXEL)
              */
-            size_t getTextureMemoryUsage() const;
+            int64_t getTextureMemoryUsage() const;
             
             friend class VirtualFont;
             

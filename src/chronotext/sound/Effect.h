@@ -52,7 +52,7 @@ namespace chr
         ~Effect();
         
         double getDuration() const;
-        size_t getMemoryUsage() const;
+        int64_t getMemoryUsage() const;
         
     protected:
         friend SoundEngine;

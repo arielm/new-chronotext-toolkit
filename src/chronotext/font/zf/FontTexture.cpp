@@ -117,7 +117,7 @@ namespace chr
             glBindTexture(GL_TEXTURE_2D, glId);
         }
         
-        size_t FontTexture::getMemoryUsage() const
+        int64_t FontTexture::getMemoryUsage() const
         {
             if (glId)
             {

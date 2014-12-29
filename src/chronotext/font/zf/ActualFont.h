@@ -154,7 +154,7 @@ namespace chr
             void unload();
             void discardTextures();
             void reloadTextures();
-            size_t getTextureMemoryUsage() const;
+            int64_t getTextureMemoryUsage() const;
             
             Glyph* fillQuad(Quad &quad, const Shape &shape, const ci::Vec2f &position, float sizeRatio);
             Glyph* getGlyph(hb_codepoint_t codepoint);

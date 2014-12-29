@@ -198,7 +198,7 @@ namespace chr
         float getMaxV() const;
         ci::Vec2f getMaxUV() const;
         
-        size_t getMemoryUsage() const;
+        int64_t getMemoryUsage() const;
         
         void bind();
         void begin();
@@ -210,7 +210,7 @@ namespace chr
         
     protected:
         ci::gl::TextureRef target;
-        size_t memoryUsage;
+        int64_t memoryUsage;
         
         int width;
         int height;

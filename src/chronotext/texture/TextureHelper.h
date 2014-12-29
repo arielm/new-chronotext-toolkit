@@ -40,7 +40,7 @@ namespace chr
         struct MemoryProbe
         {
             Texture::Request textureRequest2;
-            size_t memoryUsage;
+            int64_t memoryUsage;
             MemoryInfo memoryInfo[3];
         };
         
@@ -56,7 +56,7 @@ namespace chr
         static ci::gl::TextureRef uploadTextureData(const Texture::Data &textureData);
         
         static ci::Vec2i getTextureSize(const Texture::Data &textureData);
-        static size_t getTextureMemoryUsage(const Texture::Data &textureData);
+        static int64_t getTextureMemoryUsage(const Texture::Data &textureData);
         
     protected:
         static void textureDeallocator(void *refcon);

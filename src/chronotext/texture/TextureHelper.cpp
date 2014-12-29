@@ -304,9 +304,9 @@ namespace chr
         }
     }
     
-    size_t TextureHelper::getTextureMemoryUsage(const Texture::Data &textureData)
+    int64_t TextureHelper::getTextureMemoryUsage(const Texture::Data &textureData)
     {
-        size_t memoryUsage = 0;
+        int64_t memoryUsage = 0;
         bool rgb = false;
         
         switch (textureData.type)

@@ -37,7 +37,7 @@ namespace chr
             bool reload();
             void bind();
             
-            size_t getMemoryUsage() const;
+            int64_t getMemoryUsage() const;
             inline ci::Vec2i getSize() const { return ci::Vec2i(width, height); }
         };
     }
