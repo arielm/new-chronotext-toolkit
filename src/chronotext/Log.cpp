@@ -40,7 +40,7 @@ namespace chr
         static ci::android::dostream COUT;
         return COUT;
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-        static ci::mac::dostream COUT;
+        static chr::mac::dostream COUT;
         return COUT;
 #else
         return std::cout;
