@@ -48,6 +48,7 @@ namespace chr
         auto source = make_shared<InputSource>(TYPE_RESOURCE_MSW);
         source->mswID = mswID;
         source->mswType = mswType;
+        source->relativePath = resourceName;
         source->filePathHint = resourceName;
         
         return source;
@@ -188,12 +189,12 @@ namespace chr
             case TYPE_RESOURCE:
             {
 #if defined(CINDER_ANDROID)
-                auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), filePathHint.data(), AASSET_MODE_STREAMING);
+                auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), relativePath.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), filePathHint);
+                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), relativePath.c_str());
                 }
                 else
                 {
@@ -206,7 +207,7 @@ namespace chr
                 }
                 else
                 {
-                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
                 }
 #endif
             }
@@ -215,7 +216,7 @@ namespace chr
             {
                 try
                 {
-                    return app::loadResource(filePathHint, mswID, mswType); // TODO: VERIFY IF IT THROWS UPON ERROR
+                    return app::loadResource(relativePath.string(), mswID, mswType); // TODO: VERIFY IF IT THROWS UPON ERROR
                 }
                 catch (exception &e)
                 {
@@ -231,24 +232,24 @@ namespace chr
                 }
                 else
                 {
-                    throw EXCEPTION(InputSource, "FILE NOT FOUND: " + filePath.string());
+                    throw EXCEPTION(InputSource, "FILE NOT FOUND: " + filePathHint);
                 }
             }
                 
             case TYPE_ASSET:
             {
 #if defined(CINDER_ANDROID)
-                auto resourcePath = ("assets" / relativePath).string();
-                auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.data(), AASSET_MODE_STREAMING);
+                auto resourcePath = "assets" / relativePath;
+                auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
                 
                 if (asset)
                 {
                     AAsset_close(asset);
-                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), resourcePath);
+                    return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), resourcePath.c_str());
                 }
                 else
                 {
-                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + filePathHint);
                 }
 #else
                 if (!filePath.empty() && fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
@@ -257,7 +258,7 @@ namespace chr
                 }
                 else
                 {
-                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + relativePath.string());
+                    throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + filePathHint);
                 }
 #endif
             }
@@ -268,24 +269,29 @@ namespace chr
     
     InputSource::Ref InputSource::getSubSource(const fs::path &subPath)
     {
-        if (type == TYPE_RESOURCE_MSW)
+        switch (type)
         {
-            /*
-             * TODO: PARSE "resourceName", "mswID" AND "mswType"
-             */
-        }
-        else
-        {
-            switch (type)
+            case TYPE_FILE:
             {
-                case TYPE_FILE:
-                    return getFile(filePath.parent_path() / subPath);
-                    
-                case TYPE_ASSET:
-                    return getAsset(relativePath.parent_path() / subPath);
-                    
-                case TYPE_RESOURCE:
-                    return getResource(relativePath.parent_path() / subPath);
+                return getFile(filePath.parent_path() / subPath);
+            }
+                
+            case TYPE_ASSET:
+            {
+                return getAsset(relativePath.parent_path() / subPath);
+            }
+                
+            case TYPE_RESOURCE:
+            {
+                return getResource(relativePath.parent_path() / subPath);
+            }
+                
+            case TYPE_RESOURCE_MSW:
+            {
+                /*
+                 * TODO: PARSE "resourceName", "mswID" AND "mswType"
+                 */
+                break;
             }
         }
         
@@ -316,6 +322,11 @@ namespace chr
     
     string InputSource::getFilePathHint() const
     {
+        if (!this)
+        {
+            return EMPTY; // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
+        }
+        
         return filePathHint;
     }
     
@@ -326,14 +337,14 @@ namespace chr
     
     bool InputSource::isValid() const
     {
-        return (this) && (type != TYPE_UNDEFINED); // INCLUDES EXTRA-CARE FOR NON-INITIALIZED InputSource::Refs
+        return (this) && (type != TYPE_UNDEFINED); // INCLUDES EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
     }
     
     const string& InputSource::getURI()
     {
         if (!this)
         {
-            return EMPTY; // EXTRA-CARE FOR NON-INITIALIZED InputSource::Refs
+            return EMPTY; // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
         }
         
         /*
@@ -348,11 +359,11 @@ namespace chr
                     break;
                 
                 case TYPE_RESOURCE:
-                    uri = "res://" + filePathHint;
+                    uri = "res://" + relativePath.string();
                     break;
                     
                 case TYPE_RESOURCE_MSW:
-                    uri = "res://" + filePathHint + "?id=" + toString(mswID) + "&type=" + mswType;
+                    uri = "res://" + relativePath.string() + "?id=" + toString(mswID) + "&type=" + mswType;
                     break;
                     
                 case TYPE_FILE:

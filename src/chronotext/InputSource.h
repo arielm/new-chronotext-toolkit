@@ -6,6 +6,15 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) ENFORCE CREATION AS shared_ptr (AND/OR: DISALLOW "PUBLIC CONSTRUCTION")
+ *
+ * 2) REMOVE "TYPE_UNDEFINED" AND isValid()
+ *    - CHECKING "EXTERNALLY" FOR "NULLITY" SHOULD BE ENOUGH
+ */
+
 #pragma once
 
 #include "chronotext/Exception.h"
@@ -98,7 +107,8 @@ namespace chr
         std::string mswType;
         ci::fs::path filePath;
         ci::fs::path relativePath;
-        std::string filePathHint;
+        
+        std::string filePathHint; // XXX: SHOULD BE USED SOLELY FOR "INFORMATION" PURPOSES (I.E. NOT FOR LOADING)
         std::string uri;
     };
 }
