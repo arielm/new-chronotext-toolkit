@@ -25,16 +25,25 @@ namespace chr
         
         struct Request
         {
+            int tag;
             InputSource::Ref inputSource;
+            
             float volume;
             bool forceMemoryLoad;
             
             Request(InputSource::Ref inputSource, float volume = 1, bool forceMemoryLoad = false)
             :
+            tag(0),
             inputSource(inputSource),
             volume(volume),
             forceMemoryLoad(forceMemoryLoad)
             {}
+            
+            Request& setTag(int tag)
+            {
+                Request::tag = tag;
+                return *this;
+            }
             
             bool operator<(const Request &rhs) const
             {

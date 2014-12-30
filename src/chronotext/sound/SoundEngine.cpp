@@ -38,7 +38,7 @@ namespace chr
     {
         if (system)
         {
-            discardEffects();
+            stopEffects();
             
             effects.clear();
             playingEffects.clear();
@@ -120,7 +120,7 @@ namespace chr
             return it->second;
         }
         
-        auto sound = createSound(request); // CALLED BEFORE effectCount IS INCREMENTED BECAUSE IT CAN THROW
+        auto sound = createSound(request); // CALLED BEFORE effectCount IS INCREMENTED, BECAUSE IT CAN THROW
         auto effect = make_shared<Effect>(request, ++effectCount, sound);
         effects[request] = effect;
         
@@ -148,14 +148,6 @@ namespace chr
         }
     }
     
-    void SoundEngine::discardEffects()
-    {
-        for (auto &element : effects)
-        {
-            discardEffect(element.second);
-        }
-    }
-    
     bool SoundEngine::reloadEffect(Effect::Ref effect)
     {
         if (effect)
@@ -171,11 +163,25 @@ namespace chr
         return false;
     }
     
-    void SoundEngine::reloadEffects()
+    void SoundEngine::discardEffects(int tag)
     {
         for (auto &element : effects)
         {
-            reloadEffect(element.second);
+            if (tag == element.second->request.tag)
+            {
+                discardEffect(element.second);
+            }
+        }
+    }
+    
+    void SoundEngine::reloadEffects(int tag)
+    {
+        for (auto &element : effects)
+        {
+            if (tag == element.second->request.tag)
+            {
+                reloadEffect(element.second);
+            }
         }
     }
     

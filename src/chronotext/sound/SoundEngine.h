@@ -129,11 +129,11 @@ namespace chr
         Effect::Ref findEffect(const Effect::Request &request) const;
         
         void discardEffect(Effect::Ref effect);
-        void discardEffects();
-
         bool reloadEffect(Effect::Ref effect); // CAN THROW
-        void reloadEffects(); // CAN THROW
 
+        void discardEffects(int tag = 0);
+        void reloadEffects(int tag = 0); // CAN THROW
+        
         void stopEffect(Effect::Ref effect);
         void stopEffects();
 
