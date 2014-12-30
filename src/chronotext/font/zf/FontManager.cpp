@@ -208,7 +208,7 @@ namespace chr
                                 {
                                     auto descriptor = parseDescriptor(*refElement);
                                     
-                                    if (descriptor.inputSource->isValid() && font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap)))
+                                    if (descriptor.inputSource && font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap)))
                                     {
                                         break;
                                     }
@@ -218,7 +218,7 @@ namespace chr
                             {
                                 auto descriptor = parseDescriptor(*variantElement);
                                 
-                                if (descriptor.inputSource->isValid())
+                                if (descriptor.inputSource)
                                 {
                                     font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap));
                                 }

@@ -6,15 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * TODO:
- *
- * 1) ENFORCE CREATION AS shared_ptr (AND/OR: DISALLOW "PUBLIC CONSTRUCTION")
- *
- * 2) REMOVE "TYPE_UNDEFINED" AND isValid()
- *    - CHECKING "EXTERNALLY" FOR "NULLITY" SHOULD BE ENOUGH
- */
-
 #pragma once
 
 #include "chronotext/Exception.h"
@@ -30,7 +21,6 @@ namespace chr
 
         enum Type
         {
-            TYPE_UNDEFINED,
             TYPE_RESOURCE,
             TYPE_RESOURCE_MSW,
             TYPE_FILE,
@@ -82,13 +72,9 @@ namespace chr
 
         static InputSource::Ref getFileInDocuments(const ci::fs::path &relativePath);
         static ci::DataSourceRef loadFileInDocuments(const ci::fs::path &relativePath); // CAN THROW
-
-        static const std::string EMPTY;
         
         // ---
         
-        InputSource(Type type = TYPE_UNDEFINED);
-
         ci::DataSourceRef loadDataSource(); // CAN THROW
         InputSource::Ref getSubSource(const ci::fs::path &subPath); // CAN THROW
         
@@ -98,7 +84,6 @@ namespace chr
         std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
 
-        bool isValid() const;
         const std::string& getURI();
 
     protected:
@@ -108,7 +93,9 @@ namespace chr
         ci::fs::path filePath;
         ci::fs::path relativePath;
         
-        std::string filePathHint; // XXX: SHOULD BE USED SOLELY FOR "INFORMATION" PURPOSES (I.E. NOT FOR LOADING)
+        std::string filePathHint; // XXX: SHOULD BE USED SOLELY FOR INFORMATION PURPOSES (I.E. NOT FOR LOADING)
         std::string uri;
+        
+        InputSource(Type type);
     };
 }
