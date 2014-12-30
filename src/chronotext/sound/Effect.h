@@ -14,7 +14,7 @@
 
 namespace chr
 {
-    class SoundEngine;
+    class SoundManager;
     
     class Effect
     {
@@ -57,15 +57,17 @@ namespace chr
         int uniqueId;
         FMOD::Sound *sound;
         
-        Effect(const Request &request, int uniqueId, FMOD::Sound *sound);
         ~Effect();
-        
+
         double getDuration() const;
         int64_t getMemoryUsage() const;
         
     protected:
-        friend SoundEngine;
-        
+        friend SoundManager;
+
+        Effect(const Effect &other) = delete;
+        Effect(const Request &request, int uniqueId, FMOD::Sound *sound);
+
         void setSound(FMOD::Sound *sound);
         void resetSound();
     };

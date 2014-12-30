@@ -71,5 +71,5 @@ endif
 
 ifdef CHR_USE_FMOD_SOUND
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/sound/Effect.cpp
-    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/sound/SoundEngine.cpp
+    LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/sound/SoundManager.cpp
 endif
