@@ -89,7 +89,7 @@ namespace chr
                 
                 if (!playing)
                 {
-                    completedEvents.emplace_back(createEvent(EVENT_COMPLETED, uniqueId, channelId, playingId));
+                    completedEvents.emplace_back(Event(EVENT_COMPLETED, findByUniqueId(uniqueId), channelId, playingId));
                 }
             }
             
@@ -167,7 +167,7 @@ namespace chr
     {
         for (auto &element : effects)
         {
-            if (tag == element.second->request.tag)
+            if ((tag < 0) || (tag == element.second->request.tag))
             {
                 discardEffect(element.second);
             }
@@ -178,7 +178,7 @@ namespace chr
     {
         for (auto &element : effects)
         {
-            if (tag == element.second->request.tag)
+            if ((tag < 0) || (tag == element.second->request.tag))
             {
                 reloadEffect(element.second);
             }
@@ -206,7 +206,7 @@ namespace chr
         }
     }
     
-    void SoundEngine::stopEffects()
+    void SoundEngine::stopEffects(int tag)
     {
         vector<int> playingIdsToStop;
         
@@ -217,7 +217,7 @@ namespace chr
         
         for (auto &playingId : playingIdsToStop)
         {
-            stopEffect(playingId);
+            stopEffect(playingId, tag);
         }
     }
     
@@ -266,55 +266,70 @@ namespace chr
         return 0;
     }
     
-    bool SoundEngine::pauseEffect(int playingId)
-    {
-        auto element = playingEffects.find(playingId);
-        
-        if (element != playingEffects.end())
-        {
-            FMOD::Channel *channel;
-            system->getChannel(element->second.first, &channel);
-            channel->setPaused(true);
-            
-            return true;
-        }
-        
-        return false;
-    }
-    
-    bool SoundEngine::resumeEffect(int playingId)
-    {
-        auto element = playingEffects.find(playingId);
-        
-        if (element != playingEffects.end())
-        {
-            FMOD::Channel *channel;
-            system->getChannel(element->second.first, &channel);
-            channel->setPaused(false);
-            
-            return true;
-        }
-        
-        return false;
-    }
-    
-    bool SoundEngine::stopEffect(int playingId)
+    bool SoundEngine::pauseEffect(int playingId, int tag)
     {
         auto it = playingEffects.find(playingId);
         
         if (it != playingEffects.end())
         {
             auto channelId = it->second.first;
-            auto uniqueId = it->second.second;
+            auto effect = findByUniqueId(it->second.second);
             
-            FMOD::Channel *channel;
-            system->getChannel(channelId, &channel);
-            channel->stop();
+            if ((tag < 0) || (effect->request.tag == tag))
+            {
+                FMOD::Channel *channel;
+                system->getChannel(channelId, &channel);
+                channel->setPaused(true);
+                
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    bool SoundEngine::resumeEffect(int playingId, int tag)
+    {
+        auto it = playingEffects.find(playingId);
+        
+        if (it != playingEffects.end())
+        {
+            auto channelId = it->second.first;
+            auto effect = findByUniqueId(it->second.second);
             
-            playingEffects.erase(it);
-            dispatchEvent(createEvent(EVENT_STOPPED, uniqueId, channelId, playingId));
+            if ((tag < 0) || (effect->request.tag == tag))
+            {
+                FMOD::Channel *channel;
+                system->getChannel(channelId, &channel);
+                channel->setPaused(false);
+                
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    bool SoundEngine::stopEffect(int playingId, int tag)
+    {
+        auto it = playingEffects.find(playingId);
+        
+        if (it != playingEffects.end())
+        {
+            auto channelId = it->second.first;
+            auto effect = findByUniqueId(it->second.second);
             
-            return true;
+            if ((tag < 0) || (effect->request.tag == tag))
+            {
+                FMOD::Channel *channel;
+                system->getChannel(channelId, &channel);
+                channel->stop();
+                
+                playingEffects.erase(it);
+                dispatchEvent(Event(EVENT_STOPPED, effect, channelId, playingId));
+                
+                return true;
+            }
         }
         
         return false;
@@ -364,13 +379,13 @@ namespace chr
     {
         for (auto &element : playingEffects)
         {
-            if (element.second.first == channelId)
+            if (channelId == element.second.first)
             {
                 auto playingId = element.first;
-                auto uniqueId = element.second.second;
+                auto effect = findByUniqueId(element.second.second);
                 
                 playingEffects.erase(playingId);
-                dispatchEvent(createEvent(EVENT_INTERRUPTED, uniqueId, channelId, playingId));
+                dispatchEvent(Event(EVENT_INTERRUPTED, effect, channelId, playingId));
                 
                 return true;
             }
@@ -379,17 +394,17 @@ namespace chr
         return false;
     }
     
-    SoundEngine::Event SoundEngine::createEvent(Type type, int uniqueId, int channelId, int playingId)
+    Effect::Ref SoundEngine::findByUniqueId(int uniqueId)
     {
         for (auto &element : effects)
         {
-            if (element.second->uniqueId == uniqueId)
+            if (uniqueId == element.second->uniqueId)
             {
-                return Event(type, element.second, channelId, playingId);
+                return element.second;
             }
         }
         
-        return Event();
+        assert(false); // UNREACHABLE (AS LONG AS THE FUNCTION IS NOT PUBLIC)
     }
     
     void SoundEngine::dispatchEvent(const Event &event)

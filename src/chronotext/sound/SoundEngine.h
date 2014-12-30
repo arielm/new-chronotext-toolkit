@@ -12,7 +12,7 @@
  * 1) FIND A WAY TO ENFORCE THE CALLING OF pause() AND resume()
  *    - NECESSARY TO CALL THESE UPON FOREGROUND/BACKGROUND SWITCHES ON ANDROID
 
- * 2) PROBE MEMORY, AS IN TextureHelper
+ * 2) PROBE MEMORY (AND MORE), AS IN TextureHelper
  */
 
 #pragma once
@@ -64,19 +64,19 @@ namespace chr
                 switch (type)
                 {
                     case EVENT_STARTED:
-                    return "STARTED";
-                    
+                        return "STARTED";
+                        
                     case EVENT_STOPPED:
-                    return "STOPPED";
-                    
+                        return "STOPPED";
+                        
                     case EVENT_INTERRUPTED:
-                    return "INTERRUPTED";
-                    
+                        return "INTERRUPTED";
+                        
                     case EVENT_COMPLETED:
-                    return "COMPLETED";
-                    
+                        return "COMPLETED";
+                        
                     default:
-                    return "";
+                        return "";
                 }
             }
             
@@ -131,17 +131,17 @@ namespace chr
         void discardEffect(Effect::Ref effect);
         bool reloadEffect(Effect::Ref effect); // CAN THROW
 
-        void discardEffects(int tag = 0);
-        void reloadEffects(int tag = 0); // CAN THROW
-        
+        void discardEffects(int tag = -1);
+        void reloadEffects(int tag = -1); // CAN THROW
+
         void stopEffect(Effect::Ref effect);
-        void stopEffects();
+        void stopEffects(int tag = -1);
 
         int playEffect(Effect::Ref effect, int loopCount = 0, float volume = 1); // CAN THROW
 
-        bool pauseEffect(int playingId);
-        bool resumeEffect(int playingId);
-        bool stopEffect(int playingId);
+        bool pauseEffect(int playingId, int tag = -1);
+        bool resumeEffect(int playingId, int tag = -1);
+        bool stopEffect(int playingId, int tag = -1);
         
         bool isMute();
         void setMute(bool mute);
@@ -162,8 +162,7 @@ namespace chr
         std::set<Listener*> listeners;
         
         bool interruptChannel(int channelId);
-        
-        Event createEvent(Type type, int uniqueId, int channelId, int playingId);
+        Effect::Ref findByUniqueId(int uniqueId);
         void dispatchEvent(const Event &event);
         
         FMOD::Sound* createSound(const Effect::Request &request); // CAN THROW

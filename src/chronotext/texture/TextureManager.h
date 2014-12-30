@@ -28,8 +28,8 @@ namespace chr
         void discardTexture(Texture::Ref texture);
         bool reloadTexture(Texture::Ref texture); // CAN THROW
         
-        void discardTextures(int tag = 0);
-        void reloadTextures(int tag = 0); // CAN THROW
+        void discardTextures(int tag = -1);
+        void reloadTextures(int tag = -1); // CAN THROW
         
     protected:
         std::map<Texture::Request, Texture::Ref> textures;

@@ -62,7 +62,7 @@ namespace chr
     {
         for (auto &element : textures)
         {
-            if (tag == element.second->request.tag)
+            if ((tag < 0) || (tag == element.second->request.tag))
             {
                 element.second->discard();
             }
@@ -73,7 +73,7 @@ namespace chr
     {
         for (auto &element : textures)
         {
-            if (tag == element.second->request.tag)
+            if ((tag < 0) || (tag == element.second->request.tag))
             {
                 element.second->reload();
             }
