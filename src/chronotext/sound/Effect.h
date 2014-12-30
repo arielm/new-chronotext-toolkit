@@ -10,6 +10,8 @@
 
 #include "chronotext/InputSource.h"
 
+#include <atomic>
+
 #include "FMOD.hpp"
 
 namespace chr
