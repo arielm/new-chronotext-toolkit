@@ -15,11 +15,12 @@
 
 using namespace std;
 using namespace ci;
+
 using namespace context;
 
 namespace chr
 {
-    bool Task::VERBOSE = false;
+    atomic<bool> Task::LOG_VERBOSE (false);
     
     void Task::sleep(double seconds)
     {
@@ -29,25 +30,28 @@ namespace chr
         this_thread::sleep_for(chrono::duration<double, chrono::seconds::period>(seconds));
 #endif
     }
-
+    
     Task::State::State()
     :
     initialized(false),
     started(false),
     ended(false),
-    cancelRequired(false)
+    cancelRequired(false),
+    synchronous(false),
+    taskId(0)
     {}
     
     Task::~Task()
     {
-        LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+        LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
         
-        detach(); // OTHERWISE: THE APPLICATION MAY CRASH WHEN ABRUPTLY SHUT-DOWN
+        detach(); // OTHERWISE: THE APPLICATION MAY CRASH WHEN SHUT-DOWN ABRUPTLY
     }
     
-    int Task::getId() const
+    int Task::getId()
     {
-        return state.initialized ? 0 : taskId;
+        lock_guard<mutex> lock(_mutex);
+        return state.taskId;
     }
     
     bool Task::hasStarted()
@@ -71,12 +75,18 @@ namespace chr
     // ---
     
     /*
-     * ASSERTION: INVOKED ON THE TASK-THREAD
+     * - ONLY ACCESSIBLE FROM TASKS
+     * - INTENDED TO BE INVOKED ON THE TASK-THREAD
      */
     
     bool Task::post(function<void()> &&fn)
     {
-        return os::post(forward<function<void()>>(fn), synchronous);
+        if (state.started && !state.ended)
+        {
+            return os::post(forward<function<void()>>(fn), state.synchronous);
+        }
+        
+        return false;
     }
     
     // ---
@@ -87,13 +97,15 @@ namespace chr
     
     void Task::start(bool forceSync)
     {
-        if (!state.started)
+        if (state.initialized && !state.started)
         {
-            LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+            lock_guard<mutex> lock(_mutex);
             
-            synchronous = forceSync;
+            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
             
-            if (synchronous)
+            state.synchronous = forceSync;
+            
+            if (forceSync)
             {
                 state.started = true;
                 run();
@@ -117,14 +129,11 @@ namespace chr
     
     void Task::cancel()
     {
-        lock_guard<mutex> lock(_mutex);
-
-        if (!synchronous && state.started)
+        if (!state.synchronous && state.started)
         {
-            if (!state.cancelRequired)
-            {
-                LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
-            }
+            lock_guard<mutex> lock(_mutex);
+
+            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
             
             state.cancelRequired = true;
         }
@@ -135,17 +144,17 @@ namespace chr
     }
     
     /*
-     * ASSERTION: SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED (TODO: VERIFY)
+     * ASSERTIONS:
+     *
+     * - SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED
+     * - NO-HARM IF _thread WAS NEVER ACTUALLY USED
      */
     
     void Task::detach()
     {
-        if (!synchronous)
+        if (_thread.joinable())
         {
-            if (_thread.joinable())
-            {
-                _thread.detach();
-            }
+            _thread.detach();
         }
     }
     
@@ -157,32 +166,38 @@ namespace chr
     {
         if (!state.initialized)
         {
+            lock_guard<mutex> lock(_mutex);
+
             if (init())
             {
-                LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+                LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
                 
                 Task::manager = manager;
-                Task::taskId = taskId;
+                state.taskId = taskId;
                 
                 state.initialized = true;
                 return true;
             }
+            
+            return false;
         }
-        
-        return false;
+        else
+        {
+            assert(false);
+        }
     }
     
     /*
-     * ASSERTION: INVOKED ON THE TASK-THREAD
+     * INTENDED TO BE INVOKED FROM Task::start(), ON THE TASK-THREAD
      */
     
     void Task::performRun()
     {
         if (state.started && !state.ended)
         {
-            LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
+            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << state.taskId << " | " << this << endl;
             
-            if (!isCancelRequired()) // TODO: CHECK IF THIS CONDITION MAKES SENSE
+            if (!isCancelRequired()) // TODO: DOUBLE-CHECK IF TEST MAKES SENSE
             {
                 /*
                  * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
@@ -194,16 +209,18 @@ namespace chr
                 run();
             }
             
-            state.ended = true;
+            lock_guard<mutex> lock(_mutex); // TODO: FOLLOW-UP
             
+            state.ended = true;
+
+            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << state.taskId << " | " << this << endl;
+
             /*
              * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED DURING Task::run()
              *
              * TODO: CONSIDER USING A LAMBDA INSTEAD OF bind
              */
-            os::post(bind(&TaskManager::endTask, manager, taskId), false);
-            
-            LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << taskId << " | " << this << endl;
+            os::post(bind(&TaskManager::endTask, manager, state.taskId), false);
             
             /*
              * TODO:
@@ -230,7 +247,7 @@ namespace chr
     {
         if (!state.started || state.ended)
         {
-            LOGI_IF(VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
             
             shutdown();
             

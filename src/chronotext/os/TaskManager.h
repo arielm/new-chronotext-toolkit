@@ -19,9 +19,7 @@
  * 2) HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
  *    - SEE RELATED TODOS IN Context AND CinderDelegate
  *
- * 3) TRY TO USE NEW C++11 FEATURES LIKE std::future, std::async OR std::thread_local
- *
- * 4) CREATE TESTS AND SAMPLES PROJECTS
+ * 3) TRY TO USE NEW C++11 FEATURES LIKE std::future, std::async, std::thread_local OR std::atomic
  */
 
 #pragma once
@@ -37,7 +35,7 @@ namespace chr
     class TaskManager : public std::enable_shared_from_this<TaskManager>
     {
     public:
-        static int MAX_CONCURRENT_THREADS;
+        static std::atomic<int> MAX_CONCURRENT_THREADS;
 
         static std::shared_ptr<TaskManager> create()
         {

@@ -24,6 +24,8 @@
 
 #include "cinder/Thread.h"
 
+#include <atomic>
+
 namespace chr
 {
     class TaskManager;
@@ -31,7 +33,7 @@ namespace chr
     class Task
     {
     public:
-        static bool VERBOSE;
+        static std::atomic<bool> LOG_VERBOSE;
         
         struct State
         {
@@ -39,6 +41,9 @@ namespace chr
             bool started;
             bool ended;
             bool cancelRequired;
+            
+            bool synchronous;
+            int taskId;
             
             State();
         };
@@ -49,19 +54,24 @@ namespace chr
         virtual void shutdown() {}
         virtual void run() = 0;
         
-        int getId() const;
-        
+        /*
+         * THE FOLLOWING 4 ARE THREAD-SAFE
+         */
+        int getId();
         bool hasStarted();
         bool hasEnded();
         bool isCancelRequired();
         
     protected:
+        /*
+         * USING A STRUCTURE AS A MEAN TO ENSURE PROPER INITIALIZATION
+         *
+         * NECESSARY BECAUSE WE DON'T WANT TO IMPOSE BASE-CLASS
+         * CONSTRUCTOR-INVOCATION TO DERIVED CLASSES
+         */
         State state;
         
         std::shared_ptr<TaskManager> manager;
-        int taskId;
-        bool synchronous;
-        
         std::thread _thread;
         std::mutex _mutex;
         

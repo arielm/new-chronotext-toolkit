@@ -15,7 +15,7 @@ using namespace context;
 
 namespace chr
 {
-    int TaskManager::MAX_CONCURRENT_THREADS = 4; // XXX: RAW MECHANISM, AS FOR NOW
+    atomic<int> TaskManager::MAX_CONCURRENT_THREADS (4); // XXX: RAW MECHANISM, AS FOR NOW
     
     TaskManager::TaskManager()
     :
