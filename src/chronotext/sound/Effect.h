@@ -19,7 +19,7 @@ namespace chr
     class Effect
     {
     public:
-        static bool VERBOSE;
+        static std::atomic<bool> LOG_VERBOSE;
         
         typedef std::shared_ptr<Effect> Ref;
         

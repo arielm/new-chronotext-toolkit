@@ -15,7 +15,7 @@ using namespace std;
 
 namespace chr
 {
-    bool Effect::VERBOSE = false;
+    atomic<bool> Effect::LOG_VERBOSE (false);
     
     Effect::Effect(const Request &request, int uniqueId, FMOD::Sound *sound)
     :
@@ -48,8 +48,14 @@ namespace chr
     {
         if (sound)
         {
+            /*
+             * TODO: CONSIDER MEASURING ONCE, UPON CONSTRUCTION
+             *
+             * FIXME: MEASURE DOES NOT SEEM ACCURATE FOR CERTAIN SOUND (ACCORDING TO DATA PRINTED BY DEBUG-VERSION OF FMOD...)
+             */
+
             unsigned int memoryused;
-            sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr); // FIXME: NOT ALWAYS ACCURATE (ACCORDING TO DATA PRINTED BY DEBUG-VERSION OF FMOD...)
+            sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr);
             
             return memoryused;
         }
@@ -65,7 +71,7 @@ namespace chr
             
             // ---
             
-            LOGI_IF(VERBOSE) <<
+            LOGI_IF(LOG_VERBOSE) <<
             "EFFECT CREATED: " <<
             request.inputSource->getFilePathHint() << " | " <<
             getDuration() << "s | " <<
@@ -83,7 +89,7 @@ namespace chr
             
             // ---
             
-            LOGI_IF(VERBOSE) <<
+            LOGI_IF(LOG_VERBOSE) <<
             "EFFECT DESTROYED: " <<
             request.inputSource->getFilePathHint() <<
             endl;
