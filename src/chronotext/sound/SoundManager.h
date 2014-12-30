@@ -92,6 +92,7 @@ namespace chr
         // ---
         
         SoundManager();
+        ~SoundManager();
         
         void setup(int maxChannels = 32);
         void shutdown();

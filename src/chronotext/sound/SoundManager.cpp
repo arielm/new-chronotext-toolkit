@@ -24,6 +24,11 @@ namespace chr
     effectCount(0)
     {}
     
+    SoundManager::~SoundManager()
+    {
+        shutdown();
+    }
+    
     void SoundManager::setup(int maxChannels)
     {
         if (!system)
@@ -38,10 +43,7 @@ namespace chr
     {
         if (system)
         {
-            stopEffects();
-            
-            effects.clear();
-            playingEffects.clear();
+            discardEffects();
             
             system->close();
             system->release();
