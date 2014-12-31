@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/font/xf/FontSequence.h"
+#include "FontSequence.h"
 
 using namespace std;
 

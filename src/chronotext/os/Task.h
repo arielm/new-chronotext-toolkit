@@ -24,8 +24,6 @@
 
 #include "cinder/Thread.h"
 
-#include <atomic>
-
 namespace chr
 {
     class TaskManager;
@@ -33,8 +31,6 @@ namespace chr
     class Task
     {
     public:
-        static std::atomic<bool> LOG_VERBOSE;
-        
         struct State
         {
             bool initialized;

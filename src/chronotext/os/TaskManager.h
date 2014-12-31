@@ -29,12 +29,14 @@
 #include <map>
 #include <set>
 #include <queue>
+#include <atomic>
 
 namespace chr
 {
     class TaskManager : public std::enable_shared_from_this<TaskManager>
     {
     public:
+        static std::atomic<bool> LOG_VERBOSE;
         static std::atomic<int> MAX_CONCURRENT_THREADS;
 
         static std::shared_ptr<TaskManager> create()

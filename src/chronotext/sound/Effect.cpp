@@ -6,8 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "Effect.h"
-
+#include "chronotext/sound/Effect.h"
+#include "chronotext/sound/SoundManager.h"
 #include "chronotext/Context.h"
 #include "chronotext/utils/Utils.h"
 
@@ -15,8 +15,6 @@ using namespace std;
 
 namespace chr
 {
-    atomic<bool> Effect::LOG_VERBOSE (false);
-    
     Effect::Effect(const Request &request, int uniqueId, FMOD::Sound *sound)
     :
     request(request),
@@ -71,7 +69,7 @@ namespace chr
             
             // ---
             
-            LOGI_IF(LOG_VERBOSE) <<
+            LOGI_IF(SoundManager::LOG_VERBOSE) <<
             "EFFECT CREATED: " <<
             request.inputSource->getFilePathHint() << " | " <<
             getDuration() << "s | " <<
@@ -89,7 +87,7 @@ namespace chr
             
             // ---
             
-            LOGI_IF(LOG_VERBOSE) <<
+            LOGI_IF(SoundManager::LOG_VERBOSE) <<
             "EFFECT DESTROYED: " <<
             request.inputSource->getFilePathHint() <<
             endl;

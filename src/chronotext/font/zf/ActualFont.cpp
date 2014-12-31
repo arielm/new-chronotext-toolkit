@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/font/zf/ActualFont.h"
-#include "chronotext/font/zf/LineLayout.h"
+#include "chronotext/font/zf/FontManager.h"
 #include "chronotext/utils/Utils.h"
 
 #include "hb-ft.h"
@@ -23,6 +23,7 @@ using namespace ci;
  (it promises most wide unicode, and if that will be slower that UCS-2 -
  left as an excercise to check.)
  */
+
 static FT_Error force_ucs2_charmap(FT_Face face)
 {
     for (int i = 0; i < face->num_charmaps; i++)
@@ -216,7 +217,7 @@ namespace chr
                 
                 loaded = true;
                 
-                LOGD << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
+                LOGI_IF(FontManager::LOG_VERBOSE) << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
             }
             
             return loaded;
@@ -228,7 +229,7 @@ namespace chr
             {
                 loaded = false;
                 
-                LOGD << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
+                LOGI_IF(FontManager::LOG_VERBOSE) << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
                 
                 discardTextures();
                 

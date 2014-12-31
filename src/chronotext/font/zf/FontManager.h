@@ -15,6 +15,8 @@
 
 #include "cinder/Xml.h"
 
+#include <atomic>
+
 namespace chr
 {
     namespace zf
@@ -22,6 +24,8 @@ namespace chr
         class FontManager
         {
         public:
+            static std::atomic<bool> LOG_VERBOSE;
+
             std::shared_ptr<FreetypeHelper> ftHelper; // THE UNDERLYING FT_Library WILL BE DESTROYED AFTER ALL THE ActualFont INSTANCES
             std::shared_ptr<LangHelper> langHelper;
             std::shared_ptr<LayoutCache> layoutCache;
@@ -90,9 +94,9 @@ namespace chr
              */
             int64_t getTextureMemoryUsage() const;
             
-            friend class VirtualFont;
-            
         protected:
+            friend class VirtualFont;
+
             bool hasDefaultFont;
             std::string defaultFontName;
             VirtualFont::Style defaultFontStyle;

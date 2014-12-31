@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "SuperHandler.h"
+#include "chronotext/os/SuperHandler.h"
 
 namespace chr
 {

@@ -6,8 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "TextureHelper.h"
-
+#include "chronotext/texture/TextureHelper.h"
+#include "chronotext/texture/TextureManager.h"
 #include "chronotext/Context.h"
 #include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
@@ -20,9 +20,6 @@ using namespace context;
 
 namespace chr
 {
-    bool TextureHelper::PROBE_MEMORY = false;
-    bool TextureHelper::RGB_USE_4_CHANNELS = true;
-    
     MemoryInfo TextureHelper::memoryInfo[2];
     map<gl::Texture*, TextureHelper::MemoryProbe> TextureHelper::probes;
 
@@ -58,7 +55,7 @@ namespace chr
     
     Texture::Data TextureHelper::fetchTextureData(const Texture::Request &textureRequest)
     {
-        if (PROBE_MEMORY)
+        if (TextureManager::PROBE_MEMORY)
         {
             memoryInfo[0] = getMemoryInfo();
         }
@@ -107,7 +104,7 @@ namespace chr
         
         if (textureData.type != Texture::Data::TYPE_UNDEFINED)
         {
-            if (PROBE_MEMORY)
+            if (TextureManager::PROBE_MEMORY)
             {
                 memoryInfo[1] = getMemoryInfo();
             }
@@ -168,7 +165,7 @@ namespace chr
     {
         auto target = reinterpret_cast<gl::Texture*>(refcon);
         
-        if (PROBE_MEMORY)
+        if (TextureManager::PROBE_MEMORY)
         {
             probes[target].memoryInfo[2] = getMemoryInfo();
         }
@@ -379,7 +376,7 @@ namespace chr
                 return 0;
         }
         
-        if (rgb && RGB_USE_4_CHANNELS)
+        if (rgb && true)
         {
             memoryUsage *= 4;
             memoryUsage /= 3;

@@ -129,6 +129,10 @@ namespace chr
             std::string getFullName() const;
 
         protected:
+            friend class FontManager;
+            friend class VirtualFont;
+            friend class FontTexture;
+
             std::shared_ptr<FreetypeHelper> ftHelper;
             
             Descriptor descriptor;
@@ -160,10 +164,6 @@ namespace chr
             Glyph* getGlyph(hb_codepoint_t codepoint);
             Glyph* createGlyph(hb_codepoint_t codepoint);
             void reloadTexture(FontTexture *texture);
-            
-            friend class FontManager;
-            friend class VirtualFont;
-            friend class FontTexture;
         };
     }
 }

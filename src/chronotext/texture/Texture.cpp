@@ -6,9 +6,9 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "Texture.h"
-
+#include "chronotext/texture/Texture.h"
 #include "chronotext/texture/TextureHelper.h"
+#include "chronotext/texture/TextureManager.h"
 #include "chronotext/Context.h"
 
 using namespace std;
@@ -17,8 +17,6 @@ using namespace context;
 
 namespace chr
 {
-    bool Texture::VERBOSE = false;
-    
     Texture::Texture(InputSource::Ref inputSource, bool useMipmap, Request::Flags flags)
     :
     Texture(Request(inputSource, useMipmap, flags))
@@ -119,7 +117,7 @@ namespace chr
             
             string memoryStats;
             
-            if (VERBOSE && TextureHelper::PROBE_MEMORY)
+            if (TextureManager::LOG_VERBOSE && TextureManager::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
                 const auto &memoryProbe = TextureHelper::probes[target.get()];
@@ -142,7 +140,7 @@ namespace chr
             
             // ---
             
-            LOGI_IF(VERBOSE) <<
+            LOGI_IF(TextureManager::LOG_VERBOSE) <<
             "TEXTURE UPLOADED: " <<
             request.inputSource->getFilePathHint() << " | " <<
             glId << " | " <<
@@ -166,7 +164,7 @@ namespace chr
             
             string memoryStats;
             
-            if (VERBOSE && TextureHelper::PROBE_MEMORY)
+            if (TextureManager::LOG_VERBOSE && TextureManager::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
                 const auto &memoryProbe = TextureHelper::probes[previousTarget];
@@ -178,7 +176,7 @@ namespace chr
                 MemoryInfo::write(delta);
             }
             
-            LOGI_IF(VERBOSE) <<
+            LOGI_IF(TextureManager::LOG_VERBOSE) <<
             "TEXTURE DISCARDED: " <<
             previousGLId <<
             memoryStats <<

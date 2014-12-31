@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "Handler.h"
-
+#include "chronotext/os/Handler.h"
 #include "chronotext/Context.h"
 
 using namespace std;

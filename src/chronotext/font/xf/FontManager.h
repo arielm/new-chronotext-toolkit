@@ -11,6 +11,8 @@
 #include "chronotext/InputSource.h"
 #include "chronotext/font/xf/Font.h"
 
+#include <atomic>
+
 namespace chr
 {
     namespace xf
@@ -78,6 +80,8 @@ namespace chr
         class FontManager
         {
         public:
+            static std::atomic<bool> LOG_VERBOSE;
+
             std::shared_ptr<Font> getFont(InputSource::Ref inputSource, const Font::Properties &properties);
             
             void unload(std::shared_ptr<Font> font);
@@ -93,10 +97,10 @@ namespace chr
              */
             size_t getTextureMemoryUsage() const;
             
+        protected:
             friend class Font;
             friend struct FontTexture;
-            
-        protected:
+
             std::map<std::pair<std::string, Font::Properties>, std::shared_ptr<Font>> fonts;
             std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;
             std::vector<uint16_t> indices;

@@ -13,8 +13,6 @@
 
 #include "cinder/gl/gl.h"
 
-#include "cinder/gl/gl.h"
-
 using namespace std;
 using namespace ci;
 

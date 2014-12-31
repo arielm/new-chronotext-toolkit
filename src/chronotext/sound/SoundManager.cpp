@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "SoundManager.h"
-
+#include "chronotext/sound/SoundManager.h"
 #include "chronotext/Context.h"
 
 #include "fmod_errors.h"
@@ -17,6 +16,8 @@ using namespace ci;
 
 namespace chr
 {
+    atomic<bool> SoundManager::LOG_VERBOSE (false);
+
     SoundManager::SoundManager()
     :
     system(nullptr),

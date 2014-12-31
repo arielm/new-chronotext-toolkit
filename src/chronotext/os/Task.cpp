@@ -6,8 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "Task.h"
-
+#include "chronotext/os/Task.h"
+#include "chronotext/os/TaskManager.h"
 #include "chronotext/Context.h"
 #include "chronotext/utils/Utils.h"
 
@@ -15,13 +15,10 @@
 
 using namespace std;
 using namespace ci;
-
 using namespace context;
 
 namespace chr
 {
-    atomic<bool> Task::LOG_VERBOSE (false);
-    
     void Task::sleep(double seconds)
     {
 #if defined(CINDER_ANDROID)
@@ -43,7 +40,7 @@ namespace chr
     
     Task::~Task()
     {
-        LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
         
         detach(); // OTHERWISE: THE APPLICATION MAY CRASH WHEN SHUT-DOWN ABRUPTLY
     }
@@ -101,7 +98,7 @@ namespace chr
         {
             lock_guard<mutex> lock(_mutex);
             
-            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
             
             state.synchronous = forceSync;
             
@@ -133,7 +130,7 @@ namespace chr
         {
             lock_guard<mutex> lock(_mutex);
 
-            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
             
             state.cancelRequired = true;
         }
@@ -170,7 +167,7 @@ namespace chr
 
             if (init())
             {
-                LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+                LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
                 
                 Task::manager = manager;
                 state.taskId = taskId;
@@ -195,7 +192,7 @@ namespace chr
     {
         if (state.started && !state.ended)
         {
-            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << state.taskId << " | " << this << endl;
             
             if (!isCancelRequired()) // TODO: DOUBLE-CHECK IF TEST MAKES SENSE
             {
@@ -213,7 +210,7 @@ namespace chr
             
             state.ended = true;
 
-            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << state.taskId << " | " << this << endl;
 
             /*
              * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED DURING Task::run()
@@ -247,7 +244,7 @@ namespace chr
     {
         if (!state.started || state.ended)
         {
-            LOGI_IF(LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
             
             shutdown();
             

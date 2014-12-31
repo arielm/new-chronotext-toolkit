@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/font/zf/FontManager.h"
-#include "chronotext/system/SystemManager.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/Utils.h"
 
 #include "cinder/gl/gl.h"
@@ -19,6 +19,8 @@ namespace chr
 {
     namespace zf
     {
+        atomic<bool> FontManager::LOG_VERBOSE (false);
+
         FontManager::FontManager()
         :
         ftHelper(make_shared<FreetypeHelper>()),
@@ -335,7 +337,7 @@ namespace chr
             }
             catch (exception &e)
             {
-                LOGD << e.what() << " - " << descriptor.inputSource->getURI() << endl;
+                LOGI_IF(LOG_VERBOSE) << e.what() << " - " << descriptor.inputSource->getURI() << endl;
             }
             
             return nullptr;

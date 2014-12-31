@@ -7,14 +7,12 @@
  */
 
 #include "chronotext/font/xf/FontManager.h"
-#include "chronotext/Log.h"
-
-#include "cinder/gl/gl.h"
+#include "chronotext/Context.h"
 
 #include <set>
 
-using namespace ci;
 using namespace std;
+using namespace ci;
 
 namespace chr
 {
@@ -118,7 +116,7 @@ namespace chr
                 
                 // ---
                 
-                LOGD <<
+                LOGI_IF(FontManager::LOG_VERBOSE) <<
                 "FONT UPLOADED: " <<
                 inputSource->getFilePathHint() << " | " <<
                 glId << " | " <<
@@ -131,7 +129,7 @@ namespace chr
         {
             if (glId)
             {
-                LOGD <<
+                LOGI_IF(FontManager::LOG_VERBOSE) <<
                 "FONT DISCARDED: " <<
                 glId <<
                 endl;
@@ -177,6 +175,8 @@ namespace chr
         }
         
         // ---
+        
+        atomic<bool> FontManager::LOG_VERBOSE (false);
         
         std::shared_ptr<Font> FontManager::getFont(InputSource::Ref inputSource, const Font::Properties &properties)
         {

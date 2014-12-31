@@ -161,9 +161,9 @@ namespace chr
             static std::string styleEnumToString(Style style);
             static float snap(float value);
             
-            friend class FontManager;
-            
         protected:
+            friend class FontManager;
+
             float size;
             float sizeRatio;
             float middleLineFactor;

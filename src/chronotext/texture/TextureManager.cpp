@@ -6,13 +6,16 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "TextureManager.h"
+#include "chronotext/texture/TextureManager.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
+    atomic<bool> TextureManager::LOG_VERBOSE (false);
+    atomic<bool> TextureManager::PROBE_MEMORY (false);
+
     Texture::Ref TextureManager::getTexture(const Texture::Request &request)
     {
         auto it = textures.find(request);

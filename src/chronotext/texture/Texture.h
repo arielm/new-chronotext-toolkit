@@ -18,8 +18,6 @@ namespace chr
     class Texture
     {
     public:
-        static bool VERBOSE;
-
         typedef std::shared_ptr<Texture> Ref;
 
         struct Request

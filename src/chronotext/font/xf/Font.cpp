@@ -9,10 +9,8 @@
 #include "chronotext/font/xf/Font.h"
 #include "chronotext/font/xf/FontManager.h"
 
-#include "cinder/gl/gl.h"
-
-using namespace ci;
 using namespace std;
+using namespace ci;
 
 namespace chr
 {

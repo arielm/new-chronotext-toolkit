@@ -23,12 +23,15 @@
 
 #include <map>
 #include <set>
+#include <atomic>
 
 namespace chr
 {
     class SoundManager
     {
     public:
+        static std::atomic<bool> LOG_VERBOSE;
+
         enum Type
         {
             EVENT_STARTED,

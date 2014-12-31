@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "TaskManager.h"
-
+#include "chronotext/os/TaskManager.h"
 #include "chronotext/Context.h"
 
 using namespace std;
@@ -15,6 +14,7 @@ using namespace context;
 
 namespace chr
 {
+    atomic<bool> TaskManager::LOG_VERBOSE (false);
     atomic<int> TaskManager::MAX_CONCURRENT_THREADS (4); // XXX: RAW MECHANISM, AS FOR NOW
     
     TaskManager::TaskManager()

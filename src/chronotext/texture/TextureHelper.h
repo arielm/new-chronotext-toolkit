@@ -34,9 +34,6 @@ namespace chr
     class TextureHelper
     {
     public:
-        static bool PROBE_MEMORY;
-        static bool RGB_USE_4_CHANNELS;
-
         struct MemoryProbe
         {
             Texture::Request textureRequest2;

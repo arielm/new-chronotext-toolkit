@@ -8,15 +8,19 @@
 
 #pragma once
 
-#include "chronotext/texture/TextureHelper.h"
+#include "chronotext/texture/Texture.h"
 
 #include <map>
+#include <atomic>
 
 namespace chr
 {
     class TextureManager
     {
     public:
+        static std::atomic<bool> LOG_VERBOSE;
+        static std::atomic<bool> PROBE_MEMORY;
+
         inline Texture::Ref getTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE)
         {
             return getTexture(Texture::Request(inputSource, useMipmap, flags));

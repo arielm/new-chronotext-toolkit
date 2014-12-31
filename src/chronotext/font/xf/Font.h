@@ -119,9 +119,9 @@ namespace chr
             void addGlyph(int glyphIndex, float x, float y, float z = 0);
             void addTransformedGlyph(int glyphIndex, float x = 0, float y = 0);
             
-            friend class FontManager;
-            
         protected:
+            friend class FontManager;
+
             int glyphCount;
             std::map<wchar_t, int> glyphs;
             

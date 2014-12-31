@@ -10,8 +10,6 @@
 
 #include "chronotext/InputSource.h"
 
-#include <atomic>
-
 #include "FMOD.hpp"
 
 namespace chr
@@ -21,8 +19,6 @@ namespace chr
     class Effect
     {
     public:
-        static std::atomic<bool> LOG_VERBOSE;
-        
         typedef std::shared_ptr<Effect> Ref;
         
         struct Request

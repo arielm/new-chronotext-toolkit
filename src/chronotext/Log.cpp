@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "Log.h"
+#include "chronotext/Log.h"
 
 #include "cinder/Cinder.h"
 

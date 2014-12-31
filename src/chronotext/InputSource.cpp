@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "InputSource.h"
-
+#include "chronotext/InputSource.h"
 #include "chronotext/system/FileHelper.h"
 
 #include "cinder/app/App.h"
