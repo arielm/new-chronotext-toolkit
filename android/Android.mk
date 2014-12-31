@@ -2,7 +2,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/include/utf8-cpp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/src/libtess2
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/blocks/Freetype/include
 
-CHR_SRC = $(CINDER_PATH)/blocks/new-chronotext-toolkit/src
+CHR_SRC = $(CHR_BLOCK)/src
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CHR_SRC)
 
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Context.cpp
