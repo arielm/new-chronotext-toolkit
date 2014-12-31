@@ -2,17 +2,18 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 CINDER_PATH = ../../../../../../
+CHR_BLOCK = $(CINDER_PATH)/blocks/new-chronotext-toolkit
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../src
 FILE_LIST := $(wildcard $(LOCAL_PATH)/../../src/*.cpp)
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 CHR_USE_ATLAS := 1
-include $(LOCAL_PATH)/$(CINDER_PATH)/blocks/new-chronotext-toolkit/android/Android.mk
+include $(LOCAL_PATH)/$(CHR_BLOCK)/android/Android.mk
 
 LOCAL_CFLAGS :=
 LOCAL_CFLAGS += -ffast-math -O3
-#LOCAL_CFLAGS += -g -DDEBUG
+#LOCAL_CFLAGS += -g -DDEBUG -DFORCE_LOG
 
 LOCAL_LDLIBS := -llog -landroid
 LOCAL_STATIC_LIBRARIES := cinder boost_system boost_filesystem boost_thread freeimage ft2 android_native_app_glue
