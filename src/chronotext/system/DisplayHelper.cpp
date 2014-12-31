@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "DisplayHelper.h"
+#include "chronotext/system/DisplayHelper.h"
 
 using namespace std;
 using namespace ci;

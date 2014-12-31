@@ -29,8 +29,8 @@ namespace chr
         {
         public:
             Platform platform;
-            std::string platformString;
             
+            std::string platformString;
             std::string osVersionString;
             std::string deviceString;
             

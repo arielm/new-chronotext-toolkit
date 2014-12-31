@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "MemoryManagerBase.h"
-
+#include "chronotext/system/MemoryManagerBase.h"
 #include "chronotext/Context.h"
 
 using namespace std;

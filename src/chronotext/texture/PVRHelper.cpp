@@ -79,7 +79,7 @@ namespace chr
      */
     Buffer PVRHelper::decompressGZ(const fs::path &filePath)
     {
-        gzFile file = gzopen(filePath.string().data(), "rb");
+        gzFile file = gzopen(filePath.c_str(), "rb");
         if (!file)
         {
             throw EXCEPTION(Texture, "PVR.GZ: CAN'T OPEN FILE");

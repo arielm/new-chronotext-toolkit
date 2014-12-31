@@ -280,7 +280,7 @@ using namespace context;
     }
     else if (magSize == 1024 * 768)
     {
-        if (getSystemInfo().isPadMini)
+        if (getSystemInfo().isIPadMini)
         {
             diagonal = 7.90f; // IPAD MINI
         }

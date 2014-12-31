@@ -63,9 +63,6 @@ namespace chr
         {
             if (intern::initialized && intern::setup)
             {
-                intern::memoryManager.reset();
-                intern::systemManager.reset();
-                
                 /*
                  * TODO:
                  *
@@ -74,6 +71,9 @@ namespace chr
                  */
                 intern::taskManager.reset();
                 intern::io_service = nullptr;
+                
+                intern::memoryManager.reset();
+                intern::systemManager.reset();
                 
                 // ---
                 

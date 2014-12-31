@@ -40,8 +40,7 @@
  * - https://github.com/arielm/chronotext-playground/blob/486d4c4ac02a5e471ed5a1b1cc1cee16bc1044fe/Sketches/ContextRework/src/TestingMemory.h
  */
 
-#include "MemoryManager.h"
-
+#include "chronotext/cocoa/system/MemoryManager.h"
 #include "chronotext/Context.h"
 
 #import <sys/sysctl.h>
@@ -68,12 +67,12 @@ namespace chr
 
         void Manager::setup()
         {
-            LOGI << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(true) << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
         }
         
         void Manager::shutdown()
         {
-            LOGI << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(true) << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
         }
         
         // ---

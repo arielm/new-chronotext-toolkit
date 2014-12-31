@@ -38,11 +38,21 @@ namespace chr
     class PVRHelper
     {
     public:
+        /*
+         * TODO:
+         *
+         * 1) THE FOLLOWING 2 SHOULD USE AN InputSource AS INPUT
+         * 2) ULTIMATELY, BOTH SHOULD WORK REGARDLESS OF THE "FILE" OR "BUFFER" NATURE OF THE InputSource
+         */
+        
         static ci::Buffer decompressGZ(const ci::fs::path &filePath);
         static ci::Buffer decompressCCZ(ci::DataSourceRef dataSource);
+
+        /*
+         * TODO: THE FOLLOWING 3 SHOULD CHECK IF THE PROVIDED BUFFER IS VALID PVR-WISE
+         */
         
         static ci::gl::TextureRef loadTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
-        
         static ci::Vec2i getTextureSize(const ci::Buffer &buffer);
         static int64_t getTextureMemoryUsage(const ci::Buffer &buffer);
     };

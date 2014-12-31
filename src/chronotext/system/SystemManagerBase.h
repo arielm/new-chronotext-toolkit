@@ -15,7 +15,7 @@ namespace chr
     namespace system
     {
         Platform platform();
-        std::string platformName();
+        const std::string& platformName();
 
         // ---
         

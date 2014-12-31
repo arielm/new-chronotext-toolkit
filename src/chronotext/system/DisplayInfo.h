@@ -15,7 +15,7 @@ namespace chr
     class DisplayInfo
     {
     public:
-        constexpr static float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
+        static constexpr float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
         
         enum Orientation
         {

@@ -6,19 +6,20 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "FileHelper.h"
+#include "chronotext/system/FileHelper.h"
 
 #include "cinder/app/App.h"
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 
 namespace chr
 {
     /*
      * TODO: TEST ON WINDOWS
      */
+    
     int64_t FileHelper::getAvailableStorage(const fs::path &folderPath)
     {
         fs::path target;
@@ -46,6 +47,7 @@ namespace chr
      * PATH NORMALIZATION WITHOUT THE NEED FOR FILES TO EXIST
      * REFERENCE: http://stackoverflow.com/a/12797413/50335
      */
+    
     fs::path FileHelper::normalizePath(const fs::path &absolutePath)
     {
         fs::path::iterator it = absolutePath.begin();
@@ -70,6 +72,7 @@ namespace chr
      * PATH RELATIVIZATION WITHOUT THE NEED FOR FILES TO EXIST
      * REFERENCE: http://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path
      */
+    
     fs::path FileHelper::relativizePath(const fs::path &from, const fs::path &to)
     {
         fs::path a_From = fs::absolute(from);
@@ -134,6 +137,7 @@ namespace chr
     }
     
 #if defined(CINDER_COCOA)
+    
     fs::path FileHelper::getResourcePath()
     {
 #if defined(CINDER_COCOA_TOUCH)
@@ -157,9 +161,11 @@ namespace chr
         return App::getResourcePath();
 #endif
     }
+    
 #endif
     
 #if defined(CINDER_COCOA)
+    
     fs::path FileHelper::getResourcePath(const fs::path &relativePath)
     {
 #if defined(CINDER_COCOA_TOUCH)
@@ -168,6 +174,7 @@ namespace chr
         return App::getResourcePath(relativePath);
 #endif
     }
+    
 #endif
     
 #if defined(CINDER_ANDROID)

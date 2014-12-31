@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "MemoryManager.h"
+#include "chronotext/app/system/MemoryManager.h"
 
 namespace chr
 {

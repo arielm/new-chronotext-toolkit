@@ -34,7 +34,7 @@ namespace chr
     class FileCapture
     {
     public:
-        constexpr static size_t DEFAULT_BUFFER_SIZE = 256;
+        static constexpr size_t DEFAULT_BUFFER_SIZE = 256;
         
         FileCapture(FILE *target = 0)
         :

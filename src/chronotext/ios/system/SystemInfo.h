@@ -22,8 +22,8 @@ namespace chr
             
             bool isPodTouch;
             bool isIPhone;
-            bool isPad;
-            bool isPadMini;
+            bool isIPad;
+            bool isIPadMini;
             bool isSimulator;
         };
     }

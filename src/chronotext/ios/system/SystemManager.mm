@@ -51,8 +51,8 @@ namespace chr
             
             info.isPodTouch = isPodTouch();
             info.isIPhone = isIPhone();
-            info.isPad = isPad();
-            info.isPadMini = isPadMini();
+            info.isIPad = isIPad();
+            info.isIPadMini = isIPadMini();
             info.isSimulator = isSimulator();
             
             ManagerBase::updateInfo();
@@ -102,7 +102,7 @@ namespace chr
             return boost::starts_with(info.model , "iPhone");
         }
         
-        bool Manager::isPad()
+        bool Manager::isIPad()
         {
             return boost::starts_with(info.model , "iPad");
         }
@@ -111,7 +111,7 @@ namespace chr
          * REFERENCE: http://theiphonewiki.com/wiki/Models
          */
         
-        bool Manager::isPadMini()
+        bool Manager::isIPadMini()
         {
             if (info.machine == "iPad2,5") return true;
             if (info.machine == "iPad2,6") return true;

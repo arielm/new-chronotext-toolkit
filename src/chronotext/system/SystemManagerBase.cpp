@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "SystemManagerBase.h"
-
+#include "chronotext/system/SystemManagerBase.h"
 #include "chronotext/Context.h"
 
 using namespace std;
@@ -39,7 +38,7 @@ namespace chr
             assert(false);
         }
         
-        string platformName()
+        const string& platformName()
         {
             static const string PLATFORM_NAMES[4] = {"OSX", "Windows", "iOS", "Android"};
             return PLATFORM_NAMES[platform()];
@@ -51,7 +50,7 @@ namespace chr
         {
             updateInfo();
             
-            LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
+            LOGI_IF(true) << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
         }
         
         // ---
@@ -59,8 +58,8 @@ namespace chr
         void ManagerBase::updateInfo()
         {
             info.platform = platform();
-            info.platformString = platformName();
             
+            info.platformString = platformName();
             info.osVersionString = getOsVersionString();
             info.deviceString = getDeviceString();
         }
