@@ -35,12 +35,12 @@ namespace chr
         
         Manager::Manager()
         {
-            setup();
+            setup(); // REMINDER: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
         }
         
         Manager::~Manager()
         {
-            shutdown();
+            shutdown(); // REMINDER: INVOCATION FROM BASE-DESTRUCTOR DISCARDS INHERITANCE
         }
         
         // ---

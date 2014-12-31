@@ -38,6 +38,7 @@ namespace chr
             
             std::string getModel();
             std::string getMachine();
+            Info::Generation getGeneration();
             
             bool isPodTouch();
             bool isIPhone();
