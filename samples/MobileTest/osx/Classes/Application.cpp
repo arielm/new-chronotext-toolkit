@@ -16,8 +16,8 @@ using namespace chr;
 
 void Application::sketchCreated(CinderSketch *sketch)
 {
-    Texture::VERBOSE = true;
-    TextureHelper::PROBE_MEMORY = true;
+    TextureManager::LOG_VERBOSE = true;
+    TextureManager::PROBE_MEMORY = true;
 
     target = reinterpret_cast<Sketch*>(sketch);
 }
