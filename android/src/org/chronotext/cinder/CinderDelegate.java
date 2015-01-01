@@ -34,70 +34,58 @@ public class CinderDelegate extends Handler
   public static final int ACTION_CAPTURE_BACK_KEY = 1;
   public static final int ACTION_RELEASE_BACK_KEY = 2;
 
-  protected Activity mActivity;
-  protected Handler mHandler;
+  protected Activity activity;
+
+  protected CinderRenderer renderer;
+  protected GLView view;
   
-  protected CinderRenderer mRenderer;
-  protected GLView mView;
+  protected boolean backKeyCaptured;
 
-  protected boolean mBackKeyCaptured;
-
-  public CinderDelegate(Activity activity)
+  public CinderDelegate(Activity _activity)
   {
-    mActivity = activity;
-    mHandler = this;
-
-    mRenderer = new CinderRenderer();
-    mView = new GLView(activity);
+    activity = _activity;
 
     performInit(); // WILL CREATE THE C++ CinderDelegate
-    mView.setRenderer(mRenderer); // WILL START THE RENDERER'S THREAD
-  }
 
-  public CinderDelegate(Activity activity, Handler handler)
-  {
-    this(activity);
-    mHandler = handler;
+    renderer = new CinderRenderer();
+    view = new GLView(activity);
+
+    view.setRenderer(renderer); // WILL START THE RENDERER'S THREAD
   }
 
   protected void performInit()
   {
-    Display display = DisplayUtils.getDisplay(mActivity);
+    Display display = DisplayUtils.getDisplay(activity);
     Point displaySize = DisplayUtils.getRealSize(display);
     float displayDensity = DisplayUtils.getRealDensity(display);
 
     Utils.LOGD("CinderDelegate.init: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
-    init(mActivity, this, display, displaySize.x, displaySize.y, displayDensity);
+    init(activity, this, display, displaySize.x, displaySize.y, displayDensity);
   }
 
   public Activity getActivity()
   {
-    return mActivity;
-  }
-
-  public Handler getHandler()
-  {
-    return mHandler;
+    return activity;
   }
 
   public GLView getView()
   {
-    return mView;
+    return view;
   }
 
   public void showView()
   {
-    if (mView.getVisibility() == View.GONE)
+    if (view.getVisibility() == View.GONE)
     {
-      mView.setVisibility(View.VISIBLE);
+      view.setVisibility(View.VISIBLE);
     }
   }
 
   public void hideView()
   {
-    if (mView.getVisibility() == View.VISIBLE)
+    if (view.getVisibility() == View.VISIBLE)
     {
-      mView.setVisibility(View.GONE);
+      view.setVisibility(View.GONE);
     }
   }
 
@@ -106,11 +94,11 @@ public class CinderDelegate extends Handler
     switch (actionId)
     {
       case ACTION_CAPTURE_BACK_KEY:
-        mBackKeyCaptured = true;
+        backKeyCaptured = true;
         break;
 
       case ACTION_RELEASE_BACK_KEY:
-        mBackKeyCaptured = false;
+        backKeyCaptured = false;
         break;
     }
   }
@@ -119,28 +107,28 @@ public class CinderDelegate extends Handler
 
   public void onPause()
   {
-    mView.onPause(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
+    view.onPause(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
   }
 
   public void onResume()
   {
-    mView.onResume(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
+    view.onResume(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
   }
 
   public void onDestroy()
   {
-    mView.onDestroy(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
+    view.onDestroy(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
   }
   
   public boolean onBackPressed()
   {
-    if (mBackKeyCaptured)
+    if (backKeyCaptured)
     {
-      mView.queueEvent(new Runnable()
+      view.queueEvent(new Runnable()
       {
         public void run()
         {
-          mRenderer.event(CinderRenderer.EVENT_BACK_KEY); 
+          renderer.event(CinderRenderer.EVENT_BACK_KEY); 
         }
       });
 
@@ -155,11 +143,11 @@ public class CinderDelegate extends Handler
   // ---------------------------------------- SKETCH / DELEGATE COMMUNICATION ----------------------------------------
 
   /*
-   * THIS IS RECEIVED ON THE RENDERER'S THREAD
+   * INVOKED ON THE RENDERER'S THREAD
    */
   public void action(final int actionId)
   {
-    mActivity.runOnUiThread(new Runnable()
+    activity.runOnUiThread(new Runnable()
     {
       public void run()
       {
@@ -169,27 +157,27 @@ public class CinderDelegate extends Handler
   }
 
   /*
-   * THIS IS RECEIVED ON THE RENDERER'S THREAD
+   * INVOKED ON THE RENDERER'S THREAD
    */
   public void receiveMessageFromSketch(int what, String body)
   {
-    if (mHandler != null)
-    {
-      mHandler.sendMessage(Message.obtain(mHandler, what, body));
-    }
-  }
-
-  public void sendMessageToSketch(int what)
-  {
-    sendMessageToSketch(what, (String) null);
+      sendMessage(Message.obtain(this, what, body));
   }
 
   /*
-   * THIS WILL BE SENT ON THE RENDERER'S THREAD
+   * WILL BE QUEUED TO THE RENDERER'S THREAD
+   */
+  public void sendMessageToSketch(int what)
+  {
+    view.sendMessage(what, (String) null);
+  }
+
+  /*
+   * WILL BE QUEUED TO THE RENDERER'S THREAD
    */
   public void sendMessageToSketch(int what, String body)
   {
-    mView.sendMessage(what, body);
+    view.sendMessage(what, body);
   }
 
   // ---------------------------------------- QUERIES (TO BE CALLED FROM ANY THREAD ATTACHED TO JAVA) ----------------------------------------
@@ -197,7 +185,7 @@ public class CinderDelegate extends Handler
   public String getMemoryInfo()
   {
     MemoryInfo memoryInfo = new MemoryInfo();
-    ((ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryInfo(memoryInfo);
+    ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryInfo(memoryInfo);
 
     JSONObject json = new JSONObject();
 
@@ -216,4 +204,13 @@ public class CinderDelegate extends Handler
   // ---------------------------------------- JNI ----------------------------------------
 
   protected native void init(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
+
+  // ---------------------------------------- ABSTRACT METHODS ----------------------------------------
+
+  /*
+   * TODO
+   */
+  // public abstract void paused();
+  // public abstract void resumed();
+  // public abstract void destroyed();
 }

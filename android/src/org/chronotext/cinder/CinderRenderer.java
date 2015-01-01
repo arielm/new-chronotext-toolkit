@@ -31,8 +31,6 @@ public class CinderRenderer extends GLRenderer
   public static final int EVENT_FOREGROUND = 8;
   public static final int EVENT_BACK_KEY = 9;
 
-  protected int ticks;
-
   // ---------------------------------------- CALLBACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
 
   public void launch()
@@ -52,11 +50,6 @@ public class CinderRenderer extends GLRenderer
 
   public void draw(GL10 gl)
   {
-    if (ticks++ == 0)
-    {
-      Utils.LOGD("CinderRenderer.draw");  
-    }
-    
     draw();
   }
 
@@ -64,8 +57,6 @@ public class CinderRenderer extends GLRenderer
   {
     Utils.LOGD("CinderRenderer.start: " + (reason == REASON_RESUMED ? "RESUMED" : "SHOWN"));
     event(reason);
-
-    ticks = 0;
   }
 
   public void stop(int reason)

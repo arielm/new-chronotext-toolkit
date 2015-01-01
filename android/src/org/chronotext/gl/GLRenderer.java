@@ -114,6 +114,8 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
 
         if (startRequest)
         {
+          Utils.LOGD("GLRenderer.onDrawFrame");
+
           ticks = 0;
           t0 = now;
         }
@@ -149,7 +151,7 @@ public abstract class GLRenderer implements GLSurfaceView.Renderer
   
   protected void performStop(int reason)
   {
-    Utils.LOGI("AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
+    Utils.LOGD("AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
 
     started = false;
     stop(reason);

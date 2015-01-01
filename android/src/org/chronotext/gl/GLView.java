@@ -26,7 +26,7 @@ import android.view.View;
 
 public class GLView extends GLSurfaceView
 {
-  protected GLRenderer mRenderer;
+  protected GLRenderer renderer;
 
   protected boolean attached;
   protected boolean paused;
@@ -37,6 +37,10 @@ public class GLView extends GLSurfaceView
   {
     super(context);
 
+    /*
+     * TODO: THE FOLLOWING SHOULD BE USER-DEFINABLE
+     */
+
     // setEGLContextClientVersion(2);
     // setEGLConfigChooser(8, 8, 8, 8, 0, 0);
     // getHolder().setFormat(PixelFormat.RGBA_8888);
@@ -46,18 +50,18 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
-  public void setRenderer(Renderer renderer)
+  public void setRenderer(Renderer _renderer)
   {
-    if (mRenderer == null)
+    if (renderer == null)
     {
-      super.setRenderer(renderer); // WILL START THE RENDERER'S THREAD
-      mRenderer = (GLRenderer) renderer;
+      super.setRenderer(_renderer); // WILL START THE RENDERER'S THREAD
+      renderer = (GLRenderer) _renderer;
 
       queueEvent(new Runnable()
       {
         public void run()
         {
-          mRenderer.performLaunch();
+          renderer.performLaunch();
         }
       });
     }
@@ -111,7 +115,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          mRenderer.onAttachedToWindow();
+          renderer.onAttachedToWindow();
         }
       });
     }
@@ -152,7 +156,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          mRenderer.onResume();
+          renderer.onResume();
         }
       });
     }
@@ -181,7 +185,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          mRenderer.onPause();
+          renderer.onPause();
         }
       });
     }
@@ -193,7 +197,14 @@ public class GLView extends GLSurfaceView
   public void onDestroy()
   {
     Utils.LOGD("GLView.onDestroy");
-    finishing = true; // XXX: USED BY CustomContextFactory.destroyContext() ON THE RENDERER'S THREAD (TRICKY, BUT WE CAN'T RELY ON queueEvent() AT THIS STAGE)
+
+    /*
+     * XXX: INTENDED TO BE CustomContextFactory.destroyContext() ON THE RENDERER'S THREAD
+     *
+     * TRICKY, BUT THE BEHAVIOR OF GLSurfaceView.queueEvent() AT SHUT-DOWN IS SIMPLY NOT
+     * CONSISTENT ACCROSS THE SEVERAL OS-VERSIONS WE SUPPORT
+     */
+    finishing = true;
   }
 
   @Override
@@ -205,7 +216,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          mRenderer.onVisibilityChanged(visibility);
+          renderer.onVisibilityChanged(visibility);
         }
       });
     }
@@ -231,7 +242,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            mRenderer.addTouches(touches);
+            renderer.addTouches(touches);
           }
         });
         break;
@@ -247,7 +258,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            mRenderer.addTouches(touches);
+            renderer.addTouches(touches);
           }
         });
         break;
@@ -263,7 +274,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            mRenderer.removeTouches(touches);
+            renderer.removeTouches(touches);
           }
         });
         break;
@@ -279,7 +290,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            mRenderer.removeTouches(touches);
+            renderer.removeTouches(touches);
           }
         });
         break;
@@ -299,7 +310,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            mRenderer.updateTouches(touches);
+            renderer.updateTouches(touches);
           }
         });
         break;
@@ -332,7 +343,7 @@ public class GLView extends GLSurfaceView
     public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config)
     {
       Utils.LOGD("CustomContextFactory.createContext");
-      mRenderer.contextCreated();
+      renderer.contextCreated();
 
       int[] attrib_list = { 0x3098, mEGLContextClientVersion, EGL10.EGL_NONE };
       return egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, mEGLContextClientVersion != 0 ? attrib_list : null);
@@ -341,14 +352,14 @@ public class GLView extends GLSurfaceView
     public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context)
     {
       Utils.LOGD("CustomContextFactory.destroyContext");
-      mRenderer.contextDestroyed();
+      renderer.contextDestroyed();
 
       if (!attached || finishing)
       {
         destroyed = true;
 
-        mRenderer.onDetachedFromWindow();
-        mRenderer.onDestroy();
+        renderer.onDetachedFromWindow();
+        renderer.onDestroy();
       }
 
       egl.eglDestroyContext(display, context);
@@ -363,7 +374,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          mRenderer.sendMessage(what, body);
+          renderer.sendMessage(what, body);
         }
       });
     }
