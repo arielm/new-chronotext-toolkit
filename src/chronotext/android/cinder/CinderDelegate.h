@@ -17,6 +17,8 @@
 #include <jni.h>
 #include <android/sensor.h>
 
+#include <atomic>
+
 namespace chr
 {
     class CinderDelegate
@@ -47,7 +49,8 @@ namespace chr
         };
         
     public:
-        static bool VERBOSE;
+        static std::atomic<bool> LOG_VERBOSE;
+        static std::atomic<bool> LOG_WARNING;
         
         CinderDelegate();
         virtual ~CinderDelegate() {}

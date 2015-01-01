@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "CinderDelegate.h"
-
+#include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/utils/accel/AccelEvent.h"
@@ -19,7 +18,8 @@ using namespace ci::app;
 
 namespace chr
 {
-    bool CinderDelegate::VERBOSE = false;
+    atomic<bool> CinderDelegate::LOG_VERBOSE (false);
+    atomic<bool> CinderDelegate::LOG_WARNING (true);
     
     CinderDelegate::CinderDelegate()
     :
@@ -49,7 +49,7 @@ namespace chr
     }
     
     /*
-     * CALLED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
+     * INVOKED ON THE MAIN-THREAD, BEFORE THE RENDERER'S THREAD IS CREATED
      */
     
     void CinderDelegate::init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
@@ -104,11 +104,11 @@ namespace chr
         
         setSketch(createSketch());
         
-        CONTEXT::init(); // TODO: HANDLE FAILURE
+        sketch->init(); // TODO: HANDLE FAILURE
     }
     
     /*
-     * CALLED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
+     * INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
      */
     
     void CinderDelegate::setup(int width, int height)
@@ -429,14 +429,14 @@ namespace chr
     
     void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
     {
-        LOGI_IF(VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
         
         callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::env()->NewStringUTF(body.data()));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
-        LOGI_IF(VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
         
         sketch->sendMessage(Message(what, body));
     }
@@ -449,7 +449,6 @@ namespace chr
      * TODO:
      *
      * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
-     *
      * 2) ADD THREAD-LOCK
      */
     
@@ -465,7 +464,7 @@ namespace chr
             }
             catch (exception &e)
             {
-                LOGI << "JSON-QUERY FAILED | REASON: " << e.what() << endl; // LOG: WARNING
+                LOGI_IF(LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
             }
         }
         

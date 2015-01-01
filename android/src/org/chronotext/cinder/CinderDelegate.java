@@ -50,7 +50,7 @@ public class CinderDelegate extends Handler
     mRenderer = new CinderRenderer();
     mView = new GLView(activity);
 
-    init(); // WILL CREATE THE C++ CinderDelegate
+    performInit(); // WILL CREATE THE C++ CinderDelegate
     mView.setRenderer(mRenderer); // WILL START THE RENDERER'S THREAD
   }
 
@@ -60,7 +60,7 @@ public class CinderDelegate extends Handler
     mHandler = handler;
   }
 
-  public void init()
+  protected void performInit()
   {
     Display display = DisplayUtils.getDisplay(mActivity);
     Point displaySize = DisplayUtils.getRealSize(display);
@@ -115,21 +115,21 @@ public class CinderDelegate extends Handler
     }
   }
 
-  // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY ----------------------------------------
+  // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERLOAD) ----------------------------------------
 
   public void onPause()
   {
-    mView.onPause(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
+    mView.onPause(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
   }
 
   public void onResume()
   {
-    mView.onResume(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
+    mView.onResume(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
   }
 
   public void onDestroy()
   {
-    mView.onDestroy(); // PURPOSELY NOT CALLED ON THE RENDERER'S THREAD
+    mView.onDestroy(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
   }
   
   public boolean onBackPressed()
@@ -215,5 +215,5 @@ public class CinderDelegate extends Handler
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  public native void init(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
+  protected native void init(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
 }

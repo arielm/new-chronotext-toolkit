@@ -130,7 +130,7 @@ public class GLView extends GLSurfaceView
   }
 
   /*
-   * RECEIVED ON THE MAIN-THREAD
+   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
    */
   @Override
   public void onResume()
@@ -159,7 +159,7 @@ public class GLView extends GLSurfaceView
   }
 
   /*
-   * RECEIVED ON THE MAIN-THREAD
+   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
    */
   @Override
   public void onPause()
@@ -187,10 +187,13 @@ public class GLView extends GLSurfaceView
     }
   }
 
+  /*
+   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
+   */
   public void onDestroy()
   {
     Utils.LOGD("GLView.onDestroy");
-    finishing = true;
+    finishing = true; // XXX: USED BY CustomContextFactory.destroyContext() ON THE RENDERER'S THREAD (TRICKY, BUT WE CAN'T RELY ON queueEvent() AT THIS STAGE)
   }
 
   @Override

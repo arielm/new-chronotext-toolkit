@@ -23,7 +23,7 @@
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 using namespace chr;
 using namespace context;
 
@@ -78,12 +78,14 @@ using namespace context;
     if (self = [super init])
     {
         /*
-         * UNLIKE ON OTHER PLATFORMS: DisplayInfo AND WindowInfo ARE NOT AVAILABLE AT THIS STAGE
+         * UNLIKE ON OTHER PLATFORMS: DisplayInfo IS NOT AVAILABLE AT THIS STAGE
+         *
+         * SEE TODO IN updateDisplayInfo
          */
         
-        chr::CONTEXT::init(); // TODO: HANDLE FAILURE
+        CONTEXT::init(); // TODO: HANDLE FAILURE
         
-        sketch = chr::createSketch();
+        sketch = createSketch();
         sketch->setDelegate(self);
         
         sketch->init(); // TODO: HANDLE FAILURE
@@ -103,7 +105,7 @@ using namespace context;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     sketch->shutdown();
-    chr::destroySketch(sketch);
+    destroySketch(sketch);
 
     /*
      * TODO:
@@ -112,7 +114,7 @@ using namespace context;
      * - SEE RELATED TODOS IN Context AND TaskManager
      */
     [self stopIOService];
-    chr::CONTEXT::shutdown();
+    CONTEXT::shutdown();
     
     [super dealloc];
 }
@@ -254,6 +256,10 @@ using namespace context;
 
 - (void) updateDisplayInfo
 {
+    /*
+     * TODO: MAKE IT WORK REGARDLESS OF THE EXISTENCE OF A UIView
+     */
+    
     float contentScale = view.contentScaleFactor;
     Vec2i baseSize = [self windowSize] / contentScale;
 
