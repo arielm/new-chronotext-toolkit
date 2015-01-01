@@ -48,9 +48,7 @@ public class CinderDelegate extends Handler
     performInit(); // WILL CREATE THE C++ CinderDelegate
 
     renderer = new CinderRenderer();
-    view = new GLView(activity);
-
-    view.setRenderer(renderer); // WILL START THE RENDERER'S THREAD
+    view = new GLView(activity, renderer); // WILL START THE RENDERER'S THREAD
   }
 
   protected void performInit()

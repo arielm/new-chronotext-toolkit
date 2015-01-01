@@ -33,7 +33,7 @@ public class GLView extends GLSurfaceView
   protected boolean finishing;
   protected boolean destroyed;
 
-  public GLView(Context context)
+  public GLView(Context context, GLRenderer _renderer)
   {
     super(context);
 
@@ -46,25 +46,24 @@ public class GLView extends GLSurfaceView
     // getHolder().setFormat(PixelFormat.RGBA_8888);
 
     setEGLContextFactory(new CustomContextFactory(1)); // FIXME: EGL-CONTEXT-CLIENT-VERSION SHOULD NOT BE HARD-CODED
+
+    /*
+     * TEXTURES (AND ANY OTHER GL-RELATED MEMORY) WILL NOT BE INALIDATED ANYMORE ON-PAUSE
+     */
     setPreserveEGLContextOnPause(true);
-  }
 
-  @Override
-  public void setRenderer(Renderer _renderer)
-  {
-    if (renderer == null)
+    // ---
+
+    renderer = _renderer;
+    setRenderer(renderer); // WILL START THE RENDERER'S THREAD
+
+    queueEvent(new Runnable()
     {
-      super.setRenderer(_renderer); // WILL START THE RENDERER'S THREAD
-      renderer = (GLRenderer) _renderer;
-
-      queueEvent(new Runnable()
+      public void run()
       {
-        public void run()
-        {
-          renderer.performLaunch();
-        }
-      });
-    }
+        renderer.performLaunch();
+      }
+    });
   }
 
   @Override
