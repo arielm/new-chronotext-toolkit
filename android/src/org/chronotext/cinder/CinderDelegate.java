@@ -29,15 +29,14 @@ import android.view.View;
 public class CinderDelegate extends Handler
 {
   /*
-   * PARALLEL TO chronotext/cinder/CinderSketch/CinderDelegate.h
+   * PARALLEL TO chronotext/cinder/CinderDelegate.h
    */
   public static final int ACTION_CAPTURE_BACK_KEY = 1;
   public static final int ACTION_RELEASE_BACK_KEY = 2;
 
   protected Activity activity;
-
-  protected CinderRenderer renderer;
-  protected GLView view;
+  protected CinderRenderer cinderRenderer;
+  protected GLView glView;
   
   protected boolean backKeyCaptured;
 
@@ -47,18 +46,8 @@ public class CinderDelegate extends Handler
 
     performInit(); // WILL CREATE THE C++ CinderDelegate
 
-    renderer = new CinderRenderer();
-    view = new GLView(activity, renderer); // WILL START THE RENDERER'S THREAD
-  }
-
-  protected void performInit()
-  {
-    Display display = DisplayUtils.getDisplay(activity);
-    Point displaySize = DisplayUtils.getRealSize(display);
-    float displayDensity = DisplayUtils.getRealDensity(display);
-
-    Utils.LOGD("CinderDelegate.init: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
-    init(activity, this, display, displaySize.x, displaySize.y, displayDensity);
+    cinderRenderer = new CinderRenderer();
+    glView = new GLView(activity, this, cinderRenderer); // WILL START THE RENDERER'S THREAD
   }
 
   public Activity getActivity()
@@ -68,23 +57,35 @@ public class CinderDelegate extends Handler
 
   public GLView getView()
   {
-    return view;
+    return glView;
   }
 
   public void showView()
   {
-    if (view.getVisibility() == View.GONE)
+    if (glView.getVisibility() == View.GONE)
     {
-      view.setVisibility(View.VISIBLE);
+      glView.setVisibility(View.VISIBLE);
     }
   }
 
   public void hideView()
   {
-    if (view.getVisibility() == View.VISIBLE)
+    if (glView.getVisibility() == View.VISIBLE)
     {
-      view.setVisibility(View.GONE);
+      glView.setVisibility(View.GONE);
     }
+  }
+
+  // ---------------------------------------- LIFE-CYCLE ----------------------------------------
+
+  protected void performInit()
+  {
+    Display display = DisplayUtils.getDisplay(activity);
+    Point displaySize = DisplayUtils.getRealSize(display);
+    float displayDensity = DisplayUtils.getRealDensity(display);
+
+    Utils.LOGD("CinderDelegate.init: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+    init(activity, this, display, displaySize.x, displaySize.y, displayDensity);
   }
 
   protected void handleAction(int actionId)
@@ -101,44 +102,67 @@ public class CinderDelegate extends Handler
     }
   }
 
-  // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERLOAD) ----------------------------------------
+  // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERRIDE) ----------------------------------------
 
+  /*
+   * WILL BE QUEUED TO THE RENDERER'S THREAD
+   */
   public void onPause()
   {
-    view.onPause(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
+    Utils.LOGD("CinderDelegate.onPause");
+    glView.onPause();
   }
 
+  /*
+   * WILL BE QUEUED TO THE RENDERER'S THREAD
+   */
   public void onResume()
   {
-    view.onResume(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
+    Utils.LOGD("CinderDelegate.onResume");
+    glView.onResume();
   }
 
+  /*
+   * WILL BE QUEUED TO THE RENDERER'S THREAD
+   */
   public void onDestroy()
   {
-    view.onDestroy(); // PURPOSELY NOT (IMMEDIATLY) QUEUED TO THE RENDERER'S THREAD
+    Utils.LOGD("CinderDelegate.onDestroy");
+    glView.onDestroy();
   }
   
   public boolean onBackPressed()
   {
+    Utils.LOGD("CinderDelegate.onBackPressed");
+
     if (backKeyCaptured)
     {
-      view.queueEvent(new Runnable()
+      glView.queueEvent(new Runnable()
       {
         public void run()
         {
-          renderer.event(CinderRenderer.EVENT_BACK_KEY); 
+          cinderRenderer.event(CinderRenderer.EVENT_BACK_KEY); 
         }
       });
 
       return true;
     }
-    else
-    {
-      return false;
-    }
+
+    return false;
   }
 
-  // ---------------------------------------- SKETCH / DELEGATE COMMUNICATION ----------------------------------------
+  // ---------------------------------------- CALLBACKS INVOKED ON THE MAIN-THREAD ----------------------------------------
+
+  public void pausing()
+  {}
+
+  public void resuming()
+  {}
+
+  public void finishing()
+  {}
+
+  // ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
 
   /*
    * INVOKED ON THE RENDERER'S THREAD
@@ -167,7 +191,7 @@ public class CinderDelegate extends Handler
    */
   public void sendMessageToSketch(int what)
   {
-    view.sendMessage(what, (String) null);
+    glView.sendMessage(what, (String) null);
   }
 
   /*
@@ -175,7 +199,7 @@ public class CinderDelegate extends Handler
    */
   public void sendMessageToSketch(int what, String body)
   {
-    view.sendMessage(what, body);
+    glView.sendMessage(what, body);
   }
 
   // ---------------------------------------- QUERIES (TO BE CALLED FROM ANY THREAD ATTACHED TO JAVA) ----------------------------------------
@@ -202,13 +226,4 @@ public class CinderDelegate extends Handler
   // ---------------------------------------- JNI ----------------------------------------
 
   protected native void init(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
-
-  // ---------------------------------------- ABSTRACT METHODS ----------------------------------------
-
-  /*
-   * TODO
-   */
-  // public abstract void paused();
-  // public abstract void resumed();
-  // public abstract void destroyed();
 }

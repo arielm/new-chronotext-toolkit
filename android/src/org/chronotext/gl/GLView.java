@@ -15,7 +15,9 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 import java.util.Vector;
 
-import org.chronotext.gl.Touch;
+import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.cinder.CinderRenderer;
+import org.chronotext.cinder.Touch;
 import org.chronotext.utils.Utils;
 
 import android.content.Context;
@@ -26,16 +28,22 @@ import android.view.View;
 
 public class GLView extends GLSurfaceView
 {
-  protected GLRenderer renderer;
+  protected CinderDelegate cinderDelegate;
+  protected CinderRenderer cinderRenderer;
 
   protected boolean attached;
   protected boolean paused;
   protected boolean finishing;
   protected boolean destroyed;
 
-  public GLView(Context context, GLRenderer _renderer)
+  public GLView(Context context, CinderDelegate delegate, CinderRenderer renderer)
   {
     super(context);
+
+    cinderDelegate = delegate;
+    cinderRenderer = renderer;
+
+    // ---
 
     /*
      * TODO: THE FOLLOWING SHOULD BE USER-DEFINABLE
@@ -54,14 +62,13 @@ public class GLView extends GLSurfaceView
 
     // ---
 
-    renderer = _renderer;
-    setRenderer(renderer); // WILL START THE RENDERER'S THREAD
+    setRenderer(cinderRenderer); // WILL START THE RENDERER'S THREAD
 
     queueEvent(new Runnable()
     {
       public void run()
       {
-        renderer.performLaunch();
+        cinderRenderer.performLaunch();
       }
     });
   }
@@ -114,7 +121,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          renderer.onAttachedToWindow();
+          cinderRenderer.attachedToWindow();
         }
       });
     }
@@ -138,8 +145,6 @@ public class GLView extends GLSurfaceView
   @Override
   public void onResume()
   {
-    Utils.LOGD("GLView.onResume");
-
     if (destroyed)
     {
       Utils.LOGE("GLView IS INVALID");
@@ -151,11 +156,13 @@ public class GLView extends GLSurfaceView
       paused = false;
       super.onResume();
 
+      cinderDelegate.resuming();
+
       queueEvent(new Runnable()
       {
         public void run()
         {
-          renderer.onResume();
+          cinderRenderer.resumed();
         }
       });
     }
@@ -167,8 +174,6 @@ public class GLView extends GLSurfaceView
   @Override
   public void onPause()
   {
-    Utils.LOGD("GLView.onPause");
-
     if (destroyed)
     {
       Utils.LOGE("GLView IS INVALID");
@@ -180,11 +185,13 @@ public class GLView extends GLSurfaceView
       paused = true;
       super.onPause();
 
+      cinderDelegate.pausing();
+
       queueEvent(new Runnable()
       {
         public void run()
         {
-          renderer.onPause();
+          cinderRenderer.paused();
         }
       });
     }
@@ -195,15 +202,15 @@ public class GLView extends GLSurfaceView
    */
   public void onDestroy()
   {
-    Utils.LOGD("GLView.onDestroy");
-
     /*
-     * XXX: INTENDED TO BE CustomContextFactory.destroyContext() ON THE RENDERER'S THREAD
+     * INTENDED TO BE USED BY CustomContextFactory.destroyContext() ON THE RENDERER'S THREAD
      *
      * TRICKY, BUT THE BEHAVIOR OF GLSurfaceView.queueEvent() AT SHUT-DOWN IS SIMPLY NOT
-     * CONSISTENT ACCROSS THE SEVERAL OS-VERSIONS WE SUPPORT
+     * CONSISTENT ACCROSS THE OS-VERSIONS WE SUPPORT. SEE ALSO: GLView.onDetachedFromWindow()
      */
     finishing = true;
+
+    cinderDelegate.finishing();
   }
 
   @Override
@@ -215,7 +222,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          renderer.onVisibilityChanged(visibility);
+          cinderRenderer.visibilityChanged(visibility);
         }
       });
     }
@@ -231,7 +238,7 @@ public class GLView extends GLSurfaceView
 
     switch (event.getAction() & MotionEvent.ACTION_MASK)
     {
-      case MotionEvent.ACTION_DOWN :
+      case MotionEvent.ACTION_DOWN:
       {
         int index = 0;
         final Vector<Touch> touches = new Vector<Touch>();
@@ -241,13 +248,14 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.addTouches(touches);
+            cinderRenderer.addTouches(touches);
           }
         });
+
         break;
       }
 
-      case MotionEvent.ACTION_POINTER_DOWN :
+      case MotionEvent.ACTION_POINTER_DOWN:
       {
         int index = event.getActionIndex();
         final Vector<Touch> touches = new Vector<Touch>();
@@ -257,13 +265,14 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.addTouches(touches);
+            cinderRenderer.addTouches(touches);
           }
         });
+
         break;
       }
 
-      case MotionEvent.ACTION_UP :
+      case MotionEvent.ACTION_UP:
       {
         int index = 0;
         final Vector<Touch> touches = new Vector<Touch>();
@@ -273,13 +282,14 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.removeTouches(touches);
+            cinderRenderer.removeTouches(touches);
           }
         });
+
         break;
       }
 
-      case MotionEvent.ACTION_POINTER_UP :
+      case MotionEvent.ACTION_POINTER_UP:
       {
         int index = event.getActionIndex();
         final Vector<Touch> touches = new Vector<Touch>();
@@ -289,14 +299,15 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.removeTouches(touches);
+            cinderRenderer.removeTouches(touches);
           }
         });
+
         break;
       }
 
 
-      case MotionEvent.ACTION_MOVE :
+      case MotionEvent.ACTION_MOVE:
       {
         final Vector<Touch> touches = new Vector<Touch>();
           
@@ -309,9 +320,10 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            renderer.updateTouches(touches);
+            cinderRenderer.updateTouches(touches);
           }
         });
+
         break;
       }
     }
@@ -342,7 +354,7 @@ public class GLView extends GLSurfaceView
     public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config)
     {
       Utils.LOGD("CustomContextFactory.createContext");
-      renderer.contextCreated();
+      cinderRenderer.contextCreated();
 
       int[] attrib_list = { 0x3098, mEGLContextClientVersion, EGL10.EGL_NONE };
       return egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, mEGLContextClientVersion != 0 ? attrib_list : null);
@@ -351,14 +363,14 @@ public class GLView extends GLSurfaceView
     public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context)
     {
       Utils.LOGD("CustomContextFactory.destroyContext");
-      renderer.contextDestroyed();
+      cinderRenderer.contextDestroyed();
 
       if (!attached || finishing)
       {
         destroyed = true;
 
-        renderer.onDetachedFromWindow();
-        renderer.onDestroy();
+        cinderRenderer.detachedFromWindow();
+        cinderRenderer.performShutdown();
       }
 
       egl.eglDestroyContext(display, context);
@@ -373,7 +385,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          renderer.sendMessage(what, body);
+          cinderRenderer.sendMessage(what, body);
         }
       });
     }

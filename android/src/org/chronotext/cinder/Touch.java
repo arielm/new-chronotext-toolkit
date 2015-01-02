@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-package org.chronotext.gl;
+package org.chronotext.cinder;
 
 import java.util.Vector;
 
@@ -16,7 +16,7 @@ public class Touch
   public float x;
   public float y;
   
-  Touch(int index, float x, float y)
+  public Touch(int index, float x, float y)
   {
     this.index = index;
     this.x = x;

@@ -24,7 +24,7 @@ namespace chr
     class CinderDelegate
     {
         /*
-         * PARALLEL TO org.chronotext.cinder.CinderRenderer.java
+         * PARALLEL TO android/cinder/CinderRenderer.java
          */
         enum
         {
@@ -40,7 +40,7 @@ namespace chr
         };
         
         /*
-         * PARALLEL TO org.chronotext.cinder.CinderDelegate.java
+         * PARALLEL TO android/cinder/CinderDelegate.java
          */
         enum
         {
@@ -66,10 +66,15 @@ namespace chr
         void receiveMessageFromSketch(int what, const std::string &body);
         void sendMessageToSketch(int what, const std::string &body = "");
         
+        /*
+         * INVOKED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
+         */
         void init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
-        void setup(int width, int height);
+        
+        void launch(JNIEnv *env); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
+        void setup(int width, int height); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
         void shutdown();
-
+        
         void resize(int width, int height);
         void draw();
         
@@ -103,12 +108,12 @@ namespace chr
     protected:
         CinderSketch *sketch;
 
-        jobject javaContext_;
-        jobject javaListener_;
-        jobject javaDisplay_;
+        jobject javaContext;
+        jobject javaListener;
+        jobject javaDisplay;
         
-        DisplayInfo displayInfo_;
-        WindowInfo windowInfo_;
+        DisplayInfo displayInfo;
+        WindowInfo windowInfo;
 
         ci::Timer timer;
         uint32_t frameCount;
