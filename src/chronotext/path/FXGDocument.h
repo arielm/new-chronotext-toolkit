@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "chronotext/InputSource.h"
+
 #include "cinder/Path2d.h"
 #include "cinder/Xml.h"
 
@@ -16,8 +18,8 @@ namespace chr
     class FXGDocument
     {
     public:
-        FXGDocument();
-        FXGDocument(ci::DataSourceRef source);
+        FXGDocument() = default;
+        FXGDocument(InputSource::Ref inputSource);
         
         ci::Vec2f getViewSize() const;
         const std::vector<ci::Path2d>& getPaths() const;

@@ -6,19 +6,16 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "FXGDocument.h"
+#include "chronotext/path/FXGDocument.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
-    FXGDocument::FXGDocument()
-    {}
-    
-    FXGDocument::FXGDocument(DataSourceRef source)
+    FXGDocument::FXGDocument(InputSource::Ref inputSource)
     {
-        XmlTree doc(source);
+        XmlTree doc(inputSource->loadDataSource());
         
         if (doc.hasChild("Graphic"))
         {

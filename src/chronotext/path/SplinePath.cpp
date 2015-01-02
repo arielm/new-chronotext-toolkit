@@ -31,11 +31,11 @@ namespace chr
         add(points);
     }
     
-    SplinePath::SplinePath(DataSourceRef source)
+    SplinePath::SplinePath(InputSource::Ref inputSource)
     :
     closed(false)
     {
-        read(source);
+        read(inputSource->loadDataSource());
     }
     
     void SplinePath::read(DataSourceRef source)

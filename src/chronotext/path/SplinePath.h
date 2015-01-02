@@ -24,9 +24,6 @@
 
 #include "chronotext/path/FollowablePath.h"
 
-#include "cinder/DataSource.h"
-#include "cinder/DataTarget.h"
-
 namespace chr
 {
     class SplinePath
@@ -40,7 +37,7 @@ namespace chr
         
         SplinePath(int capacity = 0);
         SplinePath(const std::vector<ci::Vec2f> &points);
-        SplinePath(ci::DataSourceRef source);
+        SplinePath(InputSource::Ref inputSource);
 
         void read(ci::DataSourceRef source);
         void write(ci::DataTargetRef target);

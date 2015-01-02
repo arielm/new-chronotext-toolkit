@@ -16,12 +16,12 @@
 
 namespace chr
 {
-    static const float D2R = M_PI / 180.0;
-    static const float R2D = 180.0 / M_PI;
+    static constexpr float D2R (M_PI / 180.0);
+    static constexpr float R2D (180.0 / M_PI);
     
-    static const float PI = M_PI;
-    static const float TWO_PI = M_PI * 2.0;
-    static const float HALF_PI = M_PI * 0.5;
+    static constexpr float PI (M_PI);
+    static constexpr float TWO_PI (M_PI * 2.0);
+    static constexpr float HALF_PI (M_PI * 0.5);
     
     static inline float boundf(float value, float range)
     {

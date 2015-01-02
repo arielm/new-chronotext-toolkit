@@ -44,11 +44,11 @@ namespace chr
         }
     }
     
-    FollowablePath::FollowablePath(DataSourceRef source)
+    FollowablePath::FollowablePath(InputSource::Ref inputSource)
     :
     mode(MODE_TANGENT)
     {
-        read(source);
+        read(inputSource->loadDataSource());
     }
     
     void FollowablePath::read(DataSourceRef source)
@@ -158,10 +158,13 @@ namespace chr
     
     Rectf FollowablePath::getBounds() const
     {
-        float minX = numeric_limits<float>::max();
-        float minY = numeric_limits<float>::max();
-        float maxX = numeric_limits<float>::min();
-        float maxY = numeric_limits<float>::min();
+        if (points.empty())
+        {
+            return Rectf(0, 0, 0, 0);
+        }
+        
+        float minX = points.front().x, maxX = minX;
+        float minY = points.front().y, maxY = minY;
         
         for (auto &point : points)
         {
