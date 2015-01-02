@@ -7,8 +7,8 @@
  */
 
 #include "chronotext/path/FollowablePath.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
-#include "chronotext/utils/Utils.h"
 
 using namespace ci;
 using namespace std;
@@ -229,7 +229,7 @@ namespace chr
                 }
             }
             
-            int index = search(lengths, offset, 1, size());
+            auto index = utils::search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             
@@ -277,7 +277,7 @@ namespace chr
                 }
             }
             
-            int index = search(lengths, offset, 1, size());
+            auto index = utils::search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             
@@ -318,7 +318,7 @@ namespace chr
                 }
             }
             
-            int index = search(lengths, offset, 1, size());
+            auto index = utils::search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             

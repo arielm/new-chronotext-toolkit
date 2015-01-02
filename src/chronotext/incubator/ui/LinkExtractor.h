@@ -49,7 +49,7 @@ namespace chr
                     int pos5 = input.find(L"</a>", pos4);
                     
                     output.append(input, pos, pos1 - pos);
-                    links.emplace_back(output.size(), pos5 - pos4, wstringToUtf8(input.substr(pos2, pos3 - pos2)));
+                    links.emplace_back(output.size(), pos5 - pos4, utils::toString(input.substr(pos2, pos3 - pos2)));
                     output.append(input, pos4, pos5 - pos4);
                     
                     pos = pos5 + 4;

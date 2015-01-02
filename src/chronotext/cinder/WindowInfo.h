@@ -59,7 +59,7 @@ namespace chr
             lhs
             << "{"
             << "size: " << rhs.size
-            << ", anti-alasing-level: " << rhs.aaLevel
+            << ", anti-aliasing-level: " << rhs.aaLevel
             << "}";
             
             return lhs;

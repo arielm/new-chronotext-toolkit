@@ -37,7 +37,7 @@ namespace chr
         {
             if (!started)
             {
-                this->msg = msg;
+                Timing::msg = msg;
                 
                 timer.start();
                 started = true;

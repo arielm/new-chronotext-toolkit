@@ -9,7 +9,6 @@
 #include "chronotext/texture/TextureHelper.h"
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/Context.h"
-#include "chronotext/utils/Utils.h"
 #include "chronotext/utils/MathUtils.h"
 
 #include "cinder/ip/Fill.h"

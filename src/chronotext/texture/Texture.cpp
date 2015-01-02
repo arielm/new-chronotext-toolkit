@@ -13,6 +13,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace chr::utils;
 using namespace context;
 
 namespace chr
@@ -126,9 +127,9 @@ namespace chr
                 auto delta2 = memoryManager().compare(memoryProbe.memoryInfo[1], memoryInfo);
                 
                 memoryStats = " | " +
-                MemoryInfo::write(memoryProbe.memoryUsage) + ", " +
-                MemoryInfo::write(delta1) + ", " +
-                MemoryInfo::write(delta2);
+                format::bytes(memoryProbe.memoryUsage) + ", " +
+                format::bytes(delta1) + ", " +
+                format::bytes(delta2);
             }
             
             // ---
@@ -172,8 +173,8 @@ namespace chr
                 auto delta = -memoryManager().compare(memoryProbe.memoryInfo[2], memoryInfo);
                 
                 memoryStats = " | " +
-                MemoryInfo::write(memoryProbe.memoryUsage) + ", " +
-                MemoryInfo::write(delta);
+                format::bytes(memoryProbe.memoryUsage) + ", " +
+                format::bytes(delta);
             }
             
             LOGI_IF(TextureManager::LOG_VERBOSE) <<

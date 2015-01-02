@@ -8,7 +8,6 @@
 
 #include "chronotext/font/zf/FontManager.h"
 #include "chronotext/Context.h"
-#include "chronotext/utils/Utils.h"
 
 #include "cinder/gl/gl.h"
 

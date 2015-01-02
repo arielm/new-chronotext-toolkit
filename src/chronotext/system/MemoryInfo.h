@@ -31,7 +31,7 @@ namespace chr
                 
                 if (rhs.free > 0)
                 {
-                    lhs << "free: " << rhs.write(rhs.free);
+                    lhs << "free: " << utils::format::bytes(rhs.free);
                 }
                 
                 if (rhs.used > 0)
@@ -41,31 +41,19 @@ namespace chr
                         lhs << ", ";
                     }
                     
-                    lhs << "used: " << rhs.write(rhs.used);
+                    lhs << "used: " << utils::format::bytes(rhs.used);
                 }
                 
                 if ((rhs.free > 0) && (rhs.used > 0))
                 {
                     double ratio = rhs.used / double(rhs.free + rhs.used);
                     
-                    lhs << ", percent: " << percent(ratio);
+                    lhs << ", percent: " << utils::format::percent(ratio);
                 }
                 
                 lhs << "}";
                 
                 return lhs;
-            }
-            
-            static std::string write(int64_t bytes, int precision = 2, double unit = 1024 * 1024, const std::string &suffix = "M")
-            {
-                if (bytes <= 0)
-                {
-                    return "";
-                }
-                
-                std::stringstream s;
-                s << std::fixed << std::setprecision(precision) << bytes / unit << suffix;
-                return s.str();
             }
         };
     }

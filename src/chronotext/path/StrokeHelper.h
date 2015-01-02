@@ -243,7 +243,7 @@ namespace chr
                 offset = length;
             }
             
-            int index = search(lengths, offset, 1, lengths.size());
+            int index = utils::search(lengths, offset, 1, lengths.size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             

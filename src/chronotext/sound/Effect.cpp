@@ -9,7 +9,6 @@
 #include "chronotext/sound/Effect.h"
 #include "chronotext/sound/SoundManager.h"
 #include "chronotext/Context.h"
-#include "chronotext/utils/Utils.h"
 
 using namespace std;
 
@@ -73,7 +72,7 @@ namespace chr
             "EFFECT CREATED: " <<
             request.inputSource->getFilePathHint() << " | " <<
             getDuration() << "s | " <<
-            prettyBytes(getMemoryUsage()) <<
+            utils::format::bytes(getMemoryUsage()) <<
             endl;
         }
     }

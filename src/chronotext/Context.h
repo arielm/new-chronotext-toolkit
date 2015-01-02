@@ -22,10 +22,7 @@
 #include "chronotext/system/MemoryManager.h"
 #include "chronotext/os/TaskManager.h"
 
-#include "chronotext/Log.h"
-#include "chronotext/InputSource.h"
-#include "chronotext/system/FileHelper.h"
-#include "chronotext/system/DisplayHelper.h"
+#include "chronotext/utils/Utils.h"
 
 #include <boost/asio.hpp>
 
