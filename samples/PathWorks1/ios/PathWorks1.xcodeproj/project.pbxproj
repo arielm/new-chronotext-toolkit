@@ -181,7 +181,6 @@
 		A8FA3BC716E3AB8000367F97 /* GLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLViewController.mm; sourceTree = "<group>"; };
 		A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
 		A8FA3BFE16E3AB8000367F97 /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
-		A8FA3BFF16E3AB8000367F97 /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
 		A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		A8FA3C0116E3AB8000367F97 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		A8FA3C0516E3AB8000367F97 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
@@ -538,7 +537,6 @@
 			children = (
 				A8FA3BFE16E3AB8000367F97 /* GLUtils.h */,
 				A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */,
-				A8FA3BFF16E3AB8000367F97 /* Hasher.h */,
 				A8FA3C0116E3AB8000367F97 /* MathUtils.h */,
 				A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */,
 				A8FA3C0616E3AB8000367F97 /* Utils.h */,

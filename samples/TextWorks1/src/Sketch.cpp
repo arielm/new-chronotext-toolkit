@@ -8,7 +8,7 @@
 
 #include "Sketch.h"
 
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/GLUtils.h"
 
 using namespace std;

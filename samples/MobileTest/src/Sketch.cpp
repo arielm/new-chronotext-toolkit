@@ -8,9 +8,9 @@
 
 #include "Sketch.h"
 
+#include "chronotext/Context.h"
 #include "chronotext/font/xf/TextHelper.h"
 #include "chronotext/utils/GLUtils.h"
-#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
@@ -155,7 +155,7 @@ void Sketch::drawText(const string &text, const Vec2f &position, XFont::Alignmen
     font->setColor(color);
     font->setSize(fontSize);
     
-    TextHelper::drawAlignedText(*font, utf8ToWstring(text), position, alignX, alignY);
+    TextHelper::drawAlignedText(*font, utils::toWideString(text), position, alignX, alignY);
 }
 
 void Sketch::accelerated(AccelEvent event)

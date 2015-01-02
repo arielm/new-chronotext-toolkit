@@ -118,7 +118,6 @@
 		A82C90E916E00B0500FF519C /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
 		A82C90FA16E00B3B00FF519C /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
 		A82C90FB16E00B3B00FF519C /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
-		A82C90FC16E00B3B00FF519C /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
 		A82C90FD16E00B3B00FF519C /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		A82C90FE16E00B3B00FF519C /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		A82C910216E00B3B00FF519C /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
@@ -390,7 +389,6 @@
 			children = (
 				A82C90FB16E00B3B00FF519C /* GLUtils.h */,
 				A82C90FA16E00B3B00FF519C /* GLUtils.cpp */,
-				A82C90FC16E00B3B00FF519C /* Hasher.h */,
 				A82C90FE16E00B3B00FF519C /* MathUtils.h */,
 				A82C90FD16E00B3B00FF519C /* MathUtils.cpp */,
 				A82C910316E00B3B00FF519C /* Utils.h */,

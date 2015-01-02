@@ -8,7 +8,7 @@
 
 #include "Sketch.h"
 
-#include "chronotext/utils/Utils.h"
+#include "chronotext/utils/Context.h"
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/MathUtils.h"
 
@@ -98,7 +98,7 @@ void Sketch::addVersion(const string &lang)
     
     string version;
     
-    for (auto &line : readLines<string>(InputSource::getResource(lang + ".txt")))
+    for (auto &line : utils::readLines<string>(InputSource::getResource(lang + ".txt")))
     {
         version += line;
         version += " ";

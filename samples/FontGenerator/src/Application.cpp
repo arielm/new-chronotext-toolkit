@@ -22,7 +22,7 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT 4e05b6a
+ * IN SYNC WITH develop BRANCH / COMMIT cb97cfb
  */
 
 #include "cinder/app/AppNative.h"
@@ -35,9 +35,9 @@
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 using namespace chr;
-using namespace xf;
+using namespace chr::xf;
 
 const wstring ISO_8859_15_EXTENDED = ISO_8859_15 + L"\u2013\u2014"; // ADDING "N" AND "M" DASHES
 const wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";

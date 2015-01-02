@@ -15,7 +15,7 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT c371b7b
+ * IN SYNC WITH develop BRANCH / COMMIT cb97cfb
  */
 
 #pragma once
