@@ -33,7 +33,7 @@ void Sketch::setup()
     
     // ---
     
-    spline = SplinePath(InputSource::loadResource("spline_1.dat"));
+    spline = SplinePath(InputSource::getResource("spline_1.dat"));
     spline.flush(SplinePath::TYPE_BSPLINE, path);
     
     // ---
@@ -52,7 +52,7 @@ void Sketch::setup()
     
     // ---
     
-    auto document = FXGDocument(InputSource::loadResource("lys.fxg"));
+    FXGDocument document(InputSource::getResource("lys.fxg"));
     
     ShapeTesselator tesselator;
     tesselator.add(document);

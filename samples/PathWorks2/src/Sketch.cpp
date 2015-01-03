@@ -33,7 +33,7 @@ void Sketch::setup()
     
     // ---
     
-    SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
+    SplinePath spline(InputSource::getResource("spline_1.dat"));
     
     spline.flush(SplinePath::TYPE_BSPLINE, roadPath);
     float length = roadPath.getLength();
@@ -68,7 +68,7 @@ void Sketch::setup()
     
     // ---
     
-    FXGDocument document(InputSource::loadResource("lys.fxg"));
+    FXGDocument document(InputSource::getResource("lys.fxg"));
     
     for (auto &path : document.getPaths())
     {

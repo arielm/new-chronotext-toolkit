@@ -8,7 +8,7 @@
 
 #include "TextSpiral.h"
 
-#include "chronotext/utils/Context.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
 
 #include "cinder/gl/gl.h"

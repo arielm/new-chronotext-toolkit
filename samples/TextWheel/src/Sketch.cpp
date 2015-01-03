@@ -8,7 +8,7 @@
 
 #include "Sketch.h"
 
-#include "chronotext/utils/Context.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/MathUtils.h"
 
@@ -121,10 +121,10 @@ void Sketch::addVersion(const string &lang)
 
 void Sketch::nextVersion()
 {
-    currentLangIndex = bound(currentLangIndex + 1, languages.size());
+    currentLangIndex = utils::math::bound(currentLangIndex + 1, languages.size());
 }
 
 void Sketch::previousVersion()
 {
-    currentLangIndex = bound(currentLangIndex - 1, languages.size());
+    currentLangIndex = utils::math::bound(currentLangIndex - 1, languages.size());
 }
