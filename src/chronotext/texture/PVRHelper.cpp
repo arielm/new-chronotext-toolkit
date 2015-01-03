@@ -176,7 +176,7 @@ namespace chr
         uint32_t width = header->width;
         uint32_t height = header->height;
         
-        if (!isPowerOfTwo(width) || !isPowerOfTwo(height))
+        if (!utils::math::isPowerOfTwo(width) || !utils::math::isPowerOfTwo(height))
         {
             throw EXCEPTION(Texture, "TEXTURE: DIMENSIONS MUST BE A POWER-OF-TWO");
         }

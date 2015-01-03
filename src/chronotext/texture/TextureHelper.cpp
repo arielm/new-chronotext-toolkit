@@ -244,8 +244,8 @@ namespace chr
         }
         else
         {
-            int dstWidth = nextPowerOfTwo(srcWidth);
-            int dstHeight = nextPowerOfTwo(srcHeight);
+            int dstWidth = utils::math::nextPowerOfTwo(srcWidth);
+            int dstHeight = utils::math::nextPowerOfTwo(srcHeight);
             
             if ((srcWidth != dstWidth) || (srcHeight != dstHeight))
             {

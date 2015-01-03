@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/app/system/SystemManager.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Context.h"
 
 #include "cinder/System.h"
 

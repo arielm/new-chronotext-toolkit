@@ -18,14 +18,6 @@ namespace chr
     {
         namespace gl
         {
-            void bindTexture(const ci::gl::Texture &texture);
-            void beginTexture(const ci::gl::Texture &texture);
-            void endTexture();
-            
-            void drawTextureFromCenter(const ci::gl::Texture &texture);
-            void drawTexture(const ci::gl::Texture &texture, float rx = 0, float ry = 0);
-            void drawTextureInRect(const ci::gl::Texture &texture, const ci::Rectf &rect, float ox = 0, float oy = 0);
-            
             const ci::Matrix44f getPerspectiveMatrix(float fovy, float aspect, float zNear, float zFar);
             const ci::Matrix44f getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX = 0, float panY = 0, float zoom = 1);
             const ci::Matrix44f getFrustumMatrix(float left, float right, float bottom, float top, float znear, float zfar);

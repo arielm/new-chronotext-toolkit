@@ -10,8 +10,8 @@
 #include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
 
-using namespace ci;
 using namespace std;
+using namespace ci;
 
 namespace chr
 {
@@ -212,7 +212,7 @@ namespace chr
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                offset = boundf(offset, length);
+                offset = utils::math::boundf(offset, length);
             }
             else
             {
@@ -260,7 +260,7 @@ namespace chr
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                offset = boundf(offset, length);
+                offset = utils::math::boundf(offset, length);
             }
             else
             {
@@ -301,7 +301,7 @@ namespace chr
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                offset = boundf(offset, length);
+                offset = utils::math::boundf(offset, length);
             }
             else
             {

@@ -43,8 +43,8 @@ namespace chr
                 auto buffer = glyphData.getBuffer();
                 
                 useMipmap = glyphData.useMipmap;
-                width = nextPowerOfTwo(glyphWidth + glyphPadding * 2);
-                height = nextPowerOfTwo(glyphHeight + glyphPadding * 2);
+                width = utils::math::nextPowerOfTwo(glyphWidth + glyphPadding * 2);
+                height = utils::math::nextPowerOfTwo(glyphHeight + glyphPadding * 2);
                 
                 auto data = new unsigned char[width * height](); // ZERO-FILLED
                 

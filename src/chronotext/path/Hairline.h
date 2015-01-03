@@ -22,7 +22,7 @@ namespace chr
             TYPE_DASHED
         };
         
-        Hairline();
+        Hairline() = default;
         Hairline(TextureManager &textureManager, Type type);
         
         void stroke(const FollowablePath &path, float scale = 1, float uOffset = 0);
