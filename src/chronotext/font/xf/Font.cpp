@@ -292,16 +292,6 @@ namespace chr
             }
         }
         
-        QuadMatrix* Font::getMatrix()
-        {
-            return &matrix;
-        }
-        
-        const uint16_t* Font::getIndices() const
-        {
-            return const_cast<uint16_t*>(indices.data());
-        }
-        
         void Font::begin(bool useColor)
         {
             glEnable(GL_TEXTURE_2D);

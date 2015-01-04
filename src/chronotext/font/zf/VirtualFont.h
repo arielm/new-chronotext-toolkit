@@ -141,8 +141,21 @@ namespace chr
             void setClip(float x1, float y1, float x2, float y2);
             void clearClip(); // INVOKED UPON SEQUENCE-BEGIN
             
-            QuadMatrix* getMatrix();
-            const uint16_t* getIndices() const;
+            inline QuadMatrix& getMatrix()
+            {
+                return matrix;
+            }
+            
+            template <typename T>
+            inline QuadMatrix& loadMatrix(const T &other)
+            {
+                return matrix.load(other);
+            }
+            
+            inline const uint16_t* getIndices() const
+            {
+                return const_cast<uint16_t*>(indices.data());
+            }
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }

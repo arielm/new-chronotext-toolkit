@@ -23,7 +23,7 @@ namespace chr
         
         union
         {
-            Values m;
+            float m[16];
             
             struct
             {
@@ -32,17 +32,24 @@ namespace chr
                 float m02, m12, m22, m32;
                 float m03, m13, m23, m33;
             };
+            
+            Values values;
         };
         
         QuadMatrix();
-
-        void load(const ci::Matrix44f &matrix);
-        void load(const ci::MatrixAffine2f &matrix);
-
-        void setToIdentity();
+        QuadMatrix(const QuadMatrix &other) = delete;
         
+        operator float* () { return m; }
+        operator const float* () const { return m; }
+
+        QuadMatrix& load(const QuadMatrix &matrix);
+        QuadMatrix& load(const ci::Matrix44f &matrix);
+        QuadMatrix& load(const ci::MatrixAffine2f &matrix);
+
         void push();
         void pop();
+        
+        void setToIdentity();
 
         inline void setTranslation(const ci::Vec2f &t) { setTranslation(t.x, t.y, 0); }
         inline void setTranslation(const ci::Vec3f &t) { setTranslation(t.x, t.y, t.z); }

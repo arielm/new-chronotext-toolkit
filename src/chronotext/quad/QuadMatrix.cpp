@@ -18,37 +18,46 @@ namespace chr
         setToIdentity();
     }
     
-    void QuadMatrix::load(const Matrix44f &matrix)
+    QuadMatrix& QuadMatrix::load(const QuadMatrix &matrix)
     {
-        memcpy(&m, matrix.m, sizeof(m));
+        memcpy(m, matrix.m, sizeof(m));
+        return *this;
     }
     
-    void QuadMatrix::load(const MatrixAffine2f &matrix)
+    QuadMatrix& QuadMatrix::load(const Matrix44f &matrix)
+    {
+        memcpy(m, matrix.m, sizeof(m));
+        return *this;
+    }
+    
+    QuadMatrix& QuadMatrix::load(const MatrixAffine2f &matrix)
     {
         m[ 0] = matrix.m[0]; m[ 4] = matrix.m[2]; m[ 8] = 0.0f; m[12] = matrix.m[4];
         m[ 1] = matrix.m[1]; m[ 5] = matrix.m[3]; m[ 9] = 0.0f; m[13] = matrix.m[5];
         m[ 2] = 0.0f;        m[ 6] = 0.0f;        m[10] = 1.0f; m[14] = 0.0f;
         m[ 3] = 0.0f;        m[ 7] = 0.0f;        m[11] = 0.0f; m[15] = 1.0f;
+        
+        return *this;
     }
 
-    void QuadMatrix::setToIdentity()
-    {
-        m00 = m11 = m22 = m33 = 1.0f;
-        m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
-    }
-    
     void QuadMatrix::push()
     {
-        stack.push_back(m);
+        stack.push_back(values);
     }
     
     void QuadMatrix::pop()
     {
         if (!stack.empty())
         {
-            m = stack.back();
+            values = stack.back();
             stack.pop_back();
         }
+    }
+    
+    void QuadMatrix::setToIdentity()
+    {
+        m00 = m11 = m22 = m33 = 1.0f;
+        m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
     }
     
     void QuadMatrix::setTranslation(float x, float y, float z)

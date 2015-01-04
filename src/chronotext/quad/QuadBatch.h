@@ -36,7 +36,7 @@ namespace chr
     class QuadBatch
     {
     public:
-        static const int stride = sizeof(float) * (3 + 2);
+        static constexpr int stride = sizeof(float) * (3 + 2);
         
         std::vector<Vertex> vertices;
         std::vector<ci::ColorA> colors;

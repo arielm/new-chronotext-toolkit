@@ -42,11 +42,11 @@ namespace chr
         void TextHelper::drawTransformedText(Font &font, const std::wstring &text, float x, float y)
         {
             auto direction = font.getDirection();
-            auto matrix = font.getMatrix();
+            auto &matrix = font.getMatrix();
             
             if (x != 0)
             {
-                matrix->translate(x * direction, 0);
+                matrix.translate(x * direction, 0);
             }
             
             font.beginSequence();
@@ -55,7 +55,7 @@ namespace chr
             {
                 auto glyphIndex = font.getGlyphIndex(c);
                 font.addTransformedGlyph(glyphIndex, 0, y);
-                matrix->translate(font.getGlyphAdvance(glyphIndex) * direction, 0);
+                matrix.translate(font.getGlyphAdvance(glyphIndex) * direction, 0);
             }
             
             font.endSequence();
@@ -65,7 +65,7 @@ namespace chr
         {
             auto sampleSize = 0.5f * font.getSize();
             auto direction = font.getDirection();
-            auto matrix = font.getMatrix();
+            auto &matrix = font.getMatrix();
             
             font.beginSequence();
             
@@ -77,8 +77,8 @@ namespace chr
                 
                 if (glyphIndex >= 0)
                 {
-                    matrix->setTranslation(path.offset2Position(offsetX));
-                    matrix->rotateZ(path.offset2SampledAngle(offsetX, sampleSize));
+                    matrix.setTranslation(path.offset2Position(offsetX));
+                    matrix.rotateZ(path.offset2SampledAngle(offsetX, sampleSize));
                     font.addTransformedGlyph(glyphIndex, -half, offsetY);
                 }
                 

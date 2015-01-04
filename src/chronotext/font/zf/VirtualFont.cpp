@@ -371,16 +371,6 @@ namespace chr
             hasClip = false;
         }
         
-        QuadMatrix* VirtualFont::getMatrix()
-        {
-            return &matrix;
-        }
-        
-        const uint16_t* VirtualFont::getIndices() const
-        {
-            return const_cast<uint16_t*>(indices.data());
-        }
-        
         void VirtualFont::begin(bool useColor)
         {
             glEnable(GL_TEXTURE_2D);

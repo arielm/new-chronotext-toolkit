@@ -22,7 +22,7 @@ namespace chr
         public:
             std::map<T*, std::unique_ptr<QuadBatch>> map;
             
-            QuadBatchMap() {}
+            QuadBatchMap() = default;
             QuadBatchMap(const QuadBatchMap &other) = delete; // QuadBatchMap CAN'T BE COPIED (I.E. BECAUSE OF THE map OF unique_ptr)
             
             void clear()

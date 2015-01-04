@@ -106,8 +106,21 @@ namespace chr
             float getOffsetY(Alignment align) const; // FOR "ALIGN_MIDDLE": getStrikethroughOffset() WILL BE USED, UNLESS setMiddleLineFactor() HAS BEEN INVOKED
             inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
             
-            QuadMatrix* getMatrix();
-            const uint16_t* getIndices() const;
+            inline QuadMatrix& getMatrix()
+            {
+                return matrix;
+            }
+            
+            template <typename T>
+            inline QuadMatrix& loadMatrix(const T &other)
+            {
+                return matrix.load(other);
+            }
+            
+            inline const uint16_t* getIndices() const
+            {
+                return const_cast<uint16_t*>(indices.data());
+            }
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }
