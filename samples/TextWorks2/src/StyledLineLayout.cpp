@@ -13,9 +13,6 @@ using namespace ci;
 using namespace chr;
 using namespace chr::zf;
 
-StyledLineLayout::StyledLineLayout()
-{}
-
 StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleSheet)
 {
     ZFont *currentFont = nullptr;
@@ -23,7 +20,7 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
     
     for (auto run = line.runs.cbegin(); run != line.runs.cend(); ++run)
     {
-        auto font = styleSheet[run->tag].font;
+        auto font = styleSheet[run->tag].font; // XXX
         
         if (font != currentFont)
         {

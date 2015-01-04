@@ -18,8 +18,7 @@ public:
         chr::ZFont *font;
         ci::ColorA color;
         
-        Style()
-        {}
+        Style() = default;
         
         Style(std::shared_ptr<chr::ZFont> font, const ci::ColorA &color)
         :
@@ -48,7 +47,7 @@ public:
     std::vector<std::unique_ptr<chr::zf::LineLayout>> lineLayouts;
     std::vector<Chunk> chunks;
     
-    StyledLineLayout();
+    StyledLineLayout() = default;
     StyledLineLayout(const chr::zf::TextLine &line, std::map<int, Style> &styleSheet);
     
     float getAdvance() const;

@@ -61,7 +61,7 @@ void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, 
     float dr = (r2 - r1) / l;
     float D = offsetX;
     
-    auto matrix = font.getMatrix();
+    auto &matrix = font.getMatrix();
     
     for (auto &cluster : DirectionalRange(layout.clusters, reverse))
     {
@@ -73,8 +73,8 @@ void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, 
             float r = math<float>::sqrt(r1 * r1 + 2 * dr * D);
             float d = (r - r1) / dr;
             
-            matrix->setTranslation(ox - math<float>::cos(d) * r, oy + math<float>::sin(d) * r);
-            matrix->rotateZ((reverse ? -1 : +1) * HALF_PI - d);
+            matrix.setTranslation(ox - math<float>::cos(d) * r, oy + math<float>::sin(d) * r);
+            matrix.rotateZ((reverse ? -1 : +1) * HALF_PI - d);
             
             font.addTransformedCluster(cluster, -half, offsetY);
         }
