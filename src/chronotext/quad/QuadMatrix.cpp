@@ -20,7 +20,7 @@ namespace chr
     
     QuadMatrix& QuadMatrix::load(const QuadMatrix &matrix)
     {
-        memcpy(m, matrix.m, sizeof(m));
+        values = matrix.values;
         return *this;
     }
     
