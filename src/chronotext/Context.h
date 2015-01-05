@@ -48,10 +48,6 @@ namespace context
     chr::memory::Manager& memoryManager();
     chr::TaskManager& taskManager();
     
-    chr::SystemInfo getSystemInfo();
-    chr::MemoryInfo getMemoryInfo();
-    chr::DisplayInfo getDisplayInfo();
-    
     namespace os
     {
         /*

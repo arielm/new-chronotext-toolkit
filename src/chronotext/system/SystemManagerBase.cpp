@@ -12,6 +12,19 @@
 using namespace std;
 using namespace ci;
 
+namespace context
+{
+    chr::SystemInfo getSystemInfo()
+    {
+        return systemManager().getInfo();
+    }
+    
+    chr::DisplayInfo getDisplayInfo()
+    {
+        return systemManager().getDisplayInfo();
+    }
+}
+
 namespace chr
 {
     namespace system

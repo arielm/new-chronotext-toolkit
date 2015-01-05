@@ -42,3 +42,9 @@ namespace chr
         };
     }
 }
+
+namespace context
+{
+    chr::SystemInfo getSystemInfo();
+    chr::DisplayInfo getDisplayInfo();
+}

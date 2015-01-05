@@ -9,6 +9,7 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Context.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Log.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/InputSource.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/SystemManagerBase.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/MemoryManagerBase.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderDelegate.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/CinderSketch.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/android/cinder/JNI.cpp

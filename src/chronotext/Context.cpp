@@ -116,23 +116,6 @@ namespace context
     
     // ---
     
-    SystemInfo getSystemInfo()
-    {
-        return systemManager().getInfo();
-    }
-    
-    MemoryInfo getMemoryInfo()
-    {
-        return memoryManager().getInfo();
-    }
-    
-    DisplayInfo getDisplayInfo()
-    {
-        return systemManager().getDisplayInfo();
-    }
-    
-    // ---
-    
     namespace os
     {
         bool isThreadSafe()
