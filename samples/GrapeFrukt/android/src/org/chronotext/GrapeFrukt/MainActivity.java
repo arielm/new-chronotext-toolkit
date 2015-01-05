@@ -24,7 +24,7 @@ public class MainActivity extends Activity
   {
     super.onCreate(savedInstanceState);
 
-    delegate = new CinderDelegate(this, null);
+    delegate = new CinderDelegate(this);
     setContentView(delegate.getView());
   }
 

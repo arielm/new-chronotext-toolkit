@@ -9,9 +9,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT 1fb15f8
- * IOS: COMMIT 1fb15f8
- * ANDROID: COMMIT 1fb15f8
+ * OSX: COMMIT ebc399c
+ * IOS: COMMIT ebc399c
+ * ANDROID: COMMIT ebc399c
  */
 
 #pragma once

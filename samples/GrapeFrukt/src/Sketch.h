@@ -43,9 +43,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT cb97cfb
- * IOS: COMMIT cb97cfb
- * ANDROID: COMMIT cb97cfb
+ * OSX: COMMIT ebc399c
+ * IOS: COMMIT ebc399c
+ * ANDROID: COMMIT ebc399c
  */
 
 /*
