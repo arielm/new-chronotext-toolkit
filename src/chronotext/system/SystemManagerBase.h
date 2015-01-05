@@ -12,7 +12,10 @@
 
 namespace chr
 {
-    class DisplayInfo;
+    namespace display
+    {
+        class Info;
+    }
     
     namespace system
     {
@@ -27,13 +30,13 @@ namespace chr
             virtual void setup(const InitInfo &initInfo) = 0;
             virtual void shutdown() {}
 
-            const SystemInfo& getInfo() const;
-            virtual const DisplayInfo& getDisplayInfo() const = 0;
+            const Info& getInfo() const;
+            virtual const display::Info& getDisplayInfo() const = 0;
 
             virtual std::string getIpAddress(bool maskForBroadcast = false) = 0;
 
         protected:
-            SystemInfo info;
+            Info info;
             
             virtual void updateInfo();
             
@@ -45,6 +48,6 @@ namespace chr
 
 namespace context
 {
-    chr::SystemInfo getSystemInfo();
-    chr::DisplayInfo getDisplayInfo();
+    chr::system::Info getSystemInfo();
+    chr::display::Info getDisplayInfo();
 }

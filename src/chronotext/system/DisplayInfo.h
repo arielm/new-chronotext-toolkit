@@ -12,125 +12,130 @@
 
 namespace chr
 {
-    class DisplayInfo
+    namespace display
     {
-    public:
-        static constexpr float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
-        
-        enum Orientation
+        class Info
         {
-            ORIENTATION_DEFAULT,
-            ORIENTATION_PORTRAIT,
-            ORIENTATION_LANDSCAPE
-        };
-        
-        static DisplayInfo create(int width, int height, float contentScale = 1)
-        {
-            return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, 0);
-        }
-        
-        static DisplayInfo createWithDiagonal(int width, int height, float diagonal, float contentScale = 1)
-        {
-            return DisplayInfo(ci::Vec2i(width, height), contentScale, diagonal, 0);
-        }
-
-        static DisplayInfo createWithDensity(int width, int height, float density, float contentScale = 1)
-        {
-            return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, density);
-        }
-        
-        float contentScale;
-        float diagonal; // INCHES
-        float density; // DPI
-        ci::Vec2i size; // PIXELS
-        
-        DisplayInfo() = default;
-        
-        void rotate()
-        {
-            if (valid)
+        public:
+            static constexpr float REFERENCE_DENSITY = 160; // THE DENSITY-INDEPENDENT-PIXEL UNIT (DP) IS BASED ON THIS VALUE
+            
+            enum Orientation
             {
-                baseSize = baseSize.yx();
-                size = size.yx();
-            }
-        }
-        
-        float aspectRatio() const
-        {
-            if (valid)
+                ORIENTATION_DEFAULT,
+                ORIENTATION_PORTRAIT,
+                ORIENTATION_LANDSCAPE
+            };
+            
+            static Info create(int width, int height, float contentScale = 1)
             {
-                return size.x / float(size.y);
+                return Info(ci::Vec2i(width, height), contentScale, 0, 0);
             }
             
-            return 0;
-        }
-        
-        Orientation orientation() const
-        {
-            if (valid)
+            static Info createWithDiagonal(int width, int height, float diagonal, float contentScale = 1)
             {
-                return (aspectRatio() > 1) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
+                return Info(ci::Vec2i(width, height), contentScale, diagonal, 0);
             }
             
-            return ORIENTATION_DEFAULT;
-        }
-
-        friend std::ostream& operator<<(std::ostream &lhs, const DisplayInfo &rhs)
-        {
-            lhs
-            << "{"
-            << "size: " << rhs.size
-            << ", content-scale: " << rhs.contentScale
-            << ", diagonal: " << rhs.diagonal
-            << ", density: " << rhs.density
-            << "}";
-            
-            return lhs;
-        }
-        
-    protected:
-        ci::Vec2i baseSize;
-        bool valid;
-        
-        DisplayInfo(const ci::Vec2i &baseSize, float contentScale, float diagonal, float density)
-        :
-        baseSize(baseSize),
-        contentScale(contentScale),
-        diagonal(diagonal),
-        density(density)
-        {
-           valid = update();
-        }
-        
-        bool update()
-        {
-            if ((baseSize.x * baseSize.y == 0) || (contentScale < 1) || (diagonal < 0) || (density < 0))
+            static Info createWithDensity(int width, int height, float density, float contentScale = 1)
             {
-                contentScale = 0;
-                diagonal = 0;
-                density = 0;
-                size = ci::Vec2i::zero();
+                return Info(ci::Vec2i(width, height), contentScale, 0, density);
+            }
+            
+            float contentScale;
+            float diagonal; // INCHES
+            float density; // DPI
+            ci::Vec2i size; // PIXELS
+            
+            Info() = default;
+            
+            void rotate()
+            {
+                if (valid)
+                {
+                    baseSize = baseSize.yx();
+                    size = size.yx();
+                }
+            }
+            
+            float aspectRatio() const
+            {
+                if (valid)
+                {
+                    return size.x / float(size.y);
+                }
                 
-                return false;
+                return 0;
             }
             
-            size = baseSize * contentScale;
-            
-            if ((diagonal == 0) && (density == 0))
+            Orientation orientation() const
             {
-                density = REFERENCE_DENSITY;
-            }
-
-            if (diagonal == 0)
-            {
-                diagonal = size.length() / density;
-            }
-            else if (density == 0)
-            {
-                density = size.length() / diagonal;
+                if (valid)
+                {
+                    return (aspectRatio() > 1) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
+                }
+                
+                return ORIENTATION_DEFAULT;
             }
             
-            return true;
-        }
-    };
+            friend std::ostream& operator<<(std::ostream &lhs, const Info &rhs)
+            {
+                lhs
+                << "{"
+                << "size: " << rhs.size
+                << ", content-scale: " << rhs.contentScale
+                << ", diagonal: " << rhs.diagonal
+                << ", density: " << rhs.density
+                << "}";
+                
+                return lhs;
+            }
+            
+        protected:
+            ci::Vec2i baseSize;
+            bool valid;
+            
+            Info(const ci::Vec2i &baseSize, float contentScale, float diagonal, float density)
+            :
+            baseSize(baseSize),
+            contentScale(contentScale),
+            diagonal(diagonal),
+            density(density)
+            {
+                valid = update();
+            }
+            
+            bool update()
+            {
+                if ((baseSize.x * baseSize.y == 0) || (contentScale < 1) || (diagonal < 0) || (density < 0))
+                {
+                    contentScale = 0;
+                    diagonal = 0;
+                    density = 0;
+                    size = ci::Vec2i::zero();
+                    
+                    return false;
+                }
+                
+                size = baseSize * contentScale;
+                
+                if ((diagonal == 0) && (density == 0))
+                {
+                    density = REFERENCE_DENSITY;
+                }
+                
+                if (diagonal == 0)
+                {
+                    diagonal = size.length() / density;
+                }
+                else if (density == 0)
+                {
+                    density = size.length() / diagonal;
+                }
+                
+                return true;
+            }
+        };
+    }
+    
+    typedef display::Info DisplayInfo;
 }

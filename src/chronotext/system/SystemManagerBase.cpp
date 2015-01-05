@@ -51,7 +51,7 @@ namespace chr
 
         // ---
         
-        const SystemInfo& ManagerBase::getInfo() const
+        const Info& ManagerBase::getInfo() const
         {
             return info;
         }
