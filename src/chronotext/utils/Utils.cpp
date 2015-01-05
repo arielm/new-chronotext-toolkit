@@ -151,21 +151,18 @@ namespace chr
              */
             string bytes(int64_t value, int precision, const string &separator)
             {
-                if (value <= 0)
-                {
-                    return ""; // FIXME: TEMPORARY
-                }
+                string sign = (value < 0) ? "-" : "";
+                value = fabs(value);
                 
-                static const char *abbrevs[] = { "TB", "GB", "MB", "KB" };
-                double numAbbrevs = sizeof(abbrevs) / sizeof(abbrevs[0]);
-                double maximum = pow(1024.0, numAbbrevs); // XXX
+                static const vector<string> abbrevs {"TB", "GB", "MB", "KB"};
+                double maximum = pow(1024.0, abbrevs.size());
                 
-                for (auto i = 0; i < numAbbrevs; ++i)
+                for (auto &abbrev : abbrevs)
                 {
                     if (value > maximum)
                     {
                         stringstream ss;
-                        ss << fixed << setprecision(precision) << value / maximum << separator << abbrevs[i];
+                        ss << fixed << setprecision(precision) << sign << (value / maximum) << separator << abbrev;
                         return ss.str();
                     }
                     
@@ -173,14 +170,14 @@ namespace chr
                 }
                 
                 stringstream ss;
-                ss << value << separator <<  "B";
+                ss << sign << value << separator << "B";
                 return ss.str();
             }
             
             string percent(double ratio, int precision, const string &separator)
             {
                 stringstream ss;
-                ss << fixed << setprecision(precision) << ratio * 100 << separator << "%";
+                ss << fixed << setprecision(precision) << (fabs(ratio) * 100) << separator << "%"; // FIXME: "%" IS NEVER PRINTED (REPRODUCED ON ANDROID)
                 return ss.str();
             }
         }

@@ -37,7 +37,7 @@
  *      - VIA ComponentCallbacks2.onTrimMemory() CALLBACK:
  *        http://developer.android.com/reference/android/content/ComponentCallbacks2.html
  *
- * 2) MEASURE DURING memory::Manager::update AND "WARN" CinderDelegate IF NECESSARY
+ * 2) MEASURE DURING memory::Manager::update AND "WARN" CinderSketch IF NECESSARY
  *
  *
  * ADDITIONAL REFERENCES:
@@ -98,15 +98,7 @@ namespace chr
                 // ---
                 
                 freeMemory = availMem - threshold;
-                
-                // ---
-                
-                auto delta = compare(initial, Info(freeMemory));
-                
-                if (delta > 0)
-                {
-                    usedMemory = delta;
-                }
+                usedMemory = compare(initial, Info(freeMemory));
             }
             catch (exception &e)
             {}
@@ -116,7 +108,7 @@ namespace chr
         
         int64_t Manager::compare(const Info &before, const Info &after)
         {
-            if ((before.free > 0) && (after.free > 0))
+            if ((before.free != -1) && (after.free != -1))
             {
                 return before.free - after.free;
             }

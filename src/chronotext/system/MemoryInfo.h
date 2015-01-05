@@ -29,14 +29,14 @@ namespace chr
             {
                 lhs << "{";
                 
-                if (rhs.free > 0)
+                if (rhs.free != -1)
                 {
                     lhs << "free: " << utils::format::bytes(rhs.free);
                 }
                 
-                if (rhs.used > 0)
+                if (rhs.used != -1)
                 {
-                    if (rhs.free > 0)
+                    if (rhs.free != -1)
                     {
                         lhs << ", ";
                     }
@@ -44,11 +44,11 @@ namespace chr
                     lhs << "used: " << utils::format::bytes(rhs.used);
                 }
                 
-                if ((rhs.free > 0) && (rhs.used > 0))
+                if ((rhs.free != -1) && (rhs.used != -1))
                 {
                     double ratio = rhs.used / double(rhs.free + rhs.used);
                     
-                    lhs << ", percent: " << utils::format::percent(ratio);
+                    lhs << ", ratio: " << utils::format::percent(ratio);
                 }
                 
                 lhs << "}";
