@@ -56,50 +56,6 @@ namespace chr
 
         // ---
         
-        /*
-         * TODO: THE FOLLOWING COULD BE HANDLED IN FileHelper
-         */
-        
-        JNIEnv *env = jni::getEnv();
-
-        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(androidContext), "getAssets", "()Landroid/content/res/AssetManager;");
-        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(androidContext, getAssetsMethod));
-        
-        FileHelper::setAndroidAssetManager(assetManager);
-        
-        //
-        
-        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(androidContext), "getFilesDir", "()Ljava/io/File;");
-        jobject filesDirObject = env->CallObjectMethod(androidContext, getFilesDirMethod);
-        jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
-        jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
-        
-        const char *internalDataPath = env->GetStringUTFChars(absolutePathString, nullptr);
-        FileHelper::setAndroidInternalDataPath(internalDataPath);
-        env->ReleaseStringUTFChars(absolutePathString, internalDataPath);
-        
-        //
-        
-        jclass environmentClass = env->FindClass("android/os/Environment");
-        jmethodID getExternalStorageDirectoryMethod = env->GetStaticMethodID(environmentClass, "getExternalStorageDirectory",  "()Ljava/io/File;");
-        jobject externalStorageDirectoryObject = env->CallStaticObjectMethod(environmentClass, getExternalStorageDirectoryMethod);
-        absolutePathString = (jstring)env->CallObjectMethod(externalStorageDirectoryObject, getAbsolutePathMethod);
-        
-        const char *externalDataPath = env->GetStringUTFChars(absolutePathString, nullptr);
-        FileHelper::setAndroidExternalDataPath(externalDataPath);
-        env->ReleaseStringUTFChars(absolutePathString, externalDataPath);
-        
-        //
-        
-        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(androidContext), "getPackageCodePath", "()Ljava/lang/String;");
-        jstring packageCodePathString = (jstring)env->CallObjectMethod(androidContext, getPackageCodePathMethod);
-        
-        const char *apkPath = env->GetStringUTFChars(packageCodePathString, nullptr);
-        FileHelper::setAndroidApkPath(apkPath);
-        env->ReleaseStringUTFChars(packageCodePathString, apkPath);
-        
-        // ---
-        
         CONTEXT::init(initInfo);
         
         setSketch(createSketch());

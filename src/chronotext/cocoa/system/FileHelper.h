@@ -10,15 +10,13 @@
 
 #include "cinder/Cinder.h"
 
-#if defined(CINDER_COCOA)
+#if !defined(CINDER_COCOA)
 
-#include "chronotext/cocoa/system/FileHelper.h"
+#error UNSUPPORTED PLATFORM
 
-#elif defined(CINDER_ANDROID)
+#endif
 
-#include "chronotext/android/system/FileHelper.h"
-
-#else
+// ---
 
 #include "chronotext/system/FileHelperBase.h"
 
@@ -26,13 +24,11 @@ namespace chr
 {
     namespace file
     {
-        typedef HelperBase Helper;
+        class Helper : public HelperBase
+        {
+        public:
+            static ci::fs::path getResourcePath();
+            static ci::fs::path getResourcePath(const ci::fs::path &relativePath);
+        };
     }
-}
-
-#endif
-
-namespace chr
-{
-    typedef file::Helper FileHelper;
 }

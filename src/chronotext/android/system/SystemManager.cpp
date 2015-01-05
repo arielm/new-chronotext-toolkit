@@ -34,12 +34,18 @@ namespace chr
         
         void Manager::setup(const InitInfo &initInfo)
         {
-            Manager::initInfo = initInfo;
-            
+            Manager::initInfo = initInfo; // TODO INSTEAD: DisplayHelper::setup(initInfo)
+            FileHelper::setup(initInfo);
+
             updateInfo();
             
             LOGI_IF(true) << "SYSTEM INFO: " << getInfo() << endl; // LOG: VERBOSE
             LOGI_IF(true) << "DISPLAY INFO: " << getDisplayInfo() << endl; // LOG: VERBOSE
+        }
+        
+        void Manager::shutdown()
+        {
+            FileHelper::shutdown();
         }
         
         const DisplayInfo& Manager::getDisplayInfo() const

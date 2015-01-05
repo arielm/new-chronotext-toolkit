@@ -126,7 +126,7 @@ namespace chr
         
         int64_t Manager::compare(const Info &before, const Info &after)
         {
-            if ((before.used > 0) && (after.used > 0))
+            if ((before.used != -1) && (after.used != -1))
             {
                 return after.used - before.used;
             }

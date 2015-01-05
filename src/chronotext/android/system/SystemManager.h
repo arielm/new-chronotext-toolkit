@@ -37,6 +37,7 @@ namespace chr
         {
         public:
             void setup(const InitInfo &initInfo) final;
+            void shutdown() final;
 
             const DisplayInfo& getDisplayInfo() const final;
             std::string getIpAddress(bool maskForBroadcast = false) final;
