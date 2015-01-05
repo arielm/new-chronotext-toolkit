@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "cinder/Json.h"
+
 #include <jni.h>
 
 #include <string>
@@ -55,10 +57,21 @@ namespace chr
         
         // ---
         
-        JNIEnv* env();
+        JNIEnv* getEnv();
         
         std::string toString(jstring s);
         jstring toJString(const std::string &s);
+        
+        ci::JsonTree jsonQuery(const char *methodName);
+        
+        void callVoidMethodOnListener(const char *name, const char *sig, ...);
+        jboolean callBooleanMethodOnListener(const char *name, const char *sig, ...);
+        jchar callCharMethodOnListener(const char *name, const char *sig, ...);
+        jint callIntMethodOnListener(const char *name, const char *sig, ...);
+        jlong callLongMethodOnListener(const char *name, const char *sig, ...);
+        jfloat callFloatMethodOnListener(const char *name, const char *sig, ...);
+        jdouble callDoubleMethodOnListener(const char *name, const char *sig, ...);
+        jobject callObjectMethodOnListener(const char *name, const char *sig, ...);
     }
     
     // ---

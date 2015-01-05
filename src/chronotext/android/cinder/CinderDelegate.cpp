@@ -47,7 +47,7 @@ namespace chr
         }
     }
     
-    void CinderDelegate::init(JNIEnv *env, jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
+    void CinderDelegate::init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
         bootInfo.androidContext = androidContext;
         bootInfo.androidDisplay = androidDisplay;
@@ -59,6 +59,8 @@ namespace chr
         /*
          * TODO: THE FOLLOWING COULD BE HANDLED IN FileHelper
          */
+        
+        JNIEnv *env = jni::getEnv();
 
         jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(androidContext), "getAssets", "()Landroid/content/res/AssetManager;");
         AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(androidContext, getAssetsMethod));
@@ -104,7 +106,7 @@ namespace chr
         sketch->init();
     }
     
-    void CinderDelegate::launch(JNIEnv *env)
+    void CinderDelegate::launch()
     {}
     
     void CinderDelegate::setup(int width, int height)
@@ -338,7 +340,8 @@ namespace chr
      */
     int CinderDelegate::getDisplayRotation()
     {
-        JNIEnv *env = jni::env();
+        JNIEnv *env = jni::getEnv();
+        
         jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(bootInfo.androidDisplay), "getRotation", "()I");
         return env->CallIntMethod(bootInfo.androidDisplay, getRotationMethod);
     }
@@ -406,7 +409,7 @@ namespace chr
     
     void CinderDelegate::action(int actionId)
     {
-        callVoidMethodOnListener("action", "(I)V", actionId);
+        jni::callVoidMethodOnListener("action", "(I)V", actionId);
     }
     
     /*
@@ -421,7 +424,7 @@ namespace chr
     {
         LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
         
-        callVoidMethodOnListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
+        jni::callVoidMethodOnListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
@@ -429,155 +432,5 @@ namespace chr
         LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
         
         sketch->sendMessage(Message(what, body));
-    }
-    
-#pragma mark ---------------------------------------- JAVA LISTENER ----------------------------------------
-
-    /*
-     * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
-     *
-     * TODO:
-     *
-     * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
-     * 2) ADD THREAD-LOCK
-     */
-    
-    JsonTree CinderDelegate::jsonQuery(const char *methodName)
-    {
-        const string &query = jni::toString((jstring)callObjectMethodOnListener(methodName, "()Ljava/lang/String;"));
-        
-        if (!query.empty())
-        {
-            try
-            {
-                return JsonTree(query);
-            }
-            catch (exception &e)
-            {
-                LOGI_IF(LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
-            }
-        }
-        
-        return JsonTree();
-    }
-
-    // ---
-    
-    void CinderDelegate::callVoidMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        env->CallVoidMethodV(jni::listener, method, args);
-        va_end(args);
-    }
-    
-    jboolean CinderDelegate::callBooleanMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jboolean ret = env->CallBooleanMethodV(jni::listener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jchar CinderDelegate::callCharMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jchar ret = env->CallCharMethodV(jni::listener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jint CinderDelegate::callIntMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jint ret = env->CallIntMethodV(jni::listener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jlong CinderDelegate::callLongMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jlong ret = env->CallLongMethodV(jni::listener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jfloat CinderDelegate::callFloatMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jfloat ret = env->CallFloatMethodV(jni::listener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jdouble CinderDelegate::callDoubleMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jdouble ret = env->CallDoubleMethod(jni::listener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jobject CinderDelegate::callObjectMethodOnListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(jni::listener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jobject ret = env->CallObjectMethodV(jni::listener, method, args);
-        va_end(args);
-        
-        return ret;
     }
 }

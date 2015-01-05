@@ -11,8 +11,6 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/system/SystemInfo.h"
 
-#include "cinder/Json.h"
-
 #include <boost/asio.hpp>
 
 #include <android/sensor.h>
@@ -69,9 +67,9 @@ namespace chr
         /*
          * INVOKED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
          */
-        void init(JNIEnv *env, jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity);
+        void init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity);
         
-        void launch(JNIEnv *env); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
+        void launch(); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
         void setup(int width, int height); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
         void shutdown();
         
@@ -90,23 +88,6 @@ namespace chr
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
         void removeTouch(int index, float x, float y);
-
-        // ---
-        
-        /*
-         * TODO: MOVE TO SystemManager
-         */
-        
-        ci::JsonTree jsonQuery(const char *methodName);
-        
-        void callVoidMethodOnListener(const char *name, const char *sig, ...);
-        jboolean callBooleanMethodOnListener(const char *name, const char *sig, ...);
-        jchar callCharMethodOnListener(const char *name, const char *sig, ...);
-        jint callIntMethodOnListener(const char *name, const char *sig, ...);
-        jlong callLongMethodOnListener(const char *name, const char *sig, ...);
-        jfloat callFloatMethodOnListener(const char *name, const char *sig, ...);
-        jdouble callDoubleMethodOnListener(const char *name, const char *sig, ...);
-        jobject callObjectMethodOnListener(const char *name, const char *sig, ...);
         
     protected:
         CinderSketch *sketch;

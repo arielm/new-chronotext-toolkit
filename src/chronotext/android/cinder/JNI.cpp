@@ -11,6 +11,7 @@
 #include "chronotext/Context.h"
 
 using namespace std;
+using namespace ci;
 
 namespace chr
 {
@@ -21,11 +22,11 @@ namespace chr
         
         // ---
         
-        JNIEnv* env()
+        JNIEnv* getEnv()
         {
-            JNIEnv *env_ = nullptr;
+            JNIEnv *env = nullptr;
             
-            auto err = vm->GetEnv(reinterpret_cast<void**>(&env_), JNI_VERSION_1_4);
+            auto err = vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_4);
             
             if (err == JNI_EDETACHED)
             {
@@ -36,26 +37,28 @@ namespace chr
                 CI_LOGE("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
             }
             
-            if (env_)
+            if (env)
             {
-                return env_;
+                return env;
             }
             
-            throw runtime_error("INVALID JNI ENV");
+            throw runtime_error("INVALID JNI ENV"); // XXX
         }
+        
+        // ---
         
         string toString(jstring s)
         {
             if (s)
             {
-                JNIEnv *env_ = env();
+                JNIEnv *env = getEnv();
                 
-                const char *chars = env_->GetStringUTFChars(s, nullptr);
+                const char *chars = env->GetStringUTFChars(s, nullptr);
                 
                 if (chars)
                 {
                     string tmp(chars);
-                    env_->ReleaseStringUTFChars(s, chars);
+                    env->ReleaseStringUTFChars(s, chars);
                     return tmp;
                 }
             }
@@ -65,7 +68,157 @@ namespace chr
         
         jstring toJString(const string &s)
         {
-            return env()->NewStringUTF(s.data());
+            return getEnv()->NewStringUTF(s.data());
+        }
+        
+        // ---
+        
+        /*
+         * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
+         *
+         * TODO:
+         *
+         * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
+         * 2) ADD THREAD-LOCK
+         */
+        
+        JsonTree jsonQuery(const char *methodName)
+        {
+            const string &query = toString((jstring)callObjectMethodOnListener(methodName, "()Ljava/lang/String;"));
+            
+            if (!query.empty())
+            {
+                try
+                {
+                    return JsonTree(query);
+                }
+                catch (exception &e)
+                {
+                    LOGI_IF(CinderDelegate::LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
+                }
+            }
+            
+            return JsonTree();
+        }
+        
+        // ---
+        
+        void callVoidMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            env->CallVoidMethodV(listener, method, args);
+            va_end(args);
+        }
+        
+        jboolean callBooleanMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jboolean ret = env->CallBooleanMethodV(listener, method, args);
+            va_end(args);
+            
+            return ret;
+        }
+        
+        jchar callCharMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jchar ret = env->CallCharMethodV(listener, method, args);
+            va_end(args);
+            
+            return ret;
+        }
+        
+        jint callIntMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jint ret = env->CallIntMethodV(listener, method, args);
+            va_end(args);
+            
+            return ret;
+        }
+        
+        jlong callLongMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jlong ret = env->CallLongMethodV(listener, method, args);
+            va_end(args);
+            
+            return ret;
+        }
+        
+        jfloat callFloatMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jfloat ret = env->CallFloatMethodV(listener, method, args);
+            va_end(args);
+            
+            return ret;
+        }
+        
+        jdouble callDoubleMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jdouble ret = env->CallDoubleMethod(listener, method, args);
+            va_end(args);
+            
+            return ret;
+        }
+        
+        jobject callObjectMethodOnListener(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(listener);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jobject ret = env->CallObjectMethodV(listener, method, args);
+            va_end(args);
+            
+            return ret;
         }
     }
     
@@ -98,7 +251,7 @@ void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jo
     jni::listener = env->NewGlobalRef(listener);
     
     CONTEXT::delegate = new CinderDelegate();
-    CONTEXT::delegate->init(env, env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    CONTEXT::delegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
 /*
@@ -106,7 +259,7 @@ void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jo
  */
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
 {
-    CONTEXT::delegate->launch(env);
+    CONTEXT::delegate->launch();
 }
 
 /*

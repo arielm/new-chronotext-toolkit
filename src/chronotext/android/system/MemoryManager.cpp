@@ -10,7 +10,6 @@
 #include "chronotext/android/system/MemoryManager.h"
 #include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
-#include "chronotext/android/cinder/CinderDelegate.h" // XXX
 
 /*
  * MEMORY-MEASUREMENT SEEMS RELIABLE
@@ -90,7 +89,7 @@ namespace chr
             
             try
             {
-                const JsonTree &query = CONTEXT::delegate->jsonQuery("getMemoryInfo"); // XXX
+                const JsonTree &query = jni::jsonQuery("getMemoryInfo");
                 
                 auto availMem = query["availMem"].getValue<int64_t>();
                 auto threshold = query["threshold"].getValue<int64_t>();
