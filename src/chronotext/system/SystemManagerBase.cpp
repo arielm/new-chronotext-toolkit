@@ -18,11 +18,6 @@ namespace context
     {
         return systemManager().getInfo();
     }
-    
-    chr::DisplayInfo getDisplayInfo()
-    {
-        return systemManager().getDisplayInfo();
-    }
 }
 
 namespace chr

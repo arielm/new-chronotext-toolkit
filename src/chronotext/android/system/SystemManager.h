@@ -39,12 +39,9 @@ namespace chr
             void setup(const InitInfo &initInfo) final;
             void shutdown() final;
 
-            const DisplayInfo& getDisplayInfo() const final;
             std::string getIpAddress(bool maskForBroadcast = false) final;
             
         protected:
-            InitInfo initInfo;
-            
             void updateInfo() final;
             
             std::string getOsVersionString() final;

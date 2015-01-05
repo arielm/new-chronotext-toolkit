@@ -20,18 +20,19 @@ namespace chr
     {
         void Manager::setup(const InitInfo &initInfo)
         {
-            Manager::initInfo = initInfo;
-
             updateInfo();
             
-            LOGI_IF(true) << "SYSTEM INFO: " << getInfo() << endl; // LOG: VERBOSE
-            LOGI_IF(true) << "DISPLAY INFO: " << getDisplayInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(true) << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
+            
+            DisplayHelper::setup(initInfo);
         }
-
-        const DisplayInfo& Manager::getDisplayInfo() const
+        
+        void Manager::shutdown()
         {
-            return initInfo.getDisplayInfo();
+            DisplayHelper::shutdown();
         }
+        
+        // ---
         
         string Manager::getIpAddress(bool maskForBroadcast)
         {

@@ -18,25 +18,22 @@
 
 // ---
 
-#include "chronotext/system/SystemManagerBase.h"
+#include "chronotext/system/DisplayHelperBase.h"
+#include "chronotext/system/SystemInfo.h"
+
+#include "cinder/app/AppNative.h"
 
 namespace chr
 {
-    namespace system
+    namespace display
     {
-        class Manager : public ManagerBase
+        class Helper : public HelperBase
         {
         public:
-            void setup(const InitInfo &initInfo) final;
-            void shutdown() final;
+            static void setup(const system::InitInfo &initInfo);
+            static void shutdown();
             
-            std::string getIpAddress(bool maskForBroadcast) final;
-
-        protected:
-            InitInfo initInfo;
-            
-            std::string getOsVersionString() final;
-            std::string getDeviceString() final;
+            static int getAALevel(ci::app::AppNative *application);
         };
     }
 }

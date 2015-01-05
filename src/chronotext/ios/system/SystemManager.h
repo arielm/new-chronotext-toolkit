@@ -19,7 +19,6 @@
 // ---
 
 #include "chronotext/system/SystemManagerBase.h"
-#include "chronotext/system/DisplayInfo.h"
 
 namespace chr
 {
@@ -29,13 +28,11 @@ namespace chr
         {
         public:
             void setup(const InitInfo &initInfo) final;
+            void shutdown() final;
 
-            const DisplayInfo& getDisplayInfo() const final;
             std::string getIpAddress(bool maskForBroadcast = false);
             
         protected:
-            DisplayInfo displayInfo;
-            
             void updateInfo() final;
             
             std::string getOsVersionString() final;

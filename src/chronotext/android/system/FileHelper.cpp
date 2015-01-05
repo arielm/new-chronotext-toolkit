@@ -23,6 +23,8 @@ namespace chr
             fs::path externalDataPath;
             fs::path apkPath;
             
+            // ---
+            
             bool setup = false;
         }
 

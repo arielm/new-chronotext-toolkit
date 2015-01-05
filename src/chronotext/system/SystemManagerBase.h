@@ -10,13 +10,13 @@
 
 #include "chronotext/system/SystemInfo.h"
 
+namespace context
+{
+    chr::SystemInfo getSystemInfo();
+}
+
 namespace chr
 {
-    namespace display
-    {
-        class Info;
-    }
-    
     namespace system
     {
         Platform platform();
@@ -30,10 +30,9 @@ namespace chr
             virtual void setup(const InitInfo &initInfo) = 0;
             virtual void shutdown() {}
 
-            const Info& getInfo() const;
-            virtual const display::Info& getDisplayInfo() const = 0;
-
             virtual std::string getIpAddress(bool maskForBroadcast = false) = 0;
+
+            const Info& getInfo() const;
 
         protected:
             Info info;
@@ -44,10 +43,4 @@ namespace chr
             virtual std::string getDeviceString() = 0;
         };
     }
-}
-
-namespace context
-{
-    chr::system::Info getSystemInfo();
-    chr::display::Info getDisplayInfo();
 }
