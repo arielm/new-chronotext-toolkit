@@ -58,16 +58,27 @@ namespace chr
     
     void CinderDelegate::setup()
     {
-        updateBootInfo();
-        CONTEXT::init(bootInfo);
+        /*
+         * TODO: TEST ON RETINA DISPLAY (OSX)
+         */
+        
+        float contentScale = getWindowContentScale();
+        Vec2i baseSize = getWindowSize() / contentScale;
+        
+        initInfo.actualDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
+        
+        // ---
+        
+        CONTEXT::init(initInfo);
         
         setSketch(createSketch());
         sketch->init();
         
         // ---
         
-        updateWindowInfo();
-        CONTEXT::setup(io_service());
+        windowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
+        
+        CONTEXT::setup(system::SetupInfo(io_service()));
 
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update()
@@ -99,9 +110,9 @@ namespace chr
         /*
          * RESIZING IS NOT SUPPORTED WHEN EMULATING
          */
-        assert(!(bootInfo.emulated && (startCount > 0)));
+        assert(!(initInfo.emulated && (startCount > 0)));
         
-        actualWindowInfo.size = getWindowSize();
+        windowInfo.size = getWindowSize();
         sketch->resize();
         
         if (startCount == 0)
@@ -145,12 +156,12 @@ namespace chr
     
     bool CinderDelegate::isEmulated() const
     {
-        return bootInfo.emulated;
+        return initInfo.emulated;
     }
     
     const WindowInfo& CinderDelegate::getWindowInfo() const
     {
-        return bootInfo.emulated ? bootInfo.emulatedDevice.windowInfo : actualWindowInfo;
+        return initInfo.emulated ? initInfo.emulatedDevice.windowInfo : windowInfo;
     }
     
 #pragma mark ---------------------------------------- INPUT ----------------------------------------
@@ -214,15 +225,15 @@ namespace chr
     
     void CinderDelegate::emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation)
     {
-        bootInfo.emulated = true;
-        bootInfo.emulatedDevice = device;
+        initInfo.emulated = true;
+        initInfo.emulatedDevice = device;
         
         if (orientation != device.displayInfo.orientation())
         {
-            bootInfo.emulatedDevice.rotate();
+            initInfo.emulatedDevice.rotate();
         }
         
-        settings->setWindowSize(bootInfo.emulatedDevice.windowInfo.size);
+        settings->setWindowSize(initInfo.emulatedDevice.windowInfo.size);
         
         /*
          * ALLOWING TO RESIZE AN EMULATOR WOULD BE POINTLESS (AND NOT TRIVIAL TO IMPLEMENT...)
@@ -323,24 +334,6 @@ namespace chr
     {
         applyDefaultSettings(settings);
         applySettings(settings);
-    }
-    
-    // ---
-    
-    /*
-     * TODO: TEST ON RETINA DISPLAY (OSX)
-     */
-    void CinderDelegate::updateBootInfo()
-    {
-        float contentScale = getWindowContentScale();
-        Vec2i baseSize = getWindowSize() / contentScale;
-        
-        bootInfo.actualDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
-    }
-    
-    void CinderDelegate::updateWindowInfo()
-    {
-        actualWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
     }
     
     // ---

@@ -15,9 +15,8 @@ namespace chr
 {
     namespace system
     {
-        struct BootInfo
+        struct InitInfo
         {
-        public:
             bool emulated;
             EmulatedDevice emulatedDevice;
             DisplayInfo actualDisplayInfo;

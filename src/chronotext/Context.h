@@ -23,8 +23,6 @@
 #include "chronotext/os/TaskManager.h"
 #include "chronotext/utils/Utils.h"
 
-#include <boost/asio.hpp>
-
 namespace chr
 {
     class CinderSketch;
@@ -36,8 +34,8 @@ namespace chr
     
     namespace CONTEXT
     {
-        bool init(const system::BootInfo &bootInfo);
-        void setup(boost::asio::io_service &io_service);
+        bool init(const system::InitInfo &initInfo);
+        void setup(const system::SetupInfo &setupInfo);
         void shutdown();
     }
 }

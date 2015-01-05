@@ -28,7 +28,7 @@ namespace chr
         class Manager : public ManagerBase
         {
         public:
-            void setup(const BootInfo &bootInfo) final;
+            void setup(const InitInfo &initInfo) final;
 
             const DisplayInfo& getDisplayInfo() const final;
             std::string getIpAddress(bool maskForBroadcast = false);

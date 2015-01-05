@@ -30,7 +30,7 @@ namespace chr
         
         // ---
         
-        void Manager::setup(const BootInfo &bootInfo)
+        void Manager::setup(const InitInfo &initInfo)
         {
             updateInfo();
             

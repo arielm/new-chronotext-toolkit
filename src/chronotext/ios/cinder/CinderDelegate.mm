@@ -73,7 +73,7 @@ using namespace context;
 {
     if (self = [super init])
     {
-        CONTEXT::init(system::BootInfo());
+        CONTEXT::init(system::InitInfo());
         
         sketch = createSketch();
         sketch->setDelegate(self);
@@ -150,7 +150,7 @@ using namespace context;
     // ---
 
     [self startIOService];
-    CONTEXT::setup(*io);
+    CONTEXT::setup(system::SetupInfo(*io));
 
     sketch->timeline().stepTo(0);
     sketch->setup();

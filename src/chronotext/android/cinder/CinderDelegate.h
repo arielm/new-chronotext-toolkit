@@ -92,7 +92,7 @@ namespace chr
     protected:
         CinderSketch *sketch;
 
-        system::BootInfo bootInfo;
+        system::InitInfo initInfo;
         WindowInfo windowInfo;
 
         ci::Timer timer;

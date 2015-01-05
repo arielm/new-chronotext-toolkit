@@ -29,12 +29,12 @@ namespace chr
     
     namespace CONTEXT
     {
-        bool init(const system::BootInfo &bootInfo)
+        bool init(const system::InitInfo &initInfo)
         {
             if (!intern::initialized)
             {
                 intern::systemManager = make_shared<system::Manager>();
-                intern::systemManager->setup(bootInfo);
+                intern::systemManager->setup(initInfo);
                 
                 intern::memoryManager = make_shared<memory::Manager>();
                 intern::memoryManager->setup();
@@ -47,11 +47,14 @@ namespace chr
             return intern::initialized;
         }
         
-        void setup(boost::asio::io_service &io_service)
+        void setup(const system::SetupInfo &setupInfo)
         {
             if (!intern::setup && intern::initialized)
             {
-                intern::io_service = &io_service;
+                /*
+                 * TODO: MOVE TO TaskManager
+                 */
+                intern::io_service = setupInfo.io_service;
                 intern::threadId = this_thread::get_id();
                 
                 intern::taskManager = TaskManager::create();
@@ -64,7 +67,7 @@ namespace chr
         
         void shutdown()
         {
-            if (intern::initialized && intern::setup)
+            if (intern::setup)
             {
                 /*
                  * TODO:
@@ -75,6 +78,13 @@ namespace chr
                 intern::taskManager.reset();
                 intern::io_service = nullptr;
                 
+                // ---
+                
+                intern::setup = false;
+            }
+            
+            if (intern::initialized)
+            {
                 intern::memoryManager->shutdown();
                 intern::memoryManager.reset();
                 
@@ -84,7 +94,6 @@ namespace chr
                 // ---
                 
                 intern::initialized = false;
-                intern::setup = false;
             }
         }
     }
@@ -116,12 +125,20 @@ namespace context
     
     // ---
     
+    /*
+     * TODO: MOVE TO TaskManager
+     */
+    
     namespace os
     {
         bool isThreadSafe()
         {
-            assert(intern::setup);
-            return intern::threadId == this_thread::get_id();
+            if (intern::setup)
+            {
+                return intern::threadId == this_thread::get_id();
+            }
+            
+            return false;
         }
         
         bool post(function<void()> &&fn, bool forceSync)

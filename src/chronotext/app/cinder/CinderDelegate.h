@@ -61,8 +61,8 @@ namespace chr
     protected:
         CinderSketch *sketch;
 
-        system::BootInfo bootInfo;
-        WindowInfo actualWindowInfo;
+        system::InitInfo initInfo;
+        WindowInfo windowInfo;
         
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
         
@@ -70,10 +70,7 @@ namespace chr
         int updateCount;
         
         void setSketch(CinderSketch *sketch);
-
-        void updateBootInfo();
-        void updateWindowInfo();
-        
+       
         void start();
         void stop();
     };

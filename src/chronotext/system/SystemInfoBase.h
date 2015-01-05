@@ -10,6 +10,8 @@
 
 #include "cinder/Cinder.h"
 
+#include <boost/asio.hpp>
+
 #include <string>
 #include <iostream>
 
@@ -23,6 +25,18 @@ namespace chr
             PLATFORM_WINDOW,
             PLATFORM_IOS,
             PLATFORM_ANDROID
+        };
+        
+        struct SetupInfo
+        {
+            boost::asio::io_service *io_service;
+            
+            SetupInfo() = default;
+            
+            SetupInfo(boost::asio::io_service &io_service)
+            :
+            io_service(&io_service)
+            {}
         };
         
         class InfoBase

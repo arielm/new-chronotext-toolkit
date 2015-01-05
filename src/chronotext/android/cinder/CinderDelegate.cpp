@@ -49,10 +49,10 @@ namespace chr
     
     void CinderDelegate::init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
-        bootInfo.androidContext = androidContext;
-        bootInfo.androidDisplay = androidDisplay;
+        initInfo.androidContext = androidContext;
+        initInfo.androidDisplay = androidDisplay;
         
-        bootInfo.displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
+        initInfo.displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
 
         // ---
         
@@ -100,7 +100,7 @@ namespace chr
         
         // ---
         
-        CONTEXT::init(bootInfo);
+        CONTEXT::init(initInfo);
         
         setSketch(createSketch());
         sketch->init();
@@ -116,7 +116,7 @@ namespace chr
         createSensorEventQueue();
         startIOService();
         
-        CONTEXT::setup(*io);
+        CONTEXT::setup(system::SetupInfo(*io));
         
         sketch->timeline().stepTo(0);
         sketch->setup();
@@ -342,8 +342,8 @@ namespace chr
     {
         JNIEnv *env = jni::getEnv();
         
-        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(bootInfo.androidDisplay), "getRotation", "()I");
-        return env->CallIntMethod(bootInfo.androidDisplay, getRotationMethod);
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(initInfo.androidDisplay), "getRotation", "()I");
+        return env->CallIntMethod(initInfo.androidDisplay, getRotationMethod);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------

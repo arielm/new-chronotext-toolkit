@@ -18,9 +18,9 @@ namespace chr
 {
     namespace system
     {
-        void Manager::setup(const BootInfo &bootInfo)
+        void Manager::setup(const InitInfo &initInfo)
         {
-            Manager::bootInfo = bootInfo;
+            Manager::initInfo = initInfo;
 
             updateInfo();
             
@@ -30,7 +30,7 @@ namespace chr
 
         const DisplayInfo& Manager::getDisplayInfo() const
         {
-            return bootInfo.getDisplayInfo();
+            return initInfo.getDisplayInfo();
         }
         
         string Manager::getIpAddress(bool maskForBroadcast)

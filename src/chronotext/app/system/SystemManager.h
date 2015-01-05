@@ -27,13 +27,13 @@ namespace chr
         class Manager : public ManagerBase
         {
         public:
-            void setup(const BootInfo &bootInfo) final;
+            void setup(const InitInfo &initInfo) final;
             
             const DisplayInfo& getDisplayInfo() const final;
             std::string getIpAddress(bool maskForBroadcast) final;
 
         protected:
-            BootInfo bootInfo;
+            InitInfo initInfo;
             
             std::string getOsVersionString() final;
             std::string getDeviceString() final;

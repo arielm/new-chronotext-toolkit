@@ -32,9 +32,9 @@ namespace chr
 
         // ---
         
-        void Manager::setup(const BootInfo &bootInfo)
+        void Manager::setup(const InitInfo &initInfo)
         {
-            Manager::bootInfo = bootInfo;
+            Manager::initInfo = initInfo;
             
             updateInfo();
             
@@ -44,7 +44,7 @@ namespace chr
         
         const DisplayInfo& Manager::getDisplayInfo() const
         {
-            return bootInfo.displayInfo;
+            return initInfo.displayInfo;
         }
 
         /*

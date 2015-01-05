@@ -18,7 +18,7 @@ namespace chr
 {
     namespace system
     {
-        struct BootInfo
+        struct InitInfo
         {};
         
         class Info : public InfoBase

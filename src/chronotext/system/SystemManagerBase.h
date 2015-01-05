@@ -24,7 +24,7 @@ namespace chr
         class ManagerBase
         {
         public:
-            virtual void setup(const BootInfo &bootInfo) = 0;
+            virtual void setup(const InitInfo &initInfo) = 0;
             virtual void shutdown() {}
 
             const SystemInfo& getInfo() const;
