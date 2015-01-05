@@ -37,8 +37,7 @@ enum
 @property (nonatomic, assign) GLViewController *viewController;
 @property (nonatomic, readonly) chr::CinderSketch *sketch;
 @property (nonatomic, assign) AccelEvent::Filter accelFilter;
-@property (nonatomic, readonly) chr::DisplayInfo displayInfo;
-@property (nonatomic, readonly) chr::WindowInfo windowInfo;
+@property (nonatomic, readonly) const chr::WindowInfo &windowInfo;
 @property (nonatomic, readonly) BOOL initialized;
 @property (nonatomic, readonly) BOOL active;
 @property (nonatomic, readonly) double elapsedSeconds;

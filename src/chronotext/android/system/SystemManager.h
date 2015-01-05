@@ -16,6 +16,8 @@
 
 #endif
 
+// ---
+
 #include "chronotext/system/SystemManagerBase.h"
 
 namespace chr
@@ -28,23 +30,24 @@ namespace chr
              * THE SAME PROPERTIES THAT CAN BE QUERIED VIA ADB, E.G.
              * adb shell getprop ro.product.manufacturer
              */
-            
             std::string getProperty(const char *name);
         }
         
         class Manager : public ManagerBase
         {
         public:
-            Manager();
-            ~Manager() override;
-            
-            std::string getIpAddress(bool maskForBroadcast = false) override; // TODO
+            void setup(const BootInfo &bootInfo) final;
+
+            const DisplayInfo& getDisplayInfo() const final;
+            std::string getIpAddress(bool maskForBroadcast = false) final;
             
         protected:
-            void updateInfo() override;
+            BootInfo bootInfo;
             
-            std::string getOsVersionString() override;
-            std::string getDeviceString() override;
+            void updateInfo() final;
+            
+            std::string getOsVersionString() final;
+            std::string getDeviceString() final;
             
             std::string getModel();
             std::string getManufacturer();

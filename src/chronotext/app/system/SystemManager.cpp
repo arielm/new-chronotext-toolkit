@@ -18,17 +18,20 @@ namespace chr
 {
     namespace system
     {
-        Manager::Manager()
+        void Manager::setup(const BootInfo &bootInfo)
         {
-            setup();
-        }
-        
-        Manager::~Manager()
-        {
-            shutdown();
+            Manager::bootInfo = bootInfo;
+
+            updateInfo();
+            
+            LOGI_IF(true) << "SYSTEM INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(true) << "DISPLAY INFO: " << getDisplayInfo() << endl; // LOG: VERBOSE
         }
 
-        // ---
+        const DisplayInfo& Manager::getDisplayInfo() const
+        {
+            return bootInfo.getDisplayInfo();
+        }
         
         string Manager::getIpAddress(bool maskForBroadcast)
         {

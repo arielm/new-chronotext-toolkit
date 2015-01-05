@@ -20,7 +20,7 @@
 
 #else
 
-#include "chronotext/system/SystemInfoBase.h"
+#include "chronotext/app/system/SystemInfo.h"
 
 namespace chr
 {

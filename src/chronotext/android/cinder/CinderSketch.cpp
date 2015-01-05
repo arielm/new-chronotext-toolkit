@@ -49,17 +49,12 @@ namespace chr
         return delegate->isEmulated();
     }
     
-    DisplayInfo CinderSketch::getDisplayInfo() const
-    {
-        return delegate->getDisplayInfo();
-    }
-    
-    WindowInfo CinderSketch::getWindowInfo() const
+    const WindowInfo& CinderSketch::getWindowInfo() const
     {
         return delegate->getWindowInfo();
     }
     
-#pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------
+#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
     
     void CinderSketch::action(int actionId)
     {

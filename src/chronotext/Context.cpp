@@ -29,12 +29,15 @@ namespace chr
     
     namespace CONTEXT
     {
-        bool init()
+        bool init(const system::BootInfo &bootInfo)
         {
             if (!intern::initialized)
             {
                 intern::systemManager = make_shared<system::Manager>();
+                intern::systemManager->setup(bootInfo);
+                
                 intern::memoryManager = make_shared<memory::Manager>();
+                intern::memoryManager->setup();
                 
                 // ---
                 
@@ -46,7 +49,7 @@ namespace chr
         
         void setup(boost::asio::io_service &io_service)
         {
-            if (!intern::setup && init())
+            if (!intern::setup && intern::initialized)
             {
                 intern::io_service = &io_service;
                 intern::threadId = this_thread::get_id();
@@ -72,7 +75,10 @@ namespace chr
                 intern::taskManager.reset();
                 intern::io_service = nullptr;
                 
+                intern::memoryManager->shutdown();
                 intern::memoryManager.reset();
+                
+                intern::systemManager->shutdown();
                 intern::systemManager.reset();
                 
                 // ---
@@ -92,23 +98,46 @@ namespace context
 {
     system::Manager& systemManager()
     {
+        assert(intern::initialized);
         return *intern::systemManager.get();
     }
     
     memory::Manager& memoryManager()
     {
+        assert(intern::initialized);
         return *intern::memoryManager.get();
     }
     
     TaskManager& taskManager()
     {
+        assert(intern::setup);
         return *intern::taskManager.get();
     }
+    
+    // ---
+    
+    SystemInfo getSystemInfo()
+    {
+        return systemManager().getInfo();
+    }
+    
+    MemoryInfo getMemoryInfo()
+    {
+        return memoryManager().getInfo();
+    }
+    
+    DisplayInfo getDisplayInfo()
+    {
+        return systemManager().getDisplayInfo();
+    }
+    
+    // ---
     
     namespace os
     {
         bool isThreadSafe()
         {
+            assert(intern::setup);
             return intern::threadId == this_thread::get_id();
         }
         

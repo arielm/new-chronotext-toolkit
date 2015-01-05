@@ -10,7 +10,7 @@
 #include "chronotext/android/system/MemoryManager.h"
 #include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
-#include "chronotext/android/cinder/CinderDelegate.h"
+#include "chronotext/android/cinder/CinderDelegate.h" // XXX
 
 /*
  * MEMORY-MEASUREMENT SEEMS RELIABLE
@@ -38,10 +38,7 @@
  *      - VIA ComponentCallbacks2.onTrimMemory() CALLBACK:
  *        http://developer.android.com/reference/android/content/ComponentCallbacks2.html
  *
- * 2) ALLOW COMPARISON BETWEEN 2 MemoryInfo VALUES
- *    - TO BE DONE IN memory::Manager, PER PLATFORM, INSTEAD OF IN MemoryInfo)
- *
- * 3) MEASURE DURING memory::Manager::update AND "WARN" CinderDelegate IF NECESSARY
+ * 2) MEASURE DURING memory::Manager::update AND "WARN" CinderDelegate IF NECESSARY
  *
  *
  * ADDITIONAL REFERENCES:
@@ -72,16 +69,6 @@ namespace chr
 {
     namespace memory
     {
-        Manager::Manager()
-        {
-            setup(); // XXX: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
-        }
-        
-        Manager::~Manager()
-        {
-            shutdown(); // XXX: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
-        }
-        
         void Manager::setup()
         {
             initial = getInfo();
@@ -103,7 +90,7 @@ namespace chr
             
             try
             {
-                const JsonTree &query = CONTEXT::delegate->jsonQuery("getMemoryInfo");
+                const JsonTree &query = CONTEXT::delegate->jsonQuery("getMemoryInfo"); // XXX
                 
                 auto availMem = query["availMem"].getValue<int64_t>();
                 auto threshold = query["threshold"].getValue<int64_t>();

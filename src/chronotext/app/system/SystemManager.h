@@ -16,6 +16,8 @@
 
 #endif
 
+// ---
+
 #include "chronotext/system/SystemManagerBase.h"
 
 namespace chr
@@ -25,14 +27,16 @@ namespace chr
         class Manager : public ManagerBase
         {
         public:
-            Manager();
-            ~Manager() override;
+            void setup(const BootInfo &bootInfo) final;
             
-            std::string getIpAddress(bool maskForBroadcast) override;
+            const DisplayInfo& getDisplayInfo() const final;
+            std::string getIpAddress(bool maskForBroadcast) final;
 
         protected:
-            std::string getOsVersionString() override;
-            std::string getDeviceString() override;
+            BootInfo bootInfo;
+            
+            std::string getOsVersionString() final;
+            std::string getDeviceString() final;
         };
     }
 }

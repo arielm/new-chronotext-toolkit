@@ -17,8 +17,6 @@
 #include "chronotext/Context.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 
-#include <map>
-
 #include <boost/asio.hpp>
 
 using namespace std;
@@ -51,7 +49,6 @@ using namespace context;
 - (void) stopIOService;
 - (void) pollIOService;
 
-- (void) updateDisplayInfo;
 - (Vec2f) windowSize;
 - (int) aaLevel;
 
@@ -68,7 +65,6 @@ using namespace context;
 @synthesize viewController;
 @synthesize sketch;
 @synthesize accelFilter;
-@synthesize displayInfo;
 @synthesize windowInfo;
 @synthesize initialized;
 @synthesize active;
@@ -77,18 +73,11 @@ using namespace context;
 {
     if (self = [super init])
     {
-        /*
-         * UNLIKE ON OTHER PLATFORMS: DisplayInfo IS NOT AVAILABLE AT THIS STAGE
-         *
-         * SEE TODO IN updateDisplayInfo
-         */
-        
-        CONTEXT::init(); // TODO: HANDLE FAILURE
+        CONTEXT::init(system::BootInfo());
         
         sketch = createSketch();
         sketch->setDelegate(self);
-        
-        sketch->init(); // TODO: HANDLE FAILURE
+        sketch->init();
         
         // ---
         
@@ -155,12 +144,6 @@ using namespace context;
 
 - (void) setup
 {
-    /*
-     * TODO: displayInfo AND displayInfo SHOULD BE UPDATED AT LAUNCH-TIME
-     */
-    
-    [self updateDisplayInfo];
-    
     windowInfo = WindowInfo([self windowSize], [self aaLevel]);
     forceResize = YES;
     
@@ -231,10 +214,10 @@ using namespace context;
 
 - (BOOL) emulated
 {
-    return getSystemInfo().isSimulator;
+    return getSystemInfo().isSimulator; // TODO: CONSIDER RETURNING FALSE
 }
 
-#pragma mark ---------------------------------------- IO SERVICE ----------------------------------------
+#pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
 
 - (void) startIOService
 {
@@ -252,54 +235,7 @@ using namespace context;
     io->poll();
 }
 
-#pragma mark ---------------------------------------- DISPLAY AND WINDOW INFO ----------------------------------------
-
-- (void) updateDisplayInfo
-{
-    /*
-     * TODO: MAKE IT WORK REGARDLESS OF THE EXISTENCE OF A UIView
-     */
-    
-    float contentScale = view.contentScaleFactor;
-    Vec2i baseSize = [self windowSize] / contentScale;
-
-    // ---
-    
-    float diagonal = 0;
-    int magSize = baseSize.x * baseSize.y;
-    
-    if (magSize == 320 * 480)
-    {
-        diagonal = 3.54f; // IPHONE 3GS OR 4
-    }
-    else if (magSize == 320 * 568)
-    {
-        diagonal = 4.00f; // IPHONE 5
-    }
-    else if (magSize == 375 * 667)
-    {
-        diagonal = 4.70f; // IPHONE 6
-    }
-    else if (magSize == 360 * 640)
-    {
-        diagonal = 5.50f; // IPHONE 6+
-    }
-    else if (magSize == 1024 * 768)
-    {
-        if (getSystemInfo().isIPadMini)
-        {
-            diagonal = 7.90f; // IPAD MINI
-        }
-        else
-        {
-            diagonal = 9.70f; // IPAD
-        }
-    }
-    
-    // ---
-    
-    displayInfo = DisplayInfo::createWithDiagonal(baseSize.x, baseSize.y, diagonal, contentScale);
-}
+#pragma mark ---------------------------------------- WINDOW-INFO ----------------------------------------
 
 - (Vec2f) windowSize;
 {
@@ -499,7 +435,7 @@ using namespace context;
     [self touchesEnded:touches withEvent:event];
 }
 
-#pragma mark ---------------------------------------- ACTIONS AND MESSAGES ----------------------------------------
+#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
 
 - (void) action:(int)actionId
 {}

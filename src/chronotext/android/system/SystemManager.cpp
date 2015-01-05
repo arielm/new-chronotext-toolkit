@@ -8,7 +8,6 @@
 
 #include "chronotext/android/system/SystemManager.h"
 #include "chronotext/Context.h"
-#include "chronotext/utils/Utils.h"
 
 #include <sys/system_properties.h>
 #include <sys/utsname.h>
@@ -30,21 +29,27 @@ namespace chr
                 return string(tmp, len);
             }
         }
-        
+
         // ---
         
-        Manager::Manager()
+        void Manager::setup(const BootInfo &bootInfo)
         {
-            setup(); // REMINDER: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
+            Manager::bootInfo = bootInfo;
+            
+            updateInfo();
+            
+            LOGI_IF(true) << "SYSTEM INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(true) << "DISPLAY INFO: " << getDisplayInfo() << endl; // LOG: VERBOSE
         }
         
-        Manager::~Manager()
+        const DisplayInfo& Manager::getDisplayInfo() const
         {
-            shutdown(); // REMINDER: INVOCATION FROM BASE-DESTRUCTOR DISCARDS INHERITANCE
+            return bootInfo.displayInfo;
         }
-        
-        // ---
-        
+
+        /*
+         * TODO
+         */
         string Manager::getIpAddress(bool maskForBroadcast)
         {
             return "";

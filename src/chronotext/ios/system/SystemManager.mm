@@ -6,9 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "SystemManager.h"
-
-#include "chronotext/utils/Utils.h"
+#include "chronotext/ios/system/SystemManager.h"
+#include "chronotext/Context.h"
 
 #include "cinder/System.h"
 
@@ -31,18 +30,24 @@ namespace chr
         
         // ---
         
-        Manager::Manager()
+        void Manager::setup(const BootInfo &bootInfo)
         {
-            setup(); // REMINDER: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
+            updateInfo();
+            
+            displayInfo = DisplayHelper::getDisplayInfo(info);
+            
+            LOGI_IF(true) << "SYSTEM INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(true) << "DISPLAY INFO: " << getDisplayInfo() << endl; // LOG: VERBOSE
         }
         
-        Manager::~Manager()
+        const DisplayInfo& Manager::getDisplayInfo() const
         {
-            shutdown(); // REMINDER: INVOCATION FROM BASE-DESTRUCTOR DISCARDS INHERITANCE
+            return displayInfo;
         }
-        
-        // ---
-        
+
+        /*
+         * TODO
+         */
         string Manager::getIpAddress(bool maskForBroadcast)
         {
             return "";
@@ -97,7 +102,6 @@ namespace chr
          * - iPad
          * - iPad Simulator
          */
-
         string Manager::getModel()
         {
             NSString *model = UIDevice.currentDevice.model;

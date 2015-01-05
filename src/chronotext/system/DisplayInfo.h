@@ -24,17 +24,6 @@ namespace chr
             ORIENTATION_LANDSCAPE
         };
         
-        enum SizeFactor // TODO: MOVE TO system/DisplayHelper?
-        {
-            SIZE_FACTOR_UNDEFINED,
-            SIZE_FACTOR_PHONE_MINI,
-            SIZE_FACTOR_PHONE,
-            SIZE_FACTOR_PHONE_BIG,
-            SIZE_FACTOR_TABLET_MINI,
-            SIZE_FACTOR_TABLET,
-            SIZE_FACTOR_TABLET_BIG,
-        };
-        
         static DisplayInfo create(int width, int height, float contentScale = 1)
         {
             return DisplayInfo(ci::Vec2i(width, height), contentScale, 0, 0);
@@ -55,14 +44,7 @@ namespace chr
         float density; // DPI
         ci::Vec2i size; // PIXELS
         
-        DisplayInfo()
-        :
-        contentScale(0),
-        diagonal(0),
-        density(0),
-        size(ci::Vec2i::zero()),
-        valid(false)
-        {}
+        DisplayInfo() = default;
         
         void rotate()
         {

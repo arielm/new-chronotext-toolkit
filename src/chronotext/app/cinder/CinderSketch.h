@@ -27,15 +27,14 @@ namespace chr
         inline chr::FrameClock::Ref clock() const final { return clock_; }
         inline ci::Timeline& timeline() const final { return *timeline_; }
         
-        double getElapsedSeconds() const override;
-        uint32_t getElapsedFrames() const override;
+        double getElapsedSeconds() const final;
+        uint32_t getElapsedFrames() const final;
 
-        bool isEmulated() const override;
-        DisplayInfo getDisplayInfo() const override;
-        WindowInfo getWindowInfo() const override;
+        bool isEmulated() const final;
+        const WindowInfo& getWindowInfo() const final;
 
-        void action(int actionId) override;
-        void sendMessageToDelegate(int what, const std::string &body = "") override;
+        void action(int actionId) final;
+        void sendMessageToDelegate(int what, const std::string &body = "") final;
         
     protected:
         CinderDelegate *delegate;

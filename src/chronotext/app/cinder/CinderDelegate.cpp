@@ -23,8 +23,7 @@ namespace chr
     AppNative(),
     startCount(0),
     updateCount(0),
-    sketch(nullptr),
-    emulated(false)
+    sketch(nullptr)
     {}
     
     CinderSketch* CinderDelegate::getSketch()
@@ -54,44 +53,24 @@ namespace chr
             sketchCreated(sketch);
         }
     }
-    
-    void CinderDelegate::sendMessageToSketch(int what, const string &body)
-    {
-        sketch->sendMessage(Message(what, body));
-    }
-    
-    // ---
-    
-    void CinderDelegate::applyDefaultSettings(Settings *settings)
-    {
-        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
-        settings->enableHighDensityDisplay();
-    }
-
-    void CinderDelegate::prepareSettings(Settings *settings)
-    {
-        applyDefaultSettings(settings);
-        applySettings(settings);
-    }
 
     // ---
     
     void CinderDelegate::setup()
     {
-        updateActualDisplayInfo();
-        updateActualWindowInfo();
-
-        CONTEXT::init(); // TODO: HANDLE FAILURE
+        updateBootInfo();
+        CONTEXT::init(bootInfo);
         
         setSketch(createSketch());
-        sketch->init(); // TODO: HANDLE FAILURE
+        sketch->init();
         
         // ---
-
+        
+        updateWindowInfo();
         CONTEXT::setup(io_service());
 
         /*
-         * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update
+         * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update()
          */
         io_service().post([this]{ sketch->clock()->update(); });
         
@@ -120,7 +99,7 @@ namespace chr
         /*
          * RESIZING IS NOT SUPPORTED WHEN EMULATING
          */
-        assert(!(emulated && (startCount > 0)));
+        assert(!(bootInfo.emulated && (startCount > 0)));
         
         actualWindowInfo.size = getWindowSize();
         sketch->resize();
@@ -166,17 +145,12 @@ namespace chr
     
     bool CinderDelegate::isEmulated() const
     {
-        return emulated;
+        return bootInfo.emulated;
     }
     
-    WindowInfo CinderDelegate::getWindowInfo() const
+    const WindowInfo& CinderDelegate::getWindowInfo() const
     {
-        return emulated ? emulatedDevice.windowInfo : actualWindowInfo;
-    }
-    
-    DisplayInfo CinderDelegate::getDisplayInfo() const
-    {
-        return emulated ? emulatedDevice.displayInfo : actualDisplayInfo;
+        return bootInfo.emulated ? bootInfo.emulatedDevice.windowInfo : actualWindowInfo;
     }
     
 #pragma mark ---------------------------------------- INPUT ----------------------------------------
@@ -225,23 +199,30 @@ namespace chr
         }
     }
     
+#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
+    
+    void CinderDelegate::sendMessageToSketch(int what, const string &body)
+    {
+        sketch->sendMessage(Message(what, body));
+    }
+    
 #pragma mark ---------------------------------------- EMULATION ----------------------------------------
     
     /*
-     * TODO: ADDITIONAL CARE IS REQUIRED FOR "SIMULATED" CONTENT-SCALE AND ANTI-ALIASING
+     * XXX: SOME ADDITIONAL CARE IS REQUIRED IN ORDER TO EMULATE CONTENT-SCALE AND ANTI-ALIASING
      */
     
     void CinderDelegate::emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation)
     {
-        emulated = true;
-        emulatedDevice = device; // COPYING, IN ORDER TO ALLOW ROTATION
+        bootInfo.emulated = true;
+        bootInfo.emulatedDevice = device;
         
-        if (device.displayInfo.orientation() != orientation)
+        if (orientation != device.displayInfo.orientation())
         {
-            emulatedDevice.rotate();
+            bootInfo.emulatedDevice.rotate();
         }
         
-        settings->setWindowSize(emulatedDevice.windowInfo.size);
+        settings->setWindowSize(bootInfo.emulatedDevice.windowInfo.size);
         
         /*
          * ALLOWING TO RESIZE AN EMULATOR WOULD BE POINTLESS (AND NOT TRIVIAL TO IMPLEMENT...)
@@ -262,11 +243,11 @@ namespace chr
         return false;
     }
     
-    bool CinderDelegate::loadEmulators(InputSource::Ref source)
+    bool CinderDelegate::loadEmulators(InputSource::Ref inputSource)
     {
         emulators.clear();
         
-        JsonTree doc(source->loadDataSource());
+        JsonTree doc(inputSource->loadDataSource());
         
         for (auto &emulatorNode: doc.getChildren())
         {
@@ -330,20 +311,39 @@ namespace chr
         return !emulators.empty();
     }
     
-#pragma mark ---------------------------------------- LIFECYCLE ----------------------------------------
+#pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
     
-    void CinderDelegate::updateActualDisplayInfo()
+    void CinderDelegate::applyDefaultSettings(Settings *settings)
     {
-        float contentScale = getWindowContentScale();
-        Vec2i baseSize = getWindowSize() / contentScale; // XXX
-        
-        actualDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
+        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
+        settings->enableHighDensityDisplay();
     }
     
-    void CinderDelegate::updateActualWindowInfo()
+    void CinderDelegate::prepareSettings(Settings *settings)
+    {
+        applyDefaultSettings(settings);
+        applySettings(settings);
+    }
+    
+    // ---
+    
+    /*
+     * TODO: TEST ON RETINA DISPLAY (OSX)
+     */
+    void CinderDelegate::updateBootInfo()
+    {
+        float contentScale = getWindowContentScale();
+        Vec2i baseSize = getWindowSize() / contentScale;
+        
+        bootInfo.actualDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
+    }
+    
+    void CinderDelegate::updateWindowInfo()
     {
         actualWindowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
     }
+    
+    // ---
     
     void CinderDelegate::start()
     {

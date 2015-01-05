@@ -16,6 +16,8 @@
 
 #endif
 
+// ---
+
 #include "chronotext/system/MemoryManagerBase.h"
 
 namespace chr
@@ -25,14 +27,11 @@ namespace chr
         class Manager : public ManagerBase
         {
         public:
-            Manager();
-            ~Manager() override;
+            void setup() final;
+            void shutdown() final;
             
-            void setup() override;
-            void shutdown() override;
-            
-            Info getInfo() override;
-            int64_t compare(const Info &before, const Info &after) override;
+            Info getInfo() final;
+            int64_t compare(const Info &before, const Info &after) final;
         };
     }
 }

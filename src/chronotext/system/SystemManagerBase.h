@@ -12,6 +12,8 @@
 
 namespace chr
 {
+    class DisplayInfo;
+    
     namespace system
     {
         Platform platform();
@@ -22,16 +24,17 @@ namespace chr
         class ManagerBase
         {
         public:
-            Info info; // XXX: NOT ACCESSIBLE FROM system::info() IF PROTECTED
-
-            virtual ~ManagerBase() {}
-            
-            virtual void setup();
+            virtual void setup(const BootInfo &bootInfo) = 0;
             virtual void shutdown() {}
+
+            const SystemInfo& getInfo() const;
+            virtual const DisplayInfo& getDisplayInfo() const = 0;
 
             virtual std::string getIpAddress(bool maskForBroadcast = false) = 0;
 
         protected:
+            SystemInfo info;
+            
             virtual void updateInfo();
             
             virtual std::string getOsVersionString() = 0;

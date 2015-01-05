@@ -9,12 +9,12 @@
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/system/SystemInfo.h"
 
 #include "cinder/Json.h"
 
 #include <boost/asio.hpp>
 
-#include <jni.h>
 #include <android/sensor.h>
 
 #include <atomic>
@@ -82,8 +82,7 @@ namespace chr
         uint32_t getElapsedFrames() const;
 
         bool isEmulated() const;
-        WindowInfo getWindowInfo() const;
-        DisplayInfo getDisplayInfo() const;
+        const WindowInfo& getWindowInfo() const;
 
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
         void disableAccelerometer();
@@ -93,6 +92,10 @@ namespace chr
         void removeTouch(int index, float x, float y);
 
         // ---
+        
+        /*
+         * TODO: MOVE TO SystemManager
+         */
         
         ci::JsonTree jsonQuery(const char *methodName);
         
@@ -108,11 +111,7 @@ namespace chr
     protected:
         CinderSketch *sketch;
 
-        jobject javaContext;
-        jobject javaListener;
-        jobject javaDisplay;
-        
-        DisplayInfo displayInfo;
+        system::BootInfo bootInfo;
         WindowInfo windowInfo;
 
         ci::Timer timer;

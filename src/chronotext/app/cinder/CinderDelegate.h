@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "chronotext/app/system/EmulatedDevice.h"
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/system/SystemInfo.h"
 #include "chronotext/InputSource.h"
 
 #include "cinder/app/AppNative.h"
@@ -52,30 +52,27 @@ namespace chr
         void touchesEnded(ci::app::TouchEvent event);
         
         bool isEmulated() const;
-        WindowInfo getWindowInfo() const;
-        DisplayInfo getDisplayInfo() const;
+        const WindowInfo& getWindowInfo() const;
         
         void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
-        bool loadEmulators(chr::InputSource::Ref source);
+        bool loadEmulators(chr::InputSource::Ref inputSource);
         
     protected:
         CinderSketch *sketch;
 
-        int startCount;
-        int updateCount;
-
-        bool emulated;
-        EmulatedDevice emulatedDevice;
+        system::BootInfo bootInfo;
+        WindowInfo actualWindowInfo;
+        
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
         
-        DisplayInfo actualDisplayInfo;
-        WindowInfo actualWindowInfo;
-
+        int startCount;
+        int updateCount;
+        
         void setSketch(CinderSketch *sketch);
 
-        void updateActualDisplayInfo();
-        void updateActualWindowInfo();
+        void updateBootInfo();
+        void updateWindowInfo();
         
         void start();
         void stop();

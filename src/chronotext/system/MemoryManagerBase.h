@@ -28,15 +28,13 @@ namespace chr
         class ManagerBase
         {
         public:
-            virtual ~ManagerBase() {}
-            
             virtual void setup() {}
             virtual void shutdown() {}
-
+            
             virtual Info getInfo() = 0;
             
             /*
-             * HOW MUCH MEMORY WAS USED BETWEEN "BEFORE" AND "AFTER"
+             * RETURNS HOW MUCH MEMORY WAS USED BETWEEN "BEFORE" AND "AFTER"
              */
             virtual int64_t compare(const Info &before, const Info &after) { return 0; }
         };

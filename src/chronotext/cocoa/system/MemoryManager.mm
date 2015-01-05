@@ -55,16 +55,6 @@ namespace chr
 {
     namespace memory
     {
-        Manager::Manager()
-        {
-            setup(); // REMINDER: INVOCATION FROM BASE-CONSTRUCTOR DISCARDS INHERITANCE
-        }
-        
-        Manager::~Manager()
-        {
-            shutdown(); // REMINDER: INVOCATION FROM BASE-DESTRUCTOR DISCARDS INHERITANCE
-        }
-
         void Manager::setup()
         {
             LOGI_IF(true) << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE

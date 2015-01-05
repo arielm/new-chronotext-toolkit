@@ -12,7 +12,7 @@
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 
 namespace chr
 {
@@ -33,7 +33,7 @@ namespace chr
         CinderSketch::delegate = delegate;
     }
     
-    static CinderDelegate* castToDelegate(void *delegate)
+    static inline CinderDelegate* castToDelegate(void *delegate)
     {
         return static_cast<CinderDelegate*>(delegate);
     }
@@ -55,12 +55,7 @@ namespace chr
         return castToDelegate(delegate).emulated;
     }
     
-    DisplayInfo CinderSketch::getDisplayInfo() const
-    {
-        return castToDelegate(delegate).displayInfo;
-    }
-    
-    WindowInfo CinderSketch::getWindowInfo() const
+    const WindowInfo& CinderSketch::getWindowInfo() const
     {
         return castToDelegate(delegate).windowInfo;
     }

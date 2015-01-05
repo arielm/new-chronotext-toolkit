@@ -12,14 +12,6 @@
 using namespace std;
 using namespace ci;
 
-namespace context
-{
-    chr::system::Info getSystemInfo()
-    {
-        return systemManager().info;
-    }
-}
-
 namespace chr
 {
     namespace system
@@ -46,14 +38,10 @@ namespace chr
 
         // ---
         
-        void ManagerBase::setup()
+        const SystemInfo& ManagerBase::getInfo() const
         {
-            updateInfo();
-            
-            LOGI_IF(true) << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
+            return info;
         }
-        
-        // ---
         
         void ManagerBase::updateInfo()
         {

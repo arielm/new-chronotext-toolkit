@@ -16,6 +16,8 @@
 
 #endif
 
+// ---
+
 namespace chr
 {
     namespace memory
@@ -23,9 +25,6 @@ namespace chr
         class Manager : public ManagerBase
         {
         public:
-            Manager();
-            ~Manager() override;
-            
             Info getInfo() override;
         };
     }

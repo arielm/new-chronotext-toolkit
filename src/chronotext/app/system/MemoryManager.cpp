@@ -12,18 +12,6 @@ namespace chr
 {
     namespace memory
     {
-        Manager::Manager()
-        {
-            setup();
-        }
-        
-        Manager::~Manager()
-        {
-            shutdown();
-        }
-        
-        // ---
-        
         Info Manager::getInfo()
         {
             return Info();

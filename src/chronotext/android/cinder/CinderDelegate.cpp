@@ -10,7 +10,6 @@
 #include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
 #include "chronotext/utils/accel/AccelEvent.h"
-#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
@@ -50,18 +49,11 @@ namespace chr
     
     void CinderDelegate::init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
-        CinderDelegate::javaContext = javaContext;
-        CinderDelegate::javaListener = javaListener;
-
-        // ---
-
-        /*
-         * TODO: COULD BE HANDLED IN DisplayHelper
-         */
-
-        CinderDelegate::javaDisplay = javaDisplay;
+        bootInfo.javaContext = javaContext;
+        bootInfo.javaListener = javaListener;
+        bootInfo.javaDisplay = javaDisplay;
         
-        displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
+        bootInfo.displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
 
         // ---
         
@@ -107,10 +99,10 @@ namespace chr
         
         // ---
         
-        CONTEXT::init(); // TODO: HANDLE FAILURE
+        CONTEXT::init(bootInfo);
         
         setSketch(createSketch());
-        sketch->init(); // TODO: HANDLE FAILURE
+        sketch->init();
     }
     
     void CinderDelegate::launch(JNIEnv *env)
@@ -123,8 +115,8 @@ namespace chr
         // ---
         
         createSensorEventQueue();
-        
         startIOService();
+        
         CONTEXT::setup(*io);
         
         sketch->timeline().stepTo(0);
@@ -170,7 +162,9 @@ namespace chr
          */
         double now = sketch->clock()->getTime();
         
-        // TODO: CALL memory::Manager::update()
+        /*
+         * TODO: CALL memory::Manager::update()
+         */
 
         sketch->update();
         sketch->timeline().stepTo(now);
@@ -216,17 +210,12 @@ namespace chr
         return false;
     }
     
-    WindowInfo CinderDelegate::getWindowInfo() const
+    const WindowInfo& CinderDelegate::getWindowInfo() const
     {
         return windowInfo;
     }
     
-    DisplayInfo CinderDelegate::getDisplayInfo() const
-    {
-        return displayInfo;
-    }
-    
-#pragma mark ---------------------------------------- IO SERVICE ----------------------------------------
+#pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
 
     void CinderDelegate::startIOService()
     {
@@ -353,8 +342,8 @@ namespace chr
     int CinderDelegate::getDisplayRotation()
     {
         JNIEnv *env = jni::env();
-        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(javaDisplay), "getRotation", "()I");
-        return env->CallIntMethod(javaDisplay, getRotationMethod);
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(bootInfo.javaDisplay), "getRotation", "()I");
+        return env->CallIntMethod(bootInfo.javaDisplay, getRotationMethod);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -481,12 +470,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        env->CallVoidMethodV(javaListener, method, args);
+        env->CallVoidMethodV(bootInfo.javaListener, method, args);
         va_end(args);
     }
     
@@ -494,12 +483,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jboolean ret = env->CallBooleanMethodV(javaListener, method, args);
+        jboolean ret = env->CallBooleanMethodV(bootInfo.javaListener, method, args);
         va_end(args);
         
         return ret;
@@ -509,12 +498,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jchar ret = env->CallCharMethodV(javaListener, method, args);
+        jchar ret = env->CallCharMethodV(bootInfo.javaListener, method, args);
         va_end(args);
         
         return ret;
@@ -524,12 +513,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jint ret = env->CallIntMethodV(javaListener, method, args);
+        jint ret = env->CallIntMethodV(bootInfo.javaListener, method, args);
         va_end(args);
         
         return ret;
@@ -539,12 +528,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jlong ret = env->CallLongMethodV(javaListener, method, args);
+        jlong ret = env->CallLongMethodV(bootInfo.javaListener, method, args);
         va_end(args);
         
         return ret;
@@ -554,12 +543,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jfloat ret = env->CallFloatMethodV(javaListener, method, args);
+        jfloat ret = env->CallFloatMethodV(bootInfo.javaListener, method, args);
         va_end(args);
         
         return ret;
@@ -569,12 +558,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jdouble ret = env->CallDoubleMethod(javaListener, method, args);
+        jdouble ret = env->CallDoubleMethod(bootInfo.javaListener, method, args);
         va_end(args);
         
         return ret;
@@ -584,12 +573,12 @@ namespace chr
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(javaListener);
+        jclass cls = env->GetObjectClass(bootInfo.javaListener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jobject ret = env->CallObjectMethodV(javaListener, method, args);
+        jobject ret = env->CallObjectMethodV(bootInfo.javaListener, method, args);
         va_end(args);
         
         return ret;

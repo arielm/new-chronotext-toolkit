@@ -69,8 +69,7 @@ namespace chr
         virtual uint32_t getElapsedFrames() const = 0;
 
         virtual bool isEmulated() const = 0;
-        virtual DisplayInfo getDisplayInfo() const = 0;
-        virtual WindowInfo getWindowInfo() const = 0;
+        virtual const WindowInfo& getWindowInfo() const = 0;
 
         virtual ci::Vec2i getWindowSize() const { return getWindowInfo().size; }
         virtual int getWindowWidth() const { return getWindowInfo().size.x; };

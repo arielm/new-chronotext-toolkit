@@ -9,9 +9,7 @@
 #pragma once
 
 #include "chronotext/system/SystemInfoBase.h"
-#include "chronotext/system/DisplayInfo.h"
-
-#include <jni.h>
+#include "chronotext/app/system/EmulatedDevice.h"
 
 namespace chr
 {
@@ -19,18 +17,15 @@ namespace chr
     {
         struct BootInfo
         {
-            jobject javaContext;
-            jobject javaListener;
-            jobject javaDisplay;
-            
-            DisplayInfo displayInfo;
-        };
-        
-        class Info : public InfoBase
-        {
         public:
-            std::string model;
-            std::string manufacturer;
+            bool emulated;
+            EmulatedDevice emulatedDevice;
+            DisplayInfo actualDisplayInfo;
+            
+            const DisplayInfo& getDisplayInfo() const
+            {
+                return emulated ? emulatedDevice.displayInfo : actualDisplayInfo;
+            }
         };
     }
 }

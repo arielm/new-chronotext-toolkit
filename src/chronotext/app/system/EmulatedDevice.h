@@ -18,8 +18,7 @@ namespace chr
         DisplayInfo displayInfo;
         WindowInfo windowInfo;
         
-        EmulatedDevice()
-        {}
+        EmulatedDevice() = default;
         
         EmulatedDevice(const DisplayInfo &displayInfo)
         :

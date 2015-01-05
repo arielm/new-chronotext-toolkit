@@ -36,7 +36,7 @@ namespace chr
     
     namespace CONTEXT
     {
-        bool init();
+        bool init(const system::BootInfo &bootInfo);
         void setup(boost::asio::io_service &io_service);
         void shutdown();
     }
@@ -45,12 +45,12 @@ namespace chr
 namespace context
 {
     chr::system::Manager& systemManager();
-    chr::system::Info getSystemInfo();
-    
     chr::memory::Manager& memoryManager();
-    chr::memory::Info getMemoryInfo();
-    
     chr::TaskManager& taskManager();
+    
+    chr::SystemInfo getSystemInfo();
+    chr::MemoryInfo getMemoryInfo();
+    chr::DisplayInfo getDisplayInfo();
     
     namespace os
     {
