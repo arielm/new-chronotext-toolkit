@@ -85,7 +85,7 @@ public class CinderDelegate extends Handler
     float displayDensity = DisplayUtils.getRealDensity(display);
 
     Utils.LOGD("CinderDelegate.init: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
-    init(activity, this, display, displaySize.x, displaySize.y, displayDensity);
+    init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
   }
 
   protected void handleAction(int actionId)
@@ -225,5 +225,5 @@ public class CinderDelegate extends Handler
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  protected native void init(Context context, Object listener, Display display, int displayWidth, int displayHeight, float displayDensity);
+  protected native void init(Object listener, Context context, Display display, int displayWidth, int displayHeight, float displayDensity);
 }

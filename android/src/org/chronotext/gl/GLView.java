@@ -56,7 +56,7 @@ public class GLView extends GLSurfaceView
     setEGLContextFactory(new CustomContextFactory(1)); // FIXME: EGL-CONTEXT-CLIENT-VERSION SHOULD NOT BE HARD-CODED
 
     /*
-     * TEXTURES (AND ANY OTHER GL-RELATED MEMORY) WILL NOT BE INALIDATED ANYMORE ON-PAUSE
+     * TEXTURES (AND OTHER GL-RELATED MEMORY) WILL NOT BE INALIDATED ANYMORE ON-PAUSE
      */
     setPreserveEGLContextOnPause(true);
 

@@ -47,11 +47,10 @@ namespace chr
         }
     }
     
-    void CinderDelegate::init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity)
+    void CinderDelegate::init(JNIEnv *env, jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
-        bootInfo.javaContext = javaContext;
-        bootInfo.javaListener = javaListener;
-        bootInfo.javaDisplay = javaDisplay;
+        bootInfo.androidContext = androidContext;
+        bootInfo.androidDisplay = androidDisplay;
         
         bootInfo.displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
 
@@ -61,15 +60,15 @@ namespace chr
          * TODO: THE FOLLOWING COULD BE HANDLED IN FileHelper
          */
 
-        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getAssets", "()Landroid/content/res/AssetManager;");
-        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(javaContext, getAssetsMethod));
+        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(androidContext), "getAssets", "()Landroid/content/res/AssetManager;");
+        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(androidContext, getAssetsMethod));
         
         FileHelper::setAndroidAssetManager(assetManager);
         
         //
         
-        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
-        jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
+        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(androidContext), "getFilesDir", "()Ljava/io/File;");
+        jobject filesDirObject = env->CallObjectMethod(androidContext, getFilesDirMethod);
         jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
         jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
         
@@ -90,8 +89,8 @@ namespace chr
         
         //
         
-        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getPackageCodePath", "()Ljava/lang/String;");
-        jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext, getPackageCodePathMethod);
+        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(androidContext), "getPackageCodePath", "()Ljava/lang/String;");
+        jstring packageCodePathString = (jstring)env->CallObjectMethod(androidContext, getPackageCodePathMethod);
         
         const char *apkPath = env->GetStringUTFChars(packageCodePathString, nullptr);
         FileHelper::setAndroidApkPath(apkPath);
@@ -111,8 +110,6 @@ namespace chr
     void CinderDelegate::setup(int width, int height)
     {
         windowInfo = WindowInfo(width, height);
-        
-        // ---
         
         createSensorEventQueue();
         startIOService();
@@ -342,8 +339,8 @@ namespace chr
     int CinderDelegate::getDisplayRotation()
     {
         JNIEnv *env = jni::env();
-        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(bootInfo.javaDisplay), "getRotation", "()I");
-        return env->CallIntMethod(bootInfo.javaDisplay, getRotationMethod);
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(bootInfo.androidDisplay), "getRotation", "()I");
+        return env->CallIntMethod(bootInfo.androidDisplay, getRotationMethod);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -409,7 +406,7 @@ namespace chr
     
     void CinderDelegate::action(int actionId)
     {
-        callVoidMethodOnJavaListener("action", "(I)V", actionId);
+        callVoidMethodOnListener("action", "(I)V", actionId);
     }
     
     /*
@@ -424,7 +421,7 @@ namespace chr
     {
         LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
         
-        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
+        callVoidMethodOnListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
@@ -447,7 +444,7 @@ namespace chr
     
     JsonTree CinderDelegate::jsonQuery(const char *methodName)
     {
-        const string &query = jni::toString((jstring)callObjectMethodOnJavaListener(methodName, "()Ljava/lang/String;"));
+        const string &query = jni::toString((jstring)callObjectMethodOnListener(methodName, "()Ljava/lang/String;"));
         
         if (!query.empty())
         {
@@ -466,119 +463,119 @@ namespace chr
 
     // ---
     
-    void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
+    void CinderDelegate::callVoidMethodOnListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
+        jclass cls = env->GetObjectClass(jni::listener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        env->CallVoidMethodV(bootInfo.javaListener, method, args);
+        env->CallVoidMethodV(jni::listener, method, args);
         va_end(args);
     }
     
-    jboolean CinderDelegate::callBooleanMethodOnJavaListener(const char *name, const char *sig, ...)
+    jboolean CinderDelegate::callBooleanMethodOnListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
+        jclass cls = env->GetObjectClass(jni::listener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jboolean ret = env->CallBooleanMethodV(bootInfo.javaListener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jchar CinderDelegate::callCharMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env = jni::env();
-        
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jchar ret = env->CallCharMethodV(bootInfo.javaListener, method, args);
+        jboolean ret = env->CallBooleanMethodV(jni::listener, method, args);
         va_end(args);
         
         return ret;
     }
     
-    jint CinderDelegate::callIntMethodOnJavaListener(const char *name, const char *sig, ...)
+    jchar CinderDelegate::callCharMethodOnListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
+        jclass cls = env->GetObjectClass(jni::listener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jint ret = env->CallIntMethodV(bootInfo.javaListener, method, args);
+        jchar ret = env->CallCharMethodV(jni::listener, method, args);
         va_end(args);
         
         return ret;
     }
     
-    jlong CinderDelegate::callLongMethodOnJavaListener(const char *name, const char *sig, ...)
+    jint CinderDelegate::callIntMethodOnListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
+        jclass cls = env->GetObjectClass(jni::listener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jlong ret = env->CallLongMethodV(bootInfo.javaListener, method, args);
+        jint ret = env->CallIntMethodV(jni::listener, method, args);
         va_end(args);
         
         return ret;
     }
     
-    jfloat CinderDelegate::callFloatMethodOnJavaListener(const char *name, const char *sig, ...)
+    jlong CinderDelegate::callLongMethodOnListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
+        jclass cls = env->GetObjectClass(jni::listener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jfloat ret = env->CallFloatMethodV(bootInfo.javaListener, method, args);
+        jlong ret = env->CallLongMethodV(jni::listener, method, args);
         va_end(args);
         
         return ret;
     }
     
-    jdouble CinderDelegate::callDoubleMethodOnJavaListener(const char *name, const char *sig, ...)
+    jfloat CinderDelegate::callFloatMethodOnListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
+        jclass cls = env->GetObjectClass(jni::listener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jdouble ret = env->CallDoubleMethod(bootInfo.javaListener, method, args);
+        jfloat ret = env->CallFloatMethodV(jni::listener, method, args);
         va_end(args);
         
         return ret;
     }
     
-    jobject CinderDelegate::callObjectMethodOnJavaListener(const char *name, const char *sig, ...)
+    jdouble CinderDelegate::callDoubleMethodOnListener(const char *name, const char *sig, ...)
     {
         JNIEnv *env = jni::env();
         
-        jclass cls = env->GetObjectClass(bootInfo.javaListener);
+        jclass cls = env->GetObjectClass(jni::listener);
         jmethodID method = env->GetMethodID(cls, name, sig);
         
         va_list args;
         va_start(args, sig);
-        jobject ret = env->CallObjectMethodV(bootInfo.javaListener, method, args);
+        jdouble ret = env->CallDoubleMethod(jni::listener, method, args);
+        va_end(args);
+        
+        return ret;
+    }
+    
+    jobject CinderDelegate::callObjectMethodOnListener(const char *name, const char *sig, ...)
+    {
+        JNIEnv *env = jni::env();
+        
+        jclass cls = env->GetObjectClass(jni::listener);
+        jmethodID method = env->GetMethodID(cls, name, sig);
+        
+        va_list args;
+        va_start(args, sig);
+        jobject ret = env->CallObjectMethodV(jni::listener, method, args);
         va_end(args);
         
         return ret;

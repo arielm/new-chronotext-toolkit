@@ -19,9 +19,8 @@ namespace chr
     {
         struct BootInfo
         {
-            jobject javaContext;
-            jobject javaListener;
-            jobject javaDisplay;
+            jobject androidContext;
+            jobject androidDisplay;
             
             DisplayInfo displayInfo;
         };

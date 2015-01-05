@@ -27,7 +27,7 @@ extern "C"
     
     // ---
     
-    void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jobject context, jobject listener, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
+    void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jobject listener, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
 
     void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
@@ -51,6 +51,7 @@ namespace chr
     namespace jni
     {
         extern JavaVM *vm;
+        extern jobject listener;
         
         // ---
         

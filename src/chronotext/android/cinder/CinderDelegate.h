@@ -69,7 +69,7 @@ namespace chr
         /*
          * INVOKED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
          */
-        void init(JNIEnv *env, jobject javaContext, jobject javaListener, jobject javaDisplay, int displayWidth, int displayHeight, float displayDensity);
+        void init(JNIEnv *env, jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void launch(JNIEnv *env); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
         void setup(int width, int height); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
@@ -99,14 +99,14 @@ namespace chr
         
         ci::JsonTree jsonQuery(const char *methodName);
         
-        void callVoidMethodOnJavaListener(const char *name, const char *sig, ...);
-        jboolean callBooleanMethodOnJavaListener(const char *name, const char *sig, ...);
-        jchar callCharMethodOnJavaListener(const char *name, const char *sig, ...);
-        jint callIntMethodOnJavaListener(const char *name, const char *sig, ...);
-        jlong callLongMethodOnJavaListener(const char *name, const char *sig, ...);
-        jfloat callFloatMethodOnJavaListener(const char *name, const char *sig, ...);
-        jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
-        jobject callObjectMethodOnJavaListener(const char *name, const char *sig, ...);
+        void callVoidMethodOnListener(const char *name, const char *sig, ...);
+        jboolean callBooleanMethodOnListener(const char *name, const char *sig, ...);
+        jchar callCharMethodOnListener(const char *name, const char *sig, ...);
+        jint callIntMethodOnListener(const char *name, const char *sig, ...);
+        jlong callLongMethodOnListener(const char *name, const char *sig, ...);
+        jfloat callFloatMethodOnListener(const char *name, const char *sig, ...);
+        jdouble callDoubleMethodOnListener(const char *name, const char *sig, ...);
+        jobject callObjectMethodOnListener(const char *name, const char *sig, ...);
         
     protected:
         CinderSketch *sketch;
