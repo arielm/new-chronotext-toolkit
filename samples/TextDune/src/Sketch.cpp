@@ -22,7 +22,7 @@ const float REFERENCE_H = 768;
 const float TEXT_SIZE = 20;
 const float GAP = 7;
 
-const wstring text = L"hell with sinus, text should move under the influence of physical forces!";
+const wstring TEXT = L"hell with sinus, text should move under the influence of physical forces!";
 
 Sketch::Sketch()
 :
@@ -68,20 +68,19 @@ void Sketch::draw()
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.85f);
-    TextHelper::drawTextOnPath(*font, text, path, offset, -GAP);
+    TextHelper::drawTextOnPath(*font, TEXT, path, offset, -GAP);
 }
 
 void Sketch::updateDune()
 {
-    const float coefs[] = {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
-    const int slotCount = sizeof(coefs) / sizeof(float);
+    static const vector<float> coefs {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
 
     Vec2f size = Vec2f(getWindowSize()) / scale;
-    float slotSize = size.x / (slotCount - 1);
+    float slotSize = size.x / (coefs.size() - 1);
     
     SplinePath spline;
 
-    for (int i = 0; i < slotCount; i++)
+    for (auto i = 0; i < coefs.size(); i++)
     {
         spline.add(slotSize * i, coefs[i] * size.y);
     }

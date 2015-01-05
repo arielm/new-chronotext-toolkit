@@ -56,7 +56,7 @@ namespace chr
         bool isClosed() const;
         
         void flush(Type type, FollowablePath &path, float tol = 1) const;
-        inline FollowablePath flush(Type type, float tol = 1)  const { FollowablePath path; flush(type, path, tol); return path; }
+        inline FollowablePath flush(Type type, float tol = 1) const { FollowablePath path; flush(type, path, tol); return path; }
         
     protected:
         std::vector<ci::Vec2f> points;
