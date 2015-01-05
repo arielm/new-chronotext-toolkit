@@ -47,7 +47,6 @@
 		A8836D2D1A4AF8B2007733CE /* SystemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D2B1A4AF8B2007733CE /* SystemManager.cpp */; };
 		A8836D3C1A4AF8D2007733CE /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D2E1A4AF8D2007733CE /* DisplayHelper.cpp */; };
 		A8836D3D1A4AF8D2007733CE /* FileHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D311A4AF8D2007733CE /* FileHelper.cpp */; };
-		A8836D3E1A4AF8D2007733CE /* MemoryManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D351A4AF8D2007733CE /* MemoryManagerBase.cpp */; };
 		A8836D3F1A4AF8D2007733CE /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D3A1A4AF8D2007733CE /* SystemManagerBase.cpp */; };
 		A8836D4B1A4AF8E6007733CE /* MemoryManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8836D431A4AF8E6007733CE /* MemoryManager.mm */; };
 		A8836D591A4AFE23007733CE /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D4F1A4AFE23007733CE /* Handler.cpp */; };
@@ -145,7 +144,6 @@
 		A8836D321A4AF8D2007733CE /* FileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileHelper.h; sourceTree = "<group>"; };
 		A8836D331A4AF8D2007733CE /* MemoryInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryInfo.h; sourceTree = "<group>"; };
 		A8836D341A4AF8D2007733CE /* MemoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryManager.h; sourceTree = "<group>"; };
-		A8836D351A4AF8D2007733CE /* MemoryManagerBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryManagerBase.cpp; sourceTree = "<group>"; };
 		A8836D361A4AF8D2007733CE /* MemoryManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryManagerBase.h; sourceTree = "<group>"; };
 		A8836D371A4AF8D2007733CE /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
 		A8836D381A4AF8D2007733CE /* SystemInfoBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoBase.h; sourceTree = "<group>"; };
@@ -346,7 +344,6 @@
 				A8836D321A4AF8D2007733CE /* FileHelper.h */,
 				A8836D331A4AF8D2007733CE /* MemoryInfo.h */,
 				A8836D341A4AF8D2007733CE /* MemoryManager.h */,
-				A8836D351A4AF8D2007733CE /* MemoryManagerBase.cpp */,
 				A8836D361A4AF8D2007733CE /* MemoryManagerBase.h */,
 				A8836D371A4AF8D2007733CE /* SystemInfo.h */,
 				A8836D381A4AF8D2007733CE /* SystemInfoBase.h */,
@@ -589,7 +586,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A82C909216DFA3B100FF519C /* PVRHelper.cpp in Sources */,
-				A8836D3E1A4AF8D2007733CE /* MemoryManagerBase.cpp in Sources */,
 				A8112C561A4EDD040002CF68 /* FXGDocument.cpp in Sources */,
 				A8112BF01A4DA3EE0002CF68 /* Application.cpp in Sources */,
 				A82C909316DFA3B100FF519C /* Texture.cpp in Sources */,

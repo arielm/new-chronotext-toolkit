@@ -73,7 +73,7 @@ void Sketch::draw()
     matrix.rotateZ((-90 + r1) * D2R);
     TextHelper::drawTransformedText(*font, L" 2 dimensions");
     
-    matrix.rotateZ((r4) * D2R);
+    matrix.rotateZ(+r4 * D2R);
     matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" are");
     
@@ -82,12 +82,12 @@ void Sketch::draw()
     matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" not enough");
     
-    matrix.rotateZ(r3 * D2R);
+    matrix.rotateZ(+r3 * D2R);
     matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" for");
     
     matrix.push();
-    matrix.rotateZ(r2 * D2R);
+    matrix.rotateZ(+r2 * D2R);
     matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" text trees  ");
     matrixValues.push_back(matrix.values);
@@ -103,7 +103,7 @@ void Sketch::draw()
     matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" fine");
     
-    matrix.rotateZ(r4 * D2R);
+    matrix.rotateZ(+r4 * D2R);
     matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" for");
     
