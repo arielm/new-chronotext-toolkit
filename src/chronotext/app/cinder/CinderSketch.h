@@ -19,8 +19,6 @@ namespace chr
     class CinderSketch : public CinderSketchBase
     {
     public:
-        CinderSketch();
-        
         CinderDelegate* getDelegate() const;
         void setDelegate(CinderDelegate *delegate);
 
@@ -37,9 +35,9 @@ namespace chr
         void sendMessageToDelegate(int what, const std::string &body = "") final;
         
     protected:
-        CinderDelegate *delegate;
+        CinderDelegate *delegate = nullptr;
         
-        chr::FrameClock::Ref clock_;
-        ci::TimelineRef timeline_;
+        chr::FrameClock::Ref clock_ = chr::FrameClock::create();
+        ci::TimelineRef timeline_ = ci::Timeline::create();
     };
 }

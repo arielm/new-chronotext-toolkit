@@ -14,6 +14,7 @@
 
 using namespace std;
 using namespace ci;
+
 using namespace context;
 
 namespace chr
@@ -27,19 +28,9 @@ namespace chr
 #endif
     }
     
-    Task::State::State()
-    :
-    initialized(false),
-    started(false),
-    ended(false),
-    cancelRequired(false),
-    synchronous(false),
-    taskId(0)
-    {}
-    
     Task::~Task()
     {
-        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
         
         detach(); // OTHERWISE: THE APPLICATION MAY CRASH WHEN SHUT-DOWN ABRUPTLY
     }
@@ -47,25 +38,25 @@ namespace chr
     int Task::getId()
     {
         lock_guard<mutex> lock(_mutex);
-        return state.taskId;
+        return taskId;
     }
     
     bool Task::hasStarted()
     {
         lock_guard<mutex> lock(_mutex);
-        return state.started;
+        return started;
     }
     
     bool Task::hasEnded()
     {
         lock_guard<mutex> lock(_mutex);
-        return state.ended;
+        return ended;
     }
     
     bool Task::isCancelRequired()
     {
         lock_guard<mutex> lock(_mutex);
-        return state.cancelRequired;
+        return cancelRequired;
     }
     
     // ---
@@ -77,9 +68,9 @@ namespace chr
     
     bool Task::post(function<void()> &&fn)
     {
-        if (state.started && !state.ended)
+        if (started && !ended)
         {
-            return os::post(forward<function<void()>>(fn), state.synchronous);
+            return os::post(forward<function<void()>>(fn), synchronous);
         }
         
         return false;
@@ -93,23 +84,23 @@ namespace chr
     
     void Task::start(bool forceSync)
     {
-        if (state.initialized && !state.started)
+        if (initialized && !started)
         {
             lock_guard<mutex> lock(_mutex);
             
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
-            state.synchronous = forceSync;
+            synchronous = forceSync;
             
             if (forceSync)
             {
-                state.started = true;
+                started = true;
                 run();
-                state.ended = true;
+                ended = true;
             }
             else
             {
-                state.started = true;
+                started = true;
                 _thread = thread(&Task::performRun, this);
             }
         }
@@ -125,13 +116,13 @@ namespace chr
     
     void Task::cancel()
     {
-        if (!state.synchronous && state.started)
+        if (!synchronous && started)
         {
             lock_guard<mutex> lock(_mutex);
 
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
-            state.cancelRequired = true;
+            cancelRequired = true;
         }
         else
         {
@@ -160,18 +151,18 @@ namespace chr
     
     bool Task::performInit(shared_ptr<TaskManager> manager, int taskId)
     {
-        if (!state.initialized)
+        if (!initialized)
         {
             lock_guard<mutex> lock(_mutex);
 
             if (init())
             {
-                LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+                LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
                 
                 Task::manager = manager;
-                state.taskId = taskId;
+                Task::taskId = taskId;
                 
-                state.initialized = true;
+                initialized = true;
                 return true;
             }
             
@@ -189,9 +180,9 @@ namespace chr
     
     void Task::performRun()
     {
-        if (state.started && !state.ended)
+        if (started && !ended)
         {
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
             
             if (!isCancelRequired()) // TODO: DOUBLE-CHECK IF TEST MAKES SENSE
             {
@@ -207,16 +198,16 @@ namespace chr
             
             lock_guard<mutex> lock(_mutex); // TODO: FOLLOW-UP
             
-            state.ended = true;
+            ended = true;
 
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << taskId << " | " << this << endl;
 
             /*
              * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED DURING Task::run()
              *
              * TODO: CONSIDER USING A LAMBDA INSTEAD OF bind
              */
-            os::post(bind(&TaskManager::endTask, manager, state.taskId), false);
+            os::post(bind(&TaskManager::endTask, manager, taskId), false);
             
             /*
              * TODO:
@@ -241,9 +232,9 @@ namespace chr
     
     void Task::performShutdown()
     {
-        if (!state.started || state.ended)
+        if (!started || ended)
         {
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << state.taskId << " | " << this << endl;
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
             shutdown();
             

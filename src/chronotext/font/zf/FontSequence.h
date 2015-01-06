@@ -21,7 +21,7 @@ namespace chr
             bool useColor;
             float anisotropy;
             
-            FontSequence() {}
+            FontSequence() = default;
             FontSequence(const FontSequence &other) = delete; // FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
             
         protected:

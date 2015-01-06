@@ -11,7 +11,7 @@
  * BEFORE OSX 10.8, THIS WAS OCCURING AUTOMATICALLY IN PARALLEL TO std::cout
  *
  * TO ACTIVATE IT: #define FORCE_SYSLOG
- * IF ACTIVATED: std::count WILL NOT BE USED IN PARALLEL
+ * IF ACTIVATED: std::cout WILL NOT BE USED IN PARALLEL
  *
  * BASED ON:
  * https://github.com/cinder/Cinder/blob/master/include/cinder/msw/OutputDebugStringStream.h

@@ -97,7 +97,7 @@ namespace chr
         bool cancelTask(int taskId);
         
     protected:
-        int taskCount;
+        int taskCount = 0;
         
         std::map<int, std::shared_ptr<Task>> tasks;
         std::set<int> startedTasks;
@@ -107,7 +107,7 @@ namespace chr
     private:
         friend class Task;
         
-        TaskManager();
+        TaskManager() = default;
         TaskManager(const TaskManager &other) = delete;
         
         void endTask(int taskId);

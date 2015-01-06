@@ -51,7 +51,6 @@ namespace chr
         static std::atomic<bool> LOG_WARNING;
         
         CinderDelegate();
-        virtual ~CinderDelegate() {}
 
         CinderSketch* getSketch();
 

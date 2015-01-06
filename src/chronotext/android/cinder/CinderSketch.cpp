@@ -11,17 +11,9 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace chr
 {
-    CinderSketch::CinderSketch()
-    :
-    delegate(nullptr),
-    clock_(FrameClock::create()),
-    timeline_(Timeline::create())
-    {}
-    
     CinderDelegate* CinderSketch::getDelegate() const
     {
         return delegate;

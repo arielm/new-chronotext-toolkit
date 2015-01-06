@@ -17,11 +17,6 @@ namespace chr
     atomic<bool> TaskManager::LOG_VERBOSE (false);
     atomic<int> TaskManager::MAX_CONCURRENT_THREADS (4); // XXX: RAW MECHANISM, AS FOR NOW
     
-    TaskManager::TaskManager()
-    :
-    taskCount(0)
-    {}
-    
     Task* TaskManager::getTask(int taskId)
     {
         if (os::isThreadSafe())

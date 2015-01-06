@@ -31,19 +31,6 @@ namespace chr
     class Task
     {
     public:
-        struct State
-        {
-            bool initialized;
-            bool started;
-            bool ended;
-            bool cancelRequired;
-            
-            bool synchronous;
-            int taskId;
-            
-            State();
-        };
-
         static void sleep(double seconds);
 
         virtual bool init() { return true; }
@@ -59,13 +46,13 @@ namespace chr
         bool isCancelRequired();
         
     protected:
-        /*
-         * USING A STRUCTURE AS A MEAN TO ENSURE PROPER INITIALIZATION
-         *
-         * NECESSARY BECAUSE WE DON'T WANT TO IMPOSE BASE-CLASS
-         * CONSTRUCTOR-INVOCATION TO DERIVED CLASSES
-         */
-        State state;
+        bool initialized = false;
+        bool started = false;
+        bool ended = false;
+        bool cancelRequired = false;
+        
+        bool synchronous = false;
+        int taskId = 0;
         
         std::shared_ptr<TaskManager> manager;
         std::thread _thread;

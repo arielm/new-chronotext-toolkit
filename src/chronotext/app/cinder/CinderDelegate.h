@@ -34,22 +34,20 @@ namespace chr
         virtual void applySettings(Settings *settings) {}
         void prepareSettings(Settings *settings) final;
 
-        void setup() override;
-        void shutdown() override;
-        void resize() override;
+        void setup() final;
+        void shutdown() final;
+        void resize() final;
         
-        void update() override;
-        void draw() override;
+        void update() final;
+        void draw() final;
 
-        void accelerated(AccelEvent event);
-
-        void mouseDown(ci::app::MouseEvent event);
-        void mouseUp(ci::app::MouseEvent event);
-        void mouseDrag(ci::app::MouseEvent event);
+        void mouseDown(ci::app::MouseEvent event) final;
+        void mouseUp(ci::app::MouseEvent event) final;
+        void mouseDrag(ci::app::MouseEvent event) final;
         
-        void touchesBegan(ci::app::TouchEvent event);
-        void touchesMoved(ci::app::TouchEvent event);
-        void touchesEnded(ci::app::TouchEvent event);
+        void touchesBegan(ci::app::TouchEvent event) final;
+        void touchesMoved(ci::app::TouchEvent event) final;
+        void touchesEnded(ci::app::TouchEvent event) final;
         
         bool isEmulated() const;
         const WindowInfo& getWindowInfo() const;
@@ -60,14 +58,14 @@ namespace chr
         
     protected:
         CinderSketch *sketch;
+        
+        int startCount;
+        int updateCount;
 
         system::InitInfo initInfo;
         WindowInfo windowInfo;
         
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
-        
-        int startCount;
-        int updateCount;
         
         void setSketch(CinderSketch *sketch);
        
