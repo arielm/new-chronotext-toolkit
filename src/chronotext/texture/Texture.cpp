@@ -115,7 +115,7 @@ namespace chr
             
             // ---
             
-            string memoryStats;
+            stringstream memoryStats;
             
             if (TextureManager::LOG_VERBOSE && TextureManager::PROBE_MEMORY)
             {
@@ -125,10 +125,11 @@ namespace chr
                 auto delta1 = memory::compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
                 auto delta2 = memory::compare(memoryProbe.memoryInfo[1], memoryInfo);
                 
-                memoryStats = " | " +
-                format::bytes(memoryProbe.memoryUsage) + ", " +
-                format::bytes(delta1) + ", " +
-                format::bytes(delta2);
+                memoryStats << " | " <<
+                format::bytes(memoryProbe.memoryUsage) << ", " <<
+                format::bytes(delta1) << ", " <<
+                format::bytes(delta2) << " " <<
+                memoryInfo;
             }
             
             // ---
@@ -145,7 +146,7 @@ namespace chr
             request.inputSource->getFilePathHint() << " | " <<
             glId << " | " <<
             width << "x" << height <<
-            memoryStats <<
+            memoryStats.str() <<
             endl;
         }
     }
@@ -162,24 +163,25 @@ namespace chr
             
             // ---
             
-            string memoryStats;
+            stringstream memoryStats;
             
             if (TextureManager::LOG_VERBOSE && TextureManager::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
                 const auto &memoryProbe = TextureHelper::probes[previousTarget];
                 
-                auto delta = -memory::compare(memoryProbe.memoryInfo[2], memoryInfo);
+                auto delta = memory::compare(memoryProbe.memoryInfo[2], memoryInfo);
                 
-                memoryStats = " | " +
-                format::bytes(memoryProbe.memoryUsage) + ", " +
-                format::bytes(delta);
+                memoryStats << " | " <<
+                format::bytes(memoryProbe.memoryUsage) << ", " <<
+                format::bytes(delta) << " " <<
+                memoryInfo;
             }
             
             LOGI_IF(TextureManager::LOG_VERBOSE) <<
             "TEXTURE DISCARDED: " <<
             previousGLId <<
-            memoryStats <<
+            memoryStats.str() <<
             endl;
         }
     }

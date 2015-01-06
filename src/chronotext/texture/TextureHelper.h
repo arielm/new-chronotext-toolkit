@@ -46,7 +46,11 @@ namespace chr
 
         // ---
         
-        static ci::gl::TextureRef loadTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE);
+        static inline ci::gl::TextureRef loadTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE)
+        {
+            return loadTexture(Texture::Request(inputSource, useMipmap, flags));
+        }
+        
         static ci::gl::TextureRef loadTexture(const Texture::Request &textureRequest);
         
         static Texture::Data fetchTextureData(const Texture::Request &textureRequest);

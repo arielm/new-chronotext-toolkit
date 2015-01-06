@@ -23,11 +23,6 @@ namespace chr
 
     // ---
     
-    gl::TextureRef TextureHelper::loadTexture(InputSource::Ref inputSource, bool useMipmap, Texture::Request::Flags flags)
-    {
-        return loadTexture(Texture::Request(inputSource, useMipmap, flags));
-    }
-    
     gl::TextureRef TextureHelper::loadTexture(const Texture::Request &textureRequest)
     {
         auto textureData = fetchTextureData(textureRequest);
