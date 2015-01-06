@@ -10,13 +10,10 @@
 
 #include "chronotext/system/SystemInfo.h"
 
-namespace context
-{
-    chr::SystemInfo getSystemInfo();
-}
-
 namespace chr
 {
+    SystemInfo getSystemInfo();
+    
     namespace system
     {
         Platform platform();

@@ -15,7 +15,6 @@
 #import "GLViewController.h"
 
 #include "chronotext/Context.h"
-#include "chronotext/utils/accel/AccelEvent.h"
 
 #include <boost/asio.hpp>
 
@@ -23,8 +22,6 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 using namespace chr;
-
-using namespace context;
 
 @interface CinderDelegate ()
 {
@@ -73,7 +70,7 @@ using namespace context;
 {
     if (self = [super init])
     {
-        CONTEXT::init(system::InitInfo());
+        CHR::init(system::InitInfo());
         
         sketch = createSketch();
         sketch->setDelegate(self);
@@ -103,7 +100,7 @@ using namespace context;
      * - SEE RELATED TODOS IN Context AND TaskManager
      */
     [self stopIOService];
-    CONTEXT::shutdown();
+    CHR::shutdown();
     
     [super dealloc];
 }
@@ -150,7 +147,7 @@ using namespace context;
     // ---
 
     [self startIOService];
-    CONTEXT::setup(system::SetupInfo(*io));
+    CHR::setup(system::SetupInfo(*io));
 
     sketch->timeline().stepTo(0);
     sketch->setup();

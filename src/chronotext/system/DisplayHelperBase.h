@@ -10,13 +10,10 @@
 
 #include "chronotext/system/DisplayInfo.h"
 
-namespace context
-{
-    const chr::DisplayInfo& getDisplayInfo();
-}
-
 namespace chr
 {
+    const DisplayInfo& getDisplayInfo();
+
     namespace display
     {
         class HelperBase

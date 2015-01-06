@@ -27,7 +27,7 @@ namespace chr
         namespace android
         {
             /*
-             * THE SAME PROPERTIES THAT CAN BE QUERIED VIA ADB, E.G.
+             * THE SAME PROPERTIES QUERIABLE VIA ADB, E.G.
              * adb shell getprop ro.product.manufacturer
              */
             std::string getProperty(const char *name);

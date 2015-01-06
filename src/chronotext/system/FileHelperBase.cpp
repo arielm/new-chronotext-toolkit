@@ -17,7 +17,7 @@ namespace chr
     {
 #if !defined(CINDER_ANDROID)
         
-        fs::path defaultPath()
+        fs::path getDefaultPath()
         {
             return fs::current_path();
         }
@@ -29,7 +29,7 @@ namespace chr
          */
         int64_t HelperBase::getAvailableStorage(const fs::path &folderPath)
         {
-            fs::path target = folderPath.empty() ? defaultPath() : folderPath;
+            fs::path target = folderPath.empty() ? getDefaultPath() : folderPath;
             
             if (fs::exists(target))
             {

@@ -10,7 +10,6 @@
 #include "chronotext/Context.h"
 
 using namespace std;
-using namespace context;
 
 namespace chr
 {

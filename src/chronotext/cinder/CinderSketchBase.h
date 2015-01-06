@@ -10,7 +10,6 @@
 
 #include "chronotext/cinder/WindowInfo.h"
 #include "chronotext/os/SuperHandler.h"
-#include "chronotext/system/DisplayInfo.h"
 #include "chronotext/time/FrameClock.h"
 #include "chronotext/utils/accel/AccelEvent.h"
 

@@ -9,7 +9,6 @@
 #include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
-#include "chronotext/utils/accel/AccelEvent.h"
 
 using namespace std;
 using namespace ci;
@@ -50,7 +49,7 @@ namespace chr
 
         // ---
         
-        CONTEXT::init(initInfo);
+        CHR::init(initInfo);
         
         setSketch(createSketch());
         sketch->init();
@@ -66,7 +65,7 @@ namespace chr
         createSensorEventQueue();
         startIOService();
         
-        CONTEXT::setup(system::SetupInfo(*io));
+        CHR::setup(system::SetupInfo(*io));
         
         sketch->timeline().stepTo(0);
         sketch->setup();
@@ -86,7 +85,7 @@ namespace chr
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
         stopIOService();
-        CONTEXT::shutdown();
+        CHR::shutdown();
     }
     
     void CinderDelegate::resize(int width, int height)

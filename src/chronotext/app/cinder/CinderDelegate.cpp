@@ -61,7 +61,7 @@ namespace chr
         
         // ---
         
-        CONTEXT::init(initInfo);
+        CHR::init(initInfo);
         
         setSketch(createSketch());
         sketch->init();
@@ -70,7 +70,7 @@ namespace chr
         
         windowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
         
-        CONTEXT::setup(system::SetupInfo(io_service()));
+        CHR::setup(system::SetupInfo(io_service()));
 
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update()
@@ -94,7 +94,7 @@ namespace chr
          * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
-        CONTEXT::shutdown();
+        CHR::shutdown();
     }
     
     void CinderDelegate::resize()

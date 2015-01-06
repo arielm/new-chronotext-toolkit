@@ -12,14 +12,6 @@
 using namespace std;
 using namespace ci;
 
-namespace context
-{
-    chr::SystemInfo getSystemInfo()
-    {
-        return systemManager().getInfo();
-    }
-}
-
 namespace chr
 {
     namespace system
@@ -59,5 +51,10 @@ namespace chr
             info.osVersionString = getOsVersionString();
             info.deviceString = getDeviceString();
         }
+    }
+    
+    SystemInfo getSystemInfo()
+    {
+        return systemManager().getInfo();
     }
 }

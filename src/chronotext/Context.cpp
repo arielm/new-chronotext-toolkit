@@ -14,10 +14,13 @@ namespace chr
 {
     namespace intern
     {
-        shared_ptr<system::Manager> systemManager;
-        shared_ptr<memory::Manager> memoryManager;
+        shared_ptr<SystemManager> systemManager;
+        shared_ptr<MemoryManager> memoryManager;
         shared_ptr<TaskManager> taskManager;
         
+        /*
+         * TODO: MOVE TO TaskManager
+         */
         boost::asio::io_service *io_service = nullptr;
         thread::id threadId;
         
@@ -26,92 +29,88 @@ namespace chr
         bool initialized = false;
         bool setup = false;
     }
-    
-    namespace CONTEXT
+}
+
+namespace CHR
+{
+    bool init(const system::InitInfo &initInfo)
     {
-        bool init(const system::InitInfo &initInfo)
+        if (!intern::initialized)
         {
-            if (!intern::initialized)
-            {
-                intern::systemManager = make_shared<system::Manager>();
-                intern::systemManager->setup(initInfo);
-                
-                intern::memoryManager = make_shared<memory::Manager>();
-                intern::memoryManager->setup();
-                
-                // ---
-                
-                intern::initialized = true;
-            }
+            intern::systemManager = make_shared<SystemManager>();
+            intern::systemManager->setup(initInfo);
             
-            return intern::initialized;
+            intern::memoryManager = make_shared<MemoryManager>();
+            intern::memoryManager->setup();
+            
+            // ---
+            
+            intern::initialized = true;
         }
         
-        void setup(const system::SetupInfo &setupInfo)
+        return intern::initialized;
+    }
+    
+    void setup(const system::SetupInfo &setupInfo)
+    {
+        if (!intern::setup && intern::initialized)
         {
-            if (!intern::setup && intern::initialized)
-            {
-                /*
-                 * TODO: MOVE TO TaskManager
-                 */
-                intern::io_service = setupInfo.io_service;
-                intern::threadId = this_thread::get_id();
-                
-                intern::taskManager = TaskManager::create();
-                
-                // ---
-                
-                intern::setup = true;
-            }
+            /*
+             * TODO: MOVE TO TaskManager
+             */
+            intern::io_service = setupInfo.io_service;
+            intern::threadId = this_thread::get_id();
+            
+            intern::taskManager = TaskManager::create();
+            
+            // ---
+            
+            intern::setup = true;
+        }
+    }
+    
+    void shutdown()
+    {
+        if (intern::setup)
+        {
+            /*
+             * TODO:
+             *
+             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+             * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
+             */
+            intern::taskManager.reset();
+            intern::io_service = nullptr;
+            
+            // ---
+            
+            intern::setup = false;
         }
         
-        void shutdown()
+        if (intern::initialized)
         {
-            if (intern::setup)
-            {
-                /*
-                 * TODO:
-                 *
-                 * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-                 * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
-                 */
-                intern::taskManager.reset();
-                intern::io_service = nullptr;
-                
-                // ---
-                
-                intern::setup = false;
-            }
+            intern::memoryManager->shutdown();
+            intern::memoryManager.reset();
             
-            if (intern::initialized)
-            {
-                intern::memoryManager->shutdown();
-                intern::memoryManager.reset();
-                
-                intern::systemManager->shutdown();
-                intern::systemManager.reset();
-                
-                // ---
-                
-                intern::initialized = false;
-            }
+            intern::systemManager->shutdown();
+            intern::systemManager.reset();
+            
+            // ---
+            
+            intern::initialized = false;
         }
     }
 }
 
-// ---
-
-using namespace chr;
-
-namespace context
+namespace chr
 {
-    system::Manager& systemManager()
+    SystemManager& systemManager()
     {
         assert(intern::initialized);
         return *intern::systemManager.get();
     }
     
-    memory::Manager& memoryManager()
+    MemoryManager& memoryManager()
     {
         assert(intern::initialized);
         return *intern::memoryManager.get();

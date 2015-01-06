@@ -18,6 +18,7 @@
 
 // ---
 
+#include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/system/SystemManager.h"
 #include "chronotext/system/MemoryManager.h"
 #include "chronotext/os/TaskManager.h"
@@ -25,26 +26,14 @@
 
 namespace chr
 {
-    class CinderSketch;
-    
     CinderSketch* createSketch();
     void destroySketch(CinderSketch *sketch);
     
     // ---
     
-    namespace CONTEXT
-    {
-        bool init(const system::InitInfo &initInfo);
-        void setup(const system::SetupInfo &setupInfo);
-        void shutdown();
-    }
-}
-
-namespace context
-{
-    chr::system::Manager& systemManager();
-    chr::memory::Manager& memoryManager();
-    chr::TaskManager& taskManager();
+    SystemManager& systemManager();
+    MemoryManager& memoryManager();
+    TaskManager& taskManager();
     
     namespace os
     {
@@ -66,4 +55,13 @@ namespace context
          */
         bool post(std::function<void()> &&fn, bool forceSync = false);
     }
-};
+}
+
+namespace CHR
+{
+    using namespace chr;
+    
+    bool init(const system::InitInfo &initInfo);
+    void setup(const system::SetupInfo &setupInfo);
+    void shutdown();
+}

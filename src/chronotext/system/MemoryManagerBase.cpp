@@ -11,21 +11,18 @@
 
 using namespace std;
 
-namespace context
-{
-    chr::MemoryInfo getMemoryInfo()
-    {
-        return memoryManager().getInfo();
-    }
-}
-
 namespace chr
 {
     namespace memory
     {
         int64_t compare(const Info &before, const Info &after)
         {
-            return context::memoryManager().compare(before, after);
+            return memoryManager().compare(before, after);
         }
+    }
+    
+    MemoryInfo getMemoryInfo()
+    {
+        return memoryManager().getInfo();
     }
 }

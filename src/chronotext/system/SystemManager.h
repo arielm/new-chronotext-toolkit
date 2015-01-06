@@ -23,3 +23,8 @@
 #include "chronotext/app/system/SystemManager.h"
 
 #endif
+
+namespace chr
+{
+    typedef system::Manager SystemManager;
+}

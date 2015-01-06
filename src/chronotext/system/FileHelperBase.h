@@ -16,9 +16,7 @@ namespace chr
 {
     namespace file
     {
-        ci::fs::path defaultPath();
-        
-        // ---
+        ci::fs::path getDefaultPath();
         
         class HelperBase
         {

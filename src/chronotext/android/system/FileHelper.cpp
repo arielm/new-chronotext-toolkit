@@ -16,6 +16,11 @@ namespace chr
 {
     namespace file
     {
+        fs::path getDefaultPath()
+        {
+            return Helper::getAndroidInternalDataPath();
+        }
+
         namespace intern
         {
             AAssetManager *assetManager = nullptr;
@@ -26,11 +31,6 @@ namespace chr
             // ---
             
             bool setup = false;
-        }
-
-        fs::path defaultPath()
-        {
-            return Helper::getAndroidInternalDataPath();
         }
 
         // ---
@@ -88,7 +88,7 @@ namespace chr
         
         AAssetManager* Helper::getAndroidAssetManager()
         {
-            assert(intern::assetManager);
+            assert(intern::setup);
             return intern::assetManager;
         }
         

@@ -23,3 +23,8 @@
 #include "chronotext/app/system/MemoryManager.h"
 
 #endif
+
+namespace chr
+{
+    typedef memory::Manager MemoryManager;
+}

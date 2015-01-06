@@ -43,13 +43,10 @@ namespace chr
             intern::setup = false;
         }
     }
-}
-
-namespace context
-{
-    const chr::DisplayInfo& getDisplayInfo()
+    
+    const DisplayInfo& getDisplayInfo()
     {
-        assert(chr::display::intern::setup);
-        return chr::display::intern::displayInfo;
+        assert(display::intern::setup);
+        return display::intern::displayInfo;
     }
 }

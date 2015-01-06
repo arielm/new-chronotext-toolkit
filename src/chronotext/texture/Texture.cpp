@@ -15,8 +15,6 @@ using namespace std;
 using namespace ci;
 using namespace chr::utils;
 
-using namespace context;
-
 namespace chr
 {
     Texture::Texture(InputSource::Ref inputSource, bool useMipmap, Request::Flags flags)

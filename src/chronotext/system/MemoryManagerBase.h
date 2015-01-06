@@ -21,13 +21,10 @@
 
 #include "chronotext/system/MemoryInfo.h"
 
-namespace context
-{
-    chr::MemoryInfo getMemoryInfo();
-}
-
 namespace chr
 {
+    MemoryInfo getMemoryInfo();
+    
     namespace memory
     {
         int64_t compare(const Info &before, const Info &after);
