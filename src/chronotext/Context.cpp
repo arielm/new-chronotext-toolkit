@@ -27,83 +27,98 @@ namespace chr
         // ---
         
         bool initialized = false;
+        bool launched = false;
         bool setup = false;
     }
-}
-
-namespace CHR
-{
-    bool init(const system::InitInfo &initInfo)
+    
+    namespace INTERN
     {
-        if (!intern::initialized)
+        bool init(const system::InitInfo &initInfo)
         {
-            intern::systemManager = make_shared<SystemManager>();
-            intern::systemManager->setup(initInfo);
+            if (!intern::initialized)
+            {
+                intern::systemManager = make_shared<SystemManager>();
+                intern::systemManager->setup(initInfo);
+                
+                intern::memoryManager = make_shared<MemoryManager>();
+                intern::memoryManager->setup();
+                
+                // ---
+                
+                intern::initialized = true;
+            }
             
-            intern::memoryManager = make_shared<MemoryManager>();
-            intern::memoryManager->setup();
-            
-            // ---
-            
-            intern::initialized = true;
+            return intern::initialized;
         }
         
-        return intern::initialized;
-    }
-    
-    void setup(const system::SetupInfo &setupInfo)
-    {
-        if (!intern::setup && intern::initialized)
+        void launch(const system::LaunchInfo &launchInfo)
         {
-            /*
-             * TODO: MOVE TO TaskManager
-             */
-            intern::io_service = setupInfo.io_service;
-            intern::threadId = this_thread::get_id();
-            
-            intern::taskManager = TaskManager::create();
-            
-            // ---
-            
-            intern::setup = true;
-        }
-    }
-    
-    void shutdown()
-    {
-        if (intern::setup)
-        {
-            /*
-             * TODO:
-             *
-             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-             * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
-             */
-            intern::taskManager.reset();
-            intern::io_service = nullptr;
-            
-            // ---
-            
-            intern::setup = false;
+            if (!intern::launched && intern::initialized)
+            {
+                /*
+                 * TODO: MOVE TO TaskManager
+                 */
+                intern::io_service = launchInfo.io_service;
+                intern::threadId = this_thread::get_id();
+                
+                intern::taskManager = TaskManager::create();
+                
+                // ---
+                
+                intern::launched = true;
+            }
         }
         
-        if (intern::initialized)
+        void setup(const system::SetupInfo &setupInfo)
         {
-            intern::memoryManager->shutdown();
-            intern::memoryManager.reset();
+            if (!intern::setup && intern::launched)
+            {
+                LOGI_IF(true) << "WINDOW INFO: " << setupInfo.windowInfo << endl; // LOG: VERBOSE
+                
+                intern::setup = true;
+            }
+        }
+        
+        void shutdown()
+        {
+            if (intern::setup)
+            {
+                intern::setup = false;
+            }
             
-            intern::systemManager->shutdown();
-            intern::systemManager.reset();
+            if (intern::launched)
+            {
+                /*
+                 * TODO:
+                 *
+                 * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+                 * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
+                 */
+                intern::taskManager.reset();
+                intern::io_service = nullptr;
+                
+                // ---
+                
+                intern::launched = false;
+            }
             
-            // ---
-            
-            intern::initialized = false;
+            if (intern::initialized)
+            {
+                intern::memoryManager->shutdown();
+                intern::memoryManager.reset();
+                
+                intern::systemManager->shutdown();
+                intern::systemManager.reset();
+                
+                // ---
+                
+                intern::initialized = false;
+            }
         }
     }
-}
-
-namespace chr
-{
+    
+    // ---
+    
     SystemManager& systemManager()
     {
         assert(intern::initialized);
@@ -118,11 +133,9 @@ namespace chr
     
     TaskManager& taskManager()
     {
-        assert(intern::setup);
+        assert(intern::launched);
         return *intern::taskManager.get();
     }
-    
-    // ---
     
     /*
      * TODO: MOVE TO TaskManager
@@ -132,7 +145,7 @@ namespace chr
     {
         bool isThreadSafe()
         {
-            if (intern::setup)
+            if (intern::launched)
             {
                 return intern::threadId == this_thread::get_id();
             }

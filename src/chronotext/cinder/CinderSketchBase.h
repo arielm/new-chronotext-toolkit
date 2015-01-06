@@ -41,6 +41,7 @@ namespace chr
         virtual ~CinderSketchBase() {}
         
         virtual bool init() { return true; }
+        virtual void launch() {}
         virtual void setup() {}
         virtual void shutdown() {}
 

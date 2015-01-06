@@ -70,7 +70,7 @@ using namespace chr;
 {
     if (self = [super init])
     {
-        CHR::init(system::InitInfo());
+        INTERN::init(system::InitInfo());
         
         sketch = createSketch();
         sketch->setDelegate(self);
@@ -92,6 +92,7 @@ using namespace chr;
     
     sketch->shutdown();
     destroySketch(sketch);
+    sketch = nullptr;
 
     /*
      * TODO:
@@ -100,7 +101,7 @@ using namespace chr;
      * - SEE RELATED TODOS IN Context AND TaskManager
      */
     [self stopIOService];
-    CHR::shutdown();
+    INTERN::shutdown();
     
     [super dealloc];
 }
@@ -141,13 +142,17 @@ using namespace chr;
 
 - (void) setup
 {
+    [self startIOService];
+    
+    INTERN::launch(system::LaunchInfo(*io));
+    sketch->launch();
+
+    // ---
+    
     windowInfo = WindowInfo([self windowSize], [self aaLevel]);
     forceResize = YES;
-    
-    // ---
 
-    [self startIOService];
-    CHR::setup(system::SetupInfo(*io));
+    INTERN::setup(system::SetupInfo(windowInfo));
 
     sketch->timeline().stepTo(0);
     sketch->setup();
@@ -171,6 +176,7 @@ using namespace chr;
 - (void) update
 {
     sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
+    
     [self pollIOService];
     
     /*
@@ -184,6 +190,7 @@ using namespace chr;
     
     sketch->update();
     sketch->timeline().stepTo(now);
+    
     frameCount++;
 }
 
@@ -316,9 +323,9 @@ using namespace chr;
         candidateId++;
         found = false;
         
-        for (auto &it : touchIdMap)
+        for (auto &element : touchIdMap)
         {
-            if (it.second == candidateId)
+            if (element.second == candidateId)
             {
                 found = true;
                 break;
@@ -354,20 +361,23 @@ using namespace chr;
 
 - (void) updateActiveTouches
 {
-    float scale = view.contentScaleFactor;;
+    float scale = view.contentScaleFactor; // XXX
     vector<TouchEvent::Touch> activeTouches;
     
-    for (auto &it : touchIdMap)
+    for (auto &element : touchIdMap)
     {
-        CGPoint pt = [it.first locationInView:view];
-        CGPoint prevPt = [it.first previousLocationInView:view];
-        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, it.second, [it.first timestamp], it.first);
+        auto &touch = element.first;
+        auto &touchId = element.second;
+        
+        CGPoint pt = [touch locationInView:view];
+        CGPoint prevPt = [touch previousLocationInView:view];
+        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, touchId, [touch timestamp], touch);
     }
 }
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    float scale = view.contentScaleFactor;
+    float scale = view.contentScaleFactor; // XXX
     vector<TouchEvent::Touch> touchList;
     
     for (UITouch *touch in touches)
@@ -387,7 +397,7 @@ using namespace chr;
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    float scale = view.contentScaleFactor;
+    float scale = view.contentScaleFactor; // XXX
     vector<TouchEvent::Touch> touchList;
     
     for (UITouch *touch in touches)
@@ -407,7 +417,7 @@ using namespace chr;
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = view.contentScaleFactor;
+    const float scale = view.contentScaleFactor; // XXX
     vector<TouchEvent::Touch> touchList;
     
     for (UITouch *touch in touches)
@@ -480,7 +490,7 @@ using namespace chr;
 {
     if (initialized)
     {
-        sketch->event(CinderSketch::EVENT_MEMORY_WARNING); // TODO: PASS THROUGH memory::Manager
+        sketch->event(CinderSketch::EVENT_MEMORY_WARNING); // TODO: PASS THROUGH MemoryManager
     }
 }
 

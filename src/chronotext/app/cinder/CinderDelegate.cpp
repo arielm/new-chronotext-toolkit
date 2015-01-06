@@ -61,16 +61,20 @@ namespace chr
         
         // ---
         
-        CHR::init(initInfo);
+        INTERN::init(initInfo);
         
         setSketch(createSketch());
         sketch->init();
         
         // ---
         
-        windowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
+        INTERN::launch(system::LaunchInfo(io_service()));
+        sketch->launch();
+
+        // ---
         
-        CHR::setup(system::SetupInfo(io_service()));
+        windowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
+        INTERN::setup(system::SetupInfo(windowInfo));
 
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update()
@@ -83,7 +87,7 @@ namespace chr
     
     void CinderDelegate::shutdown()
     {
-        stop();
+        stop(); // NOT HAPPENING AUTOMATICALLY UPON SHUT-DOWN (I.E. UNLIKE ON MOBILE PLATFORMS)
         
         sketch->shutdown();
         setSketch(nullptr);
@@ -94,7 +98,7 @@ namespace chr
          * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
-        CHR::shutdown();
+        INTERN::shutdown();
     }
     
     void CinderDelegate::resize()

@@ -15,6 +15,11 @@ using namespace ci;
 
 namespace chr
 {
+    namespace INTERN
+    {
+        CinderDelegate *delegate = nullptr;
+    }
+    
     namespace jni
     {
         JavaVM *vm = nullptr;
@@ -221,11 +226,6 @@ namespace chr
             return ret;
         }
     }
-    
-    namespace CONTEXT
-    {
-        CinderDelegate *delegate = nullptr;
-    }
 }
 
 #pragma mark ---------------------------------------- JAVA <-> C++ ----------------------------------------
@@ -250,8 +250,8 @@ void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jo
 {
     jni::listener = env->NewGlobalRef(listener);
     
-    CONTEXT::delegate = new CinderDelegate();
-    CONTEXT::delegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    INTERN::delegate = new CinderDelegate();
+    INTERN::delegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
 /*
@@ -259,7 +259,7 @@ void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jo
  */
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
 {
-    CONTEXT::delegate->launch();
+    INTERN::delegate->launch();
 }
 
 /*
@@ -267,15 +267,15 @@ void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
  */
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    CONTEXT::delegate->setup(width, height);
+    INTERN::delegate->setup(width, height);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
 {
-    CONTEXT::delegate->shutdown();
+    INTERN::delegate->shutdown();
     
-    delete CONTEXT::delegate;
-    CONTEXT::delegate = nullptr;
+    delete INTERN::delegate;
+    INTERN::delegate = nullptr;
     
     CI_LOGI("SHUTDOWN");
 }
@@ -284,19 +284,19 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
 
 void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    CONTEXT::delegate->resize(width, height);
+    INTERN::delegate->resize(width, height);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 {
-    CONTEXT::delegate->draw();
+    INTERN::delegate->draw();
 }
 
 // ---
 
 void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
 {
-    CONTEXT::delegate->event(eventId);
+    INTERN::delegate->event(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)
@@ -304,12 +304,12 @@ void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject 
     if (body)
     {
         const char *chars = env->GetStringUTFChars(body, nullptr);
-        CONTEXT::delegate->sendMessageToSketch(what, chars);
+        INTERN::delegate->sendMessageToSketch(what, chars);
         env->ReleaseStringUTFChars(body, chars);
     }
     else
     {
-        CONTEXT::delegate->sendMessageToSketch(what);
+        INTERN::delegate->sendMessageToSketch(what);
     }
 }
 
@@ -317,15 +317,15 @@ void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject 
 
 void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    CONTEXT::delegate->addTouch(index, x, y);
+    INTERN::delegate->addTouch(index, x, y);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    CONTEXT::delegate->updateTouch(index, x, y);
+    INTERN::delegate->updateTouch(index, x, y);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    CONTEXT::delegate->removeTouch(index, x, y);
+    INTERN::delegate->removeTouch(index, x, y);
 }

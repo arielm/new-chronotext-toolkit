@@ -49,23 +49,26 @@ namespace chr
 
         // ---
         
-        CHR::init(initInfo);
+        INTERN::init(initInfo);
         
         setSketch(createSketch());
         sketch->init();
     }
     
     void CinderDelegate::launch()
-    {}
+    {
+        startIOService();
+        createSensorEventQueue();
+
+        INTERN::launch(system::LaunchInfo(*io));
+        sketch->launch();
+    }
     
     void CinderDelegate::setup(int width, int height)
     {
         windowInfo = WindowInfo(width, height);
         
-        createSensorEventQueue();
-        startIOService();
-        
-        CHR::setup(system::SetupInfo(*io));
+        INTERN::setup(system::SetupInfo(windowInfo));
         
         sketch->timeline().stepTo(0);
         sketch->setup();
@@ -73,10 +76,10 @@ namespace chr
     
     void CinderDelegate::shutdown()
     {
-        destroySensorEventQueue();
-        
         sketch->shutdown();
         setSketch(nullptr);
+
+        destroySensorEventQueue();
 
         /*
          * TODO:
@@ -85,7 +88,7 @@ namespace chr
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
         stopIOService();
-        CHR::shutdown();
+        INTERN::shutdown();
     }
     
     void CinderDelegate::resize(int width, int height)
@@ -111,11 +114,12 @@ namespace chr
         double now = sketch->clock()->getTime();
         
         /*
-         * TODO: CALL memory::Manager::update()
+         * TODO: CALL MemoryManager::update()
          */
 
         sketch->update();
         sketch->timeline().stepTo(now);
+        
         frameCount++;
 
         sketch->draw();
@@ -222,7 +226,10 @@ namespace chr
      *
      * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
      * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
+     *
+     * PROBABLY OVERKILL...
      */
+    
     static void canonicalToWorld(int displayRotation, float *canVec, ci::Vec3f &worldVec)
     {
         struct AxisSwap
@@ -285,7 +292,7 @@ namespace chr
     }
     
     /*
-     * TODO: COULD BE HANDLED IN DisplayHelper
+     * TODO: CONSIDER HANDLING IN DisplayHelper
      */
     int CinderDelegate::getDisplayRotation()
     {

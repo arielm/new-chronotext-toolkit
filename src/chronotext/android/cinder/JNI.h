@@ -21,8 +21,6 @@
 
 #include <jni.h>
 
-#include <string>
-
 extern "C"
 {
     jint JNI_OnLoad(JavaVM *vm, void *reserved);
@@ -50,6 +48,15 @@ extern "C"
 
 namespace chr
 {
+    class CinderDelegate;
+    
+    namespace INTERN
+    {
+        extern CinderDelegate *delegate;
+    }
+
+    // ---
+    
     namespace jni
     {
         extern JavaVM *vm;
@@ -72,14 +79,5 @@ namespace chr
         jfloat callFloatMethodOnListener(const char *name, const char *sig, ...);
         jdouble callDoubleMethodOnListener(const char *name, const char *sig, ...);
         jobject callObjectMethodOnListener(const char *name, const char *sig, ...);
-    }
-    
-    // ---
-    
-    class CinderDelegate;
-    
-    namespace CONTEXT
-    {
-        extern CinderDelegate *delegate;
     }
 }

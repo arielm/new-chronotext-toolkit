@@ -34,7 +34,7 @@ namespace chr
     SystemManager& systemManager();
     MemoryManager& memoryManager();
     TaskManager& taskManager();
-    
+
     namespace os
     {
         /*
@@ -55,13 +55,14 @@ namespace chr
          */
         bool post(std::function<void()> &&fn, bool forceSync = false);
     }
-}
-
-namespace CHR
-{
-    using namespace chr;
     
-    bool init(const system::InitInfo &initInfo);
-    void setup(const system::SetupInfo &setupInfo);
-    void shutdown();
+    // ---
+    
+    namespace INTERN
+    {
+        bool init(const system::InitInfo &initInfo);
+        void launch(const system::LaunchInfo &launchInfo);
+        void setup(const system::SetupInfo &setupInfo);
+        void shutdown();
+    }
 }

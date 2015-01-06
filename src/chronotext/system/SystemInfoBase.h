@@ -8,12 +8,9 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
+#include "chronotext/cinder/WindowInfo.h"
 
 #include <boost/asio.hpp>
-
-#include <string>
-#include <iostream>
 
 namespace chr
 {
@@ -27,15 +24,27 @@ namespace chr
             PLATFORM_ANDROID
         };
         
-        struct SetupInfo
+        struct LaunchInfo
         {
             boost::asio::io_service *io_service;
             
-            SetupInfo() = default;
+            LaunchInfo() = default;
             
-            SetupInfo(boost::asio::io_service &io_service)
+            LaunchInfo(boost::asio::io_service &io_service)
             :
             io_service(&io_service)
+            {}
+        };
+        
+        struct SetupInfo
+        {
+            WindowInfo windowInfo;
+            
+            SetupInfo() = default;
+            
+            SetupInfo(const WindowInfo &windowInfo)
+            :
+            windowInfo(windowInfo)
             {}
         };
         
