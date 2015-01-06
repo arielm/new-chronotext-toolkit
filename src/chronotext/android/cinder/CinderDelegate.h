@@ -50,8 +50,6 @@ namespace chr
         static std::atomic<bool> LOG_VERBOSE;
         static std::atomic<bool> LOG_WARNING;
         
-        CinderDelegate();
-
         CinderSketch* getSketch();
 
         void sketchCreated(CinderSketch *sketch) {}
@@ -89,7 +87,7 @@ namespace chr
         void removeTouch(int index, float x, float y);
         
     protected:
-        CinderSketch *sketch;
+        CinderSketch *sketch = nullptr;
 
         system::InitInfo initInfo;
         WindowInfo windowInfo;

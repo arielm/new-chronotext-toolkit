@@ -17,9 +17,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT ebc399c
- * IOS: COMMIT ebc399c
- * ANDROID: COMMIT ebc399c
+ * OSX: COMMIT 5f1b130
+ * IOS: COMMIT 5f1b130
+ * ANDROID: COMMIT 5f1b130
  */
 
 #pragma once
@@ -32,8 +32,6 @@
 class Sketch : public chr::CinderSketch
 {
 public:
-    Sketch();
-    
     void setup() final;
     void resize() final;
     void update() final;
@@ -55,7 +53,8 @@ protected:
     chr::Hairline hairline;
     std::vector<ci::Vec2f> vertices;
     
-    chr::Clock::Ref slaveClock;
+    chr::Clock::Ref slaveClock = chr::Clock::create(clock());
+    
     float scale;
     float offset;
 };

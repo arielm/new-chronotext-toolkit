@@ -24,12 +24,6 @@ const float GAP = 7;
 
 const wstring TEXT = L"hell with sinus, text should move under the influence of physical forces!";
 
-Sketch::Sketch()
-:
-CinderSketch(),
-slaveClock(Clock::create(clock()))
-{}
-
 void Sketch::setup()
 {
     hairline = Hairline(textureManager, Hairline::TYPE_NORMAL);

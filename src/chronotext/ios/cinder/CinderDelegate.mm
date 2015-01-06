@@ -23,6 +23,7 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 using namespace chr;
+
 using namespace context;
 
 @interface CinderDelegate ()
@@ -32,7 +33,6 @@ using namespace context;
     shared_ptr<boost::asio::io_service> io;
     shared_ptr<boost::asio::io_service::work> ioWork;
 
-    DisplayInfo displayInfo;
     WindowInfo windowInfo;
 
     BOOL initialized;

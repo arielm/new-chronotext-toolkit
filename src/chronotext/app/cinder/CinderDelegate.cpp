@@ -18,14 +18,6 @@ using namespace ci::app;
 
 namespace chr
 {
-    CinderDelegate::CinderDelegate()
-    :
-    AppNative(),
-    sketch(nullptr),
-    startCount(0),
-    updateCount(0)
-    {}
-    
     CinderSketch* CinderDelegate::getSketch()
     {
         return sketch;

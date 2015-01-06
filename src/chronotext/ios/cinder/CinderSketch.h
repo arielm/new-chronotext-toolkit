@@ -17,8 +17,6 @@ namespace chr
     class CinderSketch : public CinderSketchBase
     {
     public:
-        CinderSketch();
-        
         void* getDelegate() const;
         void setDelegate(void *delegate);
 
@@ -42,9 +40,9 @@ namespace chr
         void touchesEnded(ci::app::TouchEvent event);
         
     protected:
-        void *delegate;
+        void *delegate = nullptr;
         
-        chr::FrameClock::Ref clock_;
-        ci::TimelineRef timeline_;
+        chr::FrameClock::Ref clock_ = chr::FrameClock::create();
+        ci::TimelineRef timeline_ = ci::Timeline::create();
     };
 }

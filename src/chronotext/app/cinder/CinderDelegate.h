@@ -19,8 +19,6 @@ namespace chr
     class CinderDelegate : public ci::app::AppNative
     {
     public:
-        CinderDelegate();
-
         CinderSketch* getSketch();
 
         virtual void sketchCreated(CinderSketch *sketch) {}
@@ -57,10 +55,10 @@ namespace chr
         bool loadEmulators(chr::InputSource::Ref inputSource);
         
     protected:
-        CinderSketch *sketch;
+        CinderSketch *sketch = nullptr;
         
-        int startCount;
-        int updateCount;
+        int startCount = 0;
+        int updateCount = 0;
 
         system::InitInfo initInfo;
         WindowInfo windowInfo;

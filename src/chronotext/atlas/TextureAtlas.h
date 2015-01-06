@@ -28,7 +28,7 @@ namespace chr
     public:
         Texture::Ref texture;
         
-        TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap = false);
+        TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap = false); // CAN THROW
         
         Sprite::Ref getSprite(const std::string &path) const;
         std::vector<Sprite::Ref> getAnimationSprites(const std::string &path) const;

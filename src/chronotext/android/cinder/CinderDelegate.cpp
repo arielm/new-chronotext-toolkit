@@ -13,17 +13,11 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace chr
 {
     atomic<bool> CinderDelegate::LOG_VERBOSE (false);
     atomic<bool> CinderDelegate::LOG_WARNING (true);
-    
-    CinderDelegate::CinderDelegate()
-    :
-    sketch(nullptr)
-    {}
     
     CinderSketch* CinderDelegate::getSketch()
     {
