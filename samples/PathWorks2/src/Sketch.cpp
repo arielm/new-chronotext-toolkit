@@ -17,8 +17,6 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-using namespace context;
-
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
 

@@ -143,5 +143,5 @@ void Sketch::draw()
 
 float Sketch::oscillate(double t, float min, float max, float freq)
 {
-    return min + 0.5 * (max - min) * (1 + math<float>::sin(t * freq));
+    return min + 0.5f * (max - min) * (1 + math<float>::sin(t * freq));
 }

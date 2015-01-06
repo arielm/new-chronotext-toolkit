@@ -16,8 +16,6 @@ using namespace ci;
 using namespace chr;
 using namespace chr::zf;
 
-using namespace context;
-
 const float FONT_SIZE = 24; // SIZE IN PIXELS (CORRESPONDS TO 0.15 INCHES AT 160 DPI)
 const string TEXT = "Spouse and helpmate of אָדָם קַדְמוֹן: Heva, naked Eve"; // FROM JAMES JOYCE'S ULYSSES, WITH "ADAM KADMON" IN HEBREW
 

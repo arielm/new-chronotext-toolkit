@@ -17,8 +17,6 @@ using namespace ci;
 using namespace chr;
 using namespace chr::xf;
 
-using namespace context;
-
 const float DOT_RADIUS_DP = 22;
 const float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 
