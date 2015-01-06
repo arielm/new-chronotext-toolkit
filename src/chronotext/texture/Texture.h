@@ -15,6 +15,9 @@
 
 namespace chr
 {
+    class TextureHelper;
+    class TextureManager;
+    
     class Texture
     {
     public:
@@ -173,16 +176,15 @@ namespace chr
         // ---
         
         Request request;
+        int uniqueId;
         uint32_t glId;
-        
-        Texture(InputSource::Ref inputSource, bool useMipmap = false, Request::Flags flags = Request::FLAGS_NONE);
-        Texture(const Request &request);
-        Texture(const Data &data);
         
         ~Texture();
         
         void discard();
-        bool reload();
+        bool reload(); // CAN THROW
+        
+        int64_t getMemoryUsage() const;
         
         int getWidth() const;
         int getHeight() const;
@@ -196,9 +198,7 @@ namespace chr
         float getMaxV() const;
         ci::Vec2f getMaxUV() const;
         
-        int64_t getMemoryUsage() const;
-        
-        void bind();
+        bool bind(); // CAN THROW
         void begin();
         void end();
         
@@ -207,7 +207,10 @@ namespace chr
         void drawInRect(const ci::Rectf &rect, float ox = 0, float oy = 0);
         
     protected:
-        ci::gl::TextureRef target;
+        friend class TextureHelper;
+        friend class TextureManager;
+        
+        ci::gl::Texture *target;
         int64_t memoryUsage;
         
         int width;
@@ -215,7 +218,10 @@ namespace chr
         float maxU;
         float maxV;
         
-        void setTarget(ci::gl::TextureRef target);
+        Texture(const Texture &other) = delete;
+        Texture(const Request &request, ci::gl::Texture *target, int uniqueId = -1);
+        
+        void setTarget(ci::gl::Texture *target); // CAN THROW
         void resetTarget();
     };
 }

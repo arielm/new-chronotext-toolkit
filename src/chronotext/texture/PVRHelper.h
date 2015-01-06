@@ -52,7 +52,7 @@ namespace chr
          * TODO: THE FOLLOWING 3 SHOULD CHECK THE PVR-VALIDITY OF THE PROVIDED BUFFER
          */
         
-        static ci::gl::TextureRef loadTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+        static ci::gl::Texture* loadTexture(const ci::Buffer &buffer, bool useMipmap = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
         static ci::Vec2i getTextureSize(const ci::Buffer &buffer);
         static int64_t getTextureMemoryUsage(const ci::Buffer &buffer);
     };

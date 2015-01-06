@@ -18,12 +18,21 @@ using namespace ci;
 
 namespace chr
 {
-    MemoryInfo TextureHelper::memoryInfo[2];
-    map<gl::Texture*, TextureHelper::MemoryProbe> TextureHelper::probes;
+    namespace intern
+    {
+        MemoryInfo memoryInfo[2];
+    }
+    
+    map<gl::Texture*, TextureHelper::Record> TextureHelper::records;
 
     // ---
     
-    gl::TextureRef TextureHelper::loadTexture(const Texture::Request &textureRequest)
+    Texture::Ref TextureHelper::loadTexture(const Texture::Request &textureRequest)
+    {
+        return Texture::Ref(new Texture(textureRequest, loadTarget(textureRequest))); // NO "UNIQUE-ID" WILL BE ASSIGNED
+    }
+
+    gl::Texture* TextureHelper::loadTarget(const Texture::Request &textureRequest)
     {
         auto textureData = fetchTextureData(textureRequest);
         
@@ -44,13 +53,11 @@ namespace chr
         return uploadTextureData(textureData);
     }
     
-    // ---
-    
     Texture::Data TextureHelper::fetchTextureData(const Texture::Request &textureRequest)
     {
         if (TextureManager::PROBE_MEMORY)
         {
-            memoryInfo[0] = getMemoryInfo();
+            intern::memoryInfo[0] = getMemoryInfo();
         }
         
         if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.gz"))
@@ -91,15 +98,15 @@ namespace chr
         return Texture::Data(textureRequest);
     }
     
-    gl::TextureRef TextureHelper::uploadTextureData(const Texture::Data &textureData)
+    gl::Texture* TextureHelper::uploadTextureData(const Texture::Data &textureData)
     {
-        gl::TextureRef texture;
+        gl::Texture *texture = nullptr;
         
         if (textureData.type != Texture::Data::TYPE_UNDEFINED)
         {
             if (TextureManager::PROBE_MEMORY)
             {
-                memoryInfo[1] = getMemoryInfo();
+                intern::memoryInfo[1] = getMemoryInfo();
             }
             
             /*
@@ -113,12 +120,12 @@ namespace chr
             switch (textureData.type)
             {
                 case Texture::Data::TYPE_SURFACE:
-                    texture = gl::Texture::create(textureData.surface, format);
+                    texture = new gl::Texture(textureData.surface, format);
                     texture->setCleanTexCoords(textureData.maxU, textureData.maxV);
                     break;
                     
                 case Texture::Data::TYPE_IMAGE_SOURCE:
-                    texture = gl::Texture::create(textureData.imageSource, format);
+                    texture = new gl::Texture(textureData.imageSource, format);
                     break;
                     
                 case Texture::Data::TYPE_PVR:
@@ -127,7 +134,7 @@ namespace chr
                     
                 case Texture::Data::TYPE_DATA:
                     format.setInternalFormat(textureData.glInternalFormat);
-                    texture = gl::Texture::create(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
+                    texture = new gl::Texture(textureData.data.get(), textureData.glFormat, textureData.width, textureData.height, format);
                     break;
                     
                 default:
@@ -136,33 +143,30 @@ namespace chr
             
             if (glGetError() == GL_OUT_OF_MEMORY)
             {
+                if (texture)
+                {
+                    delete texture;
+                }
+                
                 throw EXCEPTION(Texture, "GL: OUT-OF-MEMORY");
             }
-            else if (texture)
+            
+            if (texture)
             {
-                auto target = texture.get();
-                
-                texture->setDeallocator(&TextureHelper::textureDeallocator, target);
-
                 auto memoryUsage = getTextureMemoryUsage(textureData);
-                probes[target] = MemoryProbe({textureData.request, memoryUsage, memoryInfo[0], memoryInfo[1]});
+                records[texture] = Record({memoryUsage, intern::memoryInfo[0], intern::memoryInfo[1]});
             }
+        }
+        
+        if (!texture)
+        {
+            throw EXCEPTION(Texture, "TEXTURE IS UNDEFINED");
         }
         
         return texture;
     }
     
     // ---
-    
-    void TextureHelper::textureDeallocator(void *refcon)
-    {
-        auto target = reinterpret_cast<gl::Texture*>(refcon);
-        
-        if (TextureManager::PROBE_MEMORY)
-        {
-            probes[target].memoryInfo[2] = getMemoryInfo();
-        }
-    }
     
     bool TextureHelper::isOverSized(const Texture::Request &textureRequest, const Vec2i &size)
     {

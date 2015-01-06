@@ -27,40 +27,31 @@
 #include "chronotext/texture/Texture.h"
 #include "chronotext/system/MemoryInfo.h"
 
-#include <map>
-
 namespace chr
 {
     class TextureHelper
     {
     public:
-        struct MemoryProbe
+        struct Record
         {
-            Texture::Request textureRequest2;
             int64_t memoryUsage;
-            MemoryInfo memoryInfo[3];
+            MemoryInfo memoryInfo[2];
         };
         
-        static MemoryInfo memoryInfo[2];
-        static std::map<ci::gl::Texture*, MemoryProbe> probes;
+        static std::map<ci::gl::Texture*, Record> records;
 
         // ---
         
-        static inline ci::gl::TextureRef loadTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE)
-        {
-            return loadTexture(Texture::Request(inputSource, useMipmap, flags));
-        }
-        
-        static ci::gl::TextureRef loadTexture(const Texture::Request &textureRequest);
-        
+        static Texture::Ref loadTexture(const Texture::Request &textureRequest);
+
+        static ci::gl::Texture* loadTarget(const Texture::Request &textureRequest);
         static Texture::Data fetchTextureData(const Texture::Request &textureRequest);
-        static ci::gl::TextureRef uploadTextureData(const Texture::Data &textureData);
+        static ci::gl::Texture* uploadTextureData(const Texture::Data &textureData);
         
         static ci::Vec2i getTextureSize(const Texture::Data &textureData);
         static int64_t getTextureMemoryUsage(const Texture::Data &textureData);
         
     protected:
-        static void textureDeallocator(void *refcon);
         static bool isOverSized(const Texture::Request &textureRequest, const ci::Vec2i &size);
 
         static Texture::Data fetchTranslucentTextureData(const Texture::Request &textureRequest);

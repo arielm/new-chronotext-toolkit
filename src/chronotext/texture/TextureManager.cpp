@@ -7,6 +7,7 @@
  */
 
 #include "chronotext/texture/TextureManager.h"
+#include "chronotext/texture/TextureHelper.h"
 
 using namespace std;
 using namespace ci;
@@ -25,7 +26,8 @@ namespace chr
             return it->second;
         }
         
-        auto texture = make_shared<Texture>(request);
+        auto target = TextureHelper::loadTarget(request); // CAN THROW
+        auto texture = Texture::Ref(new Texture(request, target, ++textureCounter)); // make_shared CAN'T BE USED WITH PROTECTED CONSTRUCTORS
         textures[request] = texture;
         
         return texture;

@@ -169,7 +169,7 @@ namespace chr
         return buffer;
     }
     
-    gl::TextureRef PVRHelper::loadTexture(const Buffer &buffer, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    gl::Texture* PVRHelper::loadTexture(const Buffer &buffer, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
         PVRTexHeader *header = (PVRTexHeader*)buffer.getData();
         
@@ -249,7 +249,7 @@ namespace chr
             glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
         }
         
-        return gl::Texture::create(GL_TEXTURE_2D, name, width, height, false);
+        return new gl::Texture(GL_TEXTURE_2D, name, width, height, false);
     }
     
     Vec2i PVRHelper::getTextureSize(const Buffer &buffer)

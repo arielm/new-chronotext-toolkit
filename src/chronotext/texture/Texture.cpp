@@ -17,25 +17,15 @@ using namespace chr::utils;
 
 namespace chr
 {
-    Texture::Texture(InputSource::Ref inputSource, bool useMipmap, Request::Flags flags)
+    Texture::Texture(const Request &request, ci::gl::Texture *target, int uniqueId)
     :
-    Texture(Request(inputSource, useMipmap, flags))
-    {}
-    
-    Texture::Texture(const Request &request)
-    :
-    Texture(TextureHelper::fetchTextureData(request))
-    {}
-    
-    Texture::Texture(const Data &data)
-    :
-    request(data.request),
-    glId(0)
+    request(request),
+    uniqueId(uniqueId),
+    target(nullptr)
     {
-        setTarget(TextureHelper::uploadTextureData(data));
-        memoryUsage = TextureHelper::getTextureMemoryUsage(data);
+        setTarget(target);
     }
-    
+
     Texture::~Texture()
     {
         resetTarget();
@@ -50,10 +40,15 @@ namespace chr
     {
         if (!target)
         {
-            setTarget(TextureHelper::loadTexture(request));
+            setTarget(TextureHelper::loadTarget(request));
         }
         
         return bool(target);
+    }
+    
+    int64_t Texture::getMemoryUsage() const
+    {
+        return memoryUsage;
     }
     
     int Texture::getWidth() const
@@ -101,32 +96,36 @@ namespace chr
         return Vec2f(maxU, maxV);
     }
     
-    int64_t Texture::getMemoryUsage() const
+    void Texture::setTarget(ci::gl::Texture* target)
     {
-        return memoryUsage;
-    }
-    
-    void Texture::setTarget(ci::gl::TextureRef target)
-    {
-        if (!Texture::target)
+        if (!target)
         {
-            Texture::target = target;
-            glId = target->getId();
+            resetTarget();
+        }
+        else if (!Texture::target)
+        {
+            auto it = TextureHelper::records.find(target);
+            
+            if (it == TextureHelper::records.end())
+            {
+                throw EXCEPTION(Texture, "UNREGISTERED TARGET");
+            }
+            
+            const auto &record = it->second;
             
             // ---
             
             stringstream memoryStats;
             
-            if (TextureManager::LOG_VERBOSE && TextureManager::PROBE_MEMORY)
+            if (TextureManager::PROBE_MEMORY)
             {
                 auto memoryInfo = getMemoryInfo();
-                const auto &memoryProbe = TextureHelper::probes[target.get()];
                 
-                auto delta1 = memory::compare(memoryProbe.memoryInfo[0], memoryProbe.memoryInfo[1]);
-                auto delta2 = memory::compare(memoryProbe.memoryInfo[1], memoryInfo);
+                auto delta1 = memory::compare(record.memoryInfo[0], record.memoryInfo[1]);
+                auto delta2 = memory::compare(record.memoryInfo[1], memoryInfo);
                 
                 memoryStats << " | " <<
-                format::bytes(memoryProbe.memoryUsage) << ", " <<
+                format::bytes(record.memoryUsage) << ", " <<
                 format::bytes(delta1) << ", " <<
                 format::bytes(delta2) << " " <<
                 memoryInfo;
@@ -134,6 +133,10 @@ namespace chr
             
             // ---
             
+            Texture::target = target;
+            memoryUsage = record.memoryUsage;
+            
+            glId = target->getId();
             width = target->getWidth();
             height = target->getHeight();
             maxU = target->getMaxU();
@@ -144,7 +147,7 @@ namespace chr
             LOGI_IF(TextureManager::LOG_VERBOSE) <<
             "TEXTURE UPLOADED: " <<
             request.inputSource->getFilePathHint() << " | " <<
-            glId << " | " <<
+            uniqueId << " | " <<
             width << "x" << height <<
             memoryStats.str() <<
             endl;
@@ -155,41 +158,49 @@ namespace chr
     {
         if (target)
         {
-            auto previousTarget = target.get();
-            auto previousGLId = glId;
+            MemoryInfo memoryInfo1;
             
-            target.reset();
+            if (TextureManager::PROBE_MEMORY)
+            {
+                memoryInfo1 = getMemoryInfo();
+            }
+
+            delete target;
+            target = nullptr;
+            
             glId = 0;
             
             // ---
             
             stringstream memoryStats;
             
-            if (TextureManager::LOG_VERBOSE && TextureManager::PROBE_MEMORY)
+            if (TextureManager::PROBE_MEMORY)
             {
-                auto memoryInfo = getMemoryInfo();
-                const auto &memoryProbe = TextureHelper::probes[previousTarget];
-                
-                auto delta = memory::compare(memoryProbe.memoryInfo[2], memoryInfo);
+                auto memoryInfo2 = getMemoryInfo();
+                auto delta = memory::compare(memoryInfo1, memoryInfo2);
                 
                 memoryStats << " | " <<
-                format::bytes(memoryProbe.memoryUsage) << ", " <<
+                format::bytes(memoryUsage) << ", " <<
                 format::bytes(delta) << " " <<
-                memoryInfo;
+                memoryInfo2;
             }
             
             LOGI_IF(TextureManager::LOG_VERBOSE) <<
             "TEXTURE DISCARDED: " <<
-            previousGLId <<
+            uniqueId <<
             memoryStats.str() <<
             endl;
         }
     }
     
-    void Texture::bind()
+    bool Texture::bind()
     {
-        reload();
-        glBindTexture(GL_TEXTURE_2D, glId);
+        if (reload())
+        {
+            glBindTexture(GL_TEXTURE_2D, glId);
+        }
+
+        return glId;
     }
     
     void Texture::begin()

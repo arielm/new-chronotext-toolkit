@@ -36,6 +36,7 @@ namespace chr
         void reloadTextures(int tag = -1); // CAN THROW
         
     protected:
+        int textureCounter = -1;
         std::map<Texture::Request, Texture::Ref> textures;
     };
 }
