@@ -14,7 +14,7 @@ using namespace std;
 
 namespace chr
 {
-    Effect::Effect(const Request &request, int uniqueId, FMOD::Sound *sound)
+    Effect::Effect(const Request &request, FMOD::Sound *sound, int uniqueId)
     :
     request(request),
     uniqueId(uniqueId),
@@ -27,52 +27,38 @@ namespace chr
     {
         resetSound();
     }
-    
-    double Effect::getDuration() const
-    {
-        if (sound)
-        {
-            unsigned int length;
-            sound->getLength(&length, FMOD_TIMEUNIT_MS);
-            
-            return length / 1000.0;
-        }
-        
-        return 0;
-    }
-    
+
     int64_t Effect::getMemoryUsage() const
     {
-        if (sound)
-        {
-            /*
-             * TODO: CONSIDER MEASURING ONCE, UPON CONSTRUCTION
-             *
-             * FIXME: MEASURE DOES NOT SEEM ACCURATE FOR CERTAIN SOUND (ACCORDING TO DATA PRINTED BY DEBUG-VERSION OF FMOD...)
-             */
+        return memoryUsage;
+    }
 
-            unsigned int memoryused;
-            sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr);
-            
-            return memoryused;
-        }
-        
-        return 0;
+    double Effect::getDuration() const
+    {
+        return duration;
     }
     
     void Effect::setSound(FMOD::Sound *sound)
     {
-        if (!Effect::sound)
+        if (!sound)
+        {
+            resetSound();
+        }
+        else if (!Effect::sound)
         {
             Effect::sound = sound;
+            
+            memoryUsage = SoundManager::getSoundMemoryUsage(sound);
+            duration = SoundManager::getSoundDuration(sound);
             
             // ---
             
             LOGI_IF(SoundManager::LOG_VERBOSE) <<
-            "EFFECT CREATED: " <<
+            "EFFECT LOADED: " <<
             request.inputSource->getFilePathHint() << " | " <<
-            getDuration() << "s | " <<
-            utils::format::bytes(getMemoryUsage()) <<
+            uniqueId << " | " <<
+            duration << "s | " <<
+            utils::format::bytes(memoryUsage) <<
             endl;
         }
     }
@@ -87,8 +73,8 @@ namespace chr
             // ---
             
             LOGI_IF(SoundManager::LOG_VERBOSE) <<
-            "EFFECT DESTROYED: " <<
-            request.inputSource->getFilePathHint() <<
+            "EFFECT DISCARDED: " <<
+            uniqueId <<
             endl;
         }
     }

@@ -94,7 +94,6 @@ namespace chr
         
         // ---
         
-        SoundManager();
         ~SoundManager();
         
         void setup(int maxChannels = 32);
@@ -143,22 +142,27 @@ namespace chr
         float getVolume();
         void setVolume(float volume);
         
+        // ---
+        
+        static FMOD::Sound* loadSound(FMOD::System *system, const Effect::Request &request); // CAN THROW
+        
+        static int64_t getSoundMemoryUsage(FMOD::Sound *sound);
+        static double getSoundDuration(FMOD::Sound *sound);
+        
     protected:
-        FMOD::System *system;
-        FMOD::ChannelGroup *masterGroup;
+        FMOD::System *system = nullptr;
+        FMOD::ChannelGroup *masterGroup = nullptr;
+
+        int effectCounter = -1;
+        int playCounter = 0;
 
         std::map<Effect::Request, Effect::Ref> effects;
         std::map<int, std::pair<int, int>> playingEffects;
-        
-        int playCount;
-        int effectCount;
         
         std::set<Listener*> listeners;
         
         bool interruptChannel(int channelId);
         Effect::Ref findByUniqueId(int uniqueId);
         void dispatchEvent(const Event &event);
-        
-        FMOD::Sound* createSound(const Effect::Request &request); // CAN THROW
     };
 }

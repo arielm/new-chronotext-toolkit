@@ -63,8 +63,11 @@ namespace chr
     protected:
         friend SoundManager;
 
+        int64_t memoryUsage;
+        double duration;
+        
         Effect(const Effect &other) = delete;
-        Effect(const Request &request, int uniqueId, FMOD::Sound *sound);
+        Effect(const Request &request, FMOD::Sound *sound, int uniqueId = -1);
 
         void setSound(FMOD::Sound *sound);
         void resetSound();

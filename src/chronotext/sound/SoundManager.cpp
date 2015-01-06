@@ -17,13 +17,6 @@ using namespace ci;
 namespace chr
 {
     atomic<bool> SoundManager::LOG_VERBOSE (false);
-
-    SoundManager::SoundManager()
-    :
-    system(nullptr),
-    playCount(0),
-    effectCount(0)
-    {}
     
     SoundManager::~SoundManager()
     {
@@ -123,8 +116,8 @@ namespace chr
             return it->second;
         }
         
-        auto sound = createSound(request); // CALLED BEFORE effectCount IS INCREMENTED, BECAUSE IT CAN THROW
-        auto effect = Effect::Ref(new Effect(request, ++effectCount, sound));
+        auto sound = loadSound(system, request); // CAN THROW
+        auto effect = Effect::Ref(new Effect(request, sound, ++effectCounter)); // make_shared CAN'T BE USED WITH PROTECTED CONSTRUCTORS
         effects[request] = effect;
         
         return effect;
@@ -157,7 +150,7 @@ namespace chr
         {
             if (!effect->sound)
             {
-                effect->setSound(createSound(effect->request));
+                effect->setSound(loadSound(system, effect->request));
             }
             
             return effect->sound;
@@ -259,7 +252,7 @@ namespace chr
             
             interruptChannel(channelId);
             
-            int playingId = ++playCount;
+            int playingId = ++playCounter;
             playingEffects[playingId] = make_pair(channelId, effect->uniqueId);
             
             dispatchEvent(Event(EVENT_STARTED, effect, channelId, playingId));
@@ -418,28 +411,27 @@ namespace chr
         }
     }
     
-    FMOD::Sound* SoundManager::createSound(const Effect::Request &request)
+    // ---
+    
+    FMOD::Sound* SoundManager::loadSound(FMOD::System *system, const Effect::Request &request)
     {
         FMOD_RESULT result = FMOD_ERR_UNINITIALIZED;
         FMOD::Sound *sound = nullptr;
         
-        if (system)
+        if (request.forceMemoryLoad || !request.inputSource->isFile())
         {
-            if (request.forceMemoryLoad || !request.inputSource->isFile())
-            {
-                auto buffer = request.inputSource->loadDataSource()->getBuffer();
-                
-                FMOD_CREATESOUNDEXINFO exinfo;
-                memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
-                exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
-                exinfo.length = buffer.getDataSize();
-                
-                result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
-            }
-            else
-            {
-                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
-            }
+            auto buffer = request.inputSource->loadDataSource()->getBuffer();
+            
+            FMOD_CREATESOUNDEXINFO exinfo;
+            memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
+            exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
+            exinfo.length = buffer.getDataSize();
+            
+            result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
+        }
+        else
+        {
+            result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
         }
         
         if (result)
@@ -448,5 +440,25 @@ namespace chr
         }
         
         return sound;
+    }
+    
+    int64_t SoundManager::getSoundMemoryUsage(FMOD::Sound *sound)
+    {
+        /*
+         * FIXME: MEASURE DOES NOT SEEM ACCURATE FOR CERTAIN SOUNDS (ACCORDING TO DATA PRINTED BY DEBUG-VERSION OF FMOD...)
+         */
+        
+        unsigned int memoryused;
+        sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr);
+        
+        return memoryused;
+    }
+    
+    double SoundManager::getSoundDuration(FMOD::Sound *sound)
+    {
+        unsigned int length;
+        sound->getLength(&length, FMOD_TIMEUNIT_MS);
+        
+        return length / 1000.0;
     }
 }
