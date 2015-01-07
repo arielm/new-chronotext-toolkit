@@ -93,7 +93,9 @@ namespace chr
         
         namespace format
         {
-            std::string bytes(int64_t value, int precision = 1, const std::string &separator = "");
+            std::string bytes(int64_t bytes, int precision = 1, const std::string &separator = "");
+            std::string time(double seconds, bool rounded = false);
+            std::string duration(double seconds, int precision = 1, const std::string &separator = "");
             std::string percent(double ratio, int precision = 1, const std::string &separator = "");
         }
     }

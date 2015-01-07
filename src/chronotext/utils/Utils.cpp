@@ -149,35 +149,91 @@ namespace chr
             /*
              * REFERENCE: http://stackoverflow.com/a/10096779/50335
              */
-            string bytes(int64_t value, int precision, const string &separator)
+            string bytes(int64_t bytes, int precision, const string &separator)
             {
-                string sign = (value < 0) ? "-" : "";
-                value = fabs(value);
-                
                 static const vector<string> abbrevs {"TB", "GB", "MB", "KB"};
                 double maximum = pow(1024.0, abbrevs.size());
-                
+
+                double value = fabs(bytes);
+
+                stringstream ss;
+                if (bytes < 0) ss << "-";
+
                 for (auto &abbrev : abbrevs)
                 {
                     if (value > maximum)
                     {
-                        stringstream ss;
-                        ss << fixed << setprecision(precision) << sign << (value / maximum) << separator << abbrev;
+                        ss << fixed << setprecision(precision);
+                        ss << (value / maximum) << separator << abbrev;
                         return ss.str();
                     }
                     
                     maximum /= 1024;
                 }
                 
+                ss << value << separator << "B";
+                return ss.str();
+            }
+            
+            string duration(double seconds, int precision, const string &separator)
+            {
+                if (fabs(seconds) >= 60)
+                {
+                    return time(seconds, true);
+                }
+                
+                static const vector<string> abbrevs {"s", "ms", "μs"};
+                double maximum = pow(1000, abbrevs.size());
+                
+                double value = fabs(seconds) * maximum;
+
                 stringstream ss;
-                ss << sign << value << separator << "B";
+                if (value < 0) ss << "-";
+                ss << fixed << setprecision(precision);
+                
+                for (auto &abbrev : abbrevs)
+                {
+                    if (value > maximum)
+                    {
+                        ss << (value / maximum) << separator << abbrev;
+                        return ss.str();
+                    }
+                    
+                    maximum /= 1000;
+                }
+                
+                ss << value << separator << "ns";
+                return ss.str();
+            }
+
+            string time(double seconds, bool rounded)
+            {
+                int time = fabs(seconds) + (rounded ? 0.5 : 0); // ROUNDING IS NOT APPROPRIATE FOR CLOCKS, SCORES, ETC.
+                int hour = time / 3600;
+                
+                time = time % 3600;
+                int min = time / 60;
+                
+                time = time % 60;
+                int sec = time;
+                
+                stringstream ss;
+                if (seconds < 0) ss << "-";
+                ss << setfill('0');
+                
+                if (hour > 0) ss << hour << ":";
+                ss << setw(2) << min << ":";
+                ss << setw(2) << sec;
+                
                 return ss.str();
             }
             
             string percent(double ratio, int precision, const string &separator)
             {
                 stringstream ss;
-                ss << fixed << setprecision(precision) << (fabs(ratio) * 100) << separator << "%"; // FIXME: "%" IS NEVER PRINTED (REPRODUCED ON ANDROID)
+                ss << fixed << setprecision(precision);
+                ss << (fabs(ratio) * 100) << separator << "%"; // FIXME: "%" IS NEVER PRINTED (ONLY ON ANDROID)
+                
                 return ss.str();
             }
         }

@@ -57,7 +57,7 @@ namespace chr
             "EFFECT LOADED: " <<
             request.inputSource->getFilePathHint() << " | " <<
             uniqueId << " | " <<
-            duration << "s | " <<
+            utils::format::duration(duration) << " | " <<
             utils::format::bytes(memoryUsage) <<
             endl;
         }

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/Log.h"
+#include "chronotext/Utils.h"
 
 #include "cinder/Timer.h"
 
@@ -16,16 +16,12 @@ namespace chr
 {
     class Timing
     {
-        std::string msg;
-        bool started;
-        ci::Timer timer;
-        
     public:
-        Timing(const std::string &msg = "")
+        Timing(const std::string &message = "")
         :
         started(false)
         {
-            start(msg);
+            start(message);
         }
         
         ~Timing()
@@ -33,11 +29,11 @@ namespace chr
             stop();
         }
         
-        void start(const std::string &msg = "")
+        void start(const std::string &message = "")
         {
             if (!started)
             {
-                Timing::msg = msg;
+                Timing::message = message;
                 
                 timer.start();
                 started = true;
@@ -48,16 +44,17 @@ namespace chr
         {
             if (started)
             {
-                double tmp = timer.getSeconds();
+                double elapsed = timer.getSeconds();
                 started = false;
                 
-                if (!msg.empty())
-                {
-                    LOGI << msg << ": ";
-                }
-                
-                LOGI << std::setprecision(15) << tmp << std::endl;
+                string prefix = message.empty() ? "" : (message + ": ");
+                LOGI << prefix << utils::format::duration(elapsed, 3) << std::endl;
             }
         }
+        
+    protected:
+        std::string message;
+        bool started;
+        ci::Timer timer;
     };
 }
