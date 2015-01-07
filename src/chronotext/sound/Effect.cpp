@@ -82,7 +82,7 @@ namespace chr
             "EFFECT LOADED: " <<
             request.inputSource->getFilePathHint() << " | " <<
             uniqueId << " | " <<
-            utils::format::duration(duration) << " | " <<
+            utils::format::duration(duration) <<
             memoryStats.str() <<
             endl;
         }
