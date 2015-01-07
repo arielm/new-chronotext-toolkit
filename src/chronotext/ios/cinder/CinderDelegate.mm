@@ -106,37 +106,49 @@ using namespace chr;
     [super dealloc];
 }
 
-- (void) startWithReason:(int)reason
+- (void) startWithReason:(int)reasonId
 {
     frameCount = 0;
     
     timer.start();
     sketch->clock()->start();
     
-    if (reason == REASON_VIEW_WILL_APPEAR)
+    switch (reasonId)
     {
-        sketch->start(CinderSketch::REASON_APP_SHOWN);
-        active = YES;
-    }
-    else
-    {
-        sketch->start(CinderSketch::REASON_APP_RESUMED);
+        case REASON_VIEW_WILL_APPEAR:
+        {
+            sketch->start(CinderSketch::REASON_APP_SHOWN);
+            active = YES;
+            break;
+        }
+            
+        case REASON_APPLICATION_DID_BECOME_ACTIVE:
+        {
+            sketch->start(CinderSketch::REASON_APP_RESUMED);
+            break;
+        }
     }
 }
 
-- (void) stopWithReason:(int)reason
+- (void) stopWithReason:(int)reasonId
 {
     timer.stop();
     sketch->clock()->stop();
     
-    if (reason == REASON_VIEW_WILL_DISAPPEAR)
+    switch (reasonId)
     {
-        sketch->stop(CinderSketch::REASON_APP_HIDDEN);
-        active = NO;
-    }
-    else
-    {
-        sketch->stop(CinderSketch::REASON_APP_PAUSED);
+        case REASON_VIEW_WILL_DISAPPEAR:
+        {
+            sketch->stop(CinderSketch::REASON_APP_HIDDEN);
+            active = NO;
+            break;
+        }
+            
+        case REASON_APPLICATION_WILL_RESIGN_ACTIVE:
+        {
+            sketch->stop(CinderSketch::REASON_APP_PAUSED);
+            break;
+        }
     }
 }
 
@@ -444,7 +456,7 @@ using namespace chr;
 
 #pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
 
-- (void) action:(int)actionId
+- (void) handleAction:(int)actionId
 {}
 
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body

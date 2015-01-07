@@ -296,7 +296,7 @@ void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 
 void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
 {
-    INTERN::delegate->event(eventId);
+    INTERN::delegate->handleEvent(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)

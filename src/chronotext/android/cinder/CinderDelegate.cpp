@@ -321,7 +321,7 @@ namespace chr
     
 #pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
 
-    void CinderDelegate::event(int eventId)
+    void CinderDelegate::handleEvent(int eventId)
     {
         switch (eventId)
         {
@@ -357,13 +357,13 @@ namespace chr
                 sketch->event(CinderSketch::EVENT_FOREGROUND);
                 break;
                 
-            case EVENT_BACK_KEY:
-                sketch->event(CinderSketch::EVENT_BACK_KEY);
+            case EVENT_BACK:
+                sketch->event(CinderSketch::EVENT_BACK);
                 break;
         }
     }
     
-    void CinderDelegate::action(int actionId)
+    void CinderDelegate::handleAction(int actionId)
     {
         jni::callVoidMethodOnListener("action", "(I)V", actionId);
     }

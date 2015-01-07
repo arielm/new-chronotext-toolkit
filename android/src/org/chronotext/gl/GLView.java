@@ -36,12 +36,11 @@ public class GLView extends GLSurfaceView
   protected boolean finishing;
   protected boolean destroyed;
 
-  public GLView(Context context, CinderDelegate delegate, CinderRenderer renderer)
+  public GLView(Context context, CinderDelegate delegate)
   {
     super(context);
 
     cinderDelegate = delegate;
-    cinderRenderer = renderer;
 
     // ---
 
@@ -62,6 +61,7 @@ public class GLView extends GLSurfaceView
 
     // ---
 
+    cinderRenderer = new CinderRenderer();
     setRenderer(cinderRenderer); // WILL START THE RENDERER'S THREAD
 
     queueEvent(new Runnable()
@@ -147,7 +147,6 @@ public class GLView extends GLSurfaceView
   {
     if (destroyed)
     {
-      Utils.LOGE("GLView IS INVALID");
       return;
     }
     
@@ -176,7 +175,6 @@ public class GLView extends GLSurfaceView
   {
     if (destroyed)
     {
-      Utils.LOGE("GLView IS INVALID");
       return;
     }
 
@@ -202,6 +200,11 @@ public class GLView extends GLSurfaceView
    */
   public void onDestroy()
   {
+    if (destroyed)
+    {
+      return;
+    }
+
     /*
      * INTENDED TO BE USED BY CustomContextFactory.destroyContext() ON THE RENDERER'S THREAD
      *
@@ -211,6 +214,27 @@ public class GLView extends GLSurfaceView
     finishing = true;
 
     cinderDelegate.finishing();
+  }
+
+  /*
+   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
+   */
+  public boolean onBackPressed()
+  {
+    if (destroyed)
+    {
+      return false;
+    }
+
+    queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        cinderRenderer.event(CinderRenderer.EVENT_BACK); 
+      }
+    });
+
+    return true;
   }
 
   @Override

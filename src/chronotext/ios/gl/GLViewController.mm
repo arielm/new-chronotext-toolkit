@@ -30,15 +30,15 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
     BOOL started;
     BOOL startRequest;
-    int startReason;
+    int startReasonId;
     
     int ticks;
     NSTimeInterval t0;
     NSTimeInterval elapsed;
 }
 
-- (void) startWithReason:(int)reason;
-- (void) stopWithReason:(int)reason;
+- (void) startWithReason:(int)reasonId;
+- (void) stopWithReason:(int)reasonId;
 
 @end
 
@@ -128,7 +128,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     
     if (self.view)
     {
-        NSLog(@"GLViewController - viewWillAppear");
+        NSLog(@"GLViewController - viewWillAppear"); // LOG: VERBOSE
         [self startWithReason:REASON_VIEW_WILL_APPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -143,7 +143,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     
     if (self.view)
     {
-        NSLog(@"GLViewController - viewWillDisappear");
+        NSLog(@"GLViewController - viewWillDisappear"); // LOG: VERBOSE
         [self stopWithReason:REASON_VIEW_WILL_DISAPPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -152,7 +152,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     }
 }
 
-- (void) startWithReason:(int)reason
+- (void) startWithReason:(int)reasonId
 {
     if (!started)
     {
@@ -163,17 +163,17 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         
         started = YES;
         startRequest = YES;
-        startReason = reason;
+        startReasonId = reasonId;
     }
 }
 
-- (void) stopWithReason:(int)reason
+- (void) stopWithReason:(int)reasonId
 {
     if (started)
     {
-        NSLog(@"AVERAGE FRAME-RATE: %f FRAMES PER SECOND", ticks / elapsed);
+        NSLog(@"AVERAGE FRAME-RATE: %f FRAMES PER SECOND", ticks / elapsed); // LOG: VERBOSE
         
-        [cinderDelegate stopWithReason:reason];
+        [cinderDelegate stopWithReason:reasonId];
         
         started = NO;
     }
@@ -191,7 +191,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         
         if (startRequest)
         {
-            [cinderDelegate startWithReason:startReason];
+            [cinderDelegate startWithReason:startReasonId];
         }
         
         // ---
@@ -304,7 +304,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (self.view)
     {
-        NSLog(@"GLViewController - applicationDidBecomeActive");
+        NSLog(@"GLViewController - applicationDidBecomeActive"); // LOG: VERBOSE
         [self startWithReason:REASON_APPLICATION_DID_BECOME_ACTIVE];
     }
 }
@@ -313,7 +313,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (self.view)
     {
-        NSLog(@"GLViewController - applicationWillResignActive");
+        NSLog(@"GLViewController - applicationWillResignActive"); // LOG: VERBOSE
         [self stopWithReason:REASON_APPLICATION_WILL_RESIGN_ACTIVE];
     }
 }

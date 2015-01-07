@@ -24,9 +24,9 @@ namespace chr
         virtual void sketchCreated(CinderSketch *sketch) {}
         virtual void sketchDestroyed(CinderSketch *sketch) {}
 
-        virtual void action(int actionId) {}
-        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
+        virtual bool handleAction(int actionId);
         virtual void sendMessageToSketch(int what, const std::string &body = "");
+        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
 
         virtual void applyDefaultSettings(Settings *settings);
         virtual void applySettings(Settings *settings) {}
@@ -47,6 +47,9 @@ namespace chr
         void touchesMoved(ci::app::TouchEvent event) final;
         void touchesEnded(ci::app::TouchEvent event) final;
         
+        void keyDown(ci::app::KeyEvent event) final;
+        void keyUp(ci::app::KeyEvent event) final;
+        
         bool isEmulated() const;
         const WindowInfo& getWindowInfo() const;
         
@@ -59,6 +62,9 @@ namespace chr
         
         int startCount = 0;
         int updateCount = 0;
+        
+        bool backCaptured = false;
+        bool escapeCaptured = false;
 
         system::InitInfo initInfo;
         WindowInfo windowInfo;

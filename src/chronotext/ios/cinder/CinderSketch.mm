@@ -53,11 +53,11 @@ namespace chr
         return castToDelegate(delegate).windowInfo;
     }
     
-#pragma mark ---------------------------------------- MESSAGES AND ACTIONS ----------------------------------------
+#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
     
     void CinderSketch::action(int actionId)
     {
-        [castToDelegate(delegate) action:actionId];
+        [castToDelegate(delegate) handleAction:actionId];
     }
     
     void CinderSketch::sendMessageToDelegate(int what, const string &body)

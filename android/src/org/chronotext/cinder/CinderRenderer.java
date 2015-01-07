@@ -32,7 +32,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   public static final int EVENT_CONTEXT_RENEWED = 6;
   public static final int EVENT_BACKGROUND = 7;
   public static final int EVENT_FOREGROUND = 8;
-  public static final int EVENT_BACK_KEY = 9;
+  public static final int EVENT_BACK = 9;
 
   public static final int REASON_RESUMED = 1;
   public static final int REASON_SHOWN = 2;

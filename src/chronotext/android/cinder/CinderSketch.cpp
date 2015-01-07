@@ -50,7 +50,7 @@ namespace chr
     
     void CinderSketch::action(int actionId)
     {
-        delegate->action(actionId);
+        delegate->handleAction(actionId);
     }
     
     void CinderSketch::sendMessageToDelegate(int what, const string &body)

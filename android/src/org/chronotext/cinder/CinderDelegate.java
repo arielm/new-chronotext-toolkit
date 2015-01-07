@@ -29,16 +29,15 @@ import android.view.View;
 public class CinderDelegate extends Handler
 {
   /*
-   * PARALLEL TO chronotext/cinder/CinderDelegate.h
+   * PARALLEL TO chronotext/cinder/CinderSketch.h
    */
-  public static final int ACTION_CAPTURE_BACK_KEY = 1;
-  public static final int ACTION_RELEASE_BACK_KEY = 2;
+  public static final int ACTION_CAPTURE_BACK = 1;
+  public static final int ACTION_RELEASE_BACK = 2;
 
   protected Activity activity;
-  protected CinderRenderer cinderRenderer;
   protected GLView glView;
   
-  protected boolean backKeyCaptured;
+  protected boolean backCaptured;
 
   public CinderDelegate(Activity _activity)
   {
@@ -46,8 +45,7 @@ public class CinderDelegate extends Handler
 
     performInit(); // WILL CREATE THE C++ CinderDelegate
 
-    cinderRenderer = new CinderRenderer();
-    glView = new GLView(activity, this, cinderRenderer); // WILL START THE RENDERER'S THREAD
+    glView = new GLView(activity, this); // WILL START THE RENDERER'S THREAD
   }
 
   public Activity getActivity()
@@ -88,19 +86,16 @@ public class CinderDelegate extends Handler
     init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
   }
 
-  protected void handleAction(int actionId)
-  {
-    switch (actionId)
-    {
-      case ACTION_CAPTURE_BACK_KEY:
-        backKeyCaptured = true;
-        break;
+  // ---------------------------------------- INVOKED ON THE MAIN-THREAD FROM GLView ----------------------------------------
 
-      case ACTION_RELEASE_BACK_KEY:
-        backKeyCaptured = false;
-        break;
-    }
-  }
+  public void pausing()
+  {}
+
+  public void resuming()
+  {}
+
+  public void finishing()
+  {}
 
   // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERRIDE) ----------------------------------------
 
@@ -131,51 +126,40 @@ public class CinderDelegate extends Handler
     glView.onDestroy();
   }
   
+  /*
+   * WILL BE QUEUED TO THE RENDERER'S THREAD
+   */
   public boolean onBackPressed()
   {
     Utils.LOGD("CinderDelegate.onBackPressed");
 
-    if (backKeyCaptured)
+    if (backCaptured)
     {
-      glView.queueEvent(new Runnable()
-      {
-        public void run()
-        {
-          cinderRenderer.event(CinderRenderer.EVENT_BACK_KEY); 
-        }
-      });
-
-      return true;
+      return glView.onBackPressed();
     }
 
     return false;
   }
-
-  // ---------------------------------------- CALLBACKS INVOKED ON THE MAIN-THREAD ----------------------------------------
-
-  public void pausing()
-  {}
-
-  public void resuming()
-  {}
-
-  public void finishing()
-  {}
 
   // ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
 
   /*
    * INVOKED ON THE RENDERER'S THREAD
    */
-  public void action(final int actionId)
+  public boolean handleAction(int actionId)
   {
-    activity.runOnUiThread(new Runnable()
+    switch (actionId)
     {
-      public void run()
-      {
-        handleAction(actionId);
-      }
-    });
+      case ACTION_CAPTURE_BACK:
+        backCaptured = true;
+        return true;
+
+      case ACTION_RELEASE_BACK:
+        backCaptured = false;
+        return true;
+    }
+
+    return false;
   }
 
   /*
@@ -183,7 +167,7 @@ public class CinderDelegate extends Handler
    */
   public void receiveMessageFromSketch(int what, String body)
   {
-      sendMessage(Message.obtain(this, what, body));
+    sendMessage(Message.obtain(this, what, body));
   }
 
   /*

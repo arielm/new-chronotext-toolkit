@@ -160,7 +160,7 @@ namespace chr
         return initInfo.emulated ? initInfo.emulatedDevice.windowInfo : windowInfo;
     }
     
-#pragma mark ---------------------------------------- INPUT ----------------------------------------
+#pragma mark ---------------------------------------- TOUCH ----------------------------------------
     
     void CinderDelegate::mouseDown(MouseEvent event)
     {
@@ -201,8 +201,78 @@ namespace chr
         }
     }
     
+#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
+
+    void CinderDelegate::keyDown(KeyEvent event)
+    {
+        if (sketch->keyDown(event))
+        {
+            return;
+        }
+        
+        switch (event.getCode())
+        {
+            case KeyEvent::KEY_BACKSPACE:
+            {
+                if (backCaptured)
+                {
+                    sketch->event(CinderSketch::EVENT_BACK);
+                }
+                else
+                {
+                    quit();
+                }
+                
+                return;
+            }
+                
+            case KeyEvent::KEY_ESCAPE:
+            {
+                if (escapeCaptured)
+                {
+                    sketch->event(CinderSketch::EVENT_ESCAPE);
+                }
+                else
+                {
+                    quit();
+                }
+                
+                return;
+            }
+        }
+    }
+    
+    void CinderDelegate::keyUp(KeyEvent event)
+    {
+        sketch->keyUp(event);
+    }
+    
 #pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
     
+    bool CinderDelegate::handleAction(int actionId)
+    {
+        switch (actionId)
+        {
+            case CinderSketch::ACTION_CAPTURE_BACK:
+                backCaptured = true;
+                return true;
+                
+            case CinderSketch::ACTION_RELEASE_BACK:
+                backCaptured = false;
+                return true;
+                
+            case CinderSketch::ACTION_CAPTURE_ESCAPE:
+                escapeCaptured = true;
+                return true;
+                
+            case CinderSketch::ACTION_RELEASE_ESCAPE:
+                escapeCaptured = false;
+                return true;
+        }
+        
+        return false;
+    }
+
     void CinderDelegate::sendMessageToSketch(int what, const string &body)
     {
         sketch->sendMessage(Message(what, body));

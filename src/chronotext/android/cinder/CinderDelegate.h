@@ -34,16 +34,7 @@ namespace chr
             EVENT_CONTEXT_RENEWED = 6,
             EVENT_BACKGROUND = 7,
             EVENT_FOREGROUND = 8,
-            EVENT_BACK_KEY = 9
-        };
-        
-        /*
-         * PARALLEL TO android/cinder/CinderDelegate.java
-         */
-        enum
-        {
-            ACTION_CAPTURE_BACK_KEY = 1,
-            ACTION_RELEASE_BACK_KEY = 2
+            EVENT_BACK = 9
         };
         
     public:
@@ -55,8 +46,8 @@ namespace chr
         void sketchCreated(CinderSketch *sketch) {}
         void sketchDestroyed(CinderSketch *sketch) {}
 
-        void event(int eventId);
-        void action(int actionId);
+        void handleEvent(int eventId);
+        void handleAction(int actionId);
         
         void receiveMessageFromSketch(int what, const std::string &body);
         void sendMessageToSketch(int what, const std::string &body = "");

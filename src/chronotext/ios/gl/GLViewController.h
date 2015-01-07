@@ -26,7 +26,7 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
     CinderDelegate *cinderDelegate;
 }
 
-@property (nonatomic, assign) GLKView *glView;
+@property (nonatomic, readonly) GLKView *glView;
 @property (nonatomic, assign) CinderDelegate *cinderDelegate;
 
 - (id) initWithProperties:(NSDictionary*)props;

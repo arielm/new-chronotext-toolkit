@@ -14,6 +14,7 @@
 #include "chronotext/utils/accel/AccelEvent.h"
 
 #include "cinder/Timeline.h"
+#include "cinder/app/KeyEvent.h"
 
 namespace chr
 {
@@ -35,7 +36,19 @@ namespace chr
             EVENT_MEMORY_WARNING,
             EVENT_CONTEXT_LOST,
             EVENT_CONTEXT_RENEWED,
-            EVENT_BACK_KEY
+            EVENT_BACK,
+            EVENT_ESCAPE
+        };
+        
+        /*
+         * PURPOSELY NON-TYPED AND OPEN
+         */
+        enum
+        {
+            ACTION_CAPTURE_BACK = 1,
+            ACTION_RELEASE_BACK = 2,
+            ACTION_CAPTURE_ESCAPE = 3,
+            ACTION_RELEASE_ESCAPE = 4,
         };
         
         virtual ~CinderSketchBase() {}
@@ -58,6 +71,9 @@ namespace chr
         virtual void updateTouch(int index, float x, float y) {}
         virtual void removeTouch(int index, float x, float y) {}
         
+        virtual bool keyDown(const ci::app::KeyEvent &event) { return false; }
+        virtual bool keyUp(const ci::app::KeyEvent &event) { return false; }
+        
         virtual void accelerated(AccelEvent event) {}
         virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
         virtual void disableAccelerometer() {}
@@ -71,14 +87,14 @@ namespace chr
         virtual bool isEmulated() const = 0;
         virtual const WindowInfo& getWindowInfo() const = 0;
 
+        virtual void action(int actionId) = 0;
+        virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
+
         virtual ci::Vec2i getWindowSize() const { return getWindowInfo().size; }
         virtual int getWindowWidth() const { return getWindowInfo().size.x; };
         virtual int getWindowHeight() const { return getWindowInfo().size.y; };
         virtual ci::Area getWindowBounds() const { return getWindowInfo().bounds(); };
         virtual ci::Vec2f getWindowCenter() const { return getWindowInfo().center(); };
         virtual float getWindowAspectRatio() const { return getWindowInfo().aspectRatio(); };
-        
-        virtual void action(int actionId) = 0;
-        virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
     };
 }

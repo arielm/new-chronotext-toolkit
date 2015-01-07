@@ -44,8 +44,8 @@ enum
 @property (nonatomic, readonly) uint32_t elapsedFrames;
 @property (nonatomic, readonly) BOOL emulated;
 
-- (void) startWithReason:(int)reason;
-- (void) stopWithReason:(int)reason;
+- (void) startWithReason:(int)reasonId;
+- (void) stopWithReason:(int)reasonId;
 
 - (void) setup;
 - (void) resize;
@@ -57,7 +57,7 @@ enum
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
 
-- (void) action:(int)actionId;
+- (void) handleAction:(int)actionId;
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;
