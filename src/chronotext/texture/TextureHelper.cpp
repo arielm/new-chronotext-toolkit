@@ -18,11 +18,7 @@ using namespace ci;
 
 namespace chr
 {
-    namespace intern
-    {
-        MemoryInfo memoryInfo[2];
-    }
-    
+    MemoryInfo TextureHelper::memoryInfo[2];
     map<gl::Texture*, TextureHelper::Record> TextureHelper::records;
 
     // ---
@@ -57,7 +53,7 @@ namespace chr
     {
         if (TextureManager::PROBE_MEMORY)
         {
-            intern::memoryInfo[0] = getMemoryInfo();
+            memoryInfo[0] = getMemoryInfo();
         }
         
         if (boost::ends_with(textureRequest.inputSource->getFilePathHint(), ".pvr.gz"))
@@ -106,7 +102,7 @@ namespace chr
         {
             if (TextureManager::PROBE_MEMORY)
             {
-                intern::memoryInfo[1] = getMemoryInfo();
+                memoryInfo[1] = getMemoryInfo();
             }
             
             /*
@@ -154,7 +150,7 @@ namespace chr
             if (texture)
             {
                 auto memoryUsage = getTextureMemoryUsage(textureData);
-                records[texture] = Record({memoryUsage, intern::memoryInfo[0], intern::memoryInfo[1]});
+                records[texture] = Record({memoryUsage, memoryInfo[0], memoryInfo[1]});
             }
         }
         

@@ -17,6 +17,7 @@ using namespace ci;
 namespace chr
 {
     atomic<bool> SoundManager::LOG_VERBOSE (false);
+    atomic<bool> SoundManager::PROBE_MEMORY (false);
     
     SoundManager::~SoundManager()
     {
@@ -400,7 +401,7 @@ namespace chr
             }
         }
         
-        assert(false); // UNREACHABLE (AS LONG AS THE FUNCTION IS NOT PUBLIC)
+        assert(false); // UNREACHABLE (AS LONG AS THE FUNCTION IS NOT PUBLIC: uniqueId IS SAFE)
     }
     
     void SoundManager::dispatchEvent(const Event &event)
@@ -413,8 +414,18 @@ namespace chr
     
     // ---
     
+    MemoryInfo SoundManager::memoryInfo[1];
+    map<FMOD::Sound*, SoundManager::Record> SoundManager::records;
+    
     FMOD::Sound* SoundManager::loadSound(FMOD::System *system, const Effect::Request &request)
     {
+        if (SoundManager::PROBE_MEMORY)
+        {
+            memoryInfo[0] = getMemoryInfo();
+        }
+        
+        // ---
+        
         FMOD_RESULT result = FMOD_ERR_UNINITIALIZED;
         FMOD::Sound *sound = nullptr;
         
@@ -438,16 +449,19 @@ namespace chr
         {
             throw EXCEPTION(SoundManager, FMOD_ErrorString(result));
         }
+
+        assert(sound);
+
+        // ---
+        
+        auto memoryUsage = getSoundMemoryUsage(sound);
+        records[sound] = Record({memoryUsage, memoryInfo[0]});
         
         return sound;
     }
     
     int64_t SoundManager::getSoundMemoryUsage(FMOD::Sound *sound)
     {
-        /*
-         * FIXME: MEASURE DOES NOT SEEM ACCURATE FOR CERTAIN SOUNDS (ACCORDING TO DATA PRINTED BY DEBUG-VERSION OF FMOD...)
-         */
-        
         unsigned int memoryused;
         sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr);
         

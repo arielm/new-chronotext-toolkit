@@ -115,6 +115,17 @@ namespace chr
             
             // ---
             
+            Texture::target = target;
+            memoryUsage = record.memoryUsage;
+            
+            glId = target->getId();
+            width = target->getWidth();
+            height = target->getHeight();
+            maxU = target->getMaxU();
+            maxV = target->getMaxV();
+            
+            // ---
+            
             stringstream memoryStats;
             
             if (TextureManager::PROBE_MEMORY)
@@ -125,22 +136,11 @@ namespace chr
                 auto delta2 = memory::compare(record.memoryInfo[1], memoryInfo);
                 
                 memoryStats << " | " <<
-                format::bytes(record.memoryUsage) << ", " <<
+                format::bytes(memoryUsage) << ", " <<
                 format::bytes(delta1) << ", " <<
                 format::bytes(delta2) << " " <<
                 memoryInfo;
             }
-            
-            // ---
-            
-            Texture::target = target;
-            memoryUsage = record.memoryUsage;
-            
-            glId = target->getId();
-            width = target->getWidth();
-            height = target->getHeight();
-            maxU = target->getMaxU();
-            maxV = target->getMaxV();
             
             // ---
             

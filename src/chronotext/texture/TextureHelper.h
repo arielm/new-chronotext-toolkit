@@ -38,6 +38,7 @@ namespace chr
             MemoryInfo memoryInfo[2];
         };
         
+        static MemoryInfo memoryInfo[2];
         static std::map<ci::gl::Texture*, Record> records;
 
         // ---

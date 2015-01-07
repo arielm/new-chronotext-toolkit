@@ -9,17 +9,24 @@
 /*
  * TODO:
  *
- * 1) FIND A WAY TO ENFORCE THE CALLING OF pause() AND resume()
+ * 1) CONTINUE WITH MEMORY-MEASUREMENT:
+ *    - UNDERSTAND WHY NO MEMORY SEEMS TO BE RELEASED WHEN (WAV) SOUND IS RELEASED
+ *    - TEST WITH MP3 FILES
+ *    - TEST WITH MEMORY-STREAMING
+ *    - ETC.
+ *
+ * 2) FIND A WAY TO ENFORCE THE CALLING OF pause() AND resume()
  *    - NECESSARY ON ANDROID, UPON FOREGROUND/BACKGROUND SWITCHES
-
- * 2) PROBE MEMORY (AND MORE...)
- *    - AS IN TextureHelper AND Texture
+ *
+ *
+ * HINT: SOME USEFUL INFO IS PRINTED WHEN USING DEBUG-VERSION OF FMOD
  */
 
 #pragma once
 
 #include "chronotext/Exception.h"
 #include "chronotext/sound/Effect.h"
+#include "chronotext/system/MemoryInfo.h"
 
 #include <map>
 #include <set>
@@ -31,6 +38,9 @@ namespace chr
     {
     public:
         static std::atomic<bool> LOG_VERBOSE;
+        static std::atomic<bool> PROBE_MEMORY;
+        
+        // ---
 
         enum Type
         {
@@ -144,8 +154,16 @@ namespace chr
         
         // ---
         
-        static FMOD::Sound* loadSound(FMOD::System *system, const Effect::Request &request); // CAN THROW
+        struct Record
+        {
+            int64_t memoryUsage;
+            MemoryInfo memoryInfo[1];
+        };
         
+        static MemoryInfo memoryInfo[1];
+        static std::map<FMOD::Sound*, Record> records;
+        
+        static FMOD::Sound* loadSound(FMOD::System *system, const Effect::Request &request); // CAN THROW
         static int64_t getSoundMemoryUsage(FMOD::Sound *sound);
         static double getSoundDuration(FMOD::Sound *sound);
         

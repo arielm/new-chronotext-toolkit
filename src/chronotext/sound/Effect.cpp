@@ -11,6 +11,7 @@
 #include "chronotext/Context.h"
 
 using namespace std;
+using namespace chr::utils;
 
 namespace chr
 {
@@ -46,19 +47,43 @@ namespace chr
         }
         else if (!Effect::sound)
         {
-            Effect::sound = sound;
+            auto it = SoundManager::records.find(sound);
             
-            memoryUsage = SoundManager::getSoundMemoryUsage(sound);
-            duration = SoundManager::getSoundDuration(sound);
+            if (it == SoundManager::records.end())
+            {
+                throw EXCEPTION(Effect, "UNREGISTERED SOUND");
+            }
             
+            const auto &record = it->second;
+
             // ---
+            
+            Effect::sound = sound;
+            memoryUsage = record.memoryUsage;
+            
+            duration = SoundManager::getSoundDuration(sound);
+
+            // ---
+            
+            stringstream memoryStats;
+            
+            if (SoundManager::PROBE_MEMORY)
+            {
+                auto memoryInfo = getMemoryInfo();
+                auto delta = memory::compare(record.memoryInfo[0], memoryInfo);
+                
+                memoryStats << " | " <<
+                format::bytes(memoryUsage) << ", " <<
+                format::bytes(delta) << " " <<
+                memoryInfo;
+            }
             
             LOGI_IF(SoundManager::LOG_VERBOSE) <<
             "EFFECT LOADED: " <<
             request.inputSource->getFilePathHint() << " | " <<
             uniqueId << " | " <<
             utils::format::duration(duration) << " | " <<
-            utils::format::bytes(memoryUsage) <<
+            memoryStats.str() <<
             endl;
         }
     }
@@ -67,14 +92,36 @@ namespace chr
     {
         if (sound)
         {
+            MemoryInfo memoryInfo1;
+            
+            if (SoundManager::PROBE_MEMORY)
+            {
+                memoryInfo1 = getMemoryInfo();
+            }
+            
             sound->release();
             sound = nullptr;
             
             // ---
             
+            stringstream memoryStats;
+            
+            if (SoundManager::PROBE_MEMORY)
+            {
+                auto memoryInfo2 = getMemoryInfo();
+                auto delta = memory::compare(memoryInfo1, memoryInfo2);
+                
+                memoryStats << " | " <<
+                format::bytes(memoryUsage) << ", " <<
+                format::bytes(delta) << " " <<
+                memoryInfo2;
+            }
+            
             LOGI_IF(SoundManager::LOG_VERBOSE) <<
             "EFFECT DISCARDED: " <<
             uniqueId <<
+            memoryStats.str() <<
+            
             endl;
         }
     }
