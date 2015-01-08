@@ -188,7 +188,7 @@ public class CinderDelegate extends Handler
 
   // ---------------------------------------- QUERIES (TO BE CALLED FROM ANY THREAD ATTACHED TO JAVA) ----------------------------------------
 
-  public String getMemoryInfo()
+  public synchronized String getMemoryInfo()
   {
     MemoryInfo memoryInfo = new MemoryInfo();
     ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryInfo(memoryInfo);

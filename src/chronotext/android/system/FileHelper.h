@@ -34,10 +34,10 @@ namespace chr
             static void setup(const system::InitInfo &initInfo);
             static void shutdown();
 
-            static AAssetManager* getAndroidAssetManager();
-            static ci::fs::path getAndroidInternalDataPath();
-            static ci::fs::path getAndroidExternalDataPath();
-            static ci::fs::path getAndroidApkPath();
+            static AAssetManager* getAssetManager();
+            static ci::fs::path getInternalDataPath();
+            static ci::fs::path getExternalDataPath();
+            static ci::fs::path getApkPath();
         };
     }
 }

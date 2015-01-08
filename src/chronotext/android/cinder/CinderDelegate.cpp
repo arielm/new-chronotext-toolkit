@@ -229,7 +229,6 @@ namespace chr
      *
      * PROBABLY OVERKILL...
      */
-    
     static void canonicalToWorld(int displayRotation, float *canVec, ci::Vec3f &worldVec)
     {
         struct AxisSwap
@@ -365,7 +364,7 @@ namespace chr
     
     void CinderDelegate::handleAction(int actionId)
     {
-        jni::callVoidMethodOnListener("action", "(I)V", actionId);
+        jni::callBooleanMethodOnListener("handleAction", "(I)Z", actionId);
     }
     
     /*

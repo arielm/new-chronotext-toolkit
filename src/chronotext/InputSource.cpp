@@ -194,12 +194,12 @@ namespace chr
                 case TYPE_RESOURCE:
                 {
 #if defined(CINDER_ANDROID)
-                    auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), relativePath.c_str(), AASSET_MODE_STREAMING);
+                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), relativePath.c_str(), AASSET_MODE_STREAMING);
                     
                     if (asset)
                     {
                         AAsset_close(asset);
-                        return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), relativePath.c_str());
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), relativePath.c_str());
                     }
                     else
                     {
@@ -245,12 +245,12 @@ namespace chr
                 {
 #if defined(CINDER_ANDROID)
                     auto resourcePath = "assets" / relativePath;
-                    auto asset = AAssetManager_open(FileHelper::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
+                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
                     
                     if (asset)
                     {
                         AAsset_close(asset);
-                        return DataSourceAsset::create(FileHelper::getAndroidAssetManager(), resourcePath.c_str());
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), resourcePath.c_str());
                     }
                     else
                     {

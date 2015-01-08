@@ -18,7 +18,7 @@ namespace chr
     {
         fs::path getDefaultPath()
         {
-            return Helper::getAndroidInternalDataPath();
+            return Helper::getInternalDataPath();
         }
 
         namespace intern
@@ -86,23 +86,23 @@ namespace chr
         
         // ---
         
-        AAssetManager* Helper::getAndroidAssetManager()
+        AAssetManager* Helper::getAssetManager()
         {
             assert(intern::setup);
             return intern::assetManager;
         }
         
-        fs::path Helper::getAndroidInternalDataPath()
+        fs::path Helper::getInternalDataPath()
         {
             return intern::internalDataPath;
         }
         
-        fs::path Helper::getAndroidExternalDataPath()
+        fs::path Helper::getExternalDataPath()
         {
             return intern::externalDataPath;
         }
         
-        fs::path Helper::getAndroidApkPath()
+        fs::path Helper::getApkPath()
         {
             return intern::apkPath;
         }
