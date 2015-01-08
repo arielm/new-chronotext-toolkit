@@ -6,7 +6,8 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import "GLViewController.h"
+#import "chronotext/ios/gl/GLViewController.h"
+#import "chronotext/ios/cinder/CinderDelegate.h"
 
 NSString* kGLViewControllerPropertyRenderingAPI = @"kGLViewControllerPropertyRenderingAPI";
 NSString* kGLViewControllerPropertyPreferredFramesPerSecond = @"kGLViewControllerPropertyPreferredFramesPerSecond";
@@ -47,20 +48,20 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 @synthesize glView;
 @synthesize cinderDelegate;
 
-- (id) initWithProperties:(NSDictionary*)props
+- (id) initWithCinderDelegate:(CinderDelegate*)delegate properties:(NSDictionary*)props
 {
     if (self = [super init])
     {
         NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
-                                  [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
-                                  [NSNumber numberWithBool:YES], kGLViewControllerPropertyMultipleTouchEnabled,
-                                  [NSNumber numberWithInt:UIInterfaceOrientationMaskPortrait], kGLViewControllerPropertyInterfaceOrientationMask,
-                                  [NSNumber numberWithInt:GLKViewDrawableColorFormatRGBA8888], kGLViewControllerPropertyColorFormat,
-                                  [NSNumber numberWithInt:GLKViewDrawableDepthFormat24], kGLViewControllerPropertyDepthFormat,
-                                  [NSNumber numberWithInt:GLKViewDrawableStencilFormatNone], kGLViewControllerPropertyStencilFormat,
-                                  [NSNumber numberWithInt:GLKViewDrawableMultisampleNone], kGLViewControllerPropertyMultisample,
-                                  nil];
+            [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
+            [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
+            [NSNumber numberWithBool:YES], kGLViewControllerPropertyMultipleTouchEnabled,
+            [NSNumber numberWithInt:UIInterfaceOrientationMaskPortrait], kGLViewControllerPropertyInterfaceOrientationMask,
+            [NSNumber numberWithInt:GLKViewDrawableColorFormatRGBA8888], kGLViewControllerPropertyColorFormat,
+            [NSNumber numberWithInt:GLKViewDrawableDepthFormat24], kGLViewControllerPropertyDepthFormat,
+            [NSNumber numberWithInt:GLKViewDrawableStencilFormatNone], kGLViewControllerPropertyStencilFormat,
+            [NSNumber numberWithInt:GLKViewDrawableMultisampleNone], kGLViewControllerPropertyMultisample,
+            nil];
         
         if (props)
         {
@@ -78,10 +79,13 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
                 [properties setObject:[defaults objectForKey:key] forKey:key];
             }
         }
-        
+
+        interfaceOrientationMask = [[properties objectForKey:kGLViewControllerPropertyInterfaceOrientationMask] intValue];
+
         // ---
         
-        interfaceOrientationMask = [[properties objectForKey:kGLViewControllerPropertyInterfaceOrientationMask] intValue];
+        cinderDelegate = delegate;
+        [cinderDelegate launch];
     }
     
     return self;
@@ -278,17 +282,17 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
 
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
     [cinderDelegate touchesBegan:touches withEvent:event];
 }
 
-- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
     [cinderDelegate touchesMoved:touches withEvent:event];
 }
 
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
     [cinderDelegate touchesEnded:touches withEvent:event];
 }

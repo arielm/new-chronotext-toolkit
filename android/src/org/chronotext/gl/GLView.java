@@ -36,11 +36,11 @@ public class GLView extends GLSurfaceView
   protected boolean finishing;
   protected boolean destroyed;
 
-  public GLView(Context context, CinderDelegate delegate)
+  public GLView(Context context, CinderDelegate _cinderDelegate)
   {
     super(context);
 
-    cinderDelegate = delegate;
+    cinderDelegate = _cinderDelegate;
 
     // ---
 

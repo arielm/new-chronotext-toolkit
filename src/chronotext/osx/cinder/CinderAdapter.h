@@ -14,11 +14,11 @@
 
 @interface CinderAdapter : NSObject
 {
-    chr::CinderSketch *sketch;
+    chr::CinderDelegate *cinderDelegate;
     NSView *view;
 }
 
-@property (nonatomic, readonly) chr::CinderSketch *sketch;
+@property (nonatomic, readonly) chr::CinderDelegate *cinderDelegate;
 @property (nonatomic, readonly) NSView *view;
 
 - (id) initWithCinderDelegate:(chr::CinderDelegate*)delegate;

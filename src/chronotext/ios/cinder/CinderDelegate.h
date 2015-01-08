@@ -11,12 +11,10 @@
  * https://github.com/cinder/Cinder/blob/v0.8.5/include/cinder/app/CinderViewCocoaTouch.h
  */
 
-#include "chronotext/cinder/CinderSketch.h"
-
 #import "chronotext/cocoa/utils/NSString+JSON.h"
+#import "chronotext/ios/gl/GLViewController.h"
 
-@class GLKView;
-@class GLViewController;
+#include "chronotext/cinder/CinderSketch.h"
 
 enum
 {
@@ -44,13 +42,14 @@ enum
 @property (nonatomic, readonly) uint32_t elapsedFrames;
 @property (nonatomic, readonly) BOOL emulated;
 
-- (void) startWithReason:(int)reasonId;
-- (void) stopWithReason:(int)reasonId;
-
+- (void) launch;
 - (void) setup;
 - (void) resize;
 - (void) update;
 - (void) draw;
+
+- (void) startWithReason:(int)reasonId;
+- (void) stopWithReason:(int)reasonId;
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;

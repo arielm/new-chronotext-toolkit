@@ -205,11 +205,6 @@ namespace chr
 
     void CinderDelegate::keyDown(KeyEvent event)
     {
-        if (sketch->keyDown(event))
-        {
-            return;
-        }
-        
         switch (event.getCode())
         {
             case KeyEvent::KEY_BACKSPACE:
@@ -240,6 +235,8 @@ namespace chr
                 return;
             }
         }
+        
+        sketch->keyDown(event);
     }
     
     void CinderDelegate::keyUp(KeyEvent event)

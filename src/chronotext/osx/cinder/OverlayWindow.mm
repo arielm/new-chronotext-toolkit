@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import "OverlayWindow.h"
-
+#import "chronotext/osx/cinder/OverlayWindow.h"
 #import "chronotext/osx/cinder/OverlayView.h"
 
 @implementation OverlayWindow

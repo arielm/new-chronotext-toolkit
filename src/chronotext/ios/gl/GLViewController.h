@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
-#import "CinderDelegate.h"
-
 OBJC_EXPORT NSString* kGLViewControllerPropertyRenderingAPI;
 OBJC_EXPORT NSString* kGLViewControllerPropertyPreferredFramesPerSecond;
 OBJC_EXPORT NSString* kGLViewControllerPropertyMultipleTouchEnabled;
@@ -20,15 +18,17 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyDepthFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyStencilFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
 
+@class CinderDelegate;
+
 @interface GLViewController : GLKViewController
 {
-    GLKView *glView;
     CinderDelegate *cinderDelegate;
+    GLKView *glView;
 }
 
+@property (nonatomic, readonly) CinderDelegate *cinderDelegate;
 @property (nonatomic, readonly) GLKView *glView;
-@property (nonatomic, assign) CinderDelegate *cinderDelegate;
 
-- (id) initWithProperties:(NSDictionary*)props;
+- (id) initWithCinderDelegate:(CinderDelegate*)delegate properties:(NSDictionary*)props;
 
 @end

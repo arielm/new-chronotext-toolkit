@@ -11,8 +11,7 @@
  * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/app/CinderViewCocoaTouch.mm
  */
 
-#import "CinderDelegate.h"
-#import "GLViewController.h"
+#import "chronotext/ios/cinder/CinderDelegate.h"
 
 #include "chronotext/Context.h"
 
@@ -106,61 +105,16 @@ using namespace chr;
     [super dealloc];
 }
 
-- (void) startWithReason:(int)reasonId
-{
-    frameCount = 0;
-    
-    timer.start();
-    sketch->clock()->start();
-    
-    switch (reasonId)
-    {
-        case REASON_VIEW_WILL_APPEAR:
-        {
-            sketch->start(CinderSketch::REASON_APP_SHOWN);
-            active = YES;
-            break;
-        }
-            
-        case REASON_APPLICATION_DID_BECOME_ACTIVE:
-        {
-            sketch->start(CinderSketch::REASON_APP_RESUMED);
-            break;
-        }
-    }
-}
-
-- (void) stopWithReason:(int)reasonId
-{
-    timer.stop();
-    sketch->clock()->stop();
-    
-    switch (reasonId)
-    {
-        case REASON_VIEW_WILL_DISAPPEAR:
-        {
-            sketch->stop(CinderSketch::REASON_APP_HIDDEN);
-            active = NO;
-            break;
-        }
-            
-        case REASON_APPLICATION_WILL_RESIGN_ACTIVE:
-        {
-            sketch->stop(CinderSketch::REASON_APP_PAUSED);
-            break;
-        }
-    }
-}
-
-- (void) setup
+- (void) launch
 {
     [self startIOService];
     
     INTERN::launch(system::LaunchInfo(*io));
     sketch->launch();
+}
 
-    // ---
-    
+- (void) setup
+{
     windowInfo = WindowInfo([self windowSize], [self aaLevel]);
     forceResize = YES;
 
@@ -214,6 +168,52 @@ using namespace chr;
     }
     
     sketch->draw();
+}
+
+- (void) startWithReason:(int)reasonId
+{
+    frameCount = 0;
+    
+    timer.start();
+    sketch->clock()->start();
+    
+    switch (reasonId)
+    {
+        case REASON_VIEW_WILL_APPEAR:
+        {
+            sketch->start(CinderSketch::REASON_APP_SHOWN);
+            active = YES;
+            break;
+        }
+            
+        case REASON_APPLICATION_DID_BECOME_ACTIVE:
+        {
+            sketch->start(CinderSketch::REASON_APP_RESUMED);
+            break;
+        }
+    }
+}
+
+- (void) stopWithReason:(int)reasonId
+{
+    timer.stop();
+    sketch->clock()->stop();
+    
+    switch (reasonId)
+    {
+        case REASON_VIEW_WILL_DISAPPEAR:
+        {
+            sketch->stop(CinderSketch::REASON_APP_HIDDEN);
+            active = NO;
+            break;
+        }
+            
+        case REASON_APPLICATION_WILL_RESIGN_ACTIVE:
+        {
+            sketch->stop(CinderSketch::REASON_APP_PAUSED);
+            break;
+        }
+    }
 }
 
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
@@ -429,7 +429,7 @@ using namespace chr;
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    const float scale = view.contentScaleFactor; // XXX
+    float scale = view.contentScaleFactor; // XXX
     vector<TouchEvent::Touch> touchList;
     
     for (UITouch *touch in touches)

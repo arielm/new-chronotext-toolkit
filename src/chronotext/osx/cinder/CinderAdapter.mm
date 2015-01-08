@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import "CinderAdapter.h"
+#import "chronotext/osx/cinder/CinderAdapter.h"
 
 using namespace std;
 using namespace ci;
@@ -14,18 +14,17 @@ using namespace chr;
 
 @implementation CinderAdapter
 
-@synthesize sketch;
+@synthesize cinderDelegate;
 @synthesize view;
 
 - (id) initWithCinderDelegate:(CinderDelegate*)delegate
 {
     if (self = [super init])
     {
-        sketch = delegate->getSketch();
-        assert(sketch);
-        
         assert(delegate->getWindow());
         view = reinterpret_cast<NSView*>(delegate->getWindow()->getNative());
+        
+        cinderDelegate = delegate;
     }
     
     return self;
@@ -33,7 +32,7 @@ using namespace chr;
 
 - (void) sendMessageToSketch:(int)what
 {
-    sketch->sendMessage(Message(what));
+    cinderDelegate->sendMessageToSketch(what);
 }
 
 - (void) sendMessageToSketch:(int)what json:(id)json
@@ -41,12 +40,12 @@ using namespace chr;
     NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
     NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     
-    [self sendMessageToSketch:what body:string];
+    cinderDelegate->sendMessageToSketch(what, [string UTF8String]);
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
 {
-    sketch->sendMessage(Message(what, [body UTF8String]));
+    cinderDelegate->sendMessageToSketch(what, [body UTF8String]);
 }
 
 - (void) receiveMessageFromSketch:(int)what body:(NSString*)body
