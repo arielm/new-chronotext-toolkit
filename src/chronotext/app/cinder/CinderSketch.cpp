@@ -48,6 +48,28 @@ namespace chr
         return delegate->getWindowInfo();
     }
     
+#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
+    
+    int CinderSketch::getCode(const KeyEvent &keyEvent) const
+    {
+        return keyEvent.getCode();
+    }
+    
+    bool CinderSketch::isShiftDown(const KeyEvent &keyEvent) const
+    {
+        return keyEvent.isShiftDown();
+    }
+    
+    bool CinderSketch::isAltDown(const KeyEvent &keyEvent) const
+    {
+        return keyEvent.isAltDown();
+    }
+    
+    bool CinderSketch::isAccelDown(const KeyEvent &keyEvent) const
+    {
+        return keyEvent.isAccelDown();
+    }
+    
 #pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
     
     void CinderSketch::action(int actionId)

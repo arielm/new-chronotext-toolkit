@@ -34,6 +34,11 @@ namespace chr
         void action(int actionId) final;
         void sendMessageToDelegate(int what, const std::string &body = "") final;
         
+        int getCode(const ci::app::KeyEvent &keyEvent) const final;
+        bool isShiftDown(const ci::app::KeyEvent &keyEvent) const final;
+        bool isAltDown(const ci::app::KeyEvent &keyEvent) const final;
+        bool isAccelDown(const ci::app::KeyEvent &keyEvent) const final;
+        
     protected:
         CinderDelegate *delegate = nullptr;
         

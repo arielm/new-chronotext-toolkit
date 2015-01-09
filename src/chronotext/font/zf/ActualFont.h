@@ -82,10 +82,7 @@ namespace chr
                 float u2;
                 float v2;
                 
-                Glyph()
-                :
-                texture(nullptr)
-                {}
+                Glyph() = default;
                 
                 Glyph(FontTexture *texture, ci::Vec2f offset, ci::Vec2f size)
                 :

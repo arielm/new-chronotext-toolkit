@@ -37,6 +37,7 @@ namespace cinder
 {
     namespace gl
     {
+        inline void rotateZ(float a) { glRotatef(a, 0, 0, 1); }
         inline void scale(float s) { glScalef(s, s, 1); }
     }
 }

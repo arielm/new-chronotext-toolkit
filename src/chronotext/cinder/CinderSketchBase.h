@@ -89,12 +89,17 @@ namespace chr
 
         virtual void action(int actionId) = 0;
         virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
-
+        
         virtual ci::Vec2i getWindowSize() const { return getWindowInfo().size; }
         virtual int getWindowWidth() const { return getWindowInfo().size.x; };
         virtual int getWindowHeight() const { return getWindowInfo().size.y; };
         virtual ci::Area getWindowBounds() const { return getWindowInfo().bounds(); };
         virtual ci::Vec2f getWindowCenter() const { return getWindowInfo().center(); };
         virtual float getWindowAspectRatio() const { return getWindowInfo().aspectRatio(); };
+        
+        virtual int getCode(const ci::app::KeyEvent &keyEvent) const { return 0; }
+        virtual bool isShiftDown(const ci::app::KeyEvent &keyEvent) const { return false; }
+        virtual bool isAltDown(const ci::app::KeyEvent &keyEvent) const { return false; }
+        virtual bool isAccelDown(const ci::app::KeyEvent &keyEvent) const { return false; }
     };
 }
