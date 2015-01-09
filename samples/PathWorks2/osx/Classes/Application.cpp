@@ -10,20 +10,9 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 using namespace chr;
 
 void Application::applySettings(Settings *settings)
 {
     settings->setWindowSize(1024, 768);
-}
-
-void Application::keyDown(KeyEvent event)
-{
-    switch (event.getCode())
-    {
-        case KeyEvent::KEY_ESCAPE:
-            quit();
-            break;
-    }
 }

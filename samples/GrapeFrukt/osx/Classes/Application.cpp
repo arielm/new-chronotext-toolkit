@@ -7,20 +7,10 @@
  */
 
 #include "Application.h"
-#include "Sketch.h"
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 using namespace chr;
-
-void Application::sketchCreated(CinderSketch *sketch)
-{
-    TextureManager::LOG_VERBOSE = true;
-    TextureManager::PROBE_MEMORY = true;
-
-    target = reinterpret_cast<Sketch*>(sketch);
-}
 
 void Application::applySettings(Settings *settings)
 {
@@ -33,19 +23,5 @@ void Application::applySettings(Settings *settings)
 //      emulate(settings, "GALAXY_S", chr::DisplayInfo::ORIENTATION_PORTRAIT);
 //      emulate(settings, "GALAXY_S4", chr::DisplayInfo::ORIENTATION_LANDSCAPE);
 //      emulate(settings, "NEXUS_7_2012", chr::DisplayInfo::ORIENTATION_LANDSCAPE);
-    }
-}
-
-void Application::keyDown(KeyEvent event)
-{
-    switch (event.getCode())
-    {
-        case KeyEvent::KEY_ESCAPE:
-            quit();
-            break;
-        
-        case KeyEvent::KEY_d:
-            target->textureManager.discardTextures();
-            break;
     }
 }

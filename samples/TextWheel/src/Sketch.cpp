@@ -16,6 +16,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace ci::app;
 using namespace chr;
 using namespace chr::zf;
 
@@ -82,12 +83,32 @@ void Sketch::draw()
 
     // ---
     
-    glRotatef(rotation * R2D, 0, 0, 1);
+    gl::rotate(rotation * R2D);
     
     gl::color(1, 0, 0, 0.125f);
     spiral.drawWire();
     
     font->replaySequence(*sequences[languages[currentLangIndex]]);
+}
+
+bool Sketch::keyDown(const KeyEvent &event)
+{
+    switch (getCode(event))
+    {
+        case KeyEvent::KEY_RIGHT:
+            nextVersion();
+            return true;
+            
+        case KeyEvent::KEY_LEFT:
+            previousVersion();
+            return true;
+            
+        case KeyEvent::KEY_u:
+            fontManager.unload();
+            return true;
+    }
+    
+    return false;
 }
 
 void Sketch::addVersion(const string &lang)

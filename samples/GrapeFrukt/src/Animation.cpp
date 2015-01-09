@@ -8,6 +8,8 @@
 
 #include "Animation.h"
 
+#include "chronotext/utils/GLUtils.h"
+
 #include "cinder/Xml.h"
 
 using namespace std;
@@ -51,10 +53,10 @@ void Animation::draw(int frameIndex)
             auto &frame = item->frames[frameIndex % frameCount];
             
             glPushMatrix();
-            glColor4f(1, 1, 1, frame.alpha);
-            glTranslatef(frame.x, frame.y, 0);
-            glScalef(frame.scaleX, frame.scaleY, 1);
-            glRotatef(frame.rotation, 0, 0, 1);
+            gl::color(1, 1, 1, frame.alpha);
+            gl::translate(frame.x, frame.y);
+            gl::scale(frame.scaleX, frame.scaleY);
+            gl::rotate(frame.rotation);
             
             atlas->drawSprite(item->path, item->registrationPointX, item->registrationPointY);
             glPopMatrix();

@@ -14,15 +14,8 @@
 
 #include "chronotext/app/cinder/CinderDelegate.h"
 
-class Sketch;
-
 class Application : public chr::CinderDelegate
 {
 public:
-    void sketchCreated(chr::CinderSketch *sketch) final;
     void applySettings(Settings *settings) final;
-    void keyDown(ci::app::KeyEvent event) final;
-    
-protected:
-    Sketch *target;
 };

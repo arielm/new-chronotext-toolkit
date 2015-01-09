@@ -9,9 +9,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT 473b7ee
- * IOS: COMMIT 473b7ee
- * ANDROID: COMMIT 473b7ee
+ * OSX: COMMIT 6e0dda1
+ * IOS: COMMIT 6e0dda1
+ * ANDROID: COMMIT 6e0dda1
  */
 
 /*
@@ -49,9 +49,6 @@ public:
     
     // ---
     
-    chr::TextureManager textureManager;
-    chr::xf::FontManager fontManager;
-    
     void setup() final;
 
     void event(Event event) final;
@@ -60,6 +57,8 @@ public:
 
     void update() final;
     void draw() final;
+    
+    bool keyDown(const ci::app::KeyEvent &keyEvent) final;
     
     void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
     void drawText(const std::string &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
@@ -71,6 +70,9 @@ public:
     void satifsfyConstraints();
     
 protected:
+    chr::TextureManager textureManager;
+    chr::xf::FontManager fontManager;
+
     chr::Texture::Ref dot;
     std::shared_ptr<chr::XFont> font;
     

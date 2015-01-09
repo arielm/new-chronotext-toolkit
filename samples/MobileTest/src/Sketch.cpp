@@ -14,6 +14,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace ci::app;
 using namespace chr;
 using namespace chr::xf;
 
@@ -30,6 +31,9 @@ const float DT = 1.0f;
 
 void Sketch::setup()
 {
+    TextureManager::LOG_VERBOSE = true;
+    TextureManager::PROBE_MEMORY = true;
+
     dot = textureManager.getTexture(InputSource::getResource("dot_112.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
     font = fontManager.getFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
     
@@ -91,7 +95,7 @@ void Sketch::event(Event event)
              */
             
             textureManager.discardTextures();
-            fontManager.discardTextures();
+            fontManager.unload();
             
             break;
         }
@@ -133,6 +137,18 @@ void Sketch::draw()
     
     string text = toString(int(clock()->getTime()));
     drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
+}
+
+bool Sketch::keyDown(const KeyEvent &keyEvent)
+{
+    switch (getCode(keyEvent))
+    {
+        case KeyEvent::KEY_w:
+            event(EVENT_MEMORY_WARNING);
+            return true;
+    }
+    
+    return false;
 }
 
 void Sketch::drawDot(const Vec2f &position, float radius, const ColorA &color)

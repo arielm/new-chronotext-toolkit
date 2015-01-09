@@ -7,7 +7,7 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT ebc399c
+ * IN SYNC WITH develop BRANCH / COMMIT 6e0dda1
  */
 
 /*
@@ -72,9 +72,12 @@ public:
 
     void setup() final;
     void resize() final;
+    
     void update() final;
     void draw() final;
-    
+
+    bool keyDown(const ci::app::KeyEvent &event) final;
+
     void addVersion(const std::string &lang);
     void nextVersion();
     void previousVersion();

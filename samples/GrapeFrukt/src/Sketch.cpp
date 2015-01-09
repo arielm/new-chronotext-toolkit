@@ -12,6 +12,7 @@
 
 using namespace std;
 using namespace ci;
+using namespace ci::app;
 using namespace chr;
 
 const float REFERENCE_H = 600;
@@ -19,6 +20,9 @@ const float FPS = 30;
 
 void Sketch::setup()
 {
+    TextureManager::LOG_VERBOSE = true;
+    TextureManager::PROBE_MEMORY = true;
+
     auto atlas = make_shared<TextureAtlas>(textureManager, InputSource::getResource("MonocleMan.xml"), true);
     animation = Animation(atlas, InputSource::getResource("sheets.xml"), InputSource::getResource("animations.xml"), FPS);
     
@@ -43,4 +47,16 @@ void Sketch::draw()
     gl::scale(getWindowHeight() / REFERENCE_H);
     
     animation.play(clock()->getTime());
+}
+
+bool Sketch::keyDown(const KeyEvent &event)
+{
+    switch (getCode(event))
+    {
+        case KeyEvent::KEY_d:
+            textureManager.discardTextures();
+            return true;
+    }
+    
+    return false;
 }

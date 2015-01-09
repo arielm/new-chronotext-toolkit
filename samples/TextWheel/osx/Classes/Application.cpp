@@ -7,41 +7,12 @@
  */
 
 #include "Application.h"
-#include "Sketch.h"
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 using namespace chr;
-
-void Application::sketchCreated(CinderSketch *sketch)
-{
-    target = reinterpret_cast<Sketch*>(sketch);
-}
 
 void Application::applySettings(Settings *settings)
 {
     settings->setWindowSize(1024, 768);
-}
-
-void Application::keyDown(KeyEvent event)
-{
-    switch (event.getCode())
-    {
-        case KeyEvent::KEY_ESCAPE:
-            quit();
-            break;
-            
-        case KeyEvent::KEY_RIGHT:
-            target->nextVersion();
-            break;
-            
-        case KeyEvent::KEY_LEFT:
-            target->previousVersion();
-            break;
-        
-        case KeyEvent::KEY_u:
-            target->fontManager.unload();
-            break;
-    }
 }

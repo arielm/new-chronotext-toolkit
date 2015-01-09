@@ -18,5 +18,4 @@ class Application : public chr::CinderDelegate
 {
 public:
     void applySettings(Settings *settings) final;
-    void keyDown(ci::app::KeyEvent event) final;
 };
