@@ -51,29 +51,7 @@ namespace chr
         int Helper::getAALevel(AppNative *application)
         {
             auto renderer = static_pointer_cast<RendererGl>(application->getRenderer());
-            
-            switch (renderer->getAntiAliasing())
-            {
-                case RendererGl::AA_MSAA_2:
-                    return 2;
-                    
-                case RendererGl::AA_MSAA_4:
-                    return 4;
-                    
-                case RendererGl::AA_MSAA_6:
-                    return 6;
-                    
-                case RendererGl::AA_MSAA_8:
-                    return 8;
-                    
-                case RendererGl::AA_MSAA_16:
-                    return 16;
-                    
-                case RendererGl::AA_MSAA_32:
-                    return 32;
-            }
-            
-            return 0;
+            return renderer->getAntiAliasing(); // XXX: THIS IS *NOT* RETURNING ENUM-VALUES LIKE RendererGl::AA_MSAA_4
         }
     }
     
