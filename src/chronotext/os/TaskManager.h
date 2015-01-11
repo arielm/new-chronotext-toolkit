@@ -111,6 +111,6 @@ namespace chr
         TaskManager(const TaskManager &other) = delete;
         
         void endTask(int taskId);
-        void nextTask();
+        bool nextTask();
     };
 }

@@ -47,6 +47,7 @@ namespace chr
         
     protected:
         bool initialized = false;
+        bool shutDown = false;
         bool started = false;
         bool ended = false;
         bool cancelRequired = false;
@@ -66,7 +67,7 @@ namespace chr
         friend class TaskManager;
         
         void start(bool forceSync = false);
-        void cancel();
+        bool cancel();
         void detach();
         
         bool performInit(std::shared_ptr<TaskManager> manager, int taskId);

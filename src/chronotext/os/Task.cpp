@@ -63,69 +63,61 @@ namespace chr
      * - ONLY ACCESSIBLE FROM TASKS
      * - INTENDED TO BE INVOKED ON THE TASK-THREAD
      */
-    
     bool Task::post(function<void()> &&fn)
     {
-        if (started && !ended)
-        {
-            return os::post(forward<function<void()>>(fn), synchronous);
-        }
+        assert(started && !ended);
         
-        return false;
+        return os::post(forward<function<void()>>(fn), synchronous);
     }
     
     // ---
     
     /*
-     * INVOKED ON THE SKETCH-THREAD, FROM TaskManager::addTask()
+     * INVOKED ON THE SKETCH-THREAD
+     *
+     * OPTION 1: FROM TaskManager::addTask()
+     * OPTION 2: FROM TaskManager::nextTask()
      */
-    
     void Task::start(bool forceSync)
     {
-        if (initialized && !started)
+        assert(initialized && !started);
+        
+        lock_guard<mutex> lock(_mutex); // REASON: Task::hasStarted() IS THREAD-SAFE
+        
+        synchronous = forceSync;
+        started = true;
+
+        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+
+        if (synchronous)
         {
-            lock_guard<mutex> lock(_mutex);
-            
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
-            
-            synchronous = forceSync;
-            
-            if (forceSync)
-            {
-                started = true;
-                run();
-                ended = true;
-            }
-            else
-            {
-                started = true;
-                _thread = thread(&Task::performRun, this);
-            }
+            run();
+            ended = true;
         }
         else
         {
-            assert(false);
+            _thread = thread(&Task::performRun, this);
         }
     }
     
     /*
      * INVOKED ON THE SKETCH-THREAD, FROM TaskManager::cancelTask()
      */
-    
-    void Task::cancel()
+    bool Task::cancel()
     {
-        if (!synchronous && started)
+        assert(!synchronous && started);
+        
+        lock_guard<mutex> lock(_mutex); // REASON: Task::isCancelRequired() IS THREAD-SAFE
+        
+        if (!cancelRequired)
         {
-            lock_guard<mutex> lock(_mutex);
-
             LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
             cancelRequired = true;
+            return true;
         }
-        else
-        {
-            assert(false);
-        }
+        
+        return false;
     }
     
     /*
@@ -134,7 +126,6 @@ namespace chr
      * - SUPPOSED TO WORK NO MATTER ON WHICH THREAD INVOKED
      * - NO-HARM IF _thread WAS NEVER ACTUALLY USED
      */
-    
     void Task::detach()
     {
         if (_thread.joinable())
@@ -146,104 +137,89 @@ namespace chr
     /*
      * INVOKED ON THE SKETCH-THREAD, FROM TaskManager::registerTask()
      */
-    
     bool Task::performInit(shared_ptr<TaskManager> manager, int taskId)
     {
-        if (!initialized)
+        assert(!initialized);
+        
+        lock_guard<mutex> lock(_mutex); // REASON: Task::getId() IS THREAD-SAFE
+        
+        if (init())
         {
-            lock_guard<mutex> lock(_mutex);
-
-            if (init())
-            {
-                LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
-                
-                Task::manager = manager;
-                Task::taskId = taskId;
-                
-                initialized = true;
-                return true;
-            }
+            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
             
-            return false;
+            Task::manager = manager;
+            Task::taskId = taskId;
+            
+            initialized = true;
+            return true;
         }
-        else
-        {
-            assert(false);
-        }
+        
+        return false;
     }
     
     /*
-     * INTENDED TO BE INVOKED FROM Task::start(), ON THE TASK-THREAD
+     * INVOKED ON THE TASK-THREAD, FROM Task::start()
      */
-    
     void Task::performRun()
     {
-        if (started && !ended)
+        assert(started && !ended);
+        
+        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
+        
         {
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
-            
-            if (!isCancelRequired()) // TODO: DOUBLE-CHECK IF TEST MAKES SENSE
-            {
-                /*
-                 * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
-                 *
-                 * TODO: A SIMILAR SYSTEM IS NECESSARY ON ANDROID FOR ATTACHING/DETACHING THE THREAD TO/FROM JAVA
-                 */
-                ThreadSetup forCocoa;
-                
-                run();
-            }
-            
-            lock_guard<mutex> lock(_mutex); // TODO: FOLLOW-UP
-            
-            ended = true;
-
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << taskId << " | " << this << endl;
-
             /*
-             * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED DURING Task::run()
+             * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
              *
-             * TODO: CONSIDER USING A LAMBDA INSTEAD OF bind
+             * PURPOSELY "BLOCK-SCOPED", IN ORDER TO "EXPIRE" RIGHT AFTER run()
+             *
+             * TODO: A SIMILAR SYSTEM IS NECESSARY ON ANDROID FOR ATTACHING/DETACHING THE THREAD TO/FROM JAVA
              */
-            os::post(bind(&TaskManager::endTask, manager, taskId), false);
+            ThreadSetup forCocoa;
             
-            /*
-             * TODO:
-             *
-             * INVESTIGATE IN WHICH "STATE" IS THE THREAD UNTIL Task::performShutdown() IS INVOKED
-             *
-             * SHOULD WE BE IN A "WAIT STATE" UNTIL THEN?
-             */
+            run();
         }
-        else
-        {
-            assert(false);
-        }
+        
+        lock_guard<mutex> lock(_mutex); // REASON: Task::hasEnded() IS THREAD-SAFE
+        
+        ended = true;
+        
+        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [END] | " << taskId << " | " << this << endl;
+        
+        /*
+         * IT IS NECESSARY TO WAIT FOR THE FUNCTIONS WHICH MAY HAVE BEEN POSTED DURING Task::run()
+         *
+         * TODO: CONSIDER USING A LAMBDA INSTEAD OF bind
+         */
+        os::post(bind(&TaskManager::endTask, manager, taskId), false);
+        
+        /*
+         * TODO:
+         *
+         * INVESTIGATE IN WHICH "STATE" IS THE THREAD UNTIL Task::performShutdown() IS INVOKED
+         *
+         * SHOULD WE BE IN A "WAIT STATE" UNTIL THEN?
+         */
     }
     
     /*
      * INVOKED ON THE SKETCH-THREAD
      *
-     * OPTION 1: FROM TaskManager::cancelTask()
-     * OPTION 2: FROM TaskManager::endTask()
+     * OPTION 1: FROM TaskManager::addTask()
+     * OPTION 2: FROM TaskManager::cancelTask()
+     * OPTION 3: FROM TaskManager::endTask()
      */
-    
     void Task::performShutdown()
     {
-        if (!started || ended)
-        {
-            LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
-            
-            shutdown();
-            
-            /*
-             * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
-             */
-            detach();
-        }
-        else
-        {
-            assert(false);
-        }
+        assert(initialized && !shutDown && (!started || ended));
+        
+        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+        
+        shutdown();
+        shutDown = true;
+        
+        /*
+         * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
+         */
+        detach();
     }
 }

@@ -106,21 +106,21 @@ namespace chr
     {
         if (os::isThreadSafe())
         {
-            auto element = tasks.find(taskId);
+            auto it = tasks.find(taskId);
             
-            if (element != tasks.end())
+            if (it != tasks.end())
             {
-                auto task = element->second;
+                auto task = it->second;
                 
                 if (startedTasks.count(taskId))
                 {
-                    element->second->cancel();
+                    return task->cancel();
                 }
                 else
                 {
                     task->performShutdown();
                     
-                    tasks.erase(element);
+                    tasks.erase(it);
                     postponedTasks.erase(taskId);
                 }
                 
@@ -134,52 +134,43 @@ namespace chr
     // ---
     
     /*
-     * POSTED FROM Task::performRun()
+     * POSTED (I.E. INVOKED ON THE SKETCH-THREAD) FROM Task::performRun()
      */
-    
     void TaskManager::endTask(int taskId)
     {
         assert(os::isThreadSafe());
         
-        auto element = tasks.find(taskId);
+        auto it = tasks.find(taskId);
+        assert(it != tasks.end());
         
-        if (element != tasks.end())
-        {
-            element->second->performShutdown();
-            
-            tasks.erase(element);
-            startedTasks.erase(taskId);
-        }
-        else
-        {
-            assert(false);
-        }
+        it->second->performShutdown();
+        
+        tasks.erase(it);
+        startedTasks.erase(taskId);
         
         nextTask();
     }
     
-    void TaskManager::nextTask()
+    bool TaskManager::nextTask()
     {
         assert(os::isThreadSafe());
-
+        
         if (!taskQueue.empty())
         {
-            int taskId = taskQueue.front();
+            auto taskId = taskQueue.front();
             
-            auto element = tasks.find(taskId);
+            auto it = tasks.find(taskId);
+            assert(it != tasks.end());
 
-            if (element != tasks.end())
-            {
-                postponedTasks.erase(taskId);
-                taskQueue.pop();
-                
-                startedTasks.insert(taskId);
-                element->second->start(false);
-            }
-            else
-            {
-                assert(false);
-            }
+            taskQueue.pop();
+            postponedTasks.erase(taskId);
+            
+            startedTasks.insert(taskId);
+            it->second->start(false);
+            
+            return true;
         }
+        
+        return false;
     }
 }
