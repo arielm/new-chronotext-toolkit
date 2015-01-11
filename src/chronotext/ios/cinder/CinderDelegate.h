@@ -57,7 +57,7 @@ enum
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
 
 - (void) handleAction:(int)actionId;
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
+- (void) handleMessageFromSketch:(int)what body:(NSString*)body;
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;

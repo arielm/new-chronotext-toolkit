@@ -49,7 +49,7 @@ namespace chr
         void handleEvent(int eventId);
         void handleAction(int actionId);
         
-        void receiveMessageFromSketch(int what, const std::string &body);
+        void handleMessageFromSketch(int what, const std::string &body);
         void sendMessageToSketch(int what, const std::string &body = "");
         
         /*

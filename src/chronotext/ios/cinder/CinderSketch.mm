@@ -64,11 +64,11 @@ namespace chr
     {
         if (body.empty())
         {
-            [castToDelegate(delegate) receiveMessageFromSketch:what body:nil];
+            [castToDelegate(delegate) handleMessageFromSketch:what body:nil];
         }
         else
         {
-            [castToDelegate(delegate) receiveMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
+            [castToDelegate(delegate) handleMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
         }
     }
     

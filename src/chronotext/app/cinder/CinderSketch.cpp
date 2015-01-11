@@ -79,6 +79,6 @@ namespace chr
     
     void CinderSketch::sendMessageToDelegate(int what, const string &body)
     {
-        delegate->receiveMessageFromSketch(what, body);
+        delegate->handleMessageFromSketch(what, body);
     }
 }

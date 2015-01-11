@@ -26,7 +26,7 @@ namespace chr
 
         virtual bool handleAction(int actionId);
         virtual void sendMessageToSketch(int what, const std::string &body = "");
-        virtual void receiveMessageFromSketch(int what, const std::string &body) {}
+        virtual void handleMessageFromSketch(int what, const std::string &body) {}
 
         virtual void applyDefaultSettings(Settings *settings);
         virtual void applySettings(Settings *settings) {}

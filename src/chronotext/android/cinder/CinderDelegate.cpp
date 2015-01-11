@@ -375,11 +375,11 @@ namespace chr
      * 3) TEXT-LENGTH LIMITED
      */
     
-    void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
+    void CinderDelegate::handleMessageFromSketch(int what, const string &body)
     {
         LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
         
-        jni::callVoidMethodOnListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
+        jni::callVoidMethodOnListener("handleMessageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
     }
     
     void CinderDelegate::sendMessageToSketch(int what, const string &body)

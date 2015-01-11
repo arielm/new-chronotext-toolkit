@@ -165,7 +165,7 @@ public class CinderDelegate extends Handler
   /*
    * INVOKED ON THE RENDERER'S THREAD
    */
-  public void receiveMessageFromSketch(int what, String body)
+  public void handleMessageFromSketch(int what, String body)
   {
     sendMessage(Message.obtain(this, what, body));
   }

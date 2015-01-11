@@ -459,7 +459,7 @@ using namespace chr;
 - (void) handleAction:(int)actionId
 {}
 
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
+- (void) handleMessageFromSketch:(int)what body:(NSString*)body
 {}
 
 - (void) sendMessageToSketch:(int)what
