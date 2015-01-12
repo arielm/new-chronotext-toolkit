@@ -33,38 +33,58 @@ namespace chr
     public:
         static void sleep(double seconds);
 
+        /*
+         * INVOKED ON THE SKETCH-THREAD, DURING REGISTRATION
+         *
+         * RETURNING false DISCARDS REGISTRATION
+         */
         virtual bool init() { return true; }
+        
+        /*
+         * INVOKED ON THE SKETCH-THREAD, AFTER EXECUTION
+         */
         virtual void shutdown() {}
+        
+        /*
+         * SYNCHRONOUS TASKS: INVOKED ON THE SKETCH-THREAD
+         * ASYNCHRONOUS TASKS: INVOKED ON THE TASK-THREAD
+         */
         virtual void run() = 0;
         
         /*
-         * THE FOLLOWING 4 ARE THREAD-SAFE
+         * THE FOLLOWING 4 CAN BE INVOKED FROM ANY THREAD
          */
         int getId();
-        bool hasStarted();
-        bool hasEnded();
-        bool isCancelRequired();
+        bool isRunning();
+        bool isAwaitingCancellation();
         
     protected:
-        bool initialized = false;
-        bool shutDown = false;
-        bool started = false;
-        bool ended = false;
-        bool cancelRequired = false;
-        
-        bool synchronous = false;
         int taskId = 0;
-        
-        std::shared_ptr<TaskManager> manager;
-        std::thread _thread;
-        std::mutex _mutex;
+        bool synchronous = false;
         
         virtual ~Task();
-        
+
+        /*
+         * RETURNS FALSE IF THE FUNCTION CAN'T BE POSTED
+         *
+         * CAUSES:
+         *
+         * - SEE os::post() IN chronotext/Context.h
+         * - NOT INVOKED WHILE RUNNING
+         */
         bool post(std::function<void()> &&fn);
         
     private:
         friend class TaskManager;
+        
+        bool initialized = false;
+        bool started = false;
+        bool ended = false;
+        bool cancelRequired = false;
+        
+        std::shared_ptr<TaskManager> manager;
+        std::thread _thread;
+        std::mutex _mutex;
         
         void start(bool forceSync = false);
         bool cancel();

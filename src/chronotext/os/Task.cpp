@@ -30,44 +30,37 @@ namespace chr
     {
         LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
         
-        detach(); // OTHERWISE: THE APPLICATION MAY CRASH WHEN SHUT-DOWN ABRUPTLY
+        detach(); // OTHERWISE: THE APPLICATION MAY CRASH WHEN SHUT-DOWN ABRUPTLY (REPRODUCIBLE ON OSX)
     }
     
     int Task::getId()
     {
-        lock_guard<mutex> lock(_mutex);
+        lock_guard<mutex> lock(_mutex); // SEE: Task::performInit()
         return taskId;
     }
     
-    bool Task::hasStarted()
+    bool Task::isRunning()
     {
-        lock_guard<mutex> lock(_mutex);
-        return started;
+        lock_guard<mutex> lock(_mutex); // SEE: Task::start() AND Task::performRun()
+        return (started && !ended);
     }
     
-    bool Task::hasEnded()
+    bool Task::isAwaitingCancellation()
     {
-        lock_guard<mutex> lock(_mutex);
-        return ended;
-    }
-    
-    bool Task::isCancelRequired()
-    {
-        lock_guard<mutex> lock(_mutex);
+        lock_guard<mutex> lock(_mutex); // SEE: Task::cancel()
         return cancelRequired;
     }
     
     // ---
     
-    /*
-     * - ONLY ACCESSIBLE FROM TASKS
-     * - INTENDED TO BE INVOKED ON THE TASK-THREAD
-     */
     bool Task::post(function<void()> &&fn)
     {
-        assert(started && !ended);
+        if (isRunning())
+        {
+            return os::post(forward<function<void()>>(fn), synchronous);
+        }
         
-        return os::post(forward<function<void()>>(fn), synchronous);
+        return false;
     }
     
     // ---
@@ -82,7 +75,7 @@ namespace chr
     {
         assert(initialized && !started);
         
-        lock_guard<mutex> lock(_mutex); // REASON: Task::hasStarted() IS THREAD-SAFE
+        _mutex.lock(); // SEE: Task::isRunning()
         
         synchronous = forceSync;
         started = true;
@@ -91,13 +84,18 @@ namespace chr
 
         if (synchronous)
         {
+            _mutex.unlock(); // IDEM
             run();
+            
+            _mutex.lock(); // IDEM
             ended = true;
         }
         else
         {
             _thread = thread(&Task::performRun, this);
         }
+        
+        _mutex.unlock(); // IDEM
     }
     
     /*
@@ -107,7 +105,7 @@ namespace chr
     {
         assert(!synchronous && started);
         
-        lock_guard<mutex> lock(_mutex); // REASON: Task::isCancelRequired() IS THREAD-SAFE
+        lock_guard<mutex> lock(_mutex); // REASON: Task::isAwaitingCancellation()
         
         if (!cancelRequired)
         {
@@ -139,9 +137,9 @@ namespace chr
      */
     bool Task::performInit(shared_ptr<TaskManager> manager, int taskId)
     {
-        assert(!initialized);
+        assert(!initialized && !ended);
         
-        lock_guard<mutex> lock(_mutex); // REASON: Task::getId() IS THREAD-SAFE
+        lock_guard<mutex> lock(_mutex); // SEE: Task::getId()
         
         if (init())
         {
@@ -158,6 +156,28 @@ namespace chr
     }
     
     /*
+     * INVOKED ON THE SKETCH-THREAD
+     *
+     * OPTION 1: FROM TaskManager::addTask()
+     * OPTION 2: FROM TaskManager::cancelTask()
+     * OPTION 3: FROM TaskManager::endTask()
+     */
+    void Task::performShutdown()
+    {
+        assert(initialized && (!started || ended));
+        
+        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
+        
+        shutdown();
+        initialized = false;
+        
+        /*
+         * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
+         */
+        detach();
+    }
+    
+    /*
      * INVOKED ON THE TASK-THREAD, FROM Task::start()
      */
     void Task::performRun()
@@ -165,7 +185,7 @@ namespace chr
         assert(started && !ended);
         
         LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " [BEGIN] | " << taskId << " | " << this << endl;
-        
+
         {
             /*
              * ThreadSetup IS MANDATORY ON OSX AND iOS (DUMMY ON ANDROID AND WINDOWS)
@@ -179,7 +199,7 @@ namespace chr
             run();
         }
         
-        lock_guard<mutex> lock(_mutex); // REASON: Task::hasEnded() IS THREAD-SAFE
+        lock_guard<mutex> lock(_mutex); // SEE: Task::isRunning()
         
         ended = true;
         
@@ -195,31 +215,10 @@ namespace chr
         /*
          * TODO:
          *
-         * INVESTIGATE IN WHICH "STATE" IS THE THREAD UNTIL Task::performShutdown() IS INVOKED
+         * INVESTIGATE IN WHICH "STATE" IS (AND/OR SHOULD BE) THE THREAD, UNTIL Task::performShutdown() IS INVOKED:
          *
-         * SHOULD WE BE IN A "WAIT STATE" UNTIL THEN?
+         * - IS IT ENOUGH TO BE IN THE (SUPPOSEDLY) CURRENT "NON-DETACHED STATE"?
+         * - OR WOULD IT BE PREFERRABLE TO BE IN A "NON-BUSY-WAIT STATE" UNTIL THEN?
          */
-    }
-    
-    /*
-     * INVOKED ON THE SKETCH-THREAD
-     *
-     * OPTION 1: FROM TaskManager::addTask()
-     * OPTION 2: FROM TaskManager::cancelTask()
-     * OPTION 3: FROM TaskManager::endTask()
-     */
-    void Task::performShutdown()
-    {
-        assert(initialized && !shutDown && (!started || ended));
-        
-        LOGI_IF(TaskManager::LOG_VERBOSE) << __PRETTY_FUNCTION__ << " | " << taskId << " | " << this << endl;
-        
-        shutdown();
-        shutDown = true;
-        
-        /*
-         * TODO: TRY "JOINING" INSTEAD OF "DETACHING"
-         */
-        detach();
     }
 }

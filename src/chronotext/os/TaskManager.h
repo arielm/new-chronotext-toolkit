@@ -16,10 +16,31 @@
  * 1) TEST AND DEVELOP FURTHER:
  *    - SEE "INNER" TODOS IN TaskManager AND Task
  *
- * 2) HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+ * 2) HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS:
  *    - SEE RELATED TODOS IN Context AND CinderDelegate
  *
- * 3) TRY TO USE NEW C++11 FEATURES LIKE std::future, std::async, std::thread_local OR std::atomic
+ * 3) HANDLE PROPERLY THE TOPIC OF "MAXIMUM CONCURRENT THREADS":
+ *    - TASKS COULD PROVIDE HINTS REGARDING WHICH "RESOURCES" THEY MAY "CONSUME":
+ *      - E.G. DISK OR NETWORK
+ *    - TAKE THE "THREAD POOL PATTERN" IN COUNT:
+ *      - http://en.wikipedia.org/wiki/Thread_pool_pattern
+ *    - CONSIDER USING "GRAND CENTRAL DISPATCH" ON COCOA:
+ *      - http://en.wikipedia.org/wiki/Grand_Central_Dispatch
+ *
+ * 4) CREATE TESTS AND SAMPLES:
+ *    - EXTREME CASES:
+ *      - Task::run() RETURNS IMMEDIATLY
+ *      - ETC.
+ *    - CANCELLATION
+ *    - "POSTING" FROM TASK
+ *    - ETC.
+ *
+ * 5) CONSIDER USING C++11 FEATURES LIKE:
+ *    - std::future
+ *    - std::async
+ *    - std::thread_local
+ *    - std::atomic
+ *    - ETC.
  */
 
 #pragma once
@@ -49,6 +70,7 @@ namespace chr
          *
          * - NOT INVOKED ON THE SKETCH-THREAD
          * - NO TASK IS REGISTERED WITH THIS ID
+         * - THE TASK HAS ALREADY BEEN EXECUTED (TASKS ARE NOT REUSABLE)
          *
          * NOTE: THE RETURNED POINTER IS NOT INTENDED FOR STORAGE
          */
@@ -84,12 +106,13 @@ namespace chr
         }
         
         /*
-         * RETURNS FALSE IF THE TASK CAN'T BE CANCELLED (OR CAN'T BE REMOVED IF NOT STARTED YET)
+         * RETURNS FALSE IF THE TASK CAN'T BE CANCELLED (OR CAN'T BE REMOVED IF NOT-YET STARTED)
          *
          * CAUSES:
          *
          * - NOT INVOKED ON THE SKETCH-THREAD
          * - NO TASK IS REGISTERED WITH THIS ID
+         * - THE TASK HAS ALREADY BEEN EXECUTED
          *
          * ASYNCHRONOUS TASKS ONLY:
          * - THE TASK IS ALREADY AWAITING CANCELLATION
