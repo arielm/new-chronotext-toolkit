@@ -30,7 +30,12 @@ namespace chr
         class Helper : public HelperBase
         {
         public:
+            /*
+             * MUST BE CALLED AFTER (OR WITHIN) UIApplication::didFinishLaunchingWithOptions
+             * OTHERWISE: SCREEN-ORIENTATION WON'T BE PROPERLY COMPUTED
+             */
             static void setup(const system::Info &systemInfo);
+            
             static void shutdown();
         };
     }

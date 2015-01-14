@@ -69,6 +69,12 @@ using namespace chr;
 {
     if (self = [super init])
     {
+        /*
+         * FIXME: THIS IS CURRENTLY CALLED TOO EARLY
+         *
+         * PROBLEM: DisplayInfo's SCREEN-ORIENTATION IS NOT PROPERLY-COMPUTABLE AT THIS STAGE
+         * SOLUTION: CALL THIS AFTER (OR WITHIN) UIApplication::didFinishLaunchingWithOptions
+         */
         INTERN::init(system::InitInfo());
         
         sketch = createSketch();
@@ -230,7 +236,7 @@ using namespace chr;
 
 - (BOOL) emulated
 {
-    return getSystemInfo().isSimulator; // TODO: CONSIDER RETURNING FALSE
+    return getSystemInfo().isSimulator;
 }
 
 #pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
@@ -257,20 +263,28 @@ using namespace chr;
 {
     Vec2f size;
     
-    switch (viewController.interfaceOrientation)
+    if (getSystemInfo().osVersion[0] >= 8)
     {
-        case UIDeviceOrientationUnknown:
-        case UIInterfaceOrientationPortrait:
-        case UIInterfaceOrientationPortraitUpsideDown:
-            size.x = view.frame.size.width;
-            size.y = view.frame.size.height;
-            break;
-            
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
-            size.x = view.frame.size.height;
-            size.y = view.frame.size.width;
-            break;
+        size.x = view.frame.size.width;
+        size.y = view.frame.size.height;
+    }
+    else
+    {
+        switch (viewController.interfaceOrientation)
+        {
+            case UIDeviceOrientationUnknown:
+            case UIInterfaceOrientationPortrait:
+            case UIInterfaceOrientationPortraitUpsideDown:
+                size.x = view.frame.size.width;
+                size.y = view.frame.size.height;
+                break;
+                
+            case UIInterfaceOrientationLandscapeLeft:
+            case UIInterfaceOrientationLandscapeRight:
+                size.x = view.frame.size.height;
+                size.y = view.frame.size.width;
+                break;
+        }
     }
     
     return size * view.contentScaleFactor;

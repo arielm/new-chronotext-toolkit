@@ -46,9 +46,11 @@ namespace chr
         void ManagerBase::updateInfo()
         {
             info.platform = platform();
-            
             info.platformString = platformName();
+            
+            info.osVersion = getOsVersion();
             info.osVersionString = getOsVersionString();
+            
             info.deviceString = getDeviceString();
         }
     }

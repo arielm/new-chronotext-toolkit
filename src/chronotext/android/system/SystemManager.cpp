@@ -9,6 +9,8 @@
 #include "chronotext/android/system/SystemManager.h"
 #include "chronotext/Context.h"
 
+#include "cinder/Utilities.h"
+
 #include <sys/system_properties.h>
 #include <sys/utsname.h>
 
@@ -21,7 +23,7 @@ namespace chr
     {
         namespace android
         {
-            string getProperty(const char *name)
+            const string getProperty(const char *name)
             {
                 static char tmp[256];
                 auto len = __system_property_get(name, tmp);
@@ -72,9 +74,31 @@ namespace chr
             ManagerBase::updateInfo();
         }
         
+        array<int, 3> Manager::getOsVersion()
+        {
+            auto releaseString = android::getProperty("ro.build.version.release");
+            auto components = ci::split(releaseString, '.');
+            
+            int major = (components.size() > 0) ? atoi(components[0].data()) : 0;
+            int minor = (components.size() > 1) ? atoi(components[1].data()) : 0;
+            int patch = (components.size() > 2) ? atoi(components[2].data()) : 0;
+            
+            return {major, minor, patch};
+        }
+        
         string Manager::getOsVersionString()
         {
-            return android::getProperty("ro.build.version.release");
+            auto releaseString = android::getProperty("ro.build.version.release");
+            auto sdkVersion = getSdkVersion();
+            
+            if (sdkVersion)
+            {
+                return releaseString + " [" + toString(sdkVersion) + "]";
+            }
+            else
+            {
+                releaseString;
+            }
         }
         
         string Manager::getDeviceString()
@@ -82,6 +106,12 @@ namespace chr
             return info.model + " [" + info.manufacturer + "]";
         }
         
+        int Manager::getSdkVersion()
+        {
+            auto sdkString = android::getProperty("ro.build.version.sdk");
+            return sdkString.empty() ? 0 : atoi(sdkString.data());
+        }
+
         string Manager::getModel()
         {
             return android::getProperty("ro.product.model");

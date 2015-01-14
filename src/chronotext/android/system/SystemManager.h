@@ -30,7 +30,7 @@ namespace chr
              * THE SAME PROPERTIES QUERIABLE VIA ADB, E.G.
              * adb shell getprop ro.product.manufacturer
              */
-            std::string getProperty(const char *name);
+            const std::string getProperty(const char *name);
         }
         
         class Manager : public ManagerBase
@@ -43,10 +43,12 @@ namespace chr
             
         protected:
             void updateInfo() final;
-            
+
+            std::array<int, 3> getOsVersion() final;
             std::string getOsVersionString() final;
             std::string getDeviceString() final;
             
+            int getSdkVersion();
             std::string getModel();
             std::string getManufacturer();
         };

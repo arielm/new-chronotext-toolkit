@@ -35,6 +35,7 @@ namespace chr
         protected:
             void updateInfo() final;
             
+            std::array<int, 3> getOsVersion() final;
             std::string getOsVersionString() final;
             std::string getDeviceString() final;
             

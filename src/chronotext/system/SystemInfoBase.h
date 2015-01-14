@@ -12,6 +12,8 @@
 
 #include <boost/asio.hpp>
 
+#include <array>
+
 namespace chr
 {
     namespace system
@@ -21,7 +23,8 @@ namespace chr
             PLATFORM_OSX,
             PLATFORM_WINDOW,
             PLATFORM_IOS,
-            PLATFORM_ANDROID
+            PLATFORM_ANDROID,
+            PLATFORM_UNDEFINED
         };
         
         struct LaunchInfo
@@ -51,27 +54,31 @@ namespace chr
         class InfoBase
         {
         public:
-            Platform platform;
-            
+            Platform platform = PLATFORM_UNDEFINED;
             std::string platformString;
-            std::string osVersionString;
-            std::string deviceString;
             
+            std::array<int, 3> osVersion {};
+            std::string osVersionString;
+            
+            std::string deviceString;
+
             friend std::ostream& operator<<(std::ostream &lhs, const InfoBase &rhs)
             {
-                lhs
-                << "{"
-                << "platform: " << rhs.platformString
-                << ", os-version: " << rhs.osVersionString;
+                lhs << "{";
                 
-                if (!rhs.deviceString.empty())
+                if (rhs.platform != PLATFORM_UNDEFINED)
                 {
-                    lhs << ", device: '" << rhs.deviceString << "'";
+                    lhs
+                    << "platform: " << rhs.platformString
+                    << ", os-version: " << rhs.osVersionString;
+                    
+                    if (!rhs.deviceString.empty())
+                    {
+                        lhs << ", device: " << rhs.deviceString;
+                    }
                 }
                 
-                lhs << "}";
-                
-                return lhs;
+                return (lhs << "}");
             }
         };
     }

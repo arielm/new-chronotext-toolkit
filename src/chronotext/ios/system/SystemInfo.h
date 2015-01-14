@@ -55,13 +55,13 @@ namespace chr
             
             std::string model;
             std::string machine;
-            Generation generation;
+            Generation generation = GENERATION_UNDEFINED;
             
-            bool isPodTouch;
-            bool isIPhone;
-            bool isIPad;
-            bool isIPadMini;
-            bool isSimulator;
+            bool isPodTouch = false;
+            bool isIPhone = false;
+            bool isIPad = false;
+            bool isIPadMini = false;
+            bool isSimulator = false;
         };
     }
 }

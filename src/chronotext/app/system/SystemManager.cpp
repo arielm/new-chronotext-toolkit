@@ -38,6 +38,10 @@ namespace chr
         {
             string host = System::getIpAddress();
             
+            /*
+             * TODO: CONSIDER USING boost::asio::ip
+             */
+            
             if (maskForBroadcast)
             {
                 if (host.rfind('.') != string::npos)
@@ -51,9 +55,15 @@ namespace chr
         
         // ---
         
+        array<int, 3> Manager::getOsVersion()
+        {
+            return {System::getOsMajorVersion(), System::getOsMinorVersion(), System::getOsBugFixVersion()};
+        }
+        
         string Manager::getOsVersionString()
         {
-            return ci::toString(System::getOsMajorVersion()) + "." + ci::toString(System::getOsMinorVersion()) + "." + ci::toString(System::getOsBugFixVersion());
+            auto osVersion = getOsVersion();
+            return toString(osVersion[0]) + "." + toString(osVersion[1]) + "." + toString(osVersion[2]);
         }
         
         string Manager::getDeviceString()

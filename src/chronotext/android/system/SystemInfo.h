@@ -28,6 +28,7 @@ namespace chr
         class Info : public InfoBase
         {
         public:
+            int sdkVersion = 0;
             std::string model;
             std::string manufacturer;
         };

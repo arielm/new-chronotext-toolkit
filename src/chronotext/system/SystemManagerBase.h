@@ -35,7 +35,8 @@ namespace chr
             Info info;
             
             virtual void updateInfo();
-            
+
+            virtual std::array<int, 3> getOsVersion() = 0;
             virtual std::string getOsVersionString() = 0;
             virtual std::string getDeviceString() = 0;
         };

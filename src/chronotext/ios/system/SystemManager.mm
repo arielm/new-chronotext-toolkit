@@ -9,8 +9,6 @@
 #include "chronotext/ios/system/SystemManager.h"
 #include "chronotext/Context.h"
 
-#include "cinder/System.h"
-
 #include <sys/utsname.h>
 
 using namespace std;
@@ -25,7 +23,7 @@ namespace chr
             map<string, Info::Generation> machineGenerations;
             map<Info::Generation, string> generationNames;
             
-            void populateData();
+            void updateGeneration();
         }
         
         // ---
@@ -62,7 +60,7 @@ namespace chr
              * XXX: ORDER OF EXECUTION MATTERS!
              */
             
-            manager::populateData();
+            manager::updateGeneration();
             
             info.model = getModel();
             info.machine = getMachine();
@@ -77,9 +75,21 @@ namespace chr
             ManagerBase::updateInfo();
         }
         
+        array<int, 3> Manager::getOsVersion()
+        {
+            NSArray *components = [UIDevice.currentDevice.systemVersion componentsSeparatedByString:@"."];
+            
+            int major = (components.count > 0) ? [[components objectAtIndex:0] intValue] : 0;
+            int minor = (components.count > 1) ? [[components objectAtIndex:1] intValue] : 0;
+            int patch = (components.count > 2) ? [[components objectAtIndex:2] intValue] : 0;
+            
+            return {major, minor, patch};
+        }
+        
         string Manager::getOsVersionString()
         {
-            return ci::toString(System::getOsMajorVersion()) + "." + ci::toString(System::getOsMinorVersion()) + "." + ci::toString(System::getOsBugFixVersion());
+            auto osVersion = getOsVersion();
+            return toString(osVersion[0]) + "." + toString(osVersion[1]) + "." + toString(osVersion[2]);
         }
         
         string Manager::getDeviceString()
@@ -165,11 +175,7 @@ namespace chr
         
         // ---
         
-        /*
-         * TODO: DYNAMIC PARSING (E.G. VIA EXTERNAL JSON FILE)
-         */
-        
-        void manager::populateData()
+        void manager::updateGeneration()
         {
             if (machineGenerations.empty())
             {

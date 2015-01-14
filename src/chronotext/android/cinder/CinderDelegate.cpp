@@ -93,7 +93,7 @@ namespace chr
     
     void CinderDelegate::resize(int width, int height)
     {
-        windowInfo.size = Vec2i(width, height); // TODO: WE COULD FILTER SPURIOUS RESIZE EVENT LIKE IN ios/cinder/CinderDelegate.mm
+        windowInfo.size = Vec2i(width, height); // TODO: WE COULD FILTER SPURIOUS RESIZE EVENTS LIKE IN ios/cinder/CinderDelegate.mm
         sketch->resize();
     }
     
