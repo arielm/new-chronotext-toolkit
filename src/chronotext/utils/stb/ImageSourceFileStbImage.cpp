@@ -1,4 +1,5 @@
 #include "ImageSourceFileStbImage.h"
+
 #include "cinder/Utilities.h"
 
 namespace cinder {

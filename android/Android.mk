@@ -33,6 +33,7 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/time/FrameClock.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/GLUtils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/MathUtils.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/Utils.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/utils/stb/ImageSourceFileStbImage.cpp
 
 ifdef CHR_USE_ZFONT
     LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/font/zf/ActualFont.cpp
