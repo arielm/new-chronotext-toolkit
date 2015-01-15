@@ -12,7 +12,7 @@
 
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    bridge = [[CinderDelegate alloc] initWithOptions:launchOptions];
+    bridge = [[CinderBridge alloc] initWithOptions:launchOptions];
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
         [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
@@ -20,12 +20,10 @@
         [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
         nil];
     
-    viewController = [bridge bindWithViewController:[[GLViewController alloc] initWithBridge:bridge properties:properties]];
-    
     window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     window.backgroundColor = [UIColor blackColor];
     
-    [window setRootViewController:viewController];
+    [window setRootViewController:[bridge createViewControllerWithProperties:properties]];
     [window makeKeyAndVisible];
     
     return YES;
@@ -34,7 +32,6 @@
 - (void) dealloc
 {
     [bridge release];
-    [viewController release];
     [window release];
     
     [super dealloc];

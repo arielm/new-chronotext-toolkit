@@ -6,16 +6,14 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * STUB FOR RUNNING A CinderSketch ON THE DESKTOP
- */
+#import "CinderBridge.h"
 
-#pragma once
-
-#include "chronotext/desktop/cinder/CinderDelegate.h"
-
-class Application : public chr::CinderDelegate
+@interface Bridge : CinderBridge
 {
-public:
-    void applySettings(Settings *settings) final;
-};
+    UIWindow *window;
+    
+}
+
+- (id) initWithOptions:(NSDictionary*)options;
+
+@end

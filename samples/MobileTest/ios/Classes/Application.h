@@ -10,15 +10,27 @@
  * STUB FOR RUNNING A CinderSketch ON iOS
  */
 
-#import <Foundation/Foundation.h>
-
-#import "CinderDelegate.h" // TODO: RENAME TO CinderBridge
+#import "Bridge.h"
 
 @interface Application : NSObject <UIApplicationDelegate>
 {
-    CinderDelegate *bridge;
-    GLViewController *viewController;
-    UIWindow *window;
+    Bridge *bridge;
+}
+
+@end
+
+@implementation Application
+
+- (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+{
+    bridge = [[Bridge alloc] initWithOptions:launchOptions];
+    return YES;
+}
+
+- (void) dealloc
+{
+    [bridge release];
+    [super dealloc];
 }
 
 @end
