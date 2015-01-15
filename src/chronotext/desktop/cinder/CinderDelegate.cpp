@@ -25,7 +25,7 @@ namespace chr
     /*
      * XXX: SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
      *
-     * OTHERWISE: POTENTIAL EXTENDERS LIKE osx/cinder/CinderAdapter WILL CRASH
+     * OTHERWISE: POTENTIAL EXTENDERS LIKE osx/cinder/CinderBridge WILL CRASH
      */
     
     void CinderDelegate::setSketch(CinderSketch *newSketch)

@@ -6,7 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
 OBJC_EXPORT NSString* kGLViewControllerPropertyRenderingAPI;
