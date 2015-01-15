@@ -6,17 +6,21 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import "AppDelegate.h"
+#import "Application.h"
 
-@implementation AppDelegate
+@implementation Application
 
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    viewController = [[GLViewController alloc] initWithCinderDelegate:self properties:[NSDictionary dictionaryWithObjectsAndKeys:
+    bridge = [[CinderDelegate alloc] initWithOptions:launchOptions];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
         [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
-        [NSNumber numberWithInt:UIInterfaceOrientationMaskAll], kGLViewControllerPropertyInterfaceOrientationMask,
+        [NSNumber numberWithInt:UIInterfaceOrientationMaskLandscape], kGLViewControllerPropertyInterfaceOrientationMask,
         [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
-        nil]];
+        nil];
+    
+    viewController = [bridge bindWithViewController:[[GLViewController alloc] initWithBridge:bridge properties:properties]];
     
     window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     window.backgroundColor = [UIColor blackColor];
@@ -29,6 +33,7 @@
 
 - (void) dealloc
 {
+    [bridge release];
     [viewController release];
     [window release];
     

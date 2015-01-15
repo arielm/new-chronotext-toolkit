@@ -51,7 +51,7 @@
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
 		A8F595661A07788300877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595651A07788300877FB2 /* Log.cpp */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
-		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
+		A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* Application.mm */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
 		A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */; };
 		A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC716E3AB8000367F97 /* GLViewController.mm */; };
@@ -174,8 +174,8 @@
 		A8F595651A07788300877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9979219FAA06000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		A8FA3B8B16E39A7C00367F97 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		A8FA3B8C16E39A7C00367F97 /* Application.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Application.mm; sourceTree = "<group>"; };
 		A8FA3B9616E3AB8000367F97 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
 		A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
 		A8FA3BBE16E3AB8000367F97 /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
@@ -434,8 +434,8 @@
 		A8FA3B8316E379B000367F97 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */,
-				A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */,
+				A8FA3B8B16E39A7C00367F97 /* Application.h */,
+				A8FA3B8C16E39A7C00367F97 /* Application.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -646,7 +646,7 @@
 				A802714519CC83FD0072973D /* FontSequence.cpp in Sources */,
 				A8112C921A4F30050002CF68 /* FXGDocument.cpp in Sources */,
 				A8836D711A4B0008007733CE /* Handler.cpp in Sources */,
-				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
+				A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */,
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8F595661A07788300877FB2 /* Log.cpp in Sources */,

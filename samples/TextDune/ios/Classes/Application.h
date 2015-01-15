@@ -12,10 +12,12 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CinderDelegate.h"
+#import "CinderDelegate.h" // TODO: RENAME TO CinderBridge
 
-@interface AppDelegate : CinderDelegate <UIApplicationDelegate>
+@interface Application : NSObject <UIApplicationDelegate>
 {
+    CinderDelegate *bridge;
+    GLViewController *viewController;
     UIWindow *window;
 }
 
