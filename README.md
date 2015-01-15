@@ -6,10 +6,12 @@ The purpose of this toolkit is twofold:
 
 2. Creating 2D games and interactive applications for iOS and Android.  
 
-The toolkit relies on Cinder 0.8.5 vanilla for [OSX and iOS](http://libcinder.org/releases/cinder_0.8.5_mac.zip) or [Windows](http://libcinder.org/releases/cinder_0.8.5_vc2012.zip), with some optional [patches](https://github.com/arielm/patches).  
-For Android, [safetydank's fork](https://github.com/safetydank/Cinder/tree/android-dev/android) must be used. Tested on OSX 10.9.5 with NDK r10b, ADT 23.0.2 and Platform 15.
+The toolkit relies on Cinder 0.8.5 vanilla for [OSX and iOS](http://libcinder.org/releases/cinder_0.8.5_mac.zip) or [Windows](http://libcinder.org/releases/cinder_0.8.5_vc2012.zip) and [safetydank's fork](https://github.com/safetydank/Cinder/tree/android-dev/android) for Android. Check the [Wiki](https://github.com/arielm/new-chronotext-toolkit/wiki) for more info.
+
+- - -
 
 The code is released under the [Simplified BSD License](https://github.com/arielm/chronotext-blocks-base/blob/master/LICENSE.md).  
 
 ### Incorporated open-source projects
-[utf8-cpp](http://utfcpp.sourceforge.net) - Copyright 2006 Nemanja Trifunovic
+[utf8-cpp](http://utfcpp.sourceforge.net) - Copyright 2006 Nemanja Trifunovic  
+[stb_image](public domain image library by Sean Barrett et al) - By Sean Barrett and co.
