@@ -20,7 +20,7 @@
 
 #else
 
-#include "chronotext/app/system/DisplayHelper.h"
+#include "chronotext/desktop/system/DisplayHelper.h"
 
 #endif
 

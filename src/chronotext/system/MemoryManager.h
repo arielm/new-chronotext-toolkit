@@ -20,7 +20,7 @@
 
 #else
 
-#include "chronotext/app/system/MemoryManager.h"
+#include "chronotext/desktop/system/MemoryManager.h"
 
 #endif
 

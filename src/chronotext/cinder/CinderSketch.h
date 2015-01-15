@@ -20,6 +20,6 @@
 
 #else
 
-#include "chronotext/app/cinder/CinderSketch.h"
+#include "chronotext/desktop/cinder/CinderSketch.h"
 
 #endif

@@ -6,8 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "CinderDelegate.h"
-
+#include "chronotext/desktop/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 
 #include "cinder/Json.h"

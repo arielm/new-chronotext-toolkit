@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/app/system/SystemManager.h"
+#include "chronotext/desktop/system/SystemManager.h"
 #include "chronotext/Context.h"
 
 #include "cinder/System.h"

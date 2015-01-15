@@ -20,7 +20,7 @@
 
 #else
 
-#include "chronotext/app/system/SystemManager.h"
+#include "chronotext/desktop/system/SystemManager.h"
 
 #endif
 

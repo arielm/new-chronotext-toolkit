@@ -9,7 +9,7 @@
 #pragma once
 
 #include "chronotext/system/SystemInfoBase.h"
-#include "chronotext/app/system/EmulatedDevice.h"
+#include "chronotext/desktop/system/EmulatedDevice.h"
 
 namespace chr
 {

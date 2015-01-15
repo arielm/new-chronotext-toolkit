@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/app/system/DisplayHelper.h"
+#include "chronotext/desktop/system/DisplayHelper.h"
 #include "chronotext/Context.h"
 
 #include "cinder/app/Renderer.h"
