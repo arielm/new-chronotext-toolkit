@@ -121,20 +121,17 @@ namespace chr
     
     SystemManager& systemManager()
     {
-        assert(intern::initialized);
-        return *intern::systemManager.get();
+        return checkedReference(intern::systemManager.get());
     }
     
     MemoryManager& memoryManager()
     {
-        assert(intern::initialized);
-        return *intern::memoryManager.get();
+        return checkedReference(intern::memoryManager.get());
     }
     
     TaskManager& taskManager()
     {
-        assert(intern::launched);
-        return *intern::taskManager.get();
+        return checkedReference(intern::taskManager.get());
     }
     
     /*

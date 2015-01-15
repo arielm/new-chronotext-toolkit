@@ -24,6 +24,11 @@ namespace chr
         
         // ---
         
+        /*
+         * FIXME: SCREEN-SIZE EVALUATION ON IPHONE 6 IS MORE COMPLICATED...
+         * https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW46
+         */
+        
         void Helper::setup(const system::Info &systemInfo)
         {
             if (!intern::setup)
@@ -36,20 +41,28 @@ namespace chr
                 
                 Vec2i baseSize;
                 
-                switch (orientation)
+                if (systemInfo.osVersion[0] >= 8)
                 {
-                    case UIDeviceOrientationUnknown:
-                    case UIInterfaceOrientationPortrait:
-                    case UIInterfaceOrientationPortraitUpsideDown:
-                        baseSize.x = bounds.size.width;
-                        baseSize.y = bounds.size.height;
-                        break;
-                        
-                    case UIInterfaceOrientationLandscapeLeft:
-                    case UIInterfaceOrientationLandscapeRight:
-                        baseSize.x = bounds.size.height;
-                        baseSize.y = bounds.size.width;
-                        break;
+                    baseSize.x = bounds.size.width;
+                    baseSize.y = bounds.size.height;
+                }
+                else
+                {
+                    switch (orientation)
+                    {
+                        case UIDeviceOrientationUnknown:
+                        case UIInterfaceOrientationPortrait:
+                        case UIInterfaceOrientationPortraitUpsideDown:
+                            baseSize.x = bounds.size.width;
+                            baseSize.y = bounds.size.height;
+                            break;
+                            
+                        case UIInterfaceOrientationLandscapeLeft:
+                        case UIInterfaceOrientationLandscapeRight:
+                            baseSize.x = bounds.size.height;
+                            baseSize.y = bounds.size.width;
+                            break;
+                    }
                 }
                 
                 // ---

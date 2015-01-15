@@ -56,6 +56,13 @@ namespace chr
         bool post(std::function<void()> &&fn, bool forceSync = false);
     }
     
+    template <class T>
+    inline T& checkedReference(T *instance)
+    {
+        assert(instance);
+        return *instance;
+    }
+    
     // ---
     
     namespace INTERN

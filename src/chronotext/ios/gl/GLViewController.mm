@@ -45,10 +45,10 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 @implementation GLViewController
 
+@synthesize cinderBridge;
 @synthesize glView;
-@synthesize cinderDelegate;
 
-- (id) initWithCinderDelegate:(CinderDelegate*)delegate properties:(NSDictionary*)props
+- (id) initWithBridge:(CinderDelegate*)bridge properties:(NSDictionary*)_properties
 {
     if (self = [super init])
     {
@@ -63,9 +63,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
             [NSNumber numberWithInt:GLKViewDrawableMultisampleNone], kGLViewControllerPropertyMultisample,
             nil];
         
-        if (props)
+        if (_properties)
         {
-            properties = [[NSMutableDictionary alloc] initWithDictionary:props];
+            properties = [[NSMutableDictionary alloc] initWithDictionary:_properties];
         }
         else
         {
@@ -84,8 +84,8 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
         // ---
         
-        cinderDelegate = delegate;
-        [cinderDelegate launch];
+        cinderBridge = bridge;
+        [cinderBridge bindWithViewController:self]; // WILL PERFORM "LAUNCH"
     }
     
     return self;
@@ -114,15 +114,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     
     // ---
     
-    cinderDelegate.view = glView;
-    cinderDelegate.viewController = self;
-
-    /*
-     * MUST TAKE PLACE BEFORE SETUP
-     */
-    [EAGLContext setCurrentContext:glView.context];
+    [EAGLContext setCurrentContext:glView.context]; // MUST TAKE PLACE BEFORE "SETUP"
     
-    [cinderDelegate setup];
+    [cinderBridge setup];
     resizeRequest = YES;
 }
 
@@ -177,7 +171,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     {
         NSLog(@"AVERAGE FRAME-RATE: %f FRAMES PER SECOND", ticks / elapsed); // LOG: VERBOSE
         
-        [cinderDelegate stopWithReason:reasonId];
+        [cinderBridge stopWithReason:reasonId];
         
         started = NO;
     }
@@ -190,12 +184,12 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         if (resizeRequest)
         {
             resizeRequest = NO;
-            [cinderDelegate resize];
+            [cinderBridge resize];
         }
         
         if (startRequest)
         {
-            [cinderDelegate startWithReason:startReasonId];
+            [cinderBridge startWithReason:startReasonId];
         }
         
         // ---
@@ -212,7 +206,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         
         // ---
         
-        [cinderDelegate update];
+        [cinderBridge update];
     }
     
     startRequest = NO;
@@ -222,7 +216,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (started)
     {
-        [cinderDelegate draw];
+        [cinderBridge draw];
     }
 }
 
@@ -284,22 +278,22 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [cinderDelegate touchesBegan:touches withEvent:event];
+    [cinderBridge touchesBegan:touches withEvent:event];
 }
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [cinderDelegate touchesMoved:touches withEvent:event];
+    [cinderBridge touchesMoved:touches withEvent:event];
 }
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [cinderDelegate touchesEnded:touches withEvent:event];
+    [cinderBridge touchesEnded:touches withEvent:event];
 }
 
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [cinderDelegate touchesCancelled:touches withEvent:event];
+    [cinderBridge touchesCancelled:touches withEvent:event];
 }
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------

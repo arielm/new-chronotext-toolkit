@@ -22,13 +22,13 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
 
 @interface GLViewController : GLKViewController
 {
-    CinderDelegate *cinderDelegate;
+    CinderDelegate *cinderBridge;
     GLKView *glView;
 }
 
-@property (nonatomic, readonly) CinderDelegate *cinderDelegate;
+@property (nonatomic, readonly) CinderDelegate *cinderBridge;
 @property (nonatomic, readonly) GLKView *glView;
 
-- (id) initWithCinderDelegate:(CinderDelegate*)delegate properties:(NSDictionary*)props;
+- (id) initWithBridge:(CinderDelegate*)bridge properties:(NSDictionary*)properties;
 
 @end

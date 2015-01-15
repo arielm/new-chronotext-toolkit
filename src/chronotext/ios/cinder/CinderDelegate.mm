@@ -24,16 +24,15 @@ using namespace chr;
 
 @interface CinderDelegate ()
 {
-    AccelEvent::Filter accelFilter;
-    
-    shared_ptr<boost::asio::io_service> io;
-    shared_ptr<boost::asio::io_service::work> ioWork;
-
+    GLKView *view;
     WindowInfo windowInfo;
-
+    
     BOOL initialized;
     BOOL active;
     BOOL forceResize;
+
+    shared_ptr<boost::asio::io_service> io;
+    shared_ptr<boost::asio::io_service::work> ioWork;
 
     Timer timer;
     uint32_t frameCount;
@@ -57,7 +56,6 @@ using namespace chr;
 
 @implementation CinderDelegate
 
-@synthesize view;
 @synthesize viewController;
 @synthesize sketch;
 @synthesize accelFilter;
@@ -65,16 +63,10 @@ using namespace chr;
 @synthesize initialized;
 @synthesize active;
 
-- (id) init
+- (id) initWithOptions:(NSDictionary*)options
 {
     if (self = [super init])
     {
-        /*
-         * FIXME: THIS IS CURRENTLY CALLED TOO EARLY
-         *
-         * PROBLEM: DisplayInfo's SCREEN-ORIENTATION IS NOT PROPERLY-COMPUTABLE AT THIS STAGE
-         * SOLUTION: CALL THIS AFTER (OR WITHIN) UIApplication::didFinishLaunchingWithOptions
-         */
         INTERN::init(system::InitInfo());
         
         sketch = createSketch();
@@ -93,8 +85,6 @@ using namespace chr;
 
 - (void) dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
     sketch->shutdown();
     destroySketch(sketch);
     sketch = nullptr;
@@ -108,19 +98,34 @@ using namespace chr;
     [self stopIOService];
     INTERN::shutdown();
     
+    // ---
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    [viewController release];
     [super dealloc];
 }
 
-- (void) launch
+- (GLViewController*) bindWithViewController:(GLViewController*)controller
 {
-    [self startIOService];
+    if (!viewController)
+    {
+        viewController = controller;
+        [viewController retain];
+        
+        [self startIOService];
+        
+        INTERN::launch(system::LaunchInfo(*io));
+        sketch->launch();
+    }
     
-    INTERN::launch(system::LaunchInfo(*io));
-    sketch->launch();
+    return viewController;
 }
 
 - (void) setup
 {
+    view = viewController.glView;
+    
     windowInfo = WindowInfo([self windowSize], [self aaLevel]);
     forceResize = YES;
 
@@ -258,6 +263,11 @@ using namespace chr;
 }
 
 #pragma mark ---------------------------------------- WINDOW-INFO ----------------------------------------
+
+/*
+ * FIXME: SCREEN-SIZE EVALUATION ON IPHONE 6 IS MORE COMPLICATED...
+ * https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW46
+ */
 
 - (Vec2f) windowSize;
 {

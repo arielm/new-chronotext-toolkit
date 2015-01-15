@@ -26,13 +26,12 @@ enum
 
 @interface CinderDelegate : NSObject <UIAccelerometerDelegate>
 {
-    GLKView *view;
     GLViewController *viewController;
     chr::CinderSketch *sketch;
+    AccelEvent::Filter accelFilter;
 }
 
-@property (nonatomic, assign) GLKView *view;
-@property (nonatomic, assign) GLViewController *viewController;
+@property (nonatomic, readonly) GLViewController *viewController;
 @property (nonatomic, readonly) chr::CinderSketch *sketch;
 @property (nonatomic, assign) AccelEvent::Filter accelFilter;
 @property (nonatomic, readonly) const chr::WindowInfo &windowInfo;
@@ -42,7 +41,10 @@ enum
 @property (nonatomic, readonly) uint32_t elapsedFrames;
 @property (nonatomic, readonly) BOOL emulated;
 
-- (void) launch;
+- (id) initWithOptions:(NSDictionary*)options;
+
+- (GLViewController*) bindWithViewController:(GLViewController*)controller;
+
 - (void) setup;
 - (void) resize;
 - (void) update;
