@@ -8,10 +8,8 @@ The purpose of this toolkit is twofold:
 
 The toolkit relies on Cinder 0.8.5 vanilla for [OSX and iOS](http://libcinder.org/releases/cinder_0.8.5_mac.zip) or [Windows](http://libcinder.org/releases/cinder_0.8.5_vc2012.zip) and [safetydank's fork](https://github.com/safetydank/Cinder/tree/android-dev/android) for Android. Check the [Wiki](https://github.com/arielm/new-chronotext-toolkit/wiki) for more info.
 
-- - -
-
 The code is released under the [Simplified BSD License](https://github.com/arielm/chronotext-blocks-base/blob/master/LICENSE.md).  
 
 ### Incorporated open-source projects
 [utf8-cpp](http://utfcpp.sourceforge.net) - Copyright 2006 Nemanja Trifunovic  
-[stb_image](public domain image library by Sean Barrett et al) - By Sean Barrett and co.
+[stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) - By Sean Barrett and co.
