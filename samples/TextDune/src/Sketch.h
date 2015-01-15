@@ -17,7 +17,7 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT df9234d
+ * OSX: COMMIT 3adbae8
  * IOS: COMMIT df9234d
  * ANDROID: COMMIT df9234d
  */
