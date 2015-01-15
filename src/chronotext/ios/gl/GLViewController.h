@@ -18,17 +18,17 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyDepthFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyStencilFormat;
 OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
 
-@class CinderDelegate;
+@class CinderBridge;
 
 @interface GLViewController : GLKViewController
 {
-    CinderDelegate *cinderBridge;
+    CinderBridge *cinderBridge;
     GLKView *glView;
 }
 
-@property (nonatomic, readonly) CinderDelegate *cinderBridge;
+@property (nonatomic, readonly) CinderBridge *cinderBridge;
 @property (nonatomic, readonly) GLKView *glView;
 
-- (id) initWithBridge:(CinderDelegate*)bridge properties:(NSDictionary*)properties;
+- (id) initWithBridge:(CinderBridge*)bridge properties:(NSDictionary*)properties;
 
 @end

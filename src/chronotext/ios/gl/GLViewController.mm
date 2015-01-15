@@ -7,7 +7,7 @@
  */
 
 #import "chronotext/ios/gl/GLViewController.h"
-#import "chronotext/ios/cinder/CinderDelegate.h"
+#import "chronotext/ios/cinder/CinderBridge.h"
 
 NSString* kGLViewControllerPropertyRenderingAPI = @"kGLViewControllerPropertyRenderingAPI";
 NSString* kGLViewControllerPropertyPreferredFramesPerSecond = @"kGLViewControllerPropertyPreferredFramesPerSecond";
@@ -48,10 +48,12 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 @synthesize cinderBridge;
 @synthesize glView;
 
-- (id) initWithBridge:(CinderDelegate*)bridge properties:(NSDictionary*)_properties
+- (id) initWithBridge:(CinderBridge*)bridge properties:(NSDictionary*)_properties
 {
     if (self = [super init])
     {
+        cinderBridge = bridge;
+
         NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
             [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
             [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
@@ -81,11 +83,6 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         }
 
         interfaceOrientationMask = [[properties objectForKey:kGLViewControllerPropertyInterfaceOrientationMask] intValue];
-
-        // ---
-        
-        cinderBridge = bridge;
-        [cinderBridge bindWithViewController:self]; // WILL PERFORM "LAUNCH"
     }
     
     return self;
@@ -154,10 +151,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (!started)
     {
-        /*
-         * MUST TAKE PLACE BEFORE START AND DRAW
-         */
-        [EAGLContext setCurrentContext:glView.context];
+        [EAGLContext setCurrentContext:glView.context]; // MUST TAKE PLACE BEFORE "START" AND "DRAW"
         
         started = YES;
         startRequest = YES;

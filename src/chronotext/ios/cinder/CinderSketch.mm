@@ -8,7 +8,7 @@
 
 #include "chronotext/ios/cinder/CinderSketch.h"
 
-#import "CinderDelegate.h"
+#import "CinderBridge.h"
 
 using namespace std;
 using namespace ci;
@@ -26,9 +26,9 @@ namespace chr
         CinderSketch::delegate = delegate;
     }
     
-    static inline CinderDelegate* castToDelegate(void *delegate)
+    static inline CinderBridge* castToDelegate(void *delegate)
     {
-        return static_cast<CinderDelegate*>(delegate);
+        return static_cast<CinderBridge*>(delegate);
     }
 
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------
