@@ -47,6 +47,6 @@ extern "C"
 
 #include "Application.h"
 
-CINDER_APP_NATIVE(Application, ci::app::RendererGl(ci::app::RendererGl::AA_MSAA_4))
+CINDER_APP_NATIVE(Application, ci::app::RendererGl(ci::app::RendererGl::AA_NONE))
 
 #endif

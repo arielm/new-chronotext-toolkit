@@ -9,9 +9,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT 6e0dda1
- * IOS: COMMIT 6e0dda1
- * ANDROID: COMMIT 6e0dda1
+ * OSX: COMMIT df9234d
+ * IOS: COMMIT df9234d
+ * ANDROID: COMMIT df9234d
  */
 
 /*
