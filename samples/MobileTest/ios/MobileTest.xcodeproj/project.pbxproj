@@ -21,6 +21,7 @@
 		A802714619CC83FD0072973D /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A802712219CC83FD0072973D /* TextHelper.cpp */; };
 		A802715119CC83FD0072973D /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A802714119CC83FD0072973D /* QuadMatrix.cpp */; };
 		A826F48F1A6811FB002A23A9 /* Bridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A826F48E1A6811FB002A23A9 /* Bridge.mm */; };
+		A826F4CE1A6B0D9B002A23A9 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A826F4CD1A6B0D9B002A23A9 /* CinderDelegate.mm */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
 		A8702BC31A5B489500EF9E9E /* DisplayHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702BB41A5B489500EF9E9E /* DisplayHelperBase.cpp */; };
@@ -89,6 +90,10 @@
 		A802714219CC83FD0072973D /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
 		A826F48D1A6811FB002A23A9 /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		A826F48E1A6811FB002A23A9 /* Bridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bridge.mm; sourceTree = "<group>"; };
+		A826F4CA1A6B0D8D002A23A9 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A826F4CB1A6B0D8D002A23A9 /* CinderDelegateBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegateBase.h; sourceTree = "<group>"; };
+		A826F4CC1A6B0D9B002A23A9 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A826F4CD1A6B0D9B002A23A9 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A85483B819CE12CD00B7866C /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
@@ -427,6 +432,8 @@
 		A8FA3B9316E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
+				A826F4CA1A6B0D8D002A23A9 /* CinderDelegate.h */,
+				A826F4CB1A6B0D8D002A23A9 /* CinderDelegateBase.h */,
 				A8FA3B9616E3AB8000367F97 /* CinderSketch.h */,
 				A8720806180833E10055F0BA /* CinderSketchBase.h */,
 				A85483B819CE12CD00B7866C /* WindowInfo.h */,
@@ -449,6 +456,8 @@
 			children = (
 				A8FA3BC116E3AB8000367F97 /* CinderBridge.h */,
 				A8FA3BC216E3AB8000367F97 /* CinderBridge.mm */,
+				A826F4CC1A6B0D9B002A23A9 /* CinderDelegate.h */,
+				A826F4CD1A6B0D9B002A23A9 /* CinderDelegate.mm */,
 				A874A4F91A2B2F16009A60A0 /* CinderSketch.h */,
 				A874A4FA1A2B2F16009A60A0 /* CinderSketch.mm */,
 			);
@@ -601,6 +610,7 @@
 				A802715119CC83FD0072973D /* QuadMatrix.cpp in Sources */,
 				A802714519CC83FD0072973D /* FontSequence.cpp in Sources */,
 				A8836D711A4B0008007733CE /* Handler.cpp in Sources */,
+				A826F4CE1A6B0D9B002A23A9 /* CinderDelegate.mm in Sources */,
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A826F48F1A6811FB002A23A9 /* Bridge.mm in Sources */,
