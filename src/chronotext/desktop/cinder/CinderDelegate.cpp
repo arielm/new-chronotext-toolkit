@@ -141,12 +141,12 @@ namespace chr
     
     bool CinderDelegate::isEmulated() const
     {
-        return false;
+        return initInfo.emulated;
     }
     
     const WindowInfo& CinderDelegate::getWindowInfo() const
     {
-        return windowInfo;
+        return initInfo.emulated ? initInfo.emulatedDevice.windowInfo : windowInfo;
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
