@@ -12,10 +12,13 @@
 
 #pragma once
 
-#include "chronotext/app/cinder/CinderDelegate.h"
+#include "chronotext/cinder/CinderDelegate.h"
 
 class Application : public chr::CinderDelegate
 {
 public:
-    void applySettings(Settings *settings) final;
+    void applySettings(Settings *settings) final
+    {
+        settings->setWindowSize(1024, 768);
+    }
 };

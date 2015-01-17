@@ -8,11 +8,6 @@ namespace chr
     {
         return new Sketch();
     }
-    
-    void destroySketch(CinderSketch *sketch)
-    {
-        delete sketch;
-    }
 }
 
 #pragma mark ---------------------------------------- DESKTOP ----------------------------------------

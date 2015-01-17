@@ -83,7 +83,7 @@ void Sketch::draw()
     drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
 }
 
-void Sketch::handleEvent(int eventId)
+void Sketch::event(int eventId)
 {
     switch (eventId)
     {
@@ -138,7 +138,7 @@ bool Sketch::keyDown(const KeyEvent &keyEvent)
     switch (getCode(keyEvent))
     {
         case KeyEvent::KEY_w:
-            handleEvent(EVENT_MEMORY_WARNING);
+            event(EVENT_MEMORY_WARNING);
             return true;
     }
     

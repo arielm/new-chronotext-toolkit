@@ -9,9 +9,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT d526e6d
- * IOS: COMMIT d526e6d
- * ANDROID: COMMIT d526e6d
+ * OSX: COMMIT e262d04
+ * IOS: COMMIT e262d04
+ * ANDROID: COMMIT e262d04
  */
 
 /*
@@ -57,7 +57,7 @@ public:
     void update() final;
     void draw() final;
 
-    void handleEvent(int eventId) final;
+    void event(int eventId) final;
 
     bool keyDown(const ci::app::KeyEvent &keyEvent) final;
     
