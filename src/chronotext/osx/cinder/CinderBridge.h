@@ -19,11 +19,15 @@
 @property (nonatomic, readonly) chr::CinderDelegate *cinderDelegate;
 @property (nonatomic, readonly) NSView *view;
 
+/*
+ * WARNING: WILL CRASH IF INVOKED BEFORE AppNative::setup()
+ */
 - (id) initWithDelegate:(chr::CinderDelegate*)delegate;
 
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
-- (void) handleMessageFromSketch:(int)what body:(NSString*)body;
+
+- (void) handleMessage:(int)what body:(NSString*)body;
 
 @end

@@ -8,12 +8,9 @@
 
 package org.chronotext.cinder;
 
-import java.util.Vector;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import org.chronotext.cinder.Touch;
 import org.chronotext.utils.Utils;
 
 import android.opengl.GLSurfaceView;
@@ -22,7 +19,7 @@ import android.view.View;
 public class CinderRenderer implements GLSurfaceView.Renderer
 {
   /*
-   * PARALLEL TO chronotext/cinder/CinderSketch/CinderDelegate.h
+   * PARALLEL TO chronotext/android/cinder/CinderDelegate.h
    */
   public static final int EVENT_RESUMED = 1;
   public static final int EVENT_SHOWN = 2;
@@ -32,7 +29,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   public static final int EVENT_CONTEXT_RENEWED = 6;
   public static final int EVENT_BACKGROUND = 7;
   public static final int EVENT_FOREGROUND = 8;
-  public static final int EVENT_BACK = 9;
+  public static final int EVENT_BACK_PRESSED = 9;
 
   public static final int REASON_RESUMED = 1;
   public static final int REASON_SHOWN = 2;
@@ -56,10 +53,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   protected boolean startRequest;
   protected int startReason;
 
-  protected int ticks;
-  protected long t0;
-  protected long now;
-  protected long elapsed;
+  protected int drawCount;
 
   @Override
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -121,29 +115,17 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
       if (startRequest)
       {
+        startRequest = false;
         performStart(startReason);
+
+        drawCount = 0;
       }
 
       if (started)
       {
-        now = System.currentTimeMillis();
-
-        if (startRequest)
-        {
-          ticks = 0;
-          t0 = now;
-        }
-
-        ticks++;
-        elapsed = now - t0;
-
-        // ---
-
         performDraw();
       }
     }
-
-    startRequest = false; // PURPOSELY AT THE END
   }
 
   // ---------------------------------------- LIFE-CYCLE ----------------------------------------
@@ -152,7 +134,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   {
     if (!initialized)
     {
-      Utils.LOGD("CinderRenderer.setup: " + width + "x" + height);
+      Utils.LOGD("CinderRenderer.performSetup: " + width + "x" + height);
       setup(width, height);
 
       initialized = true;
@@ -161,15 +143,15 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   protected void performResize(int width, int height)
   {
-      Utils.LOGD("CinderRenderer.resize: " + width + "x" + height);
+      Utils.LOGD("CinderRenderer.performResize: " + width + "x" + height);
       resize(width, height);
   }
 
   protected void performDraw()
   {
-    if (ticks == 1)
+    if (drawCount++ == 0)
     {
-      Utils.LOGD("CinderRenderer.draw");
+      Utils.LOGD("CinderRenderer.performDraw");
     }
 
     draw();
@@ -183,8 +165,6 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   
   protected void performStop(int reason)
   {
-    Utils.LOGD("AVERAGE FRAME-RATE: " + ticks / (elapsed / 1000f) + " FRAMES PER SECOND");
-
     stop(reason);
     started = false;
   }
@@ -200,37 +180,37 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   protected void start(int reason)
   {
     Utils.LOGD("CinderRenderer.start: " + (reason == REASON_RESUMED ? "RESUMED" : "SHOWN"));
-    event(reason);
+    dispatchEvent(reason);
   }
 
   protected void stop(int reason)
   {
     Utils.LOGD("CinderRenderer.stop: " + (reason == REASON_PAUSED ? "PAUSED" : "HIDDEN"));
-    event(reason);
+    dispatchEvent(reason);
   }
 
   protected void contextLost()
   {
     Utils.LOGD("CinderRenderer.contextLost");
-    event(EVENT_CONTEXT_LOST);
+    dispatchEvent(EVENT_CONTEXT_LOST);
   }
 
   protected void contextRenewed()
   {
     Utils.LOGD("CinderRenderer.contextRenewed");
-    event(EVENT_CONTEXT_RENEWED);
+    dispatchEvent(EVENT_CONTEXT_RENEWED);
   }
 
   protected void foreground()
   {
     Utils.LOGD("CinderRenderer.foreground");
-    event(EVENT_FOREGROUND);
+    dispatchEvent(EVENT_FOREGROUND);
   }
 
   protected void background()
   {
     Utils.LOGD("CinderRenderer.background");
-    event(EVENT_BACKGROUND);
+    dispatchEvent(EVENT_BACKGROUND);
   }
 
   // ---------------------------------------- INVOKED ON THE RENDERER'S THREAD FROM GLView ----------------------------------------
@@ -255,7 +235,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   {
     if (!launched)
     {
-      Utils.LOGD("CinderRenderer.launch");
+      Utils.LOGD("CinderRenderer.performLaunch");
       launch();
 
       launched = true;
@@ -266,7 +246,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   {
     if (initialized)
     {
-      Utils.LOGD("CinderRenderer.shutdown");
+      Utils.LOGD("CinderRenderer.performShutdown");
       shutdown();
     }
   }
@@ -348,46 +328,14 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     }
   }
 
-  // ---
-
-  public void addTouches(Vector<Touch> touches)
-  {
-    for (Touch touch : touches)
-    {
-      addTouch(touch.index, touch.x, touch.y);
-    }
-  }
-
-  public void updateTouches(Vector<Touch> touches)
-  {
-    for (Touch touch : touches)
-    {
-      updateTouch(touch.index, touch.x, touch.y);
-    }
-  }
-
-  public void removeTouches(Vector<Touch> touches)
-  {
-    for (Touch touch : touches)
-    {
-      removeTouch(touch.index, touch.x, touch.y);
-    }
-  }
-
   // ---------------------------------------- JNI ----------------------------------------
 
-  public native void launch();
-  public native void setup(int width, int height);
-  public native void shutdown();
+  protected native void launch();
+  protected native void setup(int width, int height);
+  protected native void shutdown();
 
-  public native void resize(int width, int height);
-  public native void event(int eventId);
-  
-  public native void draw();
+  protected native void resize(int width, int height);
+  protected native void draw();
 
-  public native void addTouch(int index, float x, float y);
-  public native void updateTouch(int index, float x, float y);
-  public native void removeTouch(int index, float x, float y);
-
-  public native void sendMessage(int what, String body);
+  public native void dispatchEvent(int eventId);
 }

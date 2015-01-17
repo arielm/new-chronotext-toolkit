@@ -18,7 +18,7 @@
 
 // ---
 
-#include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/cinder/CinderDelegate.h"
 #include "chronotext/system/SystemManager.h"
 #include "chronotext/system/MemoryManager.h"
 #include "chronotext/os/TaskManager.h"
@@ -30,7 +30,8 @@ namespace chr
     void destroySketch(CinderSketch *sketch);
     
     // ---
-    
+
+    CinderDelegate& delegate();
     SystemManager& systemManager();
     MemoryManager& memoryManager();
     TaskManager& taskManager();
@@ -67,6 +68,8 @@ namespace chr
     
     namespace INTERN
     {
+        extern CinderDelegate *delegate;
+        
         bool init(const system::InitInfo &initInfo);
         void launch(const system::LaunchInfo &launchInfo);
         void setup(const system::SetupInfo &setupInfo);

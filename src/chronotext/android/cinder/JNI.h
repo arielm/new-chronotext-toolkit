@@ -27,40 +27,30 @@ extern "C"
     
     // ---
     
-    void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jobject listener, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
-
+    void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
     void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
-    
+
     void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
     
-    void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId);
-    void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body);
+    void Java_org_chronotext_cinder_CinderBridge_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+    void Java_org_chronotext_cinder_CinderBridge_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+    void Java_org_chronotext_cinder_CinderBridge_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
     
-    void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
-    void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
-    void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+    void Java_org_chronotext_cinder_CinderRenderer_dispatchEvent(JNIEnv *env, jobject obj, jint eventId);
+    void Java_org_chronotext_cinder_CinderBridge_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body);
 }
 
 // ---
 
 namespace chr
 {
-    class CinderDelegate;
-    
-    namespace INTERN
-    {
-        extern CinderDelegate *delegate;
-    }
-
-    // ---
-    
     namespace jni
     {
         extern JavaVM *vm;
-        extern jobject listener;
+        extern jobject bridge;
         
         // ---
         
@@ -71,13 +61,13 @@ namespace chr
         
         ci::JsonTree jsonQuery(const char *methodName);
         
-        void callVoidMethodOnListener(const char *name, const char *sig, ...);
-        jboolean callBooleanMethodOnListener(const char *name, const char *sig, ...);
-        jchar callCharMethodOnListener(const char *name, const char *sig, ...);
-        jint callIntMethodOnListener(const char *name, const char *sig, ...);
-        jlong callLongMethodOnListener(const char *name, const char *sig, ...);
-        jfloat callFloatMethodOnListener(const char *name, const char *sig, ...);
-        jdouble callDoubleMethodOnListener(const char *name, const char *sig, ...);
-        jobject callObjectMethodOnListener(const char *name, const char *sig, ...);
+        void callVoidMethodOnBridge(const char *name, const char *sig, ...);
+        jboolean callBooleanMethodOnBridge(const char *name, const char *sig, ...);
+        jchar callCharMethodOnBridge(const char *name, const char *sig, ...);
+        jint callIntMethodOnBridge(const char *name, const char *sig, ...);
+        jlong callLongMethodOnBridge(const char *name, const char *sig, ...);
+        jfloat callFloatMethodOnBridge(const char *name, const char *sig, ...);
+        jdouble callDoubleMethodOnBridge(const char *name, const char *sig, ...);
+        jobject callObjectMethodOnBridge(const char *name, const char *sig, ...);
     }
 }

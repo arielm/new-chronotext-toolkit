@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/cinder/CinderDelegateBase.h"
 #include "chronotext/system/SystemInfo.h"
 
 #include <boost/asio.hpp>
@@ -19,7 +19,7 @@
 
 namespace chr
 {
-    class CinderDelegate
+    class CinderDelegate : public CinderDelegateBase
     {
         /*
          * PARALLEL TO android/cinder/CinderRenderer.java
@@ -34,24 +34,13 @@ namespace chr
             EVENT_CONTEXT_RENEWED = 6,
             EVENT_BACKGROUND = 7,
             EVENT_FOREGROUND = 8,
-            EVENT_BACK = 9
+            EVENT_BACK_PRESSED = 9
         };
         
     public:
         static std::atomic<bool> LOG_VERBOSE;
         static std::atomic<bool> LOG_WARNING;
-        
-        CinderSketch* getSketch();
 
-        void sketchCreated(CinderSketch *sketch) {}
-        void sketchDestroyed(CinderSketch *sketch) {}
-
-        void handleEvent(int eventId);
-        void handleAction(int actionId);
-        
-        void handleMessageFromSketch(int what, const std::string &body);
-        void sendMessageToSketch(int what, const std::string &body = "");
-        
         /*
          * INVOKED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
          */
@@ -63,39 +52,43 @@ namespace chr
         
         void resize(int width, int height);
         void draw();
-        
-        double getElapsedSeconds() const;
-        uint32_t getElapsedFrames() const;
-
-        bool isEmulated() const;
-        const WindowInfo& getWindowInfo() const;
-
-        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
 
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
         void removeTouch(int index, float x, float y);
+
+        void messageFromBridge(int what, const std::string &body = "") final;
+        void sendMessageToBridge(int what, const std::string &body = "") final;
         
+        void eventFromBridge(int eventId) final;
+        void performAction(int actionId) final;
+
+        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
+        void disableAccelerometer();
+
+        bool isEmulated() const;
+        const WindowInfo& getWindowInfo() const;
+
+        double elapsedSeconds() const;
+        uint32_t elapsedFrames() const;
+
     protected:
         CinderSketch *sketch = nullptr;
 
+        ci::Timer timer;
+        int frameCount = 0;
+        
         system::InitInfo initInfo;
         WindowInfo windowInfo;
 
-        ci::Timer timer;
-        uint32_t frameCount;
-        
+        AccelEvent::Filter accelFilter;
+
         std::shared_ptr<boost::asio::io_service> io;
         std::shared_ptr<boost::asio::io_service::work> ioWork;
         
         ASensorManager *sensorManager;
         const ASensor *accelerometerSensor;
         ASensorEventQueue *sensorEventQueue;
-        
-        AccelEvent::Filter accelFilter;
-
-        void setSketch(CinderSketch *sketch);
 
         void start(CinderSketch::Reason reason);
         void stop(CinderSketch::Reason reason);

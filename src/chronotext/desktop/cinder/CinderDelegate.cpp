@@ -17,36 +17,6 @@ using namespace ci::app;
 
 namespace chr
 {
-    CinderSketch* CinderDelegate::getSketch()
-    {
-        return sketch;
-    }
-    
-    /*
-     * XXX: SHOULD NOT BE INVOKED BEFORE THE UNDERLYING WINDOW HAS BEEN CREATED
-     *
-     * OTHERWISE: POTENTIAL EXTENDERS LIKE osx/cinder/CinderBridge WILL CRASH
-     */
-    
-    void CinderDelegate::setSketch(CinderSketch *newSketch)
-    {
-        if (sketch)
-        {
-            destroySketch(sketch);
-            sketchDestroyed(sketch);
-            sketch = nullptr;
-        }
-        
-        if (newSketch)
-        {
-            sketch = newSketch;
-            sketch->setDelegate(this);
-            sketchCreated(sketch);
-        }
-    }
-
-    // ---
-    
     void CinderDelegate::setup()
     {
         /*
@@ -60,21 +30,23 @@ namespace chr
         
         // ---
         
+        INTERN::delegate = this;
         INTERN::init(initInfo);
         
-        setSketch(createSketch());
+        sketch = createSketch();
+        sketchCreated(sketch);
         sketch->init();
         
         // ---
         
         INTERN::launch(system::LaunchInfo(io_service()));
         sketch->launch();
-
+        
         // ---
         
         windowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
         INTERN::setup(system::SetupInfo(windowInfo));
-
+        
         /*
          * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update()
          */
@@ -86,10 +58,12 @@ namespace chr
     
     void CinderDelegate::shutdown()
     {
-        stop(); // NOT HAPPENING AUTOMATICALLY UPON SHUT-DOWN (I.E. UNLIKE ON MOBILE PLATFORMS)
+        stop(CinderSketch::REASON_APP_HIDDEN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
         
         sketch->shutdown();
-        setSketch(nullptr);
+        destroySketch(sketch);
+        sketchDestroyed(sketch);
+        sketch = nullptr;
         
         /*
          * TODO:
@@ -98,6 +72,8 @@ namespace chr
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
         INTERN::shutdown();
+        
+        INTERN::delegate = nullptr;
     }
     
     void CinderDelegate::resize()
@@ -105,15 +81,17 @@ namespace chr
         /*
          * RESIZING IS NOT SUPPORTED WHEN EMULATING
          */
-        assert(!(initInfo.emulated && (startCount > 0)));
+        assert(!(initInfo.emulated && (frameCount != -1)));
         
         windowInfo.size = getWindowSize();
         sketch->resize();
         
-        if (startCount == 0)
+        /*
+         * I.E. THE FIRST AppNative::resize()
+         */
+        if (frameCount == -1)
         {
-            start();
-            startCount++;
+            start(CinderSketch::REASON_APP_SHOWN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
         }
     }
     
@@ -126,7 +104,7 @@ namespace chr
          * "POSTED" DURING CinderSketch::update ARE "POLLED"
          */
         io_service().post([this]{ sketch->clock()->update(); });
-
+        
         /*
          * MUST BE CALLED BEFORE Sketch::update
          * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
@@ -136,12 +114,12 @@ namespace chr
         sketch->update();
         sketch->timeline().stepTo(now); // WE CAN'T CONTROL THE APP'S TIMELINE SO WE NEED OUR OWN
         
-        updateCount++;
+        frameCount++;
     }
     
     void CinderDelegate::draw()
     {
-        if (updateCount == 0)
+        if (frameCount == 0)
         {
             update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
@@ -149,14 +127,89 @@ namespace chr
         sketch->draw();
     }
     
+#pragma mark ---------------------------------------- GETTERS ----------------------------------------
+    
+    double CinderDelegate::elapsedSeconds() const
+    {
+        return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
+    }
+    
+    uint32_t CinderDelegate::elapsedFrames() const
+    {
+        return frameCount;
+    }
+    
     bool CinderDelegate::isEmulated() const
     {
-        return initInfo.emulated;
+        return false;
     }
     
     const WindowInfo& CinderDelegate::getWindowInfo() const
     {
-        return initInfo.emulated ? initInfo.emulatedDevice.windowInfo : windowInfo;
+        return windowInfo;
+    }
+    
+#pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
+    
+    void CinderDelegate::performAction(int actionId)
+    {
+        switch (actionId)
+        {
+            case CinderSketch::ACTION_CAPTURE_BACK:
+                backCaptured = true;
+                break;
+                
+            case CinderSketch::ACTION_RELEASE_BACK:
+                backCaptured = false;
+                break;
+                
+            case CinderSketch::ACTION_CAPTURE_ESCAPE:
+                escapeCaptured = true;
+                break;
+                
+            case CinderSketch::ACTION_RELEASE_ESCAPE:
+                escapeCaptured = false;
+                break;
+        }
+    }
+    
+    void CinderDelegate::messageFromBridge(int what, const std::string &body)
+    {
+        sketch->sendMessage(Message(what, body));
+    }
+    
+#pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
+    
+    void CinderDelegate::applyDefaultSettings(Settings *settings)
+    {
+        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
+        settings->enableHighDensityDisplay();
+    }
+    
+    void CinderDelegate::prepareSettings(Settings *settings)
+    {
+        applyDefaultSettings(settings);
+        applySettings(settings);
+    }
+    
+    // ---
+    
+    void CinderDelegate::start(CinderSketch::Reason reason)
+    {
+        frameCount = 0;
+        
+        timer.start();
+        sketch->clock()->start();
+        
+        sketch->start(reason);
+    }
+    
+    void CinderDelegate::stop(CinderSketch::Reason reason)
+    {
+        timer.stop();
+        sketch->clock()->stop();
+        
+        sketch->stop(reason);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -201,7 +254,7 @@ namespace chr
     }
     
 #pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
-
+    
     void CinderDelegate::keyDown(KeyEvent event)
     {
         switch (event.getCode())
@@ -210,7 +263,7 @@ namespace chr
             {
                 if (backCaptured)
                 {
-                    sketch->event(CinderSketch::EVENT_BACK);
+                    sketch->handleEvent(CinderSketch::EVENT_TRIGGER_BACK);
                 }
                 else
                 {
@@ -224,7 +277,7 @@ namespace chr
             {
                 if (escapeCaptured)
                 {
-                    sketch->event(CinderSketch::EVENT_ESCAPE);
+                    sketch->handleEvent(CinderSketch::EVENT_TRIGGER_ESCAPE);
                 }
                 else
                 {
@@ -241,37 +294,6 @@ namespace chr
     void CinderDelegate::keyUp(KeyEvent event)
     {
         sketch->keyUp(event);
-    }
-    
-#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
-    
-    bool CinderDelegate::handleAction(int actionId)
-    {
-        switch (actionId)
-        {
-            case CinderSketch::ACTION_CAPTURE_BACK:
-                backCaptured = true;
-                return true;
-                
-            case CinderSketch::ACTION_RELEASE_BACK:
-                backCaptured = false;
-                return true;
-                
-            case CinderSketch::ACTION_CAPTURE_ESCAPE:
-                escapeCaptured = true;
-                return true;
-                
-            case CinderSketch::ACTION_RELEASE_ESCAPE:
-                escapeCaptured = false;
-                return true;
-        }
-        
-        return false;
-    }
-
-    void CinderDelegate::sendMessageToSketch(int what, const string &body)
-    {
-        sketch->sendMessage(Message(what, body));
     }
     
 #pragma mark ---------------------------------------- EMULATION ----------------------------------------
@@ -377,35 +399,5 @@ namespace chr
         }
         
         return !emulators.empty();
-    }
-    
-#pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
-    
-    void CinderDelegate::applyDefaultSettings(Settings *settings)
-    {
-        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
-        settings->enableHighDensityDisplay();
-    }
-    
-    void CinderDelegate::prepareSettings(Settings *settings)
-    {
-        applyDefaultSettings(settings);
-        applySettings(settings);
-    }
-    
-    // ---
-    
-    void CinderDelegate::start()
-    {
-        sketch->clock()->start();
-        sketch->start(CinderSketch::REASON_APP_SHOWN);
-    }
-    
-    void CinderDelegate::stop()
-    {
-        sketch->clock()->stop();
-        sketch->stop(CinderSketch::REASON_APP_HIDDEN);
-        
-        LOGI << "AVERAGE FRAME-RATE: " << getAverageFps() << " FPS" << endl;
     }
 }

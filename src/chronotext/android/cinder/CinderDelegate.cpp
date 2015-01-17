@@ -7,51 +7,27 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/Context.h"
 #include "chronotext/android/cinder/JNI.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
-    atomic<bool> CinderDelegate::LOG_VERBOSE (false);
-    atomic<bool> CinderDelegate::LOG_WARNING (true);
-    
-    CinderSketch* CinderDelegate::getSketch()
-    {
-        return sketch;
-    }
-    
-    void CinderDelegate::setSketch(CinderSketch *newSketch)
-    {
-        if (sketch)
-        {
-            destroySketch(sketch);
-            sketchDestroyed(sketch);
-            sketch = nullptr;
-        }
-        
-        if (newSketch)
-        {
-            sketch = newSketch;
-            sketch->setDelegate(this);
-            sketchCreated(sketch);
-        }
-    }
-    
     void CinderDelegate::init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
     {
         initInfo.androidContext = androidContext;
         initInfo.androidDisplay = androidDisplay;
         
         initInfo.displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
-
+        
         // ---
         
         INTERN::init(initInfo);
         
-        setSketch(createSketch());
+        sketch = createSketch();
+        sketchCreated(sketch);
         sketch->init();
     }
     
@@ -59,7 +35,7 @@ namespace chr
     {
         startIOService();
         createSensorEventQueue();
-
+        
         INTERN::launch(system::LaunchInfo(*io));
         sketch->launch();
     }
@@ -77,30 +53,36 @@ namespace chr
     void CinderDelegate::shutdown()
     {
         sketch->shutdown();
-        setSketch(nullptr);
-
-        destroySensorEventQueue();
-
+        destroySketch(sketch);
+        sketchDestroyed(sketch);
+        sketch = nullptr;
+        
         /*
          * TODO:
          *
          * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
-        stopIOService();
         INTERN::shutdown();
+        
+        destroySensorEventQueue();
+        stopIOService();
     }
     
     void CinderDelegate::resize(int width, int height)
     {
-        windowInfo.size = Vec2i(width, height); // TODO: WE COULD FILTER SPURIOUS RESIZE EVENTS LIKE IN ios/cinder/CinderDelegate.mm
+        /*
+         * TODO: WE COULD FILTER SPURIOUS RESIZE EVENTS LIKE IN ios/cinder/CinderBridge.mm
+         */
+        
+        windowInfo.size = Vec2i(width, height);
         sketch->resize();
     }
     
     void CinderDelegate::draw()
     {
         sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-
+        
         pollSensorEvents(); // WHERE accelerated IS INVOKED
         pollIOService(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
         
@@ -116,13 +98,118 @@ namespace chr
         /*
          * TODO: CALL MemoryManager::update()
          */
-
+        
         sketch->update();
         sketch->timeline().stepTo(now);
         
         frameCount++;
-
+        
         sketch->draw();
+    }
+    
+#pragma mark ---------------------------------------- GETTERS ----------------------------------------
+    
+    double CinderDelegate::elapsedSeconds() const
+    {
+        return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
+    }
+    
+    uint32_t CinderDelegate::elapsedFrames() const
+    {
+        return frameCount;
+    }
+    
+    bool CinderDelegate::isEmulated() const
+    {
+        return false;
+    }
+    
+    const WindowInfo& CinderDelegate::getWindowInfo() const
+    {
+        return windowInfo;
+    }
+    
+#pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
+    
+    /*
+     * TODO: FORMAT body FOR LOG
+     *
+     * 1) LEADING AND TRAILING WHITE-SPACE TRIMMED
+     * 2) LINE-BREAKS AND TABS REPLACED BY SPACES
+     * 3) TEXT-LENGTH LIMITED
+     */
+    
+    /*
+     * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
+     */
+    void CinderDelegate::messageFromBridge(int what, const string &body)
+    {
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl;
+        
+        sketch->sendMessage(Message(what, body));
+    }
+    
+    /*
+     * WILL BE QUEUED TO THE MAIN-THREAD THREAD (VIA JAVA-HANDLER)
+     */
+    void CinderDelegate::sendMessageToBridge(int what, const string &body)
+    {
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO BRIDGE: " << what << " " << body << endl;
+        
+        jni::callVoidMethodOnBridge("messageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
+    }
+    
+    /*
+     * INVOKED ON THE RENDERER'S THREAD
+     */
+    void CinderDelegate::eventFromBridge(int eventId)
+    {
+        switch (eventId)
+        {
+            case EVENT_RESUMED:
+                start(CinderSketch::REASON_APP_RESUMED);
+                break;
+                
+            case EVENT_SHOWN:
+                start(CinderSketch::REASON_APP_SHOWN);
+                break;
+                
+            case EVENT_PAUSED:
+                stop(CinderSketch::REASON_APP_PAUSED);
+                break;
+                
+            case EVENT_HIDDEN:
+                stop(CinderSketch::REASON_APP_HIDDEN);
+                break;
+                
+            case EVENT_CONTEXT_LOST:
+                sketch->handleEvent(CinderSketch::EVENT_CONTEXT_LOST);
+                break;
+                
+            case EVENT_CONTEXT_RENEWED:
+                sketch->handleEvent(CinderSketch::EVENT_CONTEXT_RENEWED);
+                break;
+                
+            case EVENT_BACKGROUND:
+                sketch->handleEvent(CinderSketch::EVENT_BACKGROUND);
+                break;
+                
+            case EVENT_FOREGROUND:
+                sketch->handleEvent(CinderSketch::EVENT_FOREGROUND);
+                break;
+                
+            case EVENT_BACK_PRESSED:
+                sketch->handleEvent(CinderSketch::EVENT_TRIGGER_BACK);
+                break;
+        }
+    }
+    
+    /*
+     * TODO: FINALIZE THREAD-SAFETY POLICY
+     */
+    void CinderDelegate::performAction(int actionId)
+    {
+        jni::callBooleanMethodOnBridge("handleAction", "(I)Z", actionId);
     }
     
 #pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
@@ -145,30 +232,8 @@ namespace chr
         sketch->stop(reason);
     }
     
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-    
-    double CinderDelegate::getElapsedSeconds() const
-    {
-        return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-    }
-    
-    uint32_t CinderDelegate::getElapsedFrames() const
-    {
-        return frameCount;
-    }
-    
-    bool CinderDelegate::isEmulated() const
-    {
-        return false;
-    }
-    
-    const WindowInfo& CinderDelegate::getWindowInfo() const
-    {
-        return windowInfo;
-    }
-    
 #pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
-
+    
     void CinderDelegate::startIOService()
     {
         io = make_shared<boost::asio::io_service>();
@@ -185,42 +250,25 @@ namespace chr
         io->poll();
     }
     
-#pragma mark ---------------------------------------- SENSOR EVENTS ----------------------------------------
-
-    void CinderDelegate::createSensorEventQueue()
+#pragma mark ---------------------------------------- TOUCH ----------------------------------------
+    
+    void CinderDelegate::addTouch(int index, float x, float y)
     {
-        auto looper = ALooper_forThread();
-        
-        if (!looper)
-        {
-            looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
-        }
-        
-        sensorManager = ASensorManager_getInstance();
-        accelerometerSensor = ASensorManager_getDefaultSensor(sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        sensorEventQueue = ASensorManager_createEventQueue(sensorManager, looper, 3, nullptr, nullptr);
+        sketch->addTouch(index, x, y);
     }
     
-    void CinderDelegate::destroySensorEventQueue()
+    void CinderDelegate::updateTouch(int index, float x, float y)
     {
-        ASensorManager_destroyEventQueue(sensorManager, sensorEventQueue);
+        sketch->updateTouch(index, x, y);
     }
     
-    void CinderDelegate::pollSensorEvents()
+    void CinderDelegate::removeTouch(int index, float x, float y)
     {
-        ASensorEvent event;
-        
-        while (ASensorEventQueue_getEvents(sensorEventQueue, &event, 1) > 0)
-        {
-            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
-            {
-                handleAcceleration(event);
-            }
-        }
+        sketch->removeTouch(index, x, y);
     }
     
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
-
+    
     /*
      * REFERENCES:
      *
@@ -278,7 +326,7 @@ namespace chr
     void CinderDelegate::handleAcceleration(ASensorEvent event)
     {
         int displayRotation = getDisplayRotation();
-
+        
         Vec3f transformed;
         canonicalToWorld(displayRotation, (float*)&event.acceleration.v, transformed);
         
@@ -301,91 +349,37 @@ namespace chr
         return env->CallIntMethod(initInfo.androidDisplay, getRotationMethod);
     }
     
-#pragma mark ---------------------------------------- TOUCH ----------------------------------------
-
-    void CinderDelegate::addTouch(int index, float x, float y)
-    {
-        sketch->addTouch(index, x, y);
-    }
+#pragma mark ---------------------------------------- SENSOR EVENTS ----------------------------------------
     
-    void CinderDelegate::updateTouch(int index, float x, float y)
+    void CinderDelegate::createSensorEventQueue()
     {
-        sketch->updateTouch(index, x, y);
-    }
-    
-    void CinderDelegate::removeTouch(int index, float x, float y)
-    {
-        sketch->removeTouch(index, x, y);
-    }
-    
-#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
-
-    void CinderDelegate::handleEvent(int eventId)
-    {
-        switch (eventId)
+        auto looper = ALooper_forThread();
+        
+        if (!looper)
         {
-            case EVENT_RESUMED:
-                start(CinderSketch::REASON_APP_RESUMED);
-                break;
-                
-            case EVENT_SHOWN:
-                start(CinderSketch::REASON_APP_SHOWN);
-                break;
-                
-            case EVENT_PAUSED:
-                stop(CinderSketch::REASON_APP_PAUSED);
-                break;
-                
-            case EVENT_HIDDEN:
-                stop(CinderSketch::REASON_APP_HIDDEN);
-                break;
-                
-            case EVENT_CONTEXT_LOST:
-                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
-                break;
-                
-            case EVENT_CONTEXT_RENEWED:
-                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
-                break;
-                
-            case EVENT_BACKGROUND:
-                sketch->event(CinderSketch::EVENT_BACKGROUND);
-                break;
-                
-            case EVENT_FOREGROUND:
-                sketch->event(CinderSketch::EVENT_FOREGROUND);
-                break;
-                
-            case EVENT_BACK:
-                sketch->event(CinderSketch::EVENT_BACK);
-                break;
+            looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
         }
-    }
-    
-    void CinderDelegate::handleAction(int actionId)
-    {
-        jni::callBooleanMethodOnListener("handleAction", "(I)Z", actionId);
-    }
-    
-    /*
-     * TODO: FORMAT body FOR LOG
-     *
-     * 1) LEADING AND TRAILING WHITE-SPACE TRIMMED
-     * 2) LINE-BREAKS AND TABS REPLACED BY SPACES
-     * 3) TEXT-LENGTH LIMITED
-     */
-    
-    void CinderDelegate::handleMessageFromSketch(int what, const string &body)
-    {
-        LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO JAVA: " << what << " " << body << endl;
         
-        jni::callVoidMethodOnListener("handleMessageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
+        sensorManager = ASensorManager_getInstance();
+        accelerometerSensor = ASensorManager_getDefaultSensor(sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        sensorEventQueue = ASensorManager_createEventQueue(sensorManager, looper, 3, nullptr, nullptr);
     }
     
-    void CinderDelegate::sendMessageToSketch(int what, const string &body)
+    void CinderDelegate::destroySensorEventQueue()
     {
-        LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM JAVA: " << what << " " << body << endl;
+        ASensorManager_destroyEventQueue(sensorManager, sensorEventQueue);
+    }
+    
+    void CinderDelegate::pollSensorEvents()
+    {
+        ASensorEvent event;
         
-        sketch->sendMessage(Message(what, body));
+        while (ASensorEventQueue_getEvents(sensorEventQueue, &event, 1) > 0)
+        {
+            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
+            {
+                handleAcceleration(event);
+            }
+        }
     }
 }

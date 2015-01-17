@@ -12,6 +12,9 @@ using namespace std;
 
 namespace chr
 {
+    atomic<bool> CinderDelegate::LOG_VERBOSE (false);
+    atomic<bool> CinderDelegate::LOG_WARNING (true);
+    
     namespace intern
     {
         shared_ptr<SystemManager> systemManager;
@@ -33,6 +36,8 @@ namespace chr
     
     namespace INTERN
     {
+        CinderDelegate *delegate = nullptr;
+
         bool init(const system::InitInfo &initInfo)
         {
             if (!intern::initialized)
@@ -118,6 +123,11 @@ namespace chr
     }
     
     // ---
+    
+    CinderDelegate& delegate()
+    {
+        return checkedReference(INTERN::delegate);
+    }
     
     SystemManager& systemManager()
     {

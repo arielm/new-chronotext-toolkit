@@ -8,6 +8,9 @@
 
 package org.chronotext.cinder;
 
+import java.util.Vector;
+
+import org.chronotext.cinder.Touch;
 import org.chronotext.gl.GLView;
 import org.chronotext.utils.DisplayUtils;
 import org.chronotext.utils.Utils;
@@ -26,10 +29,10 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
-public class CinderDelegate extends Handler
+public class CinderBridge extends Handler
 {
   /*
-   * PARALLEL TO chronotext/cinder/CinderSketch.h
+   * PARALLEL TO chronotext/cinder/CinderSketchBase.h
    */
   public static final int ACTION_CAPTURE_BACK = 1;
   public static final int ACTION_RELEASE_BACK = 2;
@@ -39,7 +42,7 @@ public class CinderDelegate extends Handler
   
   protected boolean backCaptured;
 
-  public CinderDelegate(Activity _activity)
+  public CinderBridge(Activity _activity)
   {
     activity = _activity;
 
@@ -82,7 +85,7 @@ public class CinderDelegate extends Handler
     Point displaySize = DisplayUtils.getRealSize(display);
     float displayDensity = DisplayUtils.getRealDensity(display);
 
-    Utils.LOGD("CinderDelegate.init: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+    Utils.LOGD("CinderDelegate.performInit: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
     init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
   }
 
@@ -141,10 +144,52 @@ public class CinderDelegate extends Handler
     return false;
   }
 
-  // ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
+  // ---------------------------------------- INVOKED ON THE RENDERER'S THREAD FROM GLView ----------------------------------------
+
+  public void addTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      addTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void updateTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      updateTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void removeTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      removeTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  // ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
 
   /*
-   * INVOKED ON THE RENDERER'S THREAD
+   * WILL BE QUEUED TO THE MAIN-THREAD (VIA JAVA-HANDLER)
+   */
+  public void messageFromSketch(int what, String body)
+  {
+    sendMessage(Message.obtain(this, what, body));
+  }
+
+  /*
+   * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
+   */
+  public void sendMessageToSketch(int what)
+  {
+    sendMessageToSketch(what, (String) null);
+  }
+
+  /*
+   * TODO: FINALIZE THREAD-SAFETY POLICY
    */
   public boolean handleAction(int actionId)
   {
@@ -160,30 +205,6 @@ public class CinderDelegate extends Handler
     }
 
     return false;
-  }
-
-  /*
-   * INVOKED ON THE RENDERER'S THREAD
-   */
-  public void handleMessageFromSketch(int what, String body)
-  {
-    sendMessage(Message.obtain(this, what, body));
-  }
-
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD
-   */
-  public void sendMessageToSketch(int what)
-  {
-    glView.sendMessage(what, (String) null);
-  }
-
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD
-   */
-  public void sendMessageToSketch(int what, String body)
-  {
-    glView.sendMessage(what, body);
   }
 
   // ---------------------------------------- QUERIES (TO BE CALLED FROM ANY THREAD ATTACHED TO JAVA) ----------------------------------------
@@ -209,5 +230,14 @@ public class CinderDelegate extends Handler
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  protected native void init(Object listener, Context context, Display display, int displayWidth, int displayHeight, float displayDensity);
+  protected native void init(Object bridge, Context context, Display display, int displayWidth, int displayHeight, float displayDensity);
+
+  protected native void addTouch(int index, float x, float y);
+  protected native void updateTouch(int index, float x, float y);
+  protected native void removeTouch(int index, float x, float y);
+
+  /*
+   * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
+   */
+  public native void sendMessageToSketch(int what, String body);
 }

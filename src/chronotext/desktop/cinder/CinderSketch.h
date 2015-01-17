@@ -14,34 +14,24 @@
 
 namespace chr
 {
-    class CinderDelegate;
-    
     class CinderSketch : public CinderSketchBase
     {
     public:
-        CinderDelegate* getDelegate() const;
-        void setDelegate(CinderDelegate *delegate);
-
-        inline chr::FrameClock::Ref clock() const final { return clock_; }
-        inline ci::Timeline& timeline() const final { return *timeline_; }
-        
-        double getElapsedSeconds() const final;
-        uint32_t getElapsedFrames() const final;
-
         bool isEmulated() const final;
         const WindowInfo& getWindowInfo() const final;
 
-        void action(int actionId) final;
-        void sendMessageToDelegate(int what, const std::string &body = "") final;
+        double getElapsedSeconds() const final;
+        uint32_t getElapsedFrames() const final;
         
+        inline chr::FrameClock::Ref clock() const final { return clock_; }
+        inline ci::Timeline& timeline() const final { return *timeline_; }
+
         int getCode(const ci::app::KeyEvent &keyEvent) const final;
         bool isShiftDown(const ci::app::KeyEvent &keyEvent) const final;
         bool isAltDown(const ci::app::KeyEvent &keyEvent) const final;
         bool isAccelDown(const ci::app::KeyEvent &keyEvent) const final;
         
     protected:
-        CinderDelegate *delegate = nullptr;
-        
         chr::FrameClock::Ref clock_ = chr::FrameClock::create();
         ci::TimelineRef timeline_ = ci::Timeline::create();
     };

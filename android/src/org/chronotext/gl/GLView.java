@@ -15,7 +15,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 import java.util.Vector;
 
-import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.cinder.CinderBridge;
 import org.chronotext.cinder.CinderRenderer;
 import org.chronotext.cinder.Touch;
 import org.chronotext.utils.Utils;
@@ -28,7 +28,7 @@ import android.view.View;
 
 public class GLView extends GLSurfaceView
 {
-  protected CinderDelegate cinderDelegate;
+  protected CinderBridge cinderBridge;
   protected CinderRenderer cinderRenderer;
 
   protected boolean attached;
@@ -36,11 +36,11 @@ public class GLView extends GLSurfaceView
   protected boolean finishing;
   protected boolean destroyed;
 
-  public GLView(Context context, CinderDelegate _cinderDelegate)
+  public GLView(Context context, CinderBridge bridge)
   {
     super(context);
 
-    cinderDelegate = _cinderDelegate;
+    cinderBridge = bridge;
 
     // ---
 
@@ -140,7 +140,7 @@ public class GLView extends GLSurfaceView
   }
 
   /*
-   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
+   * INVOKED ON THE MAIN-THREAD BY cinderBridge
    */
   @Override
   public void onResume()
@@ -155,7 +155,7 @@ public class GLView extends GLSurfaceView
       paused = false;
       super.onResume();
 
-      cinderDelegate.resuming();
+      cinderBridge.resuming();
 
       queueEvent(new Runnable()
       {
@@ -168,7 +168,7 @@ public class GLView extends GLSurfaceView
   }
 
   /*
-   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
+   * INVOKED ON THE MAIN-THREAD BY cinderBridge
    */
   @Override
   public void onPause()
@@ -183,7 +183,7 @@ public class GLView extends GLSurfaceView
       paused = true;
       super.onPause();
 
-      cinderDelegate.pausing();
+      cinderBridge.pausing();
 
       queueEvent(new Runnable()
       {
@@ -196,7 +196,7 @@ public class GLView extends GLSurfaceView
   }
 
   /*
-   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
+   * INVOKED ON THE MAIN-THREAD BY cinderBridge
    */
   public void onDestroy()
   {
@@ -213,11 +213,11 @@ public class GLView extends GLSurfaceView
      */
     finishing = true;
 
-    cinderDelegate.finishing();
+    cinderBridge.finishing();
   }
 
   /*
-   * INVOKED ON THE MAIN-THREAD BY CinderDelegate
+   * INVOKED ON THE MAIN-THREAD BY cinderBridge
    */
   public boolean onBackPressed()
   {
@@ -230,7 +230,7 @@ public class GLView extends GLSurfaceView
     {
       public void run()
       {
-        cinderRenderer.event(CinderRenderer.EVENT_BACK); 
+        cinderRenderer.dispatchEvent(CinderRenderer.EVENT_BACK_PRESSED); 
       }
     });
 
@@ -272,7 +272,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderRenderer.addTouches(touches);
+            cinderBridge.addTouches(touches);
           }
         });
 
@@ -289,7 +289,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderRenderer.addTouches(touches);
+            cinderBridge.addTouches(touches);
           }
         });
 
@@ -306,7 +306,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderRenderer.removeTouches(touches);
+            cinderBridge.removeTouches(touches);
           }
         });
 
@@ -323,7 +323,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderRenderer.removeTouches(touches);
+            cinderBridge.removeTouches(touches);
           }
         });
 
@@ -344,7 +344,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderRenderer.updateTouches(touches);
+            cinderBridge.updateTouches(touches);
           }
         });
 
@@ -398,20 +398,6 @@ public class GLView extends GLSurfaceView
       }
 
       egl.eglDestroyContext(display, context);
-    }
-  }
-
-  public void sendMessage(final int what, final String body)
-  {
-    if (!destroyed)
-    {
-      queueEvent(new Runnable()
-      {
-        public void run()
-        {
-          cinderRenderer.sendMessage(what, body);
-        }
-      });
     }
   }
 }

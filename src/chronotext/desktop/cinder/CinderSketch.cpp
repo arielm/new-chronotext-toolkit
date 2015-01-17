@@ -7,7 +7,7 @@
  */
 
 #include "chronotext/desktop/cinder/CinderSketch.h"
-#include "chronotext/desktop/cinder/CinderDelegate.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
@@ -15,39 +15,27 @@ using namespace ci::app;
 
 namespace chr
 {
-    CinderDelegate* CinderSketch::getDelegate() const
-    {
-        return delegate;
-    }
-    
-    void CinderSketch::setDelegate(CinderDelegate *delegate)
-    {
-        CinderSketch::delegate = delegate;
-    }
-    
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-    
-    double CinderSketch::getElapsedSeconds() const
-    {
-        return delegate->getElapsedSeconds();
-    }
-    
-    uint32_t CinderSketch::getElapsedFrames() const
-    {
-        return delegate->getElapsedFrames();
-    }
-    
     bool CinderSketch::isEmulated() const
     {
-        return delegate->isEmulated();
+        return delegate().isEmulated();
     }
     
     const WindowInfo& CinderSketch::getWindowInfo() const
     {
-        return delegate->getWindowInfo();
+        return delegate().getWindowInfo();
+    }
+
+    double CinderSketch::getElapsedSeconds() const
+    {
+        return delegate().elapsedSeconds();
     }
     
-#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
+    uint32_t CinderSketch::getElapsedFrames() const
+    {
+        return delegate().elapsedFrames();
+    }
+
+    // ---
     
     int CinderSketch::getCode(const KeyEvent &keyEvent) const
     {
@@ -67,17 +55,5 @@ namespace chr
     bool CinderSketch::isAccelDown(const KeyEvent &keyEvent) const
     {
         return keyEvent.isAccelDown();
-    }
-    
-#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
-    
-    void CinderSketch::action(int actionId)
-    {
-        delegate->handleAction(actionId);
-    }
-    
-    void CinderSketch::sendMessageToDelegate(int what, const string &body)
-    {
-        delegate->handleMessageFromSketch(what, body);
     }
 }

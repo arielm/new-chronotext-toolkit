@@ -22,8 +22,6 @@ using namespace chr;
     if (self = [super init])
     {
         cinderDelegate = delegate;
-
-        assert(delegate->getWindow());
         view = reinterpret_cast<NSView*>(delegate->getWindow()->getNative());
     }
     
@@ -32,7 +30,7 @@ using namespace chr;
 
 - (void) sendMessageToSketch:(int)what
 {
-    cinderDelegate->sendMessageToSketch(what);
+    cinderDelegate->messageFromBridge(what);
 }
 
 - (void) sendMessageToSketch:(int)what json:(id)json
@@ -40,15 +38,15 @@ using namespace chr;
     NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
     NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     
-    cinderDelegate->sendMessageToSketch(what, [string UTF8String]);
+    cinderDelegate->messageFromBridge(what, [string UTF8String]);
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
 {
-    cinderDelegate->sendMessageToSketch(what, [body UTF8String]);
+    cinderDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
-- (void) handleMessageFromSketch:(int)what body:(NSString*)body
+- (void) handleMessage:(int)what body:(NSString*)body
 {}
 
 @end

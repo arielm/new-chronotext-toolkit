@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/cinder/CinderDelegateBase.h"
 #include "chronotext/system/SystemInfo.h"
 #include "chronotext/InputSource.h"
 
@@ -16,22 +16,12 @@
 
 namespace chr
 {
-    class CinderDelegate : public ci::app::AppNative
+    class CinderDelegate : public CinderDelegateBase, public ci::app::AppNative
     {
     public:
-        CinderSketch* getSketch();
-
-        virtual void sketchCreated(CinderSketch *sketch) {}
-        virtual void sketchDestroyed(CinderSketch *sketch) {}
-
-        virtual bool handleAction(int actionId);
-        virtual void sendMessageToSketch(int what, const std::string &body = "");
-        virtual void handleMessageFromSketch(int what, const std::string &body) {}
-
-        virtual void applyDefaultSettings(Settings *settings);
-        virtual void applySettings(Settings *settings) {}
-        void prepareSettings(Settings *settings) final;
-
+        static std::atomic<bool> LOG_VERBOSE;
+        static std::atomic<bool> LOG_WARNING;
+        
         void setup() final;
         void shutdown() final;
         void resize() final;
@@ -50,30 +40,38 @@ namespace chr
         void keyDown(ci::app::KeyEvent event) final;
         void keyUp(ci::app::KeyEvent event) final;
         
-        bool isEmulated() const;
-        const WindowInfo& getWindowInfo() const;
+        void performAction(int actionId) final;
+        void messageFromBridge(int what, const std::string &body = "") final;
         
+        bool isEmulated() const final;
+        const WindowInfo& getWindowInfo() const final;
+        
+        double elapsedSeconds() const;
+        uint32_t elapsedFrames() const;
+        
+        virtual void applySettings(Settings *settings) {}
+        virtual void applyDefaultSettings(Settings *settings);
+        void prepareSettings(Settings *settings) final;
+
         void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool loadEmulators(chr::InputSource::Ref inputSource);
-        
+
     protected:
         CinderSketch *sketch = nullptr;
         
-        int startCount = 0;
-        int updateCount = 0;
-        
-        bool backCaptured = false;
-        bool escapeCaptured = false;
+        ci::Timer timer;
+        int frameCount = -1;
 
         system::InitInfo initInfo;
         WindowInfo windowInfo;
+
+        bool backCaptured = false;
+        bool escapeCaptured = false;
         
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
-        
-        void setSketch(CinderSketch *sketch);
        
-        void start();
-        void stop();
+        void start(CinderSketch::Reason reason);
+        void stop(CinderSketch::Reason reason);
     };
 }

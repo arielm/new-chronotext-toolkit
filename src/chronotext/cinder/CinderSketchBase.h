@@ -29,20 +29,17 @@ namespace chr
             REASON_APP_PAUSED
         };
         
-        enum Event
+        enum
         {
             EVENT_FOREGROUND,
             EVENT_BACKGROUND,
             EVENT_MEMORY_WARNING,
             EVENT_CONTEXT_LOST,
             EVENT_CONTEXT_RENEWED,
-            EVENT_BACK,
-            EVENT_ESCAPE
+            EVENT_TRIGGER_BACK,
+            EVENT_TRIGGER_ESCAPE
         };
         
-        /*
-         * PURPOSELY NON-TYPED AND OPEN
-         */
         enum
         {
             ACTION_CAPTURE_BACK = 1,
@@ -58,9 +55,9 @@ namespace chr
         virtual void setup() {}
         virtual void shutdown() {}
 
+        virtual void handleEvent(int eventId) {}
+
         virtual void resize() {}
-        virtual void event(Event event) {}
-        
         virtual void start(Reason reason) {}
         virtual void stop(Reason reason) {}
 
@@ -73,30 +70,28 @@ namespace chr
         
         virtual bool keyDown(const ci::app::KeyEvent &event) { return false; }
         virtual bool keyUp(const ci::app::KeyEvent &event) { return false; }
-        
+
         virtual void accelerated(AccelEvent event) {}
-        virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
-        virtual void disableAccelerometer() {}
         
-        virtual chr::FrameClock::Ref clock() const = 0;
-        virtual ci::Timeline& timeline() const = 0;
+        virtual bool isEmulated() const = 0;
+        virtual const WindowInfo& getWindowInfo() const = 0;
 
         virtual double getElapsedSeconds() const = 0;
         virtual uint32_t getElapsedFrames() const = 0;
 
-        virtual bool isEmulated() const = 0;
-        virtual const WindowInfo& getWindowInfo() const = 0;
+        virtual chr::FrameClock::Ref clock() const = 0;
+        virtual ci::Timeline& timeline() const = 0;
 
-        virtual void action(int actionId) = 0;
-        virtual void sendMessageToDelegate(int what, const std::string &body = "") = 0;
+        inline ci::Vec2i getWindowSize() const { return getWindowInfo().size; }
+        inline int getWindowWidth() const { return getWindowInfo().size.x; };
+        inline int getWindowHeight() const { return getWindowInfo().size.y; };
+        inline ci::Area getWindowBounds() const { return getWindowInfo().bounds(); };
+        inline ci::Vec2f getWindowCenter() const { return getWindowInfo().center(); };
+        inline float getWindowAspectRatio() const { return getWindowInfo().aspectRatio(); };
         
-        virtual ci::Vec2i getWindowSize() const { return getWindowInfo().size; }
-        virtual int getWindowWidth() const { return getWindowInfo().size.x; };
-        virtual int getWindowHeight() const { return getWindowInfo().size.y; };
-        virtual ci::Area getWindowBounds() const { return getWindowInfo().bounds(); };
-        virtual ci::Vec2f getWindowCenter() const { return getWindowInfo().center(); };
-        virtual float getWindowAspectRatio() const { return getWindowInfo().aspectRatio(); };
-        
+        /*
+         * FIXME: OVER-COMPLICATED (REASON: THE FOLLOWING METHODS ARE NOT DECLARED ON iOS)
+         */
         virtual int getCode(const ci::app::KeyEvent &keyEvent) const { return 0; }
         virtual bool isShiftDown(const ci::app::KeyEvent &keyEvent) const { return false; }
         virtual bool isAltDown(const ci::app::KeyEvent &keyEvent) const { return false; }

@@ -15,15 +15,10 @@ using namespace ci;
 
 namespace chr
 {
-    namespace INTERN
-    {
-        CinderDelegate *delegate = nullptr;
-    }
-    
     namespace jni
     {
         JavaVM *vm = nullptr;
-        jobject listener = nullptr;
+        jobject bridge = nullptr;
         
         // ---
         
@@ -89,7 +84,7 @@ namespace chr
         
         JsonTree jsonQuery(const char *methodName)
         {
-            const string &query = toString((jstring)callObjectMethodOnListener(methodName, "()Ljava/lang/String;"));
+            const string &query = toString((jstring)callObjectMethodOnBridge(methodName, "()Ljava/lang/String;"));
             
             if (!query.empty())
             {
@@ -108,119 +103,119 @@ namespace chr
         
         // ---
         
-        void callVoidMethodOnListener(const char *name, const char *sig, ...)
+        void callVoidMethodOnBridge(const char *name, const char *sig, ...)
         {
             JNIEnv *env = getEnv();
             
-            jclass cls = env->GetObjectClass(listener);
+            jclass cls = env->GetObjectClass(bridge);
             jmethodID method = env->GetMethodID(cls, name, sig);
             
             va_list args;
             va_start(args, sig);
-            env->CallVoidMethodV(listener, method, args);
+            env->CallVoidMethodV(bridge, method, args);
             va_end(args);
         }
         
-        jboolean callBooleanMethodOnListener(const char *name, const char *sig, ...)
+        jboolean callBooleanMethodOnBridge(const char *name, const char *sig, ...)
         {
             JNIEnv *env = getEnv();
             
-            jclass cls = env->GetObjectClass(listener);
+            jclass cls = env->GetObjectClass(bridge);
             jmethodID method = env->GetMethodID(cls, name, sig);
             
             va_list args;
             va_start(args, sig);
-            jboolean ret = env->CallBooleanMethodV(listener, method, args);
-            va_end(args);
-            
-            return ret;
-        }
-        
-        jchar callCharMethodOnListener(const char *name, const char *sig, ...)
-        {
-            JNIEnv *env = getEnv();
-            
-            jclass cls = env->GetObjectClass(listener);
-            jmethodID method = env->GetMethodID(cls, name, sig);
-            
-            va_list args;
-            va_start(args, sig);
-            jchar ret = env->CallCharMethodV(listener, method, args);
+            jboolean ret = env->CallBooleanMethodV(bridge, method, args);
             va_end(args);
             
             return ret;
         }
         
-        jint callIntMethodOnListener(const char *name, const char *sig, ...)
+        jchar callCharMethodOnBridge(const char *name, const char *sig, ...)
         {
             JNIEnv *env = getEnv();
             
-            jclass cls = env->GetObjectClass(listener);
+            jclass cls = env->GetObjectClass(bridge);
             jmethodID method = env->GetMethodID(cls, name, sig);
             
             va_list args;
             va_start(args, sig);
-            jint ret = env->CallIntMethodV(listener, method, args);
+            jchar ret = env->CallCharMethodV(bridge, method, args);
             va_end(args);
             
             return ret;
         }
         
-        jlong callLongMethodOnListener(const char *name, const char *sig, ...)
+        jint callIntMethodOnBridge(const char *name, const char *sig, ...)
         {
             JNIEnv *env = getEnv();
             
-            jclass cls = env->GetObjectClass(listener);
+            jclass cls = env->GetObjectClass(bridge);
             jmethodID method = env->GetMethodID(cls, name, sig);
             
             va_list args;
             va_start(args, sig);
-            jlong ret = env->CallLongMethodV(listener, method, args);
+            jint ret = env->CallIntMethodV(bridge, method, args);
             va_end(args);
             
             return ret;
         }
         
-        jfloat callFloatMethodOnListener(const char *name, const char *sig, ...)
+        jlong callLongMethodOnBridge(const char *name, const char *sig, ...)
         {
             JNIEnv *env = getEnv();
             
-            jclass cls = env->GetObjectClass(listener);
+            jclass cls = env->GetObjectClass(bridge);
             jmethodID method = env->GetMethodID(cls, name, sig);
             
             va_list args;
             va_start(args, sig);
-            jfloat ret = env->CallFloatMethodV(listener, method, args);
+            jlong ret = env->CallLongMethodV(bridge, method, args);
             va_end(args);
             
             return ret;
         }
         
-        jdouble callDoubleMethodOnListener(const char *name, const char *sig, ...)
+        jfloat callFloatMethodOnBridge(const char *name, const char *sig, ...)
         {
             JNIEnv *env = getEnv();
             
-            jclass cls = env->GetObjectClass(listener);
+            jclass cls = env->GetObjectClass(bridge);
             jmethodID method = env->GetMethodID(cls, name, sig);
             
             va_list args;
             va_start(args, sig);
-            jdouble ret = env->CallDoubleMethod(listener, method, args);
+            jfloat ret = env->CallFloatMethodV(bridge, method, args);
             va_end(args);
             
             return ret;
         }
         
-        jobject callObjectMethodOnListener(const char *name, const char *sig, ...)
+        jdouble callDoubleMethodOnBridge(const char *name, const char *sig, ...)
         {
             JNIEnv *env = getEnv();
             
-            jclass cls = env->GetObjectClass(listener);
+            jclass cls = env->GetObjectClass(bridge);
             jmethodID method = env->GetMethodID(cls, name, sig);
             
             va_list args;
             va_start(args, sig);
-            jobject ret = env->CallObjectMethodV(listener, method, args);
+            jdouble ret = env->CallDoubleMethod(bridge, method, args);
+            va_end(args);
+            
+            return ret;
+        }
+        
+        jobject callObjectMethodOnBridge(const char *name, const char *sig, ...)
+        {
+            JNIEnv *env = getEnv();
+            
+            jclass cls = env->GetObjectClass(bridge);
+            jmethodID method = env->GetMethodID(cls, name, sig);
+            
+            va_list args;
+            va_start(args, sig);
+            jobject ret = env->CallObjectMethodV(bridge, method, args);
             va_end(args);
             
             return ret;
@@ -243,28 +238,19 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
     return JNI_VERSION_1_4;
 }
 
-/*
- * MUST BE CALLED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
- */
-void Java_org_chronotext_cinder_CinderDelegate_init(JNIEnv *env, jobject obj, jobject listener, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
+void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
-    jni::listener = env->NewGlobalRef(listener);
+    jni::bridge = env->NewGlobalRef(bridge);
     
     INTERN::delegate = new CinderDelegate();
     INTERN::delegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
-/*
- * MUST BE CALLED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
- */
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
 {
     INTERN::delegate->launch();
 }
 
-/*
- * MUST BE CALLED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
- */
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
 {
     INTERN::delegate->setup(width, height);
@@ -294,38 +280,38 @@ void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 
 // ---
 
-void Java_org_chronotext_cinder_CinderRenderer_event(JNIEnv *env, jobject obj, jint eventId)
-{
-    INTERN::delegate->handleEvent(eventId);
-}
-
-void Java_org_chronotext_cinder_CinderRenderer_sendMessage(JNIEnv *env, jobject obj, jint what, jstring body)
-{
-    if (body)
-    {
-        const char *chars = env->GetStringUTFChars(body, nullptr);
-        INTERN::delegate->sendMessageToSketch(what, chars);
-        env->ReleaseStringUTFChars(body, chars);
-    }
-    else
-    {
-        INTERN::delegate->sendMessageToSketch(what);
-    }
-}
-
-// ---
-
-void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+void Java_org_chronotext_cinder_CinderBridge_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
     INTERN::delegate->addTouch(index, x, y);
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+void Java_org_chronotext_cinder_CinderBridge_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
     INTERN::delegate->updateTouch(index, x, y);
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+void Java_org_chronotext_cinder_CinderBridge_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
     INTERN::delegate->removeTouch(index, x, y);
+}
+
+// ---
+
+void Java_org_chronotext_cinder_CinderRenderer_dispatchEvent(JNIEnv *env, jobject obj, jint eventId)
+{
+    INTERN::delegate->eventFromBridge(eventId);
+}
+
+void Java_org_chronotext_cinder_CinderBridge_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body)
+{
+    if (body)
+    {
+        const char *chars = env->GetStringUTFChars(body, nullptr);
+        INTERN::delegate->messageFromBridge(what, chars);
+        env->ReleaseStringUTFChars(body, chars);
+    }
+    else
+    {
+        INTERN::delegate->messageFromBridge(what);
+    }
 }

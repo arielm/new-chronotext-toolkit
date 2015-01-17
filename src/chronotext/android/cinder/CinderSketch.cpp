@@ -7,66 +7,30 @@
  */
 
 #include "chronotext/android/cinder/CinderSketch.h"
-#include "chronotext/android/cinder/CinderDelegate.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
 
 namespace chr
 {
-    CinderDelegate* CinderSketch::getDelegate() const
-    {
-        return delegate;
-    }
-    
-    void CinderSketch::setDelegate(CinderDelegate *delegate)
-    {
-        CinderSketch::delegate = delegate;
-    }
-    
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-
     double CinderSketch::getElapsedSeconds() const
     {
-        return delegate->getElapsedSeconds();
+        return delegate().elapsedSeconds();
     }
     
     uint32_t CinderSketch::getElapsedFrames() const
     {
-        return delegate->getElapsedFrames();
+        return delegate().elapsedFrames();
     }
 
     bool CinderSketch::isEmulated() const
     {
-        return delegate->isEmulated();
+        return delegate().isEmulated();
     }
     
     const WindowInfo& CinderSketch::getWindowInfo() const
     {
-        return delegate->getWindowInfo();
-    }
-    
-#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
-    
-    void CinderSketch::action(int actionId)
-    {
-        delegate->handleAction(actionId);
-    }
-    
-    void CinderSketch::sendMessageToDelegate(int what, const string &body)
-    {
-        delegate->handleMessageFromSketch(what, body);
-    }
-    
-#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
-    
-    void CinderSketch::enableAccelerometer(float updateFrequency, float filterFactor)
-    {
-        delegate->enableAccelerometer(updateFrequency, filterFactor);
-    }
-    
-    void CinderSketch::disableAccelerometer()
-    {
-        delegate->disableAccelerometer();
+        return delegate().getWindowInfo();
     }
 }
