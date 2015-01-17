@@ -55,7 +55,7 @@ namespace chr
     void CinderDelegate::shutdown()
     {
         sketch->shutdown();
-        destroySketch(sketch);
+        delete sketch;
         sketchDestroyed(sketch);
         sketch = nullptr;
         

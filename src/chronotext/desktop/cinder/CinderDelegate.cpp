@@ -61,7 +61,7 @@ namespace chr
         stop(CinderSketch::REASON_APP_HIDDEN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
         
         sketch->shutdown();
-        destroySketch(sketch);
+        delete sketch;
         sketchDestroyed(sketch);
         sketch = nullptr;
         
