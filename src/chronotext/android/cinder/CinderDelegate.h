@@ -47,10 +47,10 @@ namespace chr
         void init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void launch(); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
-        void setup(int width, int height); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
+        void setup(const ci::Vec2f &size); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
         void shutdown();
         
-        void resize(int width, int height);
+        void resize(const ci::Vec2f &size);
         void draw();
 
         void addTouch(int index, float x, float y);
@@ -60,26 +60,27 @@ namespace chr
         void messageFromBridge(int what, const std::string &body = "") final;
         void sendMessageToBridge(int what, const std::string &body = "") final;
         
-        void eventFromBridge(int eventId) final;
+        void handleEvent(int eventId) final;
         void performAction(int actionId) final;
 
-        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
+        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
+        void disableAccelerometer() final;
 
-        bool isEmulated() const;
-        const WindowInfo& getWindowInfo() const;
+        bool isEmulated() const final;
+        const WindowInfo& getWindowInfo() const final;
 
         double elapsedSeconds() const;
-        uint32_t elapsedFrames() const;
+        int elapsedFrames() const;
 
     protected:
         CinderSketch *sketch = nullptr;
 
         ci::Timer timer;
         int frameCount = 0;
+        bool forceResize = false;
         
-        system::InitInfo initInfo;
         WindowInfo windowInfo;
+        system::InitInfo initInfo;
 
         AccelEvent::Filter accelFilter;
 
@@ -95,7 +96,6 @@ namespace chr
         
         void startIOService();
         void stopIOService();
-        void pollIOService();
         
         void createSensorEventQueue();
         void destroySensorEventQueue();

@@ -14,8 +14,6 @@
 #import "chronotext/cocoa/utils/NSString+JSON.h"
 #import "chronotext/ios/gl/GLViewController.h"
 
-#include "chronotext/cinder/CinderSketch.h"
-
 enum
 {
     REASON_VIEW_WILL_APPEAR,
@@ -27,17 +25,9 @@ enum
 @interface CinderBridge : NSObject <UIAccelerometerDelegate>
 {
     GLViewController *viewController;
-    AccelEvent::Filter accelFilter;
 }
 
 @property (nonatomic, readonly) GLViewController *viewController;
-@property (nonatomic, assign) AccelEvent::Filter accelFilter;
-@property (nonatomic, readonly) const chr::WindowInfo &windowInfo;
-@property (nonatomic, readonly) BOOL initialized;
-@property (nonatomic, readonly) BOOL active;
-@property (nonatomic, readonly) double elapsedSeconds;
-@property (nonatomic, readonly) uint32_t elapsedFrames;
-@property (nonatomic, readonly) BOOL emulated;
 
 - (id) initWithOptions:(NSDictionary*)options;
 
@@ -48,18 +38,26 @@ enum
 - (void) update;
 - (void) draw;
 
-- (void) startWithReason:(int)reasonId;
-- (void) stopWithReason:(int)reasonId;
+- (void) startWithReason:(int)reason;
+- (void) stopWithReason:(int)reason;
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
 
-- (void) handleAction:(int)actionId;
-- (void) handleMessageFromSketch:(int)what body:(NSString*)body;
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
 
+- (void) handleMessage:(int)what body:(NSString*)body;
+
 @end
+
+namespace chr
+{
+    namespace INTERN
+    {
+        extern CinderBridge *bridge;
+    }
+}

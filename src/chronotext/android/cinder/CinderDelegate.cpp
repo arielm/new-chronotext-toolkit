@@ -24,6 +24,7 @@ namespace chr
         
         // ---
         
+        INTERN::delegate = this;
         INTERN::init(initInfo);
         
         sketch = createSketch();
@@ -40,9 +41,10 @@ namespace chr
         sketch->launch();
     }
     
-    void CinderDelegate::setup(int width, int height)
+    void CinderDelegate::setup(const ci::Vec2f &size)
     {
-        windowInfo = WindowInfo(width, height);
+        windowInfo = WindowInfo(size);
+        forceResize = true;
         
         INTERN::setup(system::SetupInfo(windowInfo));
         
@@ -63,20 +65,23 @@ namespace chr
          * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
+        
         INTERN::shutdown();
+        INTERN::delegate = nullptr;
         
         destroySensorEventQueue();
         stopIOService();
     }
     
-    void CinderDelegate::resize(int width, int height)
+    void CinderDelegate::resize(const ci::Vec2f &size)
     {
-        /*
-         * TODO: WE COULD FILTER SPURIOUS RESIZE EVENTS LIKE IN ios/cinder/CinderBridge.mm
-         */
-        
-        windowInfo.size = Vec2i(width, height);
-        sketch->resize();
+        if (forceResize || (size != windowInfo.size))
+        {
+            windowInfo.size = size;
+            forceResize = false;
+            
+            sketch->resize();
+        }
     }
     
     void CinderDelegate::draw()
@@ -84,7 +89,7 @@ namespace chr
         sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
         
         pollSensorEvents(); // WHERE accelerated IS INVOKED
-        pollIOService(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
+        io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
         
         /*
          * MUST BE CALLED BEFORE Sketch::update
@@ -114,7 +119,7 @@ namespace chr
         return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
     }
     
-    uint32_t CinderDelegate::elapsedFrames() const
+    int CinderDelegate::elapsedFrames() const
     {
         return frameCount;
     }
@@ -162,7 +167,7 @@ namespace chr
     /*
      * INVOKED ON THE RENDERER'S THREAD
      */
-    void CinderDelegate::eventFromBridge(int eventId)
+    void CinderDelegate::handleEvent(int eventId)
     {
         switch (eventId)
         {
@@ -243,11 +248,6 @@ namespace chr
     void CinderDelegate::stopIOService()
     {
         io->stop();
-    }
-    
-    void CinderDelegate::pollIOService()
-    {
-        io->poll();
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------

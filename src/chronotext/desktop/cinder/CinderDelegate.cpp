@@ -71,8 +71,8 @@ namespace chr
          * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
          * - SEE RELATED TODOS IN Context AND TaskManager
          */
-        INTERN::shutdown();
         
+        INTERN::shutdown();
         INTERN::delegate = nullptr;
     }
     
@@ -81,7 +81,7 @@ namespace chr
         /*
          * RESIZING IS NOT SUPPORTED WHEN EMULATING
          */
-        assert(!(initInfo.emulated && (frameCount != -1)));
+        assert((resizeCount == 0) || !initInfo.emulated);
         
         windowInfo.size = getWindowSize();
         sketch->resize();
@@ -89,7 +89,7 @@ namespace chr
         /*
          * I.E. THE FIRST AppNative::resize()
          */
-        if (frameCount == -1)
+        if (resizeCount++ == 0)
         {
             start(CinderSketch::REASON_APP_SHOWN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
         }
@@ -134,7 +134,7 @@ namespace chr
         return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
     }
     
-    uint32_t CinderDelegate::elapsedFrames() const
+    int CinderDelegate::elapsedFrames() const
     {
         return frameCount;
     }
@@ -151,6 +151,11 @@ namespace chr
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
     
+    void CinderDelegate::messageFromBridge(int what, const std::string &body)
+    {
+        sketch->sendMessage(Message(what, body));
+    }
+
     void CinderDelegate::performAction(int actionId)
     {
         switch (actionId)
@@ -171,11 +176,6 @@ namespace chr
                 escapeCaptured = false;
                 break;
         }
-    }
-    
-    void CinderDelegate::messageFromBridge(int what, const std::string &body)
-    {
-        sketch->sendMessage(Message(what, body));
     }
     
 #pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------

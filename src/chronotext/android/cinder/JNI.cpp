@@ -7,7 +7,6 @@
  */
 
 #include "chronotext/android/cinder/JNI.h"
-#include "chronotext/android/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 
 using namespace std;
@@ -242,8 +241,8 @@ void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobj
 {
     jni::bridge = env->NewGlobalRef(bridge);
     
-    INTERN::delegate = new CinderDelegate();
-    INTERN::delegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    auto cinderDelegate = new CinderDelegate();
+    cinderDelegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
@@ -253,15 +252,15 @@ void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
 
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    INTERN::delegate->setup(width, height);
+    INTERN::delegate->setup(Vec2i(width, height));
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
 {
-    INTERN::delegate->shutdown();
+    auto cinderDelegate = INTERN::delegate;
     
-    delete INTERN::delegate;
-    INTERN::delegate = nullptr;
+    cinderDelegate->shutdown();
+    delete cinderDelegate;
     
     CI_LOGI("SHUTDOWN");
 }
@@ -270,7 +269,7 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
 
 void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    INTERN::delegate->resize(width, height);
+    INTERN::delegate->resize(Vec2i(width, height));
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
@@ -299,7 +298,7 @@ void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject 
 
 void Java_org_chronotext_cinder_CinderRenderer_dispatchEvent(JNIEnv *env, jobject obj, jint eventId)
 {
-    INTERN::delegate->eventFromBridge(eventId);
+    INTERN::delegate->handleEvent(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderBridge_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body)

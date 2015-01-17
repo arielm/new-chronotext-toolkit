@@ -7,114 +7,30 @@
  */
 
 #include "chronotext/ios/cinder/CinderSketch.h"
-
-#import "CinderBridge.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace chr
 {
-    void* CinderSketch::getDelegate() const
-    {
-        return delegate;
-    }
-    
-    void CinderSketch::setDelegate(void *delegate)
-    {
-        CinderSketch::delegate = delegate;
-    }
-    
-    static inline CinderBridge* castToDelegate(void *delegate)
-    {
-        return static_cast<CinderBridge*>(delegate);
-    }
-
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-
     double CinderSketch::getElapsedSeconds() const
     {
-        return castToDelegate(delegate).elapsedSeconds;
+        return delegate().elapsedSeconds();
     }
     
-    uint32_t CinderSketch::getElapsedFrames() const
+    int CinderSketch::getElapsedFrames() const
     {
-        return castToDelegate(delegate).elapsedFrames;
+        return delegate().elapsedFrames();
     }
     
     bool CinderSketch::isEmulated() const
     {
-        return castToDelegate(delegate).emulated;
+        return delegate().isEmulated();
     }
     
     const WindowInfo& CinderSketch::getWindowInfo() const
     {
-        return castToDelegate(delegate).windowInfo;
-    }
-    
-#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
-    
-    void CinderSketch::action(int actionId)
-    {
-        [castToDelegate(delegate) handleAction:actionId];
-    }
-    
-    void CinderSketch::sendMessageToDelegate(int what, const string &body)
-    {
-        if (body.empty())
-        {
-            [castToDelegate(delegate) handleMessageFromSketch:what body:nil];
-        }
-        else
-        {
-            [castToDelegate(delegate) handleMessageFromSketch:what body:[NSString stringWithUTF8String:body.data()]];
-        }
-    }
-    
-#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
-    
-    void CinderSketch::enableAccelerometer(float updateFrequency, float filterFactor)
-    {
-        castToDelegate(delegate).accelFilter = AccelEvent::Filter(filterFactor);
-        
-        if (updateFrequency <= 0)
-        {
-            updateFrequency = 30;
-        }
-        
-        [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1 / updateFrequency)];
-        [[UIAccelerometer sharedAccelerometer] setDelegate:castToDelegate(delegate)];
-    }
-    
-    void CinderSketch::disableAccelerometer()
-    {
-        [[UIAccelerometer sharedAccelerometer] setDelegate:nil];
-    }
-    
-#pragma mark ---------------------------------------- TOUCH ----------------------------------------
-
-    void CinderSketch::touchesBegan(TouchEvent event)
-    {
-        for (auto &touch : event.getTouches())
-        {
-            addTouch(touch.getId() - 1, touch.getX(), touch.getY());
-        }
-    }
-    
-    void CinderSketch::touchesMoved(TouchEvent event)
-    {
-        for (auto &touch : event.getTouches())
-        {
-            updateTouch(touch.getId() - 1, touch.getX(), touch.getY());
-        }
-    }
-    
-    void CinderSketch::touchesEnded(TouchEvent event)
-    {
-        for (auto &touch : event.getTouches())
-        {
-            removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
-        }
+        return delegate().getWindowInfo();
     }
 }

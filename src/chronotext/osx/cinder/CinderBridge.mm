@@ -28,6 +28,8 @@ using namespace chr;
     return self;
 }
 
+#pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
+
 - (void) sendMessageToSketch:(int)what
 {
     cinderDelegate->messageFromBridge(what);

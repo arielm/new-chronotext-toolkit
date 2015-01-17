@@ -20,7 +20,7 @@ namespace chr
         virtual void messageFromBridge(int what, const std::string &body = "") = 0;
         virtual void sendMessageToBridge(int what, const std::string &body = "") {}
         
-        virtual void eventFromBridge(int eventId) {}
+        virtual void handleEvent(int eventId) {}
         virtual void performAction(int actionId) {}
         
         virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}

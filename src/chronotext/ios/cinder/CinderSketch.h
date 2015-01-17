@@ -10,38 +10,21 @@
 
 #include "chronotext/cinder/CinderSketchBase.h"
 
-#include "cinder/app/TouchEvent.h"
-
 namespace chr
 {
     class CinderSketch : public CinderSketchBase
     {
     public:
-        void* getDelegate() const;
-        void setDelegate(void *delegate);
-
-        inline chr::FrameClock::Ref clock() const final { return clock_; }
-        inline ci::Timeline& timeline() const final { return *timeline_; }
-        
         double getElapsedSeconds() const final;
-        uint32_t getElapsedFrames() const final;
+        int getElapsedFrames() const final;
         
         bool isEmulated() const final;
         const WindowInfo& getWindowInfo() const final;
 
-        void action(int actionId) final;
-        void sendMessageToDelegate(int what, const std::string &body = "") final;
+        inline chr::FrameClock::Ref clock() const final { return clock_; }
+        inline ci::Timeline& timeline() const final { return *timeline_; }
 
-        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) final;
-        void disableAccelerometer() final;
-
-        void touchesBegan(ci::app::TouchEvent event);
-        void touchesMoved(ci::app::TouchEvent event);
-        void touchesEnded(ci::app::TouchEvent event);
-        
     protected:
-        void *delegate = nullptr;
-        
         chr::FrameClock::Ref clock_ = chr::FrameClock::create();
         ci::TimelineRef timeline_ = ci::Timeline::create();
     };

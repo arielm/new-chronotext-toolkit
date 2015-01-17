@@ -16,7 +16,7 @@ namespace chr
     {
     public:
         double getElapsedSeconds() const final;
-        uint32_t getElapsedFrames() const final;
+        int getElapsedFrames() const final;
         
         bool isEmulated() const final;
         const WindowInfo& getWindowInfo() const final;

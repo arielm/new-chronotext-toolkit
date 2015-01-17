@@ -22,31 +22,24 @@ using namespace ci;
 using namespace ci::app;
 using namespace chr;
 
+namespace chr
+{
+    namespace INTERN
+    {
+        CinderBridge *bridge = nullptr;
+    }
+}
+
 @interface CinderBridge ()
 {
     GLKView *view;
-    CinderSketch *sketch;
-    WindowInfo windowInfo;
+    CinderDelegate *cinderDelegate;
     
     BOOL initialized;
     BOOL active;
-    BOOL forceResize;
-
-    shared_ptr<boost::asio::io_service> io;
-    shared_ptr<boost::asio::io_service::work> ioWork;
-
-    Timer timer;
-    uint32_t frameCount;
     
     map<UITouch*, uint32_t> touchIdMap;
 }
-
-- (void) performInit;
-- (void) performLaunch;
-
-- (void) startIOService;
-- (void) stopIOService;
-- (void) pollIOService;
 
 - (Vec2f) windowSize;
 - (int) aaLevel;
@@ -61,16 +54,17 @@ using namespace chr;
 @implementation CinderBridge
 
 @synthesize viewController;
-@synthesize accelFilter;
-@synthesize windowInfo;
-@synthesize initialized;
-@synthesize active;
 
 - (id) initWithOptions:(NSDictionary*)options
 {
     if (self = [super init])
     {
-        [self performInit];
+        INTERN::bridge = self;
+        
+        cinderDelegate = new CinderDelegate();
+        cinderDelegate->init();
+        
+        // ---
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -82,18 +76,10 @@ using namespace chr;
 
 - (void) dealloc
 {
-    sketch->shutdown();
-    destroySketch(sketch);
-    sketch = nullptr;
-
-    /*
-     * TODO:
-     *
-     * - PROPERLY HANDLE THE SHUTING-DOWN OF "UNDERGOING" TASKS
-     * - SEE RELATED TODOS IN Context AND TaskManager
-     */
-    [self stopIOService];
-    INTERN::shutdown();
+    cinderDelegate->shutdown();
+    delete cinderDelegate;
+    
+    INTERN::bridge = nullptr;
     
     // ---
     
@@ -108,167 +94,72 @@ using namespace chr;
     if (!viewController)
     {
         viewController = [[GLViewController alloc] initWithBridge:self properties:properties];
-        [self performLaunch];
+        cinderDelegate->launch();
     }
     
     return viewController;
-}
-
-- (void) performInit
-{
-    INTERN::init(system::InitInfo());
-    
-    sketch = createSketch();
-    sketch->setDelegate(self);
-    sketch->init();
-}
-
-- (void) performLaunch
-{
-    [self startIOService];
-    
-    INTERN::launch(system::LaunchInfo(*io));
-    sketch->launch();
 }
 
 - (void) setup
 {
     view = viewController.glView;
     
-    windowInfo = WindowInfo([self windowSize], [self aaLevel]);
-    forceResize = YES;
-
-    INTERN::setup(system::SetupInfo(windowInfo));
-
-    sketch->timeline().stepTo(0);
-    sketch->setup();
+    cinderDelegate->setup(WindowInfo([self windowSize], [self aaLevel]));
     
     initialized = YES;
 }
 
 - (void) resize
 {
-    Vec2f size = [self windowSize];
-    
-    if (forceResize || (size != windowInfo.size))
-    {
-        forceResize = NO;
-        windowInfo.size = size;
-        
-        sketch->resize();
-    }
+    cinderDelegate->resize([self windowSize]);
 }
 
 - (void) update
 {
-    sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-    
-    [self pollIOService];
-    
-    /*
-     * MUST BE CALLED BEFORE Sketch::update
-     * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
-     *
-     * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-     * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
-     */
-    double now = sketch->clock()->getTime();
-    
-    sketch->update();
-    sketch->timeline().stepTo(now);
-    
-    frameCount++;
+    cinderDelegate->update();
 }
 
 - (void) draw
 {
-    if (frameCount == 0)
-    {
-        [self update]; // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
-    }
-    
-    sketch->draw();
+    cinderDelegate->draw();
 }
 
-- (void) startWithReason:(int)reasonId
+- (void) startWithReason:(int)reason
 {
-    frameCount = 0;
-    
-    timer.start();
-    sketch->clock()->start();
-    
-    switch (reasonId)
+    switch (reason)
     {
         case REASON_VIEW_WILL_APPEAR:
         {
-            sketch->start(CinderSketch::REASON_APP_SHOWN);
+            cinderDelegate->start(CinderSketch::REASON_APP_SHOWN); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
             active = YES;
             break;
         }
             
         case REASON_APPLICATION_DID_BECOME_ACTIVE:
         {
-            sketch->start(CinderSketch::REASON_APP_RESUMED);
+            cinderDelegate->start(CinderSketch::REASON_APP_RESUMED); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
             break;
         }
     }
 }
 
-- (void) stopWithReason:(int)reasonId
+- (void) stopWithReason:(int)reason
 {
-    timer.stop();
-    sketch->clock()->stop();
-    
-    switch (reasonId)
+    switch (reason)
     {
         case REASON_VIEW_WILL_DISAPPEAR:
         {
-            sketch->stop(CinderSketch::REASON_APP_HIDDEN);
+            cinderDelegate->stop(CinderSketch::REASON_APP_HIDDEN); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
             active = NO;
             break;
         }
             
         case REASON_APPLICATION_WILL_RESIGN_ACTIVE:
         {
-            sketch->stop(CinderSketch::REASON_APP_PAUSED);
+            cinderDelegate->stop(CinderSketch::REASON_APP_PAUSED); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
             break;
         }
     }
-}
-
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-
-- (double) elapsedSeconds
-{
-    return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-}
-
-- (uint32_t) elapsedFrames
-{
-    return frameCount;
-}
-
-- (BOOL) emulated
-{
-    return getSystemInfo().isSimulator;
-}
-
-#pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
-
-- (void) startIOService
-{
-    io = make_shared<boost::asio::io_service>();
-    ioWork = make_shared<boost::asio::io_service::work>(*io);
-}
-
-- (void) stopIOService
-{
-    io->stop();
-}
-
-- (void) pollIOService
-{
-    io->poll();
 }
 
 #pragma mark ---------------------------------------- WINDOW-INFO ----------------------------------------
@@ -352,8 +243,7 @@ using namespace chr;
             break;
     }
     
-    Vec3f transformed(ax, ay, acceleration.z);
-    sketch->accelerated(accelFilter.process(transformed));
+    cinderDelegate->handleAcceleration(Vec3f(ax, ay, acceleration.z));
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -436,7 +326,7 @@ using namespace chr;
     
     if (!touchList.empty())
     {
-        sketch->touchesBegan(TouchEvent(WindowRef(), touchList));
+        cinderDelegate->touchesBegan(TouchEvent(WindowRef(), touchList));
     }
 }
 
@@ -456,7 +346,7 @@ using namespace chr;
     
     if (!touchList.empty())
     {
-        sketch->touchesMoved(TouchEvent(WindowRef(), touchList));
+        cinderDelegate->touchesMoved(TouchEvent(WindowRef(), touchList));
     }
 }
 
@@ -478,7 +368,7 @@ using namespace chr;
     
     if (!touchList.empty())
     {
-        sketch->touchesEnded(TouchEvent(WindowRef(), touchList));
+        cinderDelegate->touchesEnded(TouchEvent(WindowRef(), touchList));
     }
 }
 
@@ -487,17 +377,11 @@ using namespace chr;
     [self touchesEnded:touches withEvent:event];
 }
 
-#pragma mark ---------------------------------------- SKETCH <-> DELEGATE COMMUNICATION ----------------------------------------
-
-- (void) handleAction:(int)actionId
-{}
-
-- (void) handleMessageFromSketch:(int)what body:(NSString*)body
-{}
+#pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
 
 - (void) sendMessageToSketch:(int)what
 {
-    sketch->sendMessage(Message(what));
+    cinderDelegate->messageFromBridge(what);
 }
 
 - (void) sendMessageToSketch:(int)what json:(id)json
@@ -505,13 +389,16 @@ using namespace chr;
     NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
     NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     
-    [self sendMessageToSketch:what body:string];
+    cinderDelegate->messageFromBridge(what, [string UTF8String]);
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
 {
-    sketch->sendMessage(Message(what, [body UTF8String]));
+    cinderDelegate->messageFromBridge(what, [body UTF8String]);
 }
+
+- (void) handleMessage:(int)what body:(NSString*)body
+{}
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------
 
@@ -519,7 +406,7 @@ using namespace chr;
 {
     if (initialized && !active)
     {
-        sketch->event(CinderSketch::EVENT_BACKGROUND);
+        cinderDelegate->handleEvent(CinderSketch::EVENT_BACKGROUND);
     }
 }
 
@@ -527,7 +414,7 @@ using namespace chr;
 {
     if (initialized && !active)
     {
-        sketch->event(CinderSketch::EVENT_FOREGROUND);
+        cinderDelegate->handleEvent(CinderSketch::EVENT_FOREGROUND);
     }
 }
 
@@ -535,7 +422,7 @@ using namespace chr;
 {
     if (initialized)
     {
-        sketch->event(CinderSketch::EVENT_MEMORY_WARNING); // TODO: PASS THROUGH MemoryManager
+        cinderDelegate->handleEvent(CinderSketch::EVENT_MEMORY_WARNING);
     }
 }
 

@@ -40,14 +40,14 @@ namespace chr
         void keyDown(ci::app::KeyEvent event) final;
         void keyUp(ci::app::KeyEvent event) final;
         
-        void performAction(int actionId) final;
         void messageFromBridge(int what, const std::string &body = "") final;
+        void performAction(int actionId) final;
         
         bool isEmulated() const final;
         const WindowInfo& getWindowInfo() const final;
         
         double elapsedSeconds() const;
-        uint32_t elapsedFrames() const;
+        int elapsedFrames() const;
         
         virtual void applySettings(Settings *settings) {}
         virtual void applyDefaultSettings(Settings *settings);
@@ -61,7 +61,8 @@ namespace chr
         CinderSketch *sketch = nullptr;
         
         ci::Timer timer;
-        int frameCount = -1;
+        int frameCount = 0;
+        int resizeCount = 0;
 
         system::InitInfo initInfo;
         WindowInfo windowInfo;

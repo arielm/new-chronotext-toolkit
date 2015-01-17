@@ -30,7 +30,7 @@ namespace chr
         return delegate().elapsedSeconds();
     }
     
-    uint32_t CinderSketch::getElapsedFrames() const
+    int CinderSketch::getElapsedFrames() const
     {
         return delegate().elapsedFrames();
     }

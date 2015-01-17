@@ -21,7 +21,7 @@ namespace chr
         const WindowInfo& getWindowInfo() const final;
 
         double getElapsedSeconds() const final;
-        uint32_t getElapsedFrames() const final;
+        int getElapsedFrames() const final;
         
         inline chr::FrameClock::Ref clock() const final { return clock_; }
         inline ci::Timeline& timeline() const final { return *timeline_; }
