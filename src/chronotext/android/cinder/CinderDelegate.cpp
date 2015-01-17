@@ -183,23 +183,23 @@ namespace chr
                 break;
                 
             case EVENT_CONTEXT_LOST:
-                sketch->handleEvent(CinderSketch::EVENT_CONTEXT_LOST);
+                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
                 break;
                 
             case EVENT_CONTEXT_RENEWED:
-                sketch->handleEvent(CinderSketch::EVENT_CONTEXT_RENEWED);
+                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
                 break;
                 
             case EVENT_BACKGROUND:
-                sketch->handleEvent(CinderSketch::EVENT_BACKGROUND);
+                sketch->event(CinderSketch::EVENT_BACKGROUND);
                 break;
                 
             case EVENT_FOREGROUND:
-                sketch->handleEvent(CinderSketch::EVENT_FOREGROUND);
+                sketch->event(CinderSketch::EVENT_FOREGROUND);
                 break;
                 
             case EVENT_BACK_PRESSED:
-                sketch->handleEvent(CinderSketch::EVENT_TRIGGER_BACK);
+                sketch->event(CinderSketch::EVENT_TRIGGER_BACK);
                 break;
         }
     }

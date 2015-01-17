@@ -258,7 +258,7 @@ namespace chr
             {
                 if (backCaptured)
                 {
-                    sketch->handleEvent(CinderSketch::EVENT_TRIGGER_BACK);
+                    sketch->event(CinderSketch::EVENT_TRIGGER_BACK);
                 }
                 else
                 {
@@ -272,7 +272,7 @@ namespace chr
             {
                 if (escapeCaptured)
                 {
-                    sketch->handleEvent(CinderSketch::EVENT_TRIGGER_ESCAPE);
+                    sketch->event(CinderSketch::EVENT_TRIGGER_ESCAPE);
                 }
                 else
                 {

@@ -55,7 +55,7 @@ namespace chr
         virtual void setup() {}
         virtual void shutdown() {}
 
-        virtual void handleEvent(int eventId) {}
+        virtual void event(int eventId) {}
 
         virtual void resize() {}
         virtual void start(Reason reason) {}

@@ -136,7 +136,7 @@ namespace chr
     
     void CinderDelegate::handleEvent(int eventId)
     {
-        sketch->handleEvent(eventId);
+        sketch->event(eventId);
     }
     
 #pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
