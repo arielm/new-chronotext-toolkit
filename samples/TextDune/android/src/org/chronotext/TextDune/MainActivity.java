@@ -1,7 +1,7 @@
 
 package org.chronotext.TextDune;
 
-import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.cinder.CinderBridge;
 import org.chronotext.utils.Utils;
 
 import android.app.Activity;
@@ -18,42 +18,42 @@ public class MainActivity extends Activity
     System.loadLibrary("TextDune");
   }
 
-  CinderDelegate delegate;
+  CinderBridge bridge;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
 
-    delegate = new CinderDelegate(this);
-    setContentView(delegate.getView());
+    bridge = new CinderBridge(this);
+    setContentView(bridge.getView());
   }
 
   @Override
   protected void onPause()
   {
     super.onPause();
-    delegate.onPause();
+    bridge.onPause();
   }
 
   @Override
   protected void onResume()
   {
     super.onResume();
-    delegate.onResume();
+    bridge.onResume();
   }
   
   @Override
   protected void onDestroy()
   {
     super.onDestroy();
-    delegate.onDestroy();
+    bridge.onDestroy();
   }
 
   @Override
   public void onBackPressed()
   {
-    if (!delegate.onBackPressed())
+    if (!bridge.onBackPressed())
     {
       super.onBackPressed();
     }

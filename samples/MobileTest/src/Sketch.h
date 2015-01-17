@@ -9,9 +9,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT 849b44a
+ * OSX: COMMIT 4c88bd9
  * IOS: COMMIT 849b44a
- * ANDROID: COMMIT df9234d
+ * ANDROID: COMMIT 4c88bd9
  */
 
 /*
@@ -51,23 +51,17 @@ public:
     
     void setup() final;
 
-    void event(Event event) final;
     void start(Reason reason) final;
     void stop(Reason reason) final;
 
     void update() final;
     void draw() final;
-    
+
+    void handleEvent(int eventId) final;
+
     bool keyDown(const ci::app::KeyEvent &keyEvent) final;
     
-    void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
-    void drawText(const std::string &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
-    
     void accelerated(AccelEvent event) final;
-    
-    void accumulateForces();
-    void verlet();
-    void satifsfyConstraints();
     
 protected:
     chr::TextureManager textureManager;
@@ -80,4 +74,11 @@ protected:
 
     ci::Vec2f acceleration;
     Particle particle;
+    
+    void drawDot(const ci::Vec2f &position, float radius, const ci::ColorA &color);
+    void drawText(const std::string &text, const ci::Vec2f &position, chr::XFont::Alignment alignX, chr::XFont::Alignment alignY, float fontSize, const ci::ColorA &color);
+    
+    void accumulateForces();
+    void verlet();
+    void satifsfyConstraints();
 };

@@ -11,9 +11,6 @@
 @interface Bridge : CinderBridge
 {
     UIWindow *window;
-    
 }
-
-- (id) initWithOptions:(NSDictionary*)options;
 
 @end

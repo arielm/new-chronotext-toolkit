@@ -1,7 +1,7 @@
 
 package org.chronotext.MobileTest;
 
-import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.cinder.CinderBridge;
 import org.chronotext.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-public class Bridge extends CinderDelegate
+public class Bridge extends CinderBridge
 {
   static
   {

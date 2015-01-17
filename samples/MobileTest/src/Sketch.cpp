@@ -49,15 +49,48 @@ void Sketch::setup()
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::event(Event event)
+void Sketch::start(Reason reason)
 {
-    switch (event)
+    acceleration = Vec2f::zero();
+    delegate().enableAccelerometer(15);
+}
+
+void Sketch::stop(Reason reason)
+{
+    delegate().disableAccelerometer();
+}
+
+void Sketch::update()
+{
+    accumulateForces();
+    verlet();
+    satifsfyConstraints();
+}
+
+void Sketch::draw()
+{
+    gl::clear(Color::gray(1.0f), false);
+    gl::setMatricesWindow(getWindowSize(), true);
+    
+    gl::color(Color::gray(0.5f));
+    utils::gl::drawGrid(getWindowBounds(), scale * FINGERS_DISTANCE * 2, Vec2f(0, clock()->getTime() * 60));
+    
+    // ---
+    
+    drawDot(particle.position, particle.radius, ColorA(1, 0, 0, 1));
+    
+    string text = toString(int(clock()->getTime()));
+    drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
+}
+
+void Sketch::handleEvent(int eventId)
+{
+    switch (eventId)
     {
         case EVENT_CONTEXT_LOST:
         {
             /*
              * DISCARDING: FOR RELEASING GL NAMES
-             *
              * AT THIS STAGE: GL MEMORY HAS ALREADY BEEN INVALIDATED
              */
             
@@ -88,8 +121,6 @@ void Sketch::event(Event event)
         case EVENT_MEMORY_WARNING:
         {
             /*
-             * DISCARDING: FOR RELEASING GL MEMORY
-             *
              * IN ORDER TO AVOID "INTERFERENCES" WITH GL NAMES:
              * RELOADING MUST TAKE PLACE ONLY AFTER EVERYTHING HAVE BEEN DISCARDED
              */
@@ -99,44 +130,7 @@ void Sketch::event(Event event)
             
             break;
         }
-            
-        default:
-            break;
     }
-}
-
-void Sketch::start(Reason reason)
-{
-    acceleration = Vec2f::zero();
-    enableAccelerometer(15);
-}
-
-void Sketch::stop(Reason reason)
-{
-    disableAccelerometer();
-}
-
-void Sketch::update()
-{
-    accumulateForces();
-    verlet();
-    satifsfyConstraints();
-}
-
-void Sketch::draw()
-{
-    gl::clear(Color::gray(1.0f), false);
-    gl::setMatricesWindow(getWindowSize(), true);
-    
-    gl::color(Color::gray(0.5f));
-    utils::gl::drawGrid(getWindowBounds(), scale * FINGERS_DISTANCE * 2, Vec2f(0, clock()->getTime() * 60));
-    
-    // ---
-    
-    drawDot(particle.position, particle.radius, ColorA(1, 0, 0, 1));
-    
-    string text = toString(int(clock()->getTime()));
-    drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
 }
 
 bool Sketch::keyDown(const KeyEvent &keyEvent)
@@ -144,12 +138,20 @@ bool Sketch::keyDown(const KeyEvent &keyEvent)
     switch (getCode(keyEvent))
     {
         case KeyEvent::KEY_w:
-            event(EVENT_MEMORY_WARNING);
+            handleEvent(EVENT_MEMORY_WARNING);
             return true;
     }
     
     return false;
 }
+
+
+void Sketch::accelerated(AccelEvent event)
+{
+    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y);
+}
+
+// ---
 
 void Sketch::drawDot(const Vec2f &position, float radius, const ColorA &color)
 {
@@ -174,10 +176,7 @@ void Sketch::drawText(const string &text, const Vec2f &position, XFont::Alignmen
     TextHelper::drawAlignedText(*font, utils::toWideString(text), position, alignX, alignY);
 }
 
-void Sketch::accelerated(AccelEvent event)
-{
-    acceleration = Vec2f(+event.getRawData().x, -event.getRawData().y);
-}
+// ---
 
 void Sketch::accumulateForces()
 {

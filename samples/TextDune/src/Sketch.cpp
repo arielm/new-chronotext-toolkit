@@ -65,6 +65,16 @@ void Sketch::draw()
     TextHelper::drawTextOnPath(*font, TEXT, path, offset, -GAP);
 }
 
+void Sketch::addTouch(int index, float x, float y)
+{
+    slaveClock->stop();
+}
+
+void Sketch::removeTouch(int index, float x, float y)
+{
+    slaveClock->start();
+}
+
 void Sketch::updateDune()
 {
     static const vector<float> coefs {1.0f / 2, 1.0f / 4, 1.0f / 4 * 3, 1.0f / 2};
@@ -111,14 +121,4 @@ void Sketch::drawDune()
     
     gl::color(1, 1, 1, 1);
     hairline.draw();
-}
-
-void Sketch::addTouch(int index, float x, float y)
-{
-    slaveClock->stop();
-}
-
-void Sketch::removeTouch(int index, float x, float y)
-{
-    slaveClock->start();
 }

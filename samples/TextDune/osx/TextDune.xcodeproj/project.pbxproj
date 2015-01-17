@@ -117,6 +117,8 @@
 		A826F4851A67E059002A23A9 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
 		A826F4861A67E059002A23A9 /* SystemManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemManager.cpp; sourceTree = "<group>"; };
 		A826F4871A67E059002A23A9 /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
+		A826F4C11A69E053002A23A9 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A826F4C21A69E053002A23A9 /* CinderDelegateBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegateBase.h; sourceTree = "<group>"; };
 		A82C908A16DFA3B100FF519C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A82C908B16DFA3B100FF519C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
 		A82C908C16DFA3B100FF519C /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
@@ -380,10 +382,10 @@
 		A826F47A1A67E059002A23A9 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A826F47B1A67E059002A23A9 /* CinderDelegate.cpp */,
 				A826F47C1A67E059002A23A9 /* CinderDelegate.h */,
-				A826F47D1A67E059002A23A9 /* CinderSketch.cpp */,
+				A826F47B1A67E059002A23A9 /* CinderDelegate.cpp */,
 				A826F47E1A67E059002A23A9 /* CinderSketch.h */,
+				A826F47D1A67E059002A23A9 /* CinderSketch.cpp */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -421,6 +423,8 @@
 		A82C90E616E00B0400FF519C /* cinder */ = {
 			isa = PBXGroup;
 			children = (
+				A826F4C11A69E053002A23A9 /* CinderDelegate.h */,
+				A826F4C21A69E053002A23A9 /* CinderDelegateBase.h */,
 				A82C90E916E00B0500FF519C /* CinderSketch.h */,
 				A87208051808302E0055F0BA /* CinderSketchBase.h */,
 				A85483B919CE19A900B7866C /* WindowInfo.h */,

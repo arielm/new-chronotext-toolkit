@@ -17,9 +17,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT 849b44a
+ * OSX: COMMIT 4c88bd9
  * IOS: COMMIT 849b44a
- * ANDROID: COMMIT df9234d
+ * ANDROID: COMMIT 4c88bd9
  */
 
 #pragma once
@@ -36,9 +36,6 @@ public:
     void resize() final;
     void update() final;
     void draw() final;
-    
-    void updateDune();
-    void drawDune();
     
     void addTouch(int index, float x, float y) final;
     void removeTouch(int index, float x, float y) final;
@@ -57,4 +54,7 @@ protected:
     
     float scale;
     float offset;
+    
+    void updateDune();
+    void drawDune();
 };
