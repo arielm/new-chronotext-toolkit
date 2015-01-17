@@ -8,9 +8,12 @@
 
 package org.chronotext.cinder;
 
+import java.util.Vector;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import org.chronotext.cinder.Touch;
 import org.chronotext.utils.Utils;
 
 import android.opengl.GLSurfaceView;
@@ -328,6 +331,30 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     }
   }
 
+  public void addTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      addTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void updateTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      updateTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
+  public void removeTouches(Vector<Touch> touches)
+  {
+    for (Touch touch : touches)
+    {
+      removeTouch(touch.index, touch.x, touch.y);
+    }
+  }
+
   // ---------------------------------------- JNI ----------------------------------------
 
   protected native void launch();
@@ -336,6 +363,10 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   protected native void resize(int width, int height);
   protected native void draw();
+
+  protected native void addTouch(int index, float x, float y);
+  protected native void updateTouch(int index, float x, float y);
+  protected native void removeTouch(int index, float x, float y);
 
   public native void dispatchEvent(int eventId);
 }

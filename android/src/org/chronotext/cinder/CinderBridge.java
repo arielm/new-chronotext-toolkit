@@ -8,9 +8,6 @@
 
 package org.chronotext.cinder;
 
-import java.util.Vector;
-
-import org.chronotext.cinder.Touch;
 import org.chronotext.gl.GLView;
 import org.chronotext.utils.DisplayUtils;
 import org.chronotext.utils.Utils;
@@ -144,32 +141,6 @@ public class CinderBridge extends Handler
     return false;
   }
 
-  // ---------------------------------------- INVOKED ON THE RENDERER'S THREAD FROM GLView ----------------------------------------
-
-  public void addTouches(Vector<Touch> touches)
-  {
-    for (Touch touch : touches)
-    {
-      addTouch(touch.index, touch.x, touch.y);
-    }
-  }
-
-  public void updateTouches(Vector<Touch> touches)
-  {
-    for (Touch touch : touches)
-    {
-      updateTouch(touch.index, touch.x, touch.y);
-    }
-  }
-
-  public void removeTouches(Vector<Touch> touches)
-  {
-    for (Touch touch : touches)
-    {
-      removeTouch(touch.index, touch.x, touch.y);
-    }
-  }
-
   // ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
 
   /*
@@ -231,10 +202,6 @@ public class CinderBridge extends Handler
   // ---------------------------------------- JNI ----------------------------------------
 
   protected native void init(Object bridge, Context context, Display display, int displayWidth, int displayHeight, float displayDensity);
-
-  protected native void addTouch(int index, float x, float y);
-  protected native void updateTouch(int index, float x, float y);
-  protected native void removeTouch(int index, float x, float y);
 
   /*
    * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)

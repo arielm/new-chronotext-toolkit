@@ -280,17 +280,17 @@ void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 
 // ---
 
-void Java_org_chronotext_cinder_CinderBridge_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
     INTERN::delegate->addTouch(index, x, y);
 }
 
-void Java_org_chronotext_cinder_CinderBridge_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
     INTERN::delegate->updateTouch(index, x, y);
 }
 
-void Java_org_chronotext_cinder_CinderBridge_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
+void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
     INTERN::delegate->removeTouch(index, x, y);
 }

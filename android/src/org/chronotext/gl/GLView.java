@@ -272,7 +272,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderBridge.addTouches(touches);
+            cinderRenderer.addTouches(touches);
           }
         });
 
@@ -289,7 +289,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderBridge.addTouches(touches);
+            cinderRenderer.addTouches(touches);
           }
         });
 
@@ -306,7 +306,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderBridge.removeTouches(touches);
+            cinderRenderer.removeTouches(touches);
           }
         });
 
@@ -323,7 +323,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderBridge.removeTouches(touches);
+            cinderRenderer.removeTouches(touches);
           }
         });
 
@@ -344,7 +344,7 @@ public class GLView extends GLSurfaceView
         {
           public void run()
           {
-            cinderBridge.updateTouches(touches);
+            cinderRenderer.updateTouches(touches);
           }
         });
 

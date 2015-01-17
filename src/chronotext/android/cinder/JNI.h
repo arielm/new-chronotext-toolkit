@@ -26,8 +26,9 @@ extern "C"
     jint JNI_OnLoad(JavaVM *vm, void *reserved);
     
     // ---
-    
+
     void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
+
     void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
@@ -35,9 +36,9 @@ extern "C"
     void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj);
     
-    void Java_org_chronotext_cinder_CinderBridge_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
-    void Java_org_chronotext_cinder_CinderBridge_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
-    void Java_org_chronotext_cinder_CinderBridge_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+    void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+    void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
+    void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
     
     void Java_org_chronotext_cinder_CinderRenderer_dispatchEvent(JNIEnv *env, jobject obj, jint eventId);
     void Java_org_chronotext_cinder_CinderBridge_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body);
