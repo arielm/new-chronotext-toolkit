@@ -26,7 +26,6 @@ namespace chr
         virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
         virtual void disableAccelerometer() {}
         
-        virtual bool isEmulated() const = 0;
         virtual const WindowInfo& getWindowInfo() const = 0;
         
     protected:

@@ -15,16 +15,6 @@ using namespace ci::app;
 
 namespace chr
 {
-    bool CinderSketch::isEmulated() const
-    {
-        return delegate().isEmulated();
-    }
-    
-    const WindowInfo& CinderSketch::getWindowInfo() const
-    {
-        return delegate().getWindowInfo();
-    }
-
     double CinderSketch::getElapsedSeconds() const
     {
         return delegate().elapsedSeconds();
@@ -35,6 +25,11 @@ namespace chr
         return delegate().elapsedFrames();
     }
 
+    const WindowInfo& CinderSketch::getWindowInfo() const
+    {
+        return delegate().getWindowInfo();
+    }
+    
     // ---
     
     int CinderSketch::getCode(const KeyEvent &keyEvent) const

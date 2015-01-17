@@ -139,11 +139,6 @@ namespace chr
         return frameCount;
     }
     
-    bool CinderDelegate::isEmulated() const
-    {
-        return initInfo.emulated;
-    }
-    
     const WindowInfo& CinderDelegate::getWindowInfo() const
     {
         return initInfo.emulated ? initInfo.emulatedDevice.windowInfo : windowInfo;

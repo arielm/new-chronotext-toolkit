@@ -18,7 +18,6 @@ namespace chr
         double getElapsedSeconds() const final;
         int getElapsedFrames() const final;
         
-        bool isEmulated() const final;
         const WindowInfo& getWindowInfo() const final;
 
         inline chr::FrameClock::Ref clock() const final { return clock_; }

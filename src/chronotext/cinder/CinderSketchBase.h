@@ -72,10 +72,8 @@ namespace chr
         virtual bool keyUp(const ci::app::KeyEvent &event) { return false; }
 
         virtual void accelerated(AccelEvent event) {}
-        
-        virtual bool isEmulated() const = 0;
-        virtual const WindowInfo& getWindowInfo() const = 0;
 
+        virtual const WindowInfo& getWindowInfo() const = 0;
         virtual double getElapsedSeconds() const = 0;
         virtual int getElapsedFrames() const = 0;
 

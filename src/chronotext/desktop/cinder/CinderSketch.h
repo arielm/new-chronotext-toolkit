@@ -17,12 +17,11 @@ namespace chr
     class CinderSketch : public CinderSketchBase
     {
     public:
-        bool isEmulated() const final;
-        const WindowInfo& getWindowInfo() const final;
-
         double getElapsedSeconds() const final;
         int getElapsedFrames() const final;
-        
+
+        const WindowInfo& getWindowInfo() const final;
+
         inline chr::FrameClock::Ref clock() const final { return clock_; }
         inline ci::Timeline& timeline() const final { return *timeline_; }
 

@@ -61,6 +61,7 @@ namespace chr
             std::string osVersionString;
             
             std::string deviceString;
+            bool emulated = false;
 
             friend std::ostream& operator<<(std::ostream &lhs, const InfoBase &rhs)
             {

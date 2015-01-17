@@ -122,11 +122,6 @@ namespace chr
         return frameCount;
     }
     
-    bool CinderDelegate::isEmulated() const
-    {
-        return getSystemInfo().isSimulator;
-    }
-    
     const WindowInfo& CinderDelegate::getWindowInfo() const
     {
         return windowInfo;

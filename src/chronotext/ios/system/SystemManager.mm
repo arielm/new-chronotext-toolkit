@@ -70,7 +70,7 @@ namespace chr
             info.isIPhone = isIPhone();
             info.isIPad = isIPad();
             info.isIPadMini = isIPadMini();
-            info.isSimulator = isSimulator();
+            info.emulated = isSimulator();
             
             ManagerBase::updateInfo();
         }

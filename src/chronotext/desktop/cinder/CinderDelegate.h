@@ -43,9 +43,7 @@ namespace chr
         void messageFromBridge(int what, const std::string &body = "") final;
         void performAction(int actionId) final;
         
-        bool isEmulated() const final;
         const WindowInfo& getWindowInfo() const final;
-        
         double elapsedSeconds() const;
         int elapsedFrames() const;
         

@@ -20,6 +20,8 @@ namespace chr
     {
         void Manager::setup(const InitInfo &initInfo)
         {
+            Manager::initInfo = initInfo;
+            
             updateInfo();
             
             LOGI_IF(true) << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
@@ -54,6 +56,13 @@ namespace chr
         }
         
         // ---
+        
+        void Manager::updateInfo()
+        {
+            info.emulated = initInfo.emulated;
+            
+            ManagerBase::updateInfo();
+        }
         
         array<int, 3> Manager::getOsVersion()
         {

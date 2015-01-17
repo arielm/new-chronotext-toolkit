@@ -24,11 +24,6 @@ namespace chr
         return delegate().elapsedFrames();
     }
 
-    bool CinderSketch::isEmulated() const
-    {
-        return delegate().isEmulated();
-    }
-    
     const WindowInfo& CinderSketch::getWindowInfo() const
     {
         return delegate().getWindowInfo();
