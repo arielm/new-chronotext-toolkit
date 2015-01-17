@@ -11,7 +11,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace chr
 {
@@ -28,27 +27,5 @@ namespace chr
     const WindowInfo& CinderSketch::getWindowInfo() const
     {
         return delegate().getWindowInfo();
-    }
-    
-    // ---
-    
-    int CinderSketch::getCode(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.getCode();
-    }
-    
-    bool CinderSketch::isShiftDown(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.isShiftDown();
-    }
-    
-    bool CinderSketch::isAltDown(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.isAltDown();
-    }
-    
-    bool CinderSketch::isAccelDown(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.isAccelDown();
     }
 }

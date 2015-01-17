@@ -28,6 +28,14 @@ namespace chr
         
         virtual const WindowInfo& getWindowInfo() const = 0;
         
+        /*
+         * FIXME: OVER-COMPLICATED (REASON: THE FOLLOWING METHODS ARE NOT DECLARED ON iOS)
+         */
+        virtual int getCode(const ci::app::KeyEvent &keyEvent) const { return 0; }
+        virtual bool isShiftDown(const ci::app::KeyEvent &keyEvent) const { return false; }
+        virtual bool isAltDown(const ci::app::KeyEvent &keyEvent) const { return false; }
+        virtual bool isAccelDown(const ci::app::KeyEvent &keyEvent) const { return false; }
+        
     protected:
         virtual void sketchCreated(CinderSketch *sketch) {}
         virtual void sketchDestroyed(CinderSketch *sketch) {}

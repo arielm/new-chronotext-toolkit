@@ -86,14 +86,5 @@ namespace chr
         inline ci::Area getWindowBounds() const { return getWindowInfo().bounds(); };
         inline ci::Vec2f getWindowCenter() const { return getWindowInfo().center(); };
         inline float getWindowAspectRatio() const { return getWindowInfo().aspectRatio(); };
-        
-        /*
-         * FIXME: OVER-COMPLICATED (REASON: THE FOLLOWING METHODS ARE NOT DECLARED ON iOS)
-         * TODO: MOVE TO CinderDelegate FOR NOW
-         */
-        virtual int getCode(const ci::app::KeyEvent &keyEvent) const { return 0; }
-        virtual bool isShiftDown(const ci::app::KeyEvent &keyEvent) const { return false; }
-        virtual bool isAltDown(const ci::app::KeyEvent &keyEvent) const { return false; }
-        virtual bool isAccelDown(const ci::app::KeyEvent &keyEvent) const { return false; }
     };
 }

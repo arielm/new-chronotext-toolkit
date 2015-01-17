@@ -135,7 +135,7 @@ void Sketch::event(int eventId)
 
 bool Sketch::keyDown(const KeyEvent &keyEvent)
 {
-    switch (getCode(keyEvent))
+    switch (delegate().getCode(keyEvent))
     {
         case KeyEvent::KEY_w:
             event(EVENT_MEMORY_WARNING);

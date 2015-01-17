@@ -10,8 +10,6 @@
 
 #include "chronotext/cinder/CinderSketchBase.h"
 
-#include "cinder/app/AppNative.h"
-
 namespace chr
 {
     class CinderSketch : public CinderSketchBase
@@ -24,11 +22,6 @@ namespace chr
 
         inline chr::FrameClock::Ref clock() const final { return clock_; }
         inline ci::Timeline& timeline() const final { return *timeline_; }
-
-        int getCode(const ci::app::KeyEvent &keyEvent) const final;
-        bool isShiftDown(const ci::app::KeyEvent &keyEvent) const final;
-        bool isAltDown(const ci::app::KeyEvent &keyEvent) const final;
-        bool isAccelDown(const ci::app::KeyEvent &keyEvent) const final;
         
     protected:
         chr::FrameClock::Ref clock_ = chr::FrameClock::create();
