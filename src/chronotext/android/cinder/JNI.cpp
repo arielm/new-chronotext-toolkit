@@ -17,7 +17,9 @@ namespace chr
     namespace jni
     {
         JavaVM *vm = nullptr;
+        
         jobject bridge = nullptr;
+        CinderDelegate *cinderDelegate = nullptr;
         
         // ---
         
@@ -234,33 +236,33 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
     CI_LOGI("ONLOAD");
     
     jni::vm = vm;
+    
     return JNI_VERSION_1_4;
 }
 
 void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
     jni::bridge = env->NewGlobalRef(bridge);
+    jni::cinderDelegate = new CinderDelegate();
     
-    auto cinderDelegate = new CinderDelegate();
-    cinderDelegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    jni::cinderDelegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
 {
-    INTERN::delegate->launch();
+    jni::cinderDelegate->launch();
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    INTERN::delegate->setup(Vec2i(width, height));
+    jni::cinderDelegate->setup(Vec2i(width, height));
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
 {
-    auto cinderDelegate = INTERN::delegate;
-    
-    cinderDelegate->shutdown();
-    delete cinderDelegate;
+    jni::cinderDelegate->shutdown();
+    delete jni::cinderDelegate;
+    jni::cinderDelegate = nullptr;
     
     CI_LOGI("SHUTDOWN");
 }
@@ -269,36 +271,37 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
 
 void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    INTERN::delegate->resize(Vec2i(width, height));
+    jni::cinderDelegate->resize(Vec2i(width, height));
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 {
-    INTERN::delegate->draw();
+    jni::cinderDelegate->update();
+    jni::cinderDelegate->draw();
 }
 
 // ---
 
 void Java_org_chronotext_cinder_CinderRenderer_addTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    INTERN::delegate->addTouch(index, x, y);
+    jni::cinderDelegate->addTouch(index, x, y);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_updateTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    INTERN::delegate->updateTouch(index, x, y);
+    jni::cinderDelegate->updateTouch(index, x, y);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y)
 {
-    INTERN::delegate->removeTouch(index, x, y);
+    jni::cinderDelegate->removeTouch(index, x, y);
 }
 
 // ---
 
 void Java_org_chronotext_cinder_CinderRenderer_dispatchEvent(JNIEnv *env, jobject obj, jint eventId)
 {
-    INTERN::delegate->handleEvent(eventId);
+    jni::cinderDelegate->handleEvent(eventId);
 }
 
 void Java_org_chronotext_cinder_CinderBridge_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body)
@@ -306,11 +309,11 @@ void Java_org_chronotext_cinder_CinderBridge_sendMessageToSketch(JNIEnv *env, jo
     if (body)
     {
         const char *chars = env->GetStringUTFChars(body, nullptr);
-        INTERN::delegate->messageFromBridge(what, chars);
+        jni::cinderDelegate->messageFromBridge(what, chars);
         env->ReleaseStringUTFChars(body, chars);
     }
     else
     {
-        INTERN::delegate->messageFromBridge(what);
+        jni::cinderDelegate->messageFromBridge(what);
     }
 }

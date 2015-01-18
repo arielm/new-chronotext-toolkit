@@ -18,6 +18,7 @@
 
 namespace chr
 {
+    class CinderDelegateBase;
     class CinderDelegate;
     
     class CinderSketch : public SuperHandler
@@ -94,6 +95,7 @@ namespace chr
         inline float getWindowAspectRatio() const { return windowInfo.aspectRatio(); };
         
     protected:
+        friend class CinderDelegateBase;
         friend class CinderDelegate;
         
         ci::Timer timer;

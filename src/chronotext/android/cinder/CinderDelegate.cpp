@@ -15,21 +15,32 @@ using namespace ci;
 
 namespace chr
 {
-    void CinderDelegate::init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
+    atomic<bool> CinderDelegate::LOG_VERBOSE (false);
+    atomic<bool> CinderDelegate::LOG_WARNING (true);
+    
+    namespace intern
     {
+        CinderDelegate *instance = nullptr;
+    }
+    
+    CinderDelegate& delegate()
+    {
+        return checkedReference(intern::instance);
+    }
+    
+    // ---
+    
+    bool CinderDelegate::init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
+    {
+        intern::instance = this;
+        
         initInfo.androidContext = androidContext;
         initInfo.androidDisplay = androidDisplay;
         
         initInfo.displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
+        _init();
         
-        // ---
-        
-        INTERN::delegate = this;
-        INTERN::init(initInfo);
-        
-        sketch = createSketch();
-        sketchCreated(sketch);
-        sketch->init();
+        return true;
     }
     
     void CinderDelegate::launch()
@@ -37,45 +48,39 @@ namespace chr
         startIOService();
         createSensorEventQueue();
         
-        INTERN::launch(system::LaunchInfo(*io));
-        sketch->launch();
+        launchInfo.io_service = io.get();
+        _launch();
     }
     
-    void CinderDelegate::setup(const ci::Vec2f &size)
+    void CinderDelegate::setup(const Vec2i &size)
     {
-        WindowInfo windowInfo(size);
-        
-        INTERN::setup(system::SetupInfo(windowInfo));
-        sketch->performSetup(windowInfo);
+        setupInfo.windowInfo.size = size;
+        _setup();
     }
     
     void CinderDelegate::shutdown()
     {
-        sketch->shutdown();
-        delete sketch;
-        sketchDestroyed(sketch);
-        sketch = nullptr;
-        
         /*
          * TODO:
          *
          * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-         * - SEE RELATED TODOS IN Context AND TaskManager
+         * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
          */
-        
-        INTERN::shutdown();
-        INTERN::delegate = nullptr;
+        _shutdown();
         
         destroySensorEventQueue();
         stopIOService();
+        
+        intern::instance = nullptr;
     }
     
-    void CinderDelegate::resize(const ci::Vec2f &size)
+    void CinderDelegate::resize(const Vec2i &size)
     {
+        setupInfo.windowInfo.size = size;
         sketch->performResize(size);
     }
     
-    void CinderDelegate::draw()
+    void CinderDelegate::update()
     {
         /*
          * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
@@ -89,7 +94,10 @@ namespace chr
         
         sketch->performUpdate();
         updateCount++;
-        
+    }
+    
+    void CinderDelegate::draw()
+    {
         sketch->draw();
     }
     
@@ -110,7 +118,7 @@ namespace chr
     {
         LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl;
         
-        sketch->sendMessage(Message(what, body));
+        CinderDelegateBase::messageFromBridge(what, body);
     }
     
     /*
@@ -122,10 +130,7 @@ namespace chr
         
         jni::callVoidMethodOnBridge("messageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
     }
-    
-    /*
-     * INVOKED ON THE RENDERER'S THREAD
-     */
+
     void CinderDelegate::handleEvent(int eventId)
     {
         switch (eventId)

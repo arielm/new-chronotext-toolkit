@@ -9,7 +9,6 @@
 #pragma once
 
 #include "chronotext/cinder/CinderDelegateBase.h"
-#include "chronotext/system/SystemInfo.h"
 #include "chronotext/InputSource.h"
 
 #include "cinder/app/AppNative.h"
@@ -40,7 +39,6 @@ namespace chr
         void keyDown(ci::app::KeyEvent event) final;
         void keyUp(ci::app::KeyEvent event) final;
         
-        void messageFromBridge(int what, const std::string &body = "") final;
         void performAction(int actionId) final;
         
         virtual void applySettings(Settings *settings) {}
@@ -57,10 +55,6 @@ namespace chr
         bool isAccelDown(const ci::app::KeyEvent &keyEvent) const final;
 
     protected:
-        CinderSketch *sketch = nullptr;
-
-        system::InitInfo initInfo;
-
         int updateCount = 0;
         int resizeCount = 0;
 

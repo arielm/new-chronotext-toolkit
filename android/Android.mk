@@ -5,9 +5,9 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/blocks/Freetype/include
 CHR_SRC = $(CHR_BLOCK)/src
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CHR_SRC)
 
-LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Context.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/InputSource.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Log.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/cinder/CinderDelegateBase.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/cinder/CinderSketch.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/DisplayHelperBase.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/system/FileHelperBase.cpp

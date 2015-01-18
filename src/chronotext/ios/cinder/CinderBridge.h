@@ -56,7 +56,7 @@ enum
 
 namespace chr
 {
-    namespace INTERN
+    namespace system
     {
         extern CinderBridge *bridge;
     }

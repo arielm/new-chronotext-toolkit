@@ -35,6 +35,13 @@ namespace chr
     MemoryManager& memoryManager();
     TaskManager& taskManager();
 
+    template <class T>
+    inline T& checkedReference(T *instance)
+    {
+        assert(instance);
+        return *instance;
+    }
+    
     namespace os
     {
         /*
@@ -54,24 +61,5 @@ namespace chr
          * - NOT INVOKED ON THE SKETCH-THREAD
          */
         bool post(std::function<void()> &&fn, bool forceSync = false);
-    }
-    
-    template <class T>
-    inline T& checkedReference(T *instance)
-    {
-        assert(instance);
-        return *instance;
-    }
-    
-    // ---
-    
-    namespace INTERN
-    {
-        extern CinderDelegate *delegate;
-        
-        bool init(const system::InitInfo &initInfo);
-        void launch(const system::LaunchInfo &launchInfo);
-        void setup(const system::SetupInfo &setupInfo);
-        void shutdown();
     }
 }

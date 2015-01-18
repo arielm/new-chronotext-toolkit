@@ -9,15 +9,19 @@
 #pragma once
 
 #include "chronotext/cinder/CinderSketch.h"
+#include "chronotext/system/SystemInfo.h"
 
 namespace chr
 {
     class CinderDelegateBase
     {
     public:
+        static std::atomic<bool> LOG_VERBOSE;
+        static std::atomic<bool> LOG_WARNING;
+
         virtual ~CinderDelegateBase() {}
         
-        virtual void messageFromBridge(int what, const std::string &body = "") = 0;
+        virtual void messageFromBridge(int what, const std::string &body = "");
         virtual void sendMessageToBridge(int what, const std::string &body = "") {}
         
         virtual void handleEvent(int eventId) {}
@@ -35,7 +39,20 @@ namespace chr
         virtual bool isAccelDown(const ci::app::KeyEvent &keyEvent) const { return false; }
         
     protected:
+        CinderSketch *sketch = nullptr;
+
+        system::InitInfo initInfo;
+        system::LaunchInfo launchInfo;
+        system::SetupInfo setupInfo;
+        
+        AccelEvent::Filter accelFilter;
+
         virtual void sketchCreated(CinderSketch *sketch) {}
         virtual void sketchDestroyed(CinderSketch *sketch) {}
+        
+        bool _init();
+        void _launch();
+        void _setup();
+        void _shutdown();
     };
 }

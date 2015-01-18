@@ -17,14 +17,26 @@ using namespace ci::app;
 
 namespace chr
 {
+    atomic<bool> CinderDelegate::LOG_VERBOSE (false);
+    atomic<bool> CinderDelegate::LOG_WARNING (true);
+    
+    namespace intern
+    {
+        CinderDelegate *instance = nullptr;
+    }
+    
+    CinderDelegate& delegate()
+    {
+        return checkedReference(intern::instance);
+    }
+    
+    // ---
+    
     bool CinderDelegate::init()
     {
-        INTERN::delegate = this;
-        INTERN::init(system::InitInfo());
+        intern::instance = this;
         
-        sketch = createSketch();
-        sketchCreated(sketch);
-        sketch->init();
+        _init();
         
         return true;
     }
@@ -33,38 +45,34 @@ namespace chr
     {
         startIOService();
         
-        INTERN::launch(system::LaunchInfo(*io));
-        sketch->launch();
+        launchInfo.io_service = io.get();
+        _launch();
     }
     
     void CinderDelegate::setup(const WindowInfo &windowInfo)
     {
-        INTERN::setup(system::SetupInfo(windowInfo));
-        sketch->performSetup(windowInfo);
+        setupInfo.windowInfo = windowInfo;
+        _setup();
     }
     
     void CinderDelegate::shutdown()
     {
-        sketch->shutdown();
-        delete sketch;
-        sketchDestroyed(sketch);
-        sketch = nullptr;
-        
         /*
          * TODO:
          *
          * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-         * - SEE RELATED TODOS IN Context AND TaskManager
+         * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
          */
-        
-        INTERN::shutdown();
-        INTERN::delegate = nullptr;
+        _shutdown();
         
         stopIOService();
+        
+        intern::instance = nullptr;
     }
     
-    void CinderDelegate::resize(const ci::Vec2f &size)
+    void CinderDelegate::resize(const ci::Vec2i &size)
     {
+        setupInfo.windowInfo.size = size;
         sketch->performResize(size);
     }
     
@@ -94,11 +102,6 @@ namespace chr
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
-    
-    void CinderDelegate::messageFromBridge(int what, const std::string &body)
-    {
-        sketch->sendMessage(Message(what, body));
-    }
     
     void CinderDelegate::handleEvent(int eventId)
     {
@@ -175,7 +178,7 @@ namespace chr
         }
         
         UIAccelerometer.sharedAccelerometer.updateInterval = 1 / updateFrequency;
-        UIAccelerometer.sharedAccelerometer.delegate = INTERN::bridge;
+        UIAccelerometer.sharedAccelerometer.delegate = system::bridge;
     }
     
     void CinderDelegate::disableAccelerometer()

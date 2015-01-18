@@ -17,8 +17,25 @@ using namespace ci::app;
 
 namespace chr
 {
+    atomic<bool> CinderDelegate::LOG_VERBOSE (false);
+    atomic<bool> CinderDelegate::LOG_WARNING (true);
+    
+    namespace intern
+    {
+        CinderDelegate *instance = nullptr;
+    }
+    
+    CinderDelegate& delegate()
+    {
+        return checkedReference(intern::instance);
+    }
+    
+    // ---
+
     void CinderDelegate::setup()
     {
+        intern::instance = this;
+        
         /*
          * TODO: TEST ON RETINA DISPLAY (OSX)
          */
@@ -27,47 +44,31 @@ namespace chr
         Vec2i baseSize = getWindowSize() / contentScale;
         
         initInfo.actualDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
+        _init();
         
         // ---
         
-        INTERN::delegate = this;
-        INTERN::init(initInfo);
-        
-        sketch = createSketch();
-        sketchCreated(sketch);
-        sketch->init();
-        
-        // ---
-        
-        INTERN::launch(system::LaunchInfo(io_service()));
-        sketch->launch();
+        launchInfo.io_service = &io_service();
+        _launch();
         
         // ---
         
         WindowInfo actualWindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
         
-        INTERN::setup(system::SetupInfo(actualWindowInfo));
-        sketch->performSetup(initInfo.emulated ? initInfo.emulatedDevice.windowInfo : actualWindowInfo);
+        setupInfo.windowInfo = initInfo.emulated ? initInfo.emulatedDevice.windowInfo : actualWindowInfo;
+        _setup();
     }
     
     void CinderDelegate::shutdown()
     {
-        sketch->performStop(CinderSketch::REASON_APP_HIDDEN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
-        
-        sketch->shutdown();
-        delete sketch;
-        sketchDestroyed(sketch);
-        sketch = nullptr;
-        
         /*
-         * TODO:
-         *
-         * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-         * - SEE RELATED TODOS IN Context AND TaskManager
+         * NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
          */
+        sketch->performStop(CinderSketch::REASON_APP_HIDDEN);
+
+        _shutdown();
         
-        INTERN::shutdown();
-        INTERN::delegate = nullptr;
+        intern::instance = nullptr;
     }
     
     void CinderDelegate::resize()
@@ -77,14 +78,18 @@ namespace chr
          */
         assert((resizeCount == 0) || !initInfo.emulated);
         
-        sketch->performResize(initInfo.emulated ? initInfo.emulatedDevice.windowInfo.size : getWindowSize());
+        setupInfo.windowInfo.size = initInfo.emulated ? initInfo.emulatedDevice.windowInfo.size : getWindowSize();
+        sketch->performResize(setupInfo.windowInfo.size);
         
         /*
          * I.E. THE FIRST AppNative::resize()
          */
         if (resizeCount++ == 0)
         {
-            sketch->performStart(CinderSketch::REASON_APP_SHOWN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
+            /*
+             * NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
+             */
+            sketch->performStart(CinderSketch::REASON_APP_SHOWN);
             
             /*
              * DESKTOP-ONLY WORKAROUND [1/4]
@@ -137,11 +142,6 @@ namespace chr
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
-    
-    void CinderDelegate::messageFromBridge(int what, const std::string &body)
-    {
-        sketch->sendMessage(Message(what, body));
-    }
 
     void CinderDelegate::performAction(int actionId)
     {
@@ -195,6 +195,8 @@ namespace chr
     {
         sketch->removeTouch(0, event.getX(), event.getY());
     }
+    
+    // ---
     
     void CinderDelegate::touchesBegan(TouchEvent event)
     {

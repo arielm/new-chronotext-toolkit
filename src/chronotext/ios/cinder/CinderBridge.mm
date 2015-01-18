@@ -24,7 +24,7 @@ using namespace chr;
 
 namespace chr
 {
-    namespace INTERN
+    namespace system
     {
         CinderBridge *bridge = nullptr;
     }
@@ -59,7 +59,7 @@ namespace chr
 {
     if (self = [super init])
     {
-        INTERN::bridge = self;
+        system::bridge = self;
         
         cinderDelegate = new CinderDelegate();
         cinderDelegate->init();
@@ -79,7 +79,7 @@ namespace chr
     cinderDelegate->shutdown();
     delete cinderDelegate;
     
-    INTERN::bridge = nullptr;
+    system::bridge = nullptr;
     
     // ---
     

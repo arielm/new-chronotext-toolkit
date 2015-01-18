@@ -28,19 +28,20 @@ namespace chr
         /*
          * INVOKED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
          */
-        void init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity);
+        bool init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity);
         
         void launch(); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
-        void setup(const ci::Vec2f &size); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
+        void setup(const ci::Vec2i &size); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
         void shutdown();
         
-        void resize(const ci::Vec2f &size);
+        void resize(const ci::Vec2i &size);
+        void update();
         void draw();
 
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
         void removeTouch(int index, float x, float y);
-
+        
         void messageFromBridge(int what, const std::string &body = "") final;
         void sendMessageToBridge(int what, const std::string &body = "") final;
         
@@ -51,13 +52,7 @@ namespace chr
         void disableAccelerometer() final;
 
     protected:
-        CinderSketch *sketch = nullptr;
-
         int updateCount = 0;
-        
-        system::InitInfo initInfo;
-
-        AccelEvent::Filter accelFilter;
 
         std::shared_ptr<boost::asio::io_service> io;
         std::shared_ptr<boost::asio::io_service::work> ioWork;

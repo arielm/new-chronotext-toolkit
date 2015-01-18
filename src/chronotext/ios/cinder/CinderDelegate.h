@@ -27,7 +27,7 @@ namespace chr
         void setup(const WindowInfo &windowInfo);
         void shutdown();
         
-        void resize(const ci::Vec2f &size);
+        void resize(const ci::Vec2i &size);
         void update();
         void draw();
 
@@ -35,7 +35,6 @@ namespace chr
         void touchesMoved(ci::app::TouchEvent event);
         void touchesEnded(ci::app::TouchEvent event);
 
-        void messageFromBridge(int what, const std::string &body = "") final;
         void handleEvent(int eventId) final;
 
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
@@ -44,11 +43,7 @@ namespace chr
         void handleAcceleration(const ci::Vec3f &acceleration);
         
     protected:
-        CinderSketch *sketch = nullptr;
-        
         int updateCount = 0;
-        
-        AccelEvent::Filter accelFilter;
 
         std::shared_ptr<boost::asio::io_service> io;
         std::shared_ptr<boost::asio::io_service::work> ioWork;
