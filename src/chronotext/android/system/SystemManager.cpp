@@ -39,13 +39,6 @@ namespace chr
             updateInfo();
             
             LOGI_IF(true) << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
-            
-            FileHelper::setup(initInfo);
-        }
-        
-        void Manager::shutdown()
-        {
-            FileHelper::shutdown();
         }
 
         // ---

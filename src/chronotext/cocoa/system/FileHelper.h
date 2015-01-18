@@ -27,6 +27,9 @@ namespace chr
         class Helper : public HelperBase
         {
         public:
+            static void setup(const system::InitInfo &initInfo) {}
+            static void shutdown() {}
+            
             static ci::fs::path getResourcePath();
             static ci::fs::path getResourcePath(const ci::fs::path &relativePath);
         };

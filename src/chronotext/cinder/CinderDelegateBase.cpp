@@ -51,6 +51,7 @@ namespace chr
             intern::memoryManager->setup();
             
             DisplayHelper::setup(initInfo);
+            FileHelper::setup(initInfo);
             
             // ---
             
@@ -134,6 +135,7 @@ namespace chr
         
         if (intern::initialized)
         {
+            FileHelper::shutdown();
             DisplayHelper::shutdown();
             
             intern::memoryManager->shutdown();

@@ -16,9 +16,6 @@ namespace chr
     class CinderDelegateBase
     {
     public:
-        static std::atomic<bool> LOG_VERBOSE;
-        static std::atomic<bool> LOG_WARNING;
-
         virtual ~CinderDelegateBase() {}
         
         virtual void messageFromBridge(int what, const std::string &body = "");

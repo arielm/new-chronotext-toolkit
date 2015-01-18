@@ -20,7 +20,15 @@
 
 #else
 
-#include "chronotext/desktop/system/MemoryManager.h"
+#include "chronotext/system/MemoryManagerBase.h"
+
+namespace chr
+{
+    namespace memory
+    {
+        typedef ManagerBase Manager;
+    }
+}
 
 #endif
 

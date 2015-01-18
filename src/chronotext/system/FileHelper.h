@@ -26,7 +26,12 @@ namespace chr
 {
     namespace file
     {
-        typedef HelperBase Helper;
+        class Helper : public HelperBase
+        {
+        public:
+            static void setup(const system::InitInfo &initInfo) {}
+            static void shutdown() {}
+        };
     }
 }
 

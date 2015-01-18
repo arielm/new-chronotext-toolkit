@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "chronotext/system/SystemInfo.h"
+
 #include "cinder/Filesystem.h"
 
 #include "boost/filesystem/fstream.hpp"

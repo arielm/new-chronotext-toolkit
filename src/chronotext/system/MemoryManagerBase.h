@@ -35,7 +35,7 @@ namespace chr
             virtual void setup() {}
             virtual void shutdown() {}
             
-            virtual Info getInfo() = 0;
+            virtual Info getInfo() { return Info(); }
             
             /*
              * RETURNS HOW MUCH MEMORY WAS USED BETWEEN "BEFORE" AND "AFTER"
