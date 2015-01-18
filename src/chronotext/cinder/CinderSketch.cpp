@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/cinder/CinderSketchBase.h"
+#include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/Context.h"
 
 using namespace std;
@@ -14,34 +14,34 @@ using namespace ci;
 
 namespace chr
 {
-    double CinderSketchBase::getElapsedSeconds() const
+    double CinderSketch::getElapsedSeconds() const
     {
         return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-SAMPLE PER FRAME
     }
     
-    int CinderSketchBase::getElapsedFrames() const
+    int CinderSketch::getElapsedFrames() const
     {
         return frameCount;
     }
     
-    const WindowInfo& CinderSketchBase::getWindowInfo() const
+    const WindowInfo& CinderSketch::getWindowInfo() const
     {
         return windowInfo;
     }
     
-    FrameClock::Ref CinderSketchBase::clock() const
+    FrameClock::Ref CinderSketch::clock() const
     {
         return _clock;
     }
     
-    ci::Timeline& CinderSketchBase::timeline() const
+    ci::Timeline& CinderSketch::timeline() const
     {
         return *_timeline;
     }
     
     // ---
 
-    void CinderSketchBase::performSetup(const WindowInfo &windowInfo)
+    void CinderSketch::performSetup(const WindowInfo &windowInfo)
     {
         this->windowInfo = windowInfo;
         forceResize = true;
@@ -50,7 +50,7 @@ namespace chr
         setup();
     }
     
-    void CinderSketchBase::performResize(const Vec2i &size)
+    void CinderSketch::performResize(const Vec2i &size)
     {
         if (forceResize || (size != windowInfo.size))
         {
@@ -61,7 +61,7 @@ namespace chr
         }
     }
     
-    void CinderSketchBase::performStart(Reason reason)
+    void CinderSketch::performStart(Reason reason)
     {
         frameCount = 0;
         
@@ -71,7 +71,7 @@ namespace chr
         start(reason);
     }
     
-    void CinderSketchBase::performStop(Reason reason)
+    void CinderSketch::performStop(Reason reason)
     {
         timer.stop();
         _clock->stop();
@@ -79,7 +79,7 @@ namespace chr
         stop(reason);
     }
     
-    void CinderSketchBase::performUpdate()
+    void CinderSketch::performUpdate()
     {
         double now = _clock->getTime();
         

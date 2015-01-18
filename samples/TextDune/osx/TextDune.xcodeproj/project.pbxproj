@@ -33,7 +33,7 @@
 		A826F4881A67E059002A23A9 /* CinderDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F47B1A67E059002A23A9 /* CinderDelegate.cpp */; };
 		A826F48A1A67E059002A23A9 /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4801A67E059002A23A9 /* DisplayHelper.cpp */; };
 		A826F48C1A67E059002A23A9 /* SystemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4861A67E059002A23A9 /* SystemManager.cpp */; };
-		A826F4E61A6B418F002A23A9 /* CinderSketchBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4E51A6B418F002A23A9 /* CinderSketchBase.cpp */; };
+		A826F4EC1A6BDDCC002A23A9 /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4EB1A6BDDCC002A23A9 /* CinderSketch.cpp */; };
 		A82C909216DFA3B100FF519C /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908A16DFA3B100FF519C /* PVRHelper.cpp */; };
 		A82C909316DFA3B100FF519C /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908C16DFA3B100FF519C /* Texture.cpp */; };
 		A82C909416DFA3B100FF519C /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908E16DFA3B100FF519C /* TextureHelper.cpp */; };
@@ -117,7 +117,7 @@
 		A826F4871A67E059002A23A9 /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
 		A826F4C11A69E053002A23A9 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
 		A826F4C21A69E053002A23A9 /* CinderDelegateBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegateBase.h; sourceTree = "<group>"; };
-		A826F4E51A6B418F002A23A9 /* CinderSketchBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketchBase.cpp; sourceTree = "<group>"; };
+		A826F4EB1A6BDDCC002A23A9 /* CinderSketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketch.cpp; sourceTree = "<group>"; };
 		A82C908A16DFA3B100FF519C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A82C908B16DFA3B100FF519C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
 		A82C908C16DFA3B100FF519C /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
@@ -157,7 +157,6 @@
 		A8702B721A5B472200EF9E9E /* SystemManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManagerBase.h; sourceTree = "<group>"; };
 		A8702B771A5B472D00EF9E9E /* FileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileHelper.h; sourceTree = "<group>"; };
 		A8702B781A5B472D00EF9E9E /* FileHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHelper.mm; sourceTree = "<group>"; };
-		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
 		A874A4F31A2B2CDE009A60A0 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		A874A4F41A2B2D37009A60A0 /* emulators.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emulators.json; sourceTree = "<group>"; };
 		A874A4F61A2B2D43009A60A0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
@@ -423,8 +422,7 @@
 				A826F4C11A69E053002A23A9 /* CinderDelegate.h */,
 				A826F4C21A69E053002A23A9 /* CinderDelegateBase.h */,
 				A82C90E916E00B0500FF519C /* CinderSketch.h */,
-				A87208051808302E0055F0BA /* CinderSketchBase.h */,
-				A826F4E51A6B418F002A23A9 /* CinderSketchBase.cpp */,
+				A826F4EB1A6BDDCC002A23A9 /* CinderSketch.cpp */,
 				A85483B919CE19A900B7866C /* WindowInfo.h */,
 			);
 			path = cinder;
@@ -614,10 +612,10 @@
 				A802710619CC7B7C0072973D /* FontManager.cpp in Sources */,
 				A82C909416DFA3B100FF519C /* TextureHelper.cpp in Sources */,
 				A82C909516DFA3B100FF519C /* TextureManager.cpp in Sources */,
+				A826F4EC1A6BDDCC002A23A9 /* CinderSketch.cpp in Sources */,
 				A8836D2A1A4AF896007733CE /* Context.cpp in Sources */,
 				A8702B791A5B472D00EF9E9E /* FileHelper.mm in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
-				A826F4E61A6B418F002A23A9 /* CinderSketchBase.cpp in Sources */,
 				A8836D591A4AFE23007733CE /* Handler.cpp in Sources */,
 				A8112C551A4EDD040002CF68 /* FollowablePath.cpp in Sources */,
 				A8F2E312189E4FDE002D5D75 /* Clock.cpp in Sources */,
