@@ -41,12 +41,10 @@ namespace chr
             LOGI_IF(true) << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
             
             FileHelper::setup(initInfo);
-            DisplayHelper::setup(initInfo);
         }
         
         void Manager::shutdown()
         {
-            DisplayHelper::shutdown();
             FileHelper::shutdown();
         }
 

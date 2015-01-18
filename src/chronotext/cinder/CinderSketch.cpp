@@ -43,7 +43,7 @@ namespace chr
 
     void CinderSketch::performSetup(const WindowInfo &windowInfo)
     {
-        this->windowInfo = windowInfo;
+        CinderSketch::windowInfo = windowInfo;
         forceResize = true;
         
         _timeline->stepTo(0);

@@ -31,7 +31,19 @@ namespace chr
         {
             if (!intern::setup)
             {
-                intern::displayInfo = initInfo.getDisplayInfo();
+                if (initInfo.emulated)
+                {
+                    intern::displayInfo = initInfo.emulatedDevice.displayInfo;
+                }
+                else
+                {
+                    /*
+                     * TODO: TEST ON RETINA DISPLAY (OSX)
+                     */
+                    
+                    auto baseSize = initInfo.actualWindowSize / initInfo.actualContentScale;
+                    intern::displayInfo = DisplayInfo::create(baseSize.x, baseSize.y, initInfo.actualContentScale);
+                }
                 
                 // ---
                 

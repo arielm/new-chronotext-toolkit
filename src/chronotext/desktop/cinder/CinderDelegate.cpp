@@ -36,14 +36,9 @@ namespace chr
     {
         intern::instance = this;
         
-        /*
-         * TODO: TEST ON RETINA DISPLAY (OSX)
-         */
+        initInfo.actualContentScale = getWindowContentScale();
+        initInfo.actualWindowSize = getWindowSize();
         
-        float contentScale = getWindowContentScale();
-        Vec2i baseSize = getWindowSize() / contentScale;
-        
-        initInfo.actualDisplayInfo = DisplayInfo::create(baseSize.x, baseSize.y, contentScale);
         _init();
         
         // ---

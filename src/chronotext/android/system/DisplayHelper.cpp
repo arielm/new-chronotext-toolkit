@@ -28,7 +28,7 @@ namespace chr
         {
             if (!intern::setup)
             {
-                intern::displayInfo = initInfo.displayInfo;
+                intern::displayInfo = DisplayInfo::createWithDensity(initInfo.displaySize.x, initInfo.displaySize.y, initInfo.displayDensity);
                 
                 // ---
                 

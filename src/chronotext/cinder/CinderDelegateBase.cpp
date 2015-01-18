@@ -50,6 +50,8 @@ namespace chr
             intern::memoryManager = make_shared<MemoryManager>();
             intern::memoryManager->setup();
             
+            DisplayHelper::setup(initInfo);
+            
             // ---
             
             sketch = createSketch();
@@ -132,6 +134,8 @@ namespace chr
         
         if (intern::initialized)
         {
+            DisplayHelper::shutdown();
+            
             intern::memoryManager->shutdown();
             intern::memoryManager.reset();
             

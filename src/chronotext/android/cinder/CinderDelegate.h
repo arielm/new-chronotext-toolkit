@@ -28,7 +28,7 @@ namespace chr
         /*
          * INVOKED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
          */
-        bool init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity);
+        bool init(jobject androidContext, jobject androidDisplay, const ci::Vec2i &displaySize, float displayDensity);
         
         void launch(); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
         void setup(const ci::Vec2i &size); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED

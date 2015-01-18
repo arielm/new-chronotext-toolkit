@@ -17,14 +17,11 @@ namespace chr
     {
         struct InitInfo
         {
-            bool emulated;
+            bool emulated = false;
             EmulatedDevice emulatedDevice;
-            DisplayInfo actualDisplayInfo;
             
-            const DisplayInfo& getDisplayInfo() const
-            {
-                return emulated ? emulatedDevice.displayInfo : actualDisplayInfo;
-            }
+            float actualContentScale = 0;
+            ci::Vec2i actualWindowSize {};
         };
     }
 }

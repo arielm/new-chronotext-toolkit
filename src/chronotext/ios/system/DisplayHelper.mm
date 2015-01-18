@@ -29,7 +29,7 @@ namespace chr
          * https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW46
          */
         
-        void Helper::setup(const system::Info &systemInfo)
+        void Helper::setup(const system::InitInfo &initInfo)
         {
             if (!intern::setup)
             {
@@ -41,7 +41,7 @@ namespace chr
                 
                 Vec2i baseSize;
                 
-                if (systemInfo.osVersion[0] >= 8)
+                if (getSystemInfo().osVersion[0] >= 8)
                 {
                     baseSize.x = bounds.size.width;
                     baseSize.y = bounds.size.height;
@@ -88,7 +88,7 @@ namespace chr
                 }
                 else if (magSize == 1024 * 768)
                 {
-                    if (systemInfo.isIPadMini)
+                    if (getSystemInfo().isIPadMini)
                     {
                         diagonal = 7.90f; // IPAD MINI
                     }

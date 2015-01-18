@@ -30,17 +30,16 @@ namespace chr
     
     // ---
     
-    bool CinderDelegate::init(jobject androidContext, jobject androidDisplay, int displayWidth, int displayHeight, float displayDensity)
+    bool CinderDelegate::init(jobject androidContext, jobject androidDisplay, const Vec2i &displaySize, float displayDensity)
     {
         intern::instance = this;
         
         initInfo.androidContext = androidContext;
         initInfo.androidDisplay = androidDisplay;
+        initInfo.displaySize = displaySize;
+        initInfo.displayDensity = displayDensity;
         
-        initInfo.displayInfo = DisplayInfo::createWithDensity(displayWidth, displayHeight, displayDensity);
-        _init();
-        
-        return true;
+        return _init();
     }
     
     void CinderDelegate::launch()

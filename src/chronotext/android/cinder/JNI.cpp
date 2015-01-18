@@ -243,9 +243,9 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
     jni::bridge = env->NewGlobalRef(bridge);
-    jni::cinderDelegate = new CinderDelegate();
     
-    jni::cinderDelegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), displayWidth, displayHeight, displayDensity);
+    jni::cinderDelegate = new CinderDelegate();
+    jni::cinderDelegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), Vec2i(displayWidth, displayHeight), displayDensity);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
@@ -262,7 +262,6 @@ void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj
 {
     jni::cinderDelegate->shutdown();
     delete jni::cinderDelegate;
-    jni::cinderDelegate = nullptr;
     
     CI_LOGI("SHUTDOWN");
 }

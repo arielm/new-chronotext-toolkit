@@ -9,7 +9,8 @@
 #pragma once
 
 #include "chronotext/system/SystemInfoBase.h"
-#include "chronotext/system/DisplayInfo.h"
+
+#include "cinder/Vector.h"
 
 #include <jni.h>
 
@@ -19,10 +20,11 @@ namespace chr
     {
         struct InitInfo
         {
-            jobject androidContext;
-            jobject androidDisplay;
+            jobject androidContext = nullptr;
+            jobject androidDisplay = nullptr;
             
-            DisplayInfo displayInfo;
+            ci::Vec2i displaySize {};
+            float displayDensity = 0;
         };
         
         class Info : public InfoBase

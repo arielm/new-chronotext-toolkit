@@ -25,13 +25,6 @@ namespace chr
             updateInfo();
             
             LOGI_IF(true) << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
-            
-            DisplayHelper::setup(initInfo);
-        }
-        
-        void Manager::shutdown()
-        {
-            DisplayHelper::shutdown();
         }
         
         // ---
