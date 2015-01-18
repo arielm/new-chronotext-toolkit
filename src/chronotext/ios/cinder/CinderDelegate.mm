@@ -81,18 +81,15 @@ namespace chr
     
     void CinderDelegate::update()
     {
-        sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
+        /*
+         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
+         *
+         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
+         */
+        sketch->clock()->update(true);
+        double now = sketch->clock()->getTime();
         
         io->poll();
-        
-        /*
-         * MUST BE CALLED BEFORE Sketch::update
-         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
-         *
-         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
-         */
-        double now = sketch->clock()->getTime();
         
         sketch->update();
         sketch->timeline().stepTo(now);

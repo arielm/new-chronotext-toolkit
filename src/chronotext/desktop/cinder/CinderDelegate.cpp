@@ -47,11 +47,6 @@ namespace chr
         windowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
         INTERN::setup(system::SetupInfo(windowInfo));
         
-        /*
-         * App::privateUpdate__ HACKING: SEE COMMENT IN CinderDelegate::update()
-         */
-        io_service().post([this]{ sketch->clock()->update(); });
-        
         sketch->timeline().stepTo(0);
         sketch->setup();
     }
@@ -92,22 +87,28 @@ namespace chr
         if (resizeCount++ == 0)
         {
             start(CinderSketch::REASON_APP_SHOWN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
+            
+            /*
+             * DESKTOP-ONLY WORKAROUND [1/4]
+             *
+             * WILL SCHEDULLE TIME-SAMPLING DURING THE NEXT CinderDelegate::update()
+             *
+             * NECESSARY BECAUSE WE NEED TIME-SAMPLING TO TAKE PLACE BEFORE IO-SERVICE-POLLING,
+             * WHICH IS HANDLED DURING App::privateUpdate__
+             */
+            sketch->clock()->update(false);
         }
     }
     
     void CinderDelegate::update()
     {
         /*
-         * App::privateUpdate__ HACKING:
-         * WE MUST UPDATE THE CLOCK AT THE BEGINNING OF THE FRAME,
-         * AND WE NEED THIS TO TAKE PLACE BEFORE THE FUNCTIONS
-         * "POSTED" DURING CinderSketch::update ARE "POLLED"
-         */
-        io_service().post([this]{ sketch->clock()->update(); });
-        
-        /*
-         * MUST BE CALLED BEFORE Sketch::update
-         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+         * DESKTOP-ONLY WORKAROUND [2/4]
+         *
+         * NOTE THAT FrameClock::getTime() MAY HAVE BEEN ALREADY CALLED
+         * WITHIN ONE OF THE FUNCTIONS POLLED DURING App::privateUpdate__
+         *
+         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
         double now = sketch->clock()->getTime();
         
@@ -124,7 +125,21 @@ namespace chr
             update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
         
+        /*
+         * DESKTOP-ONLY WORKAROUND [3/4]
+         *
+         * NECESSARY BECAUSE CinderDelegate::draw() CAN THEORETICALLY BE INVOKED SEVERAL-TIMES PER FRAME
+         */
+        sketch->clock()->lock();
+        
         sketch->draw();
+        
+        /*
+         * DESKTOP-ONLY WORKAROUND [4/4]
+         *
+         * WILL RELEASE THE LOCK AND SCHEDULLE TIME-SAMPLING DURING THE NEXT CinderDelegate::update()
+         */
+        sketch->clock()->update(false);
     }
     
 #pragma mark ---------------------------------------- GETTERS ----------------------------------------

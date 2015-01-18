@@ -26,13 +26,17 @@ namespace chr
         double getTime() final;
         void setTime(double now) final;
         
-        void update();
+        void update(bool immediately = true);
+        void lock();
+        void unlock();
         
     protected:
-        bool shouldSample;
-        double frameTime;
+        double frameTime = 0;
         
-        FrameClock();
+        bool shouldSample = true;
+        bool locked = false;
+        
+        FrameClock() = default;
         FrameClock(std::shared_ptr<TimeBase> timeBase);
     };
 }

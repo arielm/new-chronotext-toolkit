@@ -12,23 +12,14 @@ using namespace std;
 
 namespace chr
 {
-    FrameClock::FrameClock()
-    :
-    Clock(),
-    shouldSample(true),
-    frameTime(0)
-    {}
-    
     FrameClock::FrameClock(shared_ptr<TimeBase> timeBase)
     :
-    Clock(timeBase),
-    shouldSample(true),
-    frameTime(0)
+    Clock(timeBase)
     {}
     
     double FrameClock::getTime()
     {
-        if (shouldSample)
+        if (shouldSample && !locked)
         {
             frameTime = Clock::getTime();
             shouldSample = false;
@@ -43,8 +34,27 @@ namespace chr
         frameTime = now;
     }
     
-    void FrameClock::update()
+    void FrameClock::update(bool immediately)
     {
-        shouldSample = true;
+        locked = false;
+        
+        if (immediately)
+        {
+            frameTime = Clock::getTime();
+        }
+        else
+        {
+            shouldSample = true;
+        }
+    }
+    
+    void FrameClock::lock()
+    {
+        locked = true;
+    }
+    
+    void FrameClock::unlock()
+    {
+        locked = false;
     }
 }

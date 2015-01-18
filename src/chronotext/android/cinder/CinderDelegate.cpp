@@ -86,23 +86,16 @@ namespace chr
     
     void CinderDelegate::draw()
     {
-        sketch->clock()->update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-        
-        pollSensorEvents(); // WHERE accelerated IS INVOKED
-        io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
-        
         /*
-         * MUST BE CALLED BEFORE Sketch::update
-         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
+         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
          *
-         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
+         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
+        sketch->clock()->update(true);
         double now = sketch->clock()->getTime();
         
-        /*
-         * TODO: CALL MemoryManager::update()
-         */
+        pollSensorEvents(); // WHERE handleAcceleration IS INVOKED
+        io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
         
         sketch->update();
         sketch->timeline().stepTo(now);
