@@ -29,7 +29,7 @@ import android.view.View;
 public class CinderBridge extends Handler
 {
   /*
-   * PARALLEL TO chronotext/cinder/CinderSketchBase.h
+   * PARALLEL TO chronotext/cinder/CinderSketch.h
    */
   public static final int ACTION_CAPTURE_BACK = 1;
   public static final int ACTION_RELEASE_BACK = 2;

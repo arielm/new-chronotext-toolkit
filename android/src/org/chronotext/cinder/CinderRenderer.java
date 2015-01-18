@@ -22,17 +22,19 @@ import android.view.View;
 public class CinderRenderer implements GLSurfaceView.Renderer
 {
   /*
-   * PARALLEL TO chronotext/android/cinder/CinderDelegate.h
+   * PARALLEL TO chronotext/cinder/CinderSketch.h
    */
   public static final int EVENT_RESUMED = 1;
   public static final int EVENT_SHOWN = 2;
   public static final int EVENT_PAUSED = 3;
   public static final int EVENT_HIDDEN = 4;
-  public static final int EVENT_CONTEXT_LOST = 5;
-  public static final int EVENT_CONTEXT_RENEWED = 6;
-  public static final int EVENT_BACKGROUND = 7;
-  public static final int EVENT_FOREGROUND = 8;
-  public static final int EVENT_BACK_PRESSED = 9;
+  public static final int EVENT_FOREGROUND = 5;
+  public static final int EVENT_BACKGROUND = 6;
+  public static final int EVENT_MEMORY_WARNING = 7;
+  public static final int EVENT_CONTEXT_LOST = 8;
+  public static final int EVENT_CONTEXT_RENEWED = 9;
+  public static final int EVENT_TRIGGER_BACK = 10;
+  public static final int EVENT_TRIGGER_ESCAPE = 11;
 
   public static final int REASON_RESUMED = 1;
   public static final int REASON_SHOWN = 2;

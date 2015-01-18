@@ -39,13 +39,8 @@ namespace chr
     
     void CinderDelegate::setup(const WindowInfo &windowInfo)
     {
-        CinderDelegate::windowInfo = windowInfo;
-        forceResize = true;
-
         INTERN::setup(system::SetupInfo(windowInfo));
-        
-        sketch->timeline().stepTo(0);
-        sketch->setup();
+        sketch->performSetup(windowInfo);
     }
     
     void CinderDelegate::shutdown()
@@ -70,13 +65,7 @@ namespace chr
     
     void CinderDelegate::resize(const ci::Vec2f &size)
     {
-        if (forceResize || (size != windowInfo.size))
-        {
-            windowInfo.size = size;
-            forceResize = false;
-            
-            sketch->resize();
-        }
+        sketch->performResize(size);
     }
     
     void CinderDelegate::update()
@@ -87,41 +76,21 @@ namespace chr
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
         sketch->clock()->update(true);
-        double now = sketch->clock()->getTime();
         
         io->poll();
         
-        sketch->update();
-        sketch->timeline().stepTo(now);
-        
-        frameCount++;
+        sketch->performUpdate();
+        updateCount++;
     }
     
     void CinderDelegate::draw()
     {
-        if (frameCount == 0)
+        if (updateCount == 0)
         {
             update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
         
         sketch->draw();
-    }
-    
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-    
-    double CinderDelegate::elapsedSeconds() const
-    {
-        return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-    }
-    
-    int CinderDelegate::elapsedFrames() const
-    {
-        return frameCount;
-    }
-    
-    const WindowInfo& CinderDelegate::getWindowInfo() const
-    {
-        return windowInfo;
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
@@ -133,27 +102,26 @@ namespace chr
     
     void CinderDelegate::handleEvent(int eventId)
     {
+        switch (eventId)
+        {
+            case CinderSketch::EVENT_RESUMED:
+                sketch->performStart(CinderSketch::REASON_APP_RESUMED);
+                return;
+                
+            case CinderSketch::EVENT_SHOWN:
+                sketch->performStart(CinderSketch::REASON_APP_SHOWN);
+                return;
+                
+            case CinderSketch::EVENT_PAUSED:
+                sketch->performStop(CinderSketch::REASON_APP_PAUSED);
+                return;
+                
+            case CinderSketch::EVENT_HIDDEN:
+                sketch->performStop(CinderSketch::REASON_APP_HIDDEN);
+                return;
+        }
+        
         sketch->event(eventId);
-    }
-    
-#pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
-    
-    void CinderDelegate::start(CinderSketch::Reason reason)
-    {
-        frameCount = 0;
-        
-        timer.start();
-        sketch->clock()->start();
-        
-        sketch->start(reason);
-    }
-    
-    void CinderDelegate::stop(CinderSketch::Reason reason)
-    {
-        timer.stop();
-        sketch->clock()->stop();
-        
-        sketch->stop(reason);
     }
     
 #pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------

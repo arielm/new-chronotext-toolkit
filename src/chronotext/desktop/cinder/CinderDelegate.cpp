@@ -44,16 +44,15 @@ namespace chr
         
         // ---
         
-        windowInfo = WindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
-        INTERN::setup(system::SetupInfo(windowInfo));
+        WindowInfo actualWindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
         
-        sketch->timeline().stepTo(0);
-        sketch->setup();
+        INTERN::setup(system::SetupInfo(actualWindowInfo));
+        sketch->performSetup(initInfo.emulated ? initInfo.emulatedDevice.windowInfo : actualWindowInfo);
     }
     
     void CinderDelegate::shutdown()
     {
-        stop(CinderSketch::REASON_APP_HIDDEN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
+        sketch->performStop(CinderSketch::REASON_APP_HIDDEN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
         
         sketch->shutdown();
         delete sketch;
@@ -78,15 +77,14 @@ namespace chr
          */
         assert((resizeCount == 0) || !initInfo.emulated);
         
-        windowInfo.size = getWindowSize();
-        sketch->resize();
+        sketch->performResize(initInfo.emulated ? initInfo.emulatedDevice.windowInfo.size : getWindowSize());
         
         /*
          * I.E. THE FIRST AppNative::resize()
          */
         if (resizeCount++ == 0)
         {
-            start(CinderSketch::REASON_APP_SHOWN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
+            sketch->performStart(CinderSketch::REASON_APP_SHOWN); // NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
             
             /*
              * DESKTOP-ONLY WORKAROUND [1/4]
@@ -94,7 +92,7 @@ namespace chr
              * WILL SCHEDULLE TIME-SAMPLING DURING THE NEXT CinderDelegate::update()
              *
              * NECESSARY BECAUSE WE NEED TIME-SAMPLING TO TAKE PLACE BEFORE IO-SERVICE-POLLING,
-             * WHICH IS HANDLED DURING App::privateUpdate__
+             * WHICH IS HANDLED WITHIN App::privateUpdate__
              */
             sketch->clock()->update(false);
         }
@@ -106,21 +104,17 @@ namespace chr
          * DESKTOP-ONLY WORKAROUND [2/4]
          *
          * NOTE THAT FrameClock::getTime() MAY HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE FUNCTIONS POLLED DURING App::privateUpdate__
-         *
-         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
+         * DURING ONE OF THE FUNCTIONS POLLED WITHIN App::privateUpdate__
          */
-        double now = sketch->clock()->getTime();
+        sketch->clock()->getTime();
         
-        sketch->update();
-        sketch->timeline().stepTo(now); // WE CAN'T CONTROL THE APP'S TIMELINE SO WE NEED OUR OWN
-        
-        frameCount++;
+        sketch->performUpdate();
+        updateCount++;
     }
     
     void CinderDelegate::draw()
     {
-        if (frameCount == 0)
+        if (updateCount == 0)
         {
             update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
@@ -140,23 +134,6 @@ namespace chr
          * WILL RELEASE THE LOCK AND SCHEDULLE TIME-SAMPLING DURING THE NEXT CinderDelegate::update()
          */
         sketch->clock()->update(false);
-    }
-    
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-    
-    double CinderDelegate::elapsedSeconds() const
-    {
-        return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-    }
-    
-    int CinderDelegate::elapsedFrames() const
-    {
-        return frameCount;
-    }
-    
-    const WindowInfo& CinderDelegate::getWindowInfo() const
-    {
-        return initInfo.emulated ? initInfo.emulatedDevice.windowInfo : windowInfo;
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
@@ -200,26 +177,6 @@ namespace chr
     {
         applyDefaultSettings(settings);
         applySettings(settings);
-    }
-    
-    // ---
-    
-    void CinderDelegate::start(CinderSketch::Reason reason)
-    {
-        frameCount = 0;
-        
-        timer.start();
-        sketch->clock()->start();
-        
-        sketch->start(reason);
-    }
-    
-    void CinderDelegate::stop(CinderSketch::Reason reason)
-    {
-        timer.stop();
-        sketch->clock()->stop();
-        
-        sketch->stop(reason);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------

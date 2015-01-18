@@ -43,10 +43,6 @@ namespace chr
         void messageFromBridge(int what, const std::string &body = "") final;
         void performAction(int actionId) final;
         
-        const WindowInfo& getWindowInfo() const final;
-        double elapsedSeconds() const;
-        int elapsedFrames() const;
-        
         virtual void applySettings(Settings *settings) {}
         virtual void applyDefaultSettings(Settings *settings);
         void prepareSettings(Settings *settings) final;
@@ -62,20 +58,15 @@ namespace chr
 
     protected:
         CinderSketch *sketch = nullptr;
-        
-        ci::Timer timer;
-        int frameCount = 0;
-        int resizeCount = 0;
 
         system::InitInfo initInfo;
-        WindowInfo windowInfo;
+
+        int updateCount = 0;
+        int resizeCount = 0;
 
         bool backCaptured = false;
         bool escapeCaptured = false;
         
         std::map<std::string, std::shared_ptr<EmulatedDevice>> emulators;
-       
-        void start(CinderSketch::Reason reason);
-        void stop(CinderSketch::Reason reason);
     };
 }

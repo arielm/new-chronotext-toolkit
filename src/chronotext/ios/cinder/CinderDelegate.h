@@ -40,25 +40,14 @@ namespace chr
 
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
         void disableAccelerometer() final;
-
-        const WindowInfo& getWindowInfo() const final;
-        double elapsedSeconds() const;
-        int elapsedFrames() const;
-
-        void start(CinderSketch::Reason reason);
-        void stop(CinderSketch::Reason reason);
         
         void handleAcceleration(const ci::Vec3f &acceleration);
         
     protected:
         CinderSketch *sketch = nullptr;
-
-        ci::Timer timer;
-        int frameCount = 0;
-        bool forceResize = false;
         
-        WindowInfo windowInfo;
-
+        int updateCount = 0;
+        
         AccelEvent::Filter accelFilter;
 
         std::shared_ptr<boost::asio::io_service> io;

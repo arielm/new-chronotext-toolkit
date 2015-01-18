@@ -27,7 +27,6 @@
 namespace chr
 {
     CinderSketch* createSketch();
-    void destroySketch(CinderSketch *sketch);
     
     // ---
 

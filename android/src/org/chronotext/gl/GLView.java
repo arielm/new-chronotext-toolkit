@@ -230,7 +230,7 @@ public class GLView extends GLSurfaceView
     {
       public void run()
       {
-        cinderRenderer.dispatchEvent(CinderRenderer.EVENT_BACK_PRESSED); 
+        cinderRenderer.dispatchEvent(CinderRenderer.EVENT_TRIGGER_BACK); 
       }
     });
 

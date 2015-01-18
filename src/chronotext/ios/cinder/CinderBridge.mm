@@ -130,14 +130,14 @@ namespace chr
     {
         case REASON_VIEW_WILL_APPEAR:
         {
-            cinderDelegate->start(CinderSketch::REASON_APP_SHOWN); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
+            cinderDelegate->handleEvent(CinderSketch::EVENT_SHOWN);
             active = YES;
             break;
         }
             
         case REASON_APPLICATION_DID_BECOME_ACTIVE:
         {
-            cinderDelegate->start(CinderSketch::REASON_APP_RESUMED); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
+            cinderDelegate->handleEvent(CinderSketch::EVENT_RESUMED);
             break;
         }
     }
@@ -149,14 +149,14 @@ namespace chr
     {
         case REASON_VIEW_WILL_DISAPPEAR:
         {
-            cinderDelegate->stop(CinderSketch::REASON_APP_HIDDEN); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
+            cinderDelegate->handleEvent(CinderSketch::EVENT_HIDDEN);
             active = NO;
             break;
         }
             
         case REASON_APPLICATION_WILL_RESIGN_ACTIVE:
         {
-            cinderDelegate->stop(CinderSketch::REASON_APP_PAUSED); // TODO: USE CinderDelegate::handleEvent() INSTEAD?
+            cinderDelegate->handleEvent(CinderSketch::EVENT_PAUSED);
             break;
         }
     }

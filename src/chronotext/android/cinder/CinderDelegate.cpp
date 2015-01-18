@@ -43,13 +43,10 @@ namespace chr
     
     void CinderDelegate::setup(const ci::Vec2f &size)
     {
-        windowInfo = WindowInfo(size);
-        forceResize = true;
+        WindowInfo windowInfo(size);
         
         INTERN::setup(system::SetupInfo(windowInfo));
-        
-        sketch->timeline().stepTo(0);
-        sketch->setup();
+        sketch->performSetup(windowInfo);
     }
     
     void CinderDelegate::shutdown()
@@ -75,13 +72,7 @@ namespace chr
     
     void CinderDelegate::resize(const ci::Vec2f &size)
     {
-        if (forceResize || (size != windowInfo.size))
-        {
-            windowInfo.size = size;
-            forceResize = false;
-            
-            sketch->resize();
-        }
+        sketch->performResize(size);
     }
     
     void CinderDelegate::draw()
@@ -92,34 +83,14 @@ namespace chr
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
         sketch->clock()->update(true);
-        double now = sketch->clock()->getTime();
         
         pollSensorEvents(); // WHERE handleAcceleration IS INVOKED
         io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
         
-        sketch->update();
-        sketch->timeline().stepTo(now);
-        
-        frameCount++;
+        sketch->performUpdate();
+        updateCount++;
         
         sketch->draw();
-    }
-    
-#pragma mark ---------------------------------------- GETTERS ----------------------------------------
-    
-    double CinderDelegate::elapsedSeconds() const
-    {
-        return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-    }
-    
-    int CinderDelegate::elapsedFrames() const
-    {
-        return frameCount;
-    }
-    
-    const WindowInfo& CinderDelegate::getWindowInfo() const
-    {
-        return windowInfo;
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
@@ -159,42 +130,24 @@ namespace chr
     {
         switch (eventId)
         {
-            case EVENT_RESUMED:
-                start(CinderSketch::REASON_APP_RESUMED);
-                break;
+            case CinderSketch::EVENT_RESUMED:
+                sketch->performStart(CinderSketch::REASON_APP_RESUMED);
+                return;
                 
-            case EVENT_SHOWN:
-                start(CinderSketch::REASON_APP_SHOWN);
-                break;
+            case CinderSketch::EVENT_SHOWN:
+                sketch->performStart(CinderSketch::REASON_APP_SHOWN);
+                return;
                 
-            case EVENT_PAUSED:
-                stop(CinderSketch::REASON_APP_PAUSED);
-                break;
+            case CinderSketch::EVENT_PAUSED:
+                sketch->performStop(CinderSketch::REASON_APP_PAUSED);
+                return;
                 
-            case EVENT_HIDDEN:
-                stop(CinderSketch::REASON_APP_HIDDEN);
-                break;
-                
-            case EVENT_CONTEXT_LOST:
-                sketch->event(CinderSketch::EVENT_CONTEXT_LOST);
-                break;
-                
-            case EVENT_CONTEXT_RENEWED:
-                sketch->event(CinderSketch::EVENT_CONTEXT_RENEWED);
-                break;
-                
-            case EVENT_BACKGROUND:
-                sketch->event(CinderSketch::EVENT_BACKGROUND);
-                break;
-                
-            case EVENT_FOREGROUND:
-                sketch->event(CinderSketch::EVENT_FOREGROUND);
-                break;
-                
-            case EVENT_BACK_PRESSED:
-                sketch->event(CinderSketch::EVENT_TRIGGER_BACK);
-                break;
+            case CinderSketch::EVENT_HIDDEN:
+                sketch->performStop(CinderSketch::REASON_APP_HIDDEN);
+                return;
         }
+        
+        sketch->event(eventId);
     }
     
     /*
@@ -203,26 +156,6 @@ namespace chr
     void CinderDelegate::performAction(int actionId)
     {
         jni::callBooleanMethodOnBridge("handleAction", "(I)Z", actionId);
-    }
-    
-#pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
-    
-    void CinderDelegate::start(CinderSketch::Reason reason)
-    {
-        frameCount = 0;
-        
-        timer.start();
-        sketch->clock()->start();
-        
-        sketch->start(reason);
-    }
-    
-    void CinderDelegate::stop(CinderSketch::Reason reason)
-    {
-        timer.stop();
-        sketch->clock()->stop();
-        
-        sketch->stop(reason);
     }
     
 #pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------

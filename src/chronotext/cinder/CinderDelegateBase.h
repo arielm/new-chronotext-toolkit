@@ -26,8 +26,6 @@ namespace chr
         virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
         virtual void disableAccelerometer() {}
         
-        virtual const WindowInfo& getWindowInfo() const = 0;
-        
         /*
          * FIXME: OVER-COMPLICATED (REASON: THE FOLLOWING METHODS ARE NOT DECLARED ON iOS)
          */

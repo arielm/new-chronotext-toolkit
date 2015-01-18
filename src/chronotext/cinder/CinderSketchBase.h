@@ -18,6 +18,8 @@
 
 namespace chr
 {
+    class CinderDelegate;
+    
     class CinderSketchBase : public SuperHandler
     {
     public:
@@ -31,6 +33,10 @@ namespace chr
         
         enum
         {
+            EVENT_RESUMED = 1,
+            EVENT_SHOWN,
+            EVENT_PAUSED,
+            EVENT_HIDDEN,
             EVENT_FOREGROUND,
             EVENT_BACKGROUND,
             EVENT_MEMORY_WARNING,
@@ -43,9 +49,9 @@ namespace chr
         enum
         {
             ACTION_CAPTURE_BACK = 1,
-            ACTION_RELEASE_BACK = 2,
-            ACTION_CAPTURE_ESCAPE = 3,
-            ACTION_RELEASE_ESCAPE = 4,
+            ACTION_RELEASE_BACK,
+            ACTION_CAPTURE_ESCAPE,
+            ACTION_RELEASE_ESCAPE,
         };
         
         virtual ~CinderSketchBase() {}
@@ -73,18 +79,35 @@ namespace chr
 
         virtual void accelerated(AccelEvent event) {}
 
-        virtual const WindowInfo& getWindowInfo() const = 0;
-        virtual double getElapsedSeconds() const = 0;
-        virtual int getElapsedFrames() const = 0;
+        const WindowInfo& getWindowInfo() const;
+        double getElapsedSeconds() const;
+        int getElapsedFrames() const;
 
-        virtual chr::FrameClock::Ref clock() const = 0;
-        virtual ci::Timeline& timeline() const = 0;
+        FrameClock::Ref clock() const;
+        ci::Timeline& timeline() const;
 
-        inline ci::Vec2i getWindowSize() const { return getWindowInfo().size; }
-        inline int getWindowWidth() const { return getWindowInfo().size.x; };
-        inline int getWindowHeight() const { return getWindowInfo().size.y; };
-        inline ci::Area getWindowBounds() const { return getWindowInfo().bounds(); };
-        inline ci::Vec2f getWindowCenter() const { return getWindowInfo().center(); };
-        inline float getWindowAspectRatio() const { return getWindowInfo().aspectRatio(); };
+        inline ci::Vec2i getWindowSize() const { return windowInfo.size; }
+        inline int getWindowWidth() const { return windowInfo.size.x; };
+        inline int getWindowHeight() const { return windowInfo.size.y; };
+        inline ci::Area getWindowBounds() const { return windowInfo.bounds(); };
+        inline ci::Vec2f getWindowCenter() const { return windowInfo.center(); };
+        inline float getWindowAspectRatio() const { return windowInfo.aspectRatio(); };
+        
+    protected:
+        friend class CinderDelegate;
+        
+        ci::Timer timer;
+        int frameCount = 0;
+        bool forceResize = false;
+
+        WindowInfo windowInfo;
+        FrameClock::Ref _clock = FrameClock::create();
+        ci::TimelineRef _timeline = ci::Timeline::create();
+        
+        void performSetup(const WindowInfo &windowInfo);
+        void performResize(const ci::Vec2i &size);
+        void performStart(Reason reason);
+        void performStop(Reason reason);
+        void performUpdate();
     };
 }

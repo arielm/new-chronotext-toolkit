@@ -21,22 +21,6 @@ namespace chr
 {
     class CinderDelegate : public CinderDelegateBase
     {
-        /*
-         * PARALLEL TO android/cinder/CinderRenderer.java
-         */
-        enum
-        {
-            EVENT_RESUMED = 1,
-            EVENT_SHOWN = 2,
-            EVENT_PAUSED = 3,
-            EVENT_HIDDEN = 4,
-            EVENT_CONTEXT_LOST = 5,
-            EVENT_CONTEXT_RENEWED = 6,
-            EVENT_BACKGROUND = 7,
-            EVENT_FOREGROUND = 8,
-            EVENT_BACK_PRESSED = 9
-        };
-        
     public:
         static std::atomic<bool> LOG_VERBOSE;
         static std::atomic<bool> LOG_WARNING;
@@ -66,18 +50,11 @@ namespace chr
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
         void disableAccelerometer() final;
 
-        const WindowInfo& getWindowInfo() const final;
-        double elapsedSeconds() const;
-        int elapsedFrames() const;
-
     protected:
         CinderSketch *sketch = nullptr;
 
-        ci::Timer timer;
-        int frameCount = 0;
-        bool forceResize = false;
+        int updateCount = 0;
         
-        WindowInfo windowInfo;
         system::InitInfo initInfo;
 
         AccelEvent::Filter accelFilter;
@@ -88,9 +65,6 @@ namespace chr
         ASensorManager *sensorManager;
         const ASensor *accelerometerSensor;
         ASensorEventQueue *sensorEventQueue;
-
-        void start(CinderSketch::Reason reason);
-        void stop(CinderSketch::Reason reason);
         
         void startIOService();
         void stopIOService();

@@ -10,16 +10,9 @@
 
 #include "cinder/Cinder.h"
 
-#if defined(CINDER_COCOA_TOUCH)
+#include "chronotext/cinder/CinderSketchBase.h"
 
-#include "chronotext/ios/cinder/CinderSketch.h"
-
-#elif defined(CINDER_ANDROID)
-
-#include "chronotext/android/cinder/CinderSketch.h"
-
-#else
-
-#include "chronotext/desktop/cinder/CinderSketch.h"
-
-#endif
+namespace chr
+{
+    typedef CinderSketchBase CinderSketch;
+}
