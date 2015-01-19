@@ -53,7 +53,7 @@ namespace chr
 
 @implementation CinderBridge
 
-@synthesize viewController;
+@synthesize viewControllerProperties;
 
 - (id) initWithOptions:(NSDictionary*)options
 {
@@ -89,11 +89,11 @@ namespace chr
     [super dealloc];
 }
 
-- (GLViewController*) createViewControllerWithProperties:(NSDictionary*)properties
+- (GLViewController*) viewController
 {
     if (!viewController)
     {
-        viewController = [[GLViewController alloc] initWithBridge:self properties:properties];
+        viewController = [[GLViewController alloc] initWithBridge:self properties:viewControllerProperties];
         cinderDelegate->launch();
     }
     

@@ -14,7 +14,7 @@
 {
     if (self = [super initWithOptions:options])
     {
-        NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+        self.viewControllerProperties = [NSDictionary dictionaryWithObjectsAndKeys:
             [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
             [NSNumber numberWithInt:UIInterfaceOrientationMaskAll], kGLViewControllerPropertyInterfaceOrientationMask,
             [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
@@ -23,7 +23,7 @@
         window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
         window.backgroundColor = [UIColor blackColor];
 
-        [window setRootViewController:[self createViewControllerWithProperties:properties]];
+        [window setRootViewController:self.viewController];
         [window makeKeyAndVisible];
     }
     

@@ -25,13 +25,13 @@ enum
 @interface CinderBridge : NSObject <UIAccelerometerDelegate>
 {
     GLViewController *viewController;
+    NSDictionary *viewControllerProperties;
 }
 
 @property (nonatomic, readonly) GLViewController *viewController;
+@property (nonatomic, retain) NSDictionary *viewControllerProperties;
 
 - (id) initWithOptions:(NSDictionary*)options;
-
-- (GLViewController*) createViewControllerWithProperties:(NSDictionary*)properties;
 
 - (void) setup;
 - (void) resize;

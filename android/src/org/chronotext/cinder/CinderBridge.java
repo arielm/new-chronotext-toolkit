@@ -36,8 +36,8 @@ public class CinderBridge extends Handler
 
   protected Activity activity;
 
-  protected GLView glView;
-  protected GLView.Properties properties;
+  protected GLView view;
+  protected GLView.Properties viewProperties;
   
   protected boolean backCaptured;
 
@@ -55,22 +55,22 @@ public class CinderBridge extends Handler
 
   public GLView getView()
   {
-    if (glView == null)
+    if (view == null)
     {
-      if (properties == null)
+      if (viewProperties == null)
       {
-        properties = new GLView.Properties();
+        viewProperties = new GLView.Properties();
       }
-      
-      glView = new GLView(activity, this, properties); // WILL START THE RENDERER'S THREAD
+
+      view = new GLView(activity, this, viewProperties); // WILL START THE RENDERER'S THREAD
     }
 
-    return glView;
+    return view;
   }
 
   public void setViewProperties(GLView.Properties properties)
   {
-    this.properties = properties;
+    viewProperties = properties;
   }
 
   // ---------------------------------------- LIFE-CYCLE ----------------------------------------
@@ -86,6 +86,12 @@ public class CinderBridge extends Handler
   }
 
   // ---------------------------------------- INVOKED ON THE MAIN-THREAD FROM GLView ----------------------------------------
+
+  /*
+   * TODO INSTEAD (ANDROID / IOS):
+   *
+   * USE A SINGLE handleEvent(int eventId) METHOD
+   */
 
   public void pausing()
   {}
@@ -103,10 +109,10 @@ public class CinderBridge extends Handler
    */
   public void onPause()
   {
-    if (glView != null)
+    if (view != null)
     {
       Utils.LOGD("CinderDelegate.onPause");
-      glView.onPause();
+      view.onPause();
     }
   }
 
@@ -115,10 +121,10 @@ public class CinderBridge extends Handler
    */
   public void onResume()
   {
-    if (glView != null)
+    if (view != null)
     {
       Utils.LOGD("CinderDelegate.onResume");
-      glView.onResume();
+      view.onResume();
     }
   }
 
@@ -127,10 +133,10 @@ public class CinderBridge extends Handler
    */
   public void onDestroy()
   {
-    if (glView != null)
+    if (view != null)
     {
       Utils.LOGD("CinderDelegate.onDestroy");
-      glView.onDestroy();
+      view.onDestroy();
     }
   }
   
@@ -139,13 +145,13 @@ public class CinderBridge extends Handler
    */
   public boolean onBackPressed()
   {
-    if (glView != null)
+    if (view != null)
     {
       Utils.LOGD("CinderDelegate.onBackPressed");
 
       if (backCaptured)
       {
-        return glView.onBackPressed();
+        return view.onBackPressed();
       }
     }
 

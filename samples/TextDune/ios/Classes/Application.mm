@@ -14,7 +14,7 @@
 {
     bridge = [[CinderBridge alloc] initWithOptions:launchOptions];
     
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+    bridge.viewControllerProperties = [NSDictionary dictionaryWithObjectsAndKeys:
         [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
         [NSNumber numberWithInt:UIInterfaceOrientationMaskLandscape], kGLViewControllerPropertyInterfaceOrientationMask,
         [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
@@ -23,7 +23,7 @@
     window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     window.backgroundColor = [UIColor blackColor];
     
-    [window setRootViewController:[bridge createViewControllerWithProperties:properties]];
+    [window setRootViewController:bridge.viewController];
     [window makeKeyAndVisible];
     
     return YES;
