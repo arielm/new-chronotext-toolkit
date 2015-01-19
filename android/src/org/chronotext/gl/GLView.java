@@ -21,6 +21,7 @@ import org.chronotext.cinder.Touch;
 import org.chronotext.utils.Utils;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -28,6 +29,40 @@ import android.view.View;
 
 public class GLView extends GLSurfaceView
 {
+  public static class Properties
+  {
+    int eglContextClientVersion = 1;
+    int[] eglConfigChooser;
+    int pixelFormat = PixelFormat.UNKNOWN;
+    boolean preserveEGLContextOnPause = true;
+
+    public Properties setEGLContextClientVersion(int version)
+    {
+      eglContextClientVersion = version;
+      return this;
+    }
+
+    public Properties setEGLConfigChooser(int redSize, int greenSize, int blueSize, int alphaSize, int depthSize, int stencilSize)
+    {
+      eglConfigChooser = new int[] {redSize, greenSize, blueSize, alphaSize, depthSize, stencilSize};
+      return this;
+    }
+
+    public Properties setPixelFormat(int format)
+    {
+      pixelFormat = format;
+      return this;
+    }
+
+    public Properties setPreserveEGLContextOnPause(boolean preserveOnPause)
+    {
+      preserveEGLContextOnPause = preserveOnPause;
+      return this;
+    }
+  }
+
+  // ---
+  
   protected CinderBridge cinderBridge;
   protected CinderRenderer cinderRenderer;
 
@@ -36,7 +71,7 @@ public class GLView extends GLSurfaceView
   protected boolean finishing;
   protected boolean destroyed;
 
-  public GLView(Context context, CinderBridge bridge)
+  public GLView(Context context, CinderBridge bridge, Properties properties)
   {
     super(context);
 
@@ -44,20 +79,26 @@ public class GLView extends GLSurfaceView
 
     // ---
 
-    /*
-     * TODO: THE FOLLOWING SHOULD BE USER-DEFINABLE
-     */
+    setEGLContextClientVersion(properties.eglContextClientVersion);
+    setEGLContextFactory(new CustomContextFactory(properties.eglContextClientVersion));
 
-    // setEGLContextClientVersion(2);
-    // setEGLConfigChooser(8, 8, 8, 8, 0, 0);
-    // getHolder().setFormat(PixelFormat.RGBA_8888);
+    if (properties.eglConfigChooser != null)
+    {
+      setEGLConfigChooser(
+        properties.eglConfigChooser[0],
+        properties.eglConfigChooser[1],
+        properties.eglConfigChooser[2],
+        properties.eglConfigChooser[3],
+        properties.eglConfigChooser[4],
+        properties.eglConfigChooser[5]);
+    }
 
-    setEGLContextFactory(new CustomContextFactory(1)); // FIXME: EGL-CONTEXT-CLIENT-VERSION SHOULD NOT BE HARD-CODED
+    if (properties.pixelFormat != PixelFormat.UNKNOWN)
+    {
+      getHolder().setFormat(properties.pixelFormat);
+    }
 
-    /*
-     * TEXTURES (AND OTHER GL-RELATED MEMORY) WILL NOT BE INALIDATED ANYMORE ON-PAUSE
-     */
-    setPreserveEGLContextOnPause(true);
+    setPreserveEGLContextOnPause(properties.preserveEGLContextOnPause);
 
     // ---
 

@@ -19,7 +19,7 @@
  *
  * OSX: COMMIT 600e7a3
  * IOS: COMMIT 600e7a3
- * ANDROID: COMMIT 600e7a3
+ * ANDROID: LATEST COMMIT
  */
 
 #pragma once

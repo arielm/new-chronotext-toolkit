@@ -2,6 +2,7 @@
 package org.chronotext.MobileTest;
 
 import org.chronotext.cinder.CinderBridge;
+import org.chronotext.gl.GLView;
 import org.chronotext.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +48,10 @@ public class Bridge extends CinderBridge
     super(activity);
 
     // ---
+
+    setViewProperties(new GLView.Properties()
+      .setEGLContextClientVersion(1)
+      .setPreserveEGLContextOnPause(true));
 
     if (!contentViewIsGLView)
     {
