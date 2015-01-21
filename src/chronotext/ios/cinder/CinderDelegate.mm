@@ -36,9 +36,7 @@ namespace chr
     {
         intern::instance = this;
         
-        _init();
-        
-        return true;
+        return _init();
     }
     
     void CinderDelegate::launch()

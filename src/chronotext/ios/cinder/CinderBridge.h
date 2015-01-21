@@ -14,14 +14,6 @@
 #import "chronotext/cocoa/utils/NSString+JSON.h"
 #import "chronotext/ios/gl/GLViewController.h"
 
-enum
-{
-    REASON_VIEW_WILL_APPEAR,
-    REASON_VIEW_WILL_DISAPPEAR,
-    REASON_APPLICATION_DID_BECOME_ACTIVE,
-    REASON_APPLICATION_WILL_RESIGN_ACTIVE
-};
-
 @interface CinderBridge : NSObject <UIAccelerometerDelegate>
 {
     GLViewController *viewController;
@@ -31,12 +23,10 @@ enum
 @property (nonatomic, readonly) GLViewController *viewController;
 @property (nonatomic, retain) NSDictionary *viewControllerProperties;
 
-- (id) initWithOptions:(NSDictionary*)options;
-
-- (void) setup;
-- (void) resize;
-- (void) update;
-- (void) draw;
+- (void) performSetup;
+- (void) performResize;
+- (void) performUpdate;
+- (void) performDraw;
 
 - (void) startWithReason:(int)reason;
 - (void) stopWithReason:(int)reason;

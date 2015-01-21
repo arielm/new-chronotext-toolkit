@@ -46,6 +46,10 @@
 		A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */; };
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
 		A8F595661A07788300877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595651A07788300877FB2 /* Log.cpp */; };
+		A8F828071A6F0BCB003C0D8D /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828021A6F0BCB003C0D8D /* NSDictionary+DefautValues.m */; };
+		A8F828081A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828041A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m */; };
+		A8F828091A6F0BCB003C0D8D /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828061A6F0BCB003C0D8D /* NSString+JSON.m */; };
+		A8F8280B1A6F0C70003C0D8D /* Utils.h in Sources */ = {isa = PBXBuildFile; fileRef = A8F8280A1A6F0C70003C0D8D /* Utils.h */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
 		A8FA3C1816E3AB8000367F97 /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC216E3AB8000367F97 /* CinderBridge.mm */; };
@@ -156,6 +160,13 @@
 		A8F2E318189E5234002D5D75 /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A8F2E31D189E5234002D5D75 /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A8F595651A07788300877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		A8F828011A6F0BCB003C0D8D /* NSDictionary+DefautValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+DefautValues.h"; sourceTree = "<group>"; };
+		A8F828021A6F0BCB003C0D8D /* NSDictionary+DefautValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DefautValues.m"; sourceTree = "<group>"; };
+		A8F828031A6F0BCB003C0D8D /* NSMutableDictionary+Merge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Merge.h"; sourceTree = "<group>"; };
+		A8F828041A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Merge.m"; sourceTree = "<group>"; };
+		A8F828051A6F0BCB003C0D8D /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
+		A8F828061A6F0BCB003C0D8D /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
+		A8F8280A1A6F0C70003C0D8D /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A8F9979219FAA06000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
@@ -354,6 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				A8836D881A4B005A007733CE /* system */,
+				A8F828001A6F0BCB003C0D8D /* utils */,
 			);
 			path = cocoa;
 			sourceTree = "<group>";
@@ -390,6 +402,20 @@
 				A8F2E31D189E5234002D5D75 /* TimeBase.h */,
 			);
 			path = time;
+			sourceTree = "<group>";
+		};
+		A8F828001A6F0BCB003C0D8D /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A8F828011A6F0BCB003C0D8D /* NSDictionary+DefautValues.h */,
+				A8F828021A6F0BCB003C0D8D /* NSDictionary+DefautValues.m */,
+				A8F828031A6F0BCB003C0D8D /* NSMutableDictionary+Merge.h */,
+				A8F828041A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m */,
+				A8F828051A6F0BCB003C0D8D /* NSString+JSON.h */,
+				A8F828061A6F0BCB003C0D8D /* NSString+JSON.m */,
+				A8F8280A1A6F0C70003C0D8D /* Utils.h */,
+			);
+			path = utils;
 			sourceTree = "<group>";
 		};
 		A8FA3B8316E379B000367F97 /* Classes */ = {
@@ -604,16 +630,20 @@
 				A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */,
 				A802715119CC83FD0072973D /* QuadMatrix.cpp in Sources */,
 				A802714519CC83FD0072973D /* FontSequence.cpp in Sources */,
+				A8F828071A6F0BCB003C0D8D /* NSDictionary+DefautValues.m in Sources */,
 				A8836D711A4B0008007733CE /* Handler.cpp in Sources */,
 				A826F4CE1A6B0D9B002A23A9 /* CinderDelegate.mm in Sources */,
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A826F4F61A6C0167002A23A9 /* CinderSketch.cpp in Sources */,
+				A8F8280B1A6F0C70003C0D8D /* Utils.h in Sources */,
 				A826F48F1A6811FB002A23A9 /* Bridge.mm in Sources */,
 				A8F595661A07788300877FB2 /* Log.cpp in Sources */,
 				A8702BC51A5B489500EF9E9E /* MemoryManagerBase.cpp in Sources */,
+				A8F828081A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m in Sources */,
 				A8FBC45118E35F4100F5BBEF /* SystemManager.mm in Sources */,
 				A8FA3C1816E3AB8000367F97 /* CinderBridge.mm in Sources */,
+				A8F828091A6F0BCB003C0D8D /* NSString+JSON.m in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
 				A8836D731A4B0008007733CE /* Task.cpp in Sources */,
 				A826F4F51A6C0167002A23A9 /* CinderDelegateBase.cpp in Sources */,

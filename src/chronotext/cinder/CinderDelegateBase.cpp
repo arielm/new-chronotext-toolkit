@@ -105,36 +105,28 @@ namespace chr
     
     void CinderDelegateBase::_shutdown()
     {
-        if (intern::setup)
-        {
-            sketch->shutdown();
-            delete sketch;
-            sketchDestroyed(sketch);
-            sketch = nullptr;
-
-            // ---
-            
-            intern::setup = false;
-        }
-        
-        if (intern::launched)
-        {
-            /*
-             * TODO:
-             *
-             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-             * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
-             */
-            intern::taskManager.reset();
-            intern::io_service = nullptr;
-            
-            // ---
-            
-            intern::launched = false;
-        }
-        
         if (intern::initialized)
         {
+            if (intern::setup)
+            {
+                sketch->shutdown();
+                delete sketch;
+                sketchDestroyed(sketch);
+                sketch = nullptr;
+            }
+            
+            if (intern::launched)
+            {
+                /*
+                 * TODO:
+                 *
+                 * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+                 * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
+                 */
+                intern::taskManager.reset();
+                intern::io_service = nullptr;
+            }
+            
             FileHelper::shutdown();
             DisplayHelper::shutdown();
             
@@ -147,6 +139,8 @@ namespace chr
             // ---
             
             intern::initialized = false;
+            intern::launched = false;
+            intern::setup = false;
         }
     }
     

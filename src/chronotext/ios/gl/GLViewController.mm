@@ -8,6 +8,7 @@
 
 #import "chronotext/ios/gl/GLViewController.h"
 #import "chronotext/ios/cinder/CinderBridge.h"
+#import "chronotext/cocoa/utils/Utils.h"
 
 NSString* kGLViewControllerPropertyRenderingAPI = @"kGLViewControllerPropertyRenderingAPI";
 NSString* kGLViewControllerPropertyPreferredFramesPerSecond = @"kGLViewControllerPropertyPreferredFramesPerSecond";
@@ -22,16 +23,21 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     NSMutableDictionary *properties;
     int interfaceOrientationMask;
-    
+
+    BOOL started;
+    BOOL appeared;
+
     BOOL setupRequest;
     
     BOOL resizeRequest;
     int viewportWidth;
     int viewportHeight;
 
-    BOOL started;
     BOOL startRequest;
     int startReason;
+    
+    int updateCount;
+    int drawCount;
 }
 
 - (void) startWithReason:(int)reason;
@@ -43,13 +49,17 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 @synthesize cinderBridge;
 @synthesize glView;
+@synthesize appeared;
 
 - (id) initWithBridge:(CinderBridge*)bridge properties:(NSDictionary*)_properties
 {
     if (self = [super init])
     {
         cinderBridge = bridge;
+        [cinderBridge retain];
 
+        // ---
+        
         NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
             [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
             [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
@@ -86,12 +96,17 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
 - (void) dealloc
 {
+    DLOG(@"GLViewController.dealloc");
+    
+    [cinderBridge release];
     [properties release];
+    
     [super dealloc];
 }
 
 - (void) loadView
 {
+    DLOG(@"GLViewController:loadView");
     [super loadView];
 
     glView = (GLKView*)self.view;
@@ -109,7 +124,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     
     [EAGLContext setCurrentContext:glView.context]; // MUST TAKE PLACE BEFORE "SETUP"
     
-    [cinderBridge setup];
+    [cinderBridge performSetup];
     resizeRequest = YES;
 }
 
@@ -117,12 +132,11 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     [super viewWillAppear:animated];
     
-    if (self.view)
+    if (self.view && !appeared)
     {
-#ifdef DEBUG
-        NSLog(@"GLViewController - viewWillAppear");
-#endif
+        appeared = YES;
         
+        DLOG(@"GLViewController:viewWillAppear | beingPresented: %hhd | movingToParentViewController: %hhd", [self isBeingPresented], [self isMovingToParentViewController]);
         [self startWithReason:REASON_VIEW_WILL_APPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -135,12 +149,11 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     [super viewWillDisappear:animated];
     
-    if (self.view)
+    if (self.view && appeared)
     {
-#ifdef DEBUG
-        NSLog(@"GLViewController - viewWillDisappear");
-#endif
+        appeared = NO;
         
+        DLOG(@"GLViewController:viewWillDisappear | beingDismissed: %hhd | movingFromParentViewController: %hhd", [self isBeingDismissed], [self isMovingFromParentViewController]);
         [self stopWithReason:REASON_VIEW_WILL_DISAPPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -158,6 +171,9 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         started = YES;
         startRequest = YES;
         startReason = reason;
+        
+        drawCount = 0;
+        updateCount = 0;
     }
 }
 
@@ -176,8 +192,8 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     {
         if (resizeRequest)
         {
+            [cinderBridge performResize];
             resizeRequest = NO;
-            [cinderBridge resize];
         }
         
         if (startRequest)
@@ -185,17 +201,28 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
             [cinderBridge startWithReason:startReason];
         }
         
-        [cinderBridge update];
+        [cinderBridge performUpdate];
     }
     
     startRequest = NO;
+    updateCount++;
 }
 
 - (void) glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
     if (started)
     {
-        [cinderBridge draw];
+        if (updateCount == 0)
+        {
+            [self update];
+        }
+        
+        if (drawCount++ == 0)
+        {
+            DLOG(@"GLViewController:drawInRect");
+        }
+        
+        [cinderBridge performDraw];
     }
 }
 
@@ -281,10 +308,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (self.view)
     {
-#ifdef DEBUG
-        NSLog(@"GLViewController - applicationDidBecomeActive");
-#endif
-        
+        DLOG(@"GLViewController:applicationDidBecomeActive");
         [self startWithReason:REASON_APPLICATION_DID_BECOME_ACTIVE];
     }
 }
@@ -293,10 +317,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 {
     if (self.view)
     {
-#ifdef DEBUG
-        NSLog(@"GLViewController - applicationWillResignActive");
-#endif
-        
+        DLOG(@"GLViewController:applicationWillResignActive");
         [self stopWithReason:REASON_APPLICATION_WILL_RESIGN_ACTIVE];
     }
 }

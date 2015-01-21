@@ -23,7 +23,7 @@
 
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    bridge = [[Bridge alloc] initWithOptions:launchOptions];
+    bridge = [[Bridge alloc] init];
     return YES;
 }
 

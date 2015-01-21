@@ -12,7 +12,7 @@
 
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    bridge = [[CinderBridge alloc] initWithOptions:launchOptions];
+    bridge = [[CinderBridge alloc] init];
     
     bridge.viewControllerProperties = [NSDictionary dictionaryWithObjectsAndKeys:
         [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
@@ -31,8 +31,8 @@
 
 - (void) dealloc
 {
-    [bridge release];
     [window release];
+    [bridge release];
     
     [super dealloc];
 }

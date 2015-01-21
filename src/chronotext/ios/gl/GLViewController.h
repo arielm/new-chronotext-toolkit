@@ -19,6 +19,14 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
 
 @class CinderBridge;
 
+enum
+{
+    REASON_VIEW_WILL_APPEAR,
+    REASON_VIEW_WILL_DISAPPEAR,
+    REASON_APPLICATION_DID_BECOME_ACTIVE,
+    REASON_APPLICATION_WILL_RESIGN_ACTIVE,
+};
+
 @interface GLViewController : GLKViewController
 {
     CinderBridge *cinderBridge;
@@ -27,6 +35,7 @@ OBJC_EXPORT NSString* kGLViewControllerPropertyMultisample;
 
 @property (nonatomic, readonly) CinderBridge *cinderBridge;
 @property (nonatomic, readonly) GLKView *glView;
+@property (nonatomic, readonly) BOOL appeared;
 
 - (id) initWithBridge:(CinderBridge*)bridge properties:(NSDictionary*)properties;
 

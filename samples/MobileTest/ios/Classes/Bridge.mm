@@ -10,9 +10,9 @@
 
 @implementation Bridge
 
-- (id) initWithOptions:(NSDictionary*)options
+- (id) init
 {
-    if (self = [super initWithOptions:options])
+    if (self = [super init])
     {
         self.viewControllerProperties = [NSDictionary dictionaryWithObjectsAndKeys:
             [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,

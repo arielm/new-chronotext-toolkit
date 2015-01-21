@@ -12,6 +12,7 @@
  */
 
 #import "chronotext/ios/cinder/CinderBridge.h"
+#import "chronotext/cocoa/utils/Utils.h"
 
 #include "chronotext/Context.h"
 
@@ -32,16 +33,20 @@ namespace chr
 
 @interface CinderBridge ()
 {
-    GLKView *view;
     CinderDelegate *cinderDelegate;
-    
+
     BOOL initialized;
-    BOOL active;
+    BOOL setup;
+    BOOL launched;
     
     map<UITouch*, uint32_t> touchIdMap;
 }
 
-- (Vec2f) windowSize;
+- (BOOL) performInit;
+- (void) performLaunch;
+- (void) performShutdown;
+
+- (Vec2i) windowSize;
 - (int) aaLevel;
 
 - (uint32_t) addTouchToMap:(UITouch*)touch;
@@ -55,20 +60,11 @@ namespace chr
 
 @synthesize viewControllerProperties;
 
-- (id) initWithOptions:(NSDictionary*)options
+- (id) init
 {
     if (self = [super init])
     {
-        system::bridge = self;
-        
-        cinderDelegate = new CinderDelegate();
-        cinderDelegate->init();
-        
-        // ---
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+        [self performInit];
     }
     
     return self;
@@ -76,52 +72,122 @@ namespace chr
 
 - (void) dealloc
 {
-    cinderDelegate->shutdown();
-    delete cinderDelegate;
+    DLOG(@"CinderBridge.dealloc");
+    [self performShutdown];
     
-    system::bridge = nullptr;
-    
-    // ---
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    [viewController release];
     [super dealloc];
+}
+
+- (BOOL) performInit
+{
+    if (!initialized)
+    {
+        DLOG(@"CinderBridge.performInit");
+
+        system::bridge = self;
+
+        cinderDelegate = new CinderDelegate();
+        cinderDelegate->init();
+        
+        NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self selector:@selector(applicationWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
+        [center addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+        [center addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [center addObserver:self selector:@selector(applicationDidReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+
+        // ---
+        
+        initialized = YES;
+    }
+    
+    return initialized;
+}
+
+- (void) performLaunch
+{
+    if (!launched)
+    {
+        DLOG(@"CinderBridge.performLaunch");
+
+        viewController = [[GLViewController alloc] initWithBridge:self properties:viewControllerProperties];
+
+        cinderDelegate->launch();
+        
+        // ---
+        
+        launched = YES;
+    }
+}
+
+- (void) performSetup
+{
+    if (!setup)
+    {
+        auto size = [self windowSize];
+        DLOG(@"CinderBridge:performSetup - %dx%d", size.x, size.y);
+
+        cinderDelegate->setup(WindowInfo(size, [self aaLevel]));
+        
+        // ---
+        
+        setup = YES;
+    }
+}
+
+- (void) performShutdown
+{
+    if (initialized)
+    {
+        DLOG(@"CinderBridge:performShutdown");
+        
+        if (launched)
+        {
+            [viewController release];
+            viewController = nil;
+        }
+        
+        system::bridge = nil;
+        
+        cinderDelegate->shutdown();
+        delete cinderDelegate;
+        cinderDelegate = nullptr;
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        
+        // ---
+        
+        initialized = false;
+        launched = false;
+        setup = false;
+    }
+}
+
+- (void) performResize
+{
+    auto size = [self windowSize];
+    DLOG(@"CinderBridge:performResize - %dx%d", size.x, size.y);
+    
+    cinderDelegate->resize(size);
+}
+
+- (void) performUpdate
+{
+    cinderDelegate->update();
+}
+
+- (void) performDraw
+{
+    cinderDelegate->draw();
 }
 
 - (GLViewController*) viewController
 {
     if (!viewController)
     {
-        viewController = [[GLViewController alloc] initWithBridge:self properties:viewControllerProperties];
-        cinderDelegate->launch();
+        [self performLaunch];
     }
     
     return viewController;
-}
-
-- (void) setup
-{
-    view = viewController.glView;
-    
-    cinderDelegate->setup(WindowInfo([self windowSize], [self aaLevel]));
-    
-    initialized = YES;
-}
-
-- (void) resize
-{
-    cinderDelegate->resize([self windowSize]);
-}
-
-- (void) update
-{
-    cinderDelegate->update();
-}
-
-- (void) draw
-{
-    cinderDelegate->draw();
 }
 
 - (void) startWithReason:(int)reason
@@ -130,13 +196,14 @@ namespace chr
     {
         case REASON_VIEW_WILL_APPEAR:
         {
+            DLOG(@"CinderBridge:startWithReason - SHOWN");
             cinderDelegate->handleEvent(CinderSketch::EVENT_SHOWN);
-            active = YES;
             break;
         }
             
         case REASON_APPLICATION_DID_BECOME_ACTIVE:
         {
+            DLOG(@"CinderBridge:startWithReason - RESUMED");
             cinderDelegate->handleEvent(CinderSketch::EVENT_RESUMED);
             break;
         }
@@ -149,13 +216,14 @@ namespace chr
     {
         case REASON_VIEW_WILL_DISAPPEAR:
         {
+            DLOG(@"CinderBridge:stopWithReason - HIDDEN");
             cinderDelegate->handleEvent(CinderSketch::EVENT_HIDDEN);
-            active = NO;
             break;
         }
             
         case REASON_APPLICATION_WILL_RESIGN_ACTIVE:
         {
+            DLOG(@"CinderBridge:stopWithReason - PAUSED");
             cinderDelegate->handleEvent(CinderSketch::EVENT_PAUSED);
             break;
         }
@@ -169,9 +237,10 @@ namespace chr
  * https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW46
  */
 
-- (Vec2f) windowSize;
+- (Vec2i) windowSize;
 {
-    Vec2f size;
+    Vec2i size;
+    auto view = viewController.view;
     
     if (getSystemInfo().osVersion[0] >= 8)
     {
@@ -202,7 +271,7 @@ namespace chr
 
 - (int) aaLevel
 {
-    switch (view.drawableMultisample)
+    switch (viewController.glView.drawableMultisample)
     {
         case GLKViewDrawableMultisampleNone:
             return 0;
@@ -296,7 +365,9 @@ namespace chr
 
 - (void) updateActiveTouches
 {
+    auto view = viewController.view;
     float scale = view.contentScaleFactor; // XXX
+
     vector<TouchEvent::Touch> activeTouches;
     
     for (auto &element : touchIdMap)
@@ -312,7 +383,9 @@ namespace chr
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
+    auto view = viewController.view;
     float scale = view.contentScaleFactor; // XXX
+    
     vector<TouchEvent::Touch> touchList;
     
     for (UITouch *touch in touches)
@@ -332,7 +405,9 @@ namespace chr
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
+    auto view = viewController.view;
     float scale = view.contentScaleFactor; // XXX
+    
     vector<TouchEvent::Touch> touchList;
     
     for (UITouch *touch in touches)
@@ -352,7 +427,9 @@ namespace chr
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
+    auto view = viewController.view;
     float scale = view.contentScaleFactor; // XXX
+    
     vector<TouchEvent::Touch> touchList;
     
     for (UITouch *touch in touches)
@@ -402,27 +479,40 @@ namespace chr
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------
 
+- (void) applicationWillTerminate
+{
+    if (initialized)
+    {
+        DLOG(@"CinderBridge:applicationWillTerminate");
+        [self performShutdown];
+    }
+}
+
+
+- (void) applicationDidReceiveMemoryWarning
+{
+    if (initialized)
+    {
+        DLOG(@"CinderBridge:applicationWillTerminate");
+        cinderDelegate->handleEvent(CinderSketch::EVENT_MEMORY_WARNING);
+    }
+}
+
 - (void) applicationWillResignActive
 {
-    if (initialized && !active)
+    if (setup && !viewController.appeared)
     {
+        DLOG(@"CinderBridge:applicationWillResignActive");
         cinderDelegate->handleEvent(CinderSketch::EVENT_BACKGROUND);
     }
 }
 
 - (void) applicationDidBecomeActive
 {
-    if (initialized && !active)
+    if (setup && !viewController.appeared)
     {
+        DLOG(@"CinderBridge:applicationDidBecomeActive");
         cinderDelegate->handleEvent(CinderSketch::EVENT_FOREGROUND);
-    }
-}
-
-- (void) applicationDidReceiveMemoryWarningNotification
-{
-    if (initialized)
-    {
-        cinderDelegate->handleEvent(CinderSketch::EVENT_MEMORY_WARNING);
     }
 }
 

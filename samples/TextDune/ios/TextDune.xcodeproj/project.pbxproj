@@ -52,6 +52,9 @@
 		A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */; };
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
 		A8F595661A07788300877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595651A07788300877FB2 /* Log.cpp */; };
+		A8F828141A6F37C8003C0D8D /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F8280E1A6F37C8003C0D8D /* NSDictionary+DefautValues.m */; };
+		A8F828151A6F37C8003C0D8D /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828101A6F37C8003C0D8D /* NSMutableDictionary+Merge.m */; };
+		A8F828161A6F37C8003C0D8D /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828121A6F37C8003C0D8D /* NSString+JSON.m */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* Application.mm */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
@@ -177,6 +180,13 @@
 		A8F2E318189E5234002D5D75 /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A8F2E31D189E5234002D5D75 /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A8F595651A07788300877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		A8F8280D1A6F37C8003C0D8D /* NSDictionary+DefautValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+DefautValues.h"; sourceTree = "<group>"; };
+		A8F8280E1A6F37C8003C0D8D /* NSDictionary+DefautValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DefautValues.m"; sourceTree = "<group>"; };
+		A8F8280F1A6F37C8003C0D8D /* NSMutableDictionary+Merge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Merge.h"; sourceTree = "<group>"; };
+		A8F828101A6F37C8003C0D8D /* NSMutableDictionary+Merge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Merge.m"; sourceTree = "<group>"; };
+		A8F828111A6F37C8003C0D8D /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
+		A8F828121A6F37C8003C0D8D /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
+		A8F828131A6F37C8003C0D8D /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A8F9979219FAA06000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
@@ -396,6 +406,7 @@
 			isa = PBXGroup;
 			children = (
 				A8836D881A4B005A007733CE /* system */,
+				A8F8280C1A6F37C8003C0D8D /* utils */,
 			);
 			path = cocoa;
 			sourceTree = "<group>";
@@ -432,6 +443,20 @@
 				A8F2E31D189E5234002D5D75 /* TimeBase.h */,
 			);
 			path = time;
+			sourceTree = "<group>";
+		};
+		A8F8280C1A6F37C8003C0D8D /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A8F8280D1A6F37C8003C0D8D /* NSDictionary+DefautValues.h */,
+				A8F8280E1A6F37C8003C0D8D /* NSDictionary+DefautValues.m */,
+				A8F8280F1A6F37C8003C0D8D /* NSMutableDictionary+Merge.h */,
+				A8F828101A6F37C8003C0D8D /* NSMutableDictionary+Merge.m */,
+				A8F828111A6F37C8003C0D8D /* NSString+JSON.h */,
+				A8F828121A6F37C8003C0D8D /* NSString+JSON.m */,
+				A8F828131A6F37C8003C0D8D /* Utils.h */,
+			);
+			path = utils;
 			sourceTree = "<group>";
 		};
 		A8FA3B8316E379B000367F97 /* Classes */ = {
@@ -664,6 +689,7 @@
 				A802714319CC83FD0072973D /* Font.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A8702C121A5B49BC00EF9E9E /* FileHelperBase.cpp in Sources */,
+				A8F828161A6F37C8003C0D8D /* NSString+JSON.m in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */,
 				A8112C951A4F30050002CF68 /* ShapeTesselator.cpp in Sources */,
@@ -676,6 +702,7 @@
 				A8702C131A5B49BC00EF9E9E /* MemoryManagerBase.cpp in Sources */,
 				A826F4921A681FC7002A23A9 /* CinderBridge.mm in Sources */,
 				A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */,
+				A8F828151A6F37C8003C0D8D /* NSMutableDictionary+Merge.m in Sources */,
 				A8702C1A1A5B49CD00EF9E9E /* FileHelper.mm in Sources */,
 				A8112C961A4F30050002CF68 /* SplinePath.cpp in Sources */,
 				A802714619CC83FD0072973D /* TextHelper.cpp in Sources */,
@@ -684,6 +711,7 @@
 				A8FBC44D18E35EE200F5BBEF /* FrameClock.cpp in Sources */,
 				A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */,
 				A8702C171A5B49C800EF9E9E /* DisplayHelper.mm in Sources */,
+				A8F828141A6F37C8003C0D8D /* NSDictionary+DefautValues.m in Sources */,
 				A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */,
 				A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */,
 			);
