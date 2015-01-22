@@ -81,6 +81,7 @@ namespace chr
          *
          * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
          * 2) ADD THREAD-LOCK
+         * 3) HANDLE POTENTIAL "JNI EXCEPTION" IN callObjectMethodOnBridge()
          */
         
         JsonTree jsonQuery(const char *methodName)
@@ -103,6 +104,15 @@ namespace chr
         }
         
         // ---
+        
+        /*
+         * TODO: THROW "JNI EXCEPTION" WITH THE RELEVANT JAVA ERROR MESSAGE
+         *
+         * - IF METHOD CAN'T BE FOUND
+         * - IF CALL FAILED
+         *
+         * HINTS: http://stackoverflow.com/questions/6015293/convert-exceptiondescribe-to-string
+         */
         
         void callVoidMethodOnBridge(const char *name, const char *sig, ...)
         {
@@ -229,13 +239,13 @@ namespace chr
 using namespace chr;
 
 /*
- * WARNING: THIS IS *NOT* NECESSARILY CALLED EACH TIME THE APPLICATION STARTS
+ * WARNING: THIS IS *NOT* NECESSARILY CALLED EACH TIME THE APPLICATION STARTS...
  */
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-    CI_LOGI("ONLOAD");
+    CI_LOGV("ONLOAD");
     
-    jni::vm = vm;
+    jni::vm = vm; // ...THEREFORE: THIS SHOULD *NOT* BE CLEARED
     
     return JNI_VERSION_1_4;
 }
@@ -245,7 +255,7 @@ void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobj
     jni::bridge = env->NewGlobalRef(bridge);
     
     jni::cinderDelegate = new CinderDelegate();
-    jni::cinderDelegate->init(env->NewGlobalRef(context), env->NewGlobalRef(display), Vec2i(displayWidth, displayHeight), displayDensity);
+    jni::cinderDelegate->init(env, context, display, Vec2i(displayWidth, displayHeight), displayDensity);
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
@@ -260,10 +270,13 @@ void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, j
 
 void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
 {
-    jni::cinderDelegate->shutdown();
+    jni::cinderDelegate->shutdown(env);
     delete jni::cinderDelegate;
     
-    CI_LOGI("SHUTDOWN");
+    env->DeleteGlobalRef(jni::bridge);
+    jni::bridge = nullptr;
+    
+    CI_LOGV("SHUTDOWN");
 }
 
 // ---

@@ -30,12 +30,12 @@ namespace chr
     
     // ---
     
-    bool CinderDelegate::init(jobject androidContext, jobject androidDisplay, const Vec2i &displaySize, float displayDensity)
+    bool CinderDelegate::init(JNIEnv *env, jobject androidContext, jobject androidDisplay, const Vec2i &displaySize, float displayDensity)
     {
         intern::instance = this;
         
-        initInfo.androidContext = androidContext;
-        initInfo.androidDisplay = androidDisplay;
+        initInfo.androidContext = env->NewGlobalRef(androidContext);
+        initInfo.androidDisplay = env->NewGlobalRef(androidDisplay);
         initInfo.displaySize = displaySize;
         initInfo.displayDensity = displayDensity;
         
@@ -57,7 +57,7 @@ namespace chr
         _setup();
     }
     
-    void CinderDelegate::shutdown()
+    void CinderDelegate::shutdown(JNIEnv *env)
     {
         /*
          * TODO:
@@ -69,6 +69,9 @@ namespace chr
         
         destroySensorEventQueue();
         stopIOService();
+        
+        env->DeleteGlobalRef(initInfo.androidContext);
+        env->DeleteGlobalRef(initInfo.androidDisplay);
         
         intern::instance = nullptr;
     }
@@ -135,19 +138,19 @@ namespace chr
         switch (eventId)
         {
             case CinderSketch::EVENT_RESUMED:
-                sketch->performStart(CinderSketch::REASON_APP_RESUMED);
+                sketch->performStart(CinderSketch::START_REASON_APP_RESUMED);
                 return;
                 
             case CinderSketch::EVENT_SHOWN:
-                sketch->performStart(CinderSketch::REASON_APP_SHOWN);
+                sketch->performStart(CinderSketch::START_REASON_VIEW_SHOWN);
                 return;
                 
             case CinderSketch::EVENT_PAUSED:
-                sketch->performStop(CinderSketch::REASON_APP_PAUSED);
+                sketch->performStop(CinderSketch::STOP_REASON_APP_PAUSED);
                 return;
                 
             case CinderSketch::EVENT_HIDDEN:
-                sketch->performStop(CinderSketch::REASON_APP_HIDDEN);
+                sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
                 return;
         }
         

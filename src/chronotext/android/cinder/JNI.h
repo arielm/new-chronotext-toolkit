@@ -13,6 +13,14 @@
  *    - E.G. USING "METHOD TABLES":
  *      - http://sbcgamesdev.blogspot.co.il/2012/12/using-jnionload-in-adroid-ndk.html
  *    - MORE JNI WISDOM HERE: http://developer.android.com/training/articles/perf-jni.html
+ *
+ * 2) TRY TO USE std::thread_local INSTEAD OF jni::getEnv()
+ *
+ * 3) STUDY FURTHER "JNI Local Reference Changes in ICS":
+ *    - http://android-developers.blogspot.ie/2011/11/jni-local-reference-changes-in-ics.html
+ *
+ * 4) STUDY "Debugging Android JNI with CheckJNI":
+ *    - http://android-developers.blogspot.co.il/2011/07/debugging-android-jni-with-checkjni.html
  */
 
 #pragma once
@@ -28,7 +36,6 @@ extern "C"
     // ---
 
     void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
-
     void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
