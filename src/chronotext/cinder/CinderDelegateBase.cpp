@@ -28,7 +28,7 @@ namespace chr
         shared_ptr<TaskManager> taskManager;
         
         /*
-         * TODO: MOVE TO TaskManager
+         * TODO: MOVE TO TaskManager?
          */
         boost::asio::io_service *io_service = nullptr;
         thread::id threadId;
@@ -72,7 +72,7 @@ namespace chr
         if (!intern::launched && intern::initialized)
         {
             /*
-             * TODO: MOVE TO TaskManager
+             * TODO: MOVE TO TaskManager?
              */
             intern::io_service = launchInfo.io_service;
             intern::threadId = this_thread::get_id();
@@ -164,7 +164,7 @@ namespace chr
     // ---
     
     /*
-     * TODO: MOVE TO TaskManager
+     * TODO: MOVE TO TaskManager?
      */
     
     namespace os

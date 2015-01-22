@@ -309,7 +309,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     if (self.view)
     {
         DLOG(@"GLViewController:applicationDidBecomeActive");
-        [self startWithReason:REASON_APPLICATION_DID_BECOME_ACTIVE];
+        [self startWithReason:REASON_APP_DID_BECOME_ACTIVE];
     }
 }
 
@@ -318,7 +318,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     if (self.view)
     {
         DLOG(@"GLViewController:applicationWillResignActive");
-        [self stopWithReason:REASON_APPLICATION_WILL_RESIGN_ACTIVE];
+        [self stopWithReason:REASON_APP_WILL_RESIGN_ACTIVE];
     }
 }
 

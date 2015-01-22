@@ -106,19 +106,19 @@ namespace chr
         switch (eventId)
         {
             case CinderSketch::EVENT_RESUMED:
-                sketch->performStart(CinderSketch::REASON_APP_RESUMED);
+                sketch->performStart(CinderSketch::START_REASON_APP_RESUMED);
                 return;
                 
             case CinderSketch::EVENT_SHOWN:
-                sketch->performStart(CinderSketch::REASON_APP_SHOWN);
+                sketch->performStart(CinderSketch::START_REASON_VIEW_SHOWN);
                 return;
                 
             case CinderSketch::EVENT_PAUSED:
-                sketch->performStop(CinderSketch::REASON_APP_PAUSED);
+                sketch->performStop(CinderSketch::STOP_REASON_APP_PAUSED);
                 return;
                 
             case CinderSketch::EVENT_HIDDEN:
-                sketch->performStop(CinderSketch::REASON_APP_HIDDEN);
+                sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
                 return;
         }
         

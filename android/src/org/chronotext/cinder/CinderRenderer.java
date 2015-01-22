@@ -13,6 +13,7 @@ import java.util.Vector;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import org.chronotext.cinder.CinderBridge;
 import org.chronotext.cinder.Touch;
 import org.chronotext.utils.Utils;
 
@@ -36,17 +37,15 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   public static final int EVENT_TRIGGER_BACK = 10;
   public static final int EVENT_TRIGGER_ESCAPE = 11;
 
-  public static final int REASON_RESUMED = 1;
-  public static final int REASON_SHOWN = 2;
-  public static final int REASON_PAUSED = 3;
-  public static final int REASON_HIDDEN = 4;
+  protected CinderBridge cinderBridge;
 
   protected boolean launched;
-  protected boolean initialized;
+  protected boolean setup;
   protected boolean attached;
   protected boolean paused;
   protected boolean hidden;
   protected boolean started;
+  protected boolean shutdown;
 
   protected boolean setupRequest;
   protected boolean contextRenewalRequest;
@@ -59,6 +58,11 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   protected int startReason;
 
   protected int drawCount;
+
+  public CinderRenderer(CinderBridge bridge)
+  {
+    cinderBridge = bridge;
+  }
 
   @Override
   public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -87,7 +91,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
     // ---
 
-    if (!initialized)
+    if (!setup)
     {
       setupRequest = true;
     }
@@ -137,12 +141,12 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   protected void performSetup(int width, int height)
   {
-    if (!initialized)
+    if (!setup)
     {
       Utils.LOGD("CinderRenderer.performSetup: " + width + "x" + height);
       setup(width, height);
 
-      initialized = true;
+      setup = true;
     }
   }
 
@@ -184,14 +188,18 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   protected void start(int reason)
   {
-    Utils.LOGD("CinderRenderer.start: " + (reason == REASON_RESUMED ? "RESUMED" : "SHOWN"));
+    Utils.LOGD("CinderRenderer.start: " + (reason == CinderBridge.START_REASON_APP_RESUMED ? "RESUMED" : "SHOWN"));
+
     dispatchEvent(reason);
+    cinderBridge.sketchDidStart(CinderBridge.THREAD_RENDERER, reason);
   }
 
   protected void stop(int reason)
   {
-    Utils.LOGD("CinderRenderer.stop: " + (reason == REASON_PAUSED ? "PAUSED" : "HIDDEN"));
+    Utils.LOGD("CinderRenderer.stop: " + (reason == CinderBridge.STOP_REASON_APP_PAUSED ? "PAUSED" : "HIDDEN"));
+
     dispatchEvent(reason);
+    cinderBridge.sketchDidStop(CinderBridge.THREAD_RENDERER, reason);
   }
 
   protected void contextLost()
@@ -218,11 +226,11 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     dispatchEvent(EVENT_BACKGROUND);
   }
 
-  // ---------------------------------------- INVOKED ON THE RENDERER'S THREAD FROM GLView ----------------------------------------
+  // ---------------------------------------- POSTED TO THE RENDERER'S THREAD FROM GLView ----------------------------------------
 
   public void contextCreated()
   {
-    if (initialized)
+    if (setup)
     {
       contextRenewalRequest = true;  
     }
@@ -230,7 +238,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   public void contextDestroyed()
   {
-    if (initialized)
+    if (setup)
     {
       contextLost();
     }
@@ -241,7 +249,9 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     if (!launched)
     {
       Utils.LOGD("CinderRenderer.performLaunch");
+
       launch();
+      cinderBridge.sketchDidLaunch(CinderBridge.THREAD_RENDERER);
 
       launched = true;
     }
@@ -249,10 +259,14 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   public void performShutdown()
   {
-    if (initialized)
+    if (setup && !shutdown)
     {
       Utils.LOGD("CinderRenderer.performShutdown");
+
       shutdown();
+      cinderBridge.sketchDidShutdown(CinderBridge.THREAD_RENDERER); // REASON: DETACHED FROM WINDOW
+
+      shutdown = true;
     }
   }
 
@@ -264,7 +278,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
     if (!hidden)
     {
-      requestStart(REASON_SHOWN);
+      requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: ATTACHED TO WINDOW
     }
   }
 
@@ -276,7 +290,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
     if (!paused && !hidden)
     {
-      performStop(REASON_HIDDEN);
+      performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: DETACHED FROM WINDOW
     }
   }
 
@@ -286,12 +300,12 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
     if (hidden)
     {
-      foreground();
+      foreground(); // TODO: TEST
     }
     else
     {
       paused = false;
-      requestStart(REASON_RESUMED);
+      requestStart(CinderBridge.START_REASON_APP_RESUMED); // REASON: APP RESUMED
     }
   }
 
@@ -301,12 +315,12 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
     if (hidden)
     {
-      background();
+      background(); // TODO: TEST
     }
     else
     {
       paused = true;
-      performStop(REASON_PAUSED);
+      performStop(CinderBridge.STOP_REASON_APP_PAUSED); // REASON: APP RESUMED
     }
   }
 
@@ -319,15 +333,15 @@ public class CinderRenderer implements GLSurfaceView.Renderer
       case View.VISIBLE:
       {
         hidden = false;
-        requestStart(REASON_SHOWN);
+        requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: VIEW SHOWN
         break;
       }
 
       case View.GONE:
-      case View.INVISIBLE: // WARNING: THIS ONE SEEMS TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1 V3.1)
+      case View.INVISIBLE: // WARNING: THIS ONE USED TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1, HONEYCOMB)
       {
         hidden = true;
-        performStop(REASON_HIDDEN);
+        performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: VIEW HIDDEN
         break;
       }
     }

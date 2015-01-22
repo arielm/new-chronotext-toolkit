@@ -31,21 +31,36 @@ public class CinderBridge extends Handler
   /*
    * PARALLEL TO chronotext/cinder/CinderSketch.h
    */
+
+  public static final int START_REASON_VIEW_SHOWN = 1;
+  public static final int START_REASON_APP_RESUMED = 2;
+
+  public static final int STOP_REASON_VIEW_HIDDEN = 1;
+  public static final int STOP_REASON_APP_PAUSED = 2;
+
   public static final int ACTION_CAPTURE_BACK = 1;
   public static final int ACTION_RELEASE_BACK = 2;
+
+  // ---
+
+  public static final int THREAD_MAIN = 1;
+  public static final int THREAD_RENDERER = 2;
+
+  // ---
 
   protected Activity activity;
 
   protected GLView view;
   protected GLView.Properties viewProperties;
   
+  protected boolean initialized;
   protected boolean backCaptured;
 
   public CinderBridge(Activity activity)
   {
     this.activity = activity;
 
-    performInit(); // WILL CREATE THE C++ CinderDelegate
+    performInit(); // WILL CREATE THE C++ CinderBridge
   }
 
   public Activity getActivity()
@@ -77,30 +92,49 @@ public class CinderBridge extends Handler
 
   protected void performInit()
   {
-    Display display = DisplayUtils.getDisplay(activity);
-    Point displaySize = DisplayUtils.getRealSize(display);
-    float displayDensity = DisplayUtils.getRealDensity(display);
+    if (!initialized)
+    {
+      Display display = DisplayUtils.getDisplay(activity);
+      Point displaySize = DisplayUtils.getRealSize(display);
+      float displayDensity = DisplayUtils.getRealDensity(display);
 
-    Utils.LOGD("CinderDelegate.performInit: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
-    init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
+      Utils.LOGD("CinderBridge.performInit: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+      init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
+
+      initialized = true;
+    }
   }
 
   // ---------------------------------------- INVOKED ON THE MAIN-THREAD FROM GLView ----------------------------------------
 
   /*
-   * TODO INSTEAD (ANDROID / IOS):
+   * IN PROGRESS...
    *
-   * USE A SINGLE handleEvent(int eventId) METHOD
+   * ALTERNATIVE: USING A SINGLE handleEvent(int eventId) METHOD (CONS: LONG AND CUMBERSOME ENUMS...)
+   *
+   * TODO:
+   * - COMPLETE "BRIDGE CALLBACKS" SYSTEM
+   * - INPUT (E.G. TOUCH, ACCELEROMETER), "POSTED FUNCTIONS", ETC. SHOULD BE DISPATCHED IN THE SAME ORDER ON ALL THE SUPPORTED PLATFORMS
    */
 
-  public void pausing()
-  {}
+//public void appWillPause(int threadId) {}
+//public void appDidResume(int threadId) {}
+//public void appWillTerminate(int threadId) {}
 
-  public void resuming()
-  {}
+  public void sketchDidInit(int threadId) {}
+  public void sketchDidSetup(int threadId) {}
 
-  public void finishing()
-  {}
+  public void sketchWillLaunch(int threadId) {}
+  public void sketchDidLaunch(int threadId) {}
+
+  public void sketchWillStart(int threadId, int reason) {}
+  public void sketchDidStart(int threadId, int reason) {}
+
+  public void sketchWillStop(int threadId, int reason) {}
+  public void sketchDidStop(int threadId, int reason) {}
+
+  public void sketchWillShutdown(int threadId) {}
+  public void sketchDidShutdown(int threadId) {}
 
   // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERRIDE) ----------------------------------------
 
@@ -111,7 +145,7 @@ public class CinderBridge extends Handler
   {
     if (view != null)
     {
-      Utils.LOGD("CinderDelegate.onPause");
+      Utils.LOGD("CinderBridge.onPause");
       view.onPause();
     }
   }
@@ -123,7 +157,7 @@ public class CinderBridge extends Handler
   {
     if (view != null)
     {
-      Utils.LOGD("CinderDelegate.onResume");
+      Utils.LOGD("CinderBridge.onResume");
       view.onResume();
     }
   }
@@ -133,10 +167,10 @@ public class CinderBridge extends Handler
    */
   public void onDestroy()
   {
-    if (view != null)
+    if (view != null) // TODO: ALSO CHECK IF view IS VALID
     {
-      Utils.LOGD("CinderDelegate.onDestroy");
-      view.onDestroy();
+      Utils.LOGD("CinderBridge.onDestroy");
+      sketchWillShutdown(CinderBridge.THREAD_MAIN); // REASON: APP DESTROYED
     }
   }
   
@@ -147,7 +181,7 @@ public class CinderBridge extends Handler
   {
     if (view != null)
     {
-      Utils.LOGD("CinderDelegate.onBackPressed");
+      Utils.LOGD("CinderBridge.onBackPressed");
 
       if (backCaptured)
       {

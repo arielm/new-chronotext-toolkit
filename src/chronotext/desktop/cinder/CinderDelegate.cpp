@@ -59,7 +59,7 @@ namespace chr
         /*
          * NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
          */
-        sketch->performStop(CinderSketch::REASON_APP_HIDDEN);
+        sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
 
         _shutdown();
         
@@ -84,7 +84,7 @@ namespace chr
             /*
              * NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
              */
-            sketch->performStart(CinderSketch::REASON_APP_SHOWN);
+            sketch->performStart(CinderSketch::START_REASON_VIEW_SHOWN);
             
             /*
              * DESKTOP-ONLY WORKAROUND [1/4]

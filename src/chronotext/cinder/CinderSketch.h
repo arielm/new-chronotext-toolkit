@@ -24,12 +24,16 @@ namespace chr
     class CinderSketch : public SuperHandler
     {
     public:
-        enum Reason
+        enum StartReason
         {
-            REASON_APP_SHOWN,
-            REASON_APP_HIDDEN,
-            REASON_APP_RESUMED,
-            REASON_APP_PAUSED
+            START_REASON_VIEW_SHOWN = 1,
+            START_REASON_APP_RESUMED
+        };
+        
+        enum StopReason
+        {
+            STOP_REASON_VIEW_HIDDEN = 1,
+            STOP_REASON_APP_PAUSED
         };
         
         enum
@@ -65,8 +69,8 @@ namespace chr
         virtual void event(int eventId) {}
 
         virtual void resize() {}
-        virtual void start(Reason reason) {}
-        virtual void stop(Reason reason) {}
+        virtual void start(StartReason reason) {}
+        virtual void stop(StopReason reason) {}
 
         virtual void update() {}
         virtual void draw() {}
@@ -108,8 +112,8 @@ namespace chr
         
         void performSetup(const WindowInfo &windowInfo);
         void performResize(const ci::Vec2i &size);
-        void performStart(Reason reason);
-        void performStop(Reason reason);
+        void performStart(StartReason reason);
+        void performStop(StopReason reason);
         void performUpdate();
     };
 }

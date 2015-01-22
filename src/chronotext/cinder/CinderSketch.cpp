@@ -61,7 +61,7 @@ namespace chr
         }
     }
     
-    void CinderSketch::performStart(Reason reason)
+    void CinderSketch::performStart(StartReason reason)
     {
         frameCount = 0;
         
@@ -71,7 +71,7 @@ namespace chr
         start(reason);
     }
     
-    void CinderSketch::performStop(Reason reason)
+    void CinderSketch::performStop(StopReason reason)
     {
         timer.stop();
         _clock->stop();
