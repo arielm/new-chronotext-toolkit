@@ -201,7 +201,7 @@ namespace chr
             break;
         }
             
-        case REASON_APPLICATION_DID_BECOME_ACTIVE:
+        case REASON_APP_DID_BECOME_ACTIVE:
         {
             DLOG(@"CinderBridge:startWithReason - RESUMED");
             cinderDelegate->handleEvent(CinderSketch::EVENT_RESUMED);
@@ -221,7 +221,7 @@ namespace chr
             break;
         }
             
-        case REASON_APPLICATION_WILL_RESIGN_ACTIVE:
+        case REASON_APP_WILL_RESIGN_ACTIVE:
         {
             DLOG(@"CinderBridge:stopWithReason - PAUSED");
             cinderDelegate->handleEvent(CinderSketch::EVENT_PAUSED);
@@ -463,10 +463,8 @@ namespace chr
 
 - (void) sendMessageToSketch:(int)what json:(id)json
 {
-    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
-    NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    
-    cinderDelegate->messageFromBridge(what, [string UTF8String]);
+    NSString *body = [NSString stringWithJSONObject:json];
+    cinderDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
@@ -503,7 +501,7 @@ namespace chr
     if (setup && !viewController.appeared)
     {
         DLOG(@"CinderBridge:applicationWillResignActive");
-        cinderDelegate->handleEvent(CinderSketch::EVENT_BACKGROUND);
+        cinderDelegate->handleEvent(CinderSketch::EVENT_BACKGROUND); // TODO: TEST
     }
 }
 
@@ -512,7 +510,7 @@ namespace chr
     if (setup && !viewController.appeared)
     {
         DLOG(@"CinderBridge:applicationDidBecomeActive");
-        cinderDelegate->handleEvent(CinderSketch::EVENT_FOREGROUND);
+        cinderDelegate->handleEvent(CinderSketch::EVENT_FOREGROUND); // TODO: TEST
     }
 }
 
