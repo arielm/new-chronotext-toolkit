@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "chronotext/Utils.h"
+#include "chronotext/utils/Utils.h"
 
 #include "cinder/Timer.h"
 
@@ -31,13 +31,10 @@ namespace chr
         
         void start(const std::string &message = "")
         {
-            if (!started)
-            {
-                Timing::message = message;
-                
-                timer.start();
-                started = true;
-            }
+            this->message = message;
+            
+            timer.start();
+            started = true;
         }
         
         void stop()
@@ -45,9 +42,11 @@ namespace chr
             if (started)
             {
                 double elapsed = timer.getSeconds();
+                
+                timer.stop();
                 started = false;
                 
-                string prefix = message.empty() ? "" : (message + ": ");
+                std::string prefix = message.empty() ? "" : (message + ": ");
                 LOGI << prefix << utils::format::duration(elapsed, 3) << std::endl;
             }
         }

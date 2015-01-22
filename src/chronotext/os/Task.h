@@ -52,7 +52,7 @@ namespace chr
         virtual void run() = 0;
         
         /*
-         * THE FOLLOWING 4 CAN BE INVOKED FROM ANY THREAD
+         * THE FOLLOWING 3 CAN BE INVOKED FROM ANY THREAD
          */
         int getId();
         bool isRunning();
