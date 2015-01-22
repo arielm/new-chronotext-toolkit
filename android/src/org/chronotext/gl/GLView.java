@@ -69,7 +69,7 @@ public class GLView extends GLSurfaceView
   protected boolean attached;
   protected boolean paused;
   protected boolean hidden;
-  protected boolean finishing;
+  protected boolean exiting;
   protected boolean shutdown;
 
   public GLView(Context context, CinderBridge bridge, Properties properties)
@@ -139,7 +139,7 @@ public class GLView extends GLSurfaceView
   }
 
   @Override
-  public void onWindowFocusChanged(final boolean hasFocus)
+  public void onWindowFocusChanged(boolean hasFocus)
   {
     Utils.LOGD("GLView.onWindowFocusChanged: " + hasFocus);
     super.onWindowFocusChanged(hasFocus);
@@ -159,6 +159,12 @@ public class GLView extends GLSurfaceView
     if (!attached)
     {
       attached = true;
+
+      if (!hidden)
+      {
+        cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN); // TODO: TEST
+      }
+
       super.onAttachedToWindow();
 
       queueEvent(new Runnable()
@@ -168,11 +174,6 @@ public class GLView extends GLSurfaceView
           cinderRenderer.attachedToWindow();
         }
       });
-
-      if (!hidden)
-      {
-        cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN); // TODO: TEST
-      }
     }
   }
 
@@ -181,29 +182,56 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onDetachedFromWindow");
 
-    if (shutdown || finishing)
+    if (shutdown || exiting)
     {
       return;
     }
 
     if (attached)
     {
-      /*
-       * A TRICKY-BUT-CERTAIN WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
-       * SEE ALSO: GLView.onDestroy() AND GLView.CustomContextFactory.destroyContext()
-       */
       attached = false;
 
+      if (!hidden)
+      {
+        cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
+      }
+
+      cinderBridge.sketchWillShutdown(CinderBridge.THREAD_MAIN);
+
       /*
-       * WILL CAUSE THE RENDERER'S THREAD TO EXIT
-       * (EVENTS QUEUED RIGHT BEFORE-OR-AFTER THIS WILL NEVER BE DELIVERED)
+       * SEEMS THE ONLY WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
+       * SEE ALSO: GLView.CustomContextFactory.destroyContext()
+       *
+       * CONDITION: GL-CONTEXT MUST HAVE BEEN CREATED
+       *
+       * PROBLEM: THIS WON'T HAPPEN IF THE GL-VIEW WAS NOT VISIBLE WHILE ATTACHED
+       * SOLUTION: NO OBVIOUS GLSurfaceView HACK FOR NOW!
+       *
+       * THEREFORE, IF WE WANT TO ALLOW THE ATTACHMENT OF NON-VISIBLE GL-VIEWS:
+       * - CinderSketch::shutdown() MUST BE SOLELY ASSOCIATED THE WITH RENDERERER'S THREAD, I.E.
+       *   - IT WILL ONLY OCCUR IF setup() WAS CALLED (I.E. GL-VIEW WAS VISIBLE AT SOME POINT WHILE ATTACHED)
+       *   - CinderSketch::uninit() MUST BE REINTRODUCED (ASSOCIATED WITH init() AND THE MAIN-THREAD)
+       *   - CinderSketch::launch() MUST BE CANCELLED:
+       *     - OTHERWISE, STUFF ALLOCATED DURING THE CALLBACK MAY NEVER BE RELEASED (I.E. IF setup() IS NEVER REACHED...)
+       *     - AND IN ANY-CASE, THE FOLLOWING WAS ALREADY PROBLEMATIC:
+       *       - Q: WHAT HAPPENS TO STUFF POSTED (I.E. TO SERVICE-IO, ON THE MAIN-THREAD) AFTER launch()
+       *            WHEN setup() IS NOT IMMEDIATLY CALLED?
+       *       - A: THE STUFF IS NEVER ACTUALLY "CONSUMED", BECAUSE SERVICE-IO-POLLING
+       *            IS TAKING PLACE DURING SKETCH UPDATE
+       */
+      exiting = true;
+
+      /*
+       * WILL WAIT UNTIL THE RENDERER'S THREAD HAS EXITED
        */
       super.onDetachedFromWindow();
 
       if (!hidden)
       {
-        cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN); // TODO: TEST
+        cinderBridge.sketchDidStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
       }
+
+      cinderBridge.sketchDidShutdown(CinderBridge.THREAD_MAIN);
     }
   }
 
@@ -212,7 +240,7 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.visibilityChanged: " + visibility);
 
-    if (shutdown || finishing)
+    if (shutdown || exiting)
     {
       return;
     }
@@ -239,7 +267,7 @@ public class GLView extends GLSurfaceView
       {
         public void run()
         {
-          cinderRenderer.visibilityChanged(visibility); // TODO: SHOULD A MORE "SPECIFIC" METHOD BE USED?
+          cinderRenderer.visibilityChanged(visibility);
         }
       });
 
@@ -260,7 +288,7 @@ public class GLView extends GLSurfaceView
   @Override
   public boolean onTouchEvent(MotionEvent event)
   {
-    if (shutdown || finishing)
+    if (shutdown || exiting)
     {
       return false;
     }
@@ -363,7 +391,7 @@ public class GLView extends GLSurfaceView
 
   public boolean resume()
   {
-    if (!shutdown && !finishing)
+    if (!shutdown && !exiting)
     {
       if (attached && paused) // SIMPLE PROTECTION AGAINST SPURIOUS onResume() CALLS
       {
@@ -387,7 +415,7 @@ public class GLView extends GLSurfaceView
 
   public boolean pause()
   {
-    if (!shutdown && !finishing)
+    if (!shutdown && !exiting)
     {
       if (attached && !paused) // SIMPLE PROTECTION AGAINST SPURIOUS onPause() CALLS
       {
@@ -409,27 +437,11 @@ public class GLView extends GLSurfaceView
     return false;
   }
 
-  public boolean shutdown()
-  {
-    if (!shutdown && !finishing)
-    {
-      /*
-       * A TRICKY-BUT-CERTAIN WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
-       * SEE ALSO: GLView.onDetachedFromWindow() AND GLView.CustomContextFactory.destroyContext()
-       */
-      finishing = true;
-
-      return true;
-    }
-
-    return false;
-  }
-
   public boolean backPressed()
   {
-    if (!shutdown && !finishing)
+    if (!shutdown && !exiting)
     {
-      if (attached && !paused)
+      if (attached && !hidden)
       {
         queueEvent(new Runnable()
         {
@@ -483,24 +495,16 @@ public class GLView extends GLSurfaceView
       Utils.LOGD("CustomContextFactory.destroyContext");
       cinderRenderer.contextDestroyed();
 
-      if (!attached || finishing)
+      if (exiting)
       {
+        exiting = false;
         shutdown = true;
 
         /*
-         * TODO: THESE 2 COULD BE MERGE A MORE "SPECIFIC" METHOD
+         * TODO: THESE 2 COULD BE MERGED INTO A MORE "SPECIFIC" METHOD
          */
         cinderRenderer.detachedFromWindow();
         cinderRenderer.performShutdown();
-
-        /*
-         * TODO: TRY TO NOTIFY CinderBridge ON THE MAIN-THREAD
-         *
-         * - SO THAT IT CAN AVOID USING GLView FURTHER
-         * - SO THAT IT CAN CALL CinderBridge.sketchDidShutdown()
-         *
-         * UPDATE: THIS SHOULD BE FEASIBLE BY SIMPLY "WAITING" FOR super.onDetachedFromWindow()
-         */
       }
 
       egl.eglDestroyContext(display, context);

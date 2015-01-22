@@ -161,18 +161,6 @@ public class CinderBridge extends Handler
       }
     }
   }
-
-  public void onDestroy()
-  {
-    if (view != null)
-    {
-      if (view.shutdown())
-      {
-        Utils.LOGD("CinderBridge.onDestroy");
-        sketchWillShutdown(CinderBridge.THREAD_MAIN); // REASON: APP DESTROYED
-      }
-    }
-  }
   
   public boolean onBackPressed()
   {
