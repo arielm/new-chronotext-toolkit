@@ -138,54 +138,50 @@ public class CinderBridge extends Handler
 
   // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERRIDE) ----------------------------------------
 
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD
-   */
   public void onPause()
   {
     if (view != null)
     {
-      Utils.LOGD("CinderBridge.onPause");
-      view.onPause();
+      if (view.pause())
+      {
+        Utils.LOGD("CinderBridge.onPause");
+        sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_APP_PAUSED);
+      }
     }
   }
 
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD
-   */
   public void onResume()
   {
     if (view != null)
     {
-      Utils.LOGD("CinderBridge.onResume");
-      view.onResume();
+      if (view.resume())
+      {
+        Utils.LOGD("CinderBridge.onResume");
+        sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_APP_RESUMED);
+      }
     }
   }
 
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD
-   */
   public void onDestroy()
   {
-    if (view != null) // TODO: ALSO CHECK IF view IS VALID
+    if (view != null)
     {
-      Utils.LOGD("CinderBridge.onDestroy");
-      sketchWillShutdown(CinderBridge.THREAD_MAIN); // REASON: APP DESTROYED
+      if (view.shutdown())
+      {
+        Utils.LOGD("CinderBridge.onDestroy");
+        sketchWillShutdown(CinderBridge.THREAD_MAIN); // REASON: APP DESTROYED
+      }
     }
   }
   
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD
-   */
   public boolean onBackPressed()
   {
     if (view != null)
     {
-      Utils.LOGD("CinderBridge.onBackPressed");
-
       if (backCaptured)
       {
-        return view.onBackPressed();
+        Utils.LOGD("CinderBridge.onBackPressed");
+        return view.backPressed();
       }
     }
 
@@ -196,6 +192,9 @@ public class CinderBridge extends Handler
 
   /*
    * WILL BE QUEUED TO THE MAIN-THREAD (VIA JAVA-HANDLER)
+   *
+   * TODO: DO NOT NECESSARILY QUEUE EVERY MESSSAGE TO THE MAIN-THREAD
+   * PRE-REQUISITE: RECEIVING ADDITIONAL INFO FROM SKETCH REGARDING THE "CURRENT" AND "DESTINATION" THREADS, ETC.
    */
   public void messageFromSketch(int what, String body)
   {
@@ -204,6 +203,8 @@ public class CinderBridge extends Handler
 
   /*
    * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
+   *
+   * TODO: HANDLE MESSAGES SENT "BEFORE LAUNCH"
    */
   public void sendMessageToSketch(int what)
   {

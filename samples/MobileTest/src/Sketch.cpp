@@ -49,13 +49,13 @@ void Sketch::setup()
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::start(Reason reason)
+void Sketch::start(StartReason reason)
 {
     acceleration = Vec2f::zero();
     delegate().enableAccelerometer(15);
 }
 
-void Sketch::stop(Reason reason)
+void Sketch::stop(StopReason reason)
 {
     delegate().disableAccelerometer();
 }

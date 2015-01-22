@@ -11,7 +11,7 @@
  *
  * OSX: COMMIT af2ac55
  * IOS: LATEST COMMIT
- * ANDROID: COMMIT af2ac55
+ * ANDROID: LATEST COMMIT
  */
 
 /*
@@ -51,8 +51,8 @@ public:
     
     void setup() final;
 
-    void start(Reason reason) final;
-    void stop(Reason reason) final;
+    void start(StartReason reason) final;
+    void stop(StopReason reason) final;
 
     void update() final;
     void draw() final;

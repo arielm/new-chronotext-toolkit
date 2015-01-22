@@ -257,6 +257,9 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     }
   }
 
+  /*
+   * TODO: CONSIDER MERGING WITH CinderRenderer.detachedFromWindow()
+   */
   public void performShutdown()
   {
     if (setup && !shutdown)
@@ -272,26 +275,35 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   public void attachedToWindow()
   {
-    Utils.LOGD("CinderRenderer.attachedToWindow");
-
-    attached = true;
-
-    if (!hidden)
+    if (!attached)
     {
-      requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: ATTACHED TO WINDOW
+      Utils.LOGD("CinderRenderer.attachedToWindow");
+
+      attached = true;
+
+      if (!hidden)
+      {
+        requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: ATTACHED TO WINDOW
+      }
     }
   }
 
+  /*
+   * TODO: CONSIDER MERGING WITH CinderRenderer.performShutdown()
+   */
   public void detachedFromWindow()
   {
-    Utils.LOGD("CinderRenderer.detachedFromWindow");
-
-    attached = false;
-
-    if (!paused && !hidden)
+    if (attached)
     {
-      performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: DETACHED FROM WINDOW
-    }
+      Utils.LOGD("CinderRenderer.detachedFromWindow");
+
+      attached = false;
+
+      if (!paused && !hidden)
+      {
+        performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: DETACHED FROM WINDOW
+      }
+    } 
   }
 
   public void resumed()

@@ -26,13 +26,14 @@ public class Bridge extends CinderBridge
 
   static final int GLVIEW_ATTACHED_AND_VISIBLE_AT_START = 1;
   static final int GLVIEW_ATTACHED_AND_HIDDEN_AT_START = 2;
-  static final int GLVIEW_NOT_ATTACHED_AT_START = 3; // NOT RECOMMENDED!
+  static final int GLVIEW_NOT_ATTACHED_AT_START = 3; // XXX: WAS NOT RECOMMENDED
 
-  int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
-  // boolean contentViewIsGLView = true;
+  boolean CAN_BE_HIDDEN = true;
+  boolean CAN_BE_DETACHED = true;
 
-  // int testMode = GLVIEW_NOT_ATTACHED_AT_START;
-  boolean contentViewIsGLView = false;
+//int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
+  int testMode = GLVIEW_ATTACHED_AND_HIDDEN_AT_START;
+//int testMode = GLVIEW_NOT_ATTACHED_AT_START;
 
   RelativeLayout rootView;
   RelativeLayout overlayView;
@@ -40,6 +41,7 @@ public class Bridge extends CinderBridge
   Button button1;
   Button button2;
 
+  boolean hasRootView;
   boolean hidden;
   boolean detached;
 
@@ -49,45 +51,55 @@ public class Bridge extends CinderBridge
 
     // ---
 
+    switch (testMode)
+    {
+      case GLVIEW_ATTACHED_AND_VISIBLE_AT_START:
+        hidden = false;
+        detached = false;
+        break;
+
+      case GLVIEW_ATTACHED_AND_HIDDEN_AT_START:
+        hidden = true;
+        detached = false;
+        break;
+
+      default:
+      case GLVIEW_NOT_ATTACHED_AT_START:
+        hidden = false;
+        detached = true;
+        break;
+    }
+
+    hasRootView = CAN_BE_HIDDEN || CAN_BE_DETACHED || hidden || detached;
+
+    // ---
+
     setViewProperties(new GLView.Properties()
       .setEGLContextClientVersion(1)
       .setPreserveEGLContextOnPause(true));
 
-    if (!contentViewIsGLView)
+    if (hasRootView)
     {
       rootView = new RelativeLayout(activity);
       rootView.setBackgroundColor(Color.YELLOW);
       activity.setContentView(rootView);
     }
 
-    if (testMode == GLVIEW_ATTACHED_AND_VISIBLE_AT_START || testMode == GLVIEW_ATTACHED_AND_HIDDEN_AT_START)
+    if (!detached)
     {
-      if (contentViewIsGLView)
+      if (hidden)
       {
-        activity.setContentView(getView());
+        getView().setVisibility(View.GONE);
       }
-      else
+
+      if (hasRootView)
       {
         rootView.addView(getView());
       }
-     
-      if (testMode == GLVIEW_ATTACHED_AND_HIDDEN_AT_START)
+      else
       {
-        getView().setVisibility(View.GONE);
-      }  
-    }
-    else if (testMode == GLVIEW_NOT_ATTACHED_AT_START)
-    {
-      if (contentViewIsGLView)
-      {
-        Utils.LOGE("INVALID TEST MODE");
-        return;
+        activity.setContentView(getView());
       }
-    }
-    else
-    {
-      Utils.LOGE("UNDEFINED TEST MODE");
-      return;
     }
 
     // ---    
@@ -130,23 +142,29 @@ public class Bridge extends CinderBridge
       case 1:
         if (hidden)
         {
+          hidden = false;
           getView().setVisibility(View.VISIBLE);
         }
         else
         {
+          hidden = true;
           getView().setVisibility(View.GONE);
         }
+
         break;
 
       case 2:
         if (detached)
         {
+          detached = false;
           rootView.addView(getView());
         }
         else
         {
+          detached = true;
           rootView.removeView(getView());
         }
+
         break;
     }
 
@@ -155,11 +173,8 @@ public class Bridge extends CinderBridge
 
   void refreshButtons()
   {
-    hidden = (getView().getVisibility() != View.VISIBLE);
-    detached = (getView().getParent() == null);
-
     button1.setVisibility(detached ? View.GONE : View.VISIBLE);
-    button2.setVisibility(contentViewIsGLView ? View.GONE : View.VISIBLE);
+    button2.setVisibility(hasRootView ? View.VISIBLE : View.GONE);
 
     button1.setText(hidden ? "show" : "hide");
     button2.setText(detached ? "attach" : "detach");
