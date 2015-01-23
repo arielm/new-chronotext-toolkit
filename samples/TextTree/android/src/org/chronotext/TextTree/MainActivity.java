@@ -1,11 +1,10 @@
 
 package org.chronotext.TextTree;
 
-import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.cinder.CinderBridge;
 import org.chronotext.utils.Utils;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 public class MainActivity extends Activity
@@ -18,42 +17,35 @@ public class MainActivity extends Activity
     System.loadLibrary("TextTree");
   }
 
-  CinderDelegate delegate;
+  CinderBridge bridge;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
 
-    delegate = new CinderDelegate(this);
-    setContentView(delegate.getView());
+    bridge = new CinderBridge(this);
+    setContentView(bridge.getView());
   }
 
   @Override
   protected void onPause()
   {
     super.onPause();
-    delegate.onPause();
+    bridge.onPause();
   }
 
   @Override
   protected void onResume()
   {
     super.onResume();
-    delegate.onResume();
-  }
-  
-  @Override
-  protected void onDestroy()
-  {
-    super.onDestroy();
-    delegate.onDestroy();
+    bridge.onResume();
   }
 
   @Override
   public void onBackPressed()
   {
-    if (!delegate.onBackPressed())
+    if (!bridge.onBackPressed())
     {
       super.onBackPressed();
     }

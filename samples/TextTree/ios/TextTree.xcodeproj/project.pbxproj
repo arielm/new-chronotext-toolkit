@@ -34,13 +34,11 @@
 		A8702C2E1A5B49FD00EF9E9E /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702C291A5B49FD00EF9E9E /* SystemManagerBase.cpp */; };
 		A8702C311A5B4A0A00EF9E9E /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8702C301A5B4A0A00EF9E9E /* FileHelper.mm */; };
 		A8702C341A5B4A1400EF9E9E /* DisplayHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8702C331A5B4A1400EF9E9E /* DisplayHelper.mm */; };
-		A874A4FB1A2B2F16009A60A0 /* CinderSketch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A874A4FA1A2B2F16009A60A0 /* CinderSketch.mm */; };
 		A874A4FD1A2B2FB5009A60A0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A874A4FC1A2B2FB5009A60A0 /* main.cpp */; };
 		A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */; };
 		A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D816E75A3700F27EDE /* Texture.cpp */; };
 		A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E016E75A3700F27EDE /* TextureHelper.cpp */; };
 		A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E216E75A3700F27EDE /* TextureManager.cpp */; };
-		A8836D661A4AFFE5007733CE /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D641A4AFFE5007733CE /* Context.cpp */; };
 		A8836D711A4B0008007733CE /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D671A4B0008007733CE /* Handler.cpp */; };
 		A8836D721A4B0008007733CE /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D6B1A4B0008007733CE /* SuperHandler.cpp */; };
 		A8836D731A4B0008007733CE /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D6D1A4B0008007733CE /* Task.cpp */; };
@@ -51,13 +49,16 @@
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
 		A8F595661A07788300877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595651A07788300877FB2 /* Log.cpp */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
-		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
+		A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* Application.mm */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
-		A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */; };
 		A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC716E3AB8000367F97 /* GLViewController.mm */; };
 		A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */; };
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
 		A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0516E3AB8000367F97 /* Utils.cpp */; };
+		A8FBA62B1A71D22700D6B4A3 /* CinderDelegateBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBA6261A71D22700D6B4A3 /* CinderDelegateBase.cpp */; };
+		A8FBA62C1A71D22700D6B4A3 /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBA6281A71D22700D6B4A3 /* CinderSketch.cpp */; };
+		A8FBA6311A71D23D00D6B4A3 /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBA62E1A71D23D00D6B4A3 /* CinderBridge.mm */; };
+		A8FBA6321A71D23D00D6B4A3 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBA6301A71D23D00D6B4A3 /* CinderDelegate.mm */; };
 		A8FBC44D18E35EE200F5BBEF /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC44B18E35EE200F5BBEF /* FrameClock.cpp */; };
 		A8FBC45118E35F4100F5BBEF /* SystemManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FBC45018E35F4100F5BBEF /* SystemManager.mm */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -110,7 +111,6 @@
 		A8112CBC1A4F39380002CF68 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../resources/dot.png; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		A85483B819CE12CD00B7866C /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
 		A86902621A0308F000D2C9F3 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		A8702C1B1A5B49FD00EF9E9E /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A8702C1C1A5B49FD00EF9E9E /* DisplayHelperBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelperBase.cpp; sourceTree = "<group>"; };
@@ -132,9 +132,6 @@
 		A8702C301A5B4A0A00EF9E9E /* FileHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHelper.mm; sourceTree = "<group>"; };
 		A8702C321A5B4A1400EF9E9E /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A8702C331A5B4A1400EF9E9E /* DisplayHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DisplayHelper.mm; sourceTree = "<group>"; };
-		A8720806180833E10055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
-		A874A4F91A2B2F16009A60A0 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
-		A874A4FA1A2B2F16009A60A0 /* CinderSketch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderSketch.mm; sourceTree = "<group>"; };
 		A874A4FC1A2B2FB5009A60A0 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
 		A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A87CE0D516E75A3700F27EDE /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
@@ -144,7 +141,6 @@
 		A87CE0E116E75A3700F27EDE /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureHelper.h; sourceTree = "<group>"; };
 		A87CE0E216E75A3700F27EDE /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
 		A87CE0E316E75A3700F27EDE /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
-		A8836D641A4AFFE5007733CE /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
 		A8836D651A4AFFE5007733CE /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
 		A8836D671A4B0008007733CE /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A8836D681A4B0008007733CE /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
@@ -174,13 +170,10 @@
 		A8F595651A07788300877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9979219FAA06000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		A8FA3B9616E3AB8000367F97 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
+		A8FA3B8B16E39A7C00367F97 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		A8FA3B8C16E39A7C00367F97 /* Application.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Application.mm; sourceTree = "<group>"; };
 		A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
 		A8FA3BBE16E3AB8000367F97 /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
-		A8FA3BC116E3AB8000367F97 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
-		A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
 		A8FA3BC616E3AB8000367F97 /* GLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLViewController.h; sourceTree = "<group>"; };
 		A8FA3BC716E3AB8000367F97 /* GLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLViewController.mm; sourceTree = "<group>"; };
 		A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
@@ -189,6 +182,16 @@
 		A8FA3C0116E3AB8000367F97 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		A8FA3C0516E3AB8000367F97 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		A8FA3C0616E3AB8000367F97 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		A8FBA6251A71D22700D6B4A3 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A8FBA6261A71D22700D6B4A3 /* CinderDelegateBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderDelegateBase.cpp; sourceTree = "<group>"; };
+		A8FBA6271A71D22700D6B4A3 /* CinderDelegateBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegateBase.h; sourceTree = "<group>"; };
+		A8FBA6281A71D22700D6B4A3 /* CinderSketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketch.cpp; sourceTree = "<group>"; };
+		A8FBA6291A71D22700D6B4A3 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
+		A8FBA62A1A71D22700D6B4A3 /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
+		A8FBA62D1A71D23D00D6B4A3 /* CinderBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderBridge.h; sourceTree = "<group>"; };
+		A8FBA62E1A71D23D00D6B4A3 /* CinderBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderBridge.mm; sourceTree = "<group>"; };
+		A8FBA62F1A71D23D00D6B4A3 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A8FBA6301A71D23D00D6B4A3 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
 		A8FBC44B18E35EE200F5BBEF /* FrameClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameClock.cpp; sourceTree = "<group>"; };
 		A8FBC44C18E35EE200F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
 		A8FBC44F18E35F4100F5BBEF /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
@@ -434,8 +437,8 @@
 		A8FA3B8316E379B000367F97 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */,
-				A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */,
+				A8FA3B8B16E39A7C00367F97 /* Application.h */,
+				A8FA3B8C16E39A7C00367F97 /* Application.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -444,7 +447,6 @@
 			isa = PBXGroup;
 			children = (
 				A8836D651A4AFFE5007733CE /* Context.h */,
-				A8836D641A4AFFE5007733CE /* Context.cpp */,
 				A8F9979219FAA06000F08369 /* Exception.h */,
 				A86902621A0308F000D2C9F3 /* Log.h */,
 				A8F595651A07788300877FB2 /* Log.cpp */,
@@ -469,9 +471,12 @@
 		A8FA3B9316E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3B9616E3AB8000367F97 /* CinderSketch.h */,
-				A8720806180833E10055F0BA /* CinderSketchBase.h */,
-				A85483B819CE12CD00B7866C /* WindowInfo.h */,
+				A8FBA6251A71D22700D6B4A3 /* CinderDelegate.h */,
+				A8FBA6261A71D22700D6B4A3 /* CinderDelegateBase.cpp */,
+				A8FBA6271A71D22700D6B4A3 /* CinderDelegateBase.h */,
+				A8FBA6281A71D22700D6B4A3 /* CinderSketch.cpp */,
+				A8FBA6291A71D22700D6B4A3 /* CinderSketch.h */,
+				A8FBA62A1A71D22700D6B4A3 /* WindowInfo.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -489,10 +494,10 @@
 		A8FA3BC016E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3BC116E3AB8000367F97 /* CinderDelegate.h */,
-				A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */,
-				A874A4F91A2B2F16009A60A0 /* CinderSketch.h */,
-				A874A4FA1A2B2F16009A60A0 /* CinderSketch.mm */,
+				A8FBA62D1A71D23D00D6B4A3 /* CinderBridge.h */,
+				A8FBA62E1A71D23D00D6B4A3 /* CinderBridge.mm */,
+				A8FBA62F1A71D23D00D6B4A3 /* CinderDelegate.h */,
+				A8FBA6301A71D23D00D6B4A3 /* CinderDelegate.mm */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -640,22 +645,22 @@
 			files = (
 				A8112C931A4F30050002CF68 /* Hairline.cpp in Sources */,
 				A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */,
-				A8836D661A4AFFE5007733CE /* Context.cpp in Sources */,
 				A802715119CC83FD0072973D /* QuadMatrix.cpp in Sources */,
 				A8112C941A4F30050002CF68 /* ShapeMesh.cpp in Sources */,
 				A802714519CC83FD0072973D /* FontSequence.cpp in Sources */,
 				A8702C341A5B4A1400EF9E9E /* DisplayHelper.mm in Sources */,
 				A8112C921A4F30050002CF68 /* FXGDocument.cpp in Sources */,
 				A8836D711A4B0008007733CE /* Handler.cpp in Sources */,
-				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
+				A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */,
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8F595661A07788300877FB2 /* Log.cpp in Sources */,
+				A8FBA6321A71D23D00D6B4A3 /* CinderDelegate.mm in Sources */,
 				A8FBC45118E35F4100F5BBEF /* SystemManager.mm in Sources */,
 				A8702C2B1A5B49FD00EF9E9E /* DisplayHelperBase.cpp in Sources */,
-				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
 				A8836D731A4B0008007733CE /* Task.cpp in Sources */,
+				A8FBA62C1A71D22700D6B4A3 /* CinderSketch.cpp in Sources */,
 				A874A4FD1A2B2FB5009A60A0 /* main.cpp in Sources */,
 				A802714319CC83FD0072973D /* Font.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
@@ -665,11 +670,12 @@
 				A8112C951A4F30050002CF68 /* ShapeTesselator.cpp in Sources */,
 				A8112C911A4F30050002CF68 /* FollowablePath.cpp in Sources */,
 				A8702C2E1A5B49FD00EF9E9E /* SystemManagerBase.cpp in Sources */,
+				A8FBA62B1A71D22700D6B4A3 /* CinderDelegateBase.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
-				A874A4FB1A2B2F16009A60A0 /* CinderSketch.mm in Sources */,
 				A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */,
 				A8836D921A4B005A007733CE /* MemoryManager.mm in Sources */,
 				A8836D741A4B0008007733CE /* TaskManager.cpp in Sources */,
+				A8FBA6311A71D23D00D6B4A3 /* CinderBridge.mm in Sources */,
 				A8702C2D1A5B49FD00EF9E9E /* MemoryManagerBase.cpp in Sources */,
 				A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */,
 				A8112C961A4F30050002CF68 /* SplinePath.cpp in Sources */,

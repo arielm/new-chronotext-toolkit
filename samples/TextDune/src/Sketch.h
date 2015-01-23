@@ -17,9 +17,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT af2ac55
- * IOS: LATEST COMMIT
- * ANDROID: COMMIT af2ac55
+ * OSX: COMMIT 49c2b15
+ * IOS: COMMIT 49c2b15
+ * ANDROID: COMMIT 49c2b15
  */
 
 #pragma once

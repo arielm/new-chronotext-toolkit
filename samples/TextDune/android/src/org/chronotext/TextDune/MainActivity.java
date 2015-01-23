@@ -5,7 +5,6 @@ import org.chronotext.cinder.CinderBridge;
 import org.chronotext.utils.Utils;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 public class MainActivity extends Activity
@@ -41,13 +40,6 @@ public class MainActivity extends Activity
   {
     super.onResume();
     bridge.onResume();
-  }
-  
-  @Override
-  protected void onDestroy()
-  {
-    super.onDestroy();
-    bridge.onDestroy();
   }
 
   @Override

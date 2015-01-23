@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "chronotext/app/cinder/CinderDelegate.h"
+#include "chronotext/cinder/CinderDelegate.h"
 
 class Application : public chr::CinderDelegate
 {

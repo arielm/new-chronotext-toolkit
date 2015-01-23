@@ -8,6 +8,7 @@
 
 #include "Sketch.h"
 
+#include "chronotext/Context.h"
 #include "chronotext/utils/GLUtils.h"
 
 using namespace std;
@@ -51,7 +52,7 @@ void Sketch::draw()
 
 bool Sketch::keyDown(const KeyEvent &event)
 {
-    switch (getCode(event))
+    switch (delegate().getCode(event))
     {
         case KeyEvent::KEY_d:
             textureManager.discardTextures();

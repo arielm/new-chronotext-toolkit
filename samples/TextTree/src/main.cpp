@@ -8,24 +8,19 @@ namespace chr
     {
         return new Sketch();
     }
-    
-    void destroySketch(CinderSketch *sketch)
-    {
-        delete sketch;
-    }
 }
 
 #pragma mark ----------------------------------------   IOS   ----------------------------------------
 
 #if defined(CINDER_COCOA_TOUCH)
 
-#include "AppDelegate.h"
+#include "Application.h"
 
 int main(int argc, char *argv[])
 {
     @autoreleasepool
     {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([Application class]));
     }
 }
 

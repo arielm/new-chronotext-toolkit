@@ -10,12 +10,13 @@
  * STUB FOR RUNNING A CinderSketch ON iOS
  */
 
-#import <Foundation/Foundation.h>
+#pragma once
 
-#import "CinderDelegate.h"
+#import "CinderBridge.h"
 
-@interface AppDelegate : CinderDelegate <UIApplicationDelegate>
+@interface Application : NSObject <UIApplicationDelegate>
 {
+    CinderBridge *bridge;
     UIWindow *window;
 }
 
