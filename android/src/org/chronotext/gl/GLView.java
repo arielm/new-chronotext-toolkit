@@ -196,7 +196,7 @@ public class GLView extends GLSurfaceView
         cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
       }
 
-      cinderBridge.sketchWillShutdown(CinderBridge.THREAD_MAIN);
+      cinderBridge.sketchWillShutdown(CinderBridge.THREAD_MAIN); // TODO: SHOULD TAKE PLACE ONLY IF "SETUP" TOOK PLACE
 
       /*
        * SEEMS THE ONLY WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
@@ -231,7 +231,7 @@ public class GLView extends GLSurfaceView
         cinderBridge.sketchDidStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
       }
 
-      cinderBridge.sketchDidShutdown(CinderBridge.THREAD_MAIN);
+      cinderBridge.sketchDidShutdown(CinderBridge.THREAD_MAIN); // TODO: SHOULD TAKE PLACE ONLY IF "SETUP" TOOK PLACE
     }
   }
 

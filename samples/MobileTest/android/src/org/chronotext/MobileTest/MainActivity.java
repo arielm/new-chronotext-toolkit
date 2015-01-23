@@ -36,13 +36,6 @@ public class MainActivity extends Activity
     super.onResume();
     bridge.onResume();
   }
-
-  @Override
-  protected void onDestroy()
-  {
-    super.onDestroy();
-    bridge.onDestroy();
-  }
   
   @Override
   public void onBackPressed()
