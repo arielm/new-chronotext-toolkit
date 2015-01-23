@@ -144,7 +144,9 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     if (!setup)
     {
       Utils.LOGD("CinderRenderer.performSetup: " + width + "x" + height);
+
       setup(width, height);
+      cinderBridge.sketchDidSetup(CinderBridge.THREAD_RENDERER);
 
       setup = true;
     }
@@ -168,13 +170,21 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   protected void performStart(int reason)
   {
-    start(reason);
+    Utils.LOGD("CinderRenderer.start: " + (reason == CinderBridge.START_REASON_APP_RESUMED ? "RESUMED" : "SHOWN"));
+
+    dispatchEvent(reason == CinderBridge.START_REASON_APP_RESUMED ? CinderRenderer.EVENT_RESUMED : CinderRenderer.EVENT_SHOWN);
+    cinderBridge.sketchDidStart(CinderBridge.THREAD_RENDERER, reason);
+
     started = true;
   }
   
   protected void performStop(int reason)
   {
-    stop(reason);
+    Utils.LOGD("CinderRenderer.stop: " + (reason == CinderBridge.STOP_REASON_APP_PAUSED ? "PAUSED" : "HIDDEN"));
+
+    dispatchEvent(reason == CinderBridge.STOP_REASON_APP_PAUSED ? CinderRenderer.EVENT_PAUSED : CinderRenderer.EVENT_HIDDEN);
+    cinderBridge.sketchDidStop(CinderBridge.THREAD_RENDERER, reason);
+
     started = false;
   }
 
@@ -185,22 +195,6 @@ public class CinderRenderer implements GLSurfaceView.Renderer
   }
 
   // ---
-
-  protected void start(int reason)
-  {
-    Utils.LOGD("CinderRenderer.start: " + (reason == CinderBridge.START_REASON_APP_RESUMED ? "RESUMED" : "SHOWN"));
-
-    dispatchEvent(reason);
-    cinderBridge.sketchDidStart(CinderBridge.THREAD_RENDERER, reason);
-  }
-
-  protected void stop(int reason)
-  {
-    Utils.LOGD("CinderRenderer.stop: " + (reason == CinderBridge.STOP_REASON_APP_PAUSED ? "PAUSED" : "HIDDEN"));
-
-    dispatchEvent(reason);
-    cinderBridge.sketchDidStop(CinderBridge.THREAD_RENDERER, reason);
-  }
 
   protected void contextLost()
   {
@@ -312,7 +306,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
     if (hidden)
     {
-      foreground(); // TODO: TEST
+      foreground();
     }
     else
     {
@@ -327,7 +321,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
     if (hidden)
     {
-      background(); // TODO: TEST
+      background();
     }
     else
     {

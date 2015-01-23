@@ -103,8 +103,6 @@ public class GLView extends GLSurfaceView
 
     // ---
 
-    cinderBridge.sketchWillLaunch(CinderBridge.THREAD_MAIN);
-
     cinderRenderer = new CinderRenderer(cinderBridge);
     setRenderer(cinderRenderer); // WILL START THE RENDERER'S THREAD
 
@@ -162,7 +160,7 @@ public class GLView extends GLSurfaceView
 
       if (!hidden)
       {
-        cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN); // TODO: TEST
+        cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN);
       }
 
       super.onAttachedToWindow();
@@ -275,11 +273,11 @@ public class GLView extends GLSurfaceView
       {
         if (hidden)
         {
-          cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN); // TODO: TEST
+          cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
         }
         else
         {
-          cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN); // TODO: TEST
+          cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN);
         }
       }
     }

@@ -60,7 +60,7 @@ public class CinderBridge extends Handler
   {
     this.activity = activity;
 
-    performInit(); // WILL CREATE THE C++ CinderBridge
+    performInit(); // WILL CREATE THE C++ CinderDelegate
   }
 
   public Activity getActivity()
@@ -99,7 +99,9 @@ public class CinderBridge extends Handler
       float displayDensity = DisplayUtils.getRealDensity(display);
 
       Utils.LOGD("CinderBridge.performInit: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
+
       init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
+      sketchDidInit(CinderBridge.THREAD_MAIN);
 
       initialized = true;
     }
@@ -122,10 +124,8 @@ public class CinderBridge extends Handler
 //public void appWillTerminate(int threadId) {}
 
   public void sketchDidInit(int threadId) {}
-  public void sketchDidSetup(int threadId) {}
-
-  public void sketchWillLaunch(int threadId) {}
   public void sketchDidLaunch(int threadId) {}
+  public void sketchDidSetup(int threadId) {}
 
   public void sketchWillStart(int threadId, int reason) {}
   public void sketchDidStart(int threadId, int reason) {}
@@ -164,11 +164,12 @@ public class CinderBridge extends Handler
   
   public boolean onBackPressed()
   {
-    if (view != null)
+    if (view != null) // TODO: ALSO CHECK IF shutdown
     {
+      Utils.LOGD("CinderBridge.onBackPressed");
+
       if (backCaptured)
       {
-        Utils.LOGD("CinderBridge.onBackPressed");
         return view.backPressed();
       }
     }
@@ -181,7 +182,7 @@ public class CinderBridge extends Handler
   /*
    * WILL BE QUEUED TO THE MAIN-THREAD (VIA JAVA-HANDLER)
    *
-   * TODO: DO NOT NECESSARILY QUEUE EVERY MESSSAGE TO THE MAIN-THREAD
+   * TODO: DO NOT NECESSARILY QUEUE EVERY MESSSAGE TO THE MAIN-THREAD?
    * PRE-REQUISITE: RECEIVING ADDITIONAL INFO FROM SKETCH REGARDING THE "CURRENT" AND "DESTINATION" THREADS, ETC.
    */
   public void messageFromSketch(int what, String body)
@@ -192,7 +193,7 @@ public class CinderBridge extends Handler
   /*
    * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
    *
-   * TODO: HANDLE MESSAGES SENT "BEFORE LAUNCH"
+   * TODO: HANDLE MESSAGES SENT "BEFORE LAUNCH"?
    */
   public void sendMessageToSketch(int what)
   {
