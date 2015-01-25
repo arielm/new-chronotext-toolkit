@@ -10,7 +10,7 @@
 
 #include "chronotext/InputSource.h"
 
-#include "FMOD.hpp"
+#include "fmod.hpp"
 
 namespace chr
 {

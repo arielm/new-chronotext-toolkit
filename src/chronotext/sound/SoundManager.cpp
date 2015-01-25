@@ -223,7 +223,7 @@ namespace chr
         if (reloadEffect(effect))
         {
             FMOD::Channel *channel;
-            system->playSound(FMOD_CHANNEL_FREE, effect->sound, true, &channel);
+            system->playSound(effect->sound, masterGroup, true, &channel);
             
             if (loopCount)
             {
@@ -419,30 +419,34 @@ namespace chr
     
     FMOD::Sound* SoundManager::loadSound(FMOD::System *system, const Effect::Request &request)
     {
-        if (SoundManager::PROBE_MEMORY)
-        {
-            memoryInfo[0] = getMemoryInfo();
-        }
-        
-        // ---
-        
-        FMOD_RESULT result = FMOD_ERR_UNINITIALIZED;
         FMOD::Sound *sound = nullptr;
+
+        int currentalloced1;
+        int maxalloced1;
+        FMOD_RESULT result = FMOD::Memory_GetStats(&currentalloced1, &maxalloced1);
         
-        if (request.forceMemoryLoad || !request.inputSource->isFile())
+        if (!result)
         {
-            auto buffer = request.inputSource->loadDataSource()->getBuffer();
-            
-            FMOD_CREATESOUNDEXINFO exinfo;
-            memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
-            exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
-            exinfo.length = buffer.getDataSize();
-            
-            result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
-        }
-        else
-        {
-            result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
+            if (SoundManager::PROBE_MEMORY)
+            {
+                memoryInfo[0] = getMemoryInfo();
+            }
+
+            if (request.forceMemoryLoad || !request.inputSource->isFile())
+            {
+                auto buffer = request.inputSource->loadDataSource()->getBuffer();
+                
+                FMOD_CREATESOUNDEXINFO exinfo;
+                memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
+                exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
+                exinfo.length = (unsigned int)buffer.getDataSize();
+                
+                result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
+            }
+            else
+            {
+                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
+            }
         }
         
         if (result)
@@ -450,22 +454,17 @@ namespace chr
             throw EXCEPTION(SoundManager, FMOD_ErrorString(result));
         }
 
-        assert(sound);
-
-        // ---
-        
-        auto memoryUsage = getSoundMemoryUsage(sound);
-        records[sound] = Record({memoryUsage, memoryInfo[0]});
+        if (sound)
+        {
+            int currentalloced2;
+            int maxalloced2;
+            FMOD::Memory_GetStats(&currentalloced2, &maxalloced2);
+            
+            auto memoryUsage = currentalloced2 - currentalloced1;
+            records[sound] = Record({memoryUsage, memoryInfo[0]});
+        }
         
         return sound;
-    }
-    
-    int64_t SoundManager::getSoundMemoryUsage(FMOD::Sound *sound)
-    {
-        unsigned int memoryused;
-        sound->getMemoryInfo(FMOD_MEMBITS_SOUND, 0, &memoryused, nullptr);
-        
-        return memoryused;
     }
     
     double SoundManager::getSoundDuration(FMOD::Sound *sound)

@@ -39,6 +39,7 @@
  *
  * 4) FIND A WAY TO ENFORCE THE CALLING OF pause() AND resume()
  *    - NECESSARY ON ANDROID, UPON FOREGROUND/BACKGROUND SWITCHES
+ *    - POSSIBLE SOLUTION: chr::delegate() SHOULD ALLOW "SUBSCRIPTION TO SYSTEM SIGNALS"
  */
 
 #pragma once
@@ -183,7 +184,6 @@ namespace chr
         static std::map<FMOD::Sound*, Record> records;
         
         static FMOD::Sound* loadSound(FMOD::System *system, const Effect::Request &request); // CAN THROW
-        static int64_t getSoundMemoryUsage(FMOD::Sound *sound);
         static double getSoundDuration(FMOD::Sound *sound);
         
     protected:
