@@ -19,6 +19,7 @@ namespace chr
     namespace zf
     {
         atomic<bool> FontManager::LOG_VERBOSE (false);
+        atomic<bool> FontManager::LOG_WARNING (true);
 
         FontManager::FontManager()
         :
@@ -336,7 +337,7 @@ namespace chr
             }
             catch (exception &e)
             {
-                LOGI_IF(LOG_VERBOSE) << e.what() << " - " << descriptor.inputSource->getURI() << endl;
+                LOGI_IF(LOG_WARNING) << e.what() << " - " << descriptor.inputSource->getURI() << endl;
             }
             
             return nullptr;
