@@ -1,9 +1,19 @@
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/include/utf8-cpp
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/src/libtess2
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CINDER_PATH)/blocks/Freetype/include
+ifndef CINDER_PATH
+    $(error CINDER_PATH MUST BE DEFINED!)
+endif
 
-CHR_SRC = $(CHR_BLOCK)/src
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CHR_SRC)
+ifndef CHR_BLOCK_PATH
+    $(error CHR_BLOCK_PATH MUST BE DEFINED!)
+endif
+
+###
+
+LOCAL_C_INCLUDES += $(CINDER_PATH)/include/utf8-cpp
+LOCAL_C_INCLUDES += $(CINDER_PATH)/src/libtess2
+LOCAL_C_INCLUDES += $(CINDER_PATH)/blocks/Freetype/include
+
+CHR_SRC = $(CHR_BLOCK_PATH)/src
+LOCAL_C_INCLUDES += $(CHR_SRC)
 
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/InputSource.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/Log.cpp
