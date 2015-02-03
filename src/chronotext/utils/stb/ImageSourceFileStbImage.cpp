@@ -78,14 +78,9 @@ void ImageSourceFileStbImage::load( ImageTargetRef target )
 
 void ImageSourceFileStbImage::registerSelf()
 {
-#if defined(FORCE_STB_FOR_PNG_AND_JPG)
     ImageIoRegistrar::registerSourceType("png", ImageSourceFileStbImage::createRef, 1);
     ImageIoRegistrar::registerSourceType("jpg", ImageSourceFileStbImage::createRef, 1);
     ImageIoRegistrar::registerSourceType("jpeg", ImageSourceFileStbImage::createRef, 1);
-#else
-	const int32_t SOURCE_PRIORITY = 3;
-	ImageIoRegistrar::registerSourceGeneric( ImageSourceFileStbImage::createRef, SOURCE_PRIORITY );
-#endif
 }
 
 ImageSourceFileStbImage::~ImageSourceFileStbImage()
