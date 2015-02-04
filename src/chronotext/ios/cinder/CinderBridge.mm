@@ -491,7 +491,7 @@ namespace chr
 {
     if (initialized)
     {
-        DLOG(@"CinderBridge:applicationWillTerminate");
+        DLOG(@"CinderBridge:applicationDidReceiveMemoryWarning");
         cinderDelegate->handleEvent(CinderSketch::EVENT_MEMORY_WARNING);
     }
 }
