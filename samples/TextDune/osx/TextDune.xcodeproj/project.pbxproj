@@ -56,6 +56,7 @@
 		A8836D5A1A4AFE23007733CE /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D531A4AFE23007733CE /* SuperHandler.cpp */; };
 		A8836D5B1A4AFE23007733CE /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D551A4AFE23007733CE /* Task.cpp */; };
 		A8836D5C1A4AFE23007733CE /* TaskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D571A4AFE23007733CE /* TaskManager.cpp */; };
+		A8EAC8771A82447D003BC1D3 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EAC8741A82447D003BC1D3 /* ImageSourceFileStbImage.cpp */; };
 		A8F2E312189E4FDE002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E30A189E4FDE002D5D75 /* Clock.cpp */; };
 		A8F2E314189E4FDE002D5D75 /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E30F189E4FDE002D5D75 /* FrameClock.cpp */; };
 		A8F595621A07783000877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595611A07783000877FB2 /* Log.cpp */; };
@@ -177,6 +178,9 @@
 		A8836D961A4B08EB007733CE /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8836D971A4B08EB007733CE /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A8836D981A4B08EB007733CE /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
+		A8EAC8741A82447D003BC1D3 /* ImageSourceFileStbImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSourceFileStbImage.cpp; sourceTree = "<group>"; };
+		A8EAC8751A82447D003BC1D3 /* ImageSourceFileStbImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSourceFileStbImage.h; sourceTree = "<group>"; };
+		A8EAC8761A82447D003BC1D3 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		A8F2E30A189E4FDE002D5D75 /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
 		A8F2E30B189E4FDE002D5D75 /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A8F2E30C189E4FDE002D5D75 /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
@@ -432,6 +436,7 @@
 		A82C90F416E00B3B00FF519C /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				A8EAC8731A82447D003BC1D3 /* stb */,
 				A82C90FB16E00B3B00FF519C /* GLUtils.h */,
 				A82C90FA16E00B3B00FF519C /* GLUtils.cpp */,
 				A82C90FE16E00B3B00FF519C /* MathUtils.h */,
@@ -522,6 +527,16 @@
 				A8112BEF1A4DA3EE0002CF68 /* Application.cpp */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		A8EAC8731A82447D003BC1D3 /* stb */ = {
+			isa = PBXGroup;
+			children = (
+				A8EAC8741A82447D003BC1D3 /* ImageSourceFileStbImage.cpp */,
+				A8EAC8751A82447D003BC1D3 /* ImageSourceFileStbImage.h */,
+				A8EAC8761A82447D003BC1D3 /* stb_image.h */,
+			);
+			path = stb;
 			sourceTree = "<group>";
 		};
 		A8F2E309189E4FDE002D5D75 /* time */ = {
@@ -629,6 +644,7 @@
 				A8702B751A5B472200EF9E9E /* MemoryManagerBase.cpp in Sources */,
 				A8702B731A5B472200EF9E9E /* DisplayHelperBase.cpp in Sources */,
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
+				A8EAC8771A82447D003BC1D3 /* ImageSourceFileStbImage.cpp in Sources */,
 				A8112C591A4EDD040002CF68 /* ShapeTesselator.cpp in Sources */,
 				A802711319CC7B7C0072973D /* QuadMatrix.cpp in Sources */,
 				A8112C581A4EDD040002CF68 /* ShapeMesh.cpp in Sources */,
