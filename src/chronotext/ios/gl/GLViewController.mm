@@ -136,7 +136,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     {
         appeared = YES;
         
-        DLOG(@"GLViewController:viewWillAppear | beingPresented: %hhd | movingToParentViewController: %hhd", [self isBeingPresented], [self isMovingToParentViewController]);
+        DLOG(@"GLViewController:viewWillAppear | beingPresented: %d | movingToParentViewController: %d", [self isBeingPresented], [self isMovingToParentViewController]);
         [self startWithReason:REASON_VIEW_WILL_APPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -153,7 +153,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     {
         appeared = NO;
         
-        DLOG(@"GLViewController:viewWillDisappear | beingDismissed: %hhd | movingFromParentViewController: %hhd", [self isBeingDismissed], [self isMovingFromParentViewController]);
+        DLOG(@"GLViewController:viewWillDisappear | beingDismissed: %d | movingFromParentViewController: %d", [self isBeingDismissed], [self isMovingFromParentViewController]);
         [self stopWithReason:REASON_VIEW_WILL_DISAPPEAR];
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
