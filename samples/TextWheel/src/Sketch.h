@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -68,8 +68,6 @@
 class Sketch : public chr::CinderSketch
 {
 public:
-    chr::zf::FontManager fontManager;
-
     void setup() final;
     void resize() final;
     
@@ -77,13 +75,11 @@ public:
     void draw() final;
 
     bool keyDown(const ci::app::KeyEvent &event) final;
-
-    void addVersion(const std::string &lang);
-    void nextVersion();
-    void previousVersion();
     
 protected:
+    chr::zf::FontManager fontManager;
     std::shared_ptr<chr::ZFont> font;
+    
     TextSpiral spiral;
     
     std::vector<std::string> languages;
@@ -94,4 +90,8 @@ protected:
     float rotation;
     float direction;
     int currentLangIndex;
+
+    void addVersion(const std::string &lang);
+    void nextVersion();
+    void previousVersion();
 };

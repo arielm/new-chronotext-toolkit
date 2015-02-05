@@ -20,10 +20,12 @@ ALWAYS_SEARCH_USER_PATHS = YES
 USER_HEADER_SEARCH_PATHS = "$(CINDER_PATH)/boost" "$(CINDER_PATH)/blocks/new-chronotext-toolkit/src"
 HEADER_SEARCH_PATHS = ../include "$(CINDER_PATH)/include" "$(CINDER_PATH)/src/libtess2" "$(CINDER_PATH)/blocks/Freetype/include" "$(CINDER_PATH)/blocks/hb-icu/include/icu/common" "$(CINDER_PATH)/blocks/hb-icu/include/hb"
 
-LIBRARY_SEARCH_PATHS =
-BASE_OTHER_LDFLAGS = -lz "$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a" "$(CINDER_PATH)/blocks/hb-icu/lib/osx/libicu-common.a" "$(CINDER_PATH)/blocks/hb-icu/lib/osx/libhb.a"
+LIBRARY_SEARCH_PATHS = "$(CINDER_PATH)/blocks/Freetype/lib/osx" "$(CINDER_PATH)/blocks/hb-icu/lib/osx"
+BASE_OTHER_LDFLAGS = -lz -lfreetype -licu-common -lhb
 
 BASE_GCC_PREPROCESSOR_DEFINITIONS =
+
+//
 
 PRODUCT_NAME = TextWheel
 INFOPLIST_FILE = Info.plist
