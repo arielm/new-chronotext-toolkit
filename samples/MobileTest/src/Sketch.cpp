@@ -32,7 +32,7 @@ const float DT = 1.0f;
 void Sketch::setup()
 {
     TextureManager::LOG_VERBOSE = true;
-    TextureManager::PROBE_MEMORY = true;
+    FontManager::LOG_VERBOSE = true;
 
     dot = textureManager.getTexture(InputSource::getResource("dot_112.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
     font = fontManager.getFont(InputSource::getResource("Roboto_Regular_64.fnt"), XFont::Properties2d());
@@ -135,7 +135,7 @@ void Sketch::event(int eventId)
 
 bool Sketch::keyDown(const KeyEvent &keyEvent)
 {
-    switch (delegate().getCode(keyEvent))
+    switch (CinderDelegate::getCode(keyEvent))
     {
         case KeyEvent::KEY_w:
             event(EVENT_MEMORY_WARNING);

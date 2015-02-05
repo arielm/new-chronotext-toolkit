@@ -25,6 +25,8 @@ const float TEXT_SIZE = 20;
 
 void Sketch::setup()
 {
+    FontManager::LOG_VERBOSE = true;
+    
     fontManager.loadConfig(InputSource::getResource("font-config.xml"));
     
     font = fontManager.getFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
@@ -93,7 +95,7 @@ void Sketch::draw()
 
 bool Sketch::keyDown(const KeyEvent &event)
 {
-    switch (delegate().getCode(event))
+    switch (CinderDelegate::getCode(event))
     {
         case KeyEvent::KEY_RIGHT:
             nextVersion();
