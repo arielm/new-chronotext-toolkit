@@ -24,30 +24,45 @@ namespace chr
         
         // ---
         
-        /*
-         * FIXME: SCREEN-SIZE EVALUATION ON IPHONE 6 IS MORE COMPLICATED...
-         * https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW46
-         */
-        
         void Helper::setup(const system::InitInfo &initInfo)
         {
             if (!intern::setup)
             {
                 auto bounds = UIScreen.mainScreen.bounds;
-                auto contentScale = UIScreen.mainScreen.scale;
                 auto orientation = UIApplication.sharedApplication.statusBarOrientation;
-                
+                float contentScale;
+
                 // ---
                 
                 Vec2i baseSize;
                 
-                if (getSystemInfo().osVersion[0] >= 8)
+                if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
                 {
+                    /*
+                     * TODO:
+                     *
+                     * 1) TEST ON IPHONE 6 AND 6+ DEVICES
+                     *
+                     * 2) HANDLE "DISPLAY ZOOM" MODES:
+                     *    https://github.com/brackeen/glfm/blob/c3d7a72872d82eac903285b6f108ea83ac79e66c/src/glfm_platform_ios.m#L366-371
+                     */
+                    
+                    /*
+                     * ON IPHONE 6+:
+                     * - DEVICE: ~2.609 (3 * 1920 / 2208)
+                     * - SIMULATOR: 3
+                     *
+                     * OTHERWISE: EQUALS TO UIScreen.mainScreen.scale
+                     */
+                    contentScale = UIScreen.mainScreen.nativeScale;
+
                     baseSize.x = bounds.size.width;
                     baseSize.y = bounds.size.height;
                 }
                 else
                 {
+                    contentScale = UIScreen.mainScreen.scale;
+                    
                     switch (orientation)
                     {
                         case UIDeviceOrientationUnknown:
@@ -82,7 +97,7 @@ namespace chr
                 {
                     diagonal = 4.70f; // IPHONE 6
                 }
-                else if (magSize == 360 * 640)
+                else if (magSize == 414 * 736)
                 {
                     diagonal = 5.50f; // IPHONE 6+
                 }

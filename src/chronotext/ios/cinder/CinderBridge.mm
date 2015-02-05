@@ -232,17 +232,12 @@ namespace chr
 
 #pragma mark ---------------------------------------- WINDOW-INFO ----------------------------------------
 
-/*
- * FIXME: SCREEN-SIZE EVALUATION ON IPHONE 6 IS MORE COMPLICATED...
- * https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW46
- */
-
 - (Vec2i) windowSize;
 {
     Vec2i size;
     auto view = viewController.view;
     
-    if (getSystemInfo().osVersion[0] >= 8)
+    if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
     {
         size.x = view.frame.size.width;
         size.y = view.frame.size.height;

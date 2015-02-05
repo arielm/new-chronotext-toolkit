@@ -111,15 +111,28 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
     glView = (GLKView*)self.view;
     glView.context = [[[EAGLContext alloc] initWithAPI:(EAGLRenderingAPI)[[properties objectForKey:kGLViewControllerPropertyRenderingAPI] intValue]] autorelease];
-    
+
     self.preferredFramesPerSecond = [[properties objectForKey:kGLViewControllerPropertyPreferredFramesPerSecond] intValue];
     self.view.multipleTouchEnabled = [[properties objectForKey:kGLViewControllerPropertyMultipleTouchEnabled] boolValue];
-    
+
     glView.drawableColorFormat = (GLKViewDrawableColorFormat)[[properties objectForKey:kGLViewControllerPropertyColorFormat] intValue];
     glView.drawableDepthFormat = (GLKViewDrawableDepthFormat)[[properties objectForKey:kGLViewControllerPropertyDepthFormat] intValue];
     glView.drawableStencilFormat = (GLKViewDrawableStencilFormat)[[properties objectForKey:kGLViewControllerPropertyStencilFormat] intValue];
     glView.drawableMultisample = (GLKViewDrawableMultisample)[[properties objectForKey:kGLViewControllerPropertyMultisample] intValue];
     
+    /*
+     * TODO:
+     *
+     * 1) TEST ON IPHONE 6 AND 6+ DEVICES
+     *
+     * 2) HANDLE "DISPLAY ZOOM" MODES:
+     *    https://github.com/brackeen/glfm/blob/c3d7a72872d82eac903285b6f108ea83ac79e66c/src/glfm_platform_ios.m#L366-371
+     */
+    if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
+    {
+        self.view.contentScaleFactor = UIScreen.mainScreen.nativeScale;
+    }
+
     // ---
     
     [EAGLContext setCurrentContext:glView.context]; // MUST TAKE PLACE BEFORE "SETUP"
@@ -139,7 +152,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         DLOG(@"GLViewController:viewWillAppear | beingPresented: %d | movingToParentViewController: %d", [self isBeingPresented], [self isMovingToParentViewController]);
         [self startWithReason:REASON_VIEW_WILL_APPEAR];
         
-        NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
         [center addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
     }
@@ -156,7 +169,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
         DLOG(@"GLViewController:viewWillDisappear | beingDismissed: %d | movingFromParentViewController: %d", [self isBeingDismissed], [self isMovingFromParentViewController]);
         [self stopWithReason:REASON_VIEW_WILL_DISAPPEAR];
         
-        NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         [center removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
         [center removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     }
