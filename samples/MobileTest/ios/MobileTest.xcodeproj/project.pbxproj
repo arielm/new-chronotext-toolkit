@@ -26,6 +26,8 @@
 		A826F4F61A6C0167002A23A9 /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4F41A6C0167002A23A9 /* CinderSketch.cpp */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
+		A863AAB71A83D30C0030B052 /* Default-736h.png in Resources */ = {isa = PBXBuildFile; fileRef = A863AAB51A83D30C0030B052 /* Default-736h.png */; };
+		A863AAB81A83D30C0030B052 /* Default-667h.png in Resources */ = {isa = PBXBuildFile; fileRef = A863AAB61A83D30C0030B052 /* Default-667h.png */; };
 		A8702BC31A5B489500EF9E9E /* DisplayHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702BB41A5B489500EF9E9E /* DisplayHelperBase.cpp */; };
 		A8702BC41A5B489500EF9E9E /* FileHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702BB81A5B489500EF9E9E /* FileHelperBase.cpp */; };
 		A8702BC51A5B489500EF9E9E /* MemoryManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702BBC1A5B489500EF9E9E /* MemoryManagerBase.cpp */; };
@@ -103,6 +105,9 @@
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A85483B819CE12CD00B7866C /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
+		A863AAB51A83D30C0030B052 /* Default-736h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h.png"; sourceTree = "<group>"; };
+		A863AAB61A83D30C0030B052 /* Default-667h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h.png"; sourceTree = "<group>"; };
+		A863AAB91A83D4F70030B052 /* DistributionConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DistributionConfig.xcconfig; sourceTree = "<group>"; };
 		A86902621A0308F000D2C9F3 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		A8702BB31A5B489500EF9E9E /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A8702BB41A5B489500EF9E9E /* DisplayHelperBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelperBase.cpp; sourceTree = "<group>"; };
@@ -344,6 +349,7 @@
 				A8836DA61A4B1319007733CE /* Config.xcconfig */,
 				A8836DA71A4B1319007733CE /* DebugConfig.xcconfig */,
 				A8836DA81A4B1319007733CE /* ReleaseConfig.xcconfig */,
+				A863AAB91A83D4F70030B052 /* DistributionConfig.xcconfig */,
 				D616014D45B744EF83271CE8 /* Info.plist */,
 				125ACA23B6814C2888F2E57E /* Prefix.pch */,
 				A8FA3B8316E379B000367F97 /* Classes */,
@@ -357,6 +363,8 @@
 			children = (
 				A82C900716DF91D300FF519C /* icon.png */,
 				A82C900816DF91D300FF519C /* Default-568h@2x.png */,
+				A863AAB51A83D30C0030B052 /* Default-736h.png */,
+				A863AAB61A83D30C0030B052 /* Default-667h.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -613,8 +621,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A863AAB81A83D30C0030B052 /* Default-667h.png in Resources */,
 				A802711919CC83E20072973D /* dot_112.png in Resources */,
 				A802711819CC83E20072973D /* Roboto_Regular_64.fnt in Resources */,
+				A863AAB71A83D30C0030B052 /* Default-736h.png in Resources */,
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */,
 			);
@@ -700,6 +710,19 @@
 			};
 			name = Release;
 		};
+		A863AABB1A83D5270030B052 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A863AAB91A83D4F70030B052 /* DistributionConfig.xcconfig */;
+			buildSettings = {
+			};
+			name = Distribution;
+		};
+		A863AABC1A83D5270030B052 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Distribution;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -708,6 +731,7 @@
 			buildConfigurations = (
 				00692BF314FF149000D0A05E /* Debug */,
 				00692BF414FF149000D0A05E /* Release */,
+				A863AABB1A83D5270030B052 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -717,6 +741,7 @@
 			buildConfigurations = (
 				00692BF614FF149000D0A05E /* Debug */,
 				00692BF714FF149000D0A05E /* Release */,
+				A863AABC1A83D5270030B052 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
