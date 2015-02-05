@@ -28,12 +28,15 @@ namespace chr
         virtual void disableAccelerometer() {}
         
         /*
-         * FIXME: OVER-COMPLICATED (REASON: THE FOLLOWING METHODS ARE NOT DECLARED ON iOS)
+         * ci::app::KeyEvent IS NOT FULLY FUNCTIONAL ON MOBILE PLATFORMS
+         *
+         * HENCE THE FOLLOWING METHODS ALLOWING "FULL KEYBOARD
+         * INTERACTION" ON THE DESKTOP WITHOUT #ifdefs
          */
-        virtual int getCode(const ci::app::KeyEvent &keyEvent) const { return 0; }
-        virtual bool isShiftDown(const ci::app::KeyEvent &keyEvent) const { return false; }
-        virtual bool isAltDown(const ci::app::KeyEvent &keyEvent) const { return false; }
-        virtual bool isAccelDown(const ci::app::KeyEvent &keyEvent) const { return false; }
+        static int getCode(const ci::app::KeyEvent &keyEvent);
+        static bool isShiftDown(const ci::app::KeyEvent &keyEvent);
+        static bool isAltDown(const ci::app::KeyEvent &keyEvent);
+        static bool isAccelDown(const ci::app::KeyEvent &keyEvent);
         
     protected:
         CinderSketch *sketch = nullptr;

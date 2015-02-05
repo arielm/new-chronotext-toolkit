@@ -260,6 +260,28 @@ namespace chr
         sketch->keyUp(event);
     }
     
+    // ---
+    
+    int CinderDelegateBase::getCode(const KeyEvent &keyEvent)
+    {
+        return keyEvent.getCode();
+    }
+    
+    bool CinderDelegateBase::isShiftDown(const KeyEvent &keyEvent)
+    {
+        return keyEvent.isShiftDown();
+    }
+    
+    bool CinderDelegateBase::isAltDown(const KeyEvent &keyEvent)
+    {
+        return keyEvent.isAltDown();
+    }
+    
+    bool CinderDelegateBase::isAccelDown(const KeyEvent &keyEvent)
+    {
+        return keyEvent.isAccelDown();
+    }
+    
 #pragma mark ---------------------------------------- EMULATION ----------------------------------------
     
     /*
@@ -363,27 +385,5 @@ namespace chr
         }
         
         return !emulators.empty();
-    }
-    
-#pragma mark ---------------------------------------- TEMPORARY ----------------------------------------
-
-    int CinderDelegate::getCode(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.getCode();
-    }
-    
-    bool CinderDelegate::isShiftDown(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.isShiftDown();
-    }
-    
-    bool CinderDelegate::isAltDown(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.isAltDown();
-    }
-    
-    bool CinderDelegate::isAccelDown(const KeyEvent &keyEvent) const
-    {
-        return keyEvent.isAccelDown();
     }
 }

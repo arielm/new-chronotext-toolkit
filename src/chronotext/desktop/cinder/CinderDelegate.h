@@ -48,11 +48,6 @@ namespace chr
         void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool loadEmulators(chr::InputSource::Ref inputSource);
-        
-        int getCode(const ci::app::KeyEvent &keyEvent) const final;
-        bool isShiftDown(const ci::app::KeyEvent &keyEvent) const final;
-        bool isAltDown(const ci::app::KeyEvent &keyEvent) const final;
-        bool isAccelDown(const ci::app::KeyEvent &keyEvent) const final;
 
     protected:
         int updateCount = 0;

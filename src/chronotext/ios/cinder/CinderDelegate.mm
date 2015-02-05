@@ -164,6 +164,28 @@ namespace chr
         }
     }
     
+#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
+
+    int CinderDelegateBase::getCode(const KeyEvent &keyEvent)
+    {
+        return 0;
+    }
+    
+    bool CinderDelegateBase::isShiftDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+    bool CinderDelegateBase::isAltDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+    bool CinderDelegateBase::isAccelDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
     
     void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
