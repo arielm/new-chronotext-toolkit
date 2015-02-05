@@ -48,9 +48,9 @@
 		A8836D741A4B0008007733CE /* TaskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D6F1A4B0008007733CE /* TaskManager.cpp */; };
 		A8836D921A4B005A007733CE /* MemoryManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8836D8A1A4B005A007733CE /* MemoryManager.mm */; };
 		A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8DB3EC416E0B96C00504D27 /* Sketch.cpp */; };
-		A8EAC8B51A82FB20003BC1D3 /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = A8EAC8B21A82FB20003BC1D3 /* Default-568h.png */; };
 		A8EAC8B61A82FB20003BC1D3 /* Default-736h.png in Resources */ = {isa = PBXBuildFile; fileRef = A8EAC8B31A82FB20003BC1D3 /* Default-736h.png */; };
 		A8EAC8B71A82FB20003BC1D3 /* Default-667h.png in Resources */ = {isa = PBXBuildFile; fileRef = A8EAC8B41A82FB20003BC1D3 /* Default-667h.png */; };
+		A8EAC8BB1A8300F2003BC1D3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A8EAC8BA1A8300F2003BC1D3 /* Default-568h@2x.png */; };
 		A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */; };
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
 		A8F595661A07788300877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595651A07788300877FB2 /* Log.cpp */; };
@@ -174,9 +174,9 @@
 		A8DB3EC416E0B96C00504D27 /* Sketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sketch.cpp; path = ../src/Sketch.cpp; sourceTree = "<group>"; };
 		A8DB3EC516E0B96C00504D27 /* Sketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sketch.h; path = ../src/Sketch.h; sourceTree = "<group>"; };
 		A8EAC8781A8264EE003BC1D3 /* DistributionConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DistributionConfig.xcconfig; sourceTree = "<group>"; };
-		A8EAC8B21A82FB20003BC1D3 /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
 		A8EAC8B31A82FB20003BC1D3 /* Default-736h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h.png"; sourceTree = "<group>"; };
 		A8EAC8B41A82FB20003BC1D3 /* Default-667h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h.png"; sourceTree = "<group>"; };
+		A8EAC8BA1A8300F2003BC1D3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A8F2E303189D3F47002D5D75 /* ImageSourceFileStbImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSourceFileStbImage.cpp; sourceTree = "<group>"; };
 		A8F2E304189D3F47002D5D75 /* ImageSourceFileStbImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSourceFileStbImage.h; sourceTree = "<group>"; };
 		A8F2E306189D3F47002D5D75 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
@@ -402,7 +402,7 @@
 		A82C900616DF91D300FF519C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A8EAC8B21A82FB20003BC1D3 /* Default-568h.png */,
+				A8EAC8BA1A8300F2003BC1D3 /* Default-568h@2x.png */,
 				A8EAC8B31A82FB20003BC1D3 /* Default-736h.png */,
 				A8EAC8B41A82FB20003BC1D3 /* Default-667h.png */,
 				A82C900716DF91D300FF519C /* icon.png */,
@@ -663,11 +663,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8EAC8B71A82FB20003BC1D3 /* Default-667h.png in Resources */,
-				A8EAC8B51A82FB20003BC1D3 /* Default-568h.png in Resources */,
 				A8112CC51A4F55010002CF68 /* Georgia_Regular_64.fnt in Resources */,
 				A8EAC8B61A82FB20003BC1D3 /* Default-736h.png in Resources */,
 				A82C900916DF91D300FF519C /* icon.png in Resources */,
 				A8112CC61A4F55010002CF68 /* hairline.png in Resources */,
+				A8EAC8BB1A8300F2003BC1D3 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
