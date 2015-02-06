@@ -65,6 +65,9 @@
 		A867AB95194BB3AF008EF66E /* QuadBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatchMap.h; sourceTree = "<group>"; };
 		A867AB96194BB3AF008EF66E /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
 		A867AB97194BB3AF008EF66E /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
+		A8C566841A844A5500AF12B6 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		A8C566851A844A5500AF12B6 /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
+		A8C566861A844A5500AF12B6 /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A8D0D28017EF4868001F6030 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../resources/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		A8EB33EA17AAB05600798D19 /* BinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinPack.cpp; sourceTree = "<group>"; };
 		A8EB33EB17AAB05600798D19 /* BinPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinPack.h; sourceTree = "<group>"; };
@@ -175,9 +178,12 @@
 		A809523816F35FD10011FAA3 /* OSX */ = {
 			isa = PBXGroup;
 			children = (
-				A809523916F360660011FAA3 /* Resources */,
+				A8C566841A844A5500AF12B6 /* Config.xcconfig */,
+				A8C566851A844A5500AF12B6 /* ReleaseConfig.xcconfig */,
+				A8C566861A844A5500AF12B6 /* DebugConfig.xcconfig */,
 				530D8ED2F6EB414F805B7B9E /* Prefix.pch */,
 				434A86CFEA544FFA9D66F749 /* Info.plist */,
+				A809523916F360660011FAA3 /* Resources */,
 			);
 			name = OSX;
 			sourceTree = "<group>";
@@ -196,8 +202,8 @@
 				A8112CDC1A4F66410002CF68 /* Exception.h */,
 				A8112CDE1A4F66410002CF68 /* Log.h */,
 				A8112CDD1A4F66410002CF68 /* Log.cpp */,
-				A809527616F3613E0011FAA3 /* InputSource.cpp */,
 				A809527716F3613E0011FAA3 /* InputSource.h */,
+				A809527616F3613E0011FAA3 /* InputSource.cpp */,
 				A809525216F3613E0011FAA3 /* font */,
 				A867AB92194BB3AF008EF66E /* quad */,
 				A8EB33E817AAB05600798D19 /* tools */,
@@ -304,6 +310,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FontGenerator" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -363,83 +370,27 @@
 /* Begin XCBuildConfiguration section */
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8C566861A844A5500AF12B6 /* DebugConfig.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = Info.plist;
-				OTHER_LDFLAGS = (
-					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a\"",
-				);
-				PRODUCT_NAME = FontGenerator;
 			};
 			name = Debug;
 		};
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8C566851A844A5500AF12B6 /* ReleaseConfig.xcconfig */;
 			buildSettings = {
-				DEAD_CODE_STRIPPING = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_FAST_MATH = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Prefix.pch;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = Info.plist;
-				OTHER_LDFLAGS = (
-					"\"$(CINDER_PATH)/lib/libcinder.a\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a\"",
-				);
-				PRODUCT_NAME = FontGenerator;
-				STRIP_INSTALLED_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				CINDER_PATH = ../../../../../;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/include",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(CINDER_PATH)/blocks/new-chronotext-toolkit/src\"";
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				CINDER_PATH = ../../../../../;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/include",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(CINDER_PATH)/blocks/new-chronotext-toolkit/src\"";
 			};
 			name = Release;
 		};
