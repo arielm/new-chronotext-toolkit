@@ -8,7 +8,7 @@
 
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/MathUtils.h"
-#include "chronotext/Context.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
@@ -33,7 +33,6 @@ namespace chr
             /*
              * SPECIAL VERSION TAKING IN COUNT PAN AND ZOOM
              */
-            
             const Matrix44f getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)
             {
                 float halfHeight = zNear * ci::math<float>::tan(fovy * PI / 360) / zoom;
@@ -48,7 +47,6 @@ namespace chr
             /*
              * BASED ON CODE FROM http://www.mesa3d.org
              */
-            
             const Matrix44f getFrustumMatrix(float left, float right, float bottom, float top, float znear, float zfar)
             {
                 float x = (2 * znear) / (right - left);
