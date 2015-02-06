@@ -11,17 +11,11 @@
 #include "cinder/Cinder.h"
 
 #if defined(CINDER_MSW)
-
-#include "cinder/msw/OutputDebugStringStream.h"
-
+#   include "cinder/msw/OutputDebugStringStream.h"
 #elif defined(CINDER_ANDROID)
-
-#include "cinder/android/LogStream.h"
-
+#   include "cinder/android/LogStream.h"
 #elif defined(CINDER_MAC) && defined(FORCE_SYSLOG)
-
-#include "chronotext/utils/SyslogStringStream.h"
-
+#   include "chronotext/utils/SyslogStringStream.h"
 #endif
 
 #include <mutex>

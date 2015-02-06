@@ -59,17 +59,17 @@ namespace chr
 }
 
 #if defined(DISCARD_LOGI)
-#define LOGI false && chr::Log()
-#define LOGI_IF(COND) false && chr::Log()
+#   define LOGI false && chr::Log()
+#   define LOGI_IF(COND) false && chr::Log()
 #else
-#define LOGI chr::Log()
-#define LOGI_IF(COND) (COND) && chr::Log()
+#   define LOGI chr::Log()
+#   define LOGI_IF(COND) (COND) && chr::Log()
 #endif
 
 #if defined(DEBUG) || defined(FORCE_LOGD)
-#define LOGD chr::Log()
-#define LOGD_IF(COND) (COND) && chr::Log()
+#   define LOGD chr::Log()
+#   define LOGD_IF(COND) (COND) && chr::Log()
 #else
-#define LOGD false && chr::Log()
-#define LOGD_IF(COND) false && chr::Log()
+#   define LOGD false && chr::Log()
+#   define LOGD_IF(COND) false && chr::Log()
 #endif
