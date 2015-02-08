@@ -50,8 +50,8 @@ namespace chr
             intern::memoryManager = make_shared<MemoryManager>();
             intern::memoryManager->setup();
             
-            DisplayHelper::setup(initInfo);
             FileHelper::setup(initInfo);
+            DisplayHelper::setup(initInfo);
             
             // ---
             
@@ -127,8 +127,8 @@ namespace chr
                 intern::io_service = nullptr;
             }
             
-            FileHelper::shutdown();
             DisplayHelper::shutdown();
+            FileHelper::shutdown();
             
             intern::memoryManager->shutdown();
             intern::memoryManager.reset();

@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/desktop/cinder/CinderDelegate.h"
+#include "chronotext/osx/cinder/CinderDelegate.h"
 #include "chronotext/Context.h"
 
 #include "cinder/Json.h"
@@ -32,6 +32,19 @@ namespace chr
     
     // ---
 
+    void CinderDelegate::prepareSettings(Settings *settings)
+    {
+        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
+        settings->enableHighDensityDisplay();
+        
+        applySettings(settings);
+        
+        /*
+         * TODO:
+         */
+//      [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+    }
+    
     void CinderDelegate::setup()
     {
         intern::instance = this;
@@ -158,20 +171,6 @@ namespace chr
                 escapeCaptured = false;
                 break;
         }
-    }
-    
-#pragma mark ---------------------------------------- LIFE-CYCLE ----------------------------------------
-    
-    void CinderDelegate::applyDefaultSettings(Settings *settings)
-    {
-        settings->disableFrameRate(); // WOULD OTHERWISE CAUSE INSTABILITY (IN ANY-CASE: VERTICAL-SYNC IS ALLOWED BY DEFAULT)
-        settings->enableHighDensityDisplay();
-    }
-    
-    void CinderDelegate::prepareSettings(Settings *settings)
-    {
-        applyDefaultSettings(settings);
-        applySettings(settings);
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------

@@ -8,6 +8,16 @@
 
 #pragma once
 
+#include "cinder/Cinder.h"
+
+#if !defined(CINDER_MAC)
+
+#error UNSUPPORTED PLATFORM
+
+#endif
+
+// ---
+
 #include "chronotext/cinder/CinderDelegateBase.h"
 #include "chronotext/InputSource.h"
 
@@ -20,11 +30,11 @@ namespace chr
     public:
         static std::atomic<bool> LOG_VERBOSE;
         static std::atomic<bool> LOG_WARNING;
-        
+
+        void prepareSettings(Settings *settings) final;
         void setup() final;
         void shutdown() final;
         void resize() final;
-        
         void update() final;
         void draw() final;
 
@@ -42,8 +52,6 @@ namespace chr
         void performAction(int actionId) final;
         
         virtual void applySettings(Settings *settings) {}
-        virtual void applyDefaultSettings(Settings *settings);
-        void prepareSettings(Settings *settings) final;
 
         void emulate(Settings *settings, EmulatedDevice &device, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);
         bool emulate(Settings *settings, const std::string &deviceKey, DisplayInfo::Orientation orientation = DisplayInfo::ORIENTATION_DEFAULT);

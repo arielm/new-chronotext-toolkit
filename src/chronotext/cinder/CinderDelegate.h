@@ -18,8 +18,8 @@
 
 #include "chronotext/android/cinder/CinderDelegate.h"
 
-#else
+#elif defined(CINDER_MAC)
 
-#include "chronotext/desktop/cinder/CinderDelegate.h"
+#include "chronotext/osx/cinder/CinderDelegate.h"
 
 #endif
