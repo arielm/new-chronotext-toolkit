@@ -11,9 +11,7 @@
 #include "cinder/Cinder.h"
 
 #if !defined(CINDER_COCOA)
-
-#error UNSUPPORTED PLATFORM
-
+#   error UNSUPPORTED PLATFORM
 #endif
 
 // ---

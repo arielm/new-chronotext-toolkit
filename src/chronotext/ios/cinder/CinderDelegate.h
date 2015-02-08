@@ -8,6 +8,14 @@
 
 #pragma once
 
+#include "cinder/Cinder.h"
+
+#if !defined(CINDER_COCOA_TOUCH)
+#   error UNSUPPORTED PLATFORM
+#endif
+
+// ---
+
 #include "chronotext/cinder/CinderDelegateBase.h"
 
 #include "cinder/app/TouchEvent.h"

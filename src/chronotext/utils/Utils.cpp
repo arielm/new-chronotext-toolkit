@@ -183,7 +183,7 @@ namespace chr
                 }
                 
                 static const vector<string> abbrevs {"s", "ms", "μs"};
-                double maximum = pow(1000, abbrevs.size());
+                double maximum = pow(1000.0, abbrevs.size());
                 
                 double value = fabs(seconds) * maximum;
 
@@ -232,7 +232,7 @@ namespace chr
             {
                 stringstream ss;
                 ss << fixed << setprecision(precision);
-                ss << (fabs(ratio) * 100) << separator << "%"; // FIXME: "%" IS NEVER PRINTED (ONLY ON ANDROID)
+                ss << (fabs(ratio) * 100) << separator << "%";
                 
                 return ss.str();
             }

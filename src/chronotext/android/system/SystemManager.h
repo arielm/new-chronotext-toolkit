@@ -11,9 +11,7 @@
 #include "cinder/Cinder.h"
 
 #if !defined(CINDER_ANDROID)
-
-#error UNSUPPORTED PLATFORM
-
+#   error UNSUPPORTED PLATFORM
 #endif
 
 // ---

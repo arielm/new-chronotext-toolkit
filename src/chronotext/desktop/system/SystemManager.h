@@ -11,9 +11,7 @@
 #include "cinder/Cinder.h"
 
 #if !defined(CINDER_MAC) && !defined(CINDER_MSW)
-
-#error UNSUPPORTED PLATFORM
-
+#   error UNSUPPORTED PLATFORM
 #endif
 
 // ---

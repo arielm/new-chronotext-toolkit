@@ -8,6 +8,14 @@
 
 #pragma once
 
+#include "cinder/Cinder.h"
+
+#if !defined(CINDER_ANDROID)
+#   error UNSUPPORTED PLATFORM
+#endif
+
+// ---
+
 #include "chronotext/cinder/CinderDelegateBase.h"
 #include "chronotext/system/SystemInfo.h"
 
