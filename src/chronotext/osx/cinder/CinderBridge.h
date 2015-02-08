@@ -8,7 +8,7 @@
 
 #import "chronotext/cocoa/utils/NSString+JSON.h"
 
-#include "chronotext/desktop/cinder/CinderDelegate.h"
+#include "chronotext/osx/cinder/CinderDelegate.h"
 
 @interface CinderBridge : NSObject
 {
