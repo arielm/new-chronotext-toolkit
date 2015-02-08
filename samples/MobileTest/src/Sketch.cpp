@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -21,10 +21,8 @@ using namespace chr::xf;
 const float DOT_RADIUS_DP = 22;
 const float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 
-const float FONT_SIZE = 24; // DP
-const float PADDING = 20; // DP
-
-const float FINGERS_DISTANCE = 22; // DP
+const float FONT_SIZE = 22; // DP
+const float PADDING = 22; // DP
 
 const float FRICTION = 0.01f;
 const float DT = 1.0f;
@@ -73,13 +71,13 @@ void Sketch::draw()
     gl::setMatricesWindow(getWindowSize(), true);
     
     gl::color(Color::gray(0.5f));
-    utils::gl::drawGrid(getWindowBounds(), scale * FINGERS_DISTANCE * 2, Vec2f(0, clock()->getTime() * 60));
+    utils::gl::drawGrid(getWindowBounds(), scale * DOT_RADIUS_DP * 2, Vec2f(0, clock()->getTime() * 60));
     
     // ---
     
     drawDot(particle.position, particle.radius, ColorA(1, 0, 0, 1));
     
-    string text = toString(int(clock()->getTime()));
+    string text = utils::format::time(clock()->getTime());
     drawText(text, Vec2f(0, getWindowHeight()) + Vec2f(PADDING, -PADDING) * scale, XFont::ALIGN_LEFT, XFont::ALIGN_BOTTOM, scale * FONT_SIZE, ColorA(0, 0, 0, 1));
 }
 

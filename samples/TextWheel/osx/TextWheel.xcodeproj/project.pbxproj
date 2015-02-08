@@ -17,7 +17,6 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A8027DFA16E377AE00184149 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8027DF816E377AE00184149 /* icon.icns */; };
 		A822637718BF54BC00D57C8C /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822636F18BF54BC00D57C8C /* Clock.cpp */; };
-		A826F4DE1A6B138F002A23A9 /* CinderDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4D11A6B138F002A23A9 /* CinderDelegate.cpp */; };
 		A826F4E01A6B138F002A23A9 /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4D61A6B138F002A23A9 /* DisplayHelper.cpp */; };
 		A826F4E21A6B138F002A23A9 /* SystemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4DC1A6B138F002A23A9 /* SystemManager.cpp */; };
 		A826F5021A6C122E002A23A9 /* CinderDelegateBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4FF1A6C122E002A23A9 /* CinderDelegateBase.cpp */; };
@@ -51,6 +50,8 @@
 		A8A8841018C8DB8800BC0BDB /* es.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840D18C8DB8800BC0BDB /* es.txt */; };
 		A8A8841118C8DB8800BC0BDB /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840E18C8DB8800BC0BDB /* en.txt */; };
 		A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8A8841218C9329B00BC0BDB /* font-config.xml */; };
+		A8D9473A1A88077A007FB546 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8D947311A88077A007FB546 /* CinderDelegate.mm */; };
+		A8D9473D1A88077A007FB546 /* NSView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D947381A88077A007FB546 /* NSView+StringTag.m */; };
 		A8F595641A07784800877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595631A07784800877FB2 /* Log.cpp */; };
 		A8F9FC3018C5681600C48245 /* babel_serif_osx.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8F9FC2F18C5681600C48245 /* babel_serif_osx.xml */; };
 		A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3218C5683B00C48245 /* ActualFont.cpp */; };
@@ -93,8 +94,6 @@
 		A822637018BF54BC00D57C8C /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A822637118BF54BC00D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
 		A822637618BF54BC00D57C8C /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
-		A826F4D11A6B138F002A23A9 /* CinderDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderDelegate.cpp; sourceTree = "<group>"; };
-		A826F4D21A6B138F002A23A9 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
 		A826F4D61A6B138F002A23A9 /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
 		A826F4D71A6B138F002A23A9 /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A826F4D81A6B138F002A23A9 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
@@ -171,6 +170,10 @@
 		A8A8840D18C8DB8800BC0BDB /* es.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = es.txt; path = ../resources/es.txt; sourceTree = "<group>"; };
 		A8A8840E18C8DB8800BC0BDB /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = en.txt; path = ../resources/en.txt; sourceTree = "<group>"; };
 		A8A8841218C9329B00BC0BDB /* font-config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "font-config.xml"; path = "../resources/font-config.xml"; sourceTree = "<group>"; };
+		A8D947301A88077A007FB546 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A8D947311A88077A007FB546 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
+		A8D947371A88077A007FB546 /* NSView+StringTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+StringTag.h"; sourceTree = "<group>"; };
+		A8D947381A88077A007FB546 /* NSView+StringTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+StringTag.m"; sourceTree = "<group>"; };
 		A8F595631A07784800877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9979019FA96B500F08369 /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
 		A8F9979119FA9BE000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
@@ -338,19 +341,9 @@
 		A826F4CF1A6B138F002A23A9 /* desktop */ = {
 			isa = PBXGroup;
 			children = (
-				A826F4D01A6B138F002A23A9 /* cinder */,
 				A826F4D51A6B138F002A23A9 /* system */,
 			);
 			path = desktop;
-			sourceTree = "<group>";
-		};
-		A826F4D01A6B138F002A23A9 /* cinder */ = {
-			isa = PBXGroup;
-			children = (
-				A826F4D11A6B138F002A23A9 /* CinderDelegate.cpp */,
-				A826F4D21A6B138F002A23A9 /* CinderDelegate.h */,
-			);
-			path = cinder;
 			sourceTree = "<group>";
 		};
 		A826F4D51A6B138F002A23A9 /* system */ = {
@@ -498,6 +491,7 @@
 				A826F4CF1A6B138F002A23A9 /* desktop */,
 				A829870718BD02D500934642 /* font */,
 				A82986FC18BD00C300934642 /* os */,
+				A8D9472C1A88077A007FB546 /* osx */,
 				A867AB84194B9AEF008EF66E /* quad */,
 				A8F9978419FA961900F08369 /* system */,
 				A822636E18BF54BC00D57C8C /* time */,
@@ -505,6 +499,33 @@
 			);
 			name = chronotext;
 			path = ../../../src/chronotext;
+			sourceTree = "<group>";
+		};
+		A8D9472C1A88077A007FB546 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				A8D9472D1A88077A007FB546 /* cinder */,
+				A8D947361A88077A007FB546 /* utils */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
+		A8D9472D1A88077A007FB546 /* cinder */ = {
+			isa = PBXGroup;
+			children = (
+				A8D947301A88077A007FB546 /* CinderDelegate.h */,
+				A8D947311A88077A007FB546 /* CinderDelegate.mm */,
+			);
+			path = cinder;
+			sourceTree = "<group>";
+		};
+		A8D947361A88077A007FB546 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A8D947371A88077A007FB546 /* NSView+StringTag.h */,
+				A8D947381A88077A007FB546 /* NSView+StringTag.m */,
+			);
+			path = utils;
 			sourceTree = "<group>";
 		};
 		A8F9978419FA961900F08369 /* system */ = {
@@ -661,6 +682,7 @@
 				A826F4E21A6B138F002A23A9 /* SystemManager.cpp in Sources */,
 				A867AB8A194B9AEF008EF66E /* QuadMatrix.cpp in Sources */,
 				A82C910616E00B3B00FF519C /* MathUtils.cpp in Sources */,
+				A8D9473D1A88077A007FB546 /* NSView+StringTag.m in Sources */,
 				A829870418BD00C300934642 /* SuperHandler.cpp in Sources */,
 				A8702B241A5B455E00EF9E9E /* MemoryManagerBase.cpp in Sources */,
 				A8702B221A5B455E00EF9E9E /* DisplayHelperBase.cpp in Sources */,
@@ -669,9 +691,9 @@
 				A85977441A2FC0E50080C906 /* main.cpp in Sources */,
 				A8F595641A07784800877FB2 /* Log.cpp in Sources */,
 				A859776D1A2FC1D40080C906 /* TaskManager.cpp in Sources */,
-				A826F4DE1A6B138F002A23A9 /* CinderDelegate.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A8F9FC5218C5683B00C48245 /* scrptrun.cpp in Sources */,
+				A8D9473A1A88077A007FB546 /* CinderDelegate.mm in Sources */,
 				A8A883F418C6C0D200BC0BDB /* TextSpiral.cpp in Sources */,
 				A822637718BF54BC00D57C8C /* Clock.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
