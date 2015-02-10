@@ -27,26 +27,16 @@ namespace chr
             PLATFORM_UNDEFINED
         };
         
-        struct LaunchInfo
-        {
-            boost::asio::io_service *io_service;
-            
-            LaunchInfo() = default;
-            
-            LaunchInfo(boost::asio::io_service &io_service)
-            :
-            io_service(&io_service)
-            {}
-        };
-        
         struct SetupInfo
         {
+            boost::asio::io_service *io_service;
             WindowInfo windowInfo;
             
             SetupInfo() = default;
             
-            SetupInfo(const WindowInfo &windowInfo)
+            SetupInfo(boost::asio::io_service &io_service, const WindowInfo &windowInfo)
             :
+            io_service(&io_service),
             windowInfo(windowInfo)
             {}
         };

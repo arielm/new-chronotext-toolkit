@@ -34,61 +34,87 @@ namespace chr
 
     void CinderDelegate::prepareSettings(Settings *settings)
     {
-        /*
-         * TODO: TEST ON RETINA DISPLAY (OSX)
-         */
-        settings->enableHighDensityDisplay();
-        
-        applySettings(settings);
-        
-        /*
-         * OTHERWISE:
-         *
-         * 1) CODE EXECUTED DURING THE "SECOND UPDATE" WILL BE
-         *    EXECUTED BEFORE THE "FIRST DRAW" IS DISPLAYED
-         *
-         * 2) APPLICATION MAY NOT BE FOCUSED PROPERLY,
-         *    E.G. WHEN LAUNCHED VIA IntelliJ
-         */
-        [NSApplication.sharedApplication activateIgnoringOtherApps:YES];
+        if (!prepared)
+        {
+            /*
+             * TODO: TEST ON RETINA DISPLAY (OSX)
+             */
+            settings->enableHighDensityDisplay();
+            
+            applySettings(settings);
+            
+            /*
+             * OTHERWISE:
+             *
+             * 1) CODE EXECUTED DURING THE "SECOND UPDATE" WILL BE
+             *    EXECUTED BEFORE THE "FIRST DRAW" IS DISPLAYED
+             *
+             * 2) APPLICATION MAY NOT BE FOCUSED PROPERLY,
+             *    E.G. WHEN LAUNCHED VIA IntelliJ
+             */
+            [NSApplication.sharedApplication activateIgnoringOtherApps:YES];
+            
+            // ---
+            
+            prepared = true;
+        }
     }
     
     void CinderDelegate::setup()
     {
-        intern::instance = this;
+        assert(prepared);
         
-        initInfo.actualContentScale = getWindowContentScale();
-        initInfo.actualWindowSize = getWindowSize();
+        if (!initialized_)
+        {
+            initInfo.actualContentScale = getWindowContentScale();
+            initInfo.actualWindowSize = getWindowSize();
+            
+            intern::instance = this;
+            initialized_ = _init();
+        }
         
-        _init();
-        
-        // ---
-        
-        launchInfo.io_service = &io_service();
-        _launch();
-        
-        // ---
-        
-        WindowInfo actualWindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
-        
-        setupInfo.windowInfo = initInfo.emulated ? initInfo.emulatedDevice.windowInfo : actualWindowInfo;
-        _setup();
+        if (initialized_ && !setup_)
+        {
+            WindowInfo actualWindowInfo(getWindowSize(), DisplayHelper::getAALevel(this));
+            
+            setupInfo.io_service = &io_service();
+            setupInfo.windowInfo = initInfo.emulated ? initInfo.emulatedDevice.windowInfo : actualWindowInfo;
+            
+            _setup();
+            
+            // ---
+            
+            setup_ = true;
+        }
     }
     
     void CinderDelegate::shutdown()
     {
-        /*
-         * NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
-         */
-        sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
-
-        _shutdown();
+        if (setup_)
+        {
+            /*
+             * NOT HAPPENING "AUTOMATICALLY" (UNLIKE ON MOBILE PLATFORMS)
+             */
+            sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
+            
+            _shutdown();
+            
+            setup_ = false;
+        }
         
-        intern::instance = nullptr;
+        if (initialized_)
+        {
+            _uninit();
+            
+            initialized_ = false;
+            intern::instance = nullptr;
+        }
     }
     
     void CinderDelegate::resize()
     {
+        assert(setup_);
+        
         /*
          * RESIZING IS NOT SUPPORTED WHEN EMULATING
          */
@@ -121,6 +147,8 @@ namespace chr
     
     void CinderDelegate::update()
     {
+        assert(setup_);
+        
         /*
          * DESKTOP-ONLY WORKAROUND [2/4]
          *
@@ -135,6 +163,8 @@ namespace chr
     
     void CinderDelegate::draw()
     {
+        assert(setup_);
+        
         if (updateCount == 0)
         {
             update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()

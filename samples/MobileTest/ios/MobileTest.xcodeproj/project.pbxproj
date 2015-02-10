@@ -51,7 +51,6 @@
 		A8F828071A6F0BCB003C0D8D /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828021A6F0BCB003C0D8D /* NSDictionary+DefautValues.m */; };
 		A8F828081A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828041A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m */; };
 		A8F828091A6F0BCB003C0D8D /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F828061A6F0BCB003C0D8D /* NSString+JSON.m */; };
-		A8F8280B1A6F0C70003C0D8D /* Utils.h in Sources */ = {isa = PBXBuildFile; fileRef = A8F8280A1A6F0C70003C0D8D /* Utils.h */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
 		A8FA3C1816E3AB8000367F97 /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC216E3AB8000367F97 /* CinderBridge.mm */; };
@@ -171,7 +170,6 @@
 		A8F828041A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Merge.m"; sourceTree = "<group>"; };
 		A8F828051A6F0BCB003C0D8D /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
 		A8F828061A6F0BCB003C0D8D /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
-		A8F8280A1A6F0C70003C0D8D /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A8F9979219FAA06000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A8FA3B8B16E39A7C00367F97 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
@@ -421,7 +419,6 @@
 				A8F828041A6F0BCB003C0D8D /* NSMutableDictionary+Merge.m */,
 				A8F828051A6F0BCB003C0D8D /* NSString+JSON.h */,
 				A8F828061A6F0BCB003C0D8D /* NSString+JSON.m */,
-				A8F8280A1A6F0C70003C0D8D /* Utils.h */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -597,7 +594,7 @@
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "MobileTest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -646,7 +643,6 @@
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A826F4F61A6C0167002A23A9 /* CinderSketch.cpp in Sources */,
-				A8F8280B1A6F0C70003C0D8D /* Utils.h in Sources */,
 				A826F48F1A6811FB002A23A9 /* Bridge.mm in Sources */,
 				A8F595661A07788300877FB2 /* Log.cpp in Sources */,
 				A8702BC51A5B489500EF9E9E /* MemoryManagerBase.cpp in Sources */,

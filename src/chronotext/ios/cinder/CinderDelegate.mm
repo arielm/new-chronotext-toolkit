@@ -32,49 +32,72 @@ namespace chr
     
     // ---
     
-    bool CinderDelegate::init()
+    bool CinderDelegate::performInit()
     {
-        intern::instance = this;
+        if (!initialized_)
+        {
+            intern::instance = this;
+            initialized_ = _init();
+        }
         
-        return _init();
+        return initialized_;
     }
     
-    void CinderDelegate::launch()
+    void CinderDelegate::performUninit()
     {
-        startIOService();
-        
-        launchInfo.io_service = io.get();
-        _launch();
+        if (initialized_ && !setup_)
+        {
+            _uninit();
+
+            initialized_ = false;
+            intern::instance = nullptr;
+        }
     }
     
-    void CinderDelegate::setup(const WindowInfo &windowInfo)
+    void CinderDelegate::performSetup(const WindowInfo &windowInfo)
     {
-        setupInfo.windowInfo = windowInfo;
-        _setup();
+        if (!setup_ && initialized_)
+        {
+            startIOService();
+            
+            setupInfo.io_service = io.get();
+            setupInfo.windowInfo = windowInfo;
+            
+            _setup();
+            
+            // ---
+            
+            setup_ = true;
+        }
     }
     
-    void CinderDelegate::shutdown()
+    void CinderDelegate::performShutdown()
     {
-        /*
-         * TODO:
-         *
-         * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-         * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
-         */
-        _shutdown();
-        
-        stopIOService();
-        
-        intern::instance = nullptr;
+        if (setup_)
+        {
+            /*
+             * TODO:
+             *
+             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
+             */
+            _shutdown();
+            
+            stopIOService();
+            
+            // ---
+            
+            setup_ = false;
+        }
     }
     
-    void CinderDelegate::resize(const ci::Vec2i &size)
+    void CinderDelegate::performResize(const ci::Vec2i &size)
     {
         setupInfo.windowInfo.size = size;
         sketch->performResize(size);
     }
     
-    void CinderDelegate::update()
+    void CinderDelegate::performUpdate()
     {
         /*
          * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
@@ -89,11 +112,11 @@ namespace chr
         updateCount++;
     }
     
-    void CinderDelegate::draw()
+    void CinderDelegate::performDraw()
     {
         if (updateCount == 0)
         {
-            update(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
+            performUpdate(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
         
         sketch->draw();
@@ -129,13 +152,22 @@ namespace chr
     
     void CinderDelegate::startIOService()
     {
-        io = make_shared<boost::asio::io_service>();
-        ioWork = make_shared<boost::asio::io_service::work>(*io);
+        if (!io)
+        {
+            io = make_shared<boost::asio::io_service>();
+            ioWork = make_shared<boost::asio::io_service::work>(*io);
+        }
     }
     
     void CinderDelegate::stopIOService()
     {
-        io->stop();
+        if (io)
+        {
+            io->stop();
+            
+            ioWork.reset();
+            io.reset();
+        }
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -165,7 +197,7 @@ namespace chr
     }
     
 #pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
-
+    
     int CinderDelegateBase::getCode(const KeyEvent &keyEvent)
     {
         return 0;

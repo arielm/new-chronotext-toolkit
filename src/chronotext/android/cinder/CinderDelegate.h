@@ -34,17 +34,24 @@ namespace chr
         static std::atomic<bool> LOG_WARNING;
 
         /*
-         * INVOKED ON THE MAIN-THREAD, BEFORE RENDERER'S THREAD IS CREATED
+         * INVOKED ON THE MAIN-THREAD
+         *
+         * RENDERER'S THREAD IS NOT AVAILABLE (EITHER NOT CREATED YET, OR ALREADY DESTROYED)
          */
-        bool init(JNIEnv *env, jobject androidContext, jobject androidDisplay, const ci::Vec2i &displaySize, float displayDensity);
+        bool performInit(JNIEnv *env, jobject androidContext, jobject androidDisplay, const ci::Vec2i &displaySize, float displayDensity);
+        void performUninit(JNIEnv *env);
         
-        void launch(); // INVOKED ON THE RENDERER'S THREAD, BEFORE GL-CONTEXT IS CREATED
-        void setup(const ci::Vec2i &size); // INVOKED ON THE RENDERER'S THREAD, AFTER GL-CONTEXT IS CREATED
-        void shutdown(JNIEnv *env);
+        /*
+         * INVOKED ON THE RENDERER'S THREAD
+         *
+         * GL-CONTEXT IS VALID
+         */
+        void performSetup(JNIEnv *env, const ci::Vec2i &size);
+        void performShutdown(JNIEnv *env);
         
-        void resize(const ci::Vec2i &size);
-        void update();
-        void draw();
+        void performResize(const ci::Vec2i &size);
+        void performUpdate();
+        void performDraw();
 
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);

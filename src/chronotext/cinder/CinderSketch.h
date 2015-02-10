@@ -62,7 +62,7 @@ namespace chr
         virtual ~CinderSketch() {}
         
         virtual bool init() { return true; }
-        virtual void launch() {}
+        virtual void uninit() {}
         virtual void setup() {}
         virtual void shutdown() {}
 

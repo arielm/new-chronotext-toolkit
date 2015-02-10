@@ -31,60 +31,89 @@ namespace chr
     
     // ---
     
-    bool CinderDelegate::init(JNIEnv *env, jobject androidContext, jobject androidDisplay, const Vec2i &displaySize, float displayDensity)
+    bool CinderDelegate::performInit(JNIEnv *env, jobject androidContext, jobject androidDisplay, const Vec2i &displaySize, float displayDensity)
     {
-        intern::instance = this;
+        if (!initialized_)
+        {
+            initInfo.androidContext = env->NewGlobalRef(androidContext);
+            initInfo.androidDisplay = env->NewGlobalRef(androidDisplay);
+            initInfo.displaySize = displaySize;
+            initInfo.displayDensity = displayDensity;
+
+            intern::instance = this;
+            initialized_ = _init();
+        }
         
-        initInfo.androidContext = env->NewGlobalRef(androidContext);
-        initInfo.androidDisplay = env->NewGlobalRef(androidDisplay);
-        initInfo.displaySize = displaySize;
-        initInfo.displayDensity = displayDensity;
-        
-        return _init();
+        return initialized_;
     }
     
-    void CinderDelegate::launch()
+    void CinderDelegate::performUninit(JNIEnv *env)
     {
-        startIOService();
-        createSensorEventQueue();
-        
-        launchInfo.io_service = io.get();
-        _launch();
+        if (initialized_ && !setup_)
+        {
+            _uninit();
+            
+            env->DeleteGlobalRef(initInfo.androidContext);
+            env->DeleteGlobalRef(initInfo.androidDisplay);
+            
+            // ---
+
+            initialized_ = false;
+            intern::instance = nullptr;
+        }
     }
     
-    void CinderDelegate::setup(const Vec2i &size)
+    void CinderDelegate::performSetup(JNIEnv *env, const Vec2i &size)
     {
-        setupInfo.windowInfo.size = size;
-        _setup();
+        if (!setup_ && initialized_)
+        {
+            startIOService();
+            createSensorEventQueue();
+            
+            setupInfo.io_service = io.get();
+            setupInfo.windowInfo.size = size;
+            
+            _setup();
+            
+            // ---
+            
+            setup_ = true;
+        }
     }
     
-    void CinderDelegate::shutdown(JNIEnv *env)
+    void CinderDelegate::performShutdown(JNIEnv *env)
     {
-        /*
-         * TODO:
-         *
-         * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-         * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
-         */
-        _shutdown();
-        
-        destroySensorEventQueue();
-        stopIOService();
-        
-        env->DeleteGlobalRef(initInfo.androidContext);
-        env->DeleteGlobalRef(initInfo.androidDisplay);
-        
-        intern::instance = nullptr;
+        if (setup_)
+        {
+            /*
+             * TODO:
+             *
+             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
+             */
+            _shutdown();
+            
+            destroySensorEventQueue();
+            stopIOService();
+            
+            // ---
+            
+            setup_ = false;
+        }
     }
     
-    void CinderDelegate::resize(const Vec2i &size)
+    void CinderDelegate::performResize(const Vec2i &size)
     {
+        assert(setup_);
+        
         setupInfo.windowInfo.size = size;
         sketch->performResize(size);
     }
     
-    void CinderDelegate::update()
+    void CinderDelegate::performUpdate()
     {
+        assert(setup_);
+        
         /*
          * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
          *
@@ -99,8 +128,9 @@ namespace chr
         updateCount++;
     }
     
-    void CinderDelegate::draw()
+    void CinderDelegate::performDraw()
     {
+        assert(setup_);
         sketch->draw();
     }
     
@@ -170,13 +200,22 @@ namespace chr
     
     void CinderDelegate::startIOService()
     {
-        io = make_shared<boost::asio::io_service>();
-        ioWork = make_shared<boost::asio::io_service::work>(*io);
+        if (!io)
+        {
+            io = make_shared<boost::asio::io_service>();
+            ioWork = make_shared<boost::asio::io_service::work>(*io);
+        }
     }
     
     void CinderDelegate::stopIOService()
     {
-        io->stop();
+        if (io)
+        {
+            io->stop();
+            
+            ioWork.reset();
+            io.reset();
+        }
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------

@@ -10,10 +10,8 @@
 
 #include "cinder/Cinder.h"
 
-#if !defined(CINDER_COCOA_TOUCH) && !defined(CINDER_ANDROID) && !defined(CINDER_MAC) && !defined(CINDER_MSW)
-
-#error UNSUPPORTED PLATFORM
-
+#if !defined(CINDER_COCOA_TOUCH) && !defined(CINDER_ANDROID) && !defined(CINDER_MAC)
+#   error UNSUPPORTED PLATFORM
 #endif
 
 // ---

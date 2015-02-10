@@ -32,116 +32,85 @@ namespace chr
          */
         boost::asio::io_service *io_service = nullptr;
         thread::id threadId;
-        
-        // ---
-        
-        bool initialized = false;
-        bool launched = false;
-        bool setup = false;
+        bool threadReady = false;
     }
     
     bool CinderDelegateBase::_init()
     {
-        if (!intern::initialized)
-        {
-            intern::systemManager = make_shared<SystemManager>();
-            intern::systemManager->setup(initInfo);
-            
-            intern::memoryManager = make_shared<MemoryManager>();
-            intern::memoryManager->setup();
-            
-            FileHelper::setup(initInfo);
-            DisplayHelper::setup(initInfo);
-            
-            // ---
-            
-            sketch = createSketch();
-            sketchCreated(sketch);
-            sketch->init();
-            
-            // ---
-            
-            intern::initialized = true;
-        }
+        assert(!initialized_);
+               
+        intern::systemManager = make_shared<SystemManager>();
+        intern::systemManager->setup(initInfo);
         
-        return intern::initialized;
+        intern::memoryManager = make_shared<MemoryManager>();
+        intern::memoryManager->setup();
+        
+        FileHelper::setup(initInfo);
+        DisplayHelper::setup(initInfo);
+        
+        // ---
+        
+        sketch = createSketch();
+        sketchCreated(sketch);
+        return sketch->init();
     }
     
-    void CinderDelegateBase::_launch()
+    void CinderDelegateBase::_uninit()
     {
-        if (!intern::launched && intern::initialized)
-        {
-            /*
-             * TODO: MOVE TO TaskManager?
-             */
-            intern::io_service = launchInfo.io_service;
-            intern::threadId = this_thread::get_id();
-            
-            intern::taskManager = TaskManager::create();
-            
-            // ---
-            
-            sketch->launch();
-
-            // ---
-            
-            intern::launched = true;
-        }
+        assert(initialized_ && !setup_);
+        
+        sketch->uninit();
+        delete sketch;
+        sketchDestroyed(sketch);
+        sketch = nullptr;
+        
+        // ---
+        
+        DisplayHelper::shutdown();
+        FileHelper::shutdown();
+        
+        intern::memoryManager->shutdown();
+        intern::memoryManager.reset();
+        
+        intern::systemManager->shutdown();
+        intern::systemManager.reset();
     }
     
     void CinderDelegateBase::_setup()
     {
-        if (!intern::setup && intern::launched)
-        {
-            LOGI_IF(true) << "WINDOW INFO: " << setupInfo.windowInfo << endl; // LOG: VERBOSE
-            
-            sketch->performSetup(setupInfo.windowInfo);
-            
-            // ---
-            
-            intern::setup = true;
-        }
+        assert(!setup_ && initialized_);
+        
+        /*
+         * TODO: MOVE TO TaskManager?
+         */
+        intern::io_service = setupInfo.io_service;
+        intern::threadId = this_thread::get_id();
+        intern::threadReady = true;
+        
+        intern::taskManager = TaskManager::create();
+        
+        // ---
+        
+        LOGI_IF(true) << "WINDOW INFO: " << setupInfo.windowInfo << endl; // LOG: VERBOSE
+        
+        sketch->performSetup(setupInfo.windowInfo);
     }
     
     void CinderDelegateBase::_shutdown()
     {
-        if (intern::initialized)
-        {
-            if (intern::setup)
-            {
-                sketch->shutdown();
-                delete sketch;
-                sketchDestroyed(sketch);
-                sketch = nullptr;
-            }
-            
-            if (intern::launched)
-            {
-                /*
-                 * TODO:
-                 *
-                 * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-                 * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
-                 */
-                intern::taskManager.reset();
-                intern::io_service = nullptr;
-            }
-            
-            DisplayHelper::shutdown();
-            FileHelper::shutdown();
-            
-            intern::memoryManager->shutdown();
-            intern::memoryManager.reset();
-            
-            intern::systemManager->shutdown();
-            intern::systemManager.reset();
-            
-            // ---
-            
-            intern::initialized = false;
-            intern::launched = false;
-            intern::setup = false;
-        }
+        assert(setup_);
+        
+        sketch->shutdown();
+        
+        /*
+         * TODO:
+         *
+         * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+         * - SEE RELATED TODOS IN CinderDelegate AND TaskManager
+         */
+        intern::taskManager.reset();
+        intern::threadReady = false;
+        intern::io_service = nullptr;
     }
     
     // ---
@@ -171,7 +140,7 @@ namespace chr
     {
         bool isThreadSafe()
         {
-            if (intern::launched)
+            if (intern::threadReady)
             {
                 return intern::threadId == this_thread::get_id();
             }
@@ -189,7 +158,7 @@ namespace chr
                     return true;
                 }
             }
-            else if (intern::io_service)
+            else if (intern::threadReady)
             {
                 intern::io_service->post(forward<function<void()>>(fn));
                 return true;

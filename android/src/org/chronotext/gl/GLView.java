@@ -71,6 +71,7 @@ public class GLView extends GLSurfaceView
   protected boolean hidden;
   protected boolean exiting;
   protected boolean shutdown;
+  protected boolean uninitialized;
 
   public GLView(Context context, CinderBridge bridge, Properties properties)
   {
@@ -105,14 +106,11 @@ public class GLView extends GLSurfaceView
 
     cinderRenderer = new CinderRenderer(cinderBridge);
     setRenderer(cinderRenderer); // WILL START THE RENDERER'S THREAD
+  }
 
-    queueEvent(new Runnable()
-    {
-      public void run()
-      {
-        cinderRenderer.performLaunch();
-      }
-    });
+  public boolean isValid()
+  {
+    return !(shutdown || exiting || uninitialized);
   }
 
   @Override
@@ -148,7 +146,7 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onAttachedToWindow");
 
-    if (shutdown)
+    if (!isValid())
     {
       Utils.LOGE("GLView IS INVALID");
       return;
@@ -180,7 +178,7 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.onDetachedFromWindow");
 
-    if (shutdown || exiting)
+    if (!isValid())
     {
       return;
     }
@@ -194,8 +192,6 @@ public class GLView extends GLSurfaceView
         cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
       }
 
-      cinderBridge.sketchWillShutdown(CinderBridge.THREAD_MAIN); // TODO: SHOULD TAKE PLACE ONLY IF "SETUP" TOOK PLACE
-
       /*
        * SEEMS THE ONLY WAY TO COMMUNICATE WITH THE RENDERER'S THREAD BEFORE IT EXITS
        * SEE ALSO: GLView.CustomContextFactory.destroyContext()
@@ -205,17 +201,7 @@ public class GLView extends GLSurfaceView
        * PROBLEM: THIS WON'T HAPPEN IF THE GL-VIEW WAS NOT VISIBLE WHILE ATTACHED
        * SOLUTION: NO OBVIOUS GLSurfaceView HACK FOR NOW!
        *
-       * THEREFORE, IF WE WANT TO ALLOW THE ATTACHMENT OF NON-VISIBLE GL-VIEWS:
-       * - CinderSketch::shutdown() MUST BE SOLELY ASSOCIATED THE WITH RENDERERER'S THREAD, I.E.
-       *   - IT WILL ONLY OCCUR IF setup() WAS CALLED (I.E. GL-VIEW WAS VISIBLE AT SOME POINT WHILE ATTACHED)
-       *   - CinderSketch::uninit() MUST BE REINTRODUCED (ASSOCIATED WITH init() AND THE MAIN-THREAD)
-       *   - CinderSketch::launch() MUST BE CANCELLED:
-       *     - OTHERWISE, STUFF ALLOCATED DURING THE CALLBACK MAY NEVER BE RELEASED (I.E. IF setup() IS NEVER REACHED...)
-       *     - AND IN ANY-CASE, THE FOLLOWING WAS ALREADY PROBLEMATIC:
-       *       - Q: WHAT HAPPENS TO STUFF POSTED (I.E. TO SERVICE-IO, ON THE MAIN-THREAD) AFTER launch()
-       *            WHEN setup() IS NOT IMMEDIATLY CALLED?
-       *       - A: THE STUFF IS NEVER ACTUALLY "CONSUMED", BECAUSE SERVICE-IO-POLLING
-       *            IS TAKING PLACE DURING SKETCH UPDATE
+       * CONSEQUENCES: "RENDERER'S THREAD CREATION" AND "GL CONTEXT CREATION" MUST SHARE THE SAME "SETUP" EVENT
        */
       exiting = true;
 
@@ -224,12 +210,8 @@ public class GLView extends GLSurfaceView
        */
       super.onDetachedFromWindow();
 
-      if (!hidden)
-      {
-        cinderBridge.sketchDidStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
-      }
-
-      cinderBridge.sketchDidShutdown(CinderBridge.THREAD_MAIN); // TODO: SHOULD TAKE PLACE ONLY IF "SETUP" TOOK PLACE
+      cinderBridge.performUninit();
+      uninitialized = true;
     }
   }
 
@@ -238,17 +220,18 @@ public class GLView extends GLSurfaceView
   {
     Utils.LOGD("GLView.visibilityChanged: " + visibility);
 
-    if (shutdown || exiting)
-    {
-      return;
-    }
-
     if (changedView == this)
     {
       switch (visibility)
       {
         case View.VISIBLE:
         {
+          if (!isValid())
+          {
+            Utils.LOGE("GLView IS INVALID");
+            return;
+          }
+
           hidden = false;
           break;
         }
@@ -256,6 +239,11 @@ public class GLView extends GLSurfaceView
         case View.GONE:
         case View.INVISIBLE: // WARNING: THIS ONE USED TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1, HONEYCOMB)
         {
+          if (!isValid())
+          {
+            return;
+          }
+
           hidden = true;
           break;
         }
@@ -286,7 +274,7 @@ public class GLView extends GLSurfaceView
   @Override
   public boolean onTouchEvent(MotionEvent event)
   {
-    if (shutdown || exiting)
+    if (!isValid())
     {
       return false;
     }
@@ -389,7 +377,7 @@ public class GLView extends GLSurfaceView
 
   public boolean resume()
   {
-    if (!shutdown && !exiting)
+    if (isValid())
     {
       if (attached && paused) // SIMPLE PROTECTION AGAINST SPURIOUS onResume() CALLS
       {
@@ -413,7 +401,7 @@ public class GLView extends GLSurfaceView
 
   public boolean pause()
   {
-    if (!shutdown && !exiting)
+    if (isValid())
     {
       if (attached && !paused) // SIMPLE PROTECTION AGAINST SPURIOUS onPause() CALLS
       {
@@ -437,7 +425,7 @@ public class GLView extends GLSurfaceView
 
   public boolean backPressed()
   {
-    if (!shutdown && !exiting)
+    if (isValid())
     {
       if (attached && !hidden)
       {

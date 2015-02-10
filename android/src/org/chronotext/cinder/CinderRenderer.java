@@ -39,14 +39,12 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   protected CinderBridge cinderBridge;
 
-  protected boolean launched;
   protected boolean setup;
   protected boolean attached;
   protected boolean paused;
   protected boolean hidden;
   protected boolean started;
-  protected boolean shutdown;
-
+  
   protected boolean setupRequest;
   protected boolean contextRenewalRequest;
 
@@ -146,7 +144,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
       Utils.LOGD("CinderRenderer.performSetup: " + width + "x" + height);
 
       setup(width, height);
-      cinderBridge.sketchDidSetup(CinderBridge.THREAD_RENDERER);
+      cinderBridge.sketchDidSetup();
 
       setup = true;
     }
@@ -220,7 +218,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     dispatchEvent(EVENT_BACKGROUND);
   }
 
-  // ---------------------------------------- POSTED TO THE RENDERER'S THREAD FROM GLView ----------------------------------------
+  // ---------------------------------------- POSTED TO (OR INVOKED ON) THE RENDERER'S THREAD FROM GLView ----------------------------------------
 
   public void contextCreated()
   {
@@ -238,32 +236,19 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     }
   }
 
-  public void performLaunch()
-  {
-    if (!launched)
-    {
-      Utils.LOGD("CinderRenderer.performLaunch");
-
-      launch();
-      cinderBridge.sketchDidLaunch(CinderBridge.THREAD_RENDERER);
-
-      launched = true;
-    }
-  }
-
   /*
    * TODO: CONSIDER MERGING WITH CinderRenderer.detachedFromWindow()
    */
   public void performShutdown()
   {
-    if (setup && !shutdown)
+    if (setup)
     {
       Utils.LOGD("CinderRenderer.performShutdown");
 
       shutdown();
-      cinderBridge.sketchDidShutdown(CinderBridge.THREAD_RENDERER); // REASON: DETACHED FROM WINDOW
+      cinderBridge.sketchDidShutdown(); // REASON: DETACHED FROM WINDOW
 
-      shutdown = true;
+      setup = false;
     }
   }
 
@@ -302,31 +287,37 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   public void resumed()
   {
-    Utils.LOGD("CinderRenderer.resumed");
+    if (attached)
+    {
+      Utils.LOGD("CinderRenderer.resumed");
 
-    if (hidden)
-    {
-      foreground();
-    }
-    else
-    {
-      paused = false;
-      requestStart(CinderBridge.START_REASON_APP_RESUMED); // REASON: APP RESUMED
+      if (hidden)
+      {
+        foreground();
+      }
+      else
+      {
+        paused = false;
+        requestStart(CinderBridge.START_REASON_APP_RESUMED); // REASON: APP RESUMED
+      }
     }
   }
 
   public void paused()
   {
-    Utils.LOGD("CinderRenderer.paused");
+    if (attached)
+    {
+      Utils.LOGD("CinderRenderer.paused");
 
-    if (hidden)
-    {
-      background();
-    }
-    else
-    {
-      paused = true;
-      performStop(CinderBridge.STOP_REASON_APP_PAUSED); // REASON: APP RESUMED
+      if (hidden)
+      {
+        background();
+      }
+      else
+      {
+        paused = true;
+        performStop(CinderBridge.STOP_REASON_APP_PAUSED); // REASON: APP RESUMED
+      }      
     }
   }
 
@@ -339,7 +330,12 @@ public class CinderRenderer implements GLSurfaceView.Renderer
       case View.VISIBLE:
       {
         hidden = false;
-        requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: VIEW SHOWN
+
+        if (attached)
+        {
+          requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: VIEW SHOWN  
+        }
+        
         break;
       }
 
@@ -347,7 +343,12 @@ public class CinderRenderer implements GLSurfaceView.Renderer
       case View.INVISIBLE: // WARNING: THIS ONE USED TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1, HONEYCOMB)
       {
         hidden = true;
-        performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: VIEW HIDDEN
+
+        if (attached)
+        {
+          performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: VIEW HIDDEN  
+        }
+        
         break;
       }
     }
@@ -379,7 +380,6 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  protected native void launch();
   protected native void setup(int width, int height);
   protected native void shutdown();
 

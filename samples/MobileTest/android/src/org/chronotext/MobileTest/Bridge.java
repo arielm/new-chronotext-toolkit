@@ -32,8 +32,8 @@ public class Bridge extends CinderBridge
   boolean CAN_BE_DETACHED = true;
 
 //int testMode = GLVIEW_ATTACHED_AND_VISIBLE_AT_START;
-//int testMode = GLVIEW_ATTACHED_AND_HIDDEN_AT_START;
-  int testMode = GLVIEW_NOT_ATTACHED_AT_START;
+  int testMode = GLVIEW_ATTACHED_AND_HIDDEN_AT_START;
+//int testMode = GLVIEW_NOT_ATTACHED_AT_START;
 
   RelativeLayout rootView;
   RelativeLayout overlayView;

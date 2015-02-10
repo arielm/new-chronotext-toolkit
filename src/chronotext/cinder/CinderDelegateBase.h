@@ -31,7 +31,7 @@ namespace chr
          * ci::app::KeyEvent IS NOT FULLY FUNCTIONAL ON MOBILE PLATFORMS
          *
          * HENCE THE FOLLOWING METHODS ALLOWING "FULL KEYBOARD
-         * INTERACTION" ON THE DESKTOP WITHOUT #ifdefs
+         * INTERACTION" ON THE DESKTOP WITHOUT USING MACROS
          */
         static int getCode(const ci::app::KeyEvent &keyEvent);
         static bool isShiftDown(const ci::app::KeyEvent &keyEvent);
@@ -40,9 +40,11 @@ namespace chr
         
     protected:
         CinderSketch *sketch = nullptr;
+        
+        bool initialized_ = false;
+        bool setup_ = false;
 
         system::InitInfo initInfo;
-        system::LaunchInfo launchInfo;
         system::SetupInfo setupInfo;
         
         AccelEvent::Filter accelFilter;
@@ -51,7 +53,7 @@ namespace chr
         virtual void sketchDestroyed(CinderSketch *sketch) {}
         
         bool _init();
-        void _launch();
+        void _uninit();
         void _setup();
         void _shutdown();
     };

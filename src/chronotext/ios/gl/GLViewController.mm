@@ -107,6 +107,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 - (void) loadView
 {
     DLOG(@"GLViewController:loadView");
+    
     [super loadView];
 
     glView = (GLKView*)self.view;

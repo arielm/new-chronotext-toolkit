@@ -33,18 +33,16 @@ namespace chr
 
 @interface CinderBridge ()
 {
-    CinderDelegate *cinderDelegate;
-
     BOOL initialized;
     BOOL setup;
-    BOOL launched;
+
+    CinderDelegate *cinderDelegate;
     
     map<UITouch*, uint32_t> touchIdMap;
 }
 
 - (BOOL) performInit;
-- (void) performLaunch;
-- (void) performShutdown;
+- (void) performUninit;
 
 - (Vec2i) windowSize;
 - (int) aaLevel;
@@ -73,7 +71,7 @@ namespace chr
 - (void) dealloc
 {
     DLOG(@"CinderBridge.dealloc");
-    [self performShutdown];
+    [self performUninit];
     
     [super dealloc];
 }
@@ -87,7 +85,7 @@ namespace chr
         system::bridge = self;
 
         cinderDelegate = new CinderDelegate();
-        cinderDelegate->init();
+        cinderDelegate->performInit();
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(applicationWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
@@ -103,52 +101,29 @@ namespace chr
     return initialized;
 }
 
-- (void) performLaunch
-{
-    if (!launched)
-    {
-        DLOG(@"CinderBridge.performLaunch");
-
-        viewController = [[GLViewController alloc] initWithBridge:self properties:viewControllerProperties];
-
-        cinderDelegate->launch();
-        
-        // ---
-        
-        launched = YES;
-    }
-}
-
-- (void) performSetup
-{
-    if (!setup)
-    {
-        auto size = [self windowSize];
-        DLOG(@"CinderBridge:performSetup - %dx%d", size.x, size.y);
-
-        cinderDelegate->setup(WindowInfo(size, [self aaLevel]));
-        
-        // ---
-        
-        setup = YES;
-    }
-}
-
-- (void) performShutdown
+- (void) performUninit
 {
     if (initialized)
     {
-        DLOG(@"CinderBridge:performShutdown");
+        DLOG(@"CinderBridge:performUninit");
         
-        if (launched)
+        if (setup)
+        {
+            cinderDelegate->performShutdown();
+            setup = NO;
+        }
+        
+        if (viewController)
         {
             [viewController release];
             viewController = nil;
         }
         
+        // ---
+        
         system::bridge = nil;
         
-        cinderDelegate->shutdown();
+        cinderDelegate->performUninit();
         delete cinderDelegate;
         cinderDelegate = nullptr;
         
@@ -156,9 +131,19 @@ namespace chr
         
         // ---
         
-        initialized = false;
-        launched = false;
-        setup = false;
+        initialized = NO;
+    }
+}
+
+- (void) performSetup
+{
+    if (!setup && initialized)
+    {
+        DLOG(@"CinderBridge.performSetup");
+
+        cinderDelegate->performSetup(WindowInfo([self windowSize], [self aaLevel]));
+        
+        setup = YES;
     }
 }
 
@@ -167,24 +152,24 @@ namespace chr
     auto size = [self windowSize];
     DLOG(@"CinderBridge:performResize - %dx%d", size.x, size.y);
     
-    cinderDelegate->resize(size);
+    cinderDelegate->performResize(size);
 }
 
 - (void) performUpdate
 {
-    cinderDelegate->update();
+    cinderDelegate->performUpdate();
 }
 
 - (void) performDraw
 {
-    cinderDelegate->draw();
+    cinderDelegate->performDraw();
 }
 
 - (GLViewController*) viewController
 {
     if (!viewController)
     {
-        [self performLaunch];
+        viewController = [[GLViewController alloc] initWithBridge:self properties:viewControllerProperties];
     }
     
     return viewController;
@@ -477,7 +462,7 @@ namespace chr
     if (initialized)
     {
         DLOG(@"CinderBridge:applicationWillTerminate");
-        [self performShutdown];
+        [self performUninit];
     }
 }
 

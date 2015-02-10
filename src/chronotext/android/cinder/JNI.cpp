@@ -255,41 +255,41 @@ void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobj
     jni::bridge = env->NewGlobalRef(bridge);
     
     jni::cinderDelegate = new CinderDelegate();
-    jni::cinderDelegate->init(env, context, display, Vec2i(displayWidth, displayHeight), displayDensity);
+    jni::cinderDelegate->performInit(env, context, display, Vec2i(displayWidth, displayHeight), displayDensity);
 }
 
-void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj)
+void Java_org_chronotext_cinder_CinderBridge_uninit(JNIEnv *env, jobject obj)
 {
-    jni::cinderDelegate->launch();
-}
-
-void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
-{
-    jni::cinderDelegate->setup(Vec2i(width, height));
-}
-
-void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
-{
-    jni::cinderDelegate->shutdown(env);
+    jni::cinderDelegate->performUninit(env);
     delete jni::cinderDelegate;
     
     env->DeleteGlobalRef(jni::bridge);
     jni::bridge = nullptr;
     
-    CI_LOGV("SHUTDOWN");
+    CI_LOGV("UNINIT");
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height)
+{
+    jni::cinderDelegate->performSetup(env, Vec2i(width, height));
+}
+
+void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj)
+{
+    jni::cinderDelegate->performShutdown(env);
 }
 
 // ---
 
 void Java_org_chronotext_cinder_CinderRenderer_resize(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    jni::cinderDelegate->resize(Vec2i(width, height));
+    jni::cinderDelegate->performResize(Vec2i(width, height));
 }
 
 void Java_org_chronotext_cinder_CinderRenderer_draw(JNIEnv *env, jobject obj)
 {
-    jni::cinderDelegate->update();
-    jni::cinderDelegate->draw();
+    jni::cinderDelegate->performUpdate();
+    jni::cinderDelegate->performDraw();
 }
 
 // ---

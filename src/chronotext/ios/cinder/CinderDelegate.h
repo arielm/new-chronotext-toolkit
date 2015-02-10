@@ -30,14 +30,14 @@ namespace chr
         static std::atomic<bool> LOG_VERBOSE;
         static std::atomic<bool> LOG_WARNING;
 
-        bool init();
-        void launch();
-        void setup(const WindowInfo &windowInfo);
-        void shutdown();
+        bool performInit();
+        void performUninit();
+        void performSetup(const WindowInfo &windowInfo);
+        void performShutdown();
         
-        void resize(const ci::Vec2i &size);
-        void update();
-        void draw();
+        void performResize(const ci::Vec2i &size);
+        void performUpdate();
+        void performDraw();
 
         void touchesBegan(ci::app::TouchEvent event);
         void touchesMoved(ci::app::TouchEvent event);

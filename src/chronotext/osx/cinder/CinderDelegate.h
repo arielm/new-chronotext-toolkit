@@ -58,6 +58,8 @@ namespace chr
         bool loadEmulators(chr::InputSource::Ref inputSource);
 
     protected:
+        bool prepared = false;
+        
         int updateCount = 0;
         int resizeCount = 0;
 

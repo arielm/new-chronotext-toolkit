@@ -36,7 +36,7 @@ extern "C"
     // ---
 
     void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity);
-    void Java_org_chronotext_cinder_CinderRenderer_launch(JNIEnv *env, jobject obj);
+    void Java_org_chronotext_cinder_CinderBridge_uninit(JNIEnv *env, jobject obj);
     void Java_org_chronotext_cinder_CinderRenderer_setup(JNIEnv *env, jobject obj, jint width, jint height);
     void Java_org_chronotext_cinder_CinderRenderer_shutdown(JNIEnv *env, jobject obj);
 

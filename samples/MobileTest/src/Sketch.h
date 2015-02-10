@@ -7,11 +7,11 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH
+ * IN SYNC WITH feature/NoLaunch BRANCH
  *
- * OSX: COMMIT c5d18e9
- * IOS: COMMIT c5d18e9
- * ANDROID: COMMIT c5d18e9
+ * OSX: LATEST COMMIT
+ * IOS: LATEST COMMIT
+ * ANDROID: LATEST COMMIT
  */
 
 /*

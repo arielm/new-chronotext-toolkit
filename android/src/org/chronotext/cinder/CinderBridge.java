@@ -101,9 +101,22 @@ public class CinderBridge extends Handler
       Utils.LOGD("CinderBridge.performInit: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
 
       init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
-      sketchDidInit(CinderBridge.THREAD_MAIN);
+      sketchDidInit();
 
       initialized = true;
+    }
+  }
+
+  public void performUninit()
+  {
+    if (initialized)
+    {
+      Utils.LOGD("CinderBridge.performUninit");
+
+      uninit();
+      sketchDidUninit();
+
+      initialized = false;
     }
   }
 
@@ -119,22 +132,23 @@ public class CinderBridge extends Handler
    * - INPUT (E.G. TOUCH, ACCELEROMETER), "POSTED FUNCTIONS", ETC. SHOULD BE DISPATCHED IN THE SAME ORDER ON ALL THE SUPPORTED PLATFORMS
    */
 
-//public void appWillPause(int threadId) {}
-//public void appDidResume(int threadId) {}
-//public void appWillTerminate(int threadId) {}
+  /*
+   * INVOKDED ON THE MAIN-THREAD
+   */
+  public void sketchDidInit() {}
+  public void sketchDidUninit() {}
 
-  public void sketchDidInit(int threadId) {}
-  public void sketchDidLaunch(int threadId) {}
-  public void sketchDidSetup(int threadId) {}
+  /*
+   * INVOKED ON THE RENDERER'S THREAD
+   */
+  public void sketchDidSetup() {}
+  public void sketchDidShutdown() {}
 
   public void sketchWillStart(int threadId, int reason) {}
   public void sketchDidStart(int threadId, int reason) {}
 
   public void sketchWillStop(int threadId, int reason) {}
   public void sketchDidStop(int threadId, int reason) {}
-
-  public void sketchWillShutdown(int threadId) {}
-  public void sketchDidShutdown(int threadId) {}
 
   // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERRIDE) ----------------------------------------
 
@@ -164,7 +178,7 @@ public class CinderBridge extends Handler
   
   public boolean onBackPressed()
   {
-    if (view != null) // TODO: ALSO CHECK IF shutdown
+    if (view != null)
     {
       Utils.LOGD("CinderBridge.onBackPressed");
 
@@ -243,6 +257,7 @@ public class CinderBridge extends Handler
   // ---------------------------------------- JNI ----------------------------------------
 
   protected native void init(Object bridge, Context context, Display display, int displayWidth, int displayHeight, float displayDensity);
+  protected native void uninit();
 
   /*
    * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
