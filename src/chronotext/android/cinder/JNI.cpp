@@ -75,37 +75,6 @@ namespace chr
         // ---
         
         /*
-         * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
-         *
-         * TODO:
-         *
-         * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
-         * 2) ADD THREAD-LOCK
-         * 3) HANDLE POTENTIAL "JNI EXCEPTION" IN callObjectMethodOnBridge()
-         */
-        
-        JsonTree jsonQuery(const char *methodName)
-        {
-            const string &query = toString((jstring)callObjectMethodOnBridge(methodName, "()Ljava/lang/String;"));
-            
-            if (!query.empty())
-            {
-                try
-                {
-                    return JsonTree(query);
-                }
-                catch (exception &e)
-                {
-                    LOGI_IF(CinderDelegate::LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
-                }
-            }
-            
-            return JsonTree();
-        }
-        
-        // ---
-        
-        /*
          * TODO: THROW "JNI EXCEPTION" WITH THE RELEVANT JAVA ERROR MESSAGE
          *
          * - IF METHOD CAN'T BE FOUND

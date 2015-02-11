@@ -11,6 +11,8 @@
 #include "chronotext/cinder/CinderSketch.h"
 #include "chronotext/system/SystemInfo.h"
 
+#include "cinder/Json.h"
+
 namespace chr
 {
     class CinderDelegateBase
@@ -26,6 +28,8 @@ namespace chr
         
         virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
         virtual void disableAccelerometer() {}
+        
+        virtual ci::JsonTree jsonQuery(const char *methodName) { return ci::JsonTree(); }
         
         /*
          * ci::app::KeyEvent IS NOT FULLY FUNCTIONAL ON MOBILE PLATFORMS

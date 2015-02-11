@@ -148,6 +148,39 @@ namespace chr
         sketch->event(eventId);
     }
     
+    // ---
+    
+    /*
+     * TODO:
+     *
+     * 1) FINALIZE THREAD-SAFETY POLICY
+     * 2) HANDLE POTENTIAL OBJECTIVE-C EXCEPTIONS WHILE "PERFORMING SELECTOR"
+     */
+    
+    JsonTree CinderDelegate::jsonQuery(const char *methodName)
+    {
+        SEL selector = NSSelectorFromString([NSString stringWithUTF8String:methodName]);
+        
+        if ([system::bridge respondsToSelector:selector])
+        {
+            const string &query = [[system::bridge performSelector:selector] UTF8String];
+            
+            if (!query.empty())
+            {
+                try
+                {
+                    return JsonTree(query);
+                }
+                catch (exception &e)
+                {
+                    LOGI_IF(LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
+                }
+            }
+        }
+        
+        return JsonTree();
+    }
+    
 #pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
     
     void CinderDelegate::startIOService()

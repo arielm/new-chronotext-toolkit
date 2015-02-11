@@ -196,6 +196,37 @@ namespace chr
         jni::callBooleanMethodOnBridge("handleAction", "(I)Z", actionId);
     }
     
+    // ---
+    
+    /*
+     * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
+     *
+     * TODO:
+     *
+     * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
+     * 2) FINALIZE THREAD-SAFETY POLICY
+     * 3) HANDLE POTENTIAL JNI EXCEPTIONS IN callObjectMethodOnBridge()
+     */
+    
+    JsonTree CinderDelegate::jsonQuery(const char *methodName)
+    {
+        const string &query = jni::toString((jstring)jni::callObjectMethodOnBridge(methodName, "()Ljava/lang/String;"));
+        
+        if (!query.empty())
+        {
+            try
+            {
+                return JsonTree(query);
+            }
+            catch (exception &e)
+            {
+                LOGI_IF(LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
+            }
+        }
+        
+        return JsonTree();
+    }
+    
 #pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
     
     void CinderDelegate::startIOService()

@@ -25,9 +25,9 @@
 
 #pragma once
 
-#include "cinder/Json.h"
-
 #include <jni.h>
+
+#include <string>
 
 extern "C"
 {
@@ -66,8 +66,6 @@ namespace chr
         
         std::string toString(jstring s);
         jstring toJString(const std::string &s);
-        
-        ci::JsonTree jsonQuery(const char *methodName);
         
         void callVoidMethodOnBridge(const char *name, const char *sig, ...);
         jboolean callBooleanMethodOnBridge(const char *name, const char *sig, ...);

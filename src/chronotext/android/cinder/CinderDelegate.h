@@ -65,6 +65,8 @@ namespace chr
 
         void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
         void disableAccelerometer() final;
+        
+        ci::JsonTree jsonQuery(const char *methodName) final;
 
     protected:
         int updateCount = 0;
