@@ -7,7 +7,6 @@
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/android/cinder/JNI.h"
 #include "chronotext/Context.h"
 
 using namespace std;

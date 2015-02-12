@@ -31,6 +31,7 @@
 
 extern "C"
 {
+    void android_main(struct android_app *state);
     jint JNI_OnLoad(JavaVM *vm, void *reserved);
     
     // ---

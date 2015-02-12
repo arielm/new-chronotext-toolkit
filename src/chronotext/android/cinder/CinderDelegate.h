@@ -17,7 +17,7 @@
 // ---
 
 #include "chronotext/cinder/CinderDelegateBase.h"
-#include "chronotext/system/SystemInfo.h"
+#include "chronotext/android/cinder/JNI.h"
 
 #include <boost/asio.hpp>
 

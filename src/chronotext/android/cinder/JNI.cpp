@@ -208,6 +208,13 @@ namespace chr
 using namespace chr;
 
 /*
+ * NEVER CALLED, BUT REQUIRED IN ORDER TO KEEP THE LINKER HAPPY
+ * REASON: SAFETYDANK'S cinder::app::AppAndroid IS RELYING ON android.app.NativeActivity
+ */
+void android_main(struct android_app *state)
+{}
+
+/*
  * WARNING: THIS IS *NOT* NECESSARILY CALLED EACH TIME THE APPLICATION STARTS...
  */
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
@@ -218,6 +225,8 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
     
     return JNI_VERSION_1_4;
 }
+
+// ---
 
 void Java_org_chronotext_cinder_CinderBridge_init(JNIEnv *env, jobject obj, jobject bridge, jobject context, jobject display, jint displayWidth, jint displayHeight, jfloat displayDensity)
 {
