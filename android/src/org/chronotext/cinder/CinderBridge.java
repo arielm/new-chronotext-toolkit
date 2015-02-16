@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,6 +8,7 @@
 
 package org.chronotext.cinder;
 
+import org.chronotext.cinder.BridgeListener;
 import org.chronotext.gl.GLView;
 import org.chronotext.utils.DisplayUtils;
 import org.chronotext.utils.Utils;
@@ -26,29 +27,38 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
-public class CinderBridge extends Handler
+public class CinderBridge extends Handler implements BridgeListener
 {
   /*
    * PARALLEL TO chronotext/cinder/CinderSketch.h
    */
-
-  public static final int START_REASON_VIEW_SHOWN = 1;
-  public static final int START_REASON_APP_RESUMED = 2;
-
-  public static final int STOP_REASON_VIEW_HIDDEN = 1;
-  public static final int STOP_REASON_APP_PAUSED = 2;
-
   public static final int ACTION_CAPTURE_BACK = 1;
   public static final int ACTION_RELEASE_BACK = 2;
 
-  // ---
+  /*
+   * INVOKED ON THE MAIN-THREAD
+   */
+  public static final int SKETCH_WILL_INIT = 1;
+  public static final int SKETCH_DID_INIT = 2;
+  public static final int SKETCH_WILL_UNINIT = 3;
+  public static final int SKETCH_DID_UNINIT = 4;
+  public static final int APP_DID_RESUME = 5;
+  public static final int APP_WILL_PAUSE = 6;
+  public static final int VIEW_WILL_APPEAR = 7;
+  public static final int VIEW_WILL_DISAPPEAR = 8;
 
-  public static final int THREAD_MAIN = 1;
-  public static final int THREAD_RENDERER = 2;
+  /*
+   * INVOKED ON THE RENDERER'S THREAD
+   */
+  public static final int SKETCH_WILL_SETUP = 9;
+  public static final int SKETCH_DID_SETUP = 10;
+  public static final int SKETCH_WILL_SHUTDOWN = 11;
+  public static final int SKETCH_DID_SHUTDOWN = 12;
 
   // ---
 
   protected Activity activity;
+  protected BridgeListener listener;
 
   protected GLView view;
   protected GLView.Properties viewProperties;
@@ -56,11 +66,17 @@ public class CinderBridge extends Handler
   protected boolean initialized;
   protected boolean backCaptured;
 
-  public CinderBridge(Activity activity)
+  public CinderBridge(Activity activity, BridgeListener listener)
   {
     this.activity = activity;
+    this.listener = listener;
 
     performInit(); // WILL CREATE THE C++ CinderDelegate
+  }
+
+  public CinderBridge(Activity activity)
+  {
+    this(activity, null);
   }
 
   public Activity getActivity()
@@ -100,8 +116,9 @@ public class CinderBridge extends Handler
 
       Utils.LOGD("CinderBridge.performInit: " + displaySize.x + "x" + displaySize.y + " (" + displayDensity + " dpi)");
 
+      dispatchEvent(SKETCH_WILL_INIT);
       init(this, activity, display, displaySize.x, displaySize.y, displayDensity);
-      sketchDidInit();
+      dispatchEvent(SKETCH_DID_INIT);
 
       initialized = true;
     }
@@ -113,42 +130,50 @@ public class CinderBridge extends Handler
     {
       Utils.LOGD("CinderBridge.performUninit");
 
+      dispatchEvent(SKETCH_WILL_UNINIT);
       uninit();
-      sketchDidUninit();
+      dispatchEvent(SKETCH_DID_UNINIT);
 
       initialized = false;
     }
   }
 
-  // ---------------------------------------- INVOKED ON THE MAIN-THREAD FROM GLView ----------------------------------------
+  // ---------------------------------------- BRIDGE CALLBACKS ----------------------------------------
 
-  /*
-   * IN PROGRESS...
-   *
-   * ALTERNATIVE: USING A SINGLE handleEvent(int eventId) METHOD (CONS: LONG AND CUMBERSOME ENUMS...)
-   *
-   * TODO:
-   * - COMPLETE "BRIDGE CALLBACKS" SYSTEM
-   * - INPUT (E.G. TOUCH, ACCELEROMETER), "POSTED FUNCTIONS", ETC. SHOULD BE DISPATCHED IN THE SAME ORDER ON ALL THE SUPPORTED PLATFORMS
-   */
+  @Override
+  public void handleMessage(Message msg)
+  {
+    if (listener != null)
+    {
+      listener.handleMessage(msg.what, (String) msg.obj);
+    }
+    else
+    {
+      handleMessage(msg.what, (String) msg.obj);
+    }
+  }
 
-  /*
-   * INVOKDED ON THE MAIN-THREAD
-   */
-  public void sketchDidInit() {}
-  public void sketchDidUninit() {}
+  public void dispatchEvent(int eventId)
+  {
+    if (listener != null)
+    {
+      listener.handleEvent(eventId);
+    }
+    else
+    {
+      handleEvent(eventId);
+    }
+  }
 
-  /*
-   * INVOKED ON THE RENDERER'S THREAD
-   */
-  public void sketchDidSetup() {}
-  public void sketchDidShutdown() {}
+  // ---
 
-  public void sketchWillStart(int threadId, int reason) {}
-  public void sketchDidStart(int threadId, int reason) {}
+  @Override
+  public void handleMessage(int what, String body)
+  {}
 
-  public void sketchWillStop(int threadId, int reason) {}
-  public void sketchDidStop(int threadId, int reason) {}
+  @Override
+  public void handleEvent(int eventId)
+  {}
 
   // ---------------------------------------- TO BE FORWARDED FROM THE HOST ACTIVITY (DO NOT OVERRIDE) ----------------------------------------
 
@@ -159,7 +184,7 @@ public class CinderBridge extends Handler
       if (view.pause())
       {
         Utils.LOGD("CinderBridge.onPause");
-        sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_APP_PAUSED);
+        dispatchEvent(APP_WILL_PAUSE);
       }
     }
   }
@@ -171,7 +196,7 @@ public class CinderBridge extends Handler
       if (view.resume())
       {
         Utils.LOGD("CinderBridge.onResume");
-        sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_APP_RESUMED);
+        dispatchEvent(APP_DID_RESUME);
       }
     }
   }

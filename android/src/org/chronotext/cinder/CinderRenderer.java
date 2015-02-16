@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -135,7 +135,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     }
   }
 
-  // ---------------------------------------- LIFE-CYCLE ----------------------------------------
+  // ---------------------------------------- INTERNAL LIFE-CYCLE ----------------------------------------
 
   protected void performSetup(int width, int height)
   {
@@ -143,8 +143,9 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     {
       Utils.LOGD("CinderRenderer.performSetup: " + width + "x" + height);
 
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_WILL_SETUP);
       setup(width, height);
-      cinderBridge.sketchDidSetup();
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_DID_SETUP);
 
       setup = true;
     }
@@ -168,20 +169,44 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   protected void performStart(int reason)
   {
-    Utils.LOGD("CinderRenderer.start: " + (reason == CinderBridge.START_REASON_APP_RESUMED ? "RESUMED" : "SHOWN"));
+    switch (reason)
+    {
+      case CinderBridge.VIEW_WILL_APPEAR:
+      {
+        Utils.LOGD("CinderRenderer.performStart: SHOWN");
+        dispatchEvent(CinderRenderer.EVENT_SHOWN);
+        break;
+      }
 
-    dispatchEvent(reason == CinderBridge.START_REASON_APP_RESUMED ? CinderRenderer.EVENT_RESUMED : CinderRenderer.EVENT_SHOWN);
-    cinderBridge.sketchDidStart(CinderBridge.THREAD_RENDERER, reason);
+      case CinderBridge.APP_DID_RESUME:
+      {
+        Utils.LOGD("CinderRenderer.performStart: RESUMED");
+        dispatchEvent(CinderRenderer.EVENT_RESUMED);
+        break;
+      }
+    }
 
     started = true;
   }
   
   protected void performStop(int reason)
   {
-    Utils.LOGD("CinderRenderer.stop: " + (reason == CinderBridge.STOP_REASON_APP_PAUSED ? "PAUSED" : "HIDDEN"));
+    switch (reason)
+    {
+      case CinderBridge.VIEW_WILL_DISAPPEAR:
+      {
+        Utils.LOGD("CinderRenderer.performStop: HIDDEN");
+        dispatchEvent(CinderRenderer.EVENT_HIDDEN);
+        break;
+      }
 
-    dispatchEvent(reason == CinderBridge.STOP_REASON_APP_PAUSED ? CinderRenderer.EVENT_PAUSED : CinderRenderer.EVENT_HIDDEN);
-    cinderBridge.sketchDidStop(CinderBridge.THREAD_RENDERER, reason);
+      case CinderBridge.APP_WILL_PAUSE:
+      {
+        Utils.LOGD("CinderRenderer.performStop: PAUSED");
+        dispatchEvent(CinderRenderer.EVENT_PAUSED);
+        break;
+      }
+    }
 
     started = false;
   }
@@ -238,6 +263,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
   /*
    * TODO: CONSIDER MERGING WITH CinderRenderer.detachedFromWindow()
+   * SEE ALSO: GLView.CustomContextFactory.destroyContext()
    */
   public void performShutdown()
   {
@@ -245,8 +271,9 @@ public class CinderRenderer implements GLSurfaceView.Renderer
     {
       Utils.LOGD("CinderRenderer.performShutdown");
 
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_WILL_SHUTDOWN);
       shutdown();
-      cinderBridge.sketchDidShutdown(); // REASON: DETACHED FROM WINDOW
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_DID_SHUTDOWN);
 
       setup = false;
     }
@@ -262,13 +289,14 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
       if (!hidden)
       {
-        requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: ATTACHED TO WINDOW
+        requestStart(CinderBridge.VIEW_WILL_APPEAR); // REASON: ATTACHED TO WINDOW
       }
     }
   }
 
   /*
    * TODO: CONSIDER MERGING WITH CinderRenderer.performShutdown()
+   * SEE ALSO: GLView.CustomContextFactory.destroyContext()
    */
   public void detachedFromWindow()
   {
@@ -280,7 +308,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
       if (!paused && !hidden)
       {
-        performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: DETACHED FROM WINDOW
+        performStop(CinderBridge.VIEW_WILL_DISAPPEAR); // REASON: DETACHED FROM WINDOW
       }
     } 
   }
@@ -298,7 +326,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
       else
       {
         paused = false;
-        requestStart(CinderBridge.START_REASON_APP_RESUMED); // REASON: APP RESUMED
+        requestStart(CinderBridge.APP_DID_RESUME); // REASON: APP RESUMED
       }
     }
   }
@@ -316,7 +344,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
       else
       {
         paused = true;
-        performStop(CinderBridge.STOP_REASON_APP_PAUSED); // REASON: APP RESUMED
+        performStop(CinderBridge.APP_WILL_PAUSE); // REASON: APP PAUSED
       }      
     }
   }
@@ -333,7 +361,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
         if (attached)
         {
-          requestStart(CinderBridge.START_REASON_VIEW_SHOWN); // REASON: VIEW SHOWN  
+          requestStart(CinderBridge.VIEW_WILL_APPEAR); // REASON: VIEW SHOWN  
         }
         
         break;
@@ -346,7 +374,7 @@ public class CinderRenderer implements GLSurfaceView.Renderer
 
         if (attached)
         {
-          performStop(CinderBridge.STOP_REASON_VIEW_HIDDEN); // REASON: VIEW HIDDEN  
+          performStop(CinderBridge.VIEW_WILL_DISAPPEAR); // REASON: VIEW HIDDEN  
         }
         
         break;

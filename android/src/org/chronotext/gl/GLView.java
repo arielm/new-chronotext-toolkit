@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -158,7 +158,7 @@ public class GLView extends GLSurfaceView
 
       if (!hidden)
       {
-        cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN);
+        cinderBridge.dispatchEvent(CinderBridge.VIEW_WILL_APPEAR);
       }
 
       super.onAttachedToWindow();
@@ -189,7 +189,7 @@ public class GLView extends GLSurfaceView
 
       if (!hidden)
       {
-        cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
+        cinderBridge.dispatchEvent(CinderBridge.VIEW_WILL_DISAPPEAR);
       }
 
       /*
@@ -261,11 +261,11 @@ public class GLView extends GLSurfaceView
       {
         if (hidden)
         {
-          cinderBridge.sketchWillStop(CinderBridge.THREAD_MAIN, CinderBridge.STOP_REASON_VIEW_HIDDEN);
+          cinderBridge.dispatchEvent(CinderBridge.VIEW_WILL_DISAPPEAR);
         }
         else
         {
-          cinderBridge.sketchWillStart(CinderBridge.THREAD_MAIN, CinderBridge.START_REASON_VIEW_SHOWN);
+          cinderBridge.dispatchEvent(CinderBridge.VIEW_WILL_APPEAR);
         }
       }
     }

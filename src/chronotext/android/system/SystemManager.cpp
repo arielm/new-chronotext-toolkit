@@ -9,8 +9,6 @@
 #include "chronotext/android/system/SystemManager.h"
 #include "chronotext/Context.h"
 
-#include "cinder/Utilities.h"
-
 #include <sys/system_properties.h>
 #include <sys/utsname.h>
 
@@ -23,6 +21,11 @@ namespace chr
     {
         namespace android
         {
+            /*
+             * FIXME: WILL NOT WORK ANYMORE, STARTING FROM ANDROID LOLLIPOP
+             *
+             * HINT: http://stackoverflow.com/questions/26722040/replacement-for-system-property-get-in-android-l-ndk
+             */
             const string getProperty(const char *name)
             {
                 static char tmp[256];
