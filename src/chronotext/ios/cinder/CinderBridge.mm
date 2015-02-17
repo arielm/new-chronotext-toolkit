@@ -56,12 +56,19 @@ namespace chr
 
 @implementation CinderBridge
 
+@synthesize listener;
 @synthesize viewControllerProperties;
 
 - (id) init
 {
+    return [self initWithListener:nil];
+}
+
+- (id) initWithListener:(NSObject<BridgeListener>*)_listener
+{
     if (self = [super init])
     {
+        self.listener = _listener;
         [self performInit];
     }
     
@@ -212,6 +219,32 @@ namespace chr
             cinderDelegate->handleEvent(CinderSketch::EVENT_PAUSED);
             break;
         }
+    }
+}
+
+#pragma mark ---------------------------------------- BRIDGE CALLBACKS ----------------------------------------
+
+- (void) dispatchMessage:(int)what body:(NSString*)body
+{
+    if (self.listener)
+    {
+        [listener handleMessage:what body:body];
+    }
+    else
+    {
+        [self handleMessage:what body:body];
+    }
+}
+
+- (void) dispatchEvent:(int)eventId
+{
+    if (self.listener)
+    {
+        [listener handleEvent:eventId];
+    }
+    else
+    {
+        [self handleEvent:eventId];
     }
 }
 
@@ -452,7 +485,12 @@ namespace chr
     cinderDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
+// ---
+
 - (void) handleMessage:(int)what body:(NSString*)body
+{}
+
+- (void) handleEvent:(int)eventId
 {}
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------

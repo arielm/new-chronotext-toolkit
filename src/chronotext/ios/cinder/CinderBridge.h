@@ -12,16 +12,21 @@
  */
 
 #import "chronotext/cocoa/utils/NSString+JSON.h"
+#import "chronotext/ios/cinder/BridgeListener.h"
 #import "chronotext/ios/gl/GLViewController.h"
 
-@interface CinderBridge : NSObject <UIAccelerometerDelegate>
+@interface CinderBridge : NSObject <UIAccelerometerDelegate, BridgeListener>
 {
+    NSObject<BridgeListener> *listener;
     GLViewController *viewController;
     NSDictionary *viewControllerProperties;
 }
 
+@property (nonatomic, retain) NSObject<BridgeListener> *listener;
 @property (nonatomic, readonly) GLViewController *viewController;
 @property (nonatomic, retain) NSDictionary *viewControllerProperties;
+
+- (id) initWithListener:(NSObject<BridgeListener>*)listener;
 
 - (void) performSetup;
 - (void) performResize;
@@ -40,7 +45,8 @@
 - (void) sendMessageToSketch:(int)what json:(id)json;
 - (void) sendMessageToSketch:(int)what body:(NSString*)body;
 
-- (void) handleMessage:(int)what body:(NSString*)body;
+- (void) dispatchMessage:(int)what body:(NSString*)body;
+- (void) dispatchEvent:(int)eventId;
 
 @end
 

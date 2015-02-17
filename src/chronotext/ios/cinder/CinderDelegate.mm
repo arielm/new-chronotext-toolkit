@@ -124,6 +124,11 @@ namespace chr
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
     
+    void CinderDelegate::sendMessageToBridge(int what, const string &body)
+    {
+        [system::bridge dispatchMessage:what body:[NSString stringWithUTF8String:body.data()]];
+    }
+    
     void CinderDelegate::handleEvent(int eventId)
     {
         switch (eventId)

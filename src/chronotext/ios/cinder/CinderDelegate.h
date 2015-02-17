@@ -43,9 +43,10 @@ namespace chr
         void touchesMoved(ci::app::TouchEvent event);
         void touchesEnded(ci::app::TouchEvent event);
 
+        void sendMessageToBridge(int what, const std::string &body = "") final;
         void handleEvent(int eventId) final;
 
-        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
+        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) final;
         void disableAccelerometer() final;
         void handleAcceleration(const ci::Vec3f &acceleration);
         

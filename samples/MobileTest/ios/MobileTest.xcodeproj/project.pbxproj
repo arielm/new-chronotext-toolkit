@@ -93,6 +93,7 @@
 		A802714019CC83FD0072973D /* QuadBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatchMap.h; sourceTree = "<group>"; };
 		A802714119CC83FD0072973D /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
 		A802714219CC83FD0072973D /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
+		A8147D911A92534600885D67 /* BridgeListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeListener.h; sourceTree = "<group>"; };
 		A826F48D1A6811FB002A23A9 /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		A826F48E1A6811FB002A23A9 /* Bridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bridge.mm; sourceTree = "<group>"; };
 		A826F4CA1A6B0D8D002A23A9 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
@@ -487,6 +488,7 @@
 				A8FA3BC216E3AB8000367F97 /* CinderBridge.mm */,
 				A826F4CC1A6B0D9B002A23A9 /* CinderDelegate.h */,
 				A826F4CD1A6B0D9B002A23A9 /* CinderDelegate.mm */,
+				A8147D911A92534600885D67 /* BridgeListener.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
