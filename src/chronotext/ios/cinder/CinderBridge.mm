@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -90,9 +90,7 @@ namespace chr
         DLOG(@"CinderBridge.performInit");
 
         system::bridge = self;
-
         cinderDelegate = new CinderDelegate();
-        cinderDelegate->performInit();
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(applicationWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
@@ -100,6 +98,10 @@ namespace chr
         [center addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
         [center addObserver:self selector:@selector(applicationDidReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 
+        [self dispatchEvent:SKETCH_WILL_INIT];
+        cinderDelegate->performInit();
+        [self dispatchEvent:SKETCH_DID_INIT];
+        
         // ---
         
         initialized = YES;
@@ -116,7 +118,10 @@ namespace chr
         
         if (setup)
         {
+            [self dispatchEvent:SKETCH_WILL_SHUTDOWN];
             cinderDelegate->performShutdown();
+            [self dispatchEvent:SKETCH_DID_SHUTDOWN];
+            
             setup = NO;
         }
         
@@ -130,7 +135,10 @@ namespace chr
         
         system::bridge = nil;
         
+        [self dispatchEvent:SKETCH_WILL_UNINIT];
         cinderDelegate->performUninit();
+        [self dispatchEvent:SKETCH_DID_UNINIT];
+        
         delete cinderDelegate;
         cinderDelegate = nullptr;
         
@@ -148,7 +156,9 @@ namespace chr
     {
         DLOG(@"CinderBridge.performSetup");
 
+        [self dispatchEvent:SKETCH_WILL_SETUP];
         cinderDelegate->performSetup(WindowInfo([self windowSize], [self aaLevel]));
+        [self dispatchEvent:SKETCH_DID_SETUP];
         
         setup = YES;
     }
@@ -189,13 +199,18 @@ namespace chr
         case REASON_VIEW_WILL_APPEAR:
         {
             DLOG(@"CinderBridge:startWithReason - SHOWN");
+            
+            [self dispatchEvent:VIEW_WILL_APPEAR];
             cinderDelegate->handleEvent(CinderSketch::EVENT_SHOWN);
+            
             break;
         }
             
         case REASON_APP_DID_BECOME_ACTIVE:
         {
             DLOG(@"CinderBridge:startWithReason - RESUMED");
+            
+            [self dispatchEvent:APP_DID_RESUME];
             cinderDelegate->handleEvent(CinderSketch::EVENT_RESUMED);
             break;
         }
@@ -209,14 +224,20 @@ namespace chr
         case REASON_VIEW_WILL_DISAPPEAR:
         {
             DLOG(@"CinderBridge:stopWithReason - HIDDEN");
+            
+            [self dispatchEvent:VIEW_WILL_DISAPPEAR];
             cinderDelegate->handleEvent(CinderSketch::EVENT_HIDDEN);
+            
             break;
         }
             
         case REASON_APP_WILL_RESIGN_ACTIVE:
         {
             DLOG(@"CinderBridge:stopWithReason - PAUSED");
+            
+            [self dispatchEvent:APP_WILL_PAUSE];
             cinderDelegate->handleEvent(CinderSketch::EVENT_PAUSED);
+            
             break;
         }
     }
@@ -379,7 +400,7 @@ namespace chr
 - (void) updateActiveTouches
 {
     auto view = viewController.view;
-    float scale = view.contentScaleFactor; // XXX
+    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
 
     vector<TouchEvent::Touch> activeTouches;
     
@@ -397,7 +418,7 @@ namespace chr
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
     auto view = viewController.view;
-    float scale = view.contentScaleFactor; // XXX
+    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
     
     vector<TouchEvent::Touch> touchList;
     
@@ -419,7 +440,7 @@ namespace chr
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
     auto view = viewController.view;
-    float scale = view.contentScaleFactor; // XXX
+    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
     
     vector<TouchEvent::Touch> touchList;
     
@@ -441,7 +462,7 @@ namespace chr
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
     auto view = viewController.view;
-    float scale = view.contentScaleFactor; // XXX
+    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
     
     vector<TouchEvent::Touch> touchList;
     

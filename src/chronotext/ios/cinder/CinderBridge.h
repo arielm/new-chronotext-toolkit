@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -14,6 +14,24 @@
 #import "chronotext/cocoa/utils/NSString+JSON.h"
 #import "chronotext/ios/cinder/BridgeListener.h"
 #import "chronotext/ios/gl/GLViewController.h"
+
+enum
+{
+    SKETCH_WILL_INIT,
+    SKETCH_DID_INIT,
+    SKETCH_WILL_UNINIT,
+    SKETCH_DID_UNINIT,
+    
+    APP_DID_RESUME,
+    APP_WILL_PAUSE,
+    VIEW_WILL_APPEAR,
+    VIEW_WILL_DISAPPEAR,
+    
+    SKETCH_WILL_SETUP,
+    SKETCH_DID_SETUP,
+    SKETCH_WILL_SHUTDOWN,
+    SKETCH_DID_SHUTDOWN
+};
 
 @interface CinderBridge : NSObject <UIAccelerometerDelegate, BridgeListener>
 {
