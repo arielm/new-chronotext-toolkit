@@ -114,6 +114,7 @@
 		A8112C901A4F30050002CF68 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A8112CC31A4F55010002CF68 /* Georgia_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = Georgia_Regular_64.fnt; path = ../resources/Georgia_Regular_64.fnt; sourceTree = "<group>"; };
 		A8112CC41A4F55010002CF68 /* hairline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline.png; path = ../resources/hairline.png; sourceTree = "<group>"; };
+		A8147D931A957DD100885D67 /* BridgeListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeListener.h; sourceTree = "<group>"; };
 		A826F4901A681FC7002A23A9 /* CinderBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderBridge.h; sourceTree = "<group>"; };
 		A826F4911A681FC7002A23A9 /* CinderBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderBridge.mm; sourceTree = "<group>"; };
 		A826F4C51A69F75C002A23A9 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
@@ -527,6 +528,7 @@
 		A8FA3BC016E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
+				A8147D931A957DD100885D67 /* BridgeListener.h */,
 				A826F4901A681FC7002A23A9 /* CinderBridge.h */,
 				A826F4911A681FC7002A23A9 /* CinderBridge.mm */,
 				A826F4C81A69FB40002A23A9 /* CinderDelegate.h */,

@@ -17,9 +17,9 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT e32cfd0
- * IOS: COMMIT e32cfd0
- * ANDROID: COMMIT e32cfd0
+ * OSX: COMMIT 4d26837
+ * IOS: COMMIT 4d26837
+ * ANDROID: COMMIT 4d26837
  */
 
 #pragma once

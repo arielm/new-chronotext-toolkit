@@ -484,11 +484,11 @@
 		A8FA3BC016E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
+				A8147D911A92534600885D67 /* BridgeListener.h */,
 				A8FA3BC116E3AB8000367F97 /* CinderBridge.h */,
 				A8FA3BC216E3AB8000367F97 /* CinderBridge.mm */,
 				A826F4CC1A6B0D9B002A23A9 /* CinderDelegate.h */,
 				A826F4CD1A6B0D9B002A23A9 /* CinderDelegate.mm */,
-				A8147D911A92534600885D67 /* BridgeListener.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
