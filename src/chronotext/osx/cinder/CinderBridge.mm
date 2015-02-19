@@ -1,12 +1,13 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #import "chronotext/osx/cinder/CinderBridge.h"
+#import "chronotext/cocoa/utils/Utils.h"
 
 using namespace std;
 using namespace ci;
@@ -37,10 +38,8 @@ using namespace chr;
 
 - (void) sendMessageToSketch:(int)what json:(id)json
 {
-    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
-    NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    
-    cinderDelegate->messageFromBridge(what, [string UTF8String]);
+    NSString *body = [NSString stringWithJSONObject:json];
+    cinderDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
