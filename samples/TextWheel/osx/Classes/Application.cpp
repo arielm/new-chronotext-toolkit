@@ -6,16 +6,13 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * STUB FOR RUNNING A CinderSketch ON THE DESKTOP
- */
+#include "Application.h"
 
-#pragma once
+using namespace std;
+using namespace ci;
+using namespace chr;
 
-#include "chronotext/cinder/CinderDelegate.h"
-
-class Application : public chr::CinderDelegate
+void Application::applySettings(Settings *settings)
 {
-public:
-    void applySettings(Settings *settings) final;
-};
+    settings->setWindowSize(1024, 768);
+}

@@ -17,8 +17,5 @@
 class Application : public chr::CinderDelegate
 {
 public:
-    void applySettings(Settings *settings) final
-    {
-        settings->setWindowSize(1024, 768);
-    }
+    void applySettings(Settings *settings) final;
 };

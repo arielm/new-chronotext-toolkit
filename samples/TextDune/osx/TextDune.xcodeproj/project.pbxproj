@@ -30,6 +30,7 @@
 		A8112C5A1A4EDD040002CF68 /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C511A4EDD040002CF68 /* SplinePath.cpp */; };
 		A8112CC11A4F51540002CF68 /* Georgia_Regular_64.fnt in Resources */ = {isa = PBXBuildFile; fileRef = A8112CBF1A4F51540002CF68 /* Georgia_Regular_64.fnt */; };
 		A8112CC21A4F51540002CF68 /* hairline.png in Resources */ = {isa = PBXBuildFile; fileRef = A8112CC01A4F51540002CF68 /* hairline.png */; };
+		A8147DA11A977C8100885D67 /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8147D9F1A977C8100885D67 /* CinderBridge.mm */; };
 		A826F48A1A67E059002A23A9 /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4801A67E059002A23A9 /* DisplayHelper.cpp */; };
 		A826F48C1A67E059002A23A9 /* SystemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4861A67E059002A23A9 /* SystemManager.cpp */; };
 		A826F4EC1A6BDDCC002A23A9 /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4EB1A6BDDCC002A23A9 /* CinderSketch.cpp */; };
@@ -91,7 +92,7 @@
 		A802710319CC7B7C0072973D /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
 		A802710419CC7B7C0072973D /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
 		A8027DF816E377AE00184149 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
-		A8112BEF1A4DA3EE0002CF68 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
+		A8112BEF1A4DA3EE0002CF68 /* Application.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Application.cpp; sourceTree = "<group>"; };
 		A8112C461A4EDD040002CF68 /* ASPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPC.h; sourceTree = "<group>"; };
 		A8112C471A4EDD040002CF68 /* FollowablePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FollowablePath.cpp; sourceTree = "<group>"; };
 		A8112C481A4EDD040002CF68 /* FollowablePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowablePath.h; sourceTree = "<group>"; };
@@ -109,6 +110,8 @@
 		A8112C541A4EDD040002CF68 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
 		A8112CBF1A4F51540002CF68 /* Georgia_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = Georgia_Regular_64.fnt; path = ../resources/Georgia_Regular_64.fnt; sourceTree = "<group>"; };
 		A8112CC01A4F51540002CF68 /* hairline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hairline.png; path = ../resources/hairline.png; sourceTree = "<group>"; };
+		A8147D9F1A977C8100885D67 /* CinderBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderBridge.mm; sourceTree = "<group>"; };
+		A8147DA01A977C8100885D67 /* CinderBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderBridge.h; sourceTree = "<group>"; };
 		A826F4801A67E059002A23A9 /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
 		A826F4811A67E059002A23A9 /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A826F4821A67E059002A23A9 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
@@ -160,7 +163,7 @@
 		A8702B781A5B472D00EF9E9E /* FileHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHelper.mm; sourceTree = "<group>"; };
 		A874A4F31A2B2CDE009A60A0 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		A874A4F41A2B2D37009A60A0 /* emulators.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emulators.json; sourceTree = "<group>"; };
-		A874A4F61A2B2D43009A60A0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
+		A874A4F61A2B2D43009A60A0 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
 		A8836D291A4AF896007733CE /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
 		A8836D421A4AF8E6007733CE /* MemoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryManager.h; sourceTree = "<group>"; };
 		A8836D431A4AF8E6007733CE /* MemoryManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryManager.mm; sourceTree = "<group>"; };
@@ -535,6 +538,8 @@
 		A8D9473F1A880819007FB546 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
+				A8147DA01A977C8100885D67 /* CinderBridge.h */,
+				A8147D9F1A977C8100885D67 /* CinderBridge.mm */,
 				A8D947421A880819007FB546 /* CinderDelegate.h */,
 				A8D947431A880819007FB546 /* CinderDelegate.mm */,
 			);
@@ -653,6 +658,7 @@
 				A826F4EC1A6BDDCC002A23A9 /* CinderSketch.cpp in Sources */,
 				A8702B791A5B472D00EF9E9E /* FileHelper.mm in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
+				A8147DA11A977C8100885D67 /* CinderBridge.mm in Sources */,
 				A8836D591A4AFE23007733CE /* Handler.cpp in Sources */,
 				A8112C551A4EDD040002CF68 /* FollowablePath.cpp in Sources */,
 				A8F2E312189E4FDE002D5D75 /* Clock.cpp in Sources */,

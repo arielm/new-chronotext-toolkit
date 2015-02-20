@@ -41,10 +41,11 @@ extern "C"
 
 #pragma mark ---------------------------------------- DESKTOP ----------------------------------------
 
-#elif defined(CINDER_MAC) || defined(CINDER_MSW)
+#elif defined(CINDER_MAC)
 
 #include "Application.h"
 
-CINDER_APP_NATIVE(Application, ci::app::RendererGl(ci::app::RendererGl::AA_NONE))
+CINDER_APP_DESKTOP(Application, ci::app::RendererGl::AA_NONE)
 
 #endif
+

@@ -39,22 +39,12 @@ int main(int argc, char *argv[])
 extern "C"
 {}
 
-#pragma mark ----------------------------------------   OSX   ----------------------------------------
+#pragma mark ---------------------------------------- DESKTOP ----------------------------------------
 
 #elif defined(CINDER_MAC)
 
 #include "Application.h"
 
-@class CinderBridge;
-
-namespace chr
-{
-    CinderBridge* createBridge(CinderDelegate *delegate)
-    {
-        return nil;
-    }
-}
-
-CINDER_APP_NATIVE(Application, ci::app::RendererGl(ci::app::RendererGl::AA_NONE))
+CINDER_APP_DESKTOP(Application, ci::app::RendererGl::AA_NONE)
 
 #endif

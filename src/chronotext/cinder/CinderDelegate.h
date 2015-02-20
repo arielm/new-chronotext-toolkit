@@ -22,4 +22,14 @@
 
 #include "chronotext/osx/cinder/CinderDelegate.h"
 
+#define CINDER_APP_DESKTOP(APP, AA) \
+    @class CinderBridge; \
+    namespace chr { CinderBridge* createBridge(CinderDelegate *delegate) { return nil; } } \
+    CINDER_APP_NATIVE(APP, ci::app::RendererGl(AA))
+
+#define CINDER_APP_OSX(APP, BRIDGE, AA) \
+    @class CinderBridge; \
+    namespace chr { CinderBridge* createBridge(CinderDelegate *delegate) { return [[BRIDGE alloc] initWithDelegate:delegate]; } } \
+    CINDER_APP_NATIVE(APP, ci::app::RendererGl(AA))
+
 #endif
