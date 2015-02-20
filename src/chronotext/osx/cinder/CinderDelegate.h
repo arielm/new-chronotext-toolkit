@@ -47,6 +47,7 @@ namespace chr
         void keyDown(ci::app::KeyEvent event) final;
         void keyUp(ci::app::KeyEvent event) final;
         
+        void sendMessageToBridge(int what, const std::string &body = "") final;
         void performAction(int actionId) final;
         
         virtual void applySettings(Settings *settings) {}

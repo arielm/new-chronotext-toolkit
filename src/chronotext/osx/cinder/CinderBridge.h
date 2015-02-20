@@ -31,3 +31,13 @@
 - (void) handleMessage:(int)what body:(NSString*)body;
 
 @end
+
+namespace chr
+{
+    CinderBridge* createBridge(CinderDelegate *delegate);
+    
+    namespace system
+    {
+        extern CinderBridge *bridge;
+    }
+}

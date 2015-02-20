@@ -11,6 +11,8 @@
 
 #include "cinder/Json.h"
 
+#import "chronotext/osx/cinder/CinderBridge.h"
+
 using namespace std;
 using namespace ci;
 using namespace ci::app;
@@ -66,6 +68,8 @@ namespace chr
         
         if (!initialized_)
         {
+            system::bridge = createBridge(this);
+            
             initInfo.actualContentScale = getWindowContentScale();
             initInfo.actualWindowSize = getWindowSize();
             
@@ -108,6 +112,12 @@ namespace chr
             
             initialized_ = false;
             intern::instance = nullptr;
+            
+            if (system::bridge)
+            {
+                [system::bridge release];
+                system::bridge = nil;
+            }
         }
     }
     
@@ -188,6 +198,21 @@ namespace chr
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
+    
+    void CinderDelegate::sendMessageToBridge(int what, const string &body)
+    {
+        if (system::bridge)
+        {
+            if (body.empty())
+            {
+                [system::bridge handleMessage:what body:nil];
+            }
+            else
+            {
+                [system::bridge handleMessage:what body:[NSString stringWithUTF8String:body.data()]];
+            }
+        }
+    }
 
     void CinderDelegate::performAction(int actionId)
     {

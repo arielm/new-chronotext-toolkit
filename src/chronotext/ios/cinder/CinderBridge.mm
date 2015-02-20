@@ -27,7 +27,7 @@ namespace chr
 {
     namespace system
     {
-        CinderBridge *bridge = nullptr;
+        CinderBridge *bridge = nil;
     }
 }
 

@@ -13,6 +13,14 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
+namespace chr
+{
+    namespace system
+    {
+        CinderBridge *bridge = nil;
+    }
+}
+
 @implementation CinderBridge
 
 @synthesize cinderDelegate;
