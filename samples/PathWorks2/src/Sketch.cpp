@@ -96,7 +96,7 @@ void Sketch::resize()
      */
     for (auto &it : lys)
     {
-        it.second.stroke(it.first, scale * getDisplayInfo().contentScale); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
+        it.second.stroke(it.first, scale);
     }
 }
 
@@ -142,7 +142,7 @@ void Sketch::draw()
     /*
      * RE-STROKING IS NECESSARY BOTH IN TERM OF POTENTIAL SCREEN-SIZE CHANGE AND IN TERM OF DASHED-LINE-OFFSET MOTION
      */
-    peanutHairline.stroke(peanutPath, scale * getDisplayInfo().contentScale, offset); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
+    peanutHairline.stroke(peanutPath, scale, offset);
     peanutHairline.draw();
     
     drawDotOnPath(peanutPath);
@@ -170,7 +170,7 @@ void Sketch::drawDotOnPath(const FollowablePath &path)
     
     glPushMatrix();
     gl::translate(path.offset2Position(offset));
-    gl::scale(0.5f / scale); // DIVIDING BY SCALE KEEPS THE RADIUS CONSISTENT
+    gl::scale(0.5f);
     dotTexture->drawFromCenter();
     glPopMatrix();
     
