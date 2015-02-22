@@ -8,7 +8,7 @@
 
 #include "Sketch.h"
 
-#include "chronotext/InputSource.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/font/xf/TextHelper.h"
