@@ -1,3 +1,11 @@
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
 #include "chronotext/Context.h"
 
 #include "Sketch.h"
@@ -28,20 +36,15 @@ int main(int argc, char *argv[])
 
 #elif defined(CINDER_ANDROID)
 
-#include "chronotext/android/cinder/JNI.h"
-
 extern "C"
-{
-    void android_main(struct android_app *state)
-    {}
-}
+{}
 
 #pragma mark ---------------------------------------- DESKTOP ----------------------------------------
 
-#elif defined(CINDER_MAC) || defined(CINDER_MSW)
+#elif defined(CINDER_MAC)
 
 #include "Application.h"
 
-CINDER_APP_NATIVE(Application, ci::app::RendererGl(ci::app::RendererGl::AA_NONE))
+CINDER_APP_DESKTOP(Application, ci::app::RendererGl::AA_NONE)
 
 #endif

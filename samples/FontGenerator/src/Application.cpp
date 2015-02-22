@@ -22,7 +22,7 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT 2334195
+ * IN SYNC WITH develop BRANCH / COMMIT 446e1a7
  */
 
 #include "cinder/app/AppNative.h"

@@ -32,6 +32,17 @@
 		A8112C581A4EDD040002CF68 /* ShapeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C4D1A4EDD040002CF68 /* ShapeMesh.cpp */; };
 		A8112C591A4EDD040002CF68 /* ShapeTesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C4F1A4EDD040002CF68 /* ShapeTesselator.cpp */; };
 		A8112C5A1A4EDD040002CF68 /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C511A4EDD040002CF68 /* SplinePath.cpp */; };
+		A8147DEA1A995FD700885D67 /* CinderDelegateBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147DE61A995FD700885D67 /* CinderDelegateBase.cpp */; };
+		A8147DEB1A995FD700885D67 /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147DE81A995FD700885D67 /* CinderSketch.cpp */; };
+		A8147DF41A995FE900885D67 /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147DEE1A995FE900885D67 /* DisplayHelper.cpp */; };
+		A8147DF51A995FE900885D67 /* SystemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147DF21A995FE900885D67 /* SystemManager.cpp */; };
+		A8147E031A995FF700885D67 /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8147DF91A995FF700885D67 /* CinderBridge.mm */; };
+		A8147E041A995FF700885D67 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8147DFB1A995FF700885D67 /* CinderDelegate.mm */; };
+		A8147E071A995FF700885D67 /* NSView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147E021A995FF700885D67 /* NSView+StringTag.m */; };
+		A8147E101A99601E00885D67 /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147E0A1A99601E00885D67 /* NSDictionary+DefautValues.m */; };
+		A8147E111A99601E00885D67 /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147E0C1A99601E00885D67 /* NSMutableDictionary+Merge.m */; };
+		A8147E121A99601E00885D67 /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147E0E1A99601E00885D67 /* NSString+JSON.m */; };
+		A8147E621A99667D00885D67 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147E5F1A99667D00885D67 /* ImageSourceFileStbImage.cpp */; };
 		A82C909216DFA3B100FF519C /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908A16DFA3B100FF519C /* PVRHelper.cpp */; };
 		A82C909316DFA3B100FF519C /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908C16DFA3B100FF519C /* Texture.cpp */; };
 		A82C909416DFA3B100FF519C /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82C908E16DFA3B100FF519C /* TextureHelper.cpp */; };
@@ -46,13 +57,8 @@
 		A8702B5A1A5B46B700EF9E9E /* MemoryManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702B511A5B46B700EF9E9E /* MemoryManagerBase.cpp */; };
 		A8702B5B1A5B46B700EF9E9E /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702B561A5B46B700EF9E9E /* SystemManagerBase.cpp */; };
 		A8702B5E1A5B46CC00EF9E9E /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8702B5D1A5B46CC00EF9E9E /* FileHelper.mm */; };
-		A8702B621A5B46D300EF9E9E /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702B5F1A5B46D300EF9E9E /* DisplayHelper.cpp */; };
-		A874A4F01A2B2C2D009A60A0 /* CinderDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A874A4EC1A2B2C2D009A60A0 /* CinderDelegate.cpp */; };
-		A874A4F11A2B2C2D009A60A0 /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A874A4EE1A2B2C2D009A60A0 /* CinderSketch.cpp */; };
 		A874A4F51A2B2D37009A60A0 /* emulators.json in Resources */ = {isa = PBXBuildFile; fileRef = A874A4F41A2B2D37009A60A0 /* emulators.json */; };
 		A874A4F71A2B2D43009A60A0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A874A4F61A2B2D43009A60A0 /* main.cpp */; };
-		A8836D2A1A4AF896007733CE /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D281A4AF896007733CE /* Context.cpp */; };
-		A8836D2D1A4AF8B2007733CE /* SystemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D2B1A4AF8B2007733CE /* SystemManager.cpp */; };
 		A8836D4B1A4AF8E6007733CE /* MemoryManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8836D431A4AF8E6007733CE /* MemoryManager.mm */; };
 		A8836D591A4AFE23007733CE /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D4F1A4AFE23007733CE /* Handler.cpp */; };
 		A8836D5A1A4AFE23007733CE /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D531A4AFE23007733CE /* SuperHandler.cpp */; };
@@ -91,7 +97,7 @@
 		A802710319CC7B7C0072973D /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
 		A802710419CC7B7C0072973D /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
 		A8027DF816E377AE00184149 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
-		A8112BEF1A4DA3EE0002CF68 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
+		A8112BEF1A4DA3EE0002CF68 /* Application.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Application.cpp; sourceTree = "<group>"; };
 		A8112C3D1A4EDCB00002CF68 /* dot2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot2x.png; path = ../resources/dot2x.png; sourceTree = "<group>"; };
 		A8112C3E1A4EDCB00002CF68 /* Georgia_Regular_64.fnt */ = {isa = PBXFileReference; lastKnownFileType = file; name = Georgia_Regular_64.fnt; path = ../resources/Georgia_Regular_64.fnt; sourceTree = "<group>"; };
 		A8112C3F1A4EDCB00002CF68 /* lys.fxg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = lys.fxg; path = ../resources/lys.fxg; sourceTree = "<group>"; };
@@ -111,6 +117,33 @@
 		A8112C521A4EDD040002CF68 /* SplinePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplinePath.h; sourceTree = "<group>"; };
 		A8112C531A4EDD040002CF68 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
 		A8112C541A4EDD040002CF68 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
+		A8147DE41A995FD700885D67 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A8147DE51A995FD700885D67 /* CinderDelegateBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegateBase.h; sourceTree = "<group>"; };
+		A8147DE61A995FD700885D67 /* CinderDelegateBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderDelegateBase.cpp; sourceTree = "<group>"; };
+		A8147DE71A995FD700885D67 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
+		A8147DE81A995FD700885D67 /* CinderSketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketch.cpp; sourceTree = "<group>"; };
+		A8147DE91A995FD700885D67 /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
+		A8147DEE1A995FE900885D67 /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
+		A8147DEF1A995FE900885D67 /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
+		A8147DF01A995FE900885D67 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
+		A8147DF11A995FE900885D67 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		A8147DF21A995FE900885D67 /* SystemManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemManager.cpp; sourceTree = "<group>"; };
+		A8147DF31A995FE900885D67 /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
+		A8147DF81A995FF700885D67 /* CinderBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderBridge.h; sourceTree = "<group>"; };
+		A8147DF91A995FF700885D67 /* CinderBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderBridge.mm; sourceTree = "<group>"; };
+		A8147DFA1A995FF700885D67 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A8147DFB1A995FF700885D67 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
+		A8147E011A995FF700885D67 /* NSView+StringTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+StringTag.h"; sourceTree = "<group>"; };
+		A8147E021A995FF700885D67 /* NSView+StringTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+StringTag.m"; sourceTree = "<group>"; };
+		A8147E091A99601E00885D67 /* NSDictionary+DefautValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+DefautValues.h"; sourceTree = "<group>"; };
+		A8147E0A1A99601E00885D67 /* NSDictionary+DefautValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DefautValues.m"; sourceTree = "<group>"; };
+		A8147E0B1A99601E00885D67 /* NSMutableDictionary+Merge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Merge.h"; sourceTree = "<group>"; };
+		A8147E0C1A99601E00885D67 /* NSMutableDictionary+Merge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Merge.m"; sourceTree = "<group>"; };
+		A8147E0D1A99601E00885D67 /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
+		A8147E0E1A99601E00885D67 /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
+		A8147E5F1A99667D00885D67 /* ImageSourceFileStbImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSourceFileStbImage.cpp; sourceTree = "<group>"; };
+		A8147E601A99667D00885D67 /* ImageSourceFileStbImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSourceFileStbImage.h; sourceTree = "<group>"; };
+		A8147E611A99667D00885D67 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		A82C908A16DFA3B100FF519C /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A82C908B16DFA3B100FF519C /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
 		A82C908C16DFA3B100FF519C /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
@@ -121,7 +154,6 @@
 		A82C909116DFA3B100FF519C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
 		A82C909716DFA58900FF519C /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
 		A82C909816DFA58900FF519C /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
-		A82C90E916E00B0500FF519C /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
 		A82C90FA16E00B3B00FF519C /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
 		A82C90FB16E00B3B00FF519C /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
 		A82C90FD16E00B3B00FF519C /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
@@ -130,7 +162,6 @@
 		A82C910316E00B3B00FF519C /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A82C910816E02DAA00FF519C /* Sketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sketch.cpp; path = ../src/Sketch.cpp; sourceTree = "<group>"; };
 		A82C910916E02DAA00FF519C /* Sketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sketch.h; path = ../src/Sketch.h; sourceTree = "<group>"; };
-		A85483B919CE19A900B7866C /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
 		A86901181A02A9BC00D2C9F3 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		A8702B481A5B46B700EF9E9E /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A8702B491A5B46B700EF9E9E /* DisplayHelperBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelperBase.cpp; sourceTree = "<group>"; };
@@ -150,21 +181,10 @@
 		A8702B571A5B46B700EF9E9E /* SystemManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManagerBase.h; sourceTree = "<group>"; };
 		A8702B5C1A5B46CC00EF9E9E /* FileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileHelper.h; sourceTree = "<group>"; };
 		A8702B5D1A5B46CC00EF9E9E /* FileHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHelper.mm; sourceTree = "<group>"; };
-		A8702B5F1A5B46D300EF9E9E /* DisplayHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelper.cpp; sourceTree = "<group>"; };
-		A8702B601A5B46D300EF9E9E /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
-		A8702B611A5B46D300EF9E9E /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
-		A87208051808302E0055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
-		A874A4EC1A2B2C2D009A60A0 /* CinderDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderDelegate.cpp; sourceTree = "<group>"; };
-		A874A4ED1A2B2C2D009A60A0 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
-		A874A4EE1A2B2C2D009A60A0 /* CinderSketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketch.cpp; sourceTree = "<group>"; };
-		A874A4EF1A2B2C2D009A60A0 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
 		A874A4F31A2B2CDE009A60A0 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		A874A4F41A2B2D37009A60A0 /* emulators.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emulators.json; sourceTree = "<group>"; };
-		A874A4F61A2B2D43009A60A0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
-		A8836D281A4AF896007733CE /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
+		A874A4F61A2B2D43009A60A0 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
 		A8836D291A4AF896007733CE /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
-		A8836D2B1A4AF8B2007733CE /* SystemManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemManager.cpp; sourceTree = "<group>"; };
-		A8836D2C1A4AF8B2007733CE /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
 		A8836D421A4AF8E6007733CE /* MemoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryManager.h; sourceTree = "<group>"; };
 		A8836D431A4AF8E6007733CE /* MemoryManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryManager.mm; sourceTree = "<group>"; };
 		A8836D4F1A4AFE23007733CE /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
@@ -188,7 +208,6 @@
 		A8F2E311189E4FDE002D5D75 /* TimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBase.h; sourceTree = "<group>"; };
 		A8F595611A07783000877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9978319FA8ED300F08369 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
-		A8F997A319FB348D00F08369 /* EmulatedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulatedDevice.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -351,6 +370,79 @@
 			path = path;
 			sourceTree = "<group>";
 		};
+		A8147DEC1A995FE900885D67 /* desktop */ = {
+			isa = PBXGroup;
+			children = (
+				A8147DED1A995FE900885D67 /* system */,
+			);
+			path = desktop;
+			sourceTree = "<group>";
+		};
+		A8147DED1A995FE900885D67 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A8147DEE1A995FE900885D67 /* DisplayHelper.cpp */,
+				A8147DEF1A995FE900885D67 /* DisplayHelper.h */,
+				A8147DF01A995FE900885D67 /* EmulatedDevice.h */,
+				A8147DF11A995FE900885D67 /* SystemInfo.h */,
+				A8147DF21A995FE900885D67 /* SystemManager.cpp */,
+				A8147DF31A995FE900885D67 /* SystemManager.h */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
+		A8147DF61A995FF700885D67 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				A8147DF71A995FF700885D67 /* cinder */,
+				A8147E001A995FF700885D67 /* utils */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
+		A8147DF71A995FF700885D67 /* cinder */ = {
+			isa = PBXGroup;
+			children = (
+				A8147DF81A995FF700885D67 /* CinderBridge.h */,
+				A8147DF91A995FF700885D67 /* CinderBridge.mm */,
+				A8147DFA1A995FF700885D67 /* CinderDelegate.h */,
+				A8147DFB1A995FF700885D67 /* CinderDelegate.mm */,
+			);
+			path = cinder;
+			sourceTree = "<group>";
+		};
+		A8147E001A995FF700885D67 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A8147E011A995FF700885D67 /* NSView+StringTag.h */,
+				A8147E021A995FF700885D67 /* NSView+StringTag.m */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		A8147E081A99601E00885D67 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A8147E091A99601E00885D67 /* NSDictionary+DefautValues.h */,
+				A8147E0A1A99601E00885D67 /* NSDictionary+DefautValues.m */,
+				A8147E0B1A99601E00885D67 /* NSMutableDictionary+Merge.h */,
+				A8147E0C1A99601E00885D67 /* NSMutableDictionary+Merge.m */,
+				A8147E0D1A99601E00885D67 /* NSString+JSON.h */,
+				A8147E0E1A99601E00885D67 /* NSString+JSON.m */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		A8147E5E1A99667D00885D67 /* stb */ = {
+			isa = PBXGroup;
+			children = (
+				A8147E5F1A99667D00885D67 /* ImageSourceFileStbImage.cpp */,
+				A8147E601A99667D00885D67 /* ImageSourceFileStbImage.h */,
+				A8147E611A99667D00885D67 /* stb_image.h */,
+			);
+			path = stb;
+			sourceTree = "<group>";
+		};
 		A824C4531905F830003C4B84 /* system */ = {
 			isa = PBXGroup;
 			children = (
@@ -394,9 +486,12 @@
 		A82C90E616E00B0400FF519C /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A82C90E916E00B0500FF519C /* CinderSketch.h */,
-				A87208051808302E0055F0BA /* CinderSketchBase.h */,
-				A85483B919CE19A900B7866C /* WindowInfo.h */,
+				A8147DE41A995FD700885D67 /* CinderDelegate.h */,
+				A8147DE51A995FD700885D67 /* CinderDelegateBase.h */,
+				A8147DE61A995FD700885D67 /* CinderDelegateBase.cpp */,
+				A8147DE71A995FD700885D67 /* CinderSketch.h */,
+				A8147DE81A995FD700885D67 /* CinderSketch.cpp */,
+				A8147DE91A995FD700885D67 /* WindowInfo.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -404,6 +499,7 @@
 		A82C90F416E00B3B00FF519C /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				A8147E5E1A99667D00885D67 /* stb */,
 				A82C90FB16E00B3B00FF519C /* GLUtils.h */,
 				A82C90FA16E00B3B00FF519C /* GLUtils.cpp */,
 				A82C90FE16E00B3B00FF519C /* MathUtils.h */,
@@ -432,6 +528,7 @@
 			isa = PBXGroup;
 			children = (
 				A8836D411A4AF8E6007733CE /* system */,
+				A8147E081A99601E00885D67 /* utils */,
 			);
 			path = cocoa;
 			sourceTree = "<group>";
@@ -451,17 +548,17 @@
 			isa = PBXGroup;
 			children = (
 				A8836D291A4AF896007733CE /* Context.h */,
-				A8836D281A4AF896007733CE /* Context.cpp */,
 				A8F9978319FA8ED300F08369 /* Exception.h */,
 				A86901181A02A9BC00D2C9F3 /* Log.h */,
 				A8F595611A07783000877FB2 /* Log.cpp */,
 				A82C909816DFA58900FF519C /* InputSource.h */,
 				A82C909716DFA58900FF519C /* InputSource.cpp */,
-				A8F9979A19FB328F00F08369 /* app */,
-				A8836D401A4AF8E6007733CE /* cocoa */,
 				A82C90E616E00B0400FF519C /* cinder */,
+				A8836D401A4AF8E6007733CE /* cocoa */,
+				A8147DEC1A995FE900885D67 /* desktop */,
 				A80270DC19CC7B7C0072973D /* font */,
 				A82C90DB16E00AAD00FF519C /* os */,
+				A8147DF61A995FF700885D67 /* osx */,
 				A8112C451A4EDD040002CF68 /* path */,
 				A80270FF19CC7B7C0072973D /* quad */,
 				A824C4531905F830003C4B84 /* system */,
@@ -508,39 +605,6 @@
 				A8F2E311189E4FDE002D5D75 /* TimeBase.h */,
 			);
 			path = time;
-			sourceTree = "<group>";
-		};
-		A8F9979A19FB328F00F08369 /* app */ = {
-			isa = PBXGroup;
-			children = (
-				A8F9979B19FB328F00F08369 /* cinder */,
-				A8F997A019FB328F00F08369 /* system */,
-			);
-			path = app;
-			sourceTree = "<group>";
-		};
-		A8F9979B19FB328F00F08369 /* cinder */ = {
-			isa = PBXGroup;
-			children = (
-				A874A4EC1A2B2C2D009A60A0 /* CinderDelegate.cpp */,
-				A874A4ED1A2B2C2D009A60A0 /* CinderDelegate.h */,
-				A874A4EE1A2B2C2D009A60A0 /* CinderSketch.cpp */,
-				A874A4EF1A2B2C2D009A60A0 /* CinderSketch.h */,
-			);
-			path = cinder;
-			sourceTree = "<group>";
-		};
-		A8F997A019FB328F00F08369 /* system */ = {
-			isa = PBXGroup;
-			children = (
-				A8702B5F1A5B46D300EF9E9E /* DisplayHelper.cpp */,
-				A8702B601A5B46D300EF9E9E /* DisplayHelper.h */,
-				A8702B611A5B46D300EF9E9E /* SystemInfo.h */,
-				A8F997A319FB348D00F08369 /* EmulatedDevice.h */,
-				A8836D2C1A4AF8B2007733CE /* SystemManager.h */,
-				A8836D2B1A4AF8B2007733CE /* SystemManager.cpp */,
-			);
-			path = system;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -618,23 +682,24 @@
 				A8702B5B1A5B46B700EF9E9E /* SystemManagerBase.cpp in Sources */,
 				A82C909316DFA3B100FF519C /* Texture.cpp in Sources */,
 				A802710619CC7B7C0072973D /* FontManager.cpp in Sources */,
+				A8147E621A99667D00885D67 /* ImageSourceFileStbImage.cpp in Sources */,
 				A82C909416DFA3B100FF519C /* TextureHelper.cpp in Sources */,
+				A8147DEB1A995FD700885D67 /* CinderSketch.cpp in Sources */,
 				A82C909516DFA3B100FF519C /* TextureManager.cpp in Sources */,
-				A8836D2A1A4AF896007733CE /* Context.cpp in Sources */,
+				A8147E031A995FF700885D67 /* CinderBridge.mm in Sources */,
 				A8702B5E1A5B46CC00EF9E9E /* FileHelper.mm in Sources */,
+				A8147E041A995FF700885D67 /* CinderDelegate.mm in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A8836D591A4AFE23007733CE /* Handler.cpp in Sources */,
-				A874A4F11A2B2C2D009A60A0 /* CinderSketch.cpp in Sources */,
 				A8112C551A4EDD040002CF68 /* FollowablePath.cpp in Sources */,
 				A8F2E312189E4FDE002D5D75 /* Clock.cpp in Sources */,
 				A802710719CC7B7C0072973D /* FontSequence.cpp in Sources */,
-				A8702B621A5B46D300EF9E9E /* DisplayHelper.cpp in Sources */,
+				A8147DEA1A995FD700885D67 /* CinderDelegateBase.cpp in Sources */,
+				A8147DF41A995FE900885D67 /* DisplayHelper.cpp in Sources */,
 				A8702B591A5B46B700EF9E9E /* FileHelperBase.cpp in Sources */,
-				A874A4F01A2B2C2D009A60A0 /* CinderDelegate.cpp in Sources */,
 				A8836D5C1A4AFE23007733CE /* TaskManager.cpp in Sources */,
 				A8836D5A1A4AFE23007733CE /* SuperHandler.cpp in Sources */,
 				A874A4F71A2B2D43009A60A0 /* main.cpp in Sources */,
-				A8836D2D1A4AF8B2007733CE /* SystemManager.cpp in Sources */,
 				A82C910516E00B3B00FF519C /* GLUtils.cpp in Sources */,
 				A8702B5A1A5B46B700EF9E9E /* MemoryManagerBase.cpp in Sources */,
 				A8702B581A5B46B700EF9E9E /* DisplayHelperBase.cpp in Sources */,
@@ -645,13 +710,18 @@
 				A8112C571A4EDD040002CF68 /* Hairline.cpp in Sources */,
 				A802710519CC7B7C0072973D /* Font.cpp in Sources */,
 				A8F595621A07783000877FB2 /* Log.cpp in Sources */,
+				A8147DF51A995FE900885D67 /* SystemManager.cpp in Sources */,
 				A8836D4B1A4AF8E6007733CE /* MemoryManager.mm in Sources */,
 				A8112C5A1A4EDD040002CF68 /* SplinePath.cpp in Sources */,
 				A82C910716E00B3B00FF519C /* Utils.cpp in Sources */,
 				A82C910A16E02DAA00FF519C /* Sketch.cpp in Sources */,
 				A802710819CC7B7C0072973D /* TextHelper.cpp in Sources */,
 				A8836D5B1A4AFE23007733CE /* Task.cpp in Sources */,
+				A8147E121A99601E00885D67 /* NSString+JSON.m in Sources */,
 				A8F2E314189E4FDE002D5D75 /* FrameClock.cpp in Sources */,
+				A8147E101A99601E00885D67 /* NSDictionary+DefautValues.m in Sources */,
+				A8147E111A99601E00885D67 /* NSMutableDictionary+Merge.m in Sources */,
+				A8147E071A995FF700885D67 /* NSView+StringTag.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

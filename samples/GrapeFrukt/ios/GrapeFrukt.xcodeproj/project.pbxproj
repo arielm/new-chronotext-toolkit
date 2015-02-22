@@ -22,6 +22,9 @@
 		A8112C3A1A4DCC3A0002CF68 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C341A4DCC3A0002CF68 /* Sprite.cpp */; };
 		A8112C3B1A4DCC3A0002CF68 /* TextureAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C361A4DCC3A0002CF68 /* TextureAtlas.cpp */; };
 		A8112C3C1A4DCC3A0002CF68 /* TextureAtlasAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C381A4DCC3A0002CF68 /* TextureAtlasAnimation.cpp */; };
+		A8147EDE1A99708500885D67 /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147ED81A99708500885D67 /* NSDictionary+DefautValues.m */; };
+		A8147EDF1A99708500885D67 /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147EDA1A99708500885D67 /* NSMutableDictionary+Merge.m */; };
+		A8147EE01A99708500885D67 /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147EDC1A99708500885D67 /* NSString+JSON.m */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
 		A8702C451A5B4A4300EF9E9E /* DisplayHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702C361A5B4A4300EF9E9E /* DisplayHelperBase.cpp */; };
@@ -92,6 +95,14 @@
 		A8112C371A4DCC3A0002CF68 /* TextureAtlas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureAtlas.h; sourceTree = "<group>"; };
 		A8112C381A4DCC3A0002CF68 /* TextureAtlasAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureAtlasAnimation.cpp; sourceTree = "<group>"; };
 		A8112C391A4DCC3A0002CF68 /* TextureAtlasAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureAtlasAnimation.h; sourceTree = "<group>"; };
+		A8147ED71A99708500885D67 /* NSDictionary+DefautValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+DefautValues.h"; sourceTree = "<group>"; };
+		A8147ED81A99708500885D67 /* NSDictionary+DefautValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DefautValues.m"; sourceTree = "<group>"; };
+		A8147ED91A99708500885D67 /* NSMutableDictionary+Merge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Merge.h"; sourceTree = "<group>"; };
+		A8147EDA1A99708500885D67 /* NSMutableDictionary+Merge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Merge.m"; sourceTree = "<group>"; };
+		A8147EDB1A99708500885D67 /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
+		A8147EDC1A99708500885D67 /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
+		A8147EE11A99709600885D67 /* BridgeListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeListener.h; sourceTree = "<group>"; };
+		A8147EE21A99724000885D67 /* DistributionConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DistributionConfig.xcconfig; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A85483B819CE12CD00B7866C /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
@@ -301,6 +312,19 @@
 			path = atlas;
 			sourceTree = "<group>";
 		};
+		A8147ED61A99708500885D67 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A8147ED71A99708500885D67 /* NSDictionary+DefautValues.h */,
+				A8147ED81A99708500885D67 /* NSDictionary+DefautValues.m */,
+				A8147ED91A99708500885D67 /* NSMutableDictionary+Merge.h */,
+				A8147EDA1A99708500885D67 /* NSMutableDictionary+Merge.m */,
+				A8147EDB1A99708500885D67 /* NSString+JSON.h */,
+				A8147EDC1A99708500885D67 /* NSString+JSON.m */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		A824C46F190608D4003C4B84 /* system */ = {
 			isa = PBXGroup;
 			children = (
@@ -330,6 +354,7 @@
 				A8836DA61A4B1319007733CE /* Config.xcconfig */,
 				A8836DA71A4B1319007733CE /* DebugConfig.xcconfig */,
 				A8836DA81A4B1319007733CE /* ReleaseConfig.xcconfig */,
+				A8147EE21A99724000885D67 /* DistributionConfig.xcconfig */,
 				D616014D45B744EF83271CE8 /* Info.plist */,
 				125ACA23B6814C2888F2E57E /* Prefix.pch */,
 				A8FA3B8316E379B000367F97 /* Classes */,
@@ -351,6 +376,7 @@
 			isa = PBXGroup;
 			children = (
 				A8836D881A4B005A007733CE /* system */,
+				A8147ED61A99708500885D67 /* utils */,
 			);
 			path = cocoa;
 			sourceTree = "<group>";
@@ -448,6 +474,7 @@
 		A8FA3BC016E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
+				A8147EE11A99709600885D67 /* BridgeListener.h */,
 				A8FBA5F81A71CC4A00D6B4A3 /* CinderBridge.h */,
 				A8FBA5F91A71CC4A00D6B4A3 /* CinderBridge.mm */,
 				A8FA3BC116E3AB8000367F97 /* CinderDelegate.h */,
@@ -559,7 +586,7 @@
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "GrapeFrukt" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -602,6 +629,7 @@
 				A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */,
 				A802715119CC83FD0072973D /* QuadMatrix.cpp in Sources */,
 				A8836D711A4B0008007733CE /* Handler.cpp in Sources */,
+				A8147EDE1A99708500885D67 /* NSDictionary+DefautValues.m in Sources */,
 				A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8F595661A07788300877FB2 /* Log.cpp in Sources */,
@@ -610,8 +638,10 @@
 				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8702C471A5B4A4300EF9E9E /* MemoryManagerBase.cpp in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
+				A8147EDF1A99708500885D67 /* NSMutableDictionary+Merge.m in Sources */,
 				A8836D731A4B0008007733CE /* Task.cpp in Sources */,
 				A874A4FD1A2B2FB5009A60A0 /* main.cpp in Sources */,
+				A8147EE01A99708500885D67 /* NSString+JSON.m in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8FBA5F61A71CC3900D6B4A3 /* CinderDelegateBase.cpp in Sources */,
@@ -668,6 +698,19 @@
 			};
 			name = Release;
 		};
+		A8147EE41A99725A00885D67 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8147EE21A99724000885D67 /* DistributionConfig.xcconfig */;
+			buildSettings = {
+			};
+			name = Distribution;
+		};
+		A8147EE51A99725A00885D67 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Distribution;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -676,6 +719,7 @@
 			buildConfigurations = (
 				00692BF314FF149000D0A05E /* Debug */,
 				00692BF414FF149000D0A05E /* Release */,
+				A8147EE41A99725A00885D67 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -685,6 +729,7 @@
 			buildConfigurations = (
 				00692BF614FF149000D0A05E /* Debug */,
 				00692BF714FF149000D0A05E /* Release */,
+				A8147EE51A99725A00885D67 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

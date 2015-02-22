@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -9,9 +9,13 @@
 /*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT df9234d
- * IOS: COMMIT df9234d
- * ANDROID: COMMIT df9234d
+ * OSX: COMMIT 446e1a7
+ * IOS: COMMIT 446e1a7
+ * ANDROID: COMMIT 446e1a7
+ */
+
+/*
+ * FIXME: "PEANUT" LINE IS NOT DRAWN ON ANDROID
  */
 
 #pragma once

@@ -28,6 +28,13 @@
 		A8112C941A4F30050002CF68 /* ShapeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C891A4F30050002CF68 /* ShapeMesh.cpp */; };
 		A8112C951A4F30050002CF68 /* ShapeTesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C8B1A4F30050002CF68 /* ShapeTesselator.cpp */; };
 		A8112C961A4F30050002CF68 /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112C8D1A4F30050002CF68 /* SplinePath.cpp */; };
+		A8147EB61A996DF000885D67 /* CinderDelegateBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147EB21A996DF000885D67 /* CinderDelegateBase.cpp */; };
+		A8147EB71A996DF000885D67 /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147EB41A996DF000885D67 /* CinderSketch.cpp */; };
+		A8147EC01A996DF700885D67 /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147EBA1A996DF700885D67 /* NSDictionary+DefautValues.m */; };
+		A8147EC11A996DF700885D67 /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147EBC1A996DF700885D67 /* NSMutableDictionary+Merge.m */; };
+		A8147EC21A996DF700885D67 /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A8147EBE1A996DF700885D67 /* NSString+JSON.m */; };
+		A8147EC81A996E0900885D67 /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8147EC31A996E0900885D67 /* CinderBridge.mm */; };
+		A8147EC91A996E0900885D67 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8147EC61A996E0900885D67 /* CinderDelegate.mm */; };
 		A82C900916DF91D300FF519C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900716DF91D300FF519C /* icon.png */; };
 		A82C900A16DF91D300FF519C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A82C900816DF91D300FF519C /* Default-568h@2x.png */; };
 		A8702BF71A5B496000EF9E9E /* DisplayHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702BE81A5B496000EF9E9E /* DisplayHelperBase.cpp */; };
@@ -36,13 +43,11 @@
 		A8702BFA1A5B496000EF9E9E /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702BF51A5B496000EF9E9E /* SystemManagerBase.cpp */; };
 		A8702BFD1A5B497200EF9E9E /* DisplayHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8702BFC1A5B497200EF9E9E /* DisplayHelper.mm */; };
 		A8702C001A5B497900EF9E9E /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8702BFF1A5B497900EF9E9E /* FileHelper.mm */; };
-		A874A4FB1A2B2F16009A60A0 /* CinderSketch.mm in Sources */ = {isa = PBXBuildFile; fileRef = A874A4FA1A2B2F16009A60A0 /* CinderSketch.mm */; };
 		A874A4FD1A2B2FB5009A60A0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A874A4FC1A2B2FB5009A60A0 /* main.cpp */; };
 		A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */; };
 		A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0D816E75A3700F27EDE /* Texture.cpp */; };
 		A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E016E75A3700F27EDE /* TextureHelper.cpp */; };
 		A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A87CE0E216E75A3700F27EDE /* TextureManager.cpp */; };
-		A8836D661A4AFFE5007733CE /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D641A4AFFE5007733CE /* Context.cpp */; };
 		A8836D711A4B0008007733CE /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D671A4B0008007733CE /* Handler.cpp */; };
 		A8836D721A4B0008007733CE /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D6B1A4B0008007733CE /* SuperHandler.cpp */; };
 		A8836D731A4B0008007733CE /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8836D6D1A4B0008007733CE /* Task.cpp */; };
@@ -53,9 +58,8 @@
 		A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F2E316189E5234002D5D75 /* Clock.cpp */; };
 		A8F595661A07788300877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595651A07788300877FB2 /* Log.cpp */; };
 		A8FA3B8816E379C800367F97 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8FA3B8716E379C800367F97 /* GLKit.framework */; };
-		A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */; };
+		A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3B8C16E39A7C00367F97 /* Application.mm */; };
 		A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */; };
-		A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */; };
 		A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BC716E3AB8000367F97 /* GLViewController.mm */; };
 		A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */; };
 		A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8FA3C0016E3AB8000367F97 /* MathUtils.cpp */; };
@@ -112,9 +116,26 @@
 		A8112C8E1A4F30050002CF68 /* SplinePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplinePath.h; sourceTree = "<group>"; };
 		A8112C8F1A4F30050002CF68 /* StrokeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrokeHelper.h; sourceTree = "<group>"; };
 		A8112C901A4F30050002CF68 /* TexturedTriangleStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTriangleStrip.h; sourceTree = "<group>"; };
+		A8147EB01A996DF000885D67 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A8147EB11A996DF000885D67 /* CinderDelegateBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegateBase.h; sourceTree = "<group>"; };
+		A8147EB21A996DF000885D67 /* CinderDelegateBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderDelegateBase.cpp; sourceTree = "<group>"; };
+		A8147EB31A996DF000885D67 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
+		A8147EB41A996DF000885D67 /* CinderSketch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderSketch.cpp; sourceTree = "<group>"; };
+		A8147EB51A996DF000885D67 /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
+		A8147EB91A996DF700885D67 /* NSDictionary+DefautValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+DefautValues.h"; sourceTree = "<group>"; };
+		A8147EBA1A996DF700885D67 /* NSDictionary+DefautValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DefautValues.m"; sourceTree = "<group>"; };
+		A8147EBB1A996DF700885D67 /* NSMutableDictionary+Merge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Merge.h"; sourceTree = "<group>"; };
+		A8147EBC1A996DF700885D67 /* NSMutableDictionary+Merge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Merge.m"; sourceTree = "<group>"; };
+		A8147EBD1A996DF700885D67 /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
+		A8147EBE1A996DF700885D67 /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
+		A8147EC31A996E0900885D67 /* CinderBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderBridge.mm; sourceTree = "<group>"; };
+		A8147EC41A996E0900885D67 /* CinderBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderBridge.h; sourceTree = "<group>"; };
+		A8147EC51A996E0900885D67 /* BridgeListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeListener.h; sourceTree = "<group>"; };
+		A8147EC61A996E0900885D67 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
+		A8147EC71A996E0900885D67 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
+		A8147EEA1A9973E300885D67 /* DistributionConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DistributionConfig.xcconfig; sourceTree = "<group>"; };
 		A82C900716DF91D300FF519C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A82C900816DF91D300FF519C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		A85483B819CE12CD00B7866C /* WindowInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowInfo.h; sourceTree = "<group>"; };
 		A86902621A0308F000D2C9F3 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		A8702BE71A5B496000EF9E9E /* DisplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayHelper.h; sourceTree = "<group>"; };
 		A8702BE81A5B496000EF9E9E /* DisplayHelperBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayHelperBase.cpp; sourceTree = "<group>"; };
@@ -136,9 +157,6 @@
 		A8702BFC1A5B497200EF9E9E /* DisplayHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DisplayHelper.mm; sourceTree = "<group>"; };
 		A8702BFE1A5B497900EF9E9E /* FileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileHelper.h; sourceTree = "<group>"; };
 		A8702BFF1A5B497900EF9E9E /* FileHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHelper.mm; sourceTree = "<group>"; };
-		A8720806180833E10055F0BA /* CinderSketchBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketchBase.h; sourceTree = "<group>"; };
-		A874A4F91A2B2F16009A60A0 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
-		A874A4FA1A2B2F16009A60A0 /* CinderSketch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderSketch.mm; sourceTree = "<group>"; };
 		A874A4FC1A2B2FB5009A60A0 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
 		A87CE0D416E75A3700F27EDE /* PVRHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRHelper.cpp; sourceTree = "<group>"; };
 		A87CE0D516E75A3700F27EDE /* PVRHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRHelper.h; sourceTree = "<group>"; };
@@ -148,7 +166,6 @@
 		A87CE0E116E75A3700F27EDE /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureHelper.h; sourceTree = "<group>"; };
 		A87CE0E216E75A3700F27EDE /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
 		A87CE0E316E75A3700F27EDE /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
-		A8836D641A4AFFE5007733CE /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
 		A8836D651A4AFFE5007733CE /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
 		A8836D671A4B0008007733CE /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = "<group>"; };
 		A8836D681A4B0008007733CE /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = "<group>"; };
@@ -178,13 +195,10 @@
 		A8F595651A07788300877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9979219FAA06000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8FA3B8716E379C800367F97 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		A8FA3B9616E3AB8000367F97 /* CinderSketch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderSketch.h; sourceTree = "<group>"; };
+		A8FA3B8B16E39A7C00367F97 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		A8FA3B8C16E39A7C00367F97 /* Application.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Application.mm; sourceTree = "<group>"; };
 		A8FA3BBD16E3AB8000367F97 /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
 		A8FA3BBE16E3AB8000367F97 /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
-		A8FA3BC116E3AB8000367F97 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
-		A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
 		A8FA3BC616E3AB8000367F97 /* GLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLViewController.h; sourceTree = "<group>"; };
 		A8FA3BC716E3AB8000367F97 /* GLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLViewController.mm; sourceTree = "<group>"; };
 		A8FA3BFD16E3AB8000367F97 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
@@ -349,6 +363,19 @@
 			path = path;
 			sourceTree = "<group>";
 		};
+		A8147EB81A996DF700885D67 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A8147EB91A996DF700885D67 /* NSDictionary+DefautValues.h */,
+				A8147EBA1A996DF700885D67 /* NSDictionary+DefautValues.m */,
+				A8147EBB1A996DF700885D67 /* NSMutableDictionary+Merge.h */,
+				A8147EBC1A996DF700885D67 /* NSMutableDictionary+Merge.m */,
+				A8147EBD1A996DF700885D67 /* NSString+JSON.h */,
+				A8147EBE1A996DF700885D67 /* NSString+JSON.m */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		A824C46F190608D4003C4B84 /* system */ = {
 			isa = PBXGroup;
 			children = (
@@ -378,6 +405,7 @@
 				A8836DA61A4B1319007733CE /* Config.xcconfig */,
 				A8836DA71A4B1319007733CE /* DebugConfig.xcconfig */,
 				A8836DA81A4B1319007733CE /* ReleaseConfig.xcconfig */,
+				A8147EEA1A9973E300885D67 /* DistributionConfig.xcconfig */,
 				D616014D45B744EF83271CE8 /* Info.plist */,
 				125ACA23B6814C2888F2E57E /* Prefix.pch */,
 				A8FA3B8316E379B000367F97 /* Classes */,
@@ -399,6 +427,7 @@
 			isa = PBXGroup;
 			children = (
 				A8836D881A4B005A007733CE /* system */,
+				A8147EB81A996DF700885D67 /* utils */,
 			);
 			path = cocoa;
 			sourceTree = "<group>";
@@ -440,8 +469,8 @@
 		A8FA3B8316E379B000367F97 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3B8B16E39A7C00367F97 /* AppDelegate.h */,
-				A8FA3B8C16E39A7C00367F97 /* AppDelegate.mm */,
+				A8FA3B8B16E39A7C00367F97 /* Application.h */,
+				A8FA3B8C16E39A7C00367F97 /* Application.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -450,7 +479,6 @@
 			isa = PBXGroup;
 			children = (
 				A8836D651A4AFFE5007733CE /* Context.h */,
-				A8836D641A4AFFE5007733CE /* Context.cpp */,
 				A8F9979219FAA06000F08369 /* Exception.h */,
 				A86902621A0308F000D2C9F3 /* Log.h */,
 				A8F595651A07788300877FB2 /* Log.cpp */,
@@ -475,9 +503,12 @@
 		A8FA3B9316E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3B9616E3AB8000367F97 /* CinderSketch.h */,
-				A8720806180833E10055F0BA /* CinderSketchBase.h */,
-				A85483B819CE12CD00B7866C /* WindowInfo.h */,
+				A8147EB01A996DF000885D67 /* CinderDelegate.h */,
+				A8147EB11A996DF000885D67 /* CinderDelegateBase.h */,
+				A8147EB21A996DF000885D67 /* CinderDelegateBase.cpp */,
+				A8147EB31A996DF000885D67 /* CinderSketch.h */,
+				A8147EB41A996DF000885D67 /* CinderSketch.cpp */,
+				A8147EB51A996DF000885D67 /* WindowInfo.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -495,10 +526,11 @@
 		A8FA3BC016E3AB8000367F97 /* cinder */ = {
 			isa = PBXGroup;
 			children = (
-				A8FA3BC116E3AB8000367F97 /* CinderDelegate.h */,
-				A8FA3BC216E3AB8000367F97 /* CinderDelegate.mm */,
-				A874A4F91A2B2F16009A60A0 /* CinderSketch.h */,
-				A874A4FA1A2B2F16009A60A0 /* CinderSketch.mm */,
+				A8147EC31A996E0900885D67 /* CinderBridge.mm */,
+				A8147EC41A996E0900885D67 /* CinderBridge.h */,
+				A8147EC51A996E0900885D67 /* BridgeListener.h */,
+				A8147EC61A996E0900885D67 /* CinderDelegate.mm */,
+				A8147EC71A996E0900885D67 /* CinderDelegate.h */,
 			);
 			path = cinder;
 			sourceTree = "<group>";
@@ -606,7 +638,7 @@
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "PathWorks1" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -648,37 +680,40 @@
 			files = (
 				A8112C931A4F30050002CF68 /* Hairline.cpp in Sources */,
 				A8DB3EC616E0B96C00504D27 /* Sketch.cpp in Sources */,
-				A8836D661A4AFFE5007733CE /* Context.cpp in Sources */,
 				A802715119CC83FD0072973D /* QuadMatrix.cpp in Sources */,
 				A8112C941A4F30050002CF68 /* ShapeMesh.cpp in Sources */,
 				A802714519CC83FD0072973D /* FontSequence.cpp in Sources */,
+				A8147EC91A996E0900885D67 /* CinderDelegate.mm in Sources */,
 				A8112C921A4F30050002CF68 /* FXGDocument.cpp in Sources */,
 				A8836D711A4B0008007733CE /* Handler.cpp in Sources */,
-				A8FA3B8F16E39A7C00367F97 /* AppDelegate.mm in Sources */,
+				A8FA3B8F16E39A7C00367F97 /* Application.mm in Sources */,
 				A802714419CC83FD0072973D /* FontManager.cpp in Sources */,
 				A8FA3C1716E3AB8000367F97 /* InputSource.cpp in Sources */,
 				A8F595661A07788300877FB2 /* Log.cpp in Sources */,
 				A8FBC45118E35F4100F5BBEF /* SystemManager.mm in Sources */,
 				A8702BF71A5B496000EF9E9E /* DisplayHelperBase.cpp in Sources */,
-				A8FA3C1816E3AB8000367F97 /* CinderDelegate.mm in Sources */,
 				A8FA3C1A16E3AB8000367F97 /* GLViewController.mm in Sources */,
 				A8836D731A4B0008007733CE /* Task.cpp in Sources */,
 				A874A4FD1A2B2FB5009A60A0 /* main.cpp in Sources */,
+				A8147EB71A996DF000885D67 /* CinderSketch.cpp in Sources */,
 				A802714319CC83FD0072973D /* Font.cpp in Sources */,
 				A8FA3C2D16E3AB8000367F97 /* GLUtils.cpp in Sources */,
 				A8702BF81A5B496000EF9E9E /* FileHelperBase.cpp in Sources */,
+				A8147EC21A996DF700885D67 /* NSString+JSON.m in Sources */,
 				A8FA3C2E16E3AB8000367F97 /* MathUtils.cpp in Sources */,
 				A8F2E307189D3F47002D5D75 /* ImageSourceFileStbImage.cpp in Sources */,
 				A8112C951A4F30050002CF68 /* ShapeTesselator.cpp in Sources */,
 				A8112C911A4F30050002CF68 /* FollowablePath.cpp in Sources */,
 				A8702BFA1A5B496000EF9E9E /* SystemManagerBase.cpp in Sources */,
 				A8FA3C2F16E3AB8000367F97 /* Utils.cpp in Sources */,
-				A874A4FB1A2B2F16009A60A0 /* CinderSketch.mm in Sources */,
+				A8147EB61A996DF000885D67 /* CinderDelegateBase.cpp in Sources */,
 				A87CE0E416E75A3700F27EDE /* PVRHelper.cpp in Sources */,
 				A8836D921A4B005A007733CE /* MemoryManager.mm in Sources */,
 				A8836D741A4B0008007733CE /* TaskManager.cpp in Sources */,
 				A8702BF91A5B496000EF9E9E /* MemoryManagerBase.cpp in Sources */,
+				A8147EC11A996DF700885D67 /* NSMutableDictionary+Merge.m in Sources */,
 				A8F2E31E189E5234002D5D75 /* Clock.cpp in Sources */,
+				A8147EC81A996E0900885D67 /* CinderBridge.mm in Sources */,
 				A8702C001A5B497900EF9E9E /* FileHelper.mm in Sources */,
 				A8112C961A4F30050002CF68 /* SplinePath.cpp in Sources */,
 				A802714619CC83FD0072973D /* TextHelper.cpp in Sources */,
@@ -686,6 +721,7 @@
 				A8FBC44D18E35EE200F5BBEF /* FrameClock.cpp in Sources */,
 				A87CE0E616E75A3700F27EDE /* Texture.cpp in Sources */,
 				A8702BFD1A5B497200EF9E9E /* DisplayHelper.mm in Sources */,
+				A8147EC01A996DF700885D67 /* NSDictionary+DefautValues.m in Sources */,
 				A87CE0EA16E75A3700F27EDE /* TextureHelper.cpp in Sources */,
 				A87CE0EB16E75A3700F27EDE /* TextureManager.cpp in Sources */,
 			);
@@ -720,6 +756,19 @@
 			};
 			name = Release;
 		};
+		A8147EEC1A9973EC00885D67 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8147EEA1A9973E300885D67 /* DistributionConfig.xcconfig */;
+			buildSettings = {
+			};
+			name = Distribution;
+		};
+		A8147EED1A9973EC00885D67 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Distribution;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -728,6 +777,7 @@
 			buildConfigurations = (
 				00692BF314FF149000D0A05E /* Debug */,
 				00692BF414FF149000D0A05E /* Release */,
+				A8147EEC1A9973EC00885D67 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -737,6 +787,7 @@
 			buildConfigurations = (
 				00692BF614FF149000D0A05E /* Debug */,
 				00692BF714FF149000D0A05E /* Release */,
+				A8147EED1A9973EC00885D67 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

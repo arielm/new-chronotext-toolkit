@@ -48,4 +48,3 @@ extern "C"
 CINDER_APP_DESKTOP(Application, ci::app::RendererGl::AA_NONE)
 
 #endif
-

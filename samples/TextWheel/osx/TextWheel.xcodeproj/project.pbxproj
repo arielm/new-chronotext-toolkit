@@ -18,6 +18,7 @@
 		A8027DFA16E377AE00184149 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8027DF816E377AE00184149 /* icon.icns */; };
 		A8147D9B1A977B6C00885D67 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147D9A1A977B6C00885D67 /* Application.cpp */; };
 		A8147D9E1A977BC400885D67 /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8147D9C1A977BC400885D67 /* CinderBridge.mm */; };
+		A8147E6C1A99675A00885D67 /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8147E691A99675A00885D67 /* ImageSourceFileStbImage.cpp */; };
 		A822637718BF54BC00D57C8C /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A822636F18BF54BC00D57C8C /* Clock.cpp */; };
 		A826F4E01A6B138F002A23A9 /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4D61A6B138F002A23A9 /* DisplayHelper.cpp */; };
 		A826F4E21A6B138F002A23A9 /* SystemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A826F4DC1A6B138F002A23A9 /* SystemManager.cpp */; };
@@ -95,6 +96,9 @@
 		A8147D9A1A977B6C00885D67 /* Application.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Application.cpp; sourceTree = "<group>"; };
 		A8147D9C1A977BC400885D67 /* CinderBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderBridge.mm; sourceTree = "<group>"; };
 		A8147D9D1A977BC400885D67 /* CinderBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderBridge.h; sourceTree = "<group>"; };
+		A8147E691A99675A00885D67 /* ImageSourceFileStbImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSourceFileStbImage.cpp; sourceTree = "<group>"; };
+		A8147E6A1A99675A00885D67 /* ImageSourceFileStbImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSourceFileStbImage.h; sourceTree = "<group>"; };
+		A8147E6B1A99675A00885D67 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		A822636F18BF54BC00D57C8C /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
 		A822637018BF54BC00D57C8C /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = "<group>"; };
 		A822637118BF54BC00D57C8C /* DefaultTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultTimeBase.h; sourceTree = "<group>"; };
@@ -330,6 +334,16 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A8147E681A99675A00885D67 /* stb */ = {
+			isa = PBXGroup;
+			children = (
+				A8147E691A99675A00885D67 /* ImageSourceFileStbImage.cpp */,
+				A8147E6A1A99675A00885D67 /* ImageSourceFileStbImage.h */,
+				A8147E6B1A99675A00885D67 /* stb_image.h */,
+			);
+			path = stb;
+			sourceTree = "<group>";
+		};
 		A822636E18BF54BC00D57C8C /* time */ = {
 			isa = PBXGroup;
 			children = (
@@ -405,6 +419,7 @@
 		A82C90F416E00B3B00FF519C /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				A8147E681A99675A00885D67 /* stb */,
 				A82C90FB16E00B3B00FF519C /* GLUtils.h */,
 				A82C90FA16E00B3B00FF519C /* GLUtils.cpp */,
 				A82C90FE16E00B3B00FF519C /* MathUtils.h */,
@@ -676,6 +691,7 @@
 				A8F9FC4E18C5683B00C48245 /* FontTexture.cpp in Sources */,
 				A8FBC4AD18E3B1A800F5BBEF /* FrameClock.cpp in Sources */,
 				A826F5031A6C122E002A23A9 /* CinderSketch.cpp in Sources */,
+				A8147E6C1A99675A00885D67 /* ImageSourceFileStbImage.cpp in Sources */,
 				A85977811A2FD6400080C906 /* NSMutableDictionary+Merge.m in Sources */,
 				A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */,
 				A8702B281A5B456C00EF9E9E /* FileHelper.mm in Sources */,
