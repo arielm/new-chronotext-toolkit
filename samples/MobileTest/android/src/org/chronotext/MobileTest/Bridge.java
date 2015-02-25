@@ -186,7 +186,4 @@ public class Bridge extends CinderBridge
     button1.setText(hidden ? "show" : "hide");
     button2.setText(detached ? "attach" : "detach");
   }
-  
-  public void handleMessage(Message msg)
-  {}
 }
