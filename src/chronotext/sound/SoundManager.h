@@ -124,6 +124,9 @@ namespace chr
         
         // ---
         
+        FMOD::System *system = nullptr;
+        FMOD::ChannelGroup *masterGroup = nullptr;
+        
         ~SoundManager();
         
         void setup(int maxChannels = 32);
@@ -187,9 +190,6 @@ namespace chr
         static double getSoundDuration(FMOD::Sound *sound);
         
     protected:
-        FMOD::System *system = nullptr;
-        FMOD::ChannelGroup *masterGroup = nullptr;
-
         int effectCounter = -1;
         int playCounter = 0;
 
