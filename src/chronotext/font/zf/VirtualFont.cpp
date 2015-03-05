@@ -9,7 +9,6 @@
 #include "chronotext/font/zf/VirtualFont.h"
 #include "chronotext/font/zf/FontManager.h"
 #include "chronotext/font/zf/LayoutCache.h"
-#include "chronotext/font/zf/TextItemizer.h"
 
 #include "cinder/gl/gl.h"
 

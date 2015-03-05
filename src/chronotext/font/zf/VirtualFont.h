@@ -12,7 +12,7 @@
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/FontSequence.h"
 #include "chronotext/font/zf/LineLayout.h"
-#include "chronotext/font/zf/TextLine.h"
+#include "chronotext/font/zf/TextItemizer.h"
 
 #include <boost/range/iterator_range.hpp>
 
@@ -27,7 +27,6 @@ namespace chr
     {
         class FontManager;
         class LayoutCache;
-        class TextItemizer;
 
         typedef std::vector<ActualFont*> FontSet;
         
