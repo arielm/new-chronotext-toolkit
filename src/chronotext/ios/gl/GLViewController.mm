@@ -27,8 +27,6 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     BOOL started;
     BOOL appeared;
 
-    BOOL setupRequest;
-    
     BOOL resizeRequest;
     int viewportWidth;
     int viewportHeight;
