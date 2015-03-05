@@ -66,6 +66,6 @@ namespace chr
         std::shared_ptr<TimeBase> timeBase;
         
         Clock();
-        Clock(std::shared_ptr<TimeBase> timeBase);
+        Clock(std::shared_ptr<TimeBase> timeBase, bool startOnConstruction = true);
     };
 }

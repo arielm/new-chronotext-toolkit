@@ -20,14 +20,17 @@ namespace chr
     state(STOPPED)
     {}
     
-    Clock::Clock(shared_ptr<TimeBase> timeBase)
+    Clock::Clock(shared_ptr<TimeBase> timeBase, bool startOnConstruction)
     :
     timeBase(timeBase),
     mst(0),
     rate(1),
     state(STOPPED)
     {
-        start();
+        if (startOnConstruction)
+        {
+            start();
+        }
     }
     
     void Clock::start()

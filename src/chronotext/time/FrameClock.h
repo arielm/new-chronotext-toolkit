@@ -37,6 +37,6 @@ namespace chr
         bool locked = false;
         
         FrameClock() = default;
-        FrameClock(std::shared_ptr<TimeBase> timeBase);
+        FrameClock(std::shared_ptr<TimeBase> timeBase, bool startOnConstruction = true);
     };
 }

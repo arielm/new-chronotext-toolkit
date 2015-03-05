@@ -12,9 +12,9 @@ using namespace std;
 
 namespace chr
 {
-    FrameClock::FrameClock(shared_ptr<TimeBase> timeBase)
+    FrameClock::FrameClock(shared_ptr<TimeBase> timeBase, bool startOnConstruction)
     :
-    Clock(timeBase)
+    Clock(timeBase, startOnConstruction)
     {}
     
     double FrameClock::getTime()
