@@ -129,7 +129,7 @@ namespace chr
         
         ~SoundManager();
         
-        void setup(int maxChannels = 32);
+        bool init(int maxChannels = 32);
         void shutdown();
         
         /*
@@ -190,6 +190,7 @@ namespace chr
         static double getSoundDuration(FMOD::Sound *sound);
         
     protected:
+        bool initialized = false;
         int effectCounter = -1;
         int playCounter = 0;
 

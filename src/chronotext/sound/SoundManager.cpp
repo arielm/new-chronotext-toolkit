@@ -24,31 +24,40 @@ namespace chr
         shutdown();
     }
     
-    void SoundManager::setup(int maxChannels)
+    bool SoundManager::init(int maxChannels)
     {
-        if (!system)
+        if (!initialized)
         {
             FMOD::System_Create(&system);
-            system->init(maxChannels, FMOD_INIT_NORMAL, nullptr);
-            system->getMasterChannelGroup(&masterGroup);
+            FMOD_RESULT result = system->init(maxChannels, FMOD_INIT_NORMAL, nullptr);
+            
+            if (!result)
+            {
+                system->getMasterChannelGroup(&masterGroup);
+                initialized = true;
+            }
         }
+        
+        return initialized;
     }
     
     void SoundManager::shutdown()
     {
-        if (system)
+        if (initialized)
         {
             discardEffects();
             
             system->close();
             system->release();
             system = nullptr;
+            
+            initialized = false;
         }
     }
     
     void SoundManager::pause()
     {
-        if (system)
+        if (initialized)
         {
             masterGroup->setPaused(true);
         }
@@ -56,7 +65,7 @@ namespace chr
     
     void SoundManager::resume()
     {
-        if (system)
+        if (initialized)
         {
             masterGroup->setPaused(false);
         }
@@ -64,7 +73,7 @@ namespace chr
     
     void SoundManager::update()
     {
-        if (system)
+        if (initialized)
         {
             system->update();
             
@@ -334,7 +343,7 @@ namespace chr
     
     void SoundManager::setMute(bool mute)
     {
-        if (system)
+        if (initialized)
         {
             masterGroup->setMute(mute);
         }
@@ -344,7 +353,7 @@ namespace chr
     {
         bool mute = false;
         
-        if (system)
+        if (initialized)
         {
             masterGroup->getMute(&mute);
         }
@@ -356,7 +365,7 @@ namespace chr
     {
         float volume = 0;
         
-        if (system)
+        if (initialized)
         {
             masterGroup->getVolume(&volume);
         }
@@ -366,7 +375,7 @@ namespace chr
     
     void SoundManager::setVolume(float volume)
     {
-        if (system)
+        if (initialized)
         {
             masterGroup->setVolume(volume);
         }
