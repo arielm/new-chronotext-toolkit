@@ -130,7 +130,7 @@ namespace chr
         ~SoundManager();
         
         bool init(int maxChannels = 32);
-        void shutdown();
+        void uninit();
         
         /*
          * FIXME: UNSAFE

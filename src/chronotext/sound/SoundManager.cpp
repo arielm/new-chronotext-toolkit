@@ -21,7 +21,7 @@ namespace chr
     
     SoundManager::~SoundManager()
     {
-        shutdown();
+        uninit();
     }
     
     bool SoundManager::init(int maxChannels)
@@ -41,7 +41,7 @@ namespace chr
         return initialized;
     }
     
-    void SoundManager::shutdown()
+    void SoundManager::uninit()
     {
         if (initialized)
         {
