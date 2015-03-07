@@ -140,13 +140,13 @@ namespace chr
         
         /*
          * ON ANDROID (UNLIKE iOS):
-         * IT IS NECESSARY TO CALL THESE UPON FOREGROUND/BACKGROUND SWITCHES
+         * IT IS NECESSARY TO CALL THESE UPON ACTIVITY PAUSE/RESUME
          */
         void pause();
         void resume();
         
         /*
-         * IT IS MANDATORY TO CALL UPDATE EACH FRAME,
+         * IT IS MANDATORY TO CALL THIS EACH FRAME,
          * OTHERWISE (AND AMONG OTHER THINGS): CHANNELS WON'T BE RELEASED UPON COMPLETION
          */
         void update();

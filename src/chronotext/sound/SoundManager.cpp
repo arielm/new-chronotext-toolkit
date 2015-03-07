@@ -60,6 +60,7 @@ namespace chr
         if (initialized)
         {
             masterGroup->setPaused(true);
+            system->update(); // NECESSARY, OTHERWISE PAUSE-REQUEST WILL NOT BE EFFECTIVE
         }
     }
     
@@ -68,6 +69,7 @@ namespace chr
         if (initialized)
         {
             masterGroup->setPaused(false);
+            system->update(); // NOT PURELY NECESSARY SINCE SoundManager::update() IS SUPPOSED TO FOLLOW
         }
     }
     
