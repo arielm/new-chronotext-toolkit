@@ -5,10 +5,7 @@
  *
  * MODIFICATIONS:
  *
- * 1) USING stb_image v1.46
- *    https://github.com/nothings/stb
- *
- * 2) "FORCE_STB_FOR_PNG_AND_JPG" MACRO
+ * - USING stb_image v2.02
  */
 
 #pragma once
