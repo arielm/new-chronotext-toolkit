@@ -207,7 +207,6 @@
 		A8FBC44C18E35EE200F5BBEF /* FrameClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameClock.h; sourceTree = "<group>"; };
 		A8FBC44F18E35F4100F5BBEF /* SystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManager.h; sourceTree = "<group>"; };
 		A8FBC45018E35F4100F5BBEF /* SystemManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemManager.mm; sourceTree = "<group>"; };
-		A8FF6CAC19E964B200FCEF4B /* AccelerationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationManager.h; sourceTree = "<group>"; };
 		A8FF6CAD19E964B200FCEF4B /* AccelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelEvent.h; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -600,7 +599,6 @@
 		A8FF6CAB19E964B200FCEF4B /* accel */ = {
 			isa = PBXGroup;
 			children = (
-				A8FF6CAC19E964B200FCEF4B /* AccelerationManager.h */,
 				A8FF6CAD19E964B200FCEF4B /* AccelEvent.h */,
 			);
 			path = accel;
