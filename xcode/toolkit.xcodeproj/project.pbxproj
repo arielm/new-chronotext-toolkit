@@ -483,6 +483,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		007050BE1114F93F003FCAE4 /* libtoolkit_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		00CFD9E11135C3520091E310 /* libtoolkit_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A82B31FD1AAD14C900A1CEFA /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A82B31FE1AAD14C900A1CEFA /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A82B31FF1AAD14C900A1CEFA /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
@@ -668,9 +670,7 @@
 		A82B35F31AAD271800A1CEFA /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A82B35F41AAD271800A1CEFA /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		A82B35F51AAD271800A1CEFA /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
-		A8B320211AADD80D00D33333 /* libtoolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libtoolkit.a; path = "/Users/arielm/Documents/DEV2/cinder/blocks/new-chronotext-toolkit/xcode/../lib/osx/libtoolkit.a"; sourceTree = "<absolute>"; };
-		A8B320221AADD80D00D33333 /* libtoolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libtoolkit.a; path = "/Users/arielm/Documents/DEV2/cinder/blocks/new-chronotext-toolkit/xcode/../lib/ios/libtoolkit.a"; sourceTree = "<absolute>"; };
-		A8B320231AADD80D00D33333 /* libtoolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libtoolkit.a; path = "/Users/arielm/Documents/DEV2/cinder/blocks/new-chronotext-toolkit/xcode/../lib/ios_sim/libtoolkit.a"; sourceTree = "<absolute>"; };
+		D2AAC07E0554694100DB518D /* libtoolkit_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -698,6 +698,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC07E0554694100DB518D /* libtoolkit_d.a */,
+				007050BE1114F93F003FCAE4 /* libtoolkit_d.a */,
+				00CFD9E11135C3520091E310 /* libtoolkit_d.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		0867D691FE84028FC02AAC07 /* libtoolkit */ = {
 			isa = PBXGroup;
 			children = (
@@ -705,6 +715,7 @@
 				A82B35EA1AAD237600A1CEFA /* ios */,
 				A82B35F11AAD271800A1CEFA /* ios_sim */,
 				A82B31FC1AAD14C900A1CEFA /* osx */,
+				034768DFFF38A50411DB9C8B /* Products */,
 			);
 			indentWidth = 4;
 			name = libtoolkit;
@@ -1534,7 +1545,7 @@
 			);
 			name = ios;
 			productName = toolkit;
-			productReference = A8B320221AADD80D00D33333 /* libtoolkit.a */;
+			productReference = 007050BE1114F93F003FCAE4 /* libtoolkit_d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		00CFD92C1135C3520091E310 /* ios_sim */ = {
@@ -1551,7 +1562,7 @@
 			);
 			name = ios_sim;
 			productName = toolkit;
-			productReference = A8B320231AADD80D00D33333 /* libtoolkit.a */;
+			productReference = 00CFD9E11135C3520091E310 /* libtoolkit_d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		D2AAC07D0554694100DB518D /* osx */ = {
@@ -1568,7 +1579,7 @@
 			);
 			name = osx;
 			productName = toolkit;
-			productReference = A8B320211AADD80D00D33333 /* libtoolkit.a */;
+			productReference = D2AAC07E0554694100DB518D /* libtoolkit_d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -1590,7 +1601,7 @@
 				German,
 			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* libtoolkit */;
-			productRefGroup = 0867D691FE84028FC02AAC07 /* libtoolkit */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

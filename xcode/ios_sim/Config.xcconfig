@@ -23,9 +23,9 @@ COPY_PHASE_STRIP = NO
 
 //
 
-SYMROOT = ../lib/ios_sim
-OBJROOT = build/
-CONFIGURATION_BUILD_DIR = $(BUILD_DIR)
+//SYMROOT = ../lib/ios_sim
+//OBJROOT = build/
+//CONFIGURATION_BUILD_DIR = $(BUILD_DIR)
 
 //
 

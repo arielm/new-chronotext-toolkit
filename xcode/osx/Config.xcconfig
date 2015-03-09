@@ -16,9 +16,9 @@ COPY_PHASE_STRIP = NO
 
 //
 
-SYMROOT = ../lib/osx
-OBJROOT = build/
-CONFIGURATION_BUILD_DIR = $(BUILD_DIR)
+//SYMROOT = ../lib/osx
+//OBJROOT = build/
+//CONFIGURATION_BUILD_DIR = $(BUILD_DIR)
 
 //
 
