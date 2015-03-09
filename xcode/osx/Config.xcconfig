@@ -16,12 +16,6 @@ COPY_PHASE_STRIP = NO
 
 //
 
-//SYMROOT = ../lib/osx
-//OBJROOT = build/
-//CONFIGURATION_BUILD_DIR = $(BUILD_DIR)
-
-//
-
 CINDER_PATH = ../../../
 
 ALWAYS_SEARCH_USER_PATHS = YES
@@ -32,4 +26,9 @@ BASE_GCC_PREPROCESSOR_DEFINITIONS =
 
 //
 
+//SYMROOT = ../lib/osx
+//OBJROOT = build/
+//CONFIGURATION_BUILD_DIR = $(BUILD_DIR)
+
 GCC_PREFIX_HEADER = osx/Prefix.pch
+PRODUCT_NAME = toolkit

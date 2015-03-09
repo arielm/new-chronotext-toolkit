@@ -9,79 +9,54 @@
 /* Begin PBXBuildFile section */
 		A82B33351AAD1AB300A1CEFA /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32131AAD1AB300A1CEFA /* Sprite.cpp */; };
 		A82B33361AAD1AB300A1CEFA /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32131AAD1AB300A1CEFA /* Sprite.cpp */; };
-		A82B33371AAD1AB300A1CEFA /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32131AAD1AB300A1CEFA /* Sprite.cpp */; };
 		A82B33381AAD1AB300A1CEFA /* Sprite.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32141AAD1AB300A1CEFA /* Sprite.h */; };
 		A82B33391AAD1AB300A1CEFA /* Sprite.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32141AAD1AB300A1CEFA /* Sprite.h */; };
-		A82B333A1AAD1AB300A1CEFA /* Sprite.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32141AAD1AB300A1CEFA /* Sprite.h */; };
 		A82B333B1AAD1AB300A1CEFA /* TextureAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32151AAD1AB300A1CEFA /* TextureAtlas.cpp */; };
 		A82B333C1AAD1AB300A1CEFA /* TextureAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32151AAD1AB300A1CEFA /* TextureAtlas.cpp */; };
-		A82B333D1AAD1AB300A1CEFA /* TextureAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32151AAD1AB300A1CEFA /* TextureAtlas.cpp */; };
 		A82B333E1AAD1AB300A1CEFA /* TextureAtlas.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32161AAD1AB300A1CEFA /* TextureAtlas.h */; };
 		A82B333F1AAD1AB300A1CEFA /* TextureAtlas.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32161AAD1AB300A1CEFA /* TextureAtlas.h */; };
-		A82B33401AAD1AB300A1CEFA /* TextureAtlas.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32161AAD1AB300A1CEFA /* TextureAtlas.h */; };
 		A82B33411AAD1AB300A1CEFA /* TextureAtlasAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32171AAD1AB300A1CEFA /* TextureAtlasAnimation.cpp */; };
 		A82B33421AAD1AB300A1CEFA /* TextureAtlasAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32171AAD1AB300A1CEFA /* TextureAtlasAnimation.cpp */; };
-		A82B33431AAD1AB300A1CEFA /* TextureAtlasAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32171AAD1AB300A1CEFA /* TextureAtlasAnimation.cpp */; };
 		A82B33441AAD1AB300A1CEFA /* TextureAtlasAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32181AAD1AB300A1CEFA /* TextureAtlasAnimation.h */; };
 		A82B33451AAD1AB300A1CEFA /* TextureAtlasAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32181AAD1AB300A1CEFA /* TextureAtlasAnimation.h */; };
-		A82B33461AAD1AB300A1CEFA /* TextureAtlasAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32181AAD1AB300A1CEFA /* TextureAtlasAnimation.h */; };
 		A82B33561AAD1AB300A1CEFA /* Hasher.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32211AAD1AB300A1CEFA /* Hasher.h */; };
 		A82B33571AAD1AB300A1CEFA /* Hasher.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32211AAD1AB300A1CEFA /* Hasher.h */; };
-		A82B33581AAD1AB300A1CEFA /* Hasher.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32211AAD1AB300A1CEFA /* Hasher.h */; };
 		A82B33591AAD1AB300A1CEFA /* CinderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32231AAD1AB300A1CEFA /* CinderDelegate.h */; };
 		A82B335A1AAD1AB300A1CEFA /* CinderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32231AAD1AB300A1CEFA /* CinderDelegate.h */; };
-		A82B335B1AAD1AB300A1CEFA /* CinderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32231AAD1AB300A1CEFA /* CinderDelegate.h */; };
 		A82B335C1AAD1AB300A1CEFA /* CinderDelegateBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32241AAD1AB300A1CEFA /* CinderDelegateBase.cpp */; };
 		A82B335D1AAD1AB300A1CEFA /* CinderDelegateBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32241AAD1AB300A1CEFA /* CinderDelegateBase.cpp */; };
-		A82B335E1AAD1AB300A1CEFA /* CinderDelegateBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32241AAD1AB300A1CEFA /* CinderDelegateBase.cpp */; };
 		A82B335F1AAD1AB300A1CEFA /* CinderDelegateBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32251AAD1AB300A1CEFA /* CinderDelegateBase.h */; };
 		A82B33601AAD1AB300A1CEFA /* CinderDelegateBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32251AAD1AB300A1CEFA /* CinderDelegateBase.h */; };
-		A82B33611AAD1AB300A1CEFA /* CinderDelegateBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32251AAD1AB300A1CEFA /* CinderDelegateBase.h */; };
 		A82B33621AAD1AB300A1CEFA /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32261AAD1AB300A1CEFA /* CinderSketch.cpp */; };
 		A82B33631AAD1AB300A1CEFA /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32261AAD1AB300A1CEFA /* CinderSketch.cpp */; };
-		A82B33641AAD1AB300A1CEFA /* CinderSketch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32261AAD1AB300A1CEFA /* CinderSketch.cpp */; };
 		A82B33651AAD1AB300A1CEFA /* CinderSketch.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32271AAD1AB300A1CEFA /* CinderSketch.h */; };
 		A82B33661AAD1AB300A1CEFA /* CinderSketch.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32271AAD1AB300A1CEFA /* CinderSketch.h */; };
-		A82B33671AAD1AB300A1CEFA /* CinderSketch.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32271AAD1AB300A1CEFA /* CinderSketch.h */; };
 		A82B33681AAD1AB300A1CEFA /* WindowInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32281AAD1AB300A1CEFA /* WindowInfo.h */; };
 		A82B33691AAD1AB300A1CEFA /* WindowInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32281AAD1AB300A1CEFA /* WindowInfo.h */; };
-		A82B336A1AAD1AB300A1CEFA /* WindowInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32281AAD1AB300A1CEFA /* WindowInfo.h */; };
 		A82B336B1AAD1AB300A1CEFA /* FileHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B322B1AAD1AB300A1CEFA /* FileHelper.h */; };
 		A82B336C1AAD1AB300A1CEFA /* FileHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B322B1AAD1AB300A1CEFA /* FileHelper.h */; };
-		A82B336D1AAD1AB300A1CEFA /* FileHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B322B1AAD1AB300A1CEFA /* FileHelper.h */; };
 		A82B336E1AAD1AB300A1CEFA /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B322C1AAD1AB300A1CEFA /* FileHelper.mm */; };
 		A82B336F1AAD1AB300A1CEFA /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B322C1AAD1AB300A1CEFA /* FileHelper.mm */; };
-		A82B33701AAD1AB300A1CEFA /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B322C1AAD1AB300A1CEFA /* FileHelper.mm */; };
 		A82B33711AAD1AB300A1CEFA /* MemoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B322D1AAD1AB300A1CEFA /* MemoryManager.h */; };
 		A82B33721AAD1AB300A1CEFA /* MemoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B322D1AAD1AB300A1CEFA /* MemoryManager.h */; };
-		A82B33731AAD1AB300A1CEFA /* MemoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B322D1AAD1AB300A1CEFA /* MemoryManager.h */; };
 		A82B33741AAD1AB300A1CEFA /* MemoryManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B322E1AAD1AB300A1CEFA /* MemoryManager.mm */; };
 		A82B33751AAD1AB300A1CEFA /* MemoryManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B322E1AAD1AB300A1CEFA /* MemoryManager.mm */; };
-		A82B33761AAD1AB300A1CEFA /* MemoryManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B322E1AAD1AB300A1CEFA /* MemoryManager.mm */; };
 		A82B33771AAD1AB300A1CEFA /* NSDictionary+DefautValues.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32301AAD1AB300A1CEFA /* NSDictionary+DefautValues.h */; };
 		A82B33781AAD1AB300A1CEFA /* NSDictionary+DefautValues.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32301AAD1AB300A1CEFA /* NSDictionary+DefautValues.h */; };
-		A82B33791AAD1AB300A1CEFA /* NSDictionary+DefautValues.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32301AAD1AB300A1CEFA /* NSDictionary+DefautValues.h */; };
 		A82B337A1AAD1AB300A1CEFA /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32311AAD1AB300A1CEFA /* NSDictionary+DefautValues.m */; };
 		A82B337B1AAD1AB300A1CEFA /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32311AAD1AB300A1CEFA /* NSDictionary+DefautValues.m */; };
-		A82B337C1AAD1AB300A1CEFA /* NSDictionary+DefautValues.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32311AAD1AB300A1CEFA /* NSDictionary+DefautValues.m */; };
 		A82B337D1AAD1AB300A1CEFA /* NSMutableDictionary+Merge.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32321AAD1AB300A1CEFA /* NSMutableDictionary+Merge.h */; };
 		A82B337E1AAD1AB300A1CEFA /* NSMutableDictionary+Merge.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32321AAD1AB300A1CEFA /* NSMutableDictionary+Merge.h */; };
-		A82B337F1AAD1AB300A1CEFA /* NSMutableDictionary+Merge.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32321AAD1AB300A1CEFA /* NSMutableDictionary+Merge.h */; };
 		A82B33801AAD1AB300A1CEFA /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32331AAD1AB300A1CEFA /* NSMutableDictionary+Merge.m */; };
 		A82B33811AAD1AB300A1CEFA /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32331AAD1AB300A1CEFA /* NSMutableDictionary+Merge.m */; };
-		A82B33821AAD1AB300A1CEFA /* NSMutableDictionary+Merge.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32331AAD1AB300A1CEFA /* NSMutableDictionary+Merge.m */; };
 		A82B33831AAD1AB300A1CEFA /* NSString+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32341AAD1AB300A1CEFA /* NSString+JSON.h */; };
 		A82B33841AAD1AB300A1CEFA /* NSString+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32341AAD1AB300A1CEFA /* NSString+JSON.h */; };
-		A82B33851AAD1AB300A1CEFA /* NSString+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32341AAD1AB300A1CEFA /* NSString+JSON.h */; };
 		A82B33861AAD1AB300A1CEFA /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32351AAD1AB300A1CEFA /* NSString+JSON.m */; };
 		A82B33871AAD1AB300A1CEFA /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32351AAD1AB300A1CEFA /* NSString+JSON.m */; };
-		A82B33881AAD1AB300A1CEFA /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32351AAD1AB300A1CEFA /* NSString+JSON.m */; };
 		A82B33891AAD1AB300A1CEFA /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32361AAD1AB300A1CEFA /* Utils.h */; };
 		A82B338A1AAD1AB300A1CEFA /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32361AAD1AB300A1CEFA /* Utils.h */; };
-		A82B338B1AAD1AB300A1CEFA /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32361AAD1AB300A1CEFA /* Utils.h */; };
 		A82B338C1AAD1AB300A1CEFA /* Context.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32371AAD1AB300A1CEFA /* Context.h */; };
 		A82B338D1AAD1AB300A1CEFA /* Context.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32371AAD1AB300A1CEFA /* Context.h */; };
-		A82B338E1AAD1AB300A1CEFA /* Context.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32371AAD1AB300A1CEFA /* Context.h */; };
 		A82B338F1AAD1AB300A1CEFA /* DisplayHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B323A1AAD1AB300A1CEFA /* DisplayHelper.cpp */; };
 		A82B33921AAD1AB300A1CEFA /* DisplayHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B323B1AAD1AB300A1CEFA /* DisplayHelper.h */; };
 		A82B33951AAD1AB300A1CEFA /* EmulatedDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B323C1AAD1AB300A1CEFA /* EmulatedDevice.h */; };
@@ -90,151 +65,102 @@
 		A82B339E1AAD1AB300A1CEFA /* SystemManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B323F1AAD1AB300A1CEFA /* SystemManager.h */; };
 		A82B33A11AAD1AB300A1CEFA /* Exception.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32401AAD1AB300A1CEFA /* Exception.h */; };
 		A82B33A21AAD1AB300A1CEFA /* Exception.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32401AAD1AB300A1CEFA /* Exception.h */; };
-		A82B33A31AAD1AB300A1CEFA /* Exception.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32401AAD1AB300A1CEFA /* Exception.h */; };
 		A82B33A41AAD1AB300A1CEFA /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32431AAD1AB300A1CEFA /* Font.cpp */; };
 		A82B33A51AAD1AB300A1CEFA /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32431AAD1AB300A1CEFA /* Font.cpp */; };
-		A82B33A61AAD1AB300A1CEFA /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32431AAD1AB300A1CEFA /* Font.cpp */; };
 		A82B33A71AAD1AB300A1CEFA /* Font.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32441AAD1AB300A1CEFA /* Font.h */; };
 		A82B33A81AAD1AB300A1CEFA /* Font.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32441AAD1AB300A1CEFA /* Font.h */; };
-		A82B33A91AAD1AB300A1CEFA /* Font.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32441AAD1AB300A1CEFA /* Font.h */; };
 		A82B33AA1AAD1AB300A1CEFA /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32451AAD1AB300A1CEFA /* FontManager.cpp */; };
 		A82B33AB1AAD1AB300A1CEFA /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32451AAD1AB300A1CEFA /* FontManager.cpp */; };
-		A82B33AC1AAD1AB300A1CEFA /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32451AAD1AB300A1CEFA /* FontManager.cpp */; };
 		A82B33AD1AAD1AB300A1CEFA /* FontManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32461AAD1AB300A1CEFA /* FontManager.h */; };
 		A82B33AE1AAD1AB300A1CEFA /* FontManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32461AAD1AB300A1CEFA /* FontManager.h */; };
-		A82B33AF1AAD1AB300A1CEFA /* FontManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32461AAD1AB300A1CEFA /* FontManager.h */; };
 		A82B33B01AAD1AB300A1CEFA /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32471AAD1AB300A1CEFA /* FontSequence.cpp */; };
 		A82B33B11AAD1AB300A1CEFA /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32471AAD1AB300A1CEFA /* FontSequence.cpp */; };
-		A82B33B21AAD1AB300A1CEFA /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32471AAD1AB300A1CEFA /* FontSequence.cpp */; };
 		A82B33B31AAD1AB300A1CEFA /* FontSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32481AAD1AB300A1CEFA /* FontSequence.h */; };
 		A82B33B41AAD1AB300A1CEFA /* FontSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32481AAD1AB300A1CEFA /* FontSequence.h */; };
-		A82B33B51AAD1AB300A1CEFA /* FontSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32481AAD1AB300A1CEFA /* FontSequence.h */; };
 		A82B33B61AAD1AB300A1CEFA /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32491AAD1AB300A1CEFA /* TextHelper.cpp */; };
 		A82B33B71AAD1AB300A1CEFA /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32491AAD1AB300A1CEFA /* TextHelper.cpp */; };
-		A82B33B81AAD1AB300A1CEFA /* TextHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32491AAD1AB300A1CEFA /* TextHelper.cpp */; };
 		A82B33B91AAD1AB300A1CEFA /* TextHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324A1AAD1AB300A1CEFA /* TextHelper.h */; };
 		A82B33BA1AAD1AB300A1CEFA /* TextHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324A1AAD1AB300A1CEFA /* TextHelper.h */; };
-		A82B33BB1AAD1AB300A1CEFA /* TextHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324A1AAD1AB300A1CEFA /* TextHelper.h */; };
 		A82B33BC1AAD1AB300A1CEFA /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B324C1AAD1AB300A1CEFA /* ActualFont.cpp */; };
 		A82B33BD1AAD1AB300A1CEFA /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B324C1AAD1AB300A1CEFA /* ActualFont.cpp */; };
-		A82B33BE1AAD1AB300A1CEFA /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B324C1AAD1AB300A1CEFA /* ActualFont.cpp */; };
 		A82B33BF1AAD1AB300A1CEFA /* ActualFont.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324D1AAD1AB300A1CEFA /* ActualFont.h */; };
 		A82B33C01AAD1AB300A1CEFA /* ActualFont.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324D1AAD1AB300A1CEFA /* ActualFont.h */; };
-		A82B33C11AAD1AB300A1CEFA /* ActualFont.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324D1AAD1AB300A1CEFA /* ActualFont.h */; };
 		A82B33C21AAD1AB300A1CEFA /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B324E1AAD1AB300A1CEFA /* FontManager.cpp */; };
 		A82B33C31AAD1AB300A1CEFA /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B324E1AAD1AB300A1CEFA /* FontManager.cpp */; };
-		A82B33C41AAD1AB300A1CEFA /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B324E1AAD1AB300A1CEFA /* FontManager.cpp */; };
 		A82B33C51AAD1AB300A1CEFA /* FontManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324F1AAD1AB300A1CEFA /* FontManager.h */; };
 		A82B33C61AAD1AB300A1CEFA /* FontManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324F1AAD1AB300A1CEFA /* FontManager.h */; };
-		A82B33C71AAD1AB300A1CEFA /* FontManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B324F1AAD1AB300A1CEFA /* FontManager.h */; };
 		A82B33C81AAD1AB300A1CEFA /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32501AAD1AB300A1CEFA /* FontSequence.cpp */; };
 		A82B33C91AAD1AB300A1CEFA /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32501AAD1AB300A1CEFA /* FontSequence.cpp */; };
-		A82B33CA1AAD1AB300A1CEFA /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32501AAD1AB300A1CEFA /* FontSequence.cpp */; };
 		A82B33CB1AAD1AB300A1CEFA /* FontSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32511AAD1AB300A1CEFA /* FontSequence.h */; };
 		A82B33CC1AAD1AB300A1CEFA /* FontSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32511AAD1AB300A1CEFA /* FontSequence.h */; };
-		A82B33CD1AAD1AB300A1CEFA /* FontSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32511AAD1AB300A1CEFA /* FontSequence.h */; };
 		A82B33CE1AAD1AB300A1CEFA /* FontTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32521AAD1AB300A1CEFA /* FontTexture.cpp */; };
 		A82B33CF1AAD1AB300A1CEFA /* FontTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32521AAD1AB300A1CEFA /* FontTexture.cpp */; };
-		A82B33D01AAD1AB300A1CEFA /* FontTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32521AAD1AB300A1CEFA /* FontTexture.cpp */; };
 		A82B33D11AAD1AB300A1CEFA /* FontTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32531AAD1AB300A1CEFA /* FontTexture.h */; };
 		A82B33D21AAD1AB300A1CEFA /* FontTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32531AAD1AB300A1CEFA /* FontTexture.h */; };
-		A82B33D31AAD1AB300A1CEFA /* FontTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32531AAD1AB300A1CEFA /* FontTexture.h */; };
 		A82B33D41AAD1AB300A1CEFA /* FreetypeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32541AAD1AB300A1CEFA /* FreetypeHelper.h */; };
 		A82B33D51AAD1AB300A1CEFA /* FreetypeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32541AAD1AB300A1CEFA /* FreetypeHelper.h */; };
-		A82B33D61AAD1AB300A1CEFA /* FreetypeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32541AAD1AB300A1CEFA /* FreetypeHelper.h */; };
 		A82B33D71AAD1AB300A1CEFA /* GlyphData.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32551AAD1AB300A1CEFA /* GlyphData.h */; };
 		A82B33D81AAD1AB300A1CEFA /* GlyphData.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32551AAD1AB300A1CEFA /* GlyphData.h */; };
-		A82B33D91AAD1AB300A1CEFA /* GlyphData.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32551AAD1AB300A1CEFA /* GlyphData.h */; };
 		A82B33DA1AAD1AB300A1CEFA /* LangHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32561AAD1AB300A1CEFA /* LangHelper.cpp */; };
 		A82B33DB1AAD1AB300A1CEFA /* LangHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32561AAD1AB300A1CEFA /* LangHelper.cpp */; };
-		A82B33DC1AAD1AB300A1CEFA /* LangHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32561AAD1AB300A1CEFA /* LangHelper.cpp */; };
 		A82B33DD1AAD1AB300A1CEFA /* LangHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32571AAD1AB300A1CEFA /* LangHelper.h */; };
 		A82B33DE1AAD1AB300A1CEFA /* LangHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32571AAD1AB300A1CEFA /* LangHelper.h */; };
-		A82B33DF1AAD1AB300A1CEFA /* LangHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32571AAD1AB300A1CEFA /* LangHelper.h */; };
 		A82B33E01AAD1AB300A1CEFA /* LayoutCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32581AAD1AB300A1CEFA /* LayoutCache.cpp */; };
 		A82B33E11AAD1AB300A1CEFA /* LayoutCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32581AAD1AB300A1CEFA /* LayoutCache.cpp */; };
-		A82B33E21AAD1AB300A1CEFA /* LayoutCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32581AAD1AB300A1CEFA /* LayoutCache.cpp */; };
 		A82B33E31AAD1AB300A1CEFA /* LayoutCache.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32591AAD1AB300A1CEFA /* LayoutCache.h */; };
 		A82B33E41AAD1AB300A1CEFA /* LayoutCache.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32591AAD1AB300A1CEFA /* LayoutCache.h */; };
-		A82B33E51AAD1AB300A1CEFA /* LayoutCache.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32591AAD1AB300A1CEFA /* LayoutCache.h */; };
 		A82B33E61AAD1AB300A1CEFA /* LineLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325A1AAD1AB300A1CEFA /* LineLayout.cpp */; };
 		A82B33E71AAD1AB300A1CEFA /* LineLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325A1AAD1AB300A1CEFA /* LineLayout.cpp */; };
-		A82B33E81AAD1AB300A1CEFA /* LineLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325A1AAD1AB300A1CEFA /* LineLayout.cpp */; };
 		A82B33E91AAD1AB300A1CEFA /* LineLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325B1AAD1AB300A1CEFA /* LineLayout.h */; };
 		A82B33EA1AAD1AB300A1CEFA /* LineLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325B1AAD1AB300A1CEFA /* LineLayout.h */; };
-		A82B33EB1AAD1AB300A1CEFA /* LineLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325B1AAD1AB300A1CEFA /* LineLayout.h */; };
 		A82B33EC1AAD1AB300A1CEFA /* scrptrun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325C1AAD1AB300A1CEFA /* scrptrun.cpp */; };
 		A82B33ED1AAD1AB300A1CEFA /* scrptrun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325C1AAD1AB300A1CEFA /* scrptrun.cpp */; };
-		A82B33EE1AAD1AB300A1CEFA /* scrptrun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325C1AAD1AB300A1CEFA /* scrptrun.cpp */; };
 		A82B33EF1AAD1AB300A1CEFA /* scrptrun.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325D1AAD1AB300A1CEFA /* scrptrun.h */; };
 		A82B33F01AAD1AB300A1CEFA /* scrptrun.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325D1AAD1AB300A1CEFA /* scrptrun.h */; };
-		A82B33F11AAD1AB300A1CEFA /* scrptrun.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325D1AAD1AB300A1CEFA /* scrptrun.h */; };
 		A82B33F21AAD1AB300A1CEFA /* TextItemizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325E1AAD1AB300A1CEFA /* TextItemizer.cpp */; };
 		A82B33F31AAD1AB300A1CEFA /* TextItemizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325E1AAD1AB300A1CEFA /* TextItemizer.cpp */; };
-		A82B33F41AAD1AB300A1CEFA /* TextItemizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B325E1AAD1AB300A1CEFA /* TextItemizer.cpp */; };
 		A82B33F51AAD1AB300A1CEFA /* TextItemizer.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325F1AAD1AB300A1CEFA /* TextItemizer.h */; };
 		A82B33F61AAD1AB300A1CEFA /* TextItemizer.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325F1AAD1AB300A1CEFA /* TextItemizer.h */; };
-		A82B33F71AAD1AB300A1CEFA /* TextItemizer.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B325F1AAD1AB300A1CEFA /* TextItemizer.h */; };
 		A82B33F81AAD1AB300A1CEFA /* TextLine.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32601AAD1AB300A1CEFA /* TextLine.h */; };
 		A82B33F91AAD1AB300A1CEFA /* TextLine.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32601AAD1AB300A1CEFA /* TextLine.h */; };
-		A82B33FA1AAD1AB300A1CEFA /* TextLine.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32601AAD1AB300A1CEFA /* TextLine.h */; };
 		A82B33FB1AAD1AB300A1CEFA /* TextRun.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32611AAD1AB300A1CEFA /* TextRun.h */; };
 		A82B33FC1AAD1AB300A1CEFA /* TextRun.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32611AAD1AB300A1CEFA /* TextRun.h */; };
-		A82B33FD1AAD1AB300A1CEFA /* TextRun.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32611AAD1AB300A1CEFA /* TextRun.h */; };
 		A82B33FE1AAD1AB300A1CEFA /* VirtualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32621AAD1AB300A1CEFA /* VirtualFont.cpp */; };
 		A82B33FF1AAD1AB300A1CEFA /* VirtualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32621AAD1AB300A1CEFA /* VirtualFont.cpp */; };
-		A82B34001AAD1AB300A1CEFA /* VirtualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32621AAD1AB300A1CEFA /* VirtualFont.cpp */; };
 		A82B34011AAD1AB300A1CEFA /* VirtualFont.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32631AAD1AB300A1CEFA /* VirtualFont.h */; };
 		A82B34021AAD1AB300A1CEFA /* VirtualFont.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32631AAD1AB300A1CEFA /* VirtualFont.h */; };
-		A82B34031AAD1AB300A1CEFA /* VirtualFont.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32631AAD1AB300A1CEFA /* VirtualFont.h */; };
 		A82B345B1AAD1AB400A1CEFA /* FileCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32851AAD1AB300A1CEFA /* FileCapture.h */; };
 		A82B345C1AAD1AB400A1CEFA /* FileCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32851AAD1AB300A1CEFA /* FileCapture.h */; };
-		A82B345D1AAD1AB400A1CEFA /* FileCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32851AAD1AB300A1CEFA /* FileCapture.h */; };
 		A82B345E1AAD1AB400A1CEFA /* Timing.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32861AAD1AB300A1CEFA /* Timing.h */; };
 		A82B345F1AAD1AB400A1CEFA /* Timing.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32861AAD1AB300A1CEFA /* Timing.h */; };
-		A82B34601AAD1AB400A1CEFA /* Timing.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32861AAD1AB300A1CEFA /* Timing.h */; };
 		A82B34611AAD1AB400A1CEFA /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32871AAD1AB300A1CEFA /* InputSource.cpp */; };
 		A82B34621AAD1AB400A1CEFA /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32871AAD1AB300A1CEFA /* InputSource.cpp */; };
-		A82B34631AAD1AB400A1CEFA /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32871AAD1AB300A1CEFA /* InputSource.cpp */; };
 		A82B34641AAD1AB400A1CEFA /* InputSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32881AAD1AB300A1CEFA /* InputSource.h */; };
 		A82B34651AAD1AB400A1CEFA /* InputSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32881AAD1AB300A1CEFA /* InputSource.h */; };
-		A82B34661AAD1AB400A1CEFA /* InputSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32881AAD1AB300A1CEFA /* InputSource.h */; };
 		A82B34911AAD1AB400A1CEFA /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B329C1AAD1AB300A1CEFA /* Log.cpp */; };
 		A82B34921AAD1AB400A1CEFA /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B329C1AAD1AB300A1CEFA /* Log.cpp */; };
-		A82B34931AAD1AB400A1CEFA /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B329C1AAD1AB300A1CEFA /* Log.cpp */; };
 		A82B34941AAD1AB400A1CEFA /* Log.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B329D1AAD1AB300A1CEFA /* Log.h */; };
 		A82B34951AAD1AB400A1CEFA /* Log.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B329D1AAD1AB300A1CEFA /* Log.h */; };
-		A82B34961AAD1AB400A1CEFA /* Log.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B329D1AAD1AB300A1CEFA /* Log.h */; };
 		A82B34971AAD1AB400A1CEFA /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B329F1AAD1AB300A1CEFA /* Handler.cpp */; };
 		A82B34981AAD1AB400A1CEFA /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B329F1AAD1AB300A1CEFA /* Handler.cpp */; };
-		A82B34991AAD1AB400A1CEFA /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B329F1AAD1AB300A1CEFA /* Handler.cpp */; };
 		A82B349A1AAD1AB400A1CEFA /* Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A01AAD1AB300A1CEFA /* Handler.h */; };
 		A82B349B1AAD1AB400A1CEFA /* Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A01AAD1AB300A1CEFA /* Handler.h */; };
-		A82B349C1AAD1AB400A1CEFA /* Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A01AAD1AB300A1CEFA /* Handler.h */; };
 		A82B349D1AAD1AB400A1CEFA /* Message.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A11AAD1AB300A1CEFA /* Message.h */; };
 		A82B349E1AAD1AB400A1CEFA /* Message.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A11AAD1AB300A1CEFA /* Message.h */; };
-		A82B349F1AAD1AB400A1CEFA /* Message.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A11AAD1AB300A1CEFA /* Message.h */; };
 		A82B34A01AAD1AB400A1CEFA /* SubHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A21AAD1AB300A1CEFA /* SubHandler.h */; };
 		A82B34A11AAD1AB400A1CEFA /* SubHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A21AAD1AB300A1CEFA /* SubHandler.h */; };
-		A82B34A21AAD1AB400A1CEFA /* SubHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A21AAD1AB300A1CEFA /* SubHandler.h */; };
 		A82B34A31AAD1AB400A1CEFA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A31AAD1AB300A1CEFA /* SuperHandler.cpp */; };
 		A82B34A41AAD1AB400A1CEFA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A31AAD1AB300A1CEFA /* SuperHandler.cpp */; };
-		A82B34A51AAD1AB400A1CEFA /* SuperHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A31AAD1AB300A1CEFA /* SuperHandler.cpp */; };
 		A82B34A61AAD1AB400A1CEFA /* SuperHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A41AAD1AB300A1CEFA /* SuperHandler.h */; };
 		A82B34A71AAD1AB400A1CEFA /* SuperHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A41AAD1AB300A1CEFA /* SuperHandler.h */; };
-		A82B34A81AAD1AB400A1CEFA /* SuperHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A41AAD1AB300A1CEFA /* SuperHandler.h */; };
 		A82B34A91AAD1AB400A1CEFA /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A51AAD1AB300A1CEFA /* Task.cpp */; };
 		A82B34AA1AAD1AB400A1CEFA /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A51AAD1AB300A1CEFA /* Task.cpp */; };
-		A82B34AB1AAD1AB400A1CEFA /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A51AAD1AB300A1CEFA /* Task.cpp */; };
 		A82B34AC1AAD1AB400A1CEFA /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A61AAD1AB300A1CEFA /* Task.h */; };
 		A82B34AD1AAD1AB400A1CEFA /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A61AAD1AB300A1CEFA /* Task.h */; };
-		A82B34AE1AAD1AB400A1CEFA /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A61AAD1AB300A1CEFA /* Task.h */; };
 		A82B34AF1AAD1AB400A1CEFA /* TaskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A71AAD1AB300A1CEFA /* TaskManager.cpp */; };
 		A82B34B01AAD1AB400A1CEFA /* TaskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A71AAD1AB300A1CEFA /* TaskManager.cpp */; };
-		A82B34B11AAD1AB400A1CEFA /* TaskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32A71AAD1AB300A1CEFA /* TaskManager.cpp */; };
 		A82B34B21AAD1AB400A1CEFA /* TaskManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A81AAD1AB300A1CEFA /* TaskManager.h */; };
 		A82B34B31AAD1AB400A1CEFA /* TaskManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A81AAD1AB300A1CEFA /* TaskManager.h */; };
-		A82B34B41AAD1AB400A1CEFA /* TaskManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32A81AAD1AB300A1CEFA /* TaskManager.h */; };
 		A82B34B51AAD1AB400A1CEFA /* CinderBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32AB1AAD1AB300A1CEFA /* CinderBridge.h */; };
 		A82B34B81AAD1AB400A1CEFA /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B32AC1AAD1AB300A1CEFA /* CinderBridge.mm */; };
 		A82B34BB1AAD1AB400A1CEFA /* CinderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32AD1AAD1AB300A1CEFA /* CinderDelegate.h */; };
@@ -247,244 +173,160 @@
 		A82B34D01AAD1AB400A1CEFA /* NSView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B32B51AAD1AB300A1CEFA /* NSView+StringTag.m */; };
 		A82B34D31AAD1AB400A1CEFA /* ASPC.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32B71AAD1AB300A1CEFA /* ASPC.h */; };
 		A82B34D41AAD1AB400A1CEFA /* ASPC.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32B71AAD1AB300A1CEFA /* ASPC.h */; };
-		A82B34D51AAD1AB400A1CEFA /* ASPC.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32B71AAD1AB300A1CEFA /* ASPC.h */; };
 		A82B34D61AAD1AB400A1CEFA /* FollowablePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32B81AAD1AB300A1CEFA /* FollowablePath.cpp */; };
 		A82B34D71AAD1AB400A1CEFA /* FollowablePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32B81AAD1AB300A1CEFA /* FollowablePath.cpp */; };
-		A82B34D81AAD1AB400A1CEFA /* FollowablePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32B81AAD1AB300A1CEFA /* FollowablePath.cpp */; };
 		A82B34D91AAD1AB400A1CEFA /* FollowablePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32B91AAD1AB300A1CEFA /* FollowablePath.h */; };
 		A82B34DA1AAD1AB400A1CEFA /* FollowablePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32B91AAD1AB300A1CEFA /* FollowablePath.h */; };
-		A82B34DB1AAD1AB400A1CEFA /* FollowablePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32B91AAD1AB300A1CEFA /* FollowablePath.h */; };
 		A82B34DC1AAD1AB400A1CEFA /* FXGDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BA1AAD1AB300A1CEFA /* FXGDocument.cpp */; };
 		A82B34DD1AAD1AB400A1CEFA /* FXGDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BA1AAD1AB300A1CEFA /* FXGDocument.cpp */; };
-		A82B34DE1AAD1AB400A1CEFA /* FXGDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BA1AAD1AB300A1CEFA /* FXGDocument.cpp */; };
 		A82B34DF1AAD1AB400A1CEFA /* FXGDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BB1AAD1AB300A1CEFA /* FXGDocument.h */; };
 		A82B34E01AAD1AB400A1CEFA /* FXGDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BB1AAD1AB300A1CEFA /* FXGDocument.h */; };
-		A82B34E11AAD1AB400A1CEFA /* FXGDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BB1AAD1AB300A1CEFA /* FXGDocument.h */; };
 		A82B34E21AAD1AB400A1CEFA /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BC1AAD1AB300A1CEFA /* Hairline.cpp */; };
 		A82B34E31AAD1AB400A1CEFA /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BC1AAD1AB300A1CEFA /* Hairline.cpp */; };
-		A82B34E41AAD1AB400A1CEFA /* Hairline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BC1AAD1AB300A1CEFA /* Hairline.cpp */; };
 		A82B34E51AAD1AB400A1CEFA /* Hairline.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BD1AAD1AB300A1CEFA /* Hairline.h */; };
 		A82B34E61AAD1AB400A1CEFA /* Hairline.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BD1AAD1AB300A1CEFA /* Hairline.h */; };
-		A82B34E71AAD1AB400A1CEFA /* Hairline.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BD1AAD1AB300A1CEFA /* Hairline.h */; };
 		A82B34E81AAD1AB400A1CEFA /* ShapeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BE1AAD1AB300A1CEFA /* ShapeMesh.cpp */; };
 		A82B34E91AAD1AB400A1CEFA /* ShapeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BE1AAD1AB300A1CEFA /* ShapeMesh.cpp */; };
-		A82B34EA1AAD1AB400A1CEFA /* ShapeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32BE1AAD1AB300A1CEFA /* ShapeMesh.cpp */; };
 		A82B34EB1AAD1AB400A1CEFA /* ShapeMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BF1AAD1AB300A1CEFA /* ShapeMesh.h */; };
 		A82B34EC1AAD1AB400A1CEFA /* ShapeMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BF1AAD1AB300A1CEFA /* ShapeMesh.h */; };
-		A82B34ED1AAD1AB400A1CEFA /* ShapeMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32BF1AAD1AB300A1CEFA /* ShapeMesh.h */; };
 		A82B34EE1AAD1AB400A1CEFA /* ShapeTesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32C01AAD1AB300A1CEFA /* ShapeTesselator.cpp */; };
 		A82B34EF1AAD1AB400A1CEFA /* ShapeTesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32C01AAD1AB300A1CEFA /* ShapeTesselator.cpp */; };
-		A82B34F01AAD1AB400A1CEFA /* ShapeTesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32C01AAD1AB300A1CEFA /* ShapeTesselator.cpp */; };
 		A82B34F11AAD1AB400A1CEFA /* ShapeTesselator.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C11AAD1AB300A1CEFA /* ShapeTesselator.h */; };
 		A82B34F21AAD1AB400A1CEFA /* ShapeTesselator.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C11AAD1AB300A1CEFA /* ShapeTesselator.h */; };
-		A82B34F31AAD1AB400A1CEFA /* ShapeTesselator.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C11AAD1AB300A1CEFA /* ShapeTesselator.h */; };
 		A82B34F41AAD1AB400A1CEFA /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32C21AAD1AB300A1CEFA /* SplinePath.cpp */; };
 		A82B34F51AAD1AB400A1CEFA /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32C21AAD1AB300A1CEFA /* SplinePath.cpp */; };
-		A82B34F61AAD1AB400A1CEFA /* SplinePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32C21AAD1AB300A1CEFA /* SplinePath.cpp */; };
 		A82B34F71AAD1AB400A1CEFA /* SplinePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C31AAD1AB300A1CEFA /* SplinePath.h */; };
 		A82B34F81AAD1AB400A1CEFA /* SplinePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C31AAD1AB300A1CEFA /* SplinePath.h */; };
-		A82B34F91AAD1AB400A1CEFA /* SplinePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C31AAD1AB300A1CEFA /* SplinePath.h */; };
 		A82B34FA1AAD1AB400A1CEFA /* StrokeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C41AAD1AB300A1CEFA /* StrokeHelper.h */; };
 		A82B34FB1AAD1AB400A1CEFA /* StrokeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C41AAD1AB300A1CEFA /* StrokeHelper.h */; };
-		A82B34FC1AAD1AB400A1CEFA /* StrokeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C41AAD1AB300A1CEFA /* StrokeHelper.h */; };
 		A82B34FD1AAD1AB400A1CEFA /* TexturedTriangleStrip.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C51AAD1AB300A1CEFA /* TexturedTriangleStrip.h */; };
 		A82B34FE1AAD1AB400A1CEFA /* TexturedTriangleStrip.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C51AAD1AB300A1CEFA /* TexturedTriangleStrip.h */; };
-		A82B34FF1AAD1AB400A1CEFA /* TexturedTriangleStrip.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C51AAD1AB300A1CEFA /* TexturedTriangleStrip.h */; };
 		A82B35001AAD1AB400A1CEFA /* Quad.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C71AAD1AB300A1CEFA /* Quad.h */; };
 		A82B35011AAD1AB400A1CEFA /* Quad.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C71AAD1AB300A1CEFA /* Quad.h */; };
-		A82B35021AAD1AB400A1CEFA /* Quad.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C71AAD1AB300A1CEFA /* Quad.h */; };
 		A82B35031AAD1AB400A1CEFA /* QuadBatch.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C81AAD1AB300A1CEFA /* QuadBatch.h */; };
 		A82B35041AAD1AB400A1CEFA /* QuadBatch.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C81AAD1AB300A1CEFA /* QuadBatch.h */; };
-		A82B35051AAD1AB400A1CEFA /* QuadBatch.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C81AAD1AB300A1CEFA /* QuadBatch.h */; };
 		A82B35061AAD1AB400A1CEFA /* QuadBatchMap.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C91AAD1AB300A1CEFA /* QuadBatchMap.h */; };
 		A82B35071AAD1AB400A1CEFA /* QuadBatchMap.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C91AAD1AB300A1CEFA /* QuadBatchMap.h */; };
-		A82B35081AAD1AB400A1CEFA /* QuadBatchMap.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32C91AAD1AB300A1CEFA /* QuadBatchMap.h */; };
 		A82B35091AAD1AB400A1CEFA /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CA1AAD1AB300A1CEFA /* QuadMatrix.cpp */; };
 		A82B350A1AAD1AB400A1CEFA /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CA1AAD1AB300A1CEFA /* QuadMatrix.cpp */; };
-		A82B350B1AAD1AB400A1CEFA /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CA1AAD1AB300A1CEFA /* QuadMatrix.cpp */; };
 		A82B350C1AAD1AB400A1CEFA /* QuadMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32CB1AAD1AB300A1CEFA /* QuadMatrix.h */; };
 		A82B350D1AAD1AB400A1CEFA /* QuadMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32CB1AAD1AB300A1CEFA /* QuadMatrix.h */; };
-		A82B350E1AAD1AB400A1CEFA /* QuadMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32CB1AAD1AB300A1CEFA /* QuadMatrix.h */; };
 		A82B350F1AAD1AB400A1CEFA /* Effect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CD1AAD1AB300A1CEFA /* Effect.cpp */; };
 		A82B35101AAD1AB400A1CEFA /* Effect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CD1AAD1AB300A1CEFA /* Effect.cpp */; };
-		A82B35111AAD1AB400A1CEFA /* Effect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CD1AAD1AB300A1CEFA /* Effect.cpp */; };
 		A82B35121AAD1AB400A1CEFA /* Effect.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32CE1AAD1AB300A1CEFA /* Effect.h */; };
 		A82B35131AAD1AB400A1CEFA /* Effect.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32CE1AAD1AB300A1CEFA /* Effect.h */; };
-		A82B35141AAD1AB400A1CEFA /* Effect.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32CE1AAD1AB300A1CEFA /* Effect.h */; };
 		A82B35151AAD1AB400A1CEFA /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CF1AAD1AB300A1CEFA /* SoundManager.cpp */; };
 		A82B35161AAD1AB400A1CEFA /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CF1AAD1AB300A1CEFA /* SoundManager.cpp */; };
-		A82B35171AAD1AB400A1CEFA /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32CF1AAD1AB300A1CEFA /* SoundManager.cpp */; };
 		A82B35181AAD1AB400A1CEFA /* SoundManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D01AAD1AB300A1CEFA /* SoundManager.h */; };
 		A82B35191AAD1AB400A1CEFA /* SoundManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D01AAD1AB300A1CEFA /* SoundManager.h */; };
-		A82B351A1AAD1AB400A1CEFA /* SoundManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D01AAD1AB300A1CEFA /* SoundManager.h */; };
 		A82B351B1AAD1AB400A1CEFA /* DisplayHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D21AAD1AB300A1CEFA /* DisplayHelper.h */; };
 		A82B351C1AAD1AB400A1CEFA /* DisplayHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D21AAD1AB300A1CEFA /* DisplayHelper.h */; };
-		A82B351D1AAD1AB400A1CEFA /* DisplayHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D21AAD1AB300A1CEFA /* DisplayHelper.h */; };
 		A82B351E1AAD1AB400A1CEFA /* DisplayHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32D31AAD1AB300A1CEFA /* DisplayHelperBase.cpp */; };
 		A82B351F1AAD1AB400A1CEFA /* DisplayHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32D31AAD1AB300A1CEFA /* DisplayHelperBase.cpp */; };
-		A82B35201AAD1AB400A1CEFA /* DisplayHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32D31AAD1AB300A1CEFA /* DisplayHelperBase.cpp */; };
 		A82B35211AAD1AB400A1CEFA /* DisplayHelperBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D41AAD1AB300A1CEFA /* DisplayHelperBase.h */; };
 		A82B35221AAD1AB400A1CEFA /* DisplayHelperBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D41AAD1AB300A1CEFA /* DisplayHelperBase.h */; };
-		A82B35231AAD1AB400A1CEFA /* DisplayHelperBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D41AAD1AB300A1CEFA /* DisplayHelperBase.h */; };
 		A82B35241AAD1AB400A1CEFA /* DisplayInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D51AAD1AB300A1CEFA /* DisplayInfo.h */; };
 		A82B35251AAD1AB400A1CEFA /* DisplayInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D51AAD1AB300A1CEFA /* DisplayInfo.h */; };
-		A82B35261AAD1AB400A1CEFA /* DisplayInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D51AAD1AB300A1CEFA /* DisplayInfo.h */; };
 		A82B35271AAD1AB400A1CEFA /* FileHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D61AAD1AB300A1CEFA /* FileHelper.h */; };
 		A82B35281AAD1AB400A1CEFA /* FileHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D61AAD1AB300A1CEFA /* FileHelper.h */; };
-		A82B35291AAD1AB400A1CEFA /* FileHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D61AAD1AB300A1CEFA /* FileHelper.h */; };
 		A82B352A1AAD1AB400A1CEFA /* FileHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32D71AAD1AB300A1CEFA /* FileHelperBase.cpp */; };
 		A82B352B1AAD1AB400A1CEFA /* FileHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32D71AAD1AB300A1CEFA /* FileHelperBase.cpp */; };
-		A82B352C1AAD1AB400A1CEFA /* FileHelperBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32D71AAD1AB300A1CEFA /* FileHelperBase.cpp */; };
 		A82B352D1AAD1AB400A1CEFA /* FileHelperBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D81AAD1AB300A1CEFA /* FileHelperBase.h */; };
 		A82B352E1AAD1AB400A1CEFA /* FileHelperBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D81AAD1AB300A1CEFA /* FileHelperBase.h */; };
-		A82B352F1AAD1AB400A1CEFA /* FileHelperBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D81AAD1AB300A1CEFA /* FileHelperBase.h */; };
 		A82B35301AAD1AB400A1CEFA /* MemoryInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D91AAD1AB300A1CEFA /* MemoryInfo.h */; };
 		A82B35311AAD1AB400A1CEFA /* MemoryInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D91AAD1AB300A1CEFA /* MemoryInfo.h */; };
-		A82B35321AAD1AB400A1CEFA /* MemoryInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32D91AAD1AB300A1CEFA /* MemoryInfo.h */; };
 		A82B35331AAD1AB400A1CEFA /* MemoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DA1AAD1AB300A1CEFA /* MemoryManager.h */; };
 		A82B35341AAD1AB400A1CEFA /* MemoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DA1AAD1AB300A1CEFA /* MemoryManager.h */; };
-		A82B35351AAD1AB400A1CEFA /* MemoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DA1AAD1AB300A1CEFA /* MemoryManager.h */; };
 		A82B35361AAD1AB400A1CEFA /* MemoryManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32DB1AAD1AB300A1CEFA /* MemoryManagerBase.cpp */; };
 		A82B35371AAD1AB400A1CEFA /* MemoryManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32DB1AAD1AB300A1CEFA /* MemoryManagerBase.cpp */; };
-		A82B35381AAD1AB400A1CEFA /* MemoryManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32DB1AAD1AB300A1CEFA /* MemoryManagerBase.cpp */; };
 		A82B35391AAD1AB400A1CEFA /* MemoryManagerBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DC1AAD1AB300A1CEFA /* MemoryManagerBase.h */; };
 		A82B353A1AAD1AB400A1CEFA /* MemoryManagerBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DC1AAD1AB300A1CEFA /* MemoryManagerBase.h */; };
-		A82B353B1AAD1AB400A1CEFA /* MemoryManagerBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DC1AAD1AB300A1CEFA /* MemoryManagerBase.h */; };
 		A82B353C1AAD1AB400A1CEFA /* SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DD1AAD1AB300A1CEFA /* SystemInfo.h */; };
 		A82B353D1AAD1AB400A1CEFA /* SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DD1AAD1AB300A1CEFA /* SystemInfo.h */; };
-		A82B353E1AAD1AB400A1CEFA /* SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DD1AAD1AB300A1CEFA /* SystemInfo.h */; };
 		A82B353F1AAD1AB400A1CEFA /* SystemInfoBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DE1AAD1AB300A1CEFA /* SystemInfoBase.h */; };
 		A82B35401AAD1AB400A1CEFA /* SystemInfoBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DE1AAD1AB300A1CEFA /* SystemInfoBase.h */; };
-		A82B35411AAD1AB400A1CEFA /* SystemInfoBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DE1AAD1AB300A1CEFA /* SystemInfoBase.h */; };
 		A82B35421AAD1AB400A1CEFA /* SystemManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DF1AAD1AB300A1CEFA /* SystemManager.h */; };
 		A82B35431AAD1AB400A1CEFA /* SystemManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DF1AAD1AB300A1CEFA /* SystemManager.h */; };
-		A82B35441AAD1AB400A1CEFA /* SystemManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32DF1AAD1AB300A1CEFA /* SystemManager.h */; };
 		A82B35451AAD1AB400A1CEFA /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E01AAD1AB300A1CEFA /* SystemManagerBase.cpp */; };
 		A82B35461AAD1AB400A1CEFA /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E01AAD1AB300A1CEFA /* SystemManagerBase.cpp */; };
-		A82B35471AAD1AB400A1CEFA /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E01AAD1AB300A1CEFA /* SystemManagerBase.cpp */; };
 		A82B35481AAD1AB400A1CEFA /* SystemManagerBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E11AAD1AB300A1CEFA /* SystemManagerBase.h */; };
 		A82B35491AAD1AB400A1CEFA /* SystemManagerBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E11AAD1AB300A1CEFA /* SystemManagerBase.h */; };
-		A82B354A1AAD1AB400A1CEFA /* SystemManagerBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E11AAD1AB300A1CEFA /* SystemManagerBase.h */; };
 		A82B354B1AAD1AB400A1CEFA /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E31AAD1AB300A1CEFA /* PVRHelper.cpp */; };
 		A82B354C1AAD1AB400A1CEFA /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E31AAD1AB300A1CEFA /* PVRHelper.cpp */; };
-		A82B354D1AAD1AB400A1CEFA /* PVRHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E31AAD1AB300A1CEFA /* PVRHelper.cpp */; };
 		A82B354E1AAD1AB400A1CEFA /* PVRHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E41AAD1AB300A1CEFA /* PVRHelper.h */; };
 		A82B354F1AAD1AB400A1CEFA /* PVRHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E41AAD1AB300A1CEFA /* PVRHelper.h */; };
-		A82B35501AAD1AB400A1CEFA /* PVRHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E41AAD1AB300A1CEFA /* PVRHelper.h */; };
 		A82B35511AAD1AB400A1CEFA /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E51AAD1AB300A1CEFA /* Texture.cpp */; };
 		A82B35521AAD1AB400A1CEFA /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E51AAD1AB300A1CEFA /* Texture.cpp */; };
-		A82B35531AAD1AB400A1CEFA /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E51AAD1AB300A1CEFA /* Texture.cpp */; };
 		A82B35541AAD1AB400A1CEFA /* Texture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E61AAD1AB300A1CEFA /* Texture.h */; };
 		A82B35551AAD1AB400A1CEFA /* Texture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E61AAD1AB300A1CEFA /* Texture.h */; };
-		A82B35561AAD1AB400A1CEFA /* Texture.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E61AAD1AB300A1CEFA /* Texture.h */; };
 		A82B35571AAD1AB400A1CEFA /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E71AAD1AB300A1CEFA /* TextureHelper.cpp */; };
 		A82B35581AAD1AB400A1CEFA /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E71AAD1AB300A1CEFA /* TextureHelper.cpp */; };
-		A82B35591AAD1AB400A1CEFA /* TextureHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E71AAD1AB300A1CEFA /* TextureHelper.cpp */; };
 		A82B355A1AAD1AB400A1CEFA /* TextureHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E81AAD1AB300A1CEFA /* TextureHelper.h */; };
 		A82B355B1AAD1AB400A1CEFA /* TextureHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E81AAD1AB300A1CEFA /* TextureHelper.h */; };
-		A82B355C1AAD1AB400A1CEFA /* TextureHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32E81AAD1AB300A1CEFA /* TextureHelper.h */; };
 		A82B355D1AAD1AB400A1CEFA /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E91AAD1AB300A1CEFA /* TextureManager.cpp */; };
 		A82B355E1AAD1AB400A1CEFA /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E91AAD1AB300A1CEFA /* TextureManager.cpp */; };
-		A82B355F1AAD1AB400A1CEFA /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32E91AAD1AB300A1CEFA /* TextureManager.cpp */; };
 		A82B35601AAD1AB400A1CEFA /* TextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32EA1AAD1AB300A1CEFA /* TextureManager.h */; };
 		A82B35611AAD1AB400A1CEFA /* TextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32EA1AAD1AB300A1CEFA /* TextureManager.h */; };
-		A82B35621AAD1AB400A1CEFA /* TextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32EA1AAD1AB300A1CEFA /* TextureManager.h */; };
 		A82B35631AAD1AB400A1CEFA /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32EC1AAD1AB300A1CEFA /* Clock.cpp */; };
 		A82B35641AAD1AB400A1CEFA /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32EC1AAD1AB300A1CEFA /* Clock.cpp */; };
-		A82B35651AAD1AB400A1CEFA /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32EC1AAD1AB300A1CEFA /* Clock.cpp */; };
 		A82B35661AAD1AB400A1CEFA /* Clock.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32ED1AAD1AB300A1CEFA /* Clock.h */; };
 		A82B35671AAD1AB400A1CEFA /* Clock.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32ED1AAD1AB300A1CEFA /* Clock.h */; };
-		A82B35681AAD1AB400A1CEFA /* Clock.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32ED1AAD1AB300A1CEFA /* Clock.h */; };
 		A82B35691AAD1AB400A1CEFA /* DefaultTimeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32EE1AAD1AB300A1CEFA /* DefaultTimeBase.h */; };
 		A82B356A1AAD1AB400A1CEFA /* DefaultTimeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32EE1AAD1AB300A1CEFA /* DefaultTimeBase.h */; };
-		A82B356B1AAD1AB400A1CEFA /* DefaultTimeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32EE1AAD1AB300A1CEFA /* DefaultTimeBase.h */; };
 		A82B356C1AAD1AB400A1CEFA /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32EF1AAD1AB300A1CEFA /* FrameClock.cpp */; };
 		A82B356D1AAD1AB400A1CEFA /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32EF1AAD1AB300A1CEFA /* FrameClock.cpp */; };
-		A82B356E1AAD1AB400A1CEFA /* FrameClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32EF1AAD1AB300A1CEFA /* FrameClock.cpp */; };
 		A82B356F1AAD1AB400A1CEFA /* FrameClock.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32F01AAD1AB300A1CEFA /* FrameClock.h */; };
 		A82B35701AAD1AB400A1CEFA /* FrameClock.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32F01AAD1AB300A1CEFA /* FrameClock.h */; };
-		A82B35711AAD1AB400A1CEFA /* FrameClock.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32F01AAD1AB300A1CEFA /* FrameClock.h */; };
 		A82B35721AAD1AB400A1CEFA /* TimeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32F11AAD1AB300A1CEFA /* TimeBase.h */; };
 		A82B35731AAD1AB400A1CEFA /* TimeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32F11AAD1AB300A1CEFA /* TimeBase.h */; };
-		A82B35741AAD1AB400A1CEFA /* TimeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32F11AAD1AB300A1CEFA /* TimeBase.h */; };
 		A82B358A1AAD1AB400A1CEFA /* AccelEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32FD1AAD1AB300A1CEFA /* AccelEvent.h */; };
 		A82B358B1AAD1AB400A1CEFA /* AccelEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32FD1AAD1AB300A1CEFA /* AccelEvent.h */; };
-		A82B358C1AAD1AB400A1CEFA /* AccelEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32FD1AAD1AB300A1CEFA /* AccelEvent.h */; };
 		A82B358D1AAD1AB400A1CEFA /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32FE1AAD1AB300A1CEFA /* GLUtils.cpp */; };
 		A82B358E1AAD1AB400A1CEFA /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32FE1AAD1AB300A1CEFA /* GLUtils.cpp */; };
-		A82B358F1AAD1AB400A1CEFA /* GLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B32FE1AAD1AB300A1CEFA /* GLUtils.cpp */; };
 		A82B35901AAD1AB400A1CEFA /* GLUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32FF1AAD1AB300A1CEFA /* GLUtils.h */; };
 		A82B35911AAD1AB400A1CEFA /* GLUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32FF1AAD1AB300A1CEFA /* GLUtils.h */; };
-		A82B35921AAD1AB400A1CEFA /* GLUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B32FF1AAD1AB300A1CEFA /* GLUtils.h */; };
 		A82B35931AAD1AB400A1CEFA /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33001AAD1AB300A1CEFA /* MathUtils.cpp */; };
 		A82B35941AAD1AB400A1CEFA /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33001AAD1AB300A1CEFA /* MathUtils.cpp */; };
-		A82B35951AAD1AB400A1CEFA /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33001AAD1AB300A1CEFA /* MathUtils.cpp */; };
 		A82B35961AAD1AB400A1CEFA /* MathUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33011AAD1AB300A1CEFA /* MathUtils.h */; };
 		A82B35971AAD1AB400A1CEFA /* MathUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33011AAD1AB300A1CEFA /* MathUtils.h */; };
-		A82B35981AAD1AB400A1CEFA /* MathUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33011AAD1AB300A1CEFA /* MathUtils.h */; };
 		A82B35991AAD1AB400A1CEFA /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33031AAD1AB300A1CEFA /* ImageSourceFileStbImage.cpp */; };
 		A82B359A1AAD1AB400A1CEFA /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33031AAD1AB300A1CEFA /* ImageSourceFileStbImage.cpp */; };
-		A82B359B1AAD1AB400A1CEFA /* ImageSourceFileStbImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33031AAD1AB300A1CEFA /* ImageSourceFileStbImage.cpp */; };
 		A82B359C1AAD1AB400A1CEFA /* ImageSourceFileStbImage.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33041AAD1AB300A1CEFA /* ImageSourceFileStbImage.h */; };
 		A82B359D1AAD1AB400A1CEFA /* ImageSourceFileStbImage.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33041AAD1AB300A1CEFA /* ImageSourceFileStbImage.h */; };
-		A82B359E1AAD1AB400A1CEFA /* ImageSourceFileStbImage.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33041AAD1AB300A1CEFA /* ImageSourceFileStbImage.h */; };
 		A82B359F1AAD1AB400A1CEFA /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33051AAD1AB300A1CEFA /* stb_image.h */; };
 		A82B35A01AAD1AB400A1CEFA /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33051AAD1AB300A1CEFA /* stb_image.h */; };
-		A82B35A11AAD1AB400A1CEFA /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33051AAD1AB300A1CEFA /* stb_image.h */; };
 		A82B35A21AAD1AB400A1CEFA /* SyslogStringStream.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33061AAD1AB300A1CEFA /* SyslogStringStream.h */; };
 		A82B35A31AAD1AB400A1CEFA /* SyslogStringStream.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33061AAD1AB300A1CEFA /* SyslogStringStream.h */; };
-		A82B35A41AAD1AB400A1CEFA /* SyslogStringStream.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33061AAD1AB300A1CEFA /* SyslogStringStream.h */; };
 		A82B35A51AAD1AB400A1CEFA /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33071AAD1AB300A1CEFA /* Utils.cpp */; };
 		A82B35A61AAD1AB400A1CEFA /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33071AAD1AB300A1CEFA /* Utils.cpp */; };
-		A82B35A71AAD1AB400A1CEFA /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A82B33071AAD1AB300A1CEFA /* Utils.cpp */; };
 		A82B35A81AAD1AB400A1CEFA /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33081AAD1AB300A1CEFA /* Utils.h */; };
 		A82B35A91AAD1AB400A1CEFA /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33081AAD1AB300A1CEFA /* Utils.h */; };
-		A82B35AA1AAD1AB400A1CEFA /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B33081AAD1AB300A1CEFA /* Utils.h */; };
 		A82B35AB1AAD1AB400A1CEFA /* checked.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330A1AAD1AB300A1CEFA /* checked.h */; };
 		A82B35AC1AAD1AB400A1CEFA /* checked.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330A1AAD1AB300A1CEFA /* checked.h */; };
-		A82B35AD1AAD1AB400A1CEFA /* checked.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330A1AAD1AB300A1CEFA /* checked.h */; };
 		A82B35AE1AAD1AB400A1CEFA /* core.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330B1AAD1AB300A1CEFA /* core.h */; };
 		A82B35AF1AAD1AB400A1CEFA /* core.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330B1AAD1AB300A1CEFA /* core.h */; };
-		A82B35B01AAD1AB400A1CEFA /* core.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330B1AAD1AB300A1CEFA /* core.h */; };
 		A82B35B11AAD1AB400A1CEFA /* unchecked.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330C1AAD1AB300A1CEFA /* unchecked.h */; };
 		A82B35B21AAD1AB400A1CEFA /* unchecked.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330C1AAD1AB300A1CEFA /* unchecked.h */; };
-		A82B35B31AAD1AB400A1CEFA /* unchecked.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330C1AAD1AB300A1CEFA /* unchecked.h */; };
 		A82B35B41AAD1AB400A1CEFA /* utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330D1AAD1AB300A1CEFA /* utf8.h */; };
 		A82B35B51AAD1AB400A1CEFA /* utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330D1AAD1AB300A1CEFA /* utf8.h */; };
-		A82B35B61AAD1AB400A1CEFA /* utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B330D1AAD1AB300A1CEFA /* utf8.h */; };
 		A82B35CE1AAD22D700A1CEFA /* BridgeListener.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35BD1AAD22D700A1CEFA /* BridgeListener.h */; };
-		A82B35CF1AAD22D700A1CEFA /* BridgeListener.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35BD1AAD22D700A1CEFA /* BridgeListener.h */; };
 		A82B35D01AAD22D700A1CEFA /* CinderBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35BE1AAD22D700A1CEFA /* CinderBridge.h */; };
-		A82B35D11AAD22D700A1CEFA /* CinderBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35BE1AAD22D700A1CEFA /* CinderBridge.h */; };
 		A82B35D21AAD22D700A1CEFA /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35BF1AAD22D700A1CEFA /* CinderBridge.mm */; };
-		A82B35D31AAD22D700A1CEFA /* CinderBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35BF1AAD22D700A1CEFA /* CinderBridge.mm */; };
 		A82B35D41AAD22D700A1CEFA /* CinderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C01AAD22D700A1CEFA /* CinderDelegate.h */; };
-		A82B35D51AAD22D700A1CEFA /* CinderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C01AAD22D700A1CEFA /* CinderDelegate.h */; };
 		A82B35D61AAD22D700A1CEFA /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35C11AAD22D700A1CEFA /* CinderDelegate.mm */; };
-		A82B35D71AAD22D700A1CEFA /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35C11AAD22D700A1CEFA /* CinderDelegate.mm */; };
 		A82B35D81AAD22D700A1CEFA /* GLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C31AAD22D700A1CEFA /* GLViewController.h */; };
-		A82B35D91AAD22D700A1CEFA /* GLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C31AAD22D700A1CEFA /* GLViewController.h */; };
 		A82B35DA1AAD22D700A1CEFA /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35C41AAD22D700A1CEFA /* GLViewController.mm */; };
-		A82B35DB1AAD22D700A1CEFA /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35C41AAD22D700A1CEFA /* GLViewController.mm */; };
 		A82B35DC1AAD22D700A1CEFA /* DisplayHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C61AAD22D700A1CEFA /* DisplayHelper.h */; };
-		A82B35DD1AAD22D700A1CEFA /* DisplayHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C61AAD22D700A1CEFA /* DisplayHelper.h */; };
 		A82B35DE1AAD22D700A1CEFA /* DisplayHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35C71AAD22D700A1CEFA /* DisplayHelper.mm */; };
-		A82B35DF1AAD22D700A1CEFA /* DisplayHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35C71AAD22D700A1CEFA /* DisplayHelper.mm */; };
 		A82B35E01AAD22D700A1CEFA /* SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C81AAD22D700A1CEFA /* SystemInfo.h */; };
-		A82B35E11AAD22D700A1CEFA /* SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C81AAD22D700A1CEFA /* SystemInfo.h */; };
 		A82B35E21AAD22D700A1CEFA /* SystemManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C91AAD22D700A1CEFA /* SystemManager.h */; };
-		A82B35E31AAD22D700A1CEFA /* SystemManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35C91AAD22D700A1CEFA /* SystemManager.h */; };
 		A82B35E41AAD22D700A1CEFA /* SystemManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35CA1AAD22D700A1CEFA /* SystemManager.mm */; };
-		A82B35E51AAD22D700A1CEFA /* SystemManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A82B35CA1AAD22D700A1CEFA /* SystemManager.mm */; };
 		A82B35E61AAD22D700A1CEFA /* UIView+StringTag.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35CC1AAD22D700A1CEFA /* UIView+StringTag.h */; };
-		A82B35E71AAD22D700A1CEFA /* UIView+StringTag.h in Headers */ = {isa = PBXBuildFile; fileRef = A82B35CC1AAD22D700A1CEFA /* UIView+StringTag.h */; };
 		A82B35E81AAD22D700A1CEFA /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B35CD1AAD22D700A1CEFA /* UIView+StringTag.m */; };
-		A82B35E91AAD22D700A1CEFA /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A82B35CD1AAD22D700A1CEFA /* UIView+StringTag.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		007050BE1114F93F003FCAE4 /* libtoolkit_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		00CFD9E11135C3520091E310 /* libtoolkit_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		007050BE1114F93F003FCAE4 /* libtoolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A82B31FD1AAD14C900A1CEFA /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A82B31FE1AAD14C900A1CEFA /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A82B31FF1AAD14C900A1CEFA /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
@@ -666,22 +508,11 @@
 		A82B35EC1AAD237600A1CEFA /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A82B35ED1AAD237600A1CEFA /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		A82B35EE1AAD237600A1CEFA /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
-		A82B35F21AAD271800A1CEFA /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		A82B35F31AAD271800A1CEFA /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
-		A82B35F41AAD271800A1CEFA /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
-		A82B35F51AAD271800A1CEFA /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
-		D2AAC07E0554694100DB518D /* libtoolkit_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AAC07E0554694100DB518D /* libtoolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtoolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		007050AE1114F93F003FCAE4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		00CFD9D51135C3520091E310 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -701,9 +532,8 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC07E0554694100DB518D /* libtoolkit_d.a */,
-				007050BE1114F93F003FCAE4 /* libtoolkit_d.a */,
-				00CFD9E11135C3520091E310 /* libtoolkit_d.a */,
+				D2AAC07E0554694100DB518D /* libtoolkit.a */,
+				007050BE1114F93F003FCAE4 /* libtoolkit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -713,7 +543,6 @@
 			children = (
 				A82B32001AAD1AB300A1CEFA /* src */,
 				A82B35EA1AAD237600A1CEFA /* ios */,
-				A82B35F11AAD271800A1CEFA /* ios_sim */,
 				A82B31FC1AAD14C900A1CEFA /* osx */,
 				034768DFFF38A50411DB9C8B /* Products */,
 			);
@@ -1198,17 +1027,6 @@
 			path = ios;
 			sourceTree = "<group>";
 		};
-		A82B35F11AAD271800A1CEFA /* ios_sim */ = {
-			isa = PBXGroup;
-			children = (
-				A82B35F41AAD271800A1CEFA /* Prefix.pch */,
-				A82B35F21AAD271800A1CEFA /* Config.xcconfig */,
-				A82B35F31AAD271800A1CEFA /* DebugConfig.xcconfig */,
-				A82B35F51AAD271800A1CEFA /* ReleaseConfig.xcconfig */,
-			);
-			path = ios_sim;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1314,111 +1132,6 @@
 				A82B33F91AAD1AB300A1CEFA /* TextLine.h in Headers */,
 				A82B35251AAD1AB400A1CEFA /* DisplayInfo.h in Headers */,
 				A82B35071AAD1AB400A1CEFA /* QuadBatchMap.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		00CFD92D1135C3520091E310 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A82B336D1AAD1AB300A1CEFA /* FileHelper.h in Headers */,
-				A82B35B01AAD1AB400A1CEFA /* core.h in Headers */,
-				A82B335B1AAD1AB300A1CEFA /* CinderDelegate.h in Headers */,
-				A82B35141AAD1AB400A1CEFA /* Effect.h in Headers */,
-				A82B35681AAD1AB400A1CEFA /* Clock.h in Headers */,
-				A82B35411AAD1AB400A1CEFA /* SystemInfoBase.h in Headers */,
-				A82B35D51AAD22D700A1CEFA /* CinderDelegate.h in Headers */,
-				A82B34A21AAD1AB400A1CEFA /* SubHandler.h in Headers */,
-				A82B33791AAD1AB300A1CEFA /* NSDictionary+DefautValues.h in Headers */,
-				A82B349F1AAD1AB400A1CEFA /* Message.h in Headers */,
-				A82B34601AAD1AB400A1CEFA /* Timing.h in Headers */,
-				A82B34661AAD1AB400A1CEFA /* InputSource.h in Headers */,
-				A82B350E1AAD1AB400A1CEFA /* QuadMatrix.h in Headers */,
-				A82B351D1AAD1AB400A1CEFA /* DisplayHelper.h in Headers */,
-				A82B356B1AAD1AB400A1CEFA /* DefaultTimeBase.h in Headers */,
-				A82B35B61AAD1AB400A1CEFA /* utf8.h in Headers */,
-				A82B33C11AAD1AB300A1CEFA /* ActualFont.h in Headers */,
-				A82B34AE1AAD1AB400A1CEFA /* Task.h in Headers */,
-				A82B34E71AAD1AB400A1CEFA /* Hairline.h in Headers */,
-				A82B33D61AAD1AB300A1CEFA /* FreetypeHelper.h in Headers */,
-				A82B35A11AAD1AB400A1CEFA /* stb_image.h in Headers */,
-				A82B33D91AAD1AB300A1CEFA /* GlyphData.h in Headers */,
-				A82B33BB1AAD1AB300A1CEFA /* TextHelper.h in Headers */,
-				A82B35231AAD1AB400A1CEFA /* DisplayHelperBase.h in Headers */,
-				A82B34B41AAD1AB400A1CEFA /* TaskManager.h in Headers */,
-				A82B33851AAD1AB300A1CEFA /* NSString+JSON.h in Headers */,
-				A82B338B1AAD1AB300A1CEFA /* Utils.h in Headers */,
-				A82B351A1AAD1AB400A1CEFA /* SoundManager.h in Headers */,
-				A82B338E1AAD1AB300A1CEFA /* Context.h in Headers */,
-				A82B336A1AAD1AB300A1CEFA /* WindowInfo.h in Headers */,
-				A82B33B51AAD1AB300A1CEFA /* FontSequence.h in Headers */,
-				A82B34ED1AAD1AB400A1CEFA /* ShapeMesh.h in Headers */,
-				A82B353E1AAD1AB400A1CEFA /* SystemInfo.h in Headers */,
-				A82B33671AAD1AB300A1CEFA /* CinderSketch.h in Headers */,
-				A82B33611AAD1AB300A1CEFA /* CinderDelegateBase.h in Headers */,
-				A82B358C1AAD1AB400A1CEFA /* AccelEvent.h in Headers */,
-				A82B33A91AAD1AB300A1CEFA /* Font.h in Headers */,
-				A82B34A81AAD1AB400A1CEFA /* SuperHandler.h in Headers */,
-				A82B35981AAD1AB400A1CEFA /* MathUtils.h in Headers */,
-				A82B355C1AAD1AB400A1CEFA /* TextureHelper.h in Headers */,
-				A82B33461AAD1AB300A1CEFA /* TextureAtlasAnimation.h in Headers */,
-				A82B34FC1AAD1AB400A1CEFA /* StrokeHelper.h in Headers */,
-				A82B35561AAD1AB400A1CEFA /* Texture.h in Headers */,
-				A82B34FF1AAD1AB400A1CEFA /* TexturedTriangleStrip.h in Headers */,
-				A82B35351AAD1AB400A1CEFA /* MemoryManager.h in Headers */,
-				A82B35D91AAD22D700A1CEFA /* GLViewController.h in Headers */,
-				A82B35621AAD1AB400A1CEFA /* TextureManager.h in Headers */,
-				A82B35711AAD1AB400A1CEFA /* FrameClock.h in Headers */,
-				A82B349C1AAD1AB400A1CEFA /* Handler.h in Headers */,
-				A82B337F1AAD1AB300A1CEFA /* NSMutableDictionary+Merge.h in Headers */,
-				A82B33AF1AAD1AB300A1CEFA /* FontManager.h in Headers */,
-				A82B33F71AAD1AB300A1CEFA /* TextItemizer.h in Headers */,
-				A82B33E51AAD1AB300A1CEFA /* LayoutCache.h in Headers */,
-				A82B33D31AAD1AB300A1CEFA /* FontTexture.h in Headers */,
-				A82B34E11AAD1AB400A1CEFA /* FXGDocument.h in Headers */,
-				A82B35E31AAD22D700A1CEFA /* SystemManager.h in Headers */,
-				A82B33731AAD1AB300A1CEFA /* MemoryManager.h in Headers */,
-				A82B35051AAD1AB400A1CEFA /* QuadBatch.h in Headers */,
-				A82B34961AAD1AB400A1CEFA /* Log.h in Headers */,
-				A82B33A31AAD1AB300A1CEFA /* Exception.h in Headers */,
-				A82B34031AAD1AB300A1CEFA /* VirtualFont.h in Headers */,
-				A82B35D11AAD22D700A1CEFA /* CinderBridge.h in Headers */,
-				A82B35DD1AAD22D700A1CEFA /* DisplayHelper.h in Headers */,
-				A82B333A1AAD1AB300A1CEFA /* Sprite.h in Headers */,
-				A82B33C71AAD1AB300A1CEFA /* FontManager.h in Headers */,
-				A82B35021AAD1AB400A1CEFA /* Quad.h in Headers */,
-				A82B354A1AAD1AB400A1CEFA /* SystemManagerBase.h in Headers */,
-				A82B35A41AAD1AB400A1CEFA /* SyslogStringStream.h in Headers */,
-				A82B35501AAD1AB400A1CEFA /* PVRHelper.h in Headers */,
-				A82B34F31AAD1AB400A1CEFA /* ShapeTesselator.h in Headers */,
-				A82B33CD1AAD1AB300A1CEFA /* FontSequence.h in Headers */,
-				A82B35441AAD1AB400A1CEFA /* SystemManager.h in Headers */,
-				A82B35E11AAD22D700A1CEFA /* SystemInfo.h in Headers */,
-				A82B33581AAD1AB300A1CEFA /* Hasher.h in Headers */,
-				A82B35E71AAD22D700A1CEFA /* UIView+StringTag.h in Headers */,
-				A82B353B1AAD1AB400A1CEFA /* MemoryManagerBase.h in Headers */,
-				A82B352F1AAD1AB400A1CEFA /* FileHelperBase.h in Headers */,
-				A82B35921AAD1AB400A1CEFA /* GLUtils.h in Headers */,
-				A82B35741AAD1AB400A1CEFA /* TimeBase.h in Headers */,
-				A82B33EB1AAD1AB300A1CEFA /* LineLayout.h in Headers */,
-				A82B35291AAD1AB400A1CEFA /* FileHelper.h in Headers */,
-				A82B33F11AAD1AB300A1CEFA /* scrptrun.h in Headers */,
-				A82B34D51AAD1AB400A1CEFA /* ASPC.h in Headers */,
-				A82B33401AAD1AB300A1CEFA /* TextureAtlas.h in Headers */,
-				A82B345D1AAD1AB400A1CEFA /* FileCapture.h in Headers */,
-				A82B35CF1AAD22D700A1CEFA /* BridgeListener.h in Headers */,
-				A82B34F91AAD1AB400A1CEFA /* SplinePath.h in Headers */,
-				A82B33DF1AAD1AB300A1CEFA /* LangHelper.h in Headers */,
-				A82B35B31AAD1AB400A1CEFA /* unchecked.h in Headers */,
-				A82B35321AAD1AB400A1CEFA /* MemoryInfo.h in Headers */,
-				A82B359E1AAD1AB400A1CEFA /* ImageSourceFileStbImage.h in Headers */,
-				A82B34DB1AAD1AB400A1CEFA /* FollowablePath.h in Headers */,
-				A82B35AD1AAD1AB400A1CEFA /* checked.h in Headers */,
-				A82B33FD1AAD1AB300A1CEFA /* TextRun.h in Headers */,
-				A82B35AA1AAD1AB400A1CEFA /* Utils.h in Headers */,
-				A82B33FA1AAD1AB300A1CEFA /* TextLine.h in Headers */,
-				A82B35261AAD1AB400A1CEFA /* DisplayInfo.h in Headers */,
-				A82B35081AAD1AB400A1CEFA /* QuadBatchMap.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1545,24 +1258,7 @@
 			);
 			name = ios;
 			productName = toolkit;
-			productReference = 007050BE1114F93F003FCAE4 /* libtoolkit_d.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		00CFD92C1135C3520091E310 /* ios_sim */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00CFD9DE1135C3520091E310 /* Build configuration list for PBXNativeTarget "ios_sim" */;
-			buildPhases = (
-				00CFD92D1135C3520091E310 /* Headers */,
-				00CFD99C1135C3520091E310 /* Sources */,
-				00CFD9D51135C3520091E310 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ios_sim;
-			productName = toolkit;
-			productReference = 00CFD9E11135C3520091E310 /* libtoolkit_d.a */;
+			productReference = 007050BE1114F93F003FCAE4 /* libtoolkit.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		D2AAC07D0554694100DB518D /* osx */ = {
@@ -1579,7 +1275,7 @@
 			);
 			name = osx;
 			productName = toolkit;
-			productReference = D2AAC07E0554694100DB518D /* libtoolkit_d.a */;
+			productReference = D2AAC07E0554694100DB518D /* libtoolkit.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -1607,7 +1303,6 @@
 			targets = (
 				D2AAC07D0554694100DB518D /* osx */,
 				00704FCB1114F93F003FCAE4 /* ios */,
-				00CFD92C1135C3520091E310 /* ios_sim */,
 			);
 		};
 /* End PBXProject section */
@@ -1676,72 +1371,6 @@
 				A82B33ED1AAD1AB300A1CEFA /* scrptrun.cpp in Sources */,
 				A82B333C1AAD1AB300A1CEFA /* TextureAtlas.cpp in Sources */,
 				A82B35DA1AAD22D700A1CEFA /* GLViewController.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		00CFD99C1135C3520091E310 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A82B34E41AAD1AB400A1CEFA /* Hairline.cpp in Sources */,
-				A82B35E51AAD22D700A1CEFA /* SystemManager.mm in Sources */,
-				A82B34DE1AAD1AB400A1CEFA /* FXGDocument.cpp in Sources */,
-				A82B34001AAD1AB300A1CEFA /* VirtualFont.cpp in Sources */,
-				A82B33D01AAD1AB300A1CEFA /* FontTexture.cpp in Sources */,
-				A82B33CA1AAD1AB300A1CEFA /* FontSequence.cpp in Sources */,
-				A82B35A71AAD1AB400A1CEFA /* Utils.cpp in Sources */,
-				A82B34EA1AAD1AB400A1CEFA /* ShapeMesh.cpp in Sources */,
-				A82B356E1AAD1AB400A1CEFA /* FrameClock.cpp in Sources */,
-				A82B337C1AAD1AB300A1CEFA /* NSDictionary+DefautValues.m in Sources */,
-				A82B34F01AAD1AB400A1CEFA /* ShapeTesselator.cpp in Sources */,
-				A82B35651AAD1AB400A1CEFA /* Clock.cpp in Sources */,
-				A82B358F1AAD1AB400A1CEFA /* GLUtils.cpp in Sources */,
-				A82B359B1AAD1AB400A1CEFA /* ImageSourceFileStbImage.cpp in Sources */,
-				A82B35DF1AAD22D700A1CEFA /* DisplayHelper.mm in Sources */,
-				A82B33BE1AAD1AB300A1CEFA /* ActualFont.cpp in Sources */,
-				A82B34D81AAD1AB400A1CEFA /* FollowablePath.cpp in Sources */,
-				A82B35171AAD1AB400A1CEFA /* SoundManager.cpp in Sources */,
-				A82B33C41AAD1AB300A1CEFA /* FontManager.cpp in Sources */,
-				A82B33B81AAD1AB300A1CEFA /* TextHelper.cpp in Sources */,
-				A82B34931AAD1AB400A1CEFA /* Log.cpp in Sources */,
-				A82B33AC1AAD1AB300A1CEFA /* FontManager.cpp in Sources */,
-				A82B335E1AAD1AB300A1CEFA /* CinderDelegateBase.cpp in Sources */,
-				A82B35471AAD1AB400A1CEFA /* SystemManagerBase.cpp in Sources */,
-				A82B33A61AAD1AB300A1CEFA /* Font.cpp in Sources */,
-				A82B35951AAD1AB400A1CEFA /* MathUtils.cpp in Sources */,
-				A82B34991AAD1AB400A1CEFA /* Handler.cpp in Sources */,
-				A82B33701AAD1AB300A1CEFA /* FileHelper.mm in Sources */,
-				A82B33431AAD1AB300A1CEFA /* TextureAtlasAnimation.cpp in Sources */,
-				A82B33821AAD1AB300A1CEFA /* NSMutableDictionary+Merge.m in Sources */,
-				A82B33761AAD1AB300A1CEFA /* MemoryManager.mm in Sources */,
-				A82B34631AAD1AB400A1CEFA /* InputSource.cpp in Sources */,
-				A82B33641AAD1AB300A1CEFA /* CinderSketch.cpp in Sources */,
-				A82B35531AAD1AB400A1CEFA /* Texture.cpp in Sources */,
-				A82B33F41AAD1AB300A1CEFA /* TextItemizer.cpp in Sources */,
-				A82B34F61AAD1AB400A1CEFA /* SplinePath.cpp in Sources */,
-				A82B33B21AAD1AB300A1CEFA /* FontSequence.cpp in Sources */,
-				A82B34B11AAD1AB400A1CEFA /* TaskManager.cpp in Sources */,
-				A82B35D31AAD22D700A1CEFA /* CinderBridge.mm in Sources */,
-				A82B354D1AAD1AB400A1CEFA /* PVRHelper.cpp in Sources */,
-				A82B35E91AAD22D700A1CEFA /* UIView+StringTag.m in Sources */,
-				A82B34A51AAD1AB400A1CEFA /* SuperHandler.cpp in Sources */,
-				A82B33881AAD1AB300A1CEFA /* NSString+JSON.m in Sources */,
-				A82B33DC1AAD1AB300A1CEFA /* LangHelper.cpp in Sources */,
-				A82B35D71AAD22D700A1CEFA /* CinderDelegate.mm in Sources */,
-				A82B355F1AAD1AB400A1CEFA /* TextureManager.cpp in Sources */,
-				A82B35201AAD1AB400A1CEFA /* DisplayHelperBase.cpp in Sources */,
-				A82B350B1AAD1AB400A1CEFA /* QuadMatrix.cpp in Sources */,
-				A82B352C1AAD1AB400A1CEFA /* FileHelperBase.cpp in Sources */,
-				A82B35591AAD1AB400A1CEFA /* TextureHelper.cpp in Sources */,
-				A82B35381AAD1AB400A1CEFA /* MemoryManagerBase.cpp in Sources */,
-				A82B33371AAD1AB300A1CEFA /* Sprite.cpp in Sources */,
-				A82B35111AAD1AB400A1CEFA /* Effect.cpp in Sources */,
-				A82B33E81AAD1AB300A1CEFA /* LineLayout.cpp in Sources */,
-				A82B34AB1AAD1AB400A1CEFA /* Task.cpp in Sources */,
-				A82B33E21AAD1AB300A1CEFA /* LayoutCache.cpp in Sources */,
-				A82B33EE1AAD1AB300A1CEFA /* scrptrun.cpp in Sources */,
-				A82B333D1AAD1AB300A1CEFA /* TextureAtlas.cpp in Sources */,
-				A82B35DB1AAD22D700A1CEFA /* GLViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1815,40 +1444,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		007050BC1114F93F003FCAE4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A82B35EC1AAD237600A1CEFA /* DebugConfig.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
 		007050BD1114F93F003FCAE4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A82B35EE1AAD237600A1CEFA /* ReleaseConfig.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
-		};
-		00CFD9DF1135C3520091E310 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A82B35F31AAD271800A1CEFA /* DebugConfig.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		00CFD9E01135C3520091E310 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A82B35F51AAD271800A1CEFA /* ReleaseConfig.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		1DEB921F08733DC00010E9CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A82B31FE1AAD14C900A1CEFA /* DebugConfig.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
 		};
 		1DEB922008733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -1857,17 +1458,31 @@
 			};
 			name = Release;
 		};
-		1DEB922308733DC00010E9CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Debug;
-		};
 		1DEB922408733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Release;
+		};
+		A8B3204E1AADEFC100D33333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		A8B3204F1AADEFC100D33333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A82B31FE1AAD14C900A1CEFA /* DebugConfig.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		A8B320501AADEFC100D33333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A82B35EC1AAD237600A1CEFA /* DebugConfig.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1875,17 +1490,8 @@
 		007050BB1114F93F003FCAE4 /* Build configuration list for PBXNativeTarget "ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				007050BC1114F93F003FCAE4 /* Debug */,
 				007050BD1114F93F003FCAE4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		00CFD9DE1135C3520091E310 /* Build configuration list for PBXNativeTarget "ios_sim" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00CFD9DF1135C3520091E310 /* Debug */,
-				00CFD9E01135C3520091E310 /* Release */,
+				A8B320501AADEFC100D33333 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1893,8 +1499,8 @@
 		1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "osx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DEB921F08733DC00010E9CD /* Debug */,
 				1DEB922008733DC00010E9CD /* Release */,
+				A8B3204F1AADEFC100D33333 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1902,8 +1508,8 @@
 		1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "toolkit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DEB922308733DC00010E9CD /* Debug */,
 				1DEB922408733DC00010E9CD /* Release */,
+				A8B3204E1AADEFC100D33333 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
