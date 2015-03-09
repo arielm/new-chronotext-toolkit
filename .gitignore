@@ -25,3 +25,6 @@ proguard-project.txt
 Debug/
 Release/
 ipch/
+
+# Temp
+lib/
