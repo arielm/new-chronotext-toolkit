@@ -76,7 +76,7 @@ namespace chr
         if (initialized)
         {
             masterGroup->setPaused(true);
-            system->update(); // NECESSARY, OTHERWISE PAUSE-REQUEST WILL NOT BE EFFECTIVE (I.E. ON ANDROID)
+            system->update(); // NECESSARY ON ANDROID, OTHERWISE PAUSE-REQUEST WILL NOT BE EFFECTIVE
         }
     }
     
@@ -85,7 +85,7 @@ namespace chr
         if (initialized)
         {
             masterGroup->setPaused(false);
-            system->update(); // NOT PURELY NECESSARY SINCE SoundManager::update() IS SUPPOSED TO FOLLOW
+            system->update(); // PROBABLY NOT PURELY NECESSARY...
         }
     }
     
@@ -484,7 +484,7 @@ namespace chr
             }
             else
             {
-                result = system->createSound(request.inputSource->getFileName(), FMOD_DEFAULT, nullptr, &sound);
+                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
             }
         }
         

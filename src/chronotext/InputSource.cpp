@@ -18,7 +18,6 @@ namespace chr
 {
     namespace inputsource
     {
-        const char *EMPTY_CHARS = "";
         const string EMPTY_STRING = "";
         const fs::path EMPTY_PATH = "";
     }
@@ -359,16 +358,6 @@ namespace chr
         }
         
         return false;
-    }
-    
-    const char* InputSource::getFileName() const
-    {
-        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
-        {
-            return filePath.c_str();
-        }
-        
-        return inputsource::EMPTY_CHARS;
     }
     
     fs::path InputSource::getFilePath() const

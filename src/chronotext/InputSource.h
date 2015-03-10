@@ -92,9 +92,8 @@ namespace chr
         bool isFile() const;
 
         /*
-         * BOTH WILL RETURN A VALID VALUE IF hasFileName() OR isFile() RETURN true
+         * WILL RETURN A VALID fs::path IF hasFileName() OR isFile() RETURN true
          */
-        const char* getFileName() const;
         ci::fs::path getFilePath() const;
         
         std::string getFilePathHint() const;
