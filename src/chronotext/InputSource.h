@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -28,18 +28,18 @@ namespace chr
         };
 
         /*
-         * TO USE WITH THE "CINDER_RESOURCE" MACRO OR WITH A RESOURCE-NAME,
-         * FOR FILES LOCATED IN THE BUNDLE ON OSX OR IOS,
-         * OR DATA EMBEDDED INSIDE THE APK ON ANDROID
+         * TO USE WITH THE "CINDER_RESOURCE" MACRO OR WITH A RESOURCE-NAME:
+         * - OSX AND IOS: FOR FILES BUNDLED INSIDE THE APP
+         * - ANDROID: FOR DATA PACKAGED INSIDE THE APK
          *
-         * OSX, IOS: isFile() WILL RETURN true
+         * OSX AND IOS: isFile() WILL RETURN true
          * ANDROID: isFile() WILL RETURN false
          */
         static InputSource::Ref getResource(const ci::fs::path &relativePath);
         static ci::DataSourceRef loadResource(const ci::fs::path &relativePath); // CAN THROW
         
         /*
-         * TO USE WITH THE "CINDER_RESOURCE" MACRO,
+         * TO USE WITH THE "CINDER_RESOURCE" MACRO
          * FOR DATA EMBEDDED INSIDE THE EXECUTABLE ON MSW
          *
          * isFile() WILL RETURN false
@@ -49,16 +49,17 @@ namespace chr
         
         /*
          * MSW AND OSX:
-         * - TO USE WITH REGULAR "CINDER ASSETS"
+         * - TO USE WITH REGULAR CINDER-ASSETS
          * - isFile() WILL RETURN true
          *
          * IOS:
-         * - TO USE WITH CINDER'S "IOS ASSET FOLDER"
+         * - FOR TOOLKIT-ASSETS TO BE BUNDLED INSIDE THE APP:
+         *   - CREATE A REFERENCE TO THE "assets" FOLDER IN XCode
          * - isFile() WILL RETURN true
          *
          * ANDROID:
-         * - CREATE A SHORTCUT TO THE "assets" FOLDER IN "resources"
-         * - THE ASSETS WILL BE PACKAGED INSIDE THE APK
+         * - FOR TOOLKIT-ASSETS TO BE PACKAGED INSIDE THE APK:
+         *   - CREATE A SYMBOLIC-LINK TO THE "assets" FOLDER IN "resources"
          * - isFile() WILL RETURN false
          */
         static InputSource::Ref getAsset(const ci::fs::path &relativePath);
@@ -77,14 +78,28 @@ namespace chr
         
         ci::DataSourceRef loadDataSource(); // CAN THROW
         InputSource::Ref getSubSource(const ci::fs::path &subPath); // CAN THROW
-        
+
+        /*
+         * WILL RETURN true:
+         * - IF isFile() RETURNS true
+         * - FOR ANDROID-ASSETS CREATED WITH getResource(), getAsset(), ETC.
+         */
+        bool hasFileName() const;
+
+        /*
+         * WILL RETURN true ONLY IN A "TRUE" FILE-SYSTEM CASE
+         */
         bool isFile() const;
+
+        /*
+         * BOTH WILL RETURN A VALID VALUE IF hasFileName() OR isFile() RETURN true
+         */
+        const char* getFileName() const;
         ci::fs::path getFilePath() const;
         
         std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
 
-        Type getType() const;
         const std::string& getURI();
 
     protected:

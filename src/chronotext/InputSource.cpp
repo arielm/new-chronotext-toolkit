@@ -1,16 +1,15 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/InputSource.h"
-#include "chronotext/system/FileHelper.h"
+#include "chronotext/Context.h"
 
 #include "cinder/app/App.h"
-#include "cinder/Utilities.h"
 
 using namespace std;
 using namespace ci;
@@ -19,6 +18,7 @@ namespace chr
 {
     namespace inputsource
     {
+        const char *EMPTY_CHARS = "";
         const string EMPTY_STRING = "";
         const fs::path EMPTY_PATH = "";
     }
@@ -36,6 +36,8 @@ namespace chr
         
 #if defined(CINDER_COCOA)
         source->filePath = FileHelper::getResourcePath(relativePath);
+#elif defined(CINDER_ANDROID)
+        source->filePath = relativePath;
 #endif
         
         return source;
@@ -72,6 +74,8 @@ namespace chr
         source->filePath = app::getAssetPath(relativePath);
 #elif defined(CINDER_COCOA_TOUCH)
         source->filePath = FileHelper::getResourcePath("assets" / relativePath);
+#elif defined(CINDER_ANDROID)
+        source->filePath = "assets" / relativePath;
 #endif
         
         return source;
@@ -194,12 +198,13 @@ namespace chr
                 case TYPE_RESOURCE:
                 {
 #if defined(CINDER_ANDROID)
-                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), relativePath.c_str(), AASSET_MODE_STREAMING);
+                    auto filename = getFilePath().c_str();
+                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), filename, AASSET_MODE_STREAMING);
                     
                     if (asset)
                     {
                         AAsset_close(asset);
-                        return DataSourceAsset::create(FileHelper::getAssetManager(), relativePath.c_str());
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), filename);
                     }
                     else
                     {
@@ -244,13 +249,13 @@ namespace chr
                 case TYPE_ASSET:
                 {
 #if defined(CINDER_ANDROID)
-                    auto resourcePath = "assets" / relativePath;
-                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
+                    auto filename = getFilePath().c_str();
+                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), filename, AASSET_MODE_STREAMING);
                     
                     if (asset)
                     {
                         AAsset_close(asset);
-                        return DataSourceAsset::create(FileHelper::getAssetManager(), resourcePath.c_str());
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), filename);
                     }
                     else
                     {
@@ -307,6 +312,32 @@ namespace chr
         throw EXCEPTION(InputSource, "INVALID INPUT-SOURCE");
     }
     
+    bool InputSource::hasFileName() const
+    {
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
+        {
+            if (isFile())
+            {
+                return true;
+            }
+            
+            if (system::platform() == system::PLATFORM_ANDROID)
+            {
+                switch (type)
+                {
+                    case TYPE_ASSET:
+                    case TYPE_RESOURCE:
+                        return true;
+                        
+                    default:
+                        break;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
     bool InputSource::isFile() const
     {
         if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
@@ -314,17 +345,30 @@ namespace chr
             switch (type)
             {
                 case TYPE_FILE:
-#if !defined(CINDER_ANDROID)
-                case TYPE_ASSET:
-#endif
-#if defined(CINDER_COCOA)
-                case TYPE_RESOURCE:
-#endif
                     return true;
+                    
+                case TYPE_ASSET:
+                    return (system::platform() != system::PLATFORM_ANDROID);
+                    
+                case TYPE_RESOURCE:
+                    return (system::platform() == system::PLATFORM_OSX) || (system::platform() == system::PLATFORM_IOS);
+                    
+                default:
+                    break;
             }
         }
         
         return false;
+    }
+    
+    const char* InputSource::getFileName() const
+    {
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
+        {
+            return filePath.c_str();
+        }
+        
+        return inputsource::EMPTY_CHARS;
     }
     
     fs::path InputSource::getFilePath() const
@@ -353,11 +397,6 @@ namespace chr
         {
             filePathHint = hint;
         }
-    }
-    
-    InputSource::Type InputSource::getType() const
-    {
-        return type;
     }
     
     const string& InputSource::getURI()
