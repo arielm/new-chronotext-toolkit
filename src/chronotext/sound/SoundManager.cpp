@@ -250,51 +250,6 @@ namespace chr
         }
     }
     
-    int SoundManager::playEffect(Effect::Ref effect, int loopCount, float volume)
-    {
-        if (reloadEffect(effect))
-        {
-            FMOD::Channel *channel;
-            system->playSound(effect->sound, masterGroup, true, &channel);
-            
-            if (loopCount)
-            {
-                channel->setLoopCount(loopCount);
-                channel->setMode(FMOD_LOOP_NORMAL);
-            }
-            else
-            {
-                channel->setMode(FMOD_LOOP_OFF);
-            }
-            
-            if (volume == 1)
-            {
-                channel->setVolume(effect->request.volume);
-            }
-            else
-            {
-                channel->setVolume(volume);
-            }
-            
-            channel->setPaused(false);
-            
-            // ---
-            
-            int channelId;
-            channel->getIndex(&channelId);
-            
-            interruptChannel(channelId);
-            
-            int playingId = ++playCounter;
-            playingEffects[playingId] = make_pair(channelId, effect->uniqueId);
-            
-            dispatchEvent(Event(EVENT_STARTED, effect, channelId, playingId));
-            return playingId;
-        }
-        
-        return 0;
-    }
-    
     bool SoundManager::pauseEffect(int playingId, int tag)
     {
         auto it = playingEffects.find(playingId);
@@ -404,6 +359,58 @@ namespace chr
         }
     }
     
+    int SoundManager::playEffect(Effect::Ref effect, int loopCount, float volume)
+    {
+        if (reloadEffect(effect))
+        {
+            auto channel = playSound(effect->sound, loopCount, (volume == 1) ? effect->request.volume : volume);
+            
+            int channelId;
+            channel->getIndex(&channelId);
+            
+            interruptChannel(channelId);
+            
+            int playingId = ++playCounter;
+            playingEffects[playingId] = make_pair(channelId, effect->uniqueId);
+            
+            dispatchEvent(Event(EVENT_STARTED, effect, channelId, playingId));
+            return playingId;
+        }
+        
+        return 0;
+    }
+    
+    FMOD::Channel* SoundManager::playSound(FMOD::Sound *sound, int loopCount, float volume)
+    {
+        if (initialized)
+        {
+            FMOD::Channel *channel;
+            FMOD_RESULT result = system->playSound(sound, masterGroup, true, &channel);
+            
+            if (result)
+            {
+                throw EXCEPTION(SoundManager, "UNABLE TO PLAY SOUND | REASON: " + writeError(result));
+            }
+            
+            if (loopCount)
+            {
+                channel->setLoopCount(loopCount);
+                channel->setMode(FMOD_LOOP_NORMAL);
+            }
+            else
+            {
+                channel->setMode(FMOD_LOOP_OFF);
+            }
+            
+            channel->setVolume(volume);
+            channel->setPaused(false);
+            
+            return channel;
+        }
+        
+        return nullptr;
+    }
+    
     bool SoundManager::interruptChannel(int channelId)
     {
         for (auto &element : playingEffects)
@@ -464,7 +471,7 @@ namespace chr
                 memoryInfo[0] = getMemoryInfo();
             }
 
-            if (request.forceMemoryLoad || !request.inputSource->isFile())
+            if (request.forceMemoryLoad || !request.inputSource->hasFileName())
             {
                 auto buffer = request.inputSource->loadDataSource()->getBuffer();
                 
@@ -477,13 +484,13 @@ namespace chr
             }
             else
             {
-                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
+                result = system->createSound(request.inputSource->getFileName(), FMOD_DEFAULT, nullptr, &sound);
             }
         }
         
         if (result)
         {
-            throw EXCEPTION(SoundManager, writeError(result));
+            throw EXCEPTION(SoundManager, "UNABLE TO LOAD SOUND | REASON: " + writeError(result));
         }
 
         if (sound)
@@ -501,10 +508,15 @@ namespace chr
     
     double SoundManager::getSoundDuration(FMOD::Sound *sound)
     {
-        unsigned int length;
-        sound->getLength(&length, FMOD_TIMEUNIT_MS);
+        if (sound)
+        {
+            unsigned int length;
+            sound->getLength(&length, FMOD_TIMEUNIT_MS);
+            
+            return length / 1000.0;
+        }
         
-        return length / 1000.0;
+        return 0;
     }
     
     string SoundManager::writeError(FMOD_RESULT result)

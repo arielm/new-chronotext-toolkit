@@ -166,8 +166,6 @@ namespace chr
         void stopEffect(Effect::Ref effect);
         void stopEffects(int tag = -1);
 
-        int playEffect(Effect::Ref effect, int loopCount = 0, float volume = 1); // CAN THROW
-
         bool pauseEffect(int playingId, int tag = -1);
         bool resumeEffect(int playingId, int tag = -1);
         bool stopEffect(int playingId, int tag = -1);
@@ -177,7 +175,13 @@ namespace chr
         
         float getVolume();
         void setVolume(float volume);
-        
+
+        /*
+         * USE A loopCount VALUE OF -1 FOR INFINITE-LOOPING
+         */
+        int playEffect(Effect::Ref effect, int loopCount = 0, float volume = 1); // CAN THROW
+        FMOD::Channel* playSound(FMOD::Sound *sound, int loopCount = 0, float volume = 1); // CAN THROW
+
         // ---
         
         struct Record
