@@ -84,10 +84,11 @@ namespace chr
         std::string getFilePathHint() const;
         void setFilePathHint(const std::string &hint);
 
+        Type getType() const;
         const std::string& getURI();
 
     protected:
-        int type;
+        Type type;
         int mswID;
         std::string mswType;
         ci::fs::path filePath;

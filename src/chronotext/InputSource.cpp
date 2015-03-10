@@ -355,6 +355,11 @@ namespace chr
         }
     }
     
+    InputSource::Type InputSource::getType() const
+    {
+        return type;
+    }
+    
     const string& InputSource::getURI()
     {
         if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
