@@ -1,9 +1,13 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
+ * SoundManager IS TESTED AND DEVELOPED VIA THE TestBed1 PROJECT IN THE chronotext-playgound REPO
  */
 
 /*
@@ -29,15 +33,13 @@
  *
  * 1) MEMORY-CONSUMPTION:
  *    - OSX AND ANDROID:
- *      - TRY TO UNDERSTAND THE "MEMORY MODEL" USED BY FMOD BEHIND THE SCENES
+ *      - TRY TO UNDERSTAND THE MEMORY MODEL(S) USED BY FMOD BEHIND THE SCENES
+ *    - WHAT IS THE COST OF (NON-ENCODED AND/OR ENCODED) FILE-STREAMING?
  
- * 2) MP3:
+ * 2) MP3 (OR ANY OTHER ENCODED FORMAT):
  *    - UNDERSTAND CPU AND MEMORY REQUIREMENTS
  *
- * 3) TEST FILE-STREAMING:
- *    - PRE-REQUISITE: SoundManager SHOULD BE UPGRADED
- *
- * 4) FIND A WAY TO ENFORCE THE CALLING OF pause() AND resume()
+ * 3) FIND A WAY TO ENFORCE THE CALLING OF pause() AND resume()
  *    - NECESSARY ON ANDROID, UPON FOREGROUND/BACKGROUND SWITCHES
  *    - POSSIBLE SOLUTION: chr::delegate() SHOULD ALLOW "SUBSCRIPTION TO SYSTEM SIGNALS"
  */
@@ -47,6 +49,8 @@
 #include "chronotext/Exception.h"
 #include "chronotext/sound/Effect.h"
 #include "chronotext/system/MemoryInfo.h"
+
+#include "fmod_errors.h"
 
 #include <map>
 #include <set>
