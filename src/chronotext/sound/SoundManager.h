@@ -50,8 +50,6 @@
 #include "chronotext/sound/Effect.h"
 #include "chronotext/system/MemoryInfo.h"
 
-#include "fmod_errors.h"
-
 #include <map>
 #include <set>
 #include <atomic>
@@ -133,6 +131,7 @@ namespace chr
         
         ~SoundManager();
         
+        bool isValid();
         bool init(int maxChannels = 32);
         void uninit();
         
@@ -143,7 +142,7 @@ namespace chr
         void removeListener(Listener *listener);
         
         /*
-         * ON ANDROID (UNLIKE iOS):
+         * ON ANDROID (UNLIKE OTHER PLATFORMS):
          * IT IS NECESSARY TO CALL THESE UPON ACTIVITY PAUSE/RESUME
          */
         void pause();
@@ -192,6 +191,8 @@ namespace chr
         
         static FMOD::Sound* loadSound(FMOD::System *system, const Effect::Request &request); // CAN THROW
         static double getSoundDuration(FMOD::Sound *sound);
+        
+        static std::string writeError(FMOD_RESULT result);
         
     protected:
         bool initialized = false;

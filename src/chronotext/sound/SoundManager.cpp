@@ -9,6 +9,8 @@
 #include "chronotext/sound/SoundManager.h"
 #include "chronotext/Context.h"
 
+#include "fmod_errors.h"
+
 using namespace std;
 using namespace ci;
 
@@ -22,6 +24,11 @@ namespace chr
         uninit();
     }
     
+    bool SoundManager::isValid()
+    {
+        return initialized;
+    }
+    
     bool SoundManager::init(int maxChannels)
     {
         if (!initialized)
@@ -29,7 +36,12 @@ namespace chr
             FMOD::System_Create(&system);
             FMOD_RESULT result = system->init(maxChannels, FMOD_INIT_NORMAL, nullptr);
             
-            if (!result)
+            if (result)
+            {
+                system->release();
+                system = nullptr;
+            }
+            else
             {
                 system->getMasterChannelGroup(&masterGroup);
                 initialized = true;
@@ -44,10 +56,16 @@ namespace chr
         if (initialized)
         {
             discardEffects();
+            assert(playingEffects.empty());
+
+            effects.clear();
+            listeners.clear();
             
             system->close();
             system->release();
             system = nullptr;
+            
+            // ---
             
             initialized = false;
         }
@@ -58,7 +76,7 @@ namespace chr
         if (initialized)
         {
             masterGroup->setPaused(true);
-            system->update(); // NECESSARY, OTHERWISE PAUSE-REQUEST WILL NOT BE EFFECTIVE
+            system->update(); // NECESSARY, OTHERWISE PAUSE-REQUEST WILL NOT BE EFFECTIVE (I.E. ON ANDROID)
         }
     }
     
@@ -119,18 +137,23 @@ namespace chr
     
     Effect::Ref SoundManager::getEffect(const Effect::Request &request)
     {
-        auto it = effects.find(request);
-        
-        if (it != effects.end())
+        if (initialized)
         {
-            return it->second;
+            auto it = effects.find(request);
+            
+            if (it != effects.end())
+            {
+                return it->second;
+            }
+            
+            auto sound = loadSound(system, request); // CAN THROW
+            auto effect = Effect::Ref(new Effect(request, sound, ++effectCounter)); // make_shared CAN'T BE USED WITH PROTECTED CONSTRUCTORS
+            effects[request] = effect;
+            
+            return effect;
         }
         
-        auto sound = loadSound(system, request); // CAN THROW
-        auto effect = Effect::Ref(new Effect(request, sound, ++effectCounter)); // make_shared CAN'T BE USED WITH PROTECTED CONSTRUCTORS
-        effects[request] = effect;
-        
-        return effect;
+        return nullptr;
     }
 
     Effect::Ref SoundManager::findEffect(const Effect::Request &request) const
@@ -147,7 +170,7 @@ namespace chr
     
     void SoundManager::discardEffect(Effect::Ref effect)
     {
-        if (effect)
+        if (initialized && effect)
         {
             stopEffect(effect);
             effect->resetSound();
@@ -156,7 +179,7 @@ namespace chr
     
     bool SoundManager::reloadEffect(Effect::Ref effect)
     {
-        if (effect)
+        if (initialized && effect)
         {
             if (!effect->sound)
             {
@@ -460,7 +483,7 @@ namespace chr
         
         if (result)
         {
-            throw EXCEPTION(SoundManager, FMOD_ErrorString(result));
+            throw EXCEPTION(SoundManager, writeError(result));
         }
 
         if (sound)
@@ -482,5 +505,10 @@ namespace chr
         sound->getLength(&length, FMOD_TIMEUNIT_MS);
         
         return length / 1000.0;
+    }
+    
+    string SoundManager::writeError(FMOD_RESULT result)
+    {
+        return string(FMOD_ErrorString(result));
     }
 }
