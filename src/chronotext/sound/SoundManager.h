@@ -132,7 +132,7 @@ namespace chr
         ~SoundManager();
         
         bool isValid();
-        bool init(int maxChannels = 32);
+        bool init(int maxChannels = 32, FMOD_INITFLAGS flags = FMOD_INIT_NORMAL);
         void uninit();
         
         /*

@@ -29,12 +29,12 @@ namespace chr
         return initialized;
     }
     
-    bool SoundManager::init(int maxChannels)
+    bool SoundManager::init(int maxChannels, FMOD_INITFLAGS flags)
     {
         if (!initialized)
         {
             FMOD::System_Create(&system);
-            FMOD_RESULT result = system->init(maxChannels, FMOD_INIT_NORMAL, nullptr);
+            FMOD_RESULT result = system->init(maxChannels, flags, nullptr);
             
             if (result)
             {
