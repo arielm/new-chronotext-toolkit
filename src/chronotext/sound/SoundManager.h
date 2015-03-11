@@ -7,7 +7,26 @@
  */
 
 /*
- * SoundManager IS TESTED AND DEVELOPED VIA THE TestBed1 PROJECT IN THE chronotext-playgound REPO
+ * SoundManager IS TESTED AND DEVELOPED VIA THE TestBed2 PROJECT IN THE chronotext-playgound REPO:
+ * - https://github.com/arielm/chronotext-playground/blob/master/Sketches/TestBed2/src/TestingSound1.cpp
+ * - https://github.com/arielm/chronotext-playground/blob/master/Sketches/TestBed2/src/TestingSound2.cpp
+ *
+ * DEPENDENCIES:
+ * - https://github.com/arielm/FMOD (FMOD VERSION 1.05.11)
+ */
+
+/*
+ * IMPORTANT:
+ *
+ * - SINCE VERSION 1.03.00: "Low Level is now thread-safe by default"
+ * - SOURCE: http://www.fmod.org/docs/content/generated/common/revision.html
+ *
+ * THIS CAN LEAD TO COUNTER-INTUITIVE SITUATIONS, E.G.:
+ * - CHANNEL NOT PROPERLY PAUSED AFTER CALLING ChannelGroup::setPaused()
+ *
+ * SOLUTIONS:
+ * - EITHER CALLING System::update() IN ORDER TO IMMEDIATLY PROCESS THE (ASYNC) COMMAND-QUEUE
+ * - OR INITIALIZE WITH "FMOD_INIT_THREAD_UNSAFE" IN ORDER TO REMOVE THE COMMAND-QUEUE
  */
 
 /*
