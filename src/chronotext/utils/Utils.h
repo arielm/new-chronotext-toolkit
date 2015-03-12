@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -97,6 +97,14 @@ namespace chr
             std::string time(double seconds, bool rounded = false);
             std::string duration(double seconds, int precision = 1, const std::string &separator = "");
             std::string percent(double ratio, int precision = 1, const std::string &separator = "");
+            
+            template<typename T>
+            inline const std::string write(const T &t)
+            {
+                std::stringstream tmp;
+                tmp << t;
+                return tmp.str();
+            }
         }
     }
 }
