@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -36,7 +36,7 @@
 /*
  * PREVIOUS TESTABLE MILESTONE:
  *
- * - https://github.com/arielm/new-chronotext-toolkit/blob/ffa9f658e609f13bf969a17fc76beba3dbe22735/src/chronotext/android/system/MemoryManager.cpp
+ * - https://github.com/arielm/new-chronotext-toolkit/blob/ffa9f658e609f13bf969a17fc76beba3dbe22735/src/chronotext/cocoa/system/MemoryManager.mm
  * - https://github.com/arielm/chronotext-playground/blob/486d4c4ac02a5e471ed5a1b1cc1cee16bc1044fe/Sketches/ContextRework/src/TestingMemory.h
  */
 
@@ -57,14 +57,14 @@ namespace chr
     {
         void Manager::setup()
         {
-            LOGI_IF(true) << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(LOG_VERBOSE) << "MEMORY INFO: " << getInfo() << endl;
         }
         
         void Manager::shutdown()
         {
-            LOGI_IF(true) << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(LOG_VERBOSE) << "MEMORY INFO: " << getInfo() << endl;
         }
-        
+
         // ---
         
         /*

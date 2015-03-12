@@ -28,6 +28,8 @@ namespace chr
             void setup() final;
             void shutdown() final;
             
+            void update();
+            
             Info getInfo() final;
             int64_t compare(const Info &before, const Info &after) final;
             

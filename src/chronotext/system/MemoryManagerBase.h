@@ -1,20 +1,22 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
- * DEVELOPED AND TESTED VIA THE ContextRework PROJECT IN THE chronotext-playground REPOSITORY:
- * https://github.com/arielm/chronotext-playground/blob/master/Sketches/ContextRework/src/TestingMemory.h
+ * TESTED AND DEVELOPED VIA THE TestBed1 PROJECT IN THE chronotext-playgound REPOSITORY:
+ *
+ * - https://github.com/arielm/chronotext-playground/blob/master/Sketches/TestBed1/src/TestingMemory1.cpp
+ * - https://github.com/arielm/chronotext-playground/blob/master/Sketches/TestBed1/src/TestingMemory2.cpp
  *
  *
  * ADDITIONAL PLATFORM-RELATED INFO:
  *
- * - chronotext/cocoa/system/MemoryManager.mm
- * - chronotext/android/system/MemoryManager.cpp
+ * - https://github.com/arielm/new-chronotext-toolkit/blob/develop/src/chronotext/cocoa/system/MemoryManager.mm
+ * - https://github.com/arielm/new-chronotext-toolkit/blob/develop/src/chronotext/android/system/MemoryManager.cpp
  */
 
 #pragma once
@@ -32,6 +34,9 @@ namespace chr
         class ManagerBase
         {
         public:
+            static std::atomic<bool> LOG_VERBOSE;
+            static std::atomic<bool> LOG_WARNING;
+            
             virtual void setup() {}
             virtual void shutdown() {}
             

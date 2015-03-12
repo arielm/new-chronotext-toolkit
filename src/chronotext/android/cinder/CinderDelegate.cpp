@@ -120,6 +120,11 @@ namespace chr
          */
         sketch->clock()->update(true);
         
+        /*
+         * CAN TRIGGER CinderSketch::EVENT_MEMORY_WARNING
+         */
+        memoryManager().update();
+        
         pollSensorEvents(); // WHERE handleAcceleration IS INVOKED
         io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
         

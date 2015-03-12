@@ -15,6 +15,9 @@ namespace chr
 {
     namespace memory
     {
+        atomic<bool> ManagerBase::LOG_VERBOSE (false);
+        atomic<bool> ManagerBase::LOG_WARNING (true);
+
         int64_t compare(const Info &before, const Info &after)
         {
             return memoryManager().compare(before, after);

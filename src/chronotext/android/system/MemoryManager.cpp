@@ -71,12 +71,36 @@ namespace chr
         {
             initial = getInfo();
             
-            LOGI << "MEMORY INFO: " << initial << endl; // LOG: VERBOSE
+            LOGI_IF(LOG_VERBOSE) << "MEMORY INFO: " << initial << endl;
         }
         
         void Manager::shutdown()
         {
-            LOGI << "MEMORY INFO: " << getInfo() << endl; // LOG: VERBOSE
+            LOGI_IF(LOG_VERBOSE) << "MEMORY INFO: " << getInfo() << endl;
+        }
+        
+        // ---
+        
+        /*
+         * INTENDED TO BE CALLED REGULARELY, E.G. AT EACH FRAME
+         */
+        
+        void Manager::update()
+        {
+            try
+            {
+                const JsonTree &query = delegate().jsonQuery("getMemoryInfo");
+                auto lowMemory = query["lowMemory"].getValue<bool>();
+                
+                if (lowMemory)
+                {
+                    LOGI_IF(LOG_WARNING) << "ANDROID: LOW-MEMORY WARNING" << endl;
+                    
+                    delegate().handleEvent(CinderSketch::EVENT_MEMORY_WARNING);
+                }
+            }
+            catch (exception &e)
+            {}
         }
         
         // ---
@@ -92,7 +116,6 @@ namespace chr
                 
                 auto availMem = query["availMem"].getValue<int64_t>();
                 auto threshold = query["threshold"].getValue<int64_t>();
-                auto lowMemory = query["lowMemory"].getValue<bool>();
                 
                 // ---
                 
