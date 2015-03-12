@@ -10,6 +10,14 @@
  * MEMORY-MEASUREMENT SEEMS RELIABLE ON IOS, LESS ON OSX
  *
  *
+ * - MEASUREMENT IS DONE VIA DARWIN'S mach LAYER:
+ *   - WITH SOME LIGHT VARIATIONS BETWEEN IOS AND OSX
+ *
+ * - LOW-MEMORY DETECTION:
+ *   - IOS: IS HANDLED BY THE SYSTEM VIA UIApplicationDidReceiveMemoryWarningNotification
+ *   - OSX: NOT RELEVANT
+ *
+ *
  * FINDINGS:
  *
  * 1) task_info.resident_size IS THE RIGHT WAY TO MEASURE "USED MEMORY", BUT:
@@ -25,12 +33,24 @@
  *      - TOTALLY CHAOTIC BEHAVIOR (PROBABLY A SIDE-EFFECT OF "MODERN DESKTOP MEMORY MANAGEMENT")
  *    - TOTAL MEMORY:
  *      - NOT ACCURATE AND USELESS
+ *    - UNSOLVED:
+ *      - THE RELEASE OF PREVIOUSLY ALLOCATED MEMORY IS NOT PROPERLY DETECTED
  *
  *
  * TODO:
  *
  * 1) INVESTIGATE task_info.resident_size FURTHER:
  *    - THE PER-THREAD NATURE MAY REQUIRE A SOLUTION INTEGRATED WITH os/TaskManager
+ *
+ * 2) TRY TO PROPERLY DETECT MEMORY-RELEASE ON OSX:
+ *    - THE GOAL IS TO SHOW THE SAME VALUE AS IN XCODE'S INSTRUMENT
+ */
+
+/*
+ * ADDITIONAL REFERENCES:
+ *
+ * - http://stackoverflow.com/a/23123849/50335
+ * - http://miknight.blogspot.co.il/2005/11/resident-set-size-in-mac-os-x.html
  */
 
 /*
@@ -67,13 +87,6 @@ namespace chr
 
         // ---
         
-        /*
-         * REFERENCES:
-         *
-         * - http://stackoverflow.com/a/23123849/50335
-         * - http://miknight.blogspot.co.il/2005/11/resident-set-size-in-mac-os-x.html
-         */
-
         Info Manager::getInfo()
         {
             int mib[6];

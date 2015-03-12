@@ -1,17 +1,20 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-
 #include "chronotext/android/system/MemoryManager.h"
 #include "chronotext/Context.h"
 
 /*
- * MEMORY-MEASUREMENT SEEMS RELIABLE
+ * MEMORY MEASUREMENT SEEMS RELIABLE:
+ *
+ *
+ * MEASUREMENT AND LOW-MEMORY-DETECTION ARE BOTH HANDLED USING JAVA AND THE ActivityManager.MemoryInfo STRUCTURE:
+ * http://developer.android.com/reference/android/app/ActivityManager.MemoryInfo.html
  *
  *
  * FINDINGS:
@@ -28,17 +31,12 @@
  *
  * TODO:
  *
- * 1) IMPLEMENT "AUTOMATIC MEMORY WARNING":
- *    - OPTION 1:
- *      - VIA ActivityManager.MemoryInfo STRUCTURE:
- *        http://developer.android.com/reference/android/app/ActivityManager.MemoryInfo.html
- *    - OPTION 2:
- *      - VIA ComponentCallbacks2.onTrimMemory() CALLBACK:
- *        http://developer.android.com/reference/android/content/ComponentCallbacks2.html
- *
- * 2) MEASURE DURING memory::Manager::update AND "WARN" CinderSketch IF NECESSARY
- *
- *
+ * 1) TEST ALTERNATIVES FOR LOW-MEMORY-DETECTION:
+ *    - USING THE ComponentCallbacks2.onTrimMemory() CALLBACK:
+ *      http://developer.android.com/reference/android/content/ComponentCallbacks2.html
+ */
+
+/*
  * ADDITIONAL REFERENCES:
  *
  * - http://stackoverflow.com/a/18894037/50335
@@ -54,7 +52,7 @@
  */
 
 /*
- * PREVIOUS TESTABLE MILESTONE: USING C++ FOR QUERYING "FREE MEMORY" INSTEAD OF JAVA
+ * PREVIOUS TESTABLE MILESTONE: USING C++ FOR QUERYING FREE-MEMORY INSTEAD OF JAVA
  *
  * - https://github.com/arielm/new-chronotext-toolkit/blob/ffa9f658e609f13bf969a17fc76beba3dbe22735/src/chronotext/android/system/MemoryManager.cpp
  * - https://github.com/arielm/chronotext-playground/blob/486d4c4ac02a5e471ed5a1b1cc1cee16bc1044fe/Sketches/ContextRework/src/TestingMemory.h
@@ -82,7 +80,7 @@ namespace chr
         // ---
         
         /*
-         * INTENDED TO BE CALLED REGULARELY, E.G. AT EACH FRAME
+         * INTENDED TO BE CALLED REGULARELY (E.G. AT EACH FRAME), ON THE RENDERER'S THREAD
          */
         
         void Manager::update()
