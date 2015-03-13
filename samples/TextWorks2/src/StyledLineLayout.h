@@ -15,7 +15,7 @@ class StyledLineLayout
 public:
     struct Style
     {
-        chr::ZFont *font;
+        chr::ZFont *font = nullptr;
         ci::ColorA color;
         
         Style() = default;

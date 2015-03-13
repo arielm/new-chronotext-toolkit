@@ -9,7 +9,7 @@
 /*
  * FEATURES:
  *
- * 1) DEMONSTRATES HOW TO USE ZFont'S TAGGING-SYSTEM:
+ * 1) DEMONSTRATES HOW TO USE ZFont's TAGGING-SYSTEM:
  *    - THE SYSTEM IS PURPOSELY GENERIC AND LOW-LEVEL
  *      I.E. IT IS NOT ONLY FOR STYLING PURPOSES
  *
@@ -19,7 +19,7 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT 446e1a7
+ * IN SYNC WITH develop BRANCH / COMMIT 8358df8
  */
 
 #pragma once
@@ -36,8 +36,6 @@ public:
     void resize() final;
     void draw() final;
     
-    void drawAlignedText(const StyledLineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
-    
 protected:
     chr::zf::FontManager fontManager;
     
@@ -47,4 +45,6 @@ protected:
     float fontSize;
     std::map<int, StyledLineLayout::Style> styleSheet;
     StyledLineLayout layout;
+    
+    void drawAlignedText(const StyledLineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
 };

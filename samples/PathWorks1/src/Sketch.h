@@ -7,11 +7,25 @@
  */
 
 /*
+ * FEATURES:
+ *
+ * 1) DEMONSTRATE USAGE OF chr::SplinePath, chr::FollowablePath, ETC.
+ * 2) TEXT-RENDERING VIA chr::XFont
+ * 3) SMOOTH TEXT MOTION ON A "FOLLOWABLE" PATH
+ * 4) PARSING OF VECTORIAL-DATA FROM ADOBE'S FXG FILES
+ * 5) SHAPE TESSELATION BASED ON VECTORIAL-DATA
+ * 6) RESOLUTION-INDEPENDENT TEXTURE-SCALING
+ *
+ *
+ * TODO: RE-ADAPT TO OSX RETINA SCREENS
+ */
+
+/*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT 446e1a7
- * IOS: COMMIT 446e1a7
- * ANDROID: COMMIT 446e1a7
+ * OSX: COMMIT 8358df8
+ * IOS: COMMIT 8358df8
+ * ANDROID: COMMIT 8358df8
  */
 
 /*
@@ -40,8 +54,6 @@ public:
     void resize() final;
     void update() final;
     void draw() final;
-    
-    void drawDots(const chr::SplinePath &spline);
 
 protected:
     chr::TextureManager textureManager;
@@ -62,4 +74,6 @@ protected:
     float scale;
     float offset1;
     float offset2;
+    
+    void drawDots(const chr::SplinePath &spline);
 };

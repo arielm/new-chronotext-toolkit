@@ -10,6 +10,8 @@
  * TODO:
  *
  * 1) BEFORE PROGRESSING FURTHER:
+ *    - CHECK IF EasyloggingC++ CAN BE USED:
+ *      https://github.com/easylogging/easyloggingpp
  *    - CHECK IF boost::iostreams CAN BE USED
  *    - STUDY THE "VARIADIC LOG" EXAMPLE FROM "New Tools for Class and Library Authors":
  *      https://github.com/boostcon/cppnow_presentations_2012/raw/master/wed/schurr_cpp11_tools_for_class_authors.pdf

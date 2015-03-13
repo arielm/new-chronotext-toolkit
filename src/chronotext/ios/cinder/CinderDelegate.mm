@@ -255,6 +255,10 @@ namespace chr
     
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
     
+    /*
+     * TODO: THE TIME HAS COME TO RELY ON THE CoreMotion FRAMEWORK
+     */
+    
     void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
     {
         accelFilter = AccelEvent::Filter(filterFactor);

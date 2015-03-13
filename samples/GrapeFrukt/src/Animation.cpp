@@ -8,6 +8,7 @@
 
 #include "Animation.h"
 
+#include "chronotext/Exception.h"
 #include "chronotext/utils/GLUtils.h"
 
 #include "cinder/Xml.h"
@@ -16,17 +17,10 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-Animation::Animation()
-:
-fps(1),
-frameCount(0)
-{}
-
 Animation::Animation(shared_ptr<TextureAtlas> atlas, InputSource::Ref sheetInputSource, InputSource::Ref animationInputSource, float fps)
 :
 atlas(atlas),
-fps(fps),
-frameCount(0)
+fps(fps)
 {
     loadSheet(sheetInputSource);
     loadAnimation(animationInputSource);
@@ -130,7 +124,7 @@ void Animation::loadAnimation(InputSource::Ref inputSource)
         }
         else
         {
-            throw runtime_error("ERROR WHILE PARSING GRAPEFRUKT ANIMATION");
+            throw EXCEPTION(Animation, "ERROR WHILE PARSING GRAPEFRUKT ANIMATION");
         }
     }
 }

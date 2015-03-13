@@ -7,11 +7,24 @@
  */
 
 /*
+ * FEATURES:
+ *
+ * 1) DEMONSTRATES USAGE OF chr::QuadMatrix, chr::xf::FontSequence, ETC.
+ * 2) TEXT-RENDERING VIA chr::XFont
+ * 3) TEXTURE LOADING AND RENDERING
+ *
+ * TODO:
+ *
+ * 1) TEXTURES SHOULD BE RENDERED VIA chr::QuadMatrix AND chr::QuadBatch
+ *    - PRE-REQUISITE: TEXTURE-BATCHING SUPPORT AT THE TOOLKIT'S LEVEL
+ */
+
+/*
  * IN SYNC WITH develop BRANCH
  *
- * OSX: COMMIT 446e1a7
- * IOS: COMMIT 446e1a7
- * ANDROID: COMMIT 446e1a7
+ * OSX: COMMIT 8358df8
+ * IOS: COMMIT 8358df8
+ * ANDROID: COMMIT 8358df8
  */
 
 #pragma once
@@ -27,8 +40,6 @@ public:
     void update() final;
     void draw() final;
     
-    static float oscillate(double t, float min, float max, float freq);
-    
 protected:
     chr::TextureManager textureManager;
     chr::Texture::Ref dot;
@@ -41,4 +52,6 @@ protected:
     float r3;
     float r4;
     float r5;
+    
+    static float oscillate(double t, float min, float max, float freq);
 };

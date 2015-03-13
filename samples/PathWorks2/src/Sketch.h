@@ -7,15 +7,24 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH
+ * FEATURES:
  *
- * OSX: COMMIT 446e1a7
- * IOS: COMMIT 446e1a7
- * ANDROID: COMMIT 446e1a7
+ * 1) DEMONSTRATE USAGE OF chr::SplinePath, chr::FollowablePath, chr::Hairline, ETC.
+ * 2) SMOOTH MOTION ON A "FOLLOWABLE" PATH
+ * 3) PARSING OF VECTORIAL-DATA FROM ADOBE'S FXG FILES
+ * 4) RESOLUTION-INDEPENDENT "HAIRLINE" RENDERING
+ * 5) COMPLEX (SINGLE AND MULTI PORTION) TRIANGLE-STRIPPING
+ *
+ *
+ * TODO: RE-ADAPT TO OSX RETINA SCREENS
  */
 
 /*
- * TODO: RE-ADAPT TO OSX RETINA SCREENS
+ * IN SYNC WITH develop BRANCH
+ *
+ * OSX: COMMIT 8358df8
+ * IOS: COMMIT 8358df8
+ * ANDROID: COMMIT 8358df8
  */
 
 #pragma once
@@ -32,8 +41,6 @@ public:
     void resize() final;
     void update() final;
     void draw() final;
-    
-    void drawDotOnPath(const chr::FollowablePath &path);
     
 protected:
     chr::TextureManager textureManager;
@@ -55,4 +62,6 @@ protected:
     
     float scale;
     float offset;
+    
+    void drawDotOnPath(const chr::FollowablePath &path);
 };

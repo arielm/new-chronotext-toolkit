@@ -57,7 +57,7 @@ void Sketch::draw()
     
     // ---
 
-    std::vector<QuadMatrix::Values> matrixValues;
+    vector<QuadMatrix::Values> matrixValues;
     auto &matrix = font->getMatrix();
     
     font->setSize(TEXT_SIZE);

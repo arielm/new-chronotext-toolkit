@@ -91,8 +91,7 @@ void Sketch::resize()
     scale = getWindowHeight() / REFERENCE_H;
 
     /*
-     * RE-STROKING THE LYS' HAIRLINES UPON SCREEN-SIZE CHANGE:
-     * NECESSARY IN ORDER TO KEEP THE STROKE-WIDTH "HAIRLINE"
+     * RE-STROKING IS NECESSARY IN ORDER TO KEEP THE WIDTH OF THE STROKES HAIRLINE-SIZED
      */
     for (auto &it : lys)
     {

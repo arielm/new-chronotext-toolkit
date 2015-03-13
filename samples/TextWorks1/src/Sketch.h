@@ -9,13 +9,21 @@
 /*
  * FEATURES:
  *
- * 1) DEMONSTRATES HOW TO DRAW CRISP TEXT
+ * 1) DEMONSTRATES UNICODE TEXT-RENDERING VIA chr::ZFont
+ *    - ENGLISH AND HEBREW PROPERLY MIXED, THANKS TO THE "BIDI" ALGORITHM
  *
- * 2) DEMONSTRATES HOW TO KEEP THE SAME PHYSICAL FONT-SIZE ACROSS DEVICES
+ * 2) DEMONSTRATES HOW TO DRAW CRISP TEXT:
+ *    - FONT-SIZE IS DETERMINED BASED ON THE (MOBILE) SCREEN'S DENSITY
+ *
+ * 3) DEMONSTRATES HOW TO KEEP THE SAME PHYSICAL FONT-SIZE ACROSS (MOBILE) DEVICES
+ *
+ *
+ * REMINDER: OSX IS USED AS A SIMULATOR:
+ * - I.E. THE ACTUAL SCREEN'S DENSITY IS NOT TAKEN IN COUNT
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT 446e1a7
+ * IN SYNC WITH develop BRANCH / COMMIT 8358df8
  */
 
 #pragma once
@@ -29,9 +37,9 @@ public:
     void setup() final;
     void draw() final;
     
-    void drawAlignedText(chr::ZFont &font, const std::string &text, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
-
 protected:
     chr::zf::FontManager fontManager;
     std::shared_ptr<chr::ZFont> font;
+    
+    void drawAlignedText(chr::ZFont &font, const std::string &text, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
 };
