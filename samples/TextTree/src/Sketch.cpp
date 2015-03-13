@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -22,23 +22,10 @@ const float TEXT_SIZE = 20;
 const float DOT_SCALE = 0.2f;
 const float GROW_FACTOR = 1.133f;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
-    {
-        dot = textureManager.getTexture("dot.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("American Typewriter_Regular_64.fnt"), XFont::Properties2d());
-    }
+    dot = textureManager.getTexture(InputSource::getResource("dot.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
+    font = fontManager.getFont(InputSource::getResource("American Typewriter_Regular_64.fnt"), XFont::Properties2d());
     
     // ---
     
@@ -49,20 +36,9 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            fontManager.discardTextures();
-            break;
-    }
-}
-
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
+    double now = clock()->getTime();
 
     r1 = oscillate(now, -3, +3, 0.75f);
     r2 = oscillate(now, 6, 24, 1.5f);
@@ -81,8 +57,8 @@ void Sketch::draw()
     
     // ---
 
-    vector<QuadMatrix::Values> M;
-    auto matrix = font->getMatrix();
+    vector<QuadMatrix::Values> matrixValues;
+    auto &matrix = font->getMatrix();
     
     font->setSize(TEXT_SIZE);
     font->setColor(0, 0, 0, 0.75f);
@@ -92,56 +68,56 @@ void Sketch::draw()
     /*
      * BASE OF THE TREE, AT THE BOTTOM OF THE SCREEN
      */
-    matrix->setTranslation(0, REFERENCE_H * 0.5f);
+    matrix.setTranslation(0, REFERENCE_H * 0.5f);
     
-    matrix->rotateZ((-90 + r1) * D2R);
+    matrix.rotateZ((-90 + r1) * D2R);
     TextHelper::drawTransformedText(*font, L" 2 dimensions");
     
-    matrix->rotateZ((r4) * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.rotateZ(+r4 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" are");
     
-    matrix->push();
-    matrix->rotateZ(+r2 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.push();
+    matrix.rotateZ(+r2 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" not enough");
     
-    matrix->rotateZ(r3 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.rotateZ(+r3 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" for");
     
-    matrix->push();
-    matrix->rotateZ(r2 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.push();
+    matrix.rotateZ(+r2 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" text trees  ");
-    M.push_back(matrix->m);
+    matrixValues.push_back(matrix.values);
 
-    matrix->pop();
-    matrix->rotateZ(-r5 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.pop();
+    matrix.rotateZ(-r5 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" interaction  ");
-    M.push_back(matrix->m);
+    matrixValues.push_back(matrix.values);
 
-    matrix->pop();
-    matrix->rotateZ(-r5 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.pop();
+    matrix.rotateZ(-r5 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" fine");
     
-    matrix->rotateZ(r4 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.rotateZ(+r4 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" for");
     
-    matrix->push();
-    matrix->rotateZ(-r3 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.push();
+    matrix.rotateZ(-r3 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" text trees  ");
-    M.push_back(matrix->m);
+    matrixValues.push_back(matrix.values);
     
-    matrix->pop();
-    matrix->rotateZ(+r3 * D2R);
-    matrix->scale(GROW_FACTOR);
+    matrix.pop();
+    matrix.rotateZ(+r3 * D2R);
+    matrix.scale(GROW_FACTOR);
     TextHelper::drawTransformedText(*font, L" fiction  ");
-    M.push_back(matrix->m);
+    matrixValues.push_back(matrix.values);
     
     font->endSequence();
     
@@ -150,10 +126,10 @@ void Sketch::draw()
     gl::color(1, 0, 0, 0.75f);
     dot->begin();
     
-    for (auto &m : M)
+    for (auto &values : matrixValues)
     {
         glPushMatrix();
-        glMultMatrixf(m.data());
+        glMultMatrixf(values.data());
         
         gl::translate(0, -font->getOffsetY(XFont::ALIGN_MIDDLE));
         gl::scale(DOT_SCALE);
@@ -167,5 +143,5 @@ void Sketch::draw()
 
 float Sketch::oscillate(double t, float min, float max, float freq)
 {
-    return min + 0.5 * (max - min) * (1 + math<float>::sin(t * freq));
+    return min + 0.5f * (max - min) * (1 + math<float>::sin(t * freq));
 }

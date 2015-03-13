@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -14,37 +14,23 @@
 
 #include "chronotext/os/Message.h"
 
-#include <boost/asio.hpp>
-
-namespace chronotext
+namespace chr
 {
     class Handler
     {
     public:
-        Handler();
         virtual ~Handler() {}
-
-        template <typename F> bool post(const F &fn)
-        {
-            if (io)
-            {
-                io->post(fn);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        
-        void setIOService(boost::asio::io_service &io);
-        bool sendMessage(const Message &message);
 
         virtual void handleMessage(const Message &message) {}
 
-    protected:
-        boost::asio::io_service *io;
+        /*
+         * RETURNS FALSE IF THE MESSAGE CAN'T BE SENT
+         *
+         * CAUSES:
+         *
+         * - IO-SERVICE IS NOT DEFINED
+         * - THE CONTEXT IS BEING SHUT-DOWN (TODO)
+         */
+        bool sendMessage(const Message &message);
     };
 }
-
-namespace chr = chronotext;

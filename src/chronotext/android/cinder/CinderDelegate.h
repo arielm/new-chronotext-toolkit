@@ -1,137 +1,86 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
-#include <jni.h>
+#include "cinder/Cinder.h"
+
+#if !defined(CINDER_ANDROID)
+#   error UNSUPPORTED PLATFORM
+#endif
+
+// ---
+
+#include "chronotext/cinder/CinderDelegateBase.h"
+#include "chronotext/android/cinder/JNI.h"
+
+#include <boost/asio.hpp>
+
 #include <android/sensor.h>
 
-#include "chronotext/cinder/CinderSketch.h"
-
-#include "cinder/android/LogStream.h"
-
-namespace chronotext
+namespace chr
 {
-    class CinderDelegate
+    class CinderDelegate : public CinderDelegateBase
     {
-        std::shared_ptr<ci::android::dostream> mOutputStream;
-        
-        WindowInfo mWindowInfo;
-        int mDisplayRotation;
-        
-        ci::Timer mTimer;
-        uint32_t mFrameCount;
-        
-        float mAccelFilterFactor;
-        ci::Vec3f mLastAccel, mLastRawAccel;
-        
-        ASensorManager *mSensorManager;
-        const ASensor *mAccelerometerSensor;
-        ASensorEventQueue *mSensorEventQueue;
-        
-        std::shared_ptr<boost::asio::io_service> io;
-        std::shared_ptr<boost::asio::io_service::work> ioWork;
-        
-        static int sensorEventCallback(int fd, int events, void *data)
-        {
-            CinderDelegate *instance = (CinderDelegate*)data;
-            instance->processSensorEvents();
-            
-            return 1;
-        }
-        
-        void processSensorEvents();
-        void accelerated(float x, float y, float z);
-        
-        enum
-        {
-            ACCELEROMETER_ROTATION_DEFAULT = 0,
-            ACCELEROMETER_ROTATION_PORTRAIT,
-            ACCELEROMETER_ROTATION_LANDSCAPE
-        };
-        
-        enum
-        {
-            EVENT_ATTACHED = 1,
-            EVENT_DETACHED,
-            EVENT_PAUSED,
-            EVENT_RESUMED,
-            EVENT_SHOWN,
-            EVENT_HIDDEN,
-            EVENT_BACKGROUND,
-            EVENT_FOREGROUND,
-            EVENT_BACK_KEY
-        };
-        
     public:
-        JavaVM *mJavaVM;
-        jobject mJavaContext;
-        jobject mJavaListener;
+        /*
+         * INVOKED ON THE MAIN-THREAD
+         *
+         * RENDERER'S THREAD IS NOT AVAILABLE (EITHER NOT CREATED YET, OR ALREADY DESTROYED)
+         */
+        bool performInit(JNIEnv *env, jobject androidContext, jobject androidDisplay, const ci::Vec2i &displaySize, float displayDensity);
+        void performUninit(JNIEnv *env);
         
-        CinderSketch *sketch;
+        /*
+         * INVOKED ON THE RENDERER'S THREAD
+         *
+         * GL-CONTEXT IS VALID
+         */
+        void performSetup(JNIEnv *env, const ci::Vec2i &size);
+        void performShutdown(JNIEnv *env);
         
-        CinderDelegate()
-        :
-        mLastAccel(ci::Vec3f::zero()),
-        mLastRawAccel(ci::Vec3f::zero())
-        {}
-        
-        virtual ~CinderDelegate()
-        {
-            CI_LOGD("CinderDelegate DELETED");
-        }
-        
-        void launch(JavaVM *javaVM, jobject javaContext, jobject javaListener);
-        
-        void setup(int width, int height, float diagonal, float density, int displayRotation);
-        void shutdown();
-        
-        void draw();
-        void event(int eventId);
-        
+        void performResize(const ci::Vec2i &size);
+        void performUpdate();
+        void performDraw();
+
         void addTouch(int index, float x, float y);
         void updateTouch(int index, float x, float y);
         void removeTouch(int index, float x, float y);
         
-        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f);
-        void disableAccelerometer();
+        void messageFromBridge(int what, const std::string &body = "") final;
+        void sendMessageToBridge(int what, const std::string &body = "") final;
         
-        std::ostream& console();
-        boost::asio::io_service& io_service() const;
+        void handleEvent(int eventId) final;
+        void performAction(int actionId) final;
 
-        double getElapsedSeconds() const;
-        uint32_t getElapsedFrames() const;
+        void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
+        void disableAccelerometer() final;
         
-        int getWindowWidth() const;
-        int getWindowHeight() const;
-        ci::Vec2f getWindowCenter() const;
-        ci::Vec2i getWindowSize() const;
-        float getWindowAspectRatio() const;
-        ci::Area getWindowBounds() const;
-        float getWindowContentScale() const;
-        WindowInfo getWindowInfo() const;
+        ci::JsonTree jsonQuery(const char *methodName) final;
+
+    protected:
+        int updateCount = 0;
+
+        std::shared_ptr<boost::asio::io_service> io;
+        std::shared_ptr<boost::asio::io_service::work> ioWork;
         
-        virtual void action(int actionId);
-        virtual void receiveMessageFromSketch(int what, const std::string &body);
-        virtual void sendMessageToSketch(int what, const std::string &body);
+        ASensorManager *sensorManager;
+        const ASensor *accelerometerSensor;
+        ASensorEventQueue *sensorEventQueue;
         
-        // ---------------------------------------- JNI ----------------------------------------
+        void startIOService();
+        void stopIOService();
         
-        JNIEnv* getJNIEnv();
-        
-        void callVoidMethodOnJavaListener(const char *name, const char *sig, ...);
-        jboolean callBooleanMethodOnJavaListener(const char *name, const char *sig, ...);
-        jchar callCharMethodOnJavaListener(const char *name, const char *sig, ...);
-        jint callIntMethodOnJavaListener(const char *name, const char *sig, ...);
-        jlong callLongMethodOnJavaListener(const char *name, const char *sig, ...);
-        jfloat callFloatMethodOnJavaListener(const char *name, const char *sig, ...);
-        jdouble callDoubleMethodOnJavaListener(const char *name, const char *sig, ...);
+        void createSensorEventQueue();
+        void destroySensorEventQueue();
+        void pollSensorEvents();
+
+        void handleAcceleration(ASensorEvent event);
+        int getDisplayRotation();
     };
 }
-
-namespace chr = chronotext;

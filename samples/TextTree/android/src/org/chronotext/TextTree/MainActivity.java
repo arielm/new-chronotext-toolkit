@@ -1,48 +1,60 @@
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
 
 package org.chronotext.TextTree;
 
-import org.chronotext.cinder.CinderDelegate;
+import org.chronotext.cinder.CinderBridge;
+import org.chronotext.utils.Utils;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 public class MainActivity extends Activity
 {
   static
   {
+    Utils.DEBUG = true;
+    Utils.TAG = "cinder";
+
     System.loadLibrary("TextTree");
   }
 
-  CinderDelegate delegate;
+  CinderBridge bridge;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
 
-    delegate = new CinderDelegate(this, null);
-    setContentView(delegate.getView());
+    bridge = new CinderBridge(this);
+    setContentView(bridge.getView());
   }
 
   @Override
   protected void onPause()
   {
     super.onPause();
-    delegate.onPause();
+    bridge.onPause();
   }
 
   @Override
   protected void onResume()
   {
     super.onResume();
-    delegate.onResume();
+    bridge.onResume();
   }
 
   @Override
-  protected void onDestroy()
+  public void onBackPressed()
   {
-    super.onDestroy();
-    delegate.onDestroy();
+    if (!bridge.onBackPressed())
+    {
+      super.onBackPressed();
+    }
   }
 }

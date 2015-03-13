@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -13,23 +13,11 @@
 using namespace ci;
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
-    TextureAtlas::TextureAtlas(TextureManager &textureManager, const string &resourceName, bool useMipmap)
+    TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap)
     :
     textureManager(textureManager)
-    {
-        init(InputSource::getResource(resourceName), useMipmap);
-    }
-    
-    TextureAtlas::TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap)
-    :
-    textureManager(textureManager)
-    {
-        init(inputSource, useMipmap);
-    }
-    
-    void TextureAtlas::init(InputSourceRef inputSource, bool useMipmap)
     {
         XmlTree doc(inputSource->loadDataSource());
         
@@ -80,29 +68,28 @@ namespace chronotext
         }
     }
     
-    SpriteRef TextureAtlas::getSprite(const string &path) const
+    Sprite::Ref TextureAtlas::getSprite(const string &path) const
     {
         auto it = sprites.find(path);
         
-        if (it == sprites.end())
-        {
-            return SpriteRef();
-        }
-        else
+        if (it != sprites.end())
         {
             return it->second;
         }
+        
+        return nullptr;
     }
     
-    vector<SpriteRef> TextureAtlas::getAnimationSprites(const string &path) const
+    vector<Sprite::Ref> TextureAtlas::getAnimationSprites(const string &path) const
     {
-        vector<SpriteRef> animationSprites;
+        vector<Sprite::Ref> animationSprites;
+        
         string pattern = path + "%d";
         
         for (auto &it : sprites)
         {
             int i = -1;
-            sscanf(it.first.c_str(), pattern.c_str(), &i);
+            sscanf(it.first.data(), pattern.data(), &i); // XXX
             
             if (i != -1)
             {

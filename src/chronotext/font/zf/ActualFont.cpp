@@ -2,19 +2,18 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/zf/ActualFont.h"
-#include "chronotext/font/zf/LineLayout.h"
+#include "chronotext/font/zf/FontManager.h"
 #include "chronotext/utils/Utils.h"
 
 #include "hb-ft.h"
 
 using namespace std;
 using namespace ci;
-using namespace chr;
 
 /*
  See http://www.microsoft.com/typography/otspec/name.htm for a list of some
@@ -24,6 +23,7 @@ using namespace chr;
  (it promises most wide unicode, and if that will be slower that UCS-2 -
  left as an excercise to check.)
  */
+
 static FT_Error force_ucs2_charmap(FT_Face face)
 {
     for (int i = 0; i < face->num_charmaps; i++)
@@ -47,7 +47,7 @@ static const FT_ULong SPACE_SEPARATORS[] =
 
 static const size_t SPACE_SEPARATORS_COUNT = sizeof(SPACE_SEPARATORS) / sizeof(FT_ULong);
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -113,31 +113,31 @@ namespace chronotext
             }
         }
         
-        void ActualFont::reload()
+        bool ActualFont::reload()
         {
             if (!loaded)
             {
                 FT_Error error;
                 
-                if (descriptor.forceMemoryLoad || !descriptor.source->isFile())
+                if (descriptor.forceMemoryLoad || !descriptor.inputSource->isFile())
                 {
-                    memoryBuffer = descriptor.source->loadDataSource()->getBuffer();
+                    memoryBuffer = descriptor.inputSource->loadDataSource()->getBuffer();
                     error = FT_New_Memory_Face(ftHelper->getLib(), (FT_Byte*)memoryBuffer.getData(), memoryBuffer.getDataSize(), descriptor.faceIndex, &ftFace);
                 }
                 else
                 {
-                    error = FT_New_Face(ftHelper->getLib(), descriptor.source->getFilePath().c_str(), descriptor.faceIndex, &ftFace);
+                    error = FT_New_Face(ftHelper->getLib(), descriptor.inputSource->getFilePath().c_str(), descriptor.faceIndex, &ftFace);
                 }
                 
                 if (error)
                 {
-                    throw runtime_error("FREETYPE: ERROR " + toString(error));
+                    throw EXCEPTION(ActualFont, "FREETYPE: ERROR " + toString(error));
                 }
                 
                 if (force_ucs2_charmap(ftFace))
                 {
                     FT_Done_Face(ftFace); ftFace = nullptr;
-                    throw runtime_error("HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
+                    throw EXCEPTION(ActualFont, "HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
                 
                 // ---
@@ -183,7 +183,7 @@ namespace chronotext
                 
                 auto os2 = (TT_OS2*)FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2);
                 
-                if (os2 && (os2->version != 0xFFFF))
+                if (os2 && (os2->version != 0xFFFF) && (os2->yStrikeoutPosition != 0))
                 {
                     metrics.strikethroughOffset = FT_MulFix(os2->yStrikeoutPosition, ftFace->size->metrics.y_scale) * scale.y;
                 }
@@ -216,8 +216,11 @@ namespace chronotext
                 // ---
                 
                 loaded = true;
-                LOGD << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
+                
+                LOGI_IF(FontManager::LOG_VERBOSE) << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
             }
+            
+            return loaded;
         }
         
         void ActualFont::unload()
@@ -225,7 +228,8 @@ namespace chronotext
             if (loaded)
             {
                 loaded = false;
-                LOGD << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
+                
+                LOGI_IF(FontManager::LOG_VERBOSE) << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
                 
                 discardTextures();
                 
@@ -249,13 +253,11 @@ namespace chronotext
         
         void ActualFont::reloadTextures()
         {
-            reload();
-            
-            if (loaded)
+            if (reload())
             {
                 for (auto &texture : textures)
                 {
-                    if (!texture->id)
+                    if (!texture->glId)
                     {
                         texture->upload(GlyphData(ftFace, texture->codepoint, useMipmap, padding));
                     }
@@ -263,9 +265,9 @@ namespace chronotext
             }
         }
         
-        size_t ActualFont::getTextureMemoryUsage() const
+        int64_t ActualFont::getTextureMemoryUsage() const
         {
-            size_t total = 0;
+            int64_t total = 0;
             
             for (auto &texture : textures)
             {
@@ -277,7 +279,7 @@ namespace chronotext
         
         ActualFont::Glyph* ActualFont::fillQuad(Quad &quad, const Shape &shape, const Vec2f &position, float sizeRatio)
         {
-            auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout HAVE BEEN PREVIOUSLY PRELOADED
+            auto glyph = shape.glyph; // VALID ONLY IF THE PARENT LineLayout IS LOADED
             
             if (!glyph)
             {
@@ -308,13 +310,11 @@ namespace chronotext
         {
             Glyph *glyph = nullptr;
             
-            reload();
-            
-            if (loaded)
+            if (reload())
             {
-                auto entry = glyphs.find(codepoint);
+                auto it = glyphs.find(codepoint);
                 
-                if (entry == glyphs.end())
+                if (it == glyphs.end())
                 {
                     glyph = createGlyph(codepoint);
                     
@@ -334,7 +334,7 @@ namespace chronotext
                 }
                 else
                 {
-                    glyph = entry->second.get();
+                    glyph = it->second.get();
                 }
             }
             
@@ -358,9 +358,7 @@ namespace chronotext
         
         void ActualFont::reloadTexture(FontTexture *texture)
         {
-            reload();
-            
-            if (loaded)
+            if (reload())
             {
                 texture->upload(GlyphData(ftFace, texture->codepoint, useMipmap, padding));
             }

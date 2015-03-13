@@ -1,21 +1,25 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
  * FEATURES:
  *
- * 1) DEMONSTRATES HOW TO USE ZFont'S TAGGING-SYSTEM:
+ * 1) DEMONSTRATES HOW TO USE ZFont's TAGGING-SYSTEM:
  *    - THE SYSTEM IS PURPOSELY GENERIC AND LOW-LEVEL
  *      I.E. IT IS NOT ONLY FOR STYLING PURPOSES
  *
  * 2) DEMONSTRATES USAGE OF THE TAGGING-SYSTEM FOR STYLING PURPOSES:
  *    - THE StyledLineLayout CLASS ALLOWS TO CREATE A COMPOSITE
  *      LINE-LAYOUT USING DIFFERENT FONTS AND COLORS
+ */
+
+/*
+ * IN SYNC WITH develop BRANCH / COMMIT 8358df8
  */
 
 #pragma once
@@ -27,6 +31,12 @@
 
 class Sketch : public chr::CinderSketch
 {
+public:
+    void setup() final;
+    void resize() final;
+    void draw() final;
+    
+protected:
     chr::zf::FontManager fontManager;
     
     std::shared_ptr<chr::ZFont> font1;
@@ -35,14 +45,6 @@ class Sketch : public chr::CinderSketch
     float fontSize;
     std::map<int, StyledLineLayout::Style> styleSheet;
     StyledLineLayout layout;
-
-public:
-    Sketch(void *context, void *delegate = NULL);
-    
-    void setup(bool renewContext);
-    void event(int id);
-    void resize();
-    void draw();
     
     void drawAlignedText(const StyledLineLayout &layout, const ci::Vec2f &position, chr::ZFont::Alignment alignX, chr::ZFont::Alignment alignY);
 };

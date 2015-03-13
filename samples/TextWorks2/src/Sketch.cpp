@@ -1,53 +1,45 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "Sketch.h"
 
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/GLUtils.h"
 
 using namespace std;
 using namespace ci;
 using namespace chr;
-using namespace zf;
+using namespace chr::zf;
 
 const float FONT_SIZE = 64; // THE MAXIMAL FONT-SIZE
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (!renewContext)
-    {
-        fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-        
-        font1 = fontManager.getCachedFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
-        font2 = fontManager.getCachedFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
-        
-        styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
-        styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));
-        styleSheet[2] = StyledLineLayout::Style(font1, ColorA(1, 0, 0, 0.75f));
-                              
-        // ---
-        
-        TextLine line;
-        line.addChunk("Spouse and ", 0);
-        line.addChunk("helpmate", 1);
-        line.addChunk(" of אָדָם קַדְמוֹן: Heva, ", 0);
-        line.addChunk("naked", 2);
-        line.addChunk(" Eve", 0);
-        
-        fontManager.itemizer.processLine(line);
-        layout = StyledLineLayout(line, styleSheet);
-    }
+    fontManager.loadConfig(InputSource::getResource("font-config.xml"));
+    
+    font1 = fontManager.getFont("serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(FONT_SIZE));
+    font2 = fontManager.getFont("serif", ZFont::STYLE_BOLD, ZFont::Properties2d(FONT_SIZE));
+    
+    styleSheet[0] = StyledLineLayout::Style(font1, ColorA(0, 0, 0, 0.85f));
+    styleSheet[1] = StyledLineLayout::Style(font2, ColorA(0, 0, 0, 0.85f));
+    styleSheet[2] = StyledLineLayout::Style(font1, ColorA(1, 0, 0, 0.75f));
+    
+    // ---
+    
+    TextLine line;
+    line.addChunk("Spouse and ", 0);
+    line.addChunk("helpmate", 1);
+    line.addChunk(" of אָדָם קַדְמוֹן: Heva, ", 0);
+    line.addChunk("naked", 2);
+    line.addChunk(" Eve", 0);
+    
+    fontManager.itemizer->processLine(line);
+    layout = StyledLineLayout(line, styleSheet);
     
     // ---
     
@@ -56,16 +48,6 @@ void Sketch::setup(bool renewContext)
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-}
-
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            fontManager.discardTextures();
-            break;
-    }
 }
 
 void Sketch::resize()

@@ -1,0 +1,94 @@
+{
+    "IPHONE_3GS": {
+        "display": {
+            "size": [320, 480],
+            "diagonal": 3.54
+        }
+    },
+    "IPHONE_4": {
+        "display": {
+            "size": [320, 480],
+            "diagonal": 3.54,
+            "contentScale": 2
+        }
+    },
+    "IPHONE_5": {
+        "display": {
+            "size": [320, 568],
+            "diagonal": 4,
+            "contentScale": 2
+        }
+    },
+    "IPAD_1": {
+        "display": {
+            "size": [1024, 768],
+            "diagonal": 9.7
+        }
+    },
+    "IPAD_MINI_1": {
+        "display": {
+            "size": [1024, 768],
+            "diagonal": 7.9
+        }
+    },
+    "GALAXY_MINI_2": {
+        "display": {
+            "size": [320, 480],
+            "diagonal": 3.27
+        }
+    },
+    "GALAXY_S": {
+        "display": {
+            "size": [400, 800],
+            "diagonal": 4
+        }
+    },
+    "GALAXY_S3": {
+        "display": {
+            "size": [720, 1280],
+            "diagonal": 4.8
+        }
+    },
+    "GALAXY_S4": {
+        "display": {
+            "size": [1080, 1920],
+            "diagonal": 5
+        }
+    },
+    "GALAXY_TAB_10": {
+        "display": {
+            "size": [1280, 800],
+            "diagonal": 10.1
+        }
+    },
+    "XOOM_1": {
+        "display": {
+            "size": [1280, 752],
+            "diagonal": 10.08
+        }
+    },
+    "NEXUS_7_2012": {
+        "display": {
+            "size": [800, 1280],
+            "diagonal": 7.02
+        },
+        "window": {
+            "size": [734, 1280]
+        }
+    },
+    "NEXUS_7_2013": {
+        "display": {
+            "size": [120, 1920],
+            "diagonal": 7.02
+        },
+        "window": {
+            "size": [1104, 1920]
+        }
+    },
+    "KINDLE_FIRE": {
+        "display": {
+            "size": [800, 1280],
+            "diagonal": 7
+        }
+    }
+}

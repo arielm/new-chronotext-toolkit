@@ -2,35 +2,41 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
-#include "chronotext/texture/TextureHelper.h"
 #include "chronotext/texture/Texture.h"
 
 #include <map>
+#include <atomic>
 
-namespace chronotext
+namespace chr
 {
     class TextureManager
     {
     public:
-        TextureRef getTexture(const std::string &resourceName, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
-        TextureRef getTexture(InputSourceRef inputSource, bool useMipmap = false, TextureRequest::Flags flags = TextureRequest::FLAGS_NONE);
-        TextureRef getTexture(const TextureRequest &textureRequest);
+        static std::atomic<bool> LOG_VERBOSE;
+        static std::atomic<bool> PROBE_MEMORY;
+
+        inline Texture::Ref getTexture(InputSource::Ref inputSource, bool useMipmap = false, Texture::Request::Flags flags = Texture::Request::FLAGS_NONE)
+        {
+            return getTexture(Texture::Request(inputSource, useMipmap, flags));
+        }
         
-        bool remove(TextureRef texture);
-        void clear();
+        Texture::Ref getTexture(const Texture::Request &request); // CAN THROW
+        Texture::Ref findTexture(const Texture::Request &request) const;
         
-        void discard();
-        void reload();
+        void discardTexture(Texture::Ref texture);
+        bool reloadTexture(Texture::Ref texture); // CAN THROW
+        
+        void discardTextures(int tag = -1);
+        void reloadTextures(int tag = -1); // CAN THROW
         
     protected:
-        std::map<TextureRequest, TextureRef> textures;
+        int textureCounter = -1;
+        std::map<Texture::Request, Texture::Ref> textures;
     };
 }
-
-namespace chr = chronotext;

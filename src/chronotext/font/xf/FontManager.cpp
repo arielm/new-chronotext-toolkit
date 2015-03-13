@@ -2,18 +2,17 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/xf/FontManager.h"
 #include "chronotext/utils/Utils.h"
 
-using namespace ci;
 using namespace std;
-using namespace chr;
+using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace xf
     {
@@ -75,11 +74,11 @@ namespace chronotext
         
         // ---
         
-        FontTexture::FontTexture(FontAtlas *atlas, InputSourceRef inputSource)
+        FontTexture::FontTexture(FontAtlas *atlas, InputSource::Ref inputSource)
         :
         width(atlas->width),
         height(atlas->height),
-        id(0),
+        glId(0),
         inputSource(inputSource)
         {
             upload(atlas);
@@ -95,10 +94,10 @@ namespace chronotext
             assert(width == atlas->width);
             assert(height == atlas->height);
             
-            if (!id)
+            if (!glId)
             {
-                glGenTextures(1, &id);
-                glBindTexture(GL_TEXTURE_2D, id);
+                glGenTextures(1, &glId);
+                glBindTexture(GL_TEXTURE_2D, glId);
                 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -115,10 +114,10 @@ namespace chronotext
                 
                 // ---
                 
-                LOGD <<
+                LOGI_IF(FontManager::LOG_VERBOSE) <<
                 "FONT UPLOADED: " <<
                 inputSource->getFilePathHint() << " | " <<
-                id << " | " <<
+                glId << " | " <<
                 width << "x" << height  <<
                 endl;
             }
@@ -126,23 +125,23 @@ namespace chronotext
         
         void FontTexture::discard()
         {
-            if (id)
+            if (glId)
             {
-                LOGD <<
+                LOGI_IF(FontManager::LOG_VERBOSE) <<
                 "FONT DISCARDED: " <<
-                id <<
+                glId <<
                 endl;
                 
                 // ---
                 
-                glDeleteTextures(1, &id);
-                id = 0;
+                glDeleteTextures(1, &glId);
+                glId = 0;
             }
         }
         
-        void FontTexture::reload()
+        bool FontTexture::reload()
         {
-            if (!id)
+            if (!glId)
             {
                 FontData *data;
                 FontAtlas *atlas;
@@ -153,31 +152,33 @@ namespace chronotext
                 upload(atlas);
                 delete atlas;
             }
+            
+            return glId;
         }
         
         void FontTexture::bind()
         {
             reload();
-            glBindTexture(GL_TEXTURE_2D, id);
+            glBindTexture(GL_TEXTURE_2D, glId);
         }
         
         size_t FontTexture::getMemoryUsage() const
         {
-            if (id)
+            if (glId)
             {
-                return size_t(width * height * 1.333f);
+                return width * height * 1.33;
             }
-            else
-            {
-                return 0;
-            }
+            
+            return 0;
         }
         
         // ---
         
-        std::shared_ptr<Font> FontManager::getCachedFont(InputSourceRef inputSource, const Font::Properties &properties)
+        atomic<bool> FontManager::LOG_VERBOSE (false);
+        
+        std::shared_ptr<Font> FontManager::getFont(InputSource::Ref inputSource, const Font::Properties &properties)
         {
-            auto uri = inputSource->getURI();
+            const auto &uri = inputSource->getURI();
             
             auto key = make_pair(uri, properties);
             auto it1 = fonts.find(key);
@@ -186,33 +187,31 @@ namespace chronotext
             {
                 return it1->second;
             }
+            
+            FontData *data;
+            FontTexture *texture;
+            auto it2 = fontDataAndTextures.find(uri);
+            
+            if (it2 == fontDataAndTextures.end())
+            {
+                FontAtlas *atlas;
+                tie(data, atlas) = fetchFontDataAndAtlas(inputSource); // CAN THROW
+                
+                texture = new FontTexture(atlas, inputSource);
+                delete atlas;
+                
+                fontDataAndTextures[uri] = make_pair(unique_ptr<FontData>(data), unique_ptr<FontTexture>(texture));
+            }
             else
             {
-                FontData *data;
-                FontTexture *texture;
-                auto it2 = fontDataAndTextures.find(uri);
-                
-                if (it2 == fontDataAndTextures.end())
-                {
-                    FontAtlas *atlas;
-                    tie(data, atlas) = fetchFontDataAndAtlas(inputSource); // CAN THROW
-                    
-                    texture = new FontTexture(atlas, inputSource);
-                    delete atlas;
-                    
-                    fontDataAndTextures[uri] = make_pair(unique_ptr<FontData>(data), unique_ptr<FontTexture>(texture));
-                }
-                else
-                {
-                    data = it2->second.first.get();
-                    texture = it2->second.second.get();
-                }
-                
-                auto font = shared_ptr<Font>(new Font(*this, data, texture, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
-                fonts[key] = font;
-                
-                return font;
+                data = it2->second.first.get();
+                texture = it2->second.second.get();
             }
+            
+            auto font = shared_ptr<Font>(new Font(*this, data, texture, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
+            fonts[key] = font;
+            
+            return font;
         }
         
         void FontManager::unload(shared_ptr<Font> font)
@@ -229,7 +228,7 @@ namespace chronotext
             discardUnusedTextures();
         }
         
-        void FontManager::unload(InputSourceRef inputSource)
+        void FontManager::unload(InputSource::Ref inputSource)
         {
             for (auto it = fonts.begin(); it != fonts.end();)
             {
@@ -254,9 +253,9 @@ namespace chronotext
         
         void FontManager::discardTextures()
         {
-            for (auto &it : fontDataAndTextures)
+            for (auto &element : fontDataAndTextures)
             {
-                it.second.second->discard();
+                element.second.second->discard();
             }
         }
         
@@ -264,14 +263,14 @@ namespace chronotext
         {
             set<FontTexture*> texturesInUse;
             
-            for (auto &it1 : fonts)
+            for (auto &font : fonts)
             {
-                auto &uri = it1.first.first;
-                auto it2 = fontDataAndTextures.find(uri);
+                const auto &uri = font.first.first;
+                auto it = fontDataAndTextures.find(uri);
                 
-                if (it2 != fontDataAndTextures.end())
+                if (it != fontDataAndTextures.end())
                 {
-                    texturesInUse.insert(it2->second.second.get());
+                    texturesInUse.insert(it->second.second.get());
                 }
             }
             
@@ -285,9 +284,9 @@ namespace chronotext
         {
             size_t total = 0;
             
-            for (auto &it : fontDataAndTextures)
+            for (auto &element : fontDataAndTextures)
             {
-                total += it.second.second->getMemoryUsage();
+                total += element.second.second->getMemoryUsage();
             }
             
             return total;
@@ -297,36 +296,36 @@ namespace chronotext
         {
             set<FontTexture*> texturesInUse;
             
-            for (auto &it1 : fonts)
+            for (auto &font : fonts)
             {
-                auto &uri = it1.first.first;
-                auto it2 = fontDataAndTextures.find(uri);
+                const auto &uri = font.first.first;
+                auto it = fontDataAndTextures.find(uri);
                 
-                if (it2 != fontDataAndTextures.end())
+                if (it != fontDataAndTextures.end())
                 {
-                    texturesInUse.insert(it2->second.second.get());
+                    texturesInUse.insert(it->second.second.get());
                 }
             }
             
-            for (auto &it : fontDataAndTextures)
+            for (auto &element : fontDataAndTextures)
             {
-                if (!texturesInUse.count(it.second.second.get()))
+                if (!texturesInUse.count(element.second.second.get()))
                 {
-                    it.second.second->discard();
+                    element.second.second->discard();
                 }
             }
         }
         
-        std::pair<FontData*, FontAtlas*> FontManager::fetchFontDataAndAtlas(InputSourceRef source)
+        std::pair<FontData*, FontAtlas*> FontManager::fetchFontDataAndAtlas(InputSource::Ref source)
         {
             auto in = source->loadDataSource()->createStream(); // CAN THROW
             
             string version;
             in->readFixedString(&version, 10);
             
-            if (version != "XFONT.003")
+            if (version != "XFONT.004")
             {
-                throw runtime_error("Font: WRONG FORMAT");
+                throw EXCEPTION(xf::FontManager, "WRONG FORMAT");
             }
             
             // ---
@@ -340,10 +339,10 @@ namespace chronotext
             in->readLittle(&data->height);
             in->readLittle(&data->ascent);
             in->readLittle(&data->descent);
-            in->readLittle(&data->spaceAdvance);
-            in->readLittle(&data->strikethroughFactor);
-            in->readLittle(&data->underlineOffset);
             in->readLittle(&data->lineThickness);
+            in->readLittle(&data->underlineOffset);
+            in->readLittle(&data->strikethroughOffset);
+            in->readLittle(&data->spaceAdvance);
             
             int atlasWidth;
             int atlasHeight;
@@ -402,7 +401,7 @@ namespace chronotext
             return make_pair(data, atlas);
         }
         
-        const vector<GLushort>& FontManager::getIndices(int capacity)
+        const vector<uint16_t>& FontManager::getIndices(int capacity)
         {
             if (capacity * 6 > indices.size())
             {

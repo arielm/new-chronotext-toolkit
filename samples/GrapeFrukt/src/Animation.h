@@ -1,8 +1,8 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -60,8 +60,8 @@ class Animation
     };
     
 public:
-    Animation();
-    Animation(std::shared_ptr<chr::TextureAtlas> atlas, chr::InputSourceRef sheetInputSource, chr::InputSourceRef animationInputSource, float fps = 24);
+    Animation() = default;
+    Animation(std::shared_ptr<chr::TextureAtlas> atlas, chr::InputSource::Ref sheetInputSource, chr::InputSource::Ref animationInputSource, float fps = 24);
     
     int getFrameCount() const;
     float getDuration() const;
@@ -72,12 +72,12 @@ public:
     
 protected:
     std::shared_ptr<chr::TextureAtlas> atlas;
-    float fps;
-    int frameCount;
+    float fps = 1;
+    int frameCount = 0;
 
     std::map<std::string, std::unique_ptr<Item>> itemMap;
     std::vector<Item*> itemList;
 
-    void loadSheet(chr::InputSourceRef inputSource);
-    void loadAnimation(chr::InputSourceRef inputSource);
+    void loadSheet(chr::InputSource::Ref inputSource);
+    void loadAnimation(chr::InputSource::Ref inputSource);
 };

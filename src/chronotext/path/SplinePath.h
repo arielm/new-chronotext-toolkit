@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -24,24 +24,20 @@
 
 #include "chronotext/path/FollowablePath.h"
 
-#include "cinder/DataSource.h"
-#include "cinder/DataTarget.h"
-
-namespace chronotext
+namespace chr
 {
     class SplinePath
     {
     public:
-        typedef enum
+        enum Type
         {
             TYPE_BSPLINE,
             TYPE_CATMULL_ROM
-        }
-        Type;
+        };
         
         SplinePath(int capacity = 0);
         SplinePath(const std::vector<ci::Vec2f> &points);
-        SplinePath(ci::DataSourceRef source);
+        SplinePath(InputSource::Ref inputSource);
 
         void read(ci::DataSourceRef source);
         void write(ci::DataTargetRef target);
@@ -60,7 +56,7 @@ namespace chronotext
         bool isClosed() const;
         
         void flush(Type type, FollowablePath &path, float tol = 1) const;
-        inline FollowablePath flush(Type type, float tol = 1)  const { FollowablePath path; flush(type, path, tol); return path; }
+        inline FollowablePath flush(Type type, float tol = 1) const { FollowablePath path; flush(type, path, tol); return path; }
         
     protected:
         std::vector<ci::Vec2f> points;
@@ -87,5 +83,3 @@ namespace chronotext
         return ci::Vec2f(w0 * in[0].x + w1 * in[1].x + w2 * in[2].x + w3 * in[3].x, w0 * in[0].y + w1 * in[1].y + w2 * in[2].y + w3 * in[3].y) / 2;
     }
 }
-
-namespace chr = chronotext;

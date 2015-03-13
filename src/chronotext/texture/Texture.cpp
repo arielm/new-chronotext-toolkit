@@ -2,74 +2,205 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/texture/Texture.h"
 #include "chronotext/texture/TextureHelper.h"
+#include "chronotext/texture/TextureManager.h"
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
+using namespace chr::utils;
 
-namespace chronotext
+namespace chr
 {
-    Texture::Texture(InputSourceRef inputSource, bool useMipmap, TextureRequest::Flags flags)
+    Texture::Texture(const Request &request, ci::gl::Texture *target, int uniqueId)
     :
-    request(TextureRequest(inputSource, useMipmap, flags))
+    request(request),
+    uniqueId(uniqueId),
+    target(nullptr)
     {
-        setTarget(TextureHelper::loadTexture(request));
+        setTarget(target);
     }
-    
-    Texture::Texture(const TextureRequest &textureRequest)
-    :
-    request(textureRequest)
+
+    Texture::~Texture()
     {
-        setTarget(TextureHelper::loadTexture(request));
-    }
-    
-    Texture::Texture(const TextureData &textureData)
-    :
-    request(textureData.request)
-    {
-        setTarget(TextureHelper::uploadTextureData(textureData));
+        resetTarget();
     }
     
     void Texture::discard()
     {
-        if (target)
-        {
-            target.reset();
-        }
+        resetTarget();
     }
     
-    void Texture::reload()
+    bool Texture::reload()
     {
         if (!target)
         {
-            setTarget(TextureHelper::loadTexture(request));
+            setTarget(TextureHelper::loadTarget(request));
+        }
+        
+        return bool(target);
+    }
+    
+    int64_t Texture::getMemoryUsage() const
+    {
+        return memoryUsage;
+    }
+    
+    int Texture::getWidth() const
+    {
+        return width;
+    }
+    
+    int Texture::getHeight() const
+    {
+        return height;
+    }
+    
+    Vec2i Texture::getSize() const
+    {
+        return Vec2i(width, height);
+    }
+    
+    int Texture::getCleanWidth() const
+    {
+        return width * maxU;
+    }
+    
+    int Texture::getCleanHeight() const
+    {
+        return height * maxV;
+    }
+    
+    Vec2i Texture::getCleanSize() const
+    {
+        return Vec2i(width * maxU, height * maxV);
+    }
+    
+    float Texture::getMaxU() const
+    {
+        return maxU;
+    }
+    
+    float Texture::getMaxV() const
+    {
+        return maxV;
+    }
+    
+    Vec2f Texture::getMaxUV() const
+    {
+        return Vec2f(maxU, maxV);
+    }
+    
+    void Texture::setTarget(ci::gl::Texture* target)
+    {
+        if (!target)
+        {
+            resetTarget();
+        }
+        else if (!Texture::target)
+        {
+            auto it = TextureHelper::records.find(target);
+            
+            if (it == TextureHelper::records.end())
+            {
+                throw EXCEPTION(Texture, "UNREGISTERED TARGET");
+            }
+            
+            const auto &record = it->second;
+            
+            // ---
+            
+            Texture::target = target;
+            memoryUsage = record.memoryUsage;
+            
+            glId = target->getId();
+            width = target->getWidth();
+            height = target->getHeight();
+            maxU = target->getMaxU();
+            maxV = target->getMaxV();
+            
+            // ---
+            
+            stringstream memoryStats;
+            
+            if (TextureManager::PROBE_MEMORY)
+            {
+                auto memoryInfo = getMemoryInfo();
+                
+                auto delta1 = memory::compare(record.memoryInfo[0], record.memoryInfo[1]);
+                auto delta2 = memory::compare(record.memoryInfo[1], memoryInfo);
+                
+                memoryStats << " | " <<
+                format::bytes(memoryUsage) << ", " <<
+                format::bytes(delta1) << ", " <<
+                format::bytes(delta2) << " " <<
+                memoryInfo;
+            }
+            
+            // ---
+            
+            LOGI_IF(TextureManager::LOG_VERBOSE) <<
+            "TEXTURE UPLOADED: " <<
+            request.inputSource->getFilePathHint() << " | " <<
+            uniqueId << " | " <<
+            width << "x" << height <<
+            memoryStats.str() <<
+            endl;
         }
     }
     
-    TextureData Texture::fetchTextureData()
+    void Texture::resetTarget()
     {
-        return TextureHelper::fetchTextureData(request);
+        if (target)
+        {
+            MemoryInfo memoryInfo1;
+            
+            if (TextureManager::PROBE_MEMORY)
+            {
+                memoryInfo1 = getMemoryInfo();
+            }
+
+            delete target;
+            target = nullptr;
+            
+            glId = 0;
+            
+            // ---
+            
+            stringstream memoryStats;
+            
+            if (TextureManager::PROBE_MEMORY)
+            {
+                auto memoryInfo2 = getMemoryInfo();
+                auto delta = memory::compare(memoryInfo1, memoryInfo2);
+                
+                memoryStats << " | " <<
+                format::bytes(memoryUsage) << ", " <<
+                format::bytes(delta) << " " <<
+                memoryInfo2;
+            }
+            
+            LOGI_IF(TextureManager::LOG_VERBOSE) <<
+            "TEXTURE DISCARDED: " <<
+            uniqueId <<
+            memoryStats.str() <<
+            endl;
+        }
     }
     
-    void Texture::uploadTextureData(const TextureData &textureData)
+    bool Texture::bind()
     {
-        request = textureData.request;
-        setTarget(TextureHelper::uploadTextureData(textureData));
-    }
-    
-    int Texture::getId() const
-    {
-        return id;
-    }
-    
-    void Texture::bind()
-    {
-        glBindTexture(GL_TEXTURE_2D, id);
+        if (reload())
+        {
+            glBindTexture(GL_TEXTURE_2D, glId);
+        }
+
+        return glId;
     }
     
     void Texture::begin()
@@ -78,7 +209,7 @@ namespace chronotext
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, id);
+        bind();
     }
     
     void Texture::end()
@@ -148,61 +279,5 @@ namespace chronotext
         glTexCoordPointer(2, GL_FLOAT, 0, coords);
         glVertexPointer(2, GL_FLOAT, 0, vertices);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    }
-    
-    int Texture::getWidth() const
-    {
-        return width;
-    }
-    
-    int Texture::getHeight() const
-    {
-        return height;
-    }
-    
-    Vec2i Texture::getSize() const
-    {
-        return Vec2i(width, height);
-    }
-    
-    int Texture::getCleanWidth() const
-    {
-        return int(width * maxU);
-    }
-    
-    int Texture::getCleanHeight() const
-    {
-        return int(height * maxV);
-    }
-    
-    Vec2i Texture::getCleanSize() const
-    {
-        return Vec2i(width * maxU, height * maxV);
-    }
-    
-    float Texture::getMaxU() const
-    {
-        return maxU;
-    }
-    
-    float Texture::getMaxV() const
-    {
-        return maxV;
-    }
-    
-    Vec2f Texture::getMaxUV() const
-    {
-        return Vec2f(maxU, maxV);
-    }
-    
-    void Texture::setTarget(ci::gl::TextureRef texture)
-    {
-        target = texture;
-        
-        id = texture->getId();
-        width = texture->getWidth();
-        height = texture->getHeight();
-        maxU = texture->getMaxU();
-        maxV = texture->getMaxV();
     }
 }

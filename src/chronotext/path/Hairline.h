@@ -1,21 +1,28 @@
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
 #pragma once
 
 #include "chronotext/texture/TextureManager.h"
 #include "chronotext/path/StrokeHelper.h"
 
-namespace chronotext
+namespace chr
 {
     class Hairline
     {
     public:
-        typedef enum
+        enum Type
         {
             TYPE_NORMAL,
             TYPE_DASHED
-        }
-        Type;
+        };
         
-        Hairline();
+        Hairline() = default;
         Hairline(TextureManager &textureManager, Type type);
         
         void stroke(const FollowablePath &path, float scale = 1, float uOffset = 0);
@@ -26,9 +33,7 @@ namespace chronotext
     protected:
         Type type;
         
-        TextureRef texture;
+        Texture::Ref texture;
         TexturedTriangleStrip strip;
     };
 }
-
-namespace chr = chronotext;

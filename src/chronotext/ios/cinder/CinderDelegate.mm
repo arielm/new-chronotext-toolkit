@@ -1,397 +1,284 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * "TOUCH MAPPING" BASED ON CINDER:
- * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/app/CinderViewCocoaTouch.mm
- */
+#include "chronotext/ios/cinder/CinderDelegate.h"
+#include "chronotext/Context.h"
 
-#import "CinderDelegate.h"
-#import "GLViewController.h"
-
-#include "chronotext/utils/accel/AccelEvent.h"
-#include "chronotext/system/SystemInfo.h"
+#import "chronotext/ios/cinder/CinderBridge.h"
 
 using namespace std;
 using namespace ci;
-using namespace app;
-using namespace chr;
+using namespace ci::app;
 
-@implementation CinderDelegate
-
-@synthesize view;
-@synthesize viewController;
-@synthesize sketch;
-@synthesize accelFilterFactor;
-@synthesize io;
-@synthesize windowInfo;
-@synthesize initialized;
-@synthesize active;
-
-- (id) init
+namespace chr
 {
-    if (self = [super init])
+    namespace intern
     {
-        lastAccel = lastRawAccel = Vec3f::zero();
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+        CinderDelegate *instance = nullptr;
     }
     
-    return self;
-}
-
-- (void) dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    io->stop();
-
-    sketch->shutdown();
-    delete sketch;
-    
-    [super dealloc];
-}
-
-- (void) startWithReason:(int)reason
-{
-    frameCount = 0;
-
-    timer.start();
-    sketch->clock().start();
-    
-    if (reason == REASON_VIEW_WILL_APPEAR)
+    CinderDelegate& delegate()
     {
-        sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
-        active = YES;
-    }
-    else
-    {
-        sketch->start(CinderSketch::FLAG_APP_RESUMED);
-    }
-}
-
-- (void) stopWithReason:(int)reason
-{
-    timer.stop();
-    sketch->clock().stop();
-
-    if (reason == REASON_VIEW_WILL_DISAPPEAR)
-    {
-        sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
-        active = NO;
-    }
-    else
-    {
-        sketch->stop(CinderSketch::FLAG_APP_PAUSED);
-    }
-}
-
-- (void) setup
-{
-    switch (viewController.interfaceOrientation)
-    {
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
-            windowInfo.size.x = view.frame.size.height;
-            windowInfo.size.y = view.frame.size.width;
-            break;
-            
-        case UIInterfaceOrientationPortrait:
-        case UIInterfaceOrientationPortraitUpsideDown:
-            windowInfo.size.x = view.frame.size.width;
-            windowInfo.size.y = view.frame.size.height;
-            break;
-    }
-    
-    windowInfo.size *= view.contentScaleFactor;
-    windowInfo.contentScale = view.contentScaleFactor;
-
-    // ---
-    
-    switch (SystemInfo::instance().getSizeFactor())
-    {
-        case SystemInfo::SIZE_FACTOR_PHONE:
-            if (windowInfo.size.x == 1136)
-            {
-                windowInfo.diagonal = 4;
-            }
-            else
-            {
-                windowInfo.diagonal = 3.54f;
-            }
-            break;
-            
-        case SystemInfo::SIZE_FACTOR_TABLET:
-            windowInfo.diagonal = 9.7f;
-            break;
-            
-        case SystemInfo::SIZE_FACTOR_TABLET_MINI:
-            windowInfo.diagonal = 7.9f;
-            break;
-    }
-    
-    windowInfo.density = windowInfo.size.length() / windowInfo.diagonal;
-    
-    // ---
-    
-    switch (view.drawableMultisample)
-    {
-        case GLKViewDrawableMultisampleNone:
-            windowInfo.aaLevel = 0;
-            break;
-            
-        case GLKViewDrawableMultisample4X:
-            windowInfo.aaLevel = 4;
-            break;
+        return checkedReference(intern::instance);
     }
     
     // ---
     
-    io = make_shared<boost::asio::io_service>();
-    ioWork = make_shared<boost::asio::io_service::work>(*io);
-
-    sketch->setIOService(*io);
-    sketch->timeline().stepTo(0);
-    sketch->setup(false);
-    sketch->resize();
-    
-    initialized = YES;
-}
-
-- (void) update
-{
-    sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-    io->poll();
-    
-    /*
-     * MUST BE CALLED BEFORE Sketch::update
-     * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
-     *
-     * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-     * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
-     */
-    double now = sketch->clock().getTime();
-    
-    sketch->update();
-    sketch->timeline().stepTo(now);
-    frameCount++;
-}
-
-- (void) draw
-{
-    if (frameCount == 0)
+    bool CinderDelegate::performInit()
     {
-        [self update]; // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
-    }
-    
-    sketch->draw();
-}
-
-- (double) elapsedSeconds
-{
-    return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-}
-
-- (uint32_t) elapsedFrames
-{
-    return frameCount;
-}
-
-- (void) action:(int)actionId
-{}
-
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body
-{}
-
-- (void) sendMessageToSketch:(int)what
-{
-    sketch->sendMessage(Message(what));
-}
-
-- (void) sendMessageToSketch:(int)what json:(id)json
-{
-    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
-    NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    
-    [self sendMessageToSketch:what body:string];
-}
-
-- (void) sendMessageToSketch:(int)what body:(NSString*)body
-{
-    sketch->sendMessage(Message(what, [body UTF8String]));
-}
-
-#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
-
-- (void) accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
-{
-    Vec3f direction(acceleration.x, acceleration.y, acceleration.z);
-    Vec3f filtered = lastAccel * (1 - accelFilterFactor) + direction * accelFilterFactor;
-
-    AccelEvent event(filtered, direction, lastAccel, lastRawAccel);
-    sketch->accelerated(event);
-    
-    lastAccel = filtered;
-    lastRawAccel = direction;
-}
-
-#pragma mark ---------------------------------------- TOUCH ----------------------------------------
-
-- (uint32_t) addTouchToMap:(UITouch*)touch
-{
-    uint32_t candidateId = 0;
-    bool found = true;
-    
-    while (found)
-    {
-        candidateId++;
-        found = false;
-        
-        for (auto &it : touchIdMap)
+        if (!initialized_)
         {
-            if (it.second == candidateId)
-            {
-                found = true;
-                break;
-            }
+            intern::instance = this;
+            initialized_ = _init();
+        }
+        
+        return initialized_;
+    }
+    
+    void CinderDelegate::performUninit()
+    {
+        if (initialized_ && !setup_)
+        {
+            _uninit();
+
+            initialized_ = false;
+            intern::instance = nullptr;
         }
     }
     
-    touchIdMap.insert(make_pair(touch, candidateId));
-    return candidateId;
-}
-
-- (void) removeTouchFromMap:(UITouch*)touch
-{
-    auto found = touchIdMap.find(touch);
-    
-    if (found != touchIdMap.end())
+    void CinderDelegate::performSetup(const WindowInfo &windowInfo)
     {
-        touchIdMap.erase(found);
-    }
-}
-
-- (uint32_t) findTouchInMap:(UITouch*)touch
-{
-    auto found = touchIdMap.find(touch);
-    
-    if (found != touchIdMap.end())
-    {
-        return found->second;
+        if (!setup_ && initialized_)
+        {
+            startIOService();
+            
+            setupInfo.io_service = io.get();
+            setupInfo.windowInfo = windowInfo;
+            
+            _setup();
+            
+            // ---
+            
+            setup_ = true;
+        }
     }
     
-    return 0;
-}
-
-- (void) updateActiveTouches
-{
-    float scale = view.contentScaleFactor;;
-    vector<TouchEvent::Touch> activeTouches;
-    
-    for (auto &it : touchIdMap)
+    void CinderDelegate::performShutdown()
     {
-        CGPoint pt = [it.first locationInView:view];
-        CGPoint prevPt = [it.first previousLocationInView:view];
-        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, it.second, [it.first timestamp], it.first);
-    }
-}
-
-- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    float scale = view.contentScaleFactor;
-    vector<TouchEvent::Touch> touchList;
-    
-    for (UITouch *touch in touches)
-    {
-        CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch);
+        if (setup_)
+        {
+            /*
+             * TODO:
+             *
+             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
+             */
+            _shutdown();
+            
+            stopIOService();
+            
+            // ---
+            
+            setup_ = false;
+        }
     }
     
-    [self updateActiveTouches];
-    if (!touchList.empty())
+    void CinderDelegate::performResize(const ci::Vec2i &size)
     {
-        sketch->touchesBegan(TouchEvent(WindowRef(), touchList));
-    }
-}
-
-- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    float scale = view.contentScaleFactor;
-    vector<TouchEvent::Touch> touchList;
-    
-    for (UITouch *touch in touches)
-    {
-        CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];            
-        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
+        setupInfo.windowInfo.size = size;
+        sketch->performResize(size);
     }
     
-    [self updateActiveTouches];
-    
-    if (!touchList.empty())
+    void CinderDelegate::performUpdate()
     {
-        sketch->touchesMoved(TouchEvent(WindowRef(), touchList));
-    }
-}
-
-- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    const float scale = view.contentScaleFactor;
-    vector<TouchEvent::Touch> touchList;
-    
-    for (UITouch *touch in touches)
-    {
-        CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
+        /*
+         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
+         *
+         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
+         */
+        sketch->clock()->update(true);
         
-        [self removeTouchFromMap:touch];
+        io->poll();
+        
+        sketch->performUpdate();
+        updateCount++;
     }
     
-    [self updateActiveTouches];
+    void CinderDelegate::performDraw()
+    {
+        if (updateCount == 0)
+        {
+            performUpdate(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
+        }
+        
+        sketch->draw();
+    }
     
-    if (!touchList.empty())
+#pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
+    
+    void CinderDelegate::sendMessageToBridge(int what, const string &body)
     {
-        sketch->touchesEnded(TouchEvent(WindowRef(), touchList));
+        [system::bridge dispatchMessage:what body:[NSString stringWithUTF8String:body.data()]];
+    }
+    
+    void CinderDelegate::handleEvent(int eventId)
+    {
+        switch (eventId)
+        {
+            case CinderSketch::EVENT_RESUMED:
+                sketch->performStart(CinderSketch::START_REASON_APP_RESUMED);
+                return;
+                
+            case CinderSketch::EVENT_SHOWN:
+                sketch->performStart(CinderSketch::START_REASON_VIEW_SHOWN);
+                return;
+                
+            case CinderSketch::EVENT_PAUSED:
+                sketch->performStop(CinderSketch::STOP_REASON_APP_PAUSED);
+                return;
+                
+            case CinderSketch::EVENT_HIDDEN:
+                sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
+                return;
+        }
+        
+        sketch->event(eventId);
+    }
+    
+    // ---
+    
+    /*
+     * TODO:
+     *
+     * 1) FINALIZE THREAD-SAFETY POLICY
+     * 2) HANDLE POTENTIAL OBJECTIVE-C EXCEPTIONS WHILE "PERFORMING SELECTOR"
+     */
+    
+    JsonTree CinderDelegate::jsonQuery(const char *methodName)
+    {
+        SEL selector = NSSelectorFromString([NSString stringWithUTF8String:methodName]);
+        
+        if ([system::bridge respondsToSelector:selector])
+        {
+            const string &query = [[system::bridge performSelector:selector] UTF8String];
+            
+            if (!query.empty())
+            {
+                try
+                {
+                    return JsonTree(query);
+                }
+                catch (exception &e)
+                {
+                    LOGI_IF(LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
+                }
+            }
+        }
+        
+        return JsonTree();
+    }
+    
+#pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
+    
+    void CinderDelegate::startIOService()
+    {
+        if (!io)
+        {
+            io = make_shared<boost::asio::io_service>();
+            ioWork = make_shared<boost::asio::io_service::work>(*io);
+        }
+    }
+    
+    void CinderDelegate::stopIOService()
+    {
+        if (io)
+        {
+            io->stop();
+            
+            ioWork.reset();
+            io.reset();
+        }
+    }
+    
+#pragma mark ---------------------------------------- TOUCH ----------------------------------------
+    
+    void CinderDelegate::touchesBegan(TouchEvent event)
+    {
+        for (auto &touch : event.getTouches())
+        {
+            sketch->addTouch(touch.getId() - 1, touch.getX(), touch.getY());
+        }
+    }
+    
+    void CinderDelegate::touchesMoved(TouchEvent event)
+    {
+        for (auto &touch : event.getTouches())
+        {
+            sketch->updateTouch(touch.getId() - 1, touch.getX(), touch.getY());
+        }
+    }
+    
+    void CinderDelegate::touchesEnded(TouchEvent event)
+    {
+        for (auto &touch : event.getTouches())
+        {
+            sketch->removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
+        }
+    }
+    
+#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
+    
+    int CinderDelegateBase::getCode(const KeyEvent &keyEvent)
+    {
+        return 0;
+    }
+    
+    bool CinderDelegateBase::isShiftDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+    bool CinderDelegateBase::isAltDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+    bool CinderDelegateBase::isAccelDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
+    
+    /*
+     * TODO: THE TIME HAS COME TO RELY ON THE CoreMotion FRAMEWORK
+     */
+    
+    void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
+    {
+        accelFilter = AccelEvent::Filter(filterFactor);
+        
+        if (updateFrequency <= 0)
+        {
+            updateFrequency = 30;
+        }
+        
+        UIAccelerometer.sharedAccelerometer.updateInterval = 1 / updateFrequency;
+        UIAccelerometer.sharedAccelerometer.delegate = system::bridge;
+    }
+    
+    void CinderDelegate::disableAccelerometer()
+    {
+        UIAccelerometer.sharedAccelerometer.delegate = nil;
+    }
+    
+    void CinderDelegate::handleAcceleration(const Vec3f &acceleration)
+    {
+        sketch->accelerated(accelFilter.process(acceleration));
     }
 }
-
-- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    [self touchesEnded:touches withEvent:event];
-}
-
-#pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------
-
-- (void) applicationWillResignActive
-{
-    if (initialized && !active)
-    {
-        sketch->event(CinderSketch::EVENT_BACKGROUND);
-    }
-}
-
-- (void) applicationDidBecomeActive
-{
-    if (initialized && !active)
-    {
-        sketch->event(CinderSketch::EVENT_FOREGROUND);
-    }
-}
-
-- (void) applicationDidReceiveMemoryWarningNotification
-{
-    if (initialized)
-    {
-        sketch->event(CinderSketch::EVENT_MEMORY_WARNING);
-    }
-}
-
-@end

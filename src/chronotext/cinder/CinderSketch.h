@@ -2,32 +2,118 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
-#include "cinder/Cinder.h"
+#include "chronotext/cinder/WindowInfo.h"
+#include "chronotext/os/SuperHandler.h"
+#include "chronotext/time/FrameClock.h"
+#include "chronotext/utils/accel/AccelEvent.h"
 
-#if defined(CHR_COMPLEX) && defined(CINDER_COCOA_TOUCH)
-#include "chronotext/ios/cinder/CinderSketchComplex.h"
-namespace chronotext
-{
-    typedef CinderSketchComplex CinderSketch;
-}
-#elif defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-#include "chronotext/android/cinder/CinderSketchComplex.h"
-namespace chronotext
-{
-    typedef CinderSketchComplex CinderSketch;
-}
-#else
-#include "chronotext/cinder/CinderSketchSimple.h"
-namespace chronotext
-{
-    typedef CinderSketchSimple CinderSketch;
-}
-#endif
+#include "cinder/Timeline.h"
+#include "cinder/app/KeyEvent.h"
 
-namespace chr = chronotext;
+namespace chr
+{
+    class CinderDelegateBase;
+    class CinderDelegate;
+    
+    class CinderSketch : public SuperHandler
+    {
+    public:
+        enum StartReason
+        {
+            START_REASON_VIEW_SHOWN = 1,
+            START_REASON_APP_RESUMED
+        };
+        
+        enum StopReason
+        {
+            STOP_REASON_VIEW_HIDDEN = 1,
+            STOP_REASON_APP_PAUSED
+        };
+        
+        enum
+        {
+            EVENT_RESUMED = 1,
+            EVENT_SHOWN,
+            EVENT_PAUSED,
+            EVENT_HIDDEN,
+            EVENT_FOREGROUND,
+            EVENT_BACKGROUND,
+            EVENT_MEMORY_WARNING,
+            EVENT_CONTEXT_LOST,
+            EVENT_CONTEXT_RENEWED,
+            EVENT_TRIGGER_BACK,
+            EVENT_TRIGGER_ESCAPE
+        };
+        
+        enum
+        {
+            ACTION_CAPTURE_BACK = 1,
+            ACTION_RELEASE_BACK,
+            ACTION_CAPTURE_ESCAPE,
+            ACTION_RELEASE_ESCAPE,
+        };
+        
+        virtual ~CinderSketch() {}
+        
+        virtual bool init() { return true; }
+        virtual void uninit() {}
+        virtual void setup() {}
+        virtual void shutdown() {}
+
+        virtual void event(int eventId) {}
+
+        virtual void resize() {}
+        virtual void start(StartReason reason) {}
+        virtual void stop(StopReason reason) {}
+
+        virtual void update() {}
+        virtual void draw() {}
+        
+        virtual void addTouch(int index, float x, float y) {}
+        virtual void updateTouch(int index, float x, float y) {}
+        virtual void removeTouch(int index, float x, float y) {}
+        
+        virtual bool keyDown(const ci::app::KeyEvent &event) { return false; }
+        virtual bool keyUp(const ci::app::KeyEvent &event) { return false; }
+
+        virtual void accelerated(AccelEvent event) {}
+
+        const WindowInfo& getWindowInfo() const;
+        double getElapsedSeconds() const;
+        int getElapsedFrames() const;
+
+        FrameClock::Ref clock() const;
+        ci::Timeline& timeline() const;
+
+        inline ci::Vec2i getWindowSize() const { return windowInfo.size; }
+        inline int getWindowWidth() const { return windowInfo.size.x; };
+        inline int getWindowHeight() const { return windowInfo.size.y; };
+        inline ci::Area getWindowBounds() const { return windowInfo.bounds(); };
+        inline ci::Vec2f getWindowCenter() const { return windowInfo.center(); };
+        inline float getWindowAspectRatio() const { return windowInfo.aspectRatio(); };
+        
+    protected:
+        friend class CinderDelegateBase;
+        friend class CinderDelegate;
+        
+        ci::Timer timer;
+        int frameCount = 0;
+        bool forceResize = false;
+
+        WindowInfo windowInfo;
+        FrameClock::Ref _clock = FrameClock::create();
+        ci::TimelineRef _timeline = ci::Timeline::create();
+        
+        void performSetup(const WindowInfo &windowInfo);
+        void performResize(const ci::Vec2i &size);
+        void performStart(StartReason reason);
+        void performStop(StopReason reason);
+        void performUpdate();
+    };
+}

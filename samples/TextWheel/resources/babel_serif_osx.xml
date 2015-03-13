@@ -7,7 +7,8 @@
     </Set>
     <!-- Arabic -->
     <Set lang="ar">
-        <Ref uri="file:///Library/Fonts/AdobeNaskh-Medium.otf" scale="1.25 " />
+        <Ref uri="file:///Library/Fonts/AdobeNaskh-Medium.otf" scale="1.25" />
+        <Ref uri="file:///Library/Fonts/Nadeem.ttf" scale="1.0" /> <!-- FALLBACK FOR OSX 10.7.5 -->
     </Set>
     <!-- Chinese (Traditional) -->
     <Set lang="zh-hk:zh-mo:zh-tw">
@@ -24,6 +25,7 @@
     <!-- Hindi -->
     <Set lang="hi">
         <Ref uri="file:///Library/Fonts/AdobeDevanagari-Regular.otf" scale="1.2" />
+        <Ref uri="file:///Library/Fonts/DevanagariMT.ttf" scale="0.85" /> <!-- FALLBACK FOR OSX 10.7.5 -->
     </Set>
     <!-- Japanese -->
     <Set lang="ja">

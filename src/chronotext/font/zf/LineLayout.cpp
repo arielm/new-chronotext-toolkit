@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,7 +11,7 @@
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -19,7 +19,7 @@ namespace chronotext
         :
         codepoint(codepoint),
         position(position),
-        glyph(NULL)
+        glyph(nullptr)
         {}
         
         Cluster::Cluster(ActualFont *font, int tag, hb_codepoint_t codepoint, const Vec2f &offset, float advance)
@@ -50,7 +50,10 @@ namespace chronotext
         advance(0),
         maxHeight(0),
         maxAscent(0),
-        maxDescent(0)
+        maxDescent(0),
+        maxUnderlineOffset(0),
+        maxLineThickness(0),
+        averageStrikethroughOffset(0)
         {}
         
         void LineLayout::addCluster(const Cluster &cluster)

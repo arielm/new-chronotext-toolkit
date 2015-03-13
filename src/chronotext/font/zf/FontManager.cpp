@@ -2,54 +2,39 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/zf/FontManager.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Context.h"
+
+#include "cinder/gl/gl.h"
 
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
-        enum
-        {
-            PLATFORM_OSX,
-            PLATFORM_WINDOW,
-            PLATFORM_IOS,
-            PLATFORM_ANDROID
-        };
-        
-        const string PLATFORM_NAMES[4] = {"osx", "windows", "ios", "android"};
-        
+        atomic<bool> FontManager::LOG_VERBOSE (false);
+        atomic<bool> FontManager::LOG_WARNING (true);
+
         FontManager::FontManager()
         :
         ftHelper(make_shared<FreetypeHelper>()),
-        itemizer(langHelper),
+        langHelper(make_shared<LangHelper>()),
+        layoutCache(make_shared<LayoutCache>()),
+        itemizer(make_shared<TextItemizer>(langHelper)),
         hasDefaultFont(false)
-        {
-#if defined(CINDER_MAC)
-            platform = PLATFORM_OSX;
-#elif defined(CINDER_MSW)
-            platform = PLATFORM_WINDOW;
-#elif defined(CINDER_COCOA_TOUCH)
-            platform = PLATFORM_IOS;
-#elif defined(CINDER_ANDROID)
-            platform = PLATFORM_ANDROID;
-#else
-            assert(false);
-#endif
-        }
+        {}
         
-        void FontManager::loadConfig(InputSourceRef source)
+        void FontManager::loadConfig(InputSource::Ref source)
         {
             if (!globalMap.empty() || !aliases.empty() || hasDefaultFont)
             {
-                throw runtime_error("FONT-CONFIG ALREADY DEFINED");
+                throw EXCEPTION(FontManager, "FONT-CONFIG ALREADY DEFINED");
             }
             else
             {
@@ -96,7 +81,7 @@ namespace chronotext
                             {
                                 auto os = refElement->getAttributeValue<string>("os", "");
                                 
-                                if (os == PLATFORM_NAMES[platform])
+                                if (boost::iequals(os, system::platformName()))
                                 {
                                     auto uri = refElement->getAttributeValue<string>("uri", "");
                                     
@@ -113,7 +98,7 @@ namespace chronotext
             }
         }
         
-        shared_ptr<VirtualFont> FontManager::getCachedFont(const std::string &name, VirtualFont::Style style, const VirtualFont::Properties &properties)
+        shared_ptr<VirtualFont> FontManager::getFont(const std::string &name, VirtualFont::Style style, const VirtualFont::Properties &properties)
         {
             auto key = make_tuple(name, style, properties);
             auto it1 = shortcuts.find(key);
@@ -154,7 +139,7 @@ namespace chronotext
                 }
                 
                 auto uri = it3->second.first;
-                auto font = getCachedFont(InputSource::get(uri), VirtualFont::Properties(baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity)); // CAN THROW
+                auto font = getFont(InputSource::get(uri), VirtualFont::Properties(baseSize, properties.useMipmap, properties.useAnisotropy, properties.slotCapacity)); // CAN THROW
                 
                 /*
                  * ALLOWING CACHING UPON FURTHER ACCESS
@@ -170,13 +155,13 @@ namespace chronotext
             {
                 if (name != defaultFontName)
                 {
-                    auto font = getCachedFont(defaultFontName, style, properties);
+                    auto font = getFont(defaultFontName, style, properties);
                     shortcuts[key] = font;
                     return font;
                 }
                 else if (style != defaultFontStyle)
                 {
-                    auto font = getCachedFont(defaultFontName, defaultFontStyle, properties);
+                    auto font = getFont(defaultFontName, defaultFontStyle, properties);
                     shortcuts[key] = font;
                     return font;
                 }
@@ -185,10 +170,10 @@ namespace chronotext
             /*
              * SHOULD NOT OCCUR, UNLESS NO "DEFAULT FONT" IS DEFINED
              */
-            throw invalid_argument(string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
+            throw EXCEPTION(FontManager, string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
         }
         
-        shared_ptr<VirtualFont> FontManager::getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties)
+        shared_ptr<VirtualFont> FontManager::getFont(InputSource::Ref source, const VirtualFont::Properties &properties)
         {
             auto key = make_pair(source->getURI(), properties);
             auto it = virtualFonts.find(key);
@@ -197,59 +182,57 @@ namespace chronotext
             {
                 return it->second;
             }
-            else
+            
+            XmlTree doc(source->loadDataSource()); // EARLY-THROW IF THE DOCUMENT IS MALFORMED
+            
+            /*
+             * THE FOLLOWING IS NOT SUPPOSED TO THROW...
+             * IN THE WORST-CASE: THE FONT WILL BE "EMPTY" OR "PARTIAL"
+             *
+             * TODO: THROW WHEN DOCUMENT IS INVALID?
+             */
+            if (doc.hasChild("VirtualFont"))
             {
-                XmlTree doc(source->loadDataSource()); // EARLY-THROW IF THE DOCUMENT IS MALFORMED
+                auto font = shared_ptr<VirtualFont>(new VirtualFont(*this, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
+                virtualFonts[key] = font;
                 
-                /*
-                 * THE FOLLOWING IS NOT SUPPOSED TO THROW...
-                 * IN THE WORST-CASE: THE FONT WILL BE "EMPTY" OR "PARTIAL"
-                 *
-                 * TODO: THROW WHEN DOCUMENT IS INVALID?
-                 */
-                if (doc.hasChild("VirtualFont"))
+                for (auto setElement = doc.begin("VirtualFont/Set"); setElement != doc.end(); ++setElement)
                 {
-                    auto font = shared_ptr<VirtualFont>(new VirtualFont(*this, properties)); // make_shared WON'T WORK WITH A PROTECTED CONSTRUCTOR
-                    virtualFonts[key] = font;
+                    auto langList = splitLanguages(setElement->getAttributeValue<string>("lang", ""));
                     
-                    for (auto setElement = doc.begin("VirtualFont/Set"); setElement != doc.end(); ++setElement)
+                    for (auto &lang : langList)
                     {
-                        auto langList = splitLanguages(setElement->getAttributeValue<string>("lang", ""));
-                        
-                        for (auto &lang : langList)
+                        for (auto &variantElement : setElement->getChildren())
                         {
-                            for (auto &variantElement : setElement->getChildren())
+                            if (variantElement->getTag() == "Group")
                             {
-                                if (variantElement->getTag() == "Group")
+                                for (auto &refElement : variantElement->getChildren())
                                 {
-                                    for (auto &refElement : variantElement->getChildren())
+                                    auto descriptor = parseDescriptor(*refElement);
+                                    
+                                    if (descriptor.inputSource && font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap)))
                                     {
-                                        auto descriptor = parseDescriptor(*refElement);
-                                        
-                                        if (!descriptor.empty() && font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap)))
-                                        {
-                                            break;
-                                        }
+                                        break;
                                     }
                                 }
-                                else
+                            }
+                            else
+                            {
+                                auto descriptor = parseDescriptor(*variantElement);
+                                
+                                if (descriptor.inputSource)
                                 {
-                                    auto descriptor = parseDescriptor(*variantElement);
-                                    
-                                    if (!descriptor.empty())
-                                    {
-                                        font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap));
-                                    }
+                                    font->addActualFont(lang, getActualFont(descriptor, properties.baseSize, properties.useMipmap));
                                 }
                             }
                         }
                     }
-                    
-                    return font;
                 }
                 
-                throw invalid_argument("INVALID FONT-DEFINITION: " + source->getURI());
+                return font;
             }
+            
+            throw EXCEPTION(FontManager, "INVALID FONT-DEFINITION: " + source->getURI());
         }
         
         void FontManager::unload(shared_ptr<VirtualFont> virtualFont)
@@ -276,57 +259,59 @@ namespace chronotext
             
             set<ActualFont*> actualFontsInUse;
             
-            for (auto &it1 : virtualFonts)
+            for (auto &virtualFont : virtualFonts)
             {
-                for (auto &it2 : it1.second->fontSetMap)
+                for (auto &fontSet : virtualFont.second->fontSetMap)
                 {
-                    for (auto &it3 : it2.second)
+                    for (auto &actualFont : fontSet.second)
                     {
-                        actualFontsInUse.insert(it3);
+                        actualFontsInUse.insert(actualFont);
                     }
                 }
             }
             
-            for (auto it = actualFonts.begin(); it != actualFonts.end(); ++it)
+            for (auto &actualFont : actualFonts)
             {
-                if (!actualFontsInUse.count(it->second.get()))
+                if (!actualFontsInUse.count(actualFont.second.get()))
                 {
-                    it->second->unload();
+                    actualFont.second->unload();
                 }
             }
         }
         
         void FontManager::unload()
         {
-            for (auto &it : actualFonts)
+            layoutCache->clear();
+            
+            for (auto &actualFont : actualFonts)
             {
-                it.second->unload();
+                actualFont.second->unload();
             }
         }
         
         void FontManager::discardTextures()
         {
-            for (auto &it : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                it.second->discardTextures();
+                actualFont.second->discardTextures();
             }
         }
         
         void FontManager::reloadTextures()
         {
-            for (auto &it : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                it.second->reloadTextures();
+                actualFont.second->reloadTextures();
             }
         }
         
-        size_t FontManager::getTextureMemoryUsage() const
+        int64_t FontManager::getTextureMemoryUsage() const
         {
-            size_t total = 0;
+            int64_t total = 0;
             
-            for (auto &it : actualFonts)
+            for (auto &actualFont : actualFonts)
             {
-                total += it.second->getTextureMemoryUsage();
+                total += actualFont.second->getTextureMemoryUsage();
             }
             
             return total;
@@ -335,28 +320,27 @@ namespace chronotext
         ActualFont* FontManager::getActualFont(const ActualFont::Descriptor &descriptor, float baseSize, bool useMipmap)
         {
             ActualFont::Key key(descriptor, baseSize, useMipmap);
+            
             auto it = actualFonts.find(key);
             
             if (it != actualFonts.end())
             {
                 return it->second.get();
             }
-            else
+            
+            try
             {
-                try
-                {
-                    auto font = new ActualFont(ftHelper, descriptor, baseSize, useMipmap);
-                    actualFonts[key] = unique_ptr<ActualFont>(font);
-                    
-                    return font;
-                }
-                catch (exception &e)
-                {
-                    LOGD << e.what() << " - " << descriptor.source->getURI() << endl;
-                }
+                auto font = new ActualFont(ftHelper, descriptor, baseSize, useMipmap);
+                actualFonts[key] = unique_ptr<ActualFont>(font);
                 
-                return NULL;
+                return font;
             }
+            catch (exception &e)
+            {
+                LOGI_IF(LOG_WARNING) << e.what() << " - " << descriptor.inputSource->getURI() << endl;
+            }
+            
+            return nullptr;
         }
         
         vector<string> FontManager::splitLanguages(const string &languages)
@@ -381,7 +365,7 @@ namespace chronotext
             }
         }
         
-        const vector<GLushort>& FontManager::getIndices(int capacity)
+        const vector<uint16_t>& FontManager::getIndices(int capacity)
         {
             if (capacity * 6 > indices.size())
             {

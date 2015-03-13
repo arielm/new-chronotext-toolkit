@@ -1,12 +1,15 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "Animation.h"
+
+#include "chronotext/Exception.h"
+#include "chronotext/utils/GLUtils.h"
 
 #include "cinder/Xml.h"
 
@@ -14,17 +17,10 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-Animation::Animation()
-:
-fps(1),
-frameCount(0)
-{}
-
-Animation::Animation(shared_ptr<TextureAtlas> atlas, InputSourceRef sheetInputSource, InputSourceRef animationInputSource, float fps)
+Animation::Animation(shared_ptr<TextureAtlas> atlas, InputSource::Ref sheetInputSource, InputSource::Ref animationInputSource, float fps)
 :
 atlas(atlas),
-fps(fps),
-frameCount(0)
+fps(fps)
 {
     loadSheet(sheetInputSource);
     loadAnimation(animationInputSource);
@@ -51,10 +47,10 @@ void Animation::draw(int frameIndex)
             auto &frame = item->frames[frameIndex % frameCount];
             
             glPushMatrix();
-            glColor4f(1, 1, 1, frame.alpha);
-            glTranslatef(frame.x, frame.y, 0);
-            glScalef(frame.scaleX, frame.scaleY, 1);
-            glRotatef(frame.rotation, 0, 0, 1);
+            gl::color(1, 1, 1, frame.alpha);
+            gl::translate(frame.x, frame.y);
+            gl::scale(frame.scaleX, frame.scaleY);
+            gl::rotate(frame.rotation);
             
             atlas->drawSprite(item->path, item->registrationPointX, item->registrationPointY);
             glPopMatrix();
@@ -76,7 +72,7 @@ void Animation::play(double now)
     draw(t);
 }
 
-void Animation::loadSheet(InputSourceRef inputSource)
+void Animation::loadSheet(InputSource::Ref inputSource)
 {
     XmlTree doc(inputSource->loadDataSource());
     
@@ -88,7 +84,7 @@ void Animation::loadSheet(InputSourceRef inputSource)
         auto height = textureElement->getAttributeValue<float>("height");
         auto registrationPointX = textureElement->getAttributeValue<float>("registrationPointX");
         auto registrationPointY = textureElement->getAttributeValue<float>("registrationPointY");
-        int zIndex = textureElement->getAttributeValue<int>("zIndex", 0);
+        auto zIndex = textureElement->getAttributeValue<int>("zIndex", 0);
         
         auto item = new Item(path, width, height, registrationPointX, registrationPointY, zIndex);
         itemMap[name] = unique_ptr<Item>(item);
@@ -98,7 +94,7 @@ void Animation::loadSheet(InputSourceRef inputSource)
     std::sort(itemList.begin(), itemList.end(), Item::compareZIndex);
 }
 
-void Animation::loadAnimation(InputSourceRef inputSource)
+void Animation::loadAnimation(InputSource::Ref inputSource)
 {
     XmlTree doc(inputSource->loadDataSource());
     
@@ -128,7 +124,7 @@ void Animation::loadAnimation(InputSourceRef inputSource)
         }
         else
         {
-            throw runtime_error("ERROR WHILE PARSING GRAPEFRUKT ANIMATION");
+            throw EXCEPTION(Animation, "ERROR WHILE PARSING GRAPEFRUKT ANIMATION");
         }
     }
 }

@@ -1,88 +1,61 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * "TOUCH MAPPING" BASED ON CINDER:
- * https://github.com/cinder/Cinder/blob/v0.8.5/include/cinder/app/CinderViewCocoaTouch.h
- */
+#pragma once
 
-#include "chronotext/cinder/CinderSketch.h"
+#include "cinder/Cinder.h"
 
-#import "chronotext/cocoa/utils/NSString+JSON.h"
+#if !defined(CINDER_COCOA_TOUCH)
+#   error UNSUPPORTED PLATFORM
+#endif
 
-#include <map>
+// ---
 
-@class GLKView;
-@class GLViewController;
+#include "chronotext/cinder/CinderDelegateBase.h"
 
-enum
+#include "cinder/app/TouchEvent.h"
+
+#include <boost/asio.hpp>
+
+namespace chr
 {
-    REASON_VIEW_WILL_APPEAR,
-    REASON_VIEW_WILL_DISAPPEAR,
-    REASON_APPLICATION_DID_BECOME_ACTIVE,
-    REASON_APPLICATION_WILL_RESIGN_ACTIVE
-};
+    class CinderDelegate : public CinderDelegateBase
+    {
+    public:
+        bool performInit();
+        void performUninit();
+        void performSetup(const WindowInfo &windowInfo);
+        void performShutdown();
+        
+        void performResize(const ci::Vec2i &size);
+        void performUpdate();
+        void performDraw();
 
-@interface CinderDelegate : NSObject <UIAccelerometerDelegate>
-{
-    GLKView *view;
-    GLViewController *viewController;
-    chr::CinderSketch *sketch;
-    
-    std::map<UITouch*, uint32_t> touchIdMap;
+        void touchesBegan(ci::app::TouchEvent event);
+        void touchesMoved(ci::app::TouchEvent event);
+        void touchesEnded(ci::app::TouchEvent event);
 
-    float accelFilterFactor;
-    ci::Vec3f lastAccel, lastRawAccel;
-    
-    std::shared_ptr<boost::asio::io_service> io;
-    std::shared_ptr<boost::asio::io_service::work> ioWork;
-    
-    chr::WindowInfo windowInfo;
-    
-    ci::Timer timer;
-    uint32_t frameCount;
-    
-    BOOL initialized;
-    BOOL active;
+        void sendMessageToBridge(int what, const std::string &body = "") final;
+        void handleEvent(int eventId) final;
+
+        void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) final;
+        void disableAccelerometer() final;
+        void handleAcceleration(const ci::Vec3f &acceleration);
+        
+        ci::JsonTree jsonQuery(const char *methodName) final;
+        
+    protected:
+        int updateCount = 0;
+
+        std::shared_ptr<boost::asio::io_service> io;
+        std::shared_ptr<boost::asio::io_service::work> ioWork;
+        
+        void startIOService();
+        void stopIOService();
+    };
 }
-
-@property (nonatomic, assign) GLKView *view;
-@property (nonatomic, assign) GLViewController *viewController;
-@property (nonatomic, assign) chr::CinderSketch *sketch;
-@property (nonatomic, assign) float accelFilterFactor;
-@property (nonatomic, readonly) std::shared_ptr<boost::asio::io_service> &io;
-@property (nonatomic, readonly) chr::WindowInfo windowInfo;
-@property (nonatomic, readonly) double elapsedSeconds;
-@property (nonatomic, readonly) uint32_t elapsedFrames;
-@property (nonatomic, readonly) BOOL initialized;
-@property (nonatomic, readonly) BOOL active;
-
-- (void) startWithReason:(int)reason;
-- (void) stopWithReason:(int)reason;
-
-- (void) setup;
-- (void) update;
-- (void) draw;
-
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
-
-- (uint32_t) addTouchToMap:(UITouch*)touch;
-- (void) removeTouchFromMap:(UITouch*)touch;
-- (uint32_t) findTouchInMap:(UITouch*)touch;
-- (void) updateActiveTouches;
-
-- (void) action:(int)actionId;
-- (void) receiveMessageFromSketch:(int)what body:(NSString*)body;
-- (void) sendMessageToSketch:(int)what;
-- (void) sendMessageToSketch:(int)what json:(id)json;
-- (void) sendMessageToSketch:(int)what body:(NSString*)body;
-
-@end

@@ -2,17 +2,17 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/xf/Font.h"
 #include "chronotext/font/xf/FontManager.h"
 
-using namespace ci;
 using namespace std;
+using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace xf
     {
@@ -20,6 +20,7 @@ namespace chronotext
         :
         texture(texture),
         properties(properties),
+        middleLineFactor(0),
         indices(fontManager.getIndices(properties.slotCapacity)),
         began(0),
         hasClip(false),
@@ -36,10 +37,10 @@ namespace chronotext
             height = data->height;
             ascent = data->ascent;
             descent = data->descent;
-            spaceAdvance = data->spaceAdvance;
-            strikethroughFactor = data->strikethroughFactor;
-            underlineOffset = data->underlineOffset;
             lineThickness = data->lineThickness;
+            underlineOffset = data->underlineOffset;
+            strikethroughOffset = data->strikethroughOffset;
+            spaceAdvance = data->spaceAdvance;
             
             w = data->w;
             h = data->h;
@@ -85,7 +86,7 @@ namespace chronotext
         
         bool Font::isValid(wchar_t c) const
         {
-            return (glyphs.count(c) > 0);
+            return glyphs.count(c);
         }
         
         int Font::getGlyphIndex(wchar_t c) const
@@ -94,19 +95,15 @@ namespace chronotext
             {
                 return -2;
             }
-            else
+            
+            auto it = glyphs.find(c);
+            
+            if (it != glyphs.end())
             {
-                auto it = glyphs.find(c);
-                
-                if (it == glyphs.end())
-                {
-                    return -1; // SHALL WE USE A "MISSING GLYPH" AND RETURN ITS INDEX?
-                }
-                else
-                {
-                    return it->second;
-                }
+                return it->second;
             }
+            
+            return -1; // SHALL WE USE A "MISSING GLYPH" AND RETURN ITS INDEX?
         }
         
         wstring Font::getCharacters() const
@@ -114,9 +111,9 @@ namespace chronotext
             wstring characters;
             characters.reserve(glyphs.size());
             
-            for (auto it : glyphs)
+            for (auto &glyph : glyphs)
             {
-                characters.push_back(it.first);
+                characters.push_back(glyph.first);
             }
             
             return characters;
@@ -124,23 +121,28 @@ namespace chronotext
         
         void Font::setSize(float size)
         {
-            this->size = size;
+            Font::size = size;
             sizeRatio = size / baseSize;
+        }
+        
+        void Font::setMiddleLineFactor(float factor)
+        {
+            middleLineFactor = factor;
         }
         
         void Font::setDirection(float direction)
         {
-            this->direction = direction;
+            Font::direction = direction;
         }
         
         void Font::setAxis(const Vec2f &axis)
         {
-            this->axis = axis;
+            Font::axis = axis;
         }
         
         void Font::setColor(const ColorA &color)
         {
-            this->color = color;
+            Font::color = color;
         }
         
         void Font::setColor(float r, float g, float b, float a)
@@ -151,14 +153,9 @@ namespace chronotext
             color.a = a;
         }
         
-        void Font::setStrikethroughFactor(float factor)
-        {
-            strikethroughFactor = factor;
-        }
-        
         void Font::setClip(const Rectf &clipRect)
         {
-            this->clipRect = clipRect;
+            Font::clipRect = clipRect;
             hasClip = true;
         }
         
@@ -198,14 +195,13 @@ namespace chronotext
             {
                 return spaceAdvance * sizeRatio;
             }
-            else if (glyphIndex == -1)
+            
+            if (glyphIndex == -1)
             {
                 return 0;
             }
-            else
-            {
-                return advance[glyphIndex] * sizeRatio;
-            }
+            
+            return advance[glyphIndex] * sizeRatio;
         }
         
         float Font::getCharAdvance(wchar_t c) const
@@ -244,22 +240,22 @@ namespace chronotext
         {
             return descent * sizeRatio;
         }
-        
-        float Font::getStrikethroughOffset() const
+
+        float Font::getLineThickness() const
         {
-            return strikethroughFactor * (ascent - descent) * sizeRatio;
+            return lineThickness * sizeRatio;
         }
-        
+
         float Font::getUnderlineOffset() const
         {
             return underlineOffset * sizeRatio;
         }
         
-        float Font::getLineThickness() const
+        float Font::getStrikethroughOffset() const
         {
-            return lineThickness * sizeRatio;
+            return strikethroughOffset * sizeRatio;
         }
-        
+       
         float Font::getOffsetX(const wstring &text, Alignment align) const
         {
             switch (align)
@@ -283,7 +279,7 @@ namespace chronotext
             switch (align)
             {
                 case ALIGN_MIDDLE:
-                    return getStrikethroughOffset();
+                    return (middleLineFactor != 0) ? (middleLineFactor * (ascent - descent) * sizeRatio) : getStrikethroughOffset();
                     
                 case ALIGN_TOP:
                     return +getAscent();
@@ -294,16 +290,6 @@ namespace chronotext
                 default:
                     return 0;
             }
-        }
-        
-        QuadMatrix* Font::getMatrix()
-        {
-            return &matrix;
-        }
-        
-        const GLushort* Font::getIndices() const
-        {
-            return const_cast<GLushort*>(indices.data());
         }
         
         void Font::begin(bool useColor)
@@ -362,7 +348,7 @@ namespace chronotext
                 
                 if (sequence)
                 {
-                    this->sequence = sequence;
+                    Font::sequence = sequence;
                     sequence->begin(useColor);
                 }
                 
@@ -440,49 +426,47 @@ namespace chronotext
             {
                 return false;
             }
+            
+            if (direction * axis.x > 0)
+            {
+                quad.x1 = x + le[glyphIndex] * sizeRatio;
+                quad.x2 = quad.x1 + w[glyphIndex] * sizeRatio;
+            }
             else
             {
-                if (direction * axis.x > 0)
-                {
-                    quad.x1 = x + le[glyphIndex] * sizeRatio;
-                    quad.x2 = quad.x1 + w[glyphIndex] * sizeRatio;
-                }
-                else
-                {
-                    quad.x2 = x - le[glyphIndex] * sizeRatio;
-                    quad.x1 = quad.x2 - w[glyphIndex] * sizeRatio;
-                }
-                
-                if (axis.x > 0)
-                {
-                    quad.u1 = u1[glyphIndex];
-                    quad.u2 = u2[glyphIndex];
-                }
-                else
-                {
-                    quad.u1 = u2[glyphIndex];
-                    quad.u2 = u1[glyphIndex];
-                }
-                
-                if (axis.y > 0)
-                {
-                    quad.y1 = y - te[glyphIndex] * sizeRatio;
-                    quad.y2 = quad.y1 + h[glyphIndex] * sizeRatio;
-                    
-                    quad.v1 = v1[glyphIndex];
-                    quad.v2 = v2[glyphIndex];
-                }
-                else
-                {
-                    quad.y2 = y + te[glyphIndex] * sizeRatio;
-                    quad.y1 = quad.y2 - h[glyphIndex] * sizeRatio;
-                    
-                    quad.v1 = v2[glyphIndex];
-                    quad.v2 = v1[glyphIndex];
-                }
-                
-                return true;
+                quad.x2 = x - le[glyphIndex] * sizeRatio;
+                quad.x1 = quad.x2 - w[glyphIndex] * sizeRatio;
             }
+            
+            if (axis.x > 0)
+            {
+                quad.u1 = u1[glyphIndex];
+                quad.u2 = u2[glyphIndex];
+            }
+            else
+            {
+                quad.u1 = u2[glyphIndex];
+                quad.u2 = u1[glyphIndex];
+            }
+            
+            if (axis.y > 0)
+            {
+                quad.y1 = y - te[glyphIndex] * sizeRatio;
+                quad.y2 = quad.y1 + h[glyphIndex] * sizeRatio;
+                
+                quad.v1 = v1[glyphIndex];
+                quad.v2 = v2[glyphIndex];
+            }
+            else
+            {
+                quad.y2 = y + te[glyphIndex] * sizeRatio;
+                quad.y1 = quad.y2 - h[glyphIndex] * sizeRatio;
+                
+                quad.v1 = v2[glyphIndex];
+                quad.v2 = v1[glyphIndex];
+            }
+            
+            return true;
         }
         
         bool Font::clipQuad(Quad &quad) const

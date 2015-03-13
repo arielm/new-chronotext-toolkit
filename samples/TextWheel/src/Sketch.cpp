@@ -1,14 +1,14 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "Sketch.h"
 
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/utils/MathUtils.h"
 
@@ -16,44 +16,39 @@
 
 using namespace std;
 using namespace ci;
+using namespace ci::app;
 using namespace chr;
 using namespace chr::zf;
 
 const float REFERENCE_H = 768;
 const float TEXT_SIZE = 20;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (!renewContext)
-    {
-        fontManager.loadConfig(InputSource::getResource("font-config.xml"));
-
-        font = fontManager.getCachedFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
-        font->setSize(TEXT_SIZE);
-        font->setColor(0, 0, 0, 0.85f);
-        
-        spiral.update(0, 0, 67, 500, 17, 1, 40);
-
-        addVersion("he"); // HEBREW
-        addVersion("en"); // ENGLISH
-        addVersion("zh-tw"); // CHINESE (TRADITIONAL)
-        addVersion("fr"); // FRENCH
-        addVersion("ru"); // RUSSIAN
-        addVersion("ko"); // KOREAN
-        addVersion("de"); // GERMAN
-        addVersion("hi"); // HINDI
-        addVersion("es"); // SPANISH
-        addVersion("ja"); // JAPANESE
-        addVersion("ar"); // ARABIC
-        addVersion("el"); // GREEK
-        
-        currentLangIndex = Rand::randInt(0, languages.size() - 1);
-    }
+    FontManager::LOG_VERBOSE = true;
+    
+    fontManager.loadConfig(InputSource::getResource("font-config.xml"));
+    
+    font = fontManager.getFont("babel-serif", ZFont::STYLE_REGULAR, ZFont::Properties2d(48));
+    font->setSize(TEXT_SIZE);
+    font->setColor(0, 0, 0, 0.85f);
+    
+    spiral.update(0, 0, 67, 500, 17, 1, 40);
+    
+    addVersion("he"); // HEBREW
+    addVersion("en"); // ENGLISH
+    addVersion("zh-tw"); // CHINESE (TRADITIONAL)
+    addVersion("fr"); // FRENCH
+    addVersion("ru"); // RUSSIAN
+    addVersion("ko"); // KOREAN
+    addVersion("de"); // GERMAN
+    addVersion("hi"); // HINDI
+    addVersion("es"); // SPANISH
+    addVersion("ja"); // JAPANESE
+    addVersion("ar"); // ARABIC
+    addVersion("el"); // GREEK
+    
+    currentLangIndex = Rand::randInt(0, languages.size() - 1);
     
     // ---
     
@@ -70,16 +65,6 @@ void Sketch::setup(bool renewContext)
     }
 }
 
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            fontManager.discardTextures();
-            break;
-    }
-}
-
 void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
@@ -87,7 +72,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    rotation = getElapsedSeconds() * 0.1f;
+    rotation = clock()->getTime() * 0.1f;
 }
 
 void Sketch::draw()
@@ -100,12 +85,32 @@ void Sketch::draw()
 
     // ---
     
-    glRotatef(rotation * R2D, 0, 0, 1);
+    gl::rotate(rotation * R2D);
     
     gl::color(1, 0, 0, 0.125f);
     spiral.drawWire();
     
-    font->replaySequence(sequences[languages[currentLangIndex]]);
+    font->replaySequence(*sequences[languages[currentLangIndex]]);
+}
+
+bool Sketch::keyDown(const KeyEvent &event)
+{
+    switch (CinderDelegate::getCode(event))
+    {
+        case KeyEvent::KEY_RIGHT:
+            nextVersion();
+            return true;
+            
+        case KeyEvent::KEY_LEFT:
+            previousVersion();
+            return true;
+            
+        case KeyEvent::KEY_u:
+            fontManager.unload();
+            return true;
+    }
+    
+    return false;
 }
 
 void Sketch::addVersion(const string &lang)
@@ -116,7 +121,7 @@ void Sketch::addVersion(const string &lang)
     
     string version;
     
-    for (auto &line : readLines<string>(InputSource::getResource(lang + ".txt")))
+    for (auto &line : utils::readLines<string>(InputSource::getResource(lang + ".txt")))
     {
         version += line;
         version += " ";
@@ -127,22 +132,22 @@ void Sketch::addVersion(const string &lang)
     
     // ---
     
-    sequences.emplace(lang); // CONSTRUCTS A NEW FontSequence INTO THE MAP
+    sequences[lang] = unique_ptr<FontSequence>(new FontSequence);
     
     float offsetX = 3000; // XXX
     float offsetY = font->getOffsetY(*layout, ZFont::ALIGN_MIDDLE);
     
-    font->beginSequence(sequences[lang]);
+    font->beginSequence(*sequences[lang]);
     spiral.drawText(*font, *layout, offsetX, offsetY);
     font->endSequence();
 }
 
 void Sketch::nextVersion()
 {
-    currentLangIndex = bound(currentLangIndex + 1, languages.size());
+    currentLangIndex = utils::math::bound(currentLangIndex + 1, languages.size());
 }
 
 void Sketch::previousVersion()
 {
-    currentLangIndex = bound(currentLangIndex - 1, languages.size());
+    currentLangIndex = utils::math::bound(currentLangIndex - 1, languages.size());
 }

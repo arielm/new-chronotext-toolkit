@@ -1,12 +1,17 @@
-#include "Hairline.h"
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+#include "chronotext/path/Hairline.h"
 
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
-    Hairline::Hairline()
-    {}
-    
     Hairline::Hairline(TextureManager &textureManager, Type type)
     :
     type(type)
@@ -24,10 +29,10 @@ namespace chronotext
                 break;
                 
             default:
-                throw;
+                assert(false);
         }
         
-        texture = textureManager.getTexture(TextureRequest(InputSource::getResource(resourceName), false, TextureRequest::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+        texture = textureManager.getTexture(Texture::Request(InputSource::getResource(resourceName), false, Texture::Request::FLAGS_TRANSLUCENT).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
     }
     
     void Hairline::stroke(const FollowablePath &path, float scale, float uOffset)

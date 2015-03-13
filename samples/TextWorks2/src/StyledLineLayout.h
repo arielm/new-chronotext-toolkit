@@ -1,8 +1,8 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -15,11 +15,10 @@ class StyledLineLayout
 public:
     struct Style
     {
-        chr::ZFont *font;
+        chr::ZFont *font = nullptr;
         ci::ColorA color;
         
-        Style()
-        {}
+        Style() = default;
         
         Style(std::shared_ptr<chr::ZFont> font, const ci::ColorA &color)
         :
@@ -48,7 +47,7 @@ public:
     std::vector<std::unique_ptr<chr::zf::LineLayout>> lineLayouts;
     std::vector<Chunk> chunks;
     
-    StyledLineLayout();
+    StyledLineLayout() = default;
     StyledLineLayout(const chr::zf::TextLine &line, std::map<int, Style> &styleSheet);
     
     float getAdvance() const;

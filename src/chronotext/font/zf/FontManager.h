@@ -2,28 +2,35 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
 #include "chronotext/font/zf/VirtualFont.h"
+#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/InputSource.h"
 
 #include "cinder/Xml.h"
 
-namespace chronotext
+#include <atomic>
+
+namespace chr
 {
     namespace zf
     {
         class FontManager
         {
         public:
+            static std::atomic<bool> LOG_VERBOSE;
+            static std::atomic<bool> LOG_WARNING;
+
             std::shared_ptr<FreetypeHelper> ftHelper; // THE UNDERLYING FT_Library WILL BE DESTROYED AFTER ALL THE ActualFont INSTANCES
-            LangHelper langHelper;
-            LayoutCache layoutCache;
-            TextItemizer itemizer;
+            std::shared_ptr<LangHelper> langHelper;
+            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<TextItemizer> itemizer;
             
             FontManager();
             
@@ -34,7 +41,7 @@ namespace chronotext
              *
              * NOT MANDATORY, BUT SHOULD BE DEFINED ONLY ONCE
              */
-            void loadConfig(InputSourceRef source);
+            void loadConfig(InputSource::Ref source);
             
             /*
              * HIGHER-LEVEL METHOD, REQUIRING A FONT-CONFIG
@@ -51,12 +58,12 @@ namespace chronotext
              * - MIPMAPS ARE ALLOWED
              * - VirtualFont::setSize() SHALL BE USED DURING THE FONT'S LIFE-CYCLE
              */
-            std::shared_ptr<VirtualFont> getCachedFont(const std::string &name, VirtualFont::Style style = VirtualFont::STYLE_REGULAR, const VirtualFont::Properties &properties = VirtualFont::Properties2d());
+            std::shared_ptr<VirtualFont> getFont(const std::string &name, VirtualFont::Style style = VirtualFont::STYLE_REGULAR, const VirtualFont::Properties &properties = VirtualFont::Properties2d());
             
             /*
              * LOWER-LEVEL METHOD, FOR ACCESSING A FONT DIRECTLY VIA ITS XML-DEFINITION
              */
-            std::shared_ptr<VirtualFont> getCachedFont(InputSourceRef source, const VirtualFont::Properties &properties);
+            std::shared_ptr<VirtualFont> getFont(InputSource::Ref source, const VirtualFont::Properties &properties);
             
             /*
              * CLEARS THE FONT RESOURCES (HARFBUZZ AND FREETYPE RELATED) AND DISCARDS THE GLYPH TEXTURES
@@ -85,15 +92,12 @@ namespace chronotext
             /*
              * RETURNS THE MEMORY USED BY ALL THE GLYPH TEXTURES
              * CURRENTLY: "ALPHA" TEXTURES ARE USED (ONE BYTE PER PIXEL)
-             * NOTE THAT THE GPU MAY DECIDE TO USE MORE MEMORY INTERNALLY
              */
-            size_t getTextureMemoryUsage() const;
-            
-            friend class VirtualFont;
+            int64_t getTextureMemoryUsage() const;
             
         protected:
-            int platform;
-            
+            friend class VirtualFont;
+
             bool hasDefaultFont;
             std::string defaultFontName;
             VirtualFont::Style defaultFontStyle;
@@ -102,7 +106,7 @@ namespace chronotext
             std::map<std::tuple<std::string, VirtualFont::Style, VirtualFont::Properties>, std::shared_ptr<VirtualFont>> shortcuts;
             std::map<std::string, std::string> aliases;
 
-            std::vector<GLushort> indices;
+            std::vector<uint16_t> indices;
             
             std::map<std::pair<std::string, VirtualFont::Properties>, std::shared_ptr<VirtualFont>> virtualFonts;
             std::map<ActualFont::Key, std::unique_ptr<ActualFont>> actualFonts;
@@ -112,9 +116,7 @@ namespace chronotext
             static std::vector<std::string> splitLanguages(const std::string &languages);
             static ActualFont::Descriptor parseDescriptor(const ci::XmlTree &element);
             
-            const std::vector<GLushort>& getIndices(int capacity);
+            const std::vector<uint16_t>& getIndices(int capacity);
         };
     }
 }
-
-namespace chr = chronotext;

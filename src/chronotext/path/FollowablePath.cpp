@@ -2,18 +2,18 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/path/FollowablePath.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
-#include "chronotext/utils/Utils.h"
 
-using namespace ci;
 using namespace std;
+using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     FollowablePath::FollowablePath(int capacity)
     :
@@ -44,11 +44,11 @@ namespace chronotext
         }
     }
     
-    FollowablePath::FollowablePath(DataSourceRef source)
+    FollowablePath::FollowablePath(InputSource::Ref inputSource)
     :
     mode(MODE_TANGENT)
     {
-        read(source);
+        read(inputSource->loadDataSource());
     }
     
     void FollowablePath::read(DataSourceRef source)
@@ -158,10 +158,13 @@ namespace chronotext
     
     Rectf FollowablePath::getBounds() const
     {
-        float minX = numeric_limits<float>::max();
-        float minY = numeric_limits<float>::max();
-        float maxX = numeric_limits<float>::min();
-        float maxY = numeric_limits<float>::min();
+        if (points.empty())
+        {
+            return Rectf(0, 0, 0, 0);
+        }
+        
+        float minX = points.front().x, maxX = minX;
+        float minY = points.front().y, maxY = minY;
         
         for (auto &point : points)
         {
@@ -193,7 +196,7 @@ namespace chronotext
     
     void FollowablePath::setMode(Mode mode)
     {
-        this->mode = mode;
+        FollowablePath::mode = mode;
     }
     
     FollowablePath::Mode FollowablePath::getMode() const
@@ -209,7 +212,7 @@ namespace chronotext
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                offset = boundf(offset, length);
+                offset = utils::math::boundf(offset, length);
             }
             else
             {
@@ -229,7 +232,7 @@ namespace chronotext
                 }
             }
             
-            int index = search(lengths, offset, 1, size());
+            auto index = utils::search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             
@@ -257,7 +260,7 @@ namespace chronotext
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                offset = boundf(offset, length);
+                offset = utils::math::boundf(offset, length);
             }
             else
             {
@@ -277,7 +280,7 @@ namespace chronotext
                 }
             }
             
-            int index = search(lengths, offset, 1, size());
+            auto index = utils::search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             
@@ -298,7 +301,7 @@ namespace chronotext
         {
             if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
             {
-                offset = boundf(offset, length);
+                offset = utils::math::boundf(offset, length);
             }
             else
             {
@@ -318,7 +321,7 @@ namespace chronotext
                 }
             }
             
-            int index = search(lengths, offset, 1, size());
+            auto index = utils::search(lengths, offset, 1, size());
             auto &p0 = points[index];
             auto &p1 = points[index + 1];
             

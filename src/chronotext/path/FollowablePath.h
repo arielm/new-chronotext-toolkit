@@ -2,17 +2,18 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #pragma once
 
-#include "cinder/Path2d.h"
-#include "cinder/DataSource.h"
-#include "cinder/DataTarget.h"
+#include "chronotext/InputSource.h"
 
-namespace chronotext
+#include "cinder/DataTarget.h"
+#include "cinder/Path2d.h"
+
+namespace chr
 {
     class FollowablePath
     {
@@ -32,19 +33,18 @@ namespace chronotext
             float distance; // DISTANCE TO CLOSEST-POINT ON PATH
         };
         
-        typedef enum
+        enum Mode
         {
             MODE_BOUNDED,
             MODE_LOOP,
             MODE_TANGENT,
             MODE_MODULO,
-        }
-        Mode;
+        };
         
         FollowablePath(int capacity = 0);
         FollowablePath(const std::vector<ci::Vec2f> &points);
         FollowablePath(const ci::Path2d &path, float approximationScale = 1.0f);
-        FollowablePath(ci::DataSourceRef source);
+        FollowablePath(InputSource::Ref inputSource);
 
         void read(ci::DataSourceRef source);
         void write(ci::DataTargetRef target);
@@ -87,5 +87,3 @@ namespace chronotext
         void extendCapacity(int amount);
     };
 }
-
-namespace chr = chronotext;

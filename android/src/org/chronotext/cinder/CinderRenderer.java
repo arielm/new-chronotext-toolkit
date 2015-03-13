@@ -1,8 +1,8 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -10,138 +10,378 @@ package org.chronotext.cinder;
 
 import java.util.Vector;
 
+import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import org.chronotext.gl.GLRenderer;
-import org.chronotext.gl.Touch;
+import org.chronotext.cinder.CinderBridge;
+import org.chronotext.cinder.Touch;
+import org.chronotext.utils.Utils;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.view.Display;
-import android.view.Surface;
-import android.view.WindowManager;
-import android.util.DisplayMetrics;
+import android.opengl.GLSurfaceView;
+import android.view.View;
 
-/*
- * WARNING: BE SURE TO DEFINE android:screenOrientation IN THE MANIFEST
- * OR TO CALL setRequestedOrientation() INSIDE Activity.onCreate()
- * BECAUSE THE CURRENT SYSTEM IS NOT HANDLING AUTO-ROTATION
- */
-
-public class CinderRenderer extends GLRenderer
+public class CinderRenderer implements GLSurfaceView.Renderer
 {
-  public static final int EVENT_ATTACHED = 1;
-  public static final int EVENT_DETACHED = 2;
+  /*
+   * PARALLEL TO chronotext/cinder/CinderSketch.h
+   */
+  public static final int EVENT_RESUMED = 1;
+  public static final int EVENT_SHOWN = 2;
   public static final int EVENT_PAUSED = 3;
-  public static final int EVENT_RESUMED = 4;
-  public static final int EVENT_SHOWN = 5;
-  public static final int EVENT_HIDDEN = 6;
-  public static final int EVENT_BACKGROUND = 7;
-  public static final int EVENT_FOREGROUND = 8;
-  public static final int EVENT_BACK_KEY = 9;
+  public static final int EVENT_HIDDEN = 4;
+  public static final int EVENT_FOREGROUND = 5;
+  public static final int EVENT_BACKGROUND = 6;
+  public static final int EVENT_MEMORY_WARNING = 7;
+  public static final int EVENT_CONTEXT_LOST = 8;
+  public static final int EVENT_CONTEXT_RENEWED = 9;
+  public static final int EVENT_TRIGGER_BACK = 10;
+  public static final int EVENT_TRIGGER_ESCAPE = 11;
 
-  protected Context mContext;
-  protected Object mListener;
+  protected CinderBridge cinderBridge;
 
-  public CinderRenderer(Context context, Object listener)
+  protected boolean setup;
+  protected boolean attached;
+  protected boolean paused;
+  protected boolean hidden;
+  protected boolean started;
+  
+  protected boolean setupRequest;
+  protected boolean contextRenewalRequest;
+
+  protected boolean resizeRequest;
+  protected int viewportWidth;
+  protected int viewportHeight;
+
+  protected boolean startRequest;
+  protected int startReason;
+
+  protected int drawCount;
+
+  public CinderRenderer(CinderBridge bridge)
   {
-    mContext = context;
-    mListener = listener;
-
-    prelaunch();
+    cinderBridge = bridge;
   }
 
-  protected WindowManager getWindowManager()
+  @Override
+  public void onSurfaceCreated(GL10 gl, EGLConfig config)
   {
-    return (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-  }
-    
-  // ---------------------------------------- CALL-BACKS TAKING PLACE ON THE RENDERER'S THREAD ----------------------------------------
-
-  public void launch()
-  {
-    launch(mContext, mListener);
+    Utils.LOGD("CinderRenderer.onSurfaceCreated");
   }
 
-  public void setup(GL10 gl, int width, int height)
+  @Override
+  public void onSurfaceChanged(GL10 gl, int width, int height)
   {
-    Display display = getWindowManager().getDefaultDisplay();
-    DisplayMetrics dm = new DisplayMetrics();
-    display.getMetrics(dm);
-
-    float widthInches = (float) dm.widthPixels / dm.xdpi;
-    float heightInches = (float) dm.heightPixels / dm.ydpi;
-    float diagonal = (float) Math.sqrt(widthInches * widthInches + heightInches * heightInches);
+    Utils.LOGD("CinderRenderer.onSurfaceChanged: " + width + "x" + height);
 
     /*
-     * MORE RELIABLE THAN dm.densityDpi
+     * IT IS IMPERATIVE TO CALL glViewport() UPON EACH onSurfaceChanged()
+     * EVEN IF IT SEEMS THAT THE LATTER IS CALLED TOO OFTEN BY THE SYSTEM
+     *
+     * OTHERWISE: THE GLView WILL BE DEFORMED IN SOME SITUATIONS:
+     * E.G. RETURNING FROM SLEEP - DURING WHICH THE ORIENTATION HAS CHANGED
      */
-    float density = (float) Math.sqrt(dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels) / diagonal;
 
-    /*
-     * REFERENCES:
-     * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
-     * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
-     */
-    int displayRotation = display.getRotation();
-      
-    setup(width, height, diagonal, density, displayRotation);
-    initialized = true;
+    gl.glViewport(0, 0, width, height);
+
+    resizeRequest = true;
+    viewportWidth = width;
+    viewportHeight = height;
+
+    // ---
+
+    if (!setup)
+    {
+      setupRequest = true;
+    }
   }
 
-  public void draw(GL10 gl)
+  @Override
+  public void onDrawFrame(GL10 gl)
   {
+    if (attached && !paused && !hidden)
+    {
+      if (contextRenewalRequest)
+      {
+        contextRenewalRequest = false;
+        contextRenewed();
+
+        resizeRequest = true; // ALREADY TRUE IN PRINCIPLE
+      }
+
+      if (setupRequest)
+      {
+        setupRequest = false;
+        performSetup(viewportWidth, viewportHeight);
+      }
+
+      if (resizeRequest)
+      {
+        resizeRequest = false;
+        performResize(viewportWidth, viewportHeight);
+      }
+
+      if (startRequest)
+      {
+        startRequest = false;
+        performStart(startReason);
+
+        drawCount = 0;
+      }
+
+      if (started)
+      {
+        performDraw();
+      }
+    }
+  }
+
+  // ---------------------------------------- INTERNAL LIFE-CYCLE ----------------------------------------
+
+  protected void performSetup(int width, int height)
+  {
+    if (!setup)
+    {
+      Utils.LOGD("CinderRenderer.performSetup: " + width + "x" + height);
+
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_WILL_SETUP);
+      setup(width, height);
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_DID_SETUP);
+
+      setup = true;
+    }
+  }
+
+  protected void performResize(int width, int height)
+  {
+      Utils.LOGD("CinderRenderer.performResize: " + width + "x" + height);
+      resize(width, height);
+  }
+
+  protected void performDraw()
+  {
+    if (drawCount++ == 0)
+    {
+      Utils.LOGD("CinderRenderer.performDraw");
+    }
+
     draw();
   }
 
-  public void attached()
+  protected void performStart(int reason)
   {
-    event(EVENT_ATTACHED);
-    attached = true;
-    hidden = false;
+    switch (reason)
+    {
+      case CinderBridge.VIEW_WILL_APPEAR:
+      {
+        Utils.LOGD("CinderRenderer.performStart: SHOWN");
+        dispatchEvent(CinderRenderer.EVENT_SHOWN);
+        break;
+      }
+
+      case CinderBridge.APP_DID_RESUME:
+      {
+        Utils.LOGD("CinderRenderer.performStart: RESUMED");
+        dispatchEvent(CinderRenderer.EVENT_RESUMED);
+        break;
+      }
+    }
+
+    started = true;
+  }
+  
+  protected void performStop(int reason)
+  {
+    switch (reason)
+    {
+      case CinderBridge.VIEW_WILL_DISAPPEAR:
+      {
+        Utils.LOGD("CinderRenderer.performStop: HIDDEN");
+        dispatchEvent(CinderRenderer.EVENT_HIDDEN);
+        break;
+      }
+
+      case CinderBridge.APP_WILL_PAUSE:
+      {
+        Utils.LOGD("CinderRenderer.performStop: PAUSED");
+        dispatchEvent(CinderRenderer.EVENT_PAUSED);
+        break;
+      }
+    }
+
+    started = false;
   }
 
-  public void detached()
+  protected void requestStart(int reason)
   {
-    event(EVENT_DETACHED);
-    attached = false;
+    startRequest = true;
+    startReason = reason;
   }
 
-  public void paused()
+  // ---
+
+  protected void contextLost()
   {
-    event(EVENT_PAUSED);
-    resumed = false;
+    Utils.LOGD("CinderRenderer.contextLost");
+    dispatchEvent(EVENT_CONTEXT_LOST);
+  }
+
+  protected void contextRenewed()
+  {
+    Utils.LOGD("CinderRenderer.contextRenewed");
+    dispatchEvent(EVENT_CONTEXT_RENEWED);
+  }
+
+  protected void foreground()
+  {
+    Utils.LOGD("CinderRenderer.foreground");
+    dispatchEvent(EVENT_FOREGROUND);
+  }
+
+  protected void background()
+  {
+    Utils.LOGD("CinderRenderer.background");
+    dispatchEvent(EVENT_BACKGROUND);
+  }
+
+  // ---------------------------------------- POSTED TO (OR INVOKED ON) THE RENDERER'S THREAD FROM GLView ----------------------------------------
+
+  public void contextCreated()
+  {
+    if (setup)
+    {
+      contextRenewalRequest = true;  
+    }
+  }
+
+  public void contextDestroyed()
+  {
+    if (setup)
+    {
+      contextLost();
+    }
+  }
+
+  /*
+   * TODO: CONSIDER MERGING WITH CinderRenderer.detachedFromWindow()
+   * SEE ALSO: GLView.CustomContextFactory.destroyContext()
+   */
+  public void performShutdown()
+  {
+    if (setup)
+    {
+      Utils.LOGD("CinderRenderer.performShutdown");
+
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_WILL_SHUTDOWN);
+      shutdown();
+      cinderBridge.dispatchEvent(CinderBridge.SKETCH_DID_SHUTDOWN);
+
+      setup = false;
+    }
+  }
+
+  public void attachedToWindow()
+  {
+    if (!attached)
+    {
+      Utils.LOGD("CinderRenderer.attachedToWindow");
+
+      attached = true;
+
+      if (!hidden)
+      {
+        requestStart(CinderBridge.VIEW_WILL_APPEAR); // REASON: ATTACHED TO WINDOW
+      }
+    }
+  }
+
+  /*
+   * TODO: CONSIDER MERGING WITH CinderRenderer.performShutdown()
+   * SEE ALSO: GLView.CustomContextFactory.destroyContext()
+   */
+  public void detachedFromWindow()
+  {
+    if (attached)
+    {
+      Utils.LOGD("CinderRenderer.detachedFromWindow");
+
+      attached = false;
+
+      if (!paused && !hidden)
+      {
+        performStop(CinderBridge.VIEW_WILL_DISAPPEAR); // REASON: DETACHED FROM WINDOW
+      }
+    } 
   }
 
   public void resumed()
   {
-    event(EVENT_RESUMED);
-    resumed = true;
-    hidden = false;
+    if (attached)
+    {
+      Utils.LOGD("CinderRenderer.resumed");
+
+      if (hidden)
+      {
+        foreground();
+      }
+      else
+      {
+        paused = false;
+        requestStart(CinderBridge.APP_DID_RESUME); // REASON: APP RESUMED
+      }
+    }
   }
 
-  public void background()
+  public void paused()
   {
-    event(EVENT_BACKGROUND);
+    if (attached)
+    {
+      Utils.LOGD("CinderRenderer.paused");
+
+      if (hidden)
+      {
+        background();
+      }
+      else
+      {
+        paused = true;
+        performStop(CinderBridge.APP_WILL_PAUSE); // REASON: APP PAUSED
+      }      
+    }
   }
 
-  public void foreground()
+  public void visibilityChanged(int visibility)
   {
-    event(EVENT_FOREGROUND);
+    Utils.LOGD("CinderRenderer.visibilityChanged: " + visibility);
+
+    switch (visibility)
+    {
+      case View.VISIBLE:
+      {
+        hidden = false;
+
+        if (attached)
+        {
+          requestStart(CinderBridge.VIEW_WILL_APPEAR); // REASON: VIEW SHOWN  
+        }
+        
+        break;
+      }
+
+      case View.GONE:
+      case View.INVISIBLE: // WARNING: THIS ONE USED TO TRIGGER SOFTWARE-RENDERING ON OLDER SYSTEMS (E.G. XOOM 1, HONEYCOMB)
+      {
+        hidden = true;
+
+        if (attached)
+        {
+          performStop(CinderBridge.VIEW_WILL_DISAPPEAR); // REASON: VIEW HIDDEN  
+        }
+        
+        break;
+      }
+    }
   }
 
-  public void shown()
-  {
-    event(EVENT_SHOWN);
-    hidden = false;
-  }
-
-  public void hidden()
-  {
-    event(EVENT_HIDDEN);
-    hidden = true;
-  }
-    
   public void addTouches(Vector<Touch> touches)
   {
     for (Touch touch : touches)
@@ -168,23 +408,15 @@ public class CinderRenderer extends GLRenderer
 
   // ---------------------------------------- JNI ----------------------------------------
 
-  public native void prelaunch();
+  protected native void setup(int width, int height);
+  protected native void shutdown();
 
-  public native void launch(Context context, Object listener);
+  protected native void resize(int width, int height);
+  protected native void draw();
 
-  public native void setup(int width, int height, float diagonal, float density, int displayRotation);
+  protected native void addTouch(int index, float x, float y);
+  protected native void updateTouch(int index, float x, float y);
+  protected native void removeTouch(int index, float x, float y);
 
-  public native void shutdown();
-
-  public native void draw();
-
-  public native void event(int id);
-
-  public native void addTouch(int index, float x, float y);
-
-  public native void updateTouch(int index, float x, float y);
-
-  public native void removeTouch(int index, float x, float y);
-
-  public native void sendMessage(int what, String body);
+  public native void dispatchEvent(int eventId);
 }

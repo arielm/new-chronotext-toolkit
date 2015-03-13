@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,7 +11,7 @@
 #include "chronotext/quad/QuadBatchMap.h"
 #include "chronotext/font/zf/FontTexture.h"
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -21,7 +21,8 @@ namespace chronotext
             bool useColor;
             float anisotropy;
             
-            FontSequence() {}
+            FontSequence() = default;
+            FontSequence(const FontSequence &other) = delete; // FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
             
         protected:
             std::vector<std::unique_ptr<QuadBatchMap<FontTexture>>> maps;
@@ -30,14 +31,9 @@ namespace chronotext
             void end();
             
             void addMap(std::unique_ptr<QuadBatchMap<FontTexture>> &&map);
-            void replay(const GLushort *indices);
+            void replay(const uint16_t *indices);
             
             friend class VirtualFont;
-            
-        private:
-            FontSequence(const FontSequence &that); // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
         };
     }
 }
-
-namespace chr = chronotext;

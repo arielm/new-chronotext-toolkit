@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -10,7 +10,7 @@
 
 #include "chronotext/quad/QuadBatch.h"
 
-namespace chronotext
+namespace chr
 {
     namespace xf
     {
@@ -21,7 +21,8 @@ namespace chronotext
         public:
             bool useColor;
             
-            FontSequence() {}
+            FontSequence() = default;
+            FontSequence(const FontSequence &other) = delete; // FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
             
         protected:
             std::vector<std::unique_ptr<QuadBatch>> batches;
@@ -30,14 +31,9 @@ namespace chronotext
             void end();
             
             void addBatch(std::unique_ptr<QuadBatch> &&batch);
-            void replay(const GLushort *indices);
+            void replay(const uint16_t *indices);
             
             friend class Font;
-            
-		private:
-            FontSequence(const FontSequence &that); // MAKES IT EXPLICIT: FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
         };
     }
 }
-
-namespace chr = chronotext;

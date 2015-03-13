@@ -1,8 +1,8 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,10 +11,7 @@
 using namespace std;
 using namespace ci;
 using namespace chr;
-using namespace zf;
-
-StyledLineLayout::StyledLineLayout()
-{}
+using namespace chr::zf;
 
 StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleSheet)
 {
@@ -23,7 +20,7 @@ StyledLineLayout::StyledLineLayout(const TextLine &line, map<int, Style> &styleS
     
     for (auto run = line.runs.cbegin(); run != line.runs.cend(); ++run)
     {
-        auto font = styleSheet[run->tag].font;
+        auto font = styleSheet[run->tag].font; // XXX
         
         if (font != currentFont)
         {
@@ -113,7 +110,7 @@ float StyledLineLayout::getOffsetY(ZFont::Alignment align) const
     switch (align)
     {
         case ZFont::ALIGN_MIDDLE:
-            return 0.5f * (maxAscent - maxDescent);
+            return 0.5f * (maxAscent - maxDescent); // TODO: USE SAME POLICY AS FOR ZFont REGARDING VERTICAL ALIGNMENT (I.E. setMiddleLineFactor(), ETC.)
             
         case ZFont::ALIGN_TOP:
             return +maxAscent;

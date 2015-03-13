@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -10,37 +10,38 @@
 
 #include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/font/zf/ActualFont.h"
-#include "chronotext/font/zf/LayoutCache.h"
-#include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/font/zf/FontSequence.h"
+#include "chronotext/font/zf/LineLayout.h"
+#include "chronotext/font/zf/TextItemizer.h"
 
 #include <boost/range/iterator_range.hpp>
 
 #include <set>
 #include <map>
 
-namespace chronotext
+namespace chr
 {
     typedef class zf::VirtualFont ZFont;
 
     namespace zf
     {
         class FontManager;
+        class LayoutCache;
+
         typedef std::vector<ActualFont*> FontSet;
         
         class VirtualFont
         {
         public:
-            typedef enum
+            enum Style
             {
                 STYLE_REGULAR,
                 STYLE_BOLD,
                 STYLE_ITALIC,
                 STYLE_BOLD_ITALIC
-            }
-            Style;
+            };
             
-            typedef enum
+            enum Alignment
             {
                 ALIGN_MIDDLE,
                 ALIGN_LEFT,
@@ -48,8 +49,7 @@ namespace chronotext
                 ALIGN_TOP,
                 ALIGN_BASELINE,
                 ALIGN_BOTTOM
-            }
-            Alignment;
+            };
             
             struct Properties
             {
@@ -68,7 +68,7 @@ namespace chronotext
                 
                 Properties& setCapacity(float slotCapacity)
 				{
-                    this->slotCapacity = slotCapacity;
+                    Properties::slotCapacity = slotCapacity;
                     return *this;
                 }
                 
@@ -94,19 +94,24 @@ namespace chronotext
                 return Properties(baseSize, true, true, 1024);
             }
             
-            LayoutCache &layoutCache;
-            TextItemizer &itemizer;
+            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<TextItemizer> itemizer;
             
             ActualFont::Metrics getMetrics(const Cluster &cluster) const; // RETURNS THE SIZED METRICS OF THE ActualFont USED BY cluster
             ActualFont::Metrics getMetrics(const std::string &lang = "") const; // RETURNS THE SIZED METRICS OF THE FIRST ActualFont IN THE SET USED FOR lang
             
-            float getHeight(const LineLayout &layout) const;
-            float getAscent(const LineLayout &layout) const;
-            float getDescent(const LineLayout &layout) const;
-            float getMiddleLine(const LineLayout &layout) const;
+            /*
+             * METRICS TAKE IN COUNT EVERY ActualFont INCLUDED IN THE "COMPOSITE LINE"
+             */
+            float getHeight(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getAscent(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getDescent(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getLineThickness(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getUnderlineOffset(const LineLayout &layout) const; // RETURNS THE LINE'S MAXIMUM
+            float getStrikethroughOffset(const LineLayout &layout) const; // RETURNS THE LINE'S AVERAGE
             
             float getOffsetX(const LineLayout &layout, Alignment align) const;
-            float getOffsetY(const LineLayout &layout, Alignment align) const;
+            float getOffsetY(const LineLayout &layout, Alignment align) const; // FOR "ALIGN_MIDDLE": getStrikethroughOffset() WILL BE USED, UNLESS setMiddleLineFactor() HAS BEEN INVOKED
             inline ci::Vec2f getOffset(const LineLayout &layout, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(layout, alignX), getOffsetY(layout, alignY)); }
             
             float getAdvance(const LineLayout &layout) const;
@@ -127,15 +132,29 @@ namespace chronotext
             void preload(LineLayout &layout);
             
             void setSize(float size);
+            void setMiddleLineFactor(float factor); // DEFAULT-VALUE IS 0, OTHERWISE getOffsetY() FOR "ALIGN_MIDDLE" WILL RETURN middleLineFactor * (getAscent() - getDescent())
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);
             
             void setClip(const ci::Rectf &clipRect);
             void setClip(float x1, float y1, float x2, float y2);
-            void clearClip();
+            void clearClip(); // INVOKED UPON SEQUENCE-BEGIN
             
-            QuadMatrix* getMatrix();
-            const GLushort* getIndices() const;
+            inline QuadMatrix& getMatrix()
+            {
+                return matrix;
+            }
+            
+            template <typename T>
+            inline QuadMatrix& loadMatrix(const T &other)
+            {
+                return matrix.load(other);
+            }
+            
+            inline const uint16_t* getIndices() const
+            {
+                return const_cast<uint16_t*>(indices.data());
+            }
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }
@@ -154,18 +173,19 @@ namespace chronotext
             static std::string styleEnumToString(Style style);
             static float snap(float value);
             
-            friend class FontManager;
-            
         protected:
+            friend class FontManager;
+
             float size;
             float sizeRatio;
+            float middleLineFactor;
             ci::ColorA color;
             
             bool hasClip;
             ci::Rectf clipRect;
 
             Properties properties;
-            const std::vector<GLushort> &indices;
+            const std::vector<uint16_t> &indices;
             QuadMatrix matrix;
             
             float anisotropy;
@@ -191,5 +211,3 @@ namespace chronotext
         };
     }
 }
-
-namespace chr = chronotext;

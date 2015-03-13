@@ -1,44 +1,58 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/InputSource.h"
+#include "chronotext/Context.h"
 
 #include "cinder/app/App.h"
-#include "cinder/Utilities.h"
 
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
-    InputSourceRef InputSource::getResource(const ci::fs::path &relativePath)
+    namespace inputsource
     {
-        auto source = make_shared<InputSource>(TYPE_RESOURCE);
+        const string EMPTY_STRING = "";
+        const fs::path EMPTY_PATH = "";
+    }
+    
+    InputSource::InputSource(Type type)
+    :
+    type(type)
+    {}
+    
+    InputSource::Ref InputSource::getResource(const fs::path &relativePath)
+    {
+        auto source = Ref(new InputSource(TYPE_RESOURCE));
         source->relativePath = relativePath;
         source->filePathHint = relativePath.string();
         
 #if defined(CINDER_COCOA)
-        source->filePath = FileSystem::getResourcePath(relativePath);
+        source->filePath = FileHelper::getResourcePath(relativePath);
+#elif defined(CINDER_ANDROID)
+        source->filePath = relativePath;
 #endif
         
         return source;
     }
     
-    DataSourceRef InputSource::loadResource(const ci::fs::path &relativePath)
+    DataSourceRef InputSource::loadResource(const fs::path &relativePath)
     {
         return InputSource::getResource(relativePath)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
+    InputSource::Ref InputSource::getResource(const string &resourceName, int mswID, const std::string &mswType)
     {
-        auto source = make_shared<InputSource>(TYPE_RESOURCE_MSW);
+        auto source = Ref(new InputSource(TYPE_RESOURCE_MSW));
         source->mswID = mswID;
         source->mswType = mswType;
+        source->relativePath = resourceName;
         source->filePathHint = resourceName;
         
         return source;
@@ -49,16 +63,18 @@ namespace chronotext
         return InputSource::getResource(resourceName, mswID, mswType)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getAsset(const fs::path &relativePath)
+    InputSource::Ref InputSource::getAsset(const fs::path &relativePath)
     {
-        auto source = make_shared<InputSource>(TYPE_ASSET);
+        auto source = Ref(new InputSource(TYPE_ASSET));
         source->relativePath = relativePath;
         source->filePathHint = relativePath.string();
 
 #if defined(CINDER_MAC) || defined(CINDER_MSW)
         source->filePath = app::getAssetPath(relativePath);
 #elif defined(CINDER_COCOA_TOUCH)
-        source->filePath = FileSystem::getResourcePath("assets" / relativePath);
+        source->filePath = FileHelper::getResourcePath("assets" / relativePath);
+#elif defined(CINDER_ANDROID)
+        source->filePath = "assets" / relativePath;
 #endif
         
         return source;
@@ -74,7 +90,7 @@ namespace chronotext
      * THERE IS PROBABLY A BETTER WAY TO HANDLE THE PARSING,
      * BUT Boost.Regex IS CURRENTLY NOT AN OPTION ON COCOA
      */
-    InputSourceRef InputSource::get(const string &uri)
+    InputSource::Ref InputSource::get(const string &uri)
     {
         string scheme;
         string path;
@@ -137,7 +153,7 @@ namespace chronotext
             }
         }
         
-        throw Exception("INVALID URI: " + uri);
+        throw EXCEPTION(InputSource, "INVALID URI: " + uri);
     }
     
     DataSourceRef InputSource::load(const string &uri)
@@ -145,9 +161,9 @@ namespace chronotext
         return InputSource::get(uri)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFile(const fs::path &filePath)
+    InputSource::Ref InputSource::getFile(const fs::path &filePath)
     {
-        auto source = make_shared<InputSource>(TYPE_FILE);
+        auto source = Ref(new InputSource(TYPE_FILE));
         source->filePath = filePath;
         source->filePathHint = filePath.string();
         
@@ -159,7 +175,7 @@ namespace chronotext
         return InputSource::getFile(filePath)->loadDataSource();
     }
     
-    InputSourceRef InputSource::getFileInDocuments(const fs::path &relativePath)
+    InputSource::Ref InputSource::getFileInDocuments(const fs::path &relativePath)
     {
         auto source = InputSource::getFile(getDocumentsDirectory() / relativePath);
         source->relativePath = relativePath;
@@ -174,145 +190,171 @@ namespace chronotext
     
     DataSourceRef InputSource::loadDataSource()
     {
-        switch (type)
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
         {
-            case TYPE_RESOURCE:
+            switch (type)
             {
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), filePathHint.c_str(), AASSET_MODE_STREAMING);
-                
-                if (asset)
+                case TYPE_RESOURCE:
                 {
-                    AAsset_close(asset);
-                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), filePathHint);
-                }
-                else
-                {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
-                }
-#elif defined(CINDER_ANDROID)
-                try
-                {
-                    return app::loadResource(filePathHint); // TODO: TEST IF IT REALLY THROWS UPON ERROR
-                }
-                catch (exception &e)
-                {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
-                }
+#if defined(CINDER_ANDROID)
+                    auto filename = getFilePath().c_str();
+                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), filename, AASSET_MODE_STREAMING);
+                    
+                    if (asset)
+                    {
+                        AAsset_close(asset);
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), filename);
+                    }
+                    else
+                    {
+                        throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
+                    }
 #else
-                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
-                {
-                    return DataSourcePath::create(filePath);
-                }
-                else
-                {
-                    throw Exception("RESOURCE NOT FOUND: " + relativePath.string());
-                }
+                    if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                    {
+                        return DataSourcePath::create(filePath);
+                    }
+                    else
+                    {
+                        throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
+                    }
 #endif
-            }
-                
-            case TYPE_RESOURCE_MSW:
-            {
-                try
-                {
-                    return app::loadResource(filePathHint, mswID, mswType); // TODO: TEST IF IT REALLY THROWS UPON ERROR
                 }
-                catch (exception &e)
+                    
+                case TYPE_RESOURCE_MSW:
                 {
-                    throw Exception("RESOURCE NOT FOUND: " + filePathHint);
+                    try
+                    {
+                        return app::loadResource(relativePath.string(), mswID, mswType); // TODO: VERIFY IF IT THROWS UPON ERROR
+                    }
+                    catch (exception &e)
+                    {
+                        throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
+                    }
                 }
-            }
-                
-            case TYPE_FILE:
-            {
-                if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                    
+                case TYPE_FILE:
                 {
-                    return DataSourcePath::create(filePath);
+                    if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                    {
+                        return DataSourcePath::create(filePath);
+                    }
+                    else
+                    {
+                        throw EXCEPTION(InputSource, "FILE NOT FOUND: " + filePathHint);
+                    }
                 }
-                else
+                    
+                case TYPE_ASSET:
                 {
-                    throw Exception("FILE NOT FOUND: " + filePath.string());
-                }
-            }
-                
-            case TYPE_ASSET:
-            {
-#if defined(CHR_COMPLEX) && defined(CINDER_ANDROID)
-                string resourcePath = ("assets" / relativePath).string();
-                AAsset* asset = AAssetManager_open(FileSystem::getAndroidAssetManager(), resourcePath.c_str(), AASSET_MODE_STREAMING);
-                
-                if (asset)
-                {
-                    AAsset_close(asset);
-                    return DataSourceAsset::create(FileSystem::getAndroidAssetManager(), resourcePath);
-                }
-                else
-                {
-                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
-                }
-#elif defined(CINDER_ANDROID)
-                try
-                {
-                    return app::loadResource(("assets" / relativePath).string()); // TODO: TEST IF IT REALLY THROWS UPON ERROR
-                }
-                catch (exception &e)
-                {
-                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
-                }
+#if defined(CINDER_ANDROID)
+                    auto filename = getFilePath().c_str();
+                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), filename, AASSET_MODE_STREAMING);
+                    
+                    if (asset)
+                    {
+                        AAsset_close(asset);
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), filename);
+                    }
+                    else
+                    {
+                        throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + filePathHint);
+                    }
 #else
-                if (!filePath.empty() && fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
-                {
-                    return DataSourcePath::create(filePath);
-                }
-                else
-                {
-                    throw Exception("ASSET NOT FOUND: " + relativePath.string());
-                }
+                    if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                    {
+                        return DataSourcePath::create(filePath);
+                    }
+                    else
+                    {
+                        throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + filePathHint);
+                    }
 #endif
+                }
             }
         }
         
-        return DataSourceRef();
+        throw EXCEPTION(InputSource, "INVALID INPUT-SOURCE");
     }
     
-    InputSourceRef InputSource::getSubSource(const fs::path &subPath)
+    InputSource::Ref InputSource::getSubSource(const fs::path &subPath)
     {
-        if (type == TYPE_RESOURCE_MSW)
-        {
-            /*
-             * TODO: PARSE "resourceName", "mswID" AND "mswType"
-             */
-        }
-        else
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
         {
             switch (type)
             {
                 case TYPE_FILE:
+                {
                     return getFile(filePath.parent_path() / subPath);
+                }
                     
                 case TYPE_ASSET:
+                {
                     return getAsset(relativePath.parent_path() / subPath);
+                }
                     
                 case TYPE_RESOURCE:
+                {
                     return getResource(relativePath.parent_path() / subPath);
+                }
+                    
+                case TYPE_RESOURCE_MSW:
+                {
+                    /*
+                     * TODO: PARSE "resourceName", "mswID" AND "mswType"
+                     */
+                    break;
+                }
             }
         }
         
-        return InputSourceRef();
+        throw EXCEPTION(InputSource, "INVALID INPUT-SOURCE");
+    }
+    
+    bool InputSource::hasFileName() const
+    {
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
+        {
+            if (isFile())
+            {
+                return true;
+            }
+            
+            if (system::platform() == system::PLATFORM_ANDROID)
+            {
+                switch (type)
+                {
+                    case TYPE_ASSET:
+                    case TYPE_RESOURCE:
+                        return true;
+                        
+                    default:
+                        break;
+                }
+            }
+        }
+        
+        return false;
     }
     
     bool InputSource::isFile() const
     {
-        switch (type)
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
         {
-            case TYPE_FILE:
-#if !defined(CINDER_ANDROID)
-            case TYPE_ASSET:
-#endif
-#if defined(CINDER_COCOA)
-            case TYPE_RESOURCE:
-#endif
-                return true;
+            switch (type)
+            {
+                case TYPE_FILE:
+                    return true;
+                    
+                case TYPE_ASSET:
+                    return (system::platform() != system::PLATFORM_ANDROID);
+                    
+                case TYPE_RESOURCE:
+                    return (system::platform() == system::PLATFORM_OSX) || (system::platform() == system::PLATFORM_IOS);
+                    
+                default:
+                    break;
+            }
         }
         
         return false;
@@ -320,46 +362,65 @@ namespace chronotext
     
     fs::path InputSource::getFilePath() const
     {
-        return filePath;
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
+        {
+            return filePath;
+        }
+        
+        return inputsource::EMPTY_PATH;
     }
     
     string InputSource::getFilePathHint() const
     {
-        return filePathHint;
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
+        {
+            return filePathHint;
+        }
+        
+        return inputsource::EMPTY_STRING;
     }
     
     void InputSource::setFilePathHint(const string &hint)
     {
-        filePathHint = hint;
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
+        {
+            filePathHint = hint;
+        }
     }
     
-    string InputSource::getURI()
+    const string& InputSource::getURI()
     {
-        /*
-         * COMPUTING THE VALUE ONLY ONCE ALLOWS FOR EFFICIENT USAGE IN std::map KEYS
-         */
-        if (uri.empty())
+        if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
         {
-            switch (type)
+            /*
+             * COMPUTING THE VALUE ONLY ONCE ALLOWS FOR EFFICIENT USAGE IN std::map KEYS
+             */
+            
+            if (uri.empty())
             {
-                case TYPE_RESOURCE:
-                    uri = "res://" + filePathHint;
-                    break;
-                    
-                case TYPE_RESOURCE_MSW:
-                    uri = "res://" + filePathHint + "?id=" + toString(mswID) + "&type=" + mswType;
-                    break;
-                    
-                case TYPE_FILE:
-                    uri = "file://" + filePath.string();
-                    break;
-                    
-                case TYPE_ASSET:
-                    uri = "assets://" + relativePath.string();
-                    break;
+                switch (type)
+                {
+                    case TYPE_RESOURCE:
+                        uri = "res://" + relativePath.string();
+                        break;
+                        
+                    case TYPE_RESOURCE_MSW:
+                        uri = "res://" + relativePath.string() + "?id=" + toString(mswID) + "&type=" + mswType;
+                        break;
+                        
+                    case TYPE_FILE:
+                        uri = "file://" + filePath.string();
+                        break;
+                        
+                    case TYPE_ASSET:
+                        uri = "assets://" + relativePath.string();
+                        break;
+                }
             }
+            
+            return uri;
         }
         
-        return uri;
+        return inputsource::EMPTY_STRING;
     }
 }

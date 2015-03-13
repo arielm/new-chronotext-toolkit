@@ -1,14 +1,29 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #import "NSDictionary+DefautValues.h"
 
 @implementation NSDictionary (DefautValues)
+
+- (BOOL) boolForKey:(NSString*)key
+{
+    return [[self objectForKey:key] boolValue];
+}
+
+- (BOOL) boolForKey:(NSString*)key defaultValue:(BOOL)defaultValue
+{
+    if ([[self allKeys] containsObject:key])
+    {
+        return [[self objectForKey:key] boolValue];
+    }
+    
+    return defaultValue;
+}
 
 - (int) intForKey:(NSString*)key
 {

@@ -1,14 +1,14 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "TextSpiral.h"
 
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
 
 #include "cinder/gl/gl.h"
@@ -55,17 +55,17 @@ void TextSpiral::drawWire()
 
 void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, float offsetY)
 {
-    bool reverse = (layout.overallDirection == HB_DIRECTION_RTL);
+    float direction = (layout.overallDirection == HB_DIRECTION_RTL) ? -1 : + 1;
 
     float l = TWO_PI * turns;
     float dr = (r2 - r1) / l;
-    float D = offsetX;
+    float D = offsetX + ((direction < 0) ? font.getAdvance(layout) : 0);
     
-    auto matrix = font.getMatrix();
+    auto &matrix = font.getMatrix();
     
-    for (auto &cluster : DirectionalRange(layout.clusters, reverse))
+    for (auto &cluster : layout.clusters)
     {
-        float half = 0.5f * font.getAdvance(cluster);
+        float half = 0.5f * font.getAdvance(cluster) * direction;
         D += half;
         
         if (!cluster.isSpace)
@@ -73,10 +73,10 @@ void TextSpiral::drawText(ZFont &font, const LineLayout &layout, float offsetX, 
             float r = math<float>::sqrt(r1 * r1 + 2 * dr * D);
             float d = (r - r1) / dr;
             
-            matrix->setTranslation(ox - math<float>::cos(d) * r, oy + math<float>::sin(d) * r);
-            matrix->rotateZ((reverse ? -1 : +1) * HALF_PI - d);
+            matrix.setTranslation(ox - math<float>::cos(d) * r, oy + math<float>::sin(d) * r);
+            matrix.rotateZ(HALF_PI * direction - d);
             
-            font.addTransformedCluster(cluster, -half, offsetY);
+            font.addTransformedCluster(cluster, -half * direction, offsetY);
         }
         
         D += half;

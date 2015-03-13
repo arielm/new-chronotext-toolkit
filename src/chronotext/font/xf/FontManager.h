@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,7 +11,9 @@
 #include "chronotext/InputSource.h"
 #include "chronotext/font/xf/Font.h"
 
-namespace chronotext
+#include <atomic>
+
+namespace chr
 {
     namespace xf
     {
@@ -24,10 +26,10 @@ namespace chronotext
             float height;
             float ascent;
             float descent;
-            float spaceAdvance;
-            float strikethroughFactor;
-            float underlineOffset;
             float lineThickness;
+            float underlineOffset;
+            float strikethroughOffset;
+            float spaceAdvance;
             
             float *w;
             float *h;
@@ -60,15 +62,15 @@ namespace chronotext
         {
             int width;
             int height;
-            GLuint id;
-            InputSourceRef inputSource;
+            uint32_t glId;
+            InputSource::Ref inputSource;
             
-            FontTexture(FontAtlas *atlas, InputSourceRef inputSource);
+            FontTexture(FontAtlas *atlas, InputSource::Ref inputSource);
             ~FontTexture();
             
             void upload(FontAtlas *atlas);
             void discard();
-            void reload();
+            bool reload();
             void bind();
             
             size_t getMemoryUsage() const;
@@ -78,10 +80,12 @@ namespace chronotext
         class FontManager
         {
         public:
-            std::shared_ptr<Font> getCachedFont(InputSourceRef inputSource, const Font::Properties &properties);
+            static std::atomic<bool> LOG_VERBOSE;
+
+            std::shared_ptr<Font> getFont(InputSource::Ref inputSource, const Font::Properties &properties);
             
             void unload(std::shared_ptr<Font> font);
-            void unload(InputSourceRef inputSource);
+            void unload(InputSource::Ref inputSource);
             void unload();
             
             void discardTextures();
@@ -90,24 +94,21 @@ namespace chronotext
             /*
              * RETURNS THE MEMORY USED BY ALL THE GLYPH TEXTURE-ATLASES
              * CURRENTLY: "ALPHA" TEXTURES ARE USED (ONE BYTE PER PIXEL)
-             * NOTE THAT THE GPU MAY DECIDE TO USE MORE MEMORY INTERNALLY
              */
             size_t getTextureMemoryUsage() const;
             
+        protected:
             friend class Font;
             friend struct FontTexture;
-            
-        protected:
+
             std::map<std::pair<std::string, Font::Properties>, std::shared_ptr<Font>> fonts;
             std::map<std::string, std::pair<std::unique_ptr<FontData>, std::unique_ptr<FontTexture>>> fontDataAndTextures;
-            std::vector<GLushort> indices;
+            std::vector<uint16_t> indices;
             
             void discardUnusedTextures();
-            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSourceRef source);
+            static std::pair<FontData*, FontAtlas*> fetchFontDataAndAtlas(InputSource::Ref source);
             
-            const std::vector<GLushort>& getIndices(int capacity);
+            const std::vector<uint16_t>& getIndices(int capacity);
         };
     }
 }
-
-namespace chr = chronotext;

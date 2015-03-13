@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -12,7 +12,7 @@
 
 #include "cinder/gl/gl.h"
 
-namespace chronotext
+namespace chr
 {
     struct Vertex
     {
@@ -36,7 +36,7 @@ namespace chronotext
     class QuadBatch
     {
     public:
-        static const int stride = sizeof(float) * (3 + 2);
+        static constexpr int stride = sizeof(float) * (3 + 2);
         
         std::vector<Vertex> vertices;
         std::vector<ci::ColorA> colors;
@@ -79,7 +79,7 @@ namespace chronotext
             colors.emplace_back(color);
         }
         
-        void flush(const GLushort *indices, bool useColor = false) const
+        void flush(const uint16_t *indices, bool useColor = false) const
         {
             const float *pointer = reinterpret_cast<const float*>(vertices.data());
 
@@ -94,5 +94,3 @@ namespace chronotext
         }
     };
 }
-
-namespace chr = chronotext;

@@ -1,14 +1,14 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "Sketch.h"
 
-#include "chronotext/InputSource.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/path/FXGDocument.h"
@@ -20,73 +20,62 @@ using namespace chr;
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
+    /*
+     * THESE ARE MIPMAPPED TEXTURES:
+     * SOME EMPTY-SPACE MUST BE LEFT AT THE EDGES IN ORDER TO AVOID ARTIFACTS WHEN SCALING-DOWN
+     */
+    
+    roadTexture = textureManager.getTexture(Texture::Request(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+    checkerTexture = textureManager.getTexture(Texture::Request(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
+    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
+    
+    // ---
+    
+    SplinePath spline(InputSource::getResource("spline_1.dat"));
+    
+    spline.flush(SplinePath::TYPE_BSPLINE, roadPath);
+    float length = roadPath.getLength();
+    roadPath.setMode(FollowablePath::MODE_MODULO); // NECESSARY, FOR THE DOT TO COME-BACK TO THE START OF THE PATH ONCE THE END IS REACHED
+    
+    /*
+     * SINGLE-PORTION TRIANGLE-STRIP
+     */
+    StrokeHelper::stroke(roadPath, roadStrip, 64);
+    
+    /*
+     * MULTI-PORTION TRIANGLE-STRIP
+     */
+    checkerStrip.clear();
+    StrokeHelper::stroke(roadPath, 0, 32, checkerStrip, 64, 2);
+    StrokeHelper::stroke(roadPath, length - 32, length, checkerStrip, 64, 2, length - 32);
+    
+    // ---
+    
+    peanutSpline.add(-100, -100);
+    peanutSpline.add(   0,  -25);
+    peanutSpline.add( 100, -100);
+    peanutSpline.add( 200,    0);
+    peanutSpline.add( 100,  100);
+    peanutSpline.add(   0,   25);
+    peanutSpline.add(-100,  100);
+    peanutSpline.add(-200,    0);
+    peanutSpline.close();
+    
+    peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
+    peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED);
+    
+    // ---
+    
+    FXGDocument document(InputSource::getResource("lys.fxg"));
+    
+    for (auto &path : document.getPaths())
     {
-        textureManager.reload();
+        lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL)));
     }
-    else
-    {
-        /*
-         * THESE ARE MIPMAPPED TEXTURES:
-         * SOME EMPTY-SPACE MUST BE LEFT AT THE EDGES IN ORDER TO AVOID ARTIFACTS WHEN SCALING-DOWN
-         */
-        roadTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("asphalt_128_alpha.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-        checkerTexture = textureManager.getTexture(TextureRequest(InputSource::getResource("checker_128.png"), true).setWrap(GL_REPEAT, GL_CLAMP_TO_EDGE));
-        dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        
-        // ---
-
-        SplinePath spline = SplinePath(InputSource::loadResource("spline_1.dat"));
-        
-        spline.flush(SplinePath::TYPE_BSPLINE, roadPath);
-        float length = roadPath.getLength();
-        roadPath.setMode(FollowablePath::MODE_MODULO); // NECESSARY, FOR THE DOT TO COME-BACK TO THE START OF THE PATH ONCE THE END IS REACHED
-        
-        /*
-         * SINGLE-PORTION TRIANGLE-STRIP
-         */
-        StrokeHelper::stroke(roadPath, roadStrip, 64);
-        
-        /*
-         * MULTI-PORTION TRIANGLE-STRIP
-         */
-        checkerStrip.clear();
-        StrokeHelper::stroke(roadPath, 0, 32, checkerStrip, 64, 2);
-        StrokeHelper::stroke(roadPath, length - 32, length, checkerStrip, 64, 2, length - 32);
-        
-        // ---
-        
-        peanutSpline.add(-100, -100);
-        peanutSpline.add(   0,  -25);
-        peanutSpline.add( 100, -100);
-        peanutSpline.add( 200,    0);
-        peanutSpline.add( 100,  100);
-        peanutSpline.add(   0,   25);
-        peanutSpline.add(-100,  100);
-        peanutSpline.add(-200,    0);
-        peanutSpline.close();
-        
-        peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
-        peanutHairline = Hairline(textureManager, Hairline::TYPE_DASHED);
-        
-        // ---
-        
-        FXGDocument document(InputSource::loadResource("lys.fxg"));
-        
-        for (auto &path : document.getPaths())
-        {
-            lys.emplace_back(make_pair(FollowablePath(path, 0.75f), Hairline(textureManager, Hairline::TYPE_NORMAL)));
-        }
-        
-        lysOffset = -document.getViewSize() * 0.5f;
-    }
+    
+    lysOffset = -document.getViewSize() * 0.5f;
     
     // ---
     
@@ -97,34 +86,22 @@ void Sketch::setup(bool renewContext)
     glDepthMask(GL_FALSE);
 }
 
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            break;
-    }
-}
-
 void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
 
     /*
-     * RE-STROKING THE LYS' HAIRLINES UPON SCREEN-SIZE CHANGE:
-     * NECESSARY IN ORDER TO KEEP THE STROKE-WIDTH "HAIRLINE"
+     * RE-STROKING IS NECESSARY IN ORDER TO KEEP THE WIDTH OF THE STROKES HAIRLINE-SIZED
      */
     for (auto &it : lys)
     {
-        it.second.stroke(it.first, scale * getWindowContentScale()); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
+        it.second.stroke(it.first, scale);
     }
 }
 
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
-    offset = now * 40;
+    offset = clock()->getTime() * 40;
 }
 
 void Sketch::draw()
@@ -164,7 +141,7 @@ void Sketch::draw()
     /*
      * RE-STROKING IS NECESSARY BOTH IN TERM OF POTENTIAL SCREEN-SIZE CHANGE AND IN TERM OF DASHED-LINE-OFFSET MOTION
      */
-    peanutHairline.stroke(peanutPath, scale * getWindowContentScale(), offset); // CONTENT-SCALE IS ONLY RELEVANT FOR OSX RETINA SCREENS
+    peanutHairline.stroke(peanutPath, scale, offset);
     peanutHairline.draw();
     
     drawDotOnPath(peanutPath);
@@ -192,7 +169,7 @@ void Sketch::drawDotOnPath(const FollowablePath &path)
     
     glPushMatrix();
     gl::translate(path.offset2Position(offset));
-    gl::scale(0.5f / scale); // DIVIDING BY SCALE KEEPS THE RADIUS CONSISTENT
+    gl::scale(0.5f);
     dotTexture->drawFromCenter();
     glPopMatrix();
     

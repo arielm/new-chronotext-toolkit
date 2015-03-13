@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -16,24 +16,22 @@
 
 #pragma once
 
+#include "chronotext/atlas/Sprite.h"
 #include "chronotext/texture/TextureManager.h"
-#include "chronotext/texture/Sprite.h"
-#include "chronotext/InputSource.h"
 
 #include <map>
 
-namespace chronotext
+namespace chr
 {
     class TextureAtlas
     {
     public:
-        TextureRef texture;
+        Texture::Ref texture;
         
-        TextureAtlas(TextureManager &textureManager, const std::string &resourceName, bool useMipmap = false);
-        TextureAtlas(TextureManager &textureManager, InputSourceRef inputSource, bool useMipmap = false);
+        TextureAtlas(TextureManager &textureManager, InputSource::Ref inputSource, bool useMipmap = false); // CAN THROW
         
-        SpriteRef getSprite(const std::string &path) const;
-        std::vector<SpriteRef> getAnimationSprites(const std::string &path) const;
+        Sprite::Ref getSprite(const std::string &path) const;
+        std::vector<Sprite::Ref> getAnimationSprites(const std::string &path) const;
         
         void beginTexture();
         void endTexture();
@@ -43,10 +41,6 @@ namespace chronotext
         
     protected:
         TextureManager &textureManager;
-        std::map<std::string, SpriteRef> sprites;
-        
-        void init(InputSourceRef inputSource, bool useMipmap);
+        std::map<std::string, Sprite::Ref> sprites;
     };
 }
-
-namespace chr = chronotext;

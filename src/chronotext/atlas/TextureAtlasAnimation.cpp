@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -10,7 +10,7 @@
 
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     TextureAtlasAnimation::TextureAtlasAnimation(TextureAtlas &atlas, const string &path, float fps, bool looping, bool reverse)
     :
@@ -34,7 +34,7 @@ namespace chronotext
         
         if (sprites.empty())
         {
-            throw runtime_error("INVALID ANIMATION");
+            throw EXCEPTION(TextureAtlasAnimation, "INVALID ANIMATION");
         }
     }
     
@@ -48,7 +48,7 @@ namespace chronotext
         
         if (((firstFrameIndex < 0) || (firstFrameIndex >= tmp.size()) || ((lastFrameIndex < 0) || (lastFrameIndex >= tmp.size()))))
         {
-            throw runtime_error("OUT-OF-RANGE ANIMATION FRAMES");
+            throw EXCEPTION(TextureAtlasAnimation, "OUT-OF-RANGE ANIMATION FRAMES");
         }
         
         if (firstFrameIndex < lastFrameIndex)
@@ -68,7 +68,7 @@ namespace chronotext
         
         if (sprites.empty())
         {
-            throw runtime_error("INVALID ANIMATION");
+            throw EXCEPTION(TextureAtlasAnimation, "INVALID ANIMATION");
         }
     }
     

@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,48 +11,61 @@
  * http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Clock.html
  */
 
+/*
+ * PROBLEM: CREATING A Clock FROM A TimeBase WHICH IS NOT ENCLOSED IN A shared_ptr WOULD CAUSE A CRASH
+ *
+ * SOLUTION: ENFORCING CREATION AS shared_ptr
+ *
+ * REFERENCE: http://mortoray.com/2013/08/02/safely-using-enable_shared_from_this
+ */
+
 #pragma once
 
+#include "chronotext/Exception.h"
 #include "chronotext/time/DefaultTimeBase.h"
 
-#include <memory>
-
-namespace chronotext
+namespace chr
 {
-    class Clock : public TimeBase, public std::enable_shared_from_this<Clock>
+    class Clock : public TimeBase
     {
     public:
-        enum
+        typedef std::shared_ptr<Clock> Ref;
+
+        template<typename... T>
+        static Ref create(T&&... args)
+        {
+            return Ref(new Clock(std::forward<T>(args)...));
+        }
+
+        enum State
         {
             STOPPED,
             STARTED
         };
 
-        Clock();
-        Clock(TimeBase *timeBase);
-        Clock(std::shared_ptr<Clock> master);
-        
-        virtual ~Clock();
-        
         virtual void start();
         virtual void stop();
-        virtual double getTime();
+        
+        virtual double getTime() override;
         virtual void setTime(double now);
-        virtual int getState();
+        
+        virtual double getRate();
         virtual void setRate(double factor);
+        
+        virtual State getState();
+        
         virtual void restart();
+        virtual void reset();
         
     protected:
         double mst;
         double rate;
         double tbst;
-        int state;
+        State state;
         
-        TimeBase *timeBase;
-        bool timeBaseIsOwned;
+        std::shared_ptr<TimeBase> timeBase;
         
-        std::shared_ptr<Clock> master;
+        Clock();
+        Clock(std::shared_ptr<TimeBase> timeBase, bool startOnConstruction = true);
     };
 }
-
-namespace chr = chronotext;

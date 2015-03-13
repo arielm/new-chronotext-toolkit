@@ -21,7 +21,7 @@
 		A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952C716F3613E0011FAA3 /* MathUtils.cpp */; };
 		A809530216F3613E0011FAA3 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A80952CC16F3613E0011FAA3 /* Utils.cpp */; };
 		A809530916F361E20011FAA3 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A809530316F361E20011FAA3 /* Application.cpp */; };
-		A853DFD918116D42006C2085 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A853DFD718116D42006C2085 /* FileSystem.cpp */; };
+		A8112CDF1A4F66410002CF68 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8112CDD1A4F66410002CF68 /* Log.cpp */; };
 		A867AB98194BB3AF008EF66E /* QuadMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A867AB96194BB3AF008EF66E /* QuadMatrix.cpp */; };
 		A8D0D28117EF4868001F6030 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8D0D28017EF4868001F6030 /* Roboto-Regular.ttf */; };
 		A8EB33F117AAB05600798D19 /* BinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8EB33EA17AAB05600798D19 /* BinPack.cpp */; };
@@ -52,19 +52,22 @@
 		A809527716F3613E0011FAA3 /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
 		A80952C416F3613E0011FAA3 /* GLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtils.cpp; sourceTree = "<group>"; };
 		A80952C516F3613E0011FAA3 /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
-		A80952C616F3613E0011FAA3 /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = "<group>"; };
 		A80952C716F3613E0011FAA3 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		A80952C816F3613E0011FAA3 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		A80952CC16F3613E0011FAA3 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		A80952CD16F3613E0011FAA3 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		A809530316F361E20011FAA3 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../src/Application.cpp; sourceTree = "<group>"; };
-		A853DFD718116D42006C2085 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
-		A853DFD818116D42006C2085 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
+		A8112CDC1A4F66410002CF68 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
+		A8112CDD1A4F66410002CF68 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		A8112CDE1A4F66410002CF68 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		A867AB93194BB3AF008EF66E /* Quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quad.h; sourceTree = "<group>"; };
 		A867AB94194BB3AF008EF66E /* QuadBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatch.h; sourceTree = "<group>"; };
 		A867AB95194BB3AF008EF66E /* QuadBatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadBatchMap.h; sourceTree = "<group>"; };
 		A867AB96194BB3AF008EF66E /* QuadMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuadMatrix.cpp; sourceTree = "<group>"; };
 		A867AB97194BB3AF008EF66E /* QuadMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadMatrix.h; sourceTree = "<group>"; };
+		A8C566841A844A5500AF12B6 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		A8C566851A844A5500AF12B6 /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
+		A8C566861A844A5500AF12B6 /* DebugConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
 		A8D0D28017EF4868001F6030 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../resources/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		A8EB33EA17AAB05600798D19 /* BinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinPack.cpp; sourceTree = "<group>"; };
 		A8EB33EB17AAB05600798D19 /* BinPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinPack.h; sourceTree = "<group>"; };
@@ -175,9 +178,12 @@
 		A809523816F35FD10011FAA3 /* OSX */ = {
 			isa = PBXGroup;
 			children = (
-				A809523916F360660011FAA3 /* Resources */,
+				A8C566841A844A5500AF12B6 /* Config.xcconfig */,
+				A8C566851A844A5500AF12B6 /* ReleaseConfig.xcconfig */,
+				A8C566861A844A5500AF12B6 /* DebugConfig.xcconfig */,
 				530D8ED2F6EB414F805B7B9E /* Prefix.pch */,
 				434A86CFEA544FFA9D66F749 /* Info.plist */,
+				A809523916F360660011FAA3 /* Resources */,
 			);
 			name = OSX;
 			sourceTree = "<group>";
@@ -193,10 +199,11 @@
 		A809523E16F3613E0011FAA3 /* chronotext */ = {
 			isa = PBXGroup;
 			children = (
-				A853DFD718116D42006C2085 /* FileSystem.cpp */,
-				A853DFD818116D42006C2085 /* FileSystem.h */,
-				A809527616F3613E0011FAA3 /* InputSource.cpp */,
+				A8112CDC1A4F66410002CF68 /* Exception.h */,
+				A8112CDE1A4F66410002CF68 /* Log.h */,
+				A8112CDD1A4F66410002CF68 /* Log.cpp */,
 				A809527716F3613E0011FAA3 /* InputSource.h */,
+				A809527616F3613E0011FAA3 /* InputSource.cpp */,
 				A809525216F3613E0011FAA3 /* font */,
 				A867AB92194BB3AF008EF66E /* quad */,
 				A8EB33E817AAB05600798D19 /* tools */,
@@ -219,7 +226,6 @@
 			children = (
 				A80952C416F3613E0011FAA3 /* GLUtils.cpp */,
 				A80952C516F3613E0011FAA3 /* GLUtils.h */,
-				A80952C616F3613E0011FAA3 /* Hasher.h */,
 				A80952C716F3613E0011FAA3 /* MathUtils.cpp */,
 				A80952C816F3613E0011FAA3 /* MathUtils.h */,
 				A80952CC16F3613E0011FAA3 /* Utils.cpp */,
@@ -304,6 +310,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FontGenerator" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -345,6 +352,7 @@
 				A80952E416F3613E0011FAA3 /* InputSource.cpp in Sources */,
 				A8EEB8EA18B0113C00B300F1 /* FontSequence.cpp in Sources */,
 				A809530016F3613E0011FAA3 /* GLUtils.cpp in Sources */,
+				A8112CDF1A4F66410002CF68 /* Log.cpp in Sources */,
 				A809530116F3613E0011FAA3 /* MathUtils.cpp in Sources */,
 				A8F5104218B024FD00F0ED77 /* TextHelper.cpp in Sources */,
 				A809530216F3613E0011FAA3 /* Utils.cpp in Sources */,
@@ -353,7 +361,6 @@
 				A8EB33F217AAB05600798D19 /* FreetypeHelper.cpp in Sources */,
 				A8EEB8E918B0113C00B300F1 /* FontManager.cpp in Sources */,
 				A8EB33F317AAB05600798D19 /* XFontCreator.cpp in Sources */,
-				A853DFD918116D42006C2085 /* FileSystem.cpp in Sources */,
 				A867AB98194BB3AF008EF66E /* QuadMatrix.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,93 +370,27 @@
 /* Begin XCBuildConfiguration section */
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8C566861A844A5500AF12B6 /* DebugConfig.xcconfig */;
 			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a\"",
-				);
-				PRODUCT_NAME = FontGenerator;
-				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8C566851A844A5500AF12B6 /* ReleaseConfig.xcconfig */;
 			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_FAST_MATH = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Prefix.pch;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"\"$(CINDER_PATH)/lib/libcinder.a\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/lib/osx/libfreetype.a\"",
-				);
-				PRODUCT_NAME = FontGenerator;
-				STRIP_INSTALLED_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
-				CINDER_PATH = ../../../../../../Cinder;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/include",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(CINDER_PATH)/blocks/new-chronotext-toolkit/src\"";
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
-				CINDER_PATH = ../../../../../../Cinder;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"$(CINDER_PATH)/blocks/Freetype/include",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(CINDER_PATH)/blocks/new-chronotext-toolkit/src\"";
 			};
 			name = Release;
 		};

@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -11,11 +11,9 @@
 #include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/font/xf/FontSequence.h"
 
-#include "cinder/gl/gl.h"
-
 #include <map>
 
-namespace chronotext
+namespace chr
 {
     typedef class xf::Font XFont;
 
@@ -28,7 +26,7 @@ namespace chronotext
         class Font
         {
         public:
-            typedef enum
+            enum Alignment
             {
                 ALIGN_MIDDLE,
                 ALIGN_LEFT,
@@ -36,8 +34,7 @@ namespace chronotext
                 ALIGN_TOP,
                 ALIGN_BASELINE,
                 ALIGN_BOTTOM
-            }
-            Alignment;
+            };
             
             struct Properties
             {
@@ -52,7 +49,7 @@ namespace chronotext
                 
                 Properties& setCapacity(int slotCapacity)
 				{
-                    this->slotCapacity = slotCapacity;
+                    Properties::slotCapacity = slotCapacity;
                     return *this;
                 }
                 
@@ -78,16 +75,16 @@ namespace chronotext
             std::wstring getCharacters() const;
             
             void setSize(float size);
+            void setMiddleLineFactor(float factor); // DEFAULT-VALUE IS 0, OTHERWISE getOffsetY() FOR "ALIGN_MIDDLE" WILL RETURN middleLineFactor * (getAscent() - getDescent())
             void setDirection(float direction);
             void setAxis(const ci::Vec2f &axis);
             inline void setAxis(float x, float y) { setAxis(ci::Vec2f(x, y)); }
             void setColor(const ci::ColorA &color);
             void setColor(float r, float g, float b, float a);
-            void setStrikethroughFactor(float factor);
             
             void setClip(const ci::Rectf &clipRect);
             void setClip(float x1, float y1, float x2, float y2);
-            void clearClip();
+            void clearClip(); // INVOKED UPON SEQUENCE-BEGIN
             
             float getSize() const;
             float getDirection() const;
@@ -101,16 +98,29 @@ namespace chronotext
             float getHeight() const;
             float getAscent() const;
             float getDescent() const;
-            float getStrikethroughOffset() const;
-            float getUnderlineOffset() const;
             float getLineThickness() const;
+            float getUnderlineOffset() const;
+            float getStrikethroughOffset() const;
             
             float getOffsetX(const std::wstring &text, Alignment align) const;
-            float getOffsetY(Alignment align) const;
+            float getOffsetY(Alignment align) const; // FOR "ALIGN_MIDDLE": getStrikethroughOffset() WILL BE USED, UNLESS setMiddleLineFactor() HAS BEEN INVOKED
             inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
             
-            QuadMatrix* getMatrix();
-            const GLushort* getIndices() const;
+            inline QuadMatrix& getMatrix()
+            {
+                return matrix;
+            }
+            
+            template <typename T>
+            inline QuadMatrix& loadMatrix(const T &other)
+            {
+                return matrix.load(other);
+            }
+            
+            inline const uint16_t* getIndices() const
+            {
+                return const_cast<uint16_t*>(indices.data());
+            }
             
             void beginSequence(FontSequence *sequence, bool useColor = false);
             inline void beginSequence(FontSequence &sequence, bool useColor = false) { beginSequence(&sequence, useColor); }
@@ -122,9 +132,9 @@ namespace chronotext
             void addGlyph(int glyphIndex, float x, float y, float z = 0);
             void addTransformedGlyph(int glyphIndex, float x = 0, float y = 0);
             
-            friend class FontManager;
-            
         protected:
+            friend class FontManager;
+
             int glyphCount;
             std::map<wchar_t, int> glyphs;
             
@@ -132,10 +142,10 @@ namespace chronotext
             float height;
             float ascent;
             float descent;
-            float spaceAdvance;
-            float strikethroughFactor;
-            float underlineOffset;
             float lineThickness;
+            float underlineOffset;
+            float strikethroughOffset;
+            float spaceAdvance;
             
             float *w;
             float *h;
@@ -151,13 +161,14 @@ namespace chronotext
             FontTexture *texture;
             
             Properties properties;
-            const std::vector<GLushort> &indices;
+            const std::vector<uint16_t> &indices;
             QuadMatrix matrix;
             
             float anisotropy;
             
             float size;
             float sizeRatio;
+            float middleLineFactor;
             float direction;
             ci::Vec2f axis;
             ci::ColorA color;
@@ -181,5 +192,3 @@ namespace chronotext
         };
     }
 }
-
-namespace chr = chronotext;

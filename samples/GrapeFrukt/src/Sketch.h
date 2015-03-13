@@ -1,39 +1,57 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 /*
- * PLAYING "MONOCLE MAN" ANIMATION EXPORTED FROM FLASH USING THE GRAPEFRUKT EXPORTER:
+ * PLAYING "MONOCLE MAN" ANIMATION EXPORTED FROM FLASH USING THE" GRAPEFRUKT" EXPORTER:
+ *
  * http://prototyprally.com/introducing-the-grapefrukt-asset-exporter
  * https://github.com/zaphire/Monocle-Engine/tree/master/Content/Flash
  *
  *
  * FEATURES:
  *
- * 1) WORKS ON OSX, iOS AND ANDROID
- * 2) DEMONSTRATES USAGE OF TextureAtlas
- * 3) SOLUTION TO "PREMULTIPLIED PNG CURSE" (NECESSARY ON iOS)
- * 4) TEXTURES RELOADED AFTER OPEN-GL CONTEXT-LOSS (NECESSARY ON ANDROID)
- * 5) Clock USED IN ORDER TO "FREEZE TIME" WHEN APP IS IN BACKGROUND (iOS, ANDROID)
+ * 1) DEMONSTRATES USAGE OF chr::TextureAtlas, ETC.
+ * 2) SOLUTION TO "PREMULTIPLIED PNG CURSE" (NECESSARY ON iOS)
+ * 3) AUTOMATIC TEXTURE-RELOADING AFTER "DISCARDING" (E.G. FOLLOWING OPEN-GL CONTEXT-LOSS OR MEMORY-WARNING...)
+ * 4) USING THE SKETCH'S Clock IN ORDER TO "FREEZE" TIME WHILE UNDERLYING APP IS IN THE BACKGROUND
  *
  *
  * TODO:
  *
- * 1) ADAPT TO WINDOWS
- *    - PRE-REQUISITE:
+ * 1) ADAPT chr::TextureAtlas TO WINDOWS
+ *    - PRE-REQUISITES:
  *      - EITHER: HANDLING RESOURCES VIA ASSETS
  *      - OR: ADAPTING InputSource::getSubSource() FOR WINDOWS
  *
+ * 2) TEXTURES SHOULD BE RENDERED VIA chr::QuadMatrix AND chr::QuadBatch
+ *    - PRE-REQUISITE: TEXTURE-BATCHING SUPPORT AT THE TOOLKIT'S LEVEL
+ */
+
+/*
+ * FOLLOW-UP: THIS DEMO IS PRETTY OUTDATED...
  *
- * FOLLOW-UP:
+ * 1) THE "GRAPEFRUKT" EXPORTER WAS NOT PRACTICAL ANYWAY IN TERM OF DESIGNER-TO-PROGRAMMER PIPELINE
  *
- * THIS DEMO IS PRETTY OLD. NOWADAYS, "SPINE" LOOKS LIKE THE DEFINITIVE ANSWER:
- * http://esotericsoftware.com
- * http://www.java-gaming.org/index.php?topic=27914.0
+ * 2) NOWADAYS, "SPINE" LOOKS LIKE THE DEFINITIVE ANSWER:
+ *    - http://www.java-gaming.org/index.php?topic=27914.0
+ *    - http://esotericsoftware.com
+ */
+
+/*
+ * IN SYNC WITH develop BRANCH
+ *
+ * OSX: COMMIT 8358df8
+ * IOS: COMMIT 8358df8
+ * ANDROID: COMMIT 8358df8
+ */
+
+/*
+ * DESKTOP ONLY: PRESS D TO "DISCARD" TEXTURES
  */
 
 #pragma once
@@ -44,14 +62,13 @@
 
 class Sketch : public chr::CinderSketch
 {
+public:
+    void setup() final;
+    void draw() final;
+    
+    bool keyDown(const ci::app::KeyEvent &event) final;
+    
+protected:
     chr::TextureManager textureManager;
     Animation animation;
-    float scale;
-
-public:
-    Sketch(void *context, void *delegate = NULL);
-    
-    void setup(bool renewContext);
-    void event(int id);
-    void draw();
 };

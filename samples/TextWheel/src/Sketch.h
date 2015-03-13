@@ -1,9 +1,13 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+/*
+ * IN SYNC WITH develop BRANCH / COMMIT 8358df8
  */
 
 /*
@@ -21,7 +25,10 @@
  *
  * INSTRUCTIONS:
  *
- * PRESS THE RIGHT OR LEFT KEYS TO SWITCH BETWEEN LANGUAGES
+ * 1) PRESS THE RIGHT OR LEFT KEYS TO SWITCH BETWEEN LANGUAGES
+ *
+ * 2) PRESS U TO "UNLOAD" THE FONT-MANAGER:
+ *    - FROM THIS POINT: RESOURCES WILL BE RELOADED AND TEXTURES RECREATED ONLY WHEN NECESSARY
  *
  *
  * ADDITIONAL REQUIREMENTS:
@@ -60,29 +67,30 @@
 
 class Sketch : public chr::CinderSketch
 {
+public:
+    void setup() final;
+    void resize() final;
+    
+    void update() final;
+    void draw() final;
+
+    bool keyDown(const ci::app::KeyEvent &event) final;
+    
+protected:
     chr::zf::FontManager fontManager;
-
     std::shared_ptr<chr::ZFont> font;
+    
     TextSpiral spiral;
-
+    
     std::vector<std::string> languages;
     std::map<std::string, std::unique_ptr<chr::zf::LineLayout>> layouts;
-    std::map<std::string, chr::zf::FontSequence> sequences;
-
+    std::map<std::string, std::unique_ptr<chr::zf::FontSequence>> sequences;
+    
     float scale;
     float rotation;
     float direction;
     int currentLangIndex;
 
-public:
-    Sketch(void *context, void *delegate = NULL);
-    
-    void setup(bool renewContext);
-    void event(int id);
-    void resize();
-    void update();
-    void draw();
-    
     void addVersion(const std::string &lang);
     void nextVersion();
     void previousVersion();

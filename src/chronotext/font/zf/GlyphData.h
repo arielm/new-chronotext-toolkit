@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -18,7 +18,7 @@
 
 #include "cinder/Vector.h"
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -37,8 +37,8 @@ namespace chronotext
             :
             useMipmap(useMipmap),
             padding(padding),
-            ftGlyph(NULL),
-            data(NULL)
+            ftGlyph(nullptr),
+            data(nullptr)
             {
                 if (codepoint > 0)
                 {
@@ -61,7 +61,7 @@ namespace chronotext
                             else
                             {
                                 FT_Done_Glyph(ftGlyph);
-                                ftGlyph = NULL;
+                                ftGlyph = nullptr;
                             }
                         }
                     }
@@ -97,7 +97,7 @@ namespace chronotext
                 }
                 else
                 {
-                    return NULL;
+                    return nullptr;
                 }
             }
             
@@ -110,7 +110,7 @@ namespace chronotext
                     memcpy(data, ftSlot->bitmap.buffer, dataSize);
                     
                     FT_Done_Glyph(ftGlyph);
-                    ftGlyph = NULL;
+                    ftGlyph = nullptr;
                 }
             }
             
@@ -121,5 +121,3 @@ namespace chronotext
         };
     }
 }
-
-namespace chr = chronotext;

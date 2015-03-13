@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -10,7 +10,7 @@
 
 #include "chronotext/font/zf/ActualFont.h"
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
@@ -51,11 +51,12 @@ namespace chronotext
             float maxHeight;
             float maxAscent;
             float maxDescent;
+            float maxUnderlineOffset;
+            float maxLineThickness;
+            float averageStrikethroughOffset;
             
             LineLayout(VirtualFont *font, const std::string &langHint, hb_direction_t overallDirection);
             void addCluster(const Cluster &cluster);
         };
     }
 }
-
-namespace chr = chronotext;

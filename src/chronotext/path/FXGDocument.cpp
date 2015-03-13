@@ -2,23 +2,20 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "FXGDocument.h"
+#include "chronotext/path/FXGDocument.h"
 
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
-    FXGDocument::FXGDocument()
-    {}
-    
-    FXGDocument::FXGDocument(DataSourceRef source)
+    FXGDocument::FXGDocument(InputSource::Ref inputSource)
     {
-        XmlTree doc(source);
+        XmlTree doc(inputSource->loadDataSource());
         
         if (doc.hasChild("Graphic"))
         {
@@ -202,7 +199,7 @@ namespace chronotext
         }
         else
         {
-            return atof(accum.c_str());
+            return atof(accum.data());
         }
     }
 }

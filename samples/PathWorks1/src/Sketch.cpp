@@ -1,14 +1,14 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "Sketch.h"
 
-#include "chronotext/InputSource.h"
+#include "chronotext/Context.h"
 #include "chronotext/utils/MathUtils.h"
 #include "chronotext/utils/GLUtils.h"
 #include "chronotext/font/xf/TextHelper.h"
@@ -23,55 +23,42 @@ const float TEXT_SIZE = 18;
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
 
-Sketch::Sketch(void *context, void *delegate)
-:
-CinderSketch(context, delegate)
-{}
-
 const wstring text1 = L"followable-paths were born for motion";
 const wstring text2 = L"this peanut is a B-spline with 8 points";
 
-void Sketch::setup(bool renewContext)
+void Sketch::setup()
 {
-    if (renewContext)
-    {
-        textureManager.reload(); // MANDATORY
-        fontManager.reloadTextures(); // NOT MANDATORY (GLYPH TEXTURES ARE AUTOMATICALLY RELOADED WHENEVER NECESSARY)
-    }
-    else
-    {
-        dotTexture = textureManager.getTexture("dot2x.png", true, TextureRequest::FLAGS_TRANSLUCENT);
-        font = fontManager.getCachedFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
-        
-        // ---
-        
-        spline = SplinePath(InputSource::loadResource("spline_1.dat"));
-        spline.flush(SplinePath::TYPE_BSPLINE, path);
-        
-        // ---
-        
-        peanutSpline.add(-100, -100);
-        peanutSpline.add(   0,  -25);
-        peanutSpline.add( 100, -100);
-        peanutSpline.add( 200,    0);
-        peanutSpline.add( 100,  100);
-        peanutSpline.add(   0,   25);
-        peanutSpline.add(-100,  100);
-        peanutSpline.add(-200,    0);
-        peanutSpline.close();
-        
-        peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
-        
-        // ---
-        
-        auto document = FXGDocument(InputSource::loadResource("lys.fxg"));
-        
-        ShapeTesselator tesselator;
-        tesselator.add(document);
-        lys = shared_ptr<ShapeMesh>(tesselator.createMesh());
-        
-        lysOffset = -document.getViewSize() * 0.5f;
-    }
+    dotTexture = textureManager.getTexture(InputSource::getResource("dot2x.png"), true, Texture::Request::FLAGS_TRANSLUCENT);
+    font = fontManager.getFont(InputSource::getResource("Georgia_Regular_64.fnt"), XFont::Properties2d());
+    
+    // ---
+    
+    spline = SplinePath(InputSource::getResource("spline_1.dat"));
+    spline.flush(SplinePath::TYPE_BSPLINE, path);
+    
+    // ---
+    
+    peanutSpline.add(-100, -100);
+    peanutSpline.add(   0,  -25);
+    peanutSpline.add( 100, -100);
+    peanutSpline.add( 200,    0);
+    peanutSpline.add( 100,  100);
+    peanutSpline.add(   0,   25);
+    peanutSpline.add(-100,  100);
+    peanutSpline.add(-200,    0);
+    peanutSpline.close();
+    
+    peanutSpline.flush(SplinePath::TYPE_BSPLINE, peanutPath);
+    
+    // ---
+    
+    FXGDocument document(InputSource::getResource("lys.fxg"));
+    
+    ShapeTesselator tesselator;
+    tesselator.add(document);
+    lys = shared_ptr<ShapeMesh>(tesselator.createMesh());
+    
+    lysOffset = -document.getViewSize() * 0.5f;
     
     // ---
     
@@ -88,17 +75,6 @@ void Sketch::setup(bool renewContext)
     }
 }
 
-void Sketch::event(int id)
-{
-    switch (id)
-    {
-        case EVENT_CONTEXT_LOST:
-            textureManager.discard();
-            fontManager.discardTextures();
-            break;
-    }
-}
-
 void Sketch::resize()
 {
     scale = getWindowHeight() / REFERENCE_H;
@@ -106,7 +82,7 @@ void Sketch::resize()
 
 void Sketch::update()
 {
-    double now = getElapsedSeconds();
+    double now = clock()->getTime();
     
     offset1 = 300 + 250 * math<float>::sin(now * 1.25f);
     offset2 = now * 60;

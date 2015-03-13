@@ -2,23 +2,27 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/font/zf/VirtualFont.h"
 #include "chronotext/font/zf/FontManager.h"
+#include "chronotext/font/zf/LayoutCache.h"
+
+#include "cinder/gl/gl.h"
 
 using namespace std;
 using namespace ci;
 
-namespace chronotext
+namespace chr
 {
     namespace zf
     {
         VirtualFont::VirtualFont(FontManager &fontManager, const Properties &properties)
         :
         properties(properties),
+        middleLineFactor(0),
         layoutCache(fontManager.layoutCache),
         itemizer(fontManager.itemizer),
         indices(fontManager.getIndices(properties.slotCapacity)),
@@ -129,11 +133,21 @@ namespace chronotext
             return layout.maxDescent * sizeRatio;
         }
         
-        float VirtualFont::getMiddleLine(const LineLayout &layout) const
+        float VirtualFont::getLineThickness(const LineLayout &layout) const
         {
-            return 0.5f * (layout.maxAscent - layout.maxDescent) * sizeRatio;
+            return layout.maxLineThickness * sizeRatio;
         }
-        
+
+        float VirtualFont::getUnderlineOffset(const LineLayout &layout) const
+        {
+            return layout.maxUnderlineOffset * sizeRatio;
+        }
+
+        float VirtualFont::getStrikethroughOffset(const LineLayout &layout) const
+        {
+            return layout.averageStrikethroughOffset * sizeRatio;
+        }
+
         float VirtualFont::getOffsetX(const LineLayout &layout, Alignment align) const
         {
             switch (align)
@@ -154,7 +168,7 @@ namespace chronotext
             switch (align)
             {
                 case ALIGN_MIDDLE:
-                    return getMiddleLine(layout);
+                    return (middleLineFactor != 0) ? (middleLineFactor * (layout.maxAscent - layout.maxDescent) * sizeRatio) : getStrikethroughOffset(layout);
                     
                 case ALIGN_TOP:
                     return +getAscent(layout);
@@ -180,13 +194,14 @@ namespace chronotext
         LineLayout* VirtualFont::createLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
         {
             TextLine line(text, langHint, overallDirection);
-            itemizer.processLine(line);
+            itemizer->processLine(line);
             return createLineLayout(line, boost::make_iterator_range(line.runs));
         }
         
         LineLayout* VirtualFont::createLineLayout(const TextLine &line, boost::iterator_range<vector<TextRun>::const_iterator> range)
         {
             auto layout = new LineLayout(this, line.langHint, line.overallDirection);
+            int averageCount = 0;
             
             map<hb_codepoint_t, Cluster> clusterMap;
             auto buffer = hb_buffer_create();
@@ -197,20 +212,23 @@ namespace chronotext
                 
                 for (auto &font : getFontSet(run.language))
                 {
-                    font->reload();
-                    
-                    if (font->loaded)
+                    if (font->reload())
                     {
                         layout->maxHeight = std::max(layout->maxHeight, font->metrics.height);
                         layout->maxAscent = std::max(layout->maxAscent, font->metrics.ascent);
                         layout->maxDescent = std::max(layout->maxDescent, font->metrics.descent);
+                        layout->maxLineThickness = std::max(layout->maxLineThickness, font->metrics.lineThickness);
+                        layout->maxUnderlineOffset = std::max(layout->maxUnderlineOffset, font->metrics.underlineOffset);
+                        
+                        layout->averageStrikethroughOffset += font->metrics.strikethroughOffset;
+                        averageCount++;
                         
                         run.apply(line.text, buffer);
-                        hb_shape(font->hbFont, buffer, NULL, 0);
+                        hb_shape(font->hbFont, buffer, nullptr, 0);
                         
                         auto glyphCount = hb_buffer_get_length(buffer);
-                        auto glyphInfos = hb_buffer_get_glyph_infos(buffer, NULL);
-                        auto glyphPositions = hb_buffer_get_glyph_positions(buffer, NULL);
+                        auto glyphInfos = hb_buffer_get_glyph_infos(buffer, nullptr);
+                        auto glyphPositions = hb_buffer_get_glyph_positions(buffer, nullptr);
                         
                         bool hasMissingGlyphs = false;
                         
@@ -278,14 +296,17 @@ namespace chronotext
                     }
                 }
             }
-            
+
+            layout->averageStrikethroughOffset /= averageCount;
+
             hb_buffer_destroy(buffer);
+
             return layout;
         }
         
         shared_ptr<LineLayout> VirtualFont::getCachedLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
         {
-            return layoutCache.getLineLayout(this, text, langHint, overallDirection);
+            return layoutCache->getLineLayout(this, text, langHint, overallDirection);
         }
         
         void VirtualFont::preload(LineLayout &layout)
@@ -298,21 +319,26 @@ namespace chronotext
                     
                     if (glyph && glyph->texture)
                     {
-                        glyph->texture->reload(); // JUST IN CASE THE GLYPH HAVE BEEN PREVIOUSLY DISCARDED
+                        glyph->texture->reload(); // JUST IN CASE THE GLYPH IS NOT LOADED
                     }
                 }
             }
         }
         
-        void VirtualFont::setSize(float newSize)
+        void VirtualFont::setSize(float size)
         {
-            size = newSize;
-            sizeRatio = newSize / properties.baseSize;
+            VirtualFont::size = size;
+            sizeRatio = size / properties.baseSize;
         }
         
-        void VirtualFont::setColor(const ColorA &newColor)
+        void VirtualFont::setMiddleLineFactor(float factor)
         {
-            color = newColor;
+            middleLineFactor = factor;
+        }
+        
+        void VirtualFont::setColor(const ColorA &color)
+        {
+            VirtualFont::color = color;
         }
         
         void VirtualFont::setColor(float r, float g, float b, float a)
@@ -325,7 +351,7 @@ namespace chronotext
         
         void VirtualFont::setClip(const Rectf &clipRect)
         {
-            this->clipRect = clipRect;
+            VirtualFont::clipRect = clipRect;
             hasClip = true;
         }
         
@@ -342,16 +368,6 @@ namespace chronotext
         void VirtualFont::clearClip()
         {
             hasClip = false;
-        }
-        
-        QuadMatrix* VirtualFont::getMatrix()
-        {
-            return &matrix;
-        }
-        
-        const GLushort* VirtualFont::getIndices() const
-        {
-            return const_cast<GLushort*>(indices.data());
         }
         
         void VirtualFont::begin(bool useColor)
@@ -401,7 +417,7 @@ namespace chronotext
                 
                 if (sequence)
                 {
-                    this->sequence = sequence;
+                    VirtualFont::sequence = sequence;
                     sequence->begin(useColor, anisotropy);
                 }
                 

@@ -2,7 +2,7 @@
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
  * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
@@ -10,25 +10,16 @@
 
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
-    FrameClock::FrameClock()
+    FrameClock::FrameClock(shared_ptr<TimeBase> timeBase, bool startOnConstruction)
     :
-    Clock(),
-    shouldSample(true),
-    frameTime(0)
-    {}
-    
-    FrameClock::FrameClock(TimeBase *timeBase)
-    :
-    Clock(timeBase),
-    shouldSample(true),
-    frameTime(0)
+    Clock(timeBase, startOnConstruction)
     {}
     
     double FrameClock::getTime()
     {
-        if (shouldSample)
+        if (shouldSample && !locked)
         {
             frameTime = Clock::getTime();
             shouldSample = false;
@@ -43,8 +34,27 @@ namespace chronotext
         frameTime = now;
     }
     
-    void FrameClock::update()
+    void FrameClock::update(bool immediately)
     {
-        shouldSample = true;
+        locked = false;
+        
+        if (immediately)
+        {
+            frameTime = Clock::getTime();
+        }
+        else
+        {
+            shouldSample = true;
+        }
+    }
+    
+    void FrameClock::lock()
+    {
+        locked = true;
+    }
+    
+    void FrameClock::unlock()
+    {
+        locked = false;
     }
 }

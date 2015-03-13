@@ -1,94 +1,304 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE MODIFIED BSD LICENSE:
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
 #include "chronotext/android/cinder/CinderDelegate.h"
-#include "chronotext/FileSystem.h"
-#include "chronotext/system/SystemInfo.h"
-#include "chronotext/utils/accel/AccelEvent.h"
-
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
+#include "chronotext/Context.h"
 
 using namespace std;
 using namespace ci;
-using namespace app;
+using namespace ci::app;
 
-#define GRAVITY_EARTH 9.80665f
-
-namespace chronotext
+namespace chr
 {
-    /*
-     * CALLED ON THE RENDERER'S THREAD FROM chronotext.android.gl.GLRenderer.onSurfaceCreated()
-     */
-    void CinderDelegate::launch(JavaVM *javaVM, jobject javaContext, jobject javaListener)
+    namespace intern
     {
-        mJavaVM = javaVM;
-        mJavaListener = javaListener;
-        
-        JNIEnv *env;
-        javaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        // ---
-        
-        jmethodID getAssetsMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getAssets", "()Landroid/content/res/AssetManager;");
-        AAssetManager *assetManager = AAssetManager_fromJava(env, env->CallObjectMethod(javaContext, getAssetsMethod));
-        
-        FileSystem::setAndroidAssetManager(assetManager);
-        
-        // ---
-        
-        jmethodID getFilesDirMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getFilesDir", "()Ljava/io/File;");
-        jobject filesDirObject = env->CallObjectMethod(javaContext, getFilesDirMethod);
-        jmethodID getAbsolutePathMethod = env->GetMethodID(env->GetObjectClass(filesDirObject), "getAbsolutePath", "()Ljava/lang/String;");
-        jstring absolutePathString = (jstring)env->CallObjectMethod(filesDirObject, getAbsolutePathMethod);
-        
-        const char *internalDataPath = env->GetStringUTFChars(absolutePathString, NULL);
-        FileSystem::setAndroidInternalDataPath(internalDataPath);
-        env->ReleaseStringUTFChars(absolutePathString, internalDataPath);
-        
-        // ---
-        
-        jclass environmentClass = env->FindClass("android/os/Environment");
-        jmethodID getExternalStorageDirectoryMethod = env->GetStaticMethodID(environmentClass, "getExternalStorageDirectory",  "()Ljava/io/File;");
-        jobject externalStorageDirectoryObject = env->CallStaticObjectMethod(environmentClass, getExternalStorageDirectoryMethod);
-        absolutePathString = (jstring)env->CallObjectMethod(externalStorageDirectoryObject, getAbsolutePathMethod);
-        
-        const char *externalDataPath = env->GetStringUTFChars(absolutePathString, NULL);
-        FileSystem::setAndroidExternalDataPath(externalDataPath);
-        env->ReleaseStringUTFChars(absolutePathString, externalDataPath);
-        
-        // ---
-        
-        jmethodID getPackageCodePathMethod = env->GetMethodID(env->GetObjectClass(javaContext), "getPackageCodePath", "()Ljava/lang/String;");
-        jstring packageCodePathString = (jstring)env->CallObjectMethod(javaContext, getPackageCodePathMethod);
-        
-        const char *apkPath = env->GetStringUTFChars(packageCodePathString, NULL);
-        FileSystem::setAndroidApkPath(apkPath);
-        env->ReleaseStringUTFChars(packageCodePathString, apkPath);
-        
-        // ---
-        
-        ALooper *looper = ALooper_forThread();
-        
-        if (!looper)
+        CinderDelegate *instance = nullptr;
+    }
+    
+    CinderDelegate& delegate()
+    {
+        return checkedReference(intern::instance);
+    }
+    
+    // ---
+    
+    bool CinderDelegate::performInit(JNIEnv *env, jobject androidContext, jobject androidDisplay, const Vec2i &displaySize, float displayDensity)
+    {
+        if (!initialized_)
         {
-            looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
+            initInfo.androidContext = env->NewGlobalRef(androidContext);
+            initInfo.androidDisplay = env->NewGlobalRef(androidDisplay);
+            initInfo.displaySize = displaySize;
+            initInfo.displayDensity = displayDensity;
+
+            intern::instance = this;
+            initialized_ = _init();
         }
         
-        mSensorManager = ASensorManager_getInstance();
-        mAccelerometerSensor = ASensorManager_getDefaultSensor(mSensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        mSensorEventQueue = ASensorManager_createEventQueue(mSensorManager, looper, 3, NULL, NULL/*sensorEventCallback, this*/); // WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
+        return initialized_;
+    }
+    
+    void CinderDelegate::performUninit(JNIEnv *env)
+    {
+        if (initialized_ && !setup_)
+        {
+            _uninit();
+            
+            env->DeleteGlobalRef(initInfo.androidContext);
+            env->DeleteGlobalRef(initInfo.androidDisplay);
+            
+            // ---
+
+            initialized_ = false;
+            intern::instance = nullptr;
+        }
+    }
+    
+    void CinderDelegate::performSetup(JNIEnv *env, const Vec2i &size)
+    {
+        if (!setup_ && initialized_)
+        {
+            startIOService();
+            createSensorEventQueue();
+            
+            setupInfo.io_service = io.get();
+            setupInfo.windowInfo.size = size;
+            
+            _setup();
+            
+            // ---
+            
+            setup_ = true;
+        }
+    }
+    
+    void CinderDelegate::performShutdown(JNIEnv *env)
+    {
+        if (setup_)
+        {
+            /*
+             * TODO:
+             *
+             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
+             */
+            _shutdown();
+            
+            destroySensorEventQueue();
+            stopIOService();
+            
+            // ---
+            
+            setup_ = false;
+        }
+    }
+    
+    void CinderDelegate::performResize(const Vec2i &size)
+    {
+        assert(setup_);
+        
+        setupInfo.windowInfo.size = size;
+        sketch->performResize(size);
+    }
+    
+    void CinderDelegate::performUpdate()
+    {
+        assert(setup_);
+        
+        /*
+         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
+         *
+         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
+         */
+        sketch->clock()->update(true);
+        
+        /*
+         * CAN TRIGGER CinderSketch::EVENT_MEMORY_WARNING
+         */
+        memoryManager().update();
+        
+        pollSensorEvents(); // WHERE handleAcceleration IS INVOKED
+        io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
+        
+        sketch->performUpdate();
+        updateCount++;
+    }
+    
+    void CinderDelegate::performDraw()
+    {
+        assert(setup_);
+        sketch->draw();
+    }
+    
+#pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
+    
+    /*
+     * TODO: FORMAT body FOR LOG
+     *
+     * 1) LEADING AND TRAILING WHITE-SPACE TRIMMED
+     * 2) LINE-BREAKS AND TABS REPLACED BY SPACES
+     * 3) TEXT-LENGTH LIMITED
+     */
+    
+    /*
+     * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
+     */
+    void CinderDelegate::messageFromBridge(int what, const string &body)
+    {
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl;
+        
+        CinderDelegateBase::messageFromBridge(what, body);
     }
     
     /*
+     * WILL BE QUEUED TO THE MAIN-THREAD THREAD (VIA JAVA-HANDLER)
+     */
+    void CinderDelegate::sendMessageToBridge(int what, const string &body)
+    {
+        LOGI_IF(LOG_VERBOSE) << "MESSAGE SENT TO BRIDGE: " << what << " " << body << endl;
+        
+        jni::callVoidMethodOnBridge("messageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
+    }
+
+    void CinderDelegate::handleEvent(int eventId)
+    {
+        switch (eventId)
+        {
+            case CinderSketch::EVENT_RESUMED:
+                sketch->performStart(CinderSketch::START_REASON_APP_RESUMED);
+                return;
+                
+            case CinderSketch::EVENT_SHOWN:
+                sketch->performStart(CinderSketch::START_REASON_VIEW_SHOWN);
+                return;
+                
+            case CinderSketch::EVENT_PAUSED:
+                sketch->performStop(CinderSketch::STOP_REASON_APP_PAUSED);
+                return;
+                
+            case CinderSketch::EVENT_HIDDEN:
+                sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
+                return;
+        }
+        
+        sketch->event(eventId);
+    }
+    
+    /*
+     * TODO: FINALIZE THREAD-SAFETY POLICY
+     */
+    void CinderDelegate::performAction(int actionId)
+    {
+        jni::callBooleanMethodOnBridge("handleAction", "(I)Z", actionId);
+    }
+    
+    // ---
+    
+    /*
+     * CURRENT LIMITATION: MUST BE CALLED FROM THE MAIN-THREAD OR THE RENDERER'S THREAD
+     *
+     * TODO:
+     *
+     * 1) ADD SUPPORT FOR JAVA-THREAD-ATTACHMENT IN os/Task
+     * 2) FINALIZE THREAD-SAFETY POLICY
+     * 3) HANDLE POTENTIAL JNI EXCEPTIONS IN callObjectMethodOnBridge()
+     */
+    
+    JsonTree CinderDelegate::jsonQuery(const char *methodName)
+    {
+        const string &query = jni::toString((jstring)jni::callObjectMethodOnBridge(methodName, "()Ljava/lang/String;"));
+        
+        if (!query.empty())
+        {
+            try
+            {
+                return JsonTree(query);
+            }
+            catch (exception &e)
+            {
+                LOGI_IF(LOG_WARNING)  << "JSON-QUERY FAILED | REASON: " << e.what() << endl;
+            }
+        }
+        
+        return JsonTree();
+    }
+    
+#pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
+    
+    void CinderDelegate::startIOService()
+    {
+        if (!io)
+        {
+            io = make_shared<boost::asio::io_service>();
+            ioWork = make_shared<boost::asio::io_service::work>(*io);
+        }
+    }
+    
+    void CinderDelegate::stopIOService()
+    {
+        if (io)
+        {
+            io->stop();
+            
+            ioWork.reset();
+            io.reset();
+        }
+    }
+    
+#pragma mark ---------------------------------------- TOUCH ----------------------------------------
+    
+    void CinderDelegate::addTouch(int index, float x, float y)
+    {
+        sketch->addTouch(index, x, y);
+    }
+    
+    void CinderDelegate::updateTouch(int index, float x, float y)
+    {
+        sketch->updateTouch(index, x, y);
+    }
+    
+    void CinderDelegate::removeTouch(int index, float x, float y)
+    {
+        sketch->removeTouch(index, x, y);
+    }
+    
+    
+#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
+    
+    int CinderDelegateBase::getCode(const KeyEvent &keyEvent)
+    {
+        return 0;
+    }
+    
+    bool CinderDelegateBase::isShiftDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+    bool CinderDelegateBase::isAltDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+    bool CinderDelegateBase::isAccelDown(const KeyEvent &keyEvent)
+    {
+        return false;
+    }
+    
+#pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
+    
+    /*
      * REFERENCES:
+     *
      * http://android-developers.blogspot.co.il/2010/09/one-screen-turn-deserves-another.html
      * http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
+     *
+     * PROBABLY OVERKILL...
      */
     static void canonicalToWorld(int displayRotation, float *canVec, ci::Vec3f &worldVec)
     {
@@ -115,398 +325,84 @@ namespace chronotext
         worldVec.z = canVec[2];
     }
     
-    void CinderDelegate::processSensorEvents()
-    {
-        ASensorEvent event;
-        
-        while (ASensorEventQueue_getEvents(mSensorEventQueue, &event, 1) > 0)
-        {
-            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
-            {
-                Vec3f transformed;
-                canonicalToWorld(mDisplayRotation, (float*)&event.acceleration.v, transformed);
-                
-                /*
-                 * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
-                 */
-                accelerated(-transformed.x / GRAVITY_EARTH, -transformed.y / GRAVITY_EARTH, transformed.z / GRAVITY_EARTH);
-            }
-        }
-    }
-    
-    void CinderDelegate::accelerated(float x, float y, float z)
-    {
-        Vec3f acceleration(x, y, z);
-        Vec3f filtered = mLastAccel * (1 - mAccelFilterFactor) + acceleration * mAccelFilterFactor;
-        
-        AccelEvent event(filtered, acceleration, mLastAccel, mLastRawAccel);
-        sketch->accelerated(event);
-        
-        mLastAccel = filtered;
-        mLastRawAccel = acceleration;
-    }
-    
-    void CinderDelegate::setup(int width, int height, float diagonal, float density, int displayRotation)
-    {
-        mWindowInfo.size = Vec2i(width, height);
-        mWindowInfo.contentScale = 1;
-        mWindowInfo.diagonal = diagonal;
-        mWindowInfo.density = density;
-        mDisplayRotation = displayRotation;
-        
-        /*
-         * IDEALLY, THIS INFO SHOULD BE ACCESSIBLE AS-SOON-AS THE "PRELAUNCH" STAGE...
-         */
-        SystemInfo::instance().setWindowInfo(mWindowInfo);
-        
-        io = make_shared<boost::asio::io_service>();
-        ioWork = make_shared<boost::asio::io_service::work>(*io);
-        
-        sketch->setIOService(*io);
-        sketch->setup(false);
-        sketch->resize();
-    }
-    
-    void CinderDelegate::shutdown()
-    {
-        ASensorManager_destroyEventQueue(mSensorManager, mSensorEventQueue);
-        io->stop();
-        
-        sketch->shutdown();
-        delete sketch;
-    }
-    
-    void CinderDelegate::draw()
-    {
-        /*
-         * WOULD BE BETTER TO USE A CALL-BACK, BUT IT'S NOT WORKING
-         */
-        processSensorEvents();
-
-        sketch->clock().update(); // MUST BE CALLED AT THE BEGINNING OF THE FRAME
-        io->poll();
-        
-        /*
-         * MUST BE CALLED BEFORE Sketch::update
-         * ANY SUBSEQUENT CALL WILL RETURN THE SAME TIME-VALUE
-         *
-         * NOTE THAT getTime() COULD HAVE BEEN ALREADY CALLED
-         * WITHIN ONE OF THE PREVIOUSLY "POLLED" FUNCTIONS
-         */
-        double now = sketch->clock().getTime();
-        
-        sketch->update();
-        sketch->timeline().stepTo(now);
-        mFrameCount++;
-
-        sketch->draw();
-    }
-    
-    void CinderDelegate::event(int eventId)
-    {
-        switch (eventId)
-        {
-            case EVENT_ATTACHED:
-            case EVENT_SHOWN:
-                mFrameCount = 0;
-                
-                mTimer.start();
-                sketch->clock().start();
-                
-                sketch->start(CinderSketch::FLAG_FOCUS_GAINED);
-                break;
-                
-            case EVENT_RESUMED:
-                mFrameCount = 0;
-                
-                mTimer.start();
-                sketch->clock().start();
-                
-                sketch->setup(true); // ASSERTIONS: THE GL CONTEXT WAS JUST RE-CREATED, WITH THE SAME DIMENSIONS AS BEFORE
-                sketch->start(CinderSketch::FLAG_APP_RESUMED);
-                break;
-                
-            case EVENT_DETACHED:
-            case EVENT_HIDDEN:
-                mTimer.stop();
-                sketch->clock().stop();
-                
-                sketch->stop(CinderSketch::FLAG_FOCUS_LOST);
-                break;
-                
-            case EVENT_PAUSED:
-                mTimer.stop();
-                sketch->clock().stop();
-                
-                sketch->event(CinderSketch::EVENT_CONTEXT_LOST); // ASSERTION: THE GL CONTEXT IS ABOUT TO BE LOST
-                sketch->stop(CinderSketch::FLAG_APP_PAUSED);
-                break;
-                
-            case EVENT_BACKGROUND:
-                sketch->event(CinderSketch::EVENT_BACKGROUND);
-                break;
-                
-            case EVENT_FOREGROUND:
-                sketch->event(CinderSketch::EVENT_FOREGROUND);
-                break;
-                
-            case EVENT_BACK_KEY:
-                sketch->event(CinderSketch::EVENT_BACK_KEY);
-                break;
-        }
-    }
-    
-    void CinderDelegate::addTouch(int index, float x, float y)
-    {
-        sketch->addTouch(index, x, y);
-    }
-    
-    void CinderDelegate::updateTouch(int index, float x, float y)
-    {
-        sketch->updateTouch(index, x, y);
-    }
-    
-    void CinderDelegate::removeTouch(int index, float x, float y)
-    {
-        sketch->removeTouch(index, x, y);
-    }
-    
     void CinderDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
     {
-        mAccelFilterFactor = filterFactor;
+        accelFilter = AccelEvent::Filter(filterFactor);
         
         int delay = 1000000 / updateFrequency;
-        int min = ASensor_getMinDelay(mAccelerometerSensor);
+        int min = ASensor_getMinDelay(accelerometerSensor);
         
         if (delay < min)
         {
             delay = min;
         }
         
-        ASensorEventQueue_enableSensor(mSensorEventQueue, mAccelerometerSensor);
-        ASensorEventQueue_setEventRate(mSensorEventQueue, mAccelerometerSensor, delay);
+        ASensorEventQueue_enableSensor(sensorEventQueue, accelerometerSensor);
+        ASensorEventQueue_setEventRate(sensorEventQueue, accelerometerSensor, delay);
     }
     
     void CinderDelegate::disableAccelerometer()
     {
-        ASensorEventQueue_disableSensor(mSensorEventQueue, mAccelerometerSensor);
+        ASensorEventQueue_disableSensor(sensorEventQueue, accelerometerSensor);
     }
     
-    ostream& CinderDelegate::console()
+    void CinderDelegate::handleAcceleration(ASensorEvent event)
     {
-        if (!mOutputStream)
+        int displayRotation = getDisplayRotation();
+        
+        Vec3f transformed;
+        canonicalToWorld(displayRotation, (float*)&event.acceleration.v, transformed);
+        
+        /*
+         * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
+         */
+        transformed *= Vec3f(-1, -1, +1) / ASENSOR_STANDARD_GRAVITY; // TODO: DOUBLE-CHECK Z AXIS
+        
+        sketch->accelerated(accelFilter.process(transformed));
+    }
+    
+    /*
+     * TODO: CONSIDER HANDLING IN DisplayHelper
+     */
+    int CinderDelegate::getDisplayRotation()
+    {
+        JNIEnv *env = jni::getEnv();
+        
+        jmethodID getRotationMethod = env->GetMethodID(env->GetObjectClass(initInfo.androidDisplay), "getRotation", "()I");
+        return env->CallIntMethod(initInfo.androidDisplay, getRotationMethod);
+    }
+    
+#pragma mark ---------------------------------------- SENSOR EVENTS ----------------------------------------
+    
+    void CinderDelegate::createSensorEventQueue()
+    {
+        auto looper = ALooper_forThread();
+        
+        if (!looper)
         {
-            mOutputStream = shared_ptr<cinder::android::dostream>(new android::dostream);
+            looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
         }
         
-        return *mOutputStream;
+        sensorManager = ASensorManager_getInstance();
+        accelerometerSensor = ASensorManager_getDefaultSensor(sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        sensorEventQueue = ASensorManager_createEventQueue(sensorManager, looper, 3, nullptr, nullptr);
     }
     
-    boost::asio::io_service& CinderDelegate::io_service() const
+    void CinderDelegate::destroySensorEventQueue()
     {
-        return *io;
+        ASensorManager_destroyEventQueue(sensorManager, sensorEventQueue);
     }
     
-    double CinderDelegate::getElapsedSeconds() const
+    void CinderDelegate::pollSensorEvents()
     {
-        return mTimer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-VALUE PER FRAME
-    }
-    
-    uint32_t CinderDelegate::getElapsedFrames() const
-    {
-        return mFrameCount;
-    }
-    
-    int CinderDelegate::getWindowWidth() const
-    {
-        return mWindowInfo.size.x;
-    }
-    
-    int CinderDelegate::getWindowHeight() const
-    {
-        return mWindowInfo.size.y;
-    }
-    
-    Vec2f CinderDelegate::getWindowCenter() const
-    {
-        return mWindowInfo.size * 0.5f;
-    }
-    
-    Vec2i CinderDelegate::getWindowSize() const
-    {
-        return mWindowInfo.size;
-    }
-    
-    float CinderDelegate::getWindowAspectRatio() const
-    {
-        return mWindowInfo.size.x / (float)mWindowInfo.size.y;
-    }
-    
-    Area CinderDelegate::getWindowBounds() const
-    {
-        return Area(0, 0, mWindowInfo.size.x, mWindowInfo.size.y);
-    }
-
-    float CinderDelegate::getWindowContentScale() const
-    {
-        return mWindowInfo.contentScale;
-    }
-    
-    WindowInfo CinderDelegate::getWindowInfo() const
-    {
-        return mWindowInfo;
-    }
-    
-    void CinderDelegate::action(int actionId)
-    {
-        callVoidMethodOnJavaListener("action", "(I)V", actionId);
-    }
-
-    void CinderDelegate::receiveMessageFromSketch(int what, const string &body)
-    {
-#ifdef DEBUG_MESSAGES
-        CI_LOGD("MESSAGE SENT TO JAVA: %d %s", what, body.c_str());
-#endif
+        ASensorEvent event;
         
-        callVoidMethodOnJavaListener("receiveMessageFromSketch", "(ILjava/lang/String;)V", what, getJNIEnv()->NewStringUTF(body.c_str()));
-    }
-    
-    void CinderDelegate::sendMessageToSketch(int what, const string &body)
-    {
-#ifdef DEBUG_MESSAGES
-        CI_LOGD("MESSAGE RECEIVED FROM JAVA: %d %s", what, body.c_str());
-#endif
-        
-        sketch->sendMessage(Message(what, body));
-    }
-    
-    // ---------------------------------------- JNI ----------------------------------------
-    
-    JNIEnv* CinderDelegate::getJNIEnv()
-    {
-        JNIEnv *env = NULL;
-        
-        int err = mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        if (err == JNI_EDETACHED)
+        while (ASensorEventQueue_getEvents(sensorEventQueue, &event, 1) > 0)
         {
-            CI_LOGE("getJNIEnv error: current thread not attached to Java VM");
+            if (event.type == ASENSOR_TYPE_ACCELEROMETER)
+            {
+                handleAcceleration(event);
+            }
         }
-        else if (err == JNI_EVERSION)
-        {
-            CI_LOGE("getJNIEnv error: VM doesn't support requested JNI version");
-        }
-        
-        return env;
-    }
-    
-    void CinderDelegate::callVoidMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jclass cls = env->GetObjectClass(mJavaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        env->CallVoidMethodV(mJavaListener, method, args);
-        va_end(args);
-    }
-    
-    jboolean CinderDelegate::callBooleanMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jclass cls = env->GetObjectClass(mJavaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jboolean ret = env->CallBooleanMethodV(mJavaListener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jchar CinderDelegate::callCharMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jclass cls = env->GetObjectClass(mJavaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jchar ret = env->CallCharMethodV(mJavaListener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jint CinderDelegate::callIntMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jclass cls = env->GetObjectClass(mJavaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jint ret = env->CallIntMethodV(mJavaListener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jlong CinderDelegate::callLongMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jclass cls = env->GetObjectClass(mJavaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jlong ret = env->CallLongMethodV(mJavaListener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jfloat CinderDelegate::callFloatMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jclass cls = env->GetObjectClass(mJavaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jfloat ret = env->CallFloatMethodV(mJavaListener, method, args);
-        va_end(args);
-        
-        return ret;
-    }
-    
-    jdouble CinderDelegate::callDoubleMethodOnJavaListener(const char *name, const char *sig, ...)
-    {
-        JNIEnv *env;
-        mJavaVM->GetEnv((void**)&env, JNI_VERSION_1_4);
-        
-        jclass cls = env->GetObjectClass(mJavaListener);
-        jmethodID method = env->GetMethodID(cls, name, sig);
-        
-        va_list args;
-        va_start(args, sig);
-        jdouble ret = env->CallDoubleMethod(mJavaListener, method, args);
-        va_end(args);
-        
-        return ret;
     }
 }

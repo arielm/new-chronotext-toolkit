@@ -1,24 +1,32 @@
-#include "ShapeMesh.h"
+/*
+ * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
+ * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ *
+ * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
+ * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
+ */
+
+#include "chronotext/path/ShapeMesh.h"
 
 #include "cinder/gl/gl.h"
 
 using namespace ci;
 using namespace std;
 
-namespace chronotext
+namespace chr
 {
     void ShapeMesh::appendVertices(const Vec2f *vertices, size_t count)
     {
-        this->vertices.insert(this->vertices.end(), vertices, vertices + count);
+        ShapeMesh::vertices.insert(ShapeMesh::vertices.end(), vertices, vertices + count);
     }
     
     void ShapeMesh::appendIndices(const uint32_t *indices, size_t count)
     {
-        this->indices.reserve(this->indices.size() + count);
+        ShapeMesh::indices.reserve(ShapeMesh::indices.size() + count);
         
         for (int i = 0; i < count; i++)
         {
-            this->indices.push_back((uint16_t)indices[i]);
+            ShapeMesh::indices.push_back((uint16_t)indices[i]);
         }
     }
     
