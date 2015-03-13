@@ -14,7 +14,7 @@
  *   - WITH SOME LIGHT VARIATIONS BETWEEN IOS AND OSX
  *
  * - LOW-MEMORY DETECTION:
- *   - IOS: IS HANDLED BY THE SYSTEM VIA UIApplicationDidReceiveMemoryWarningNotification
+ *   - IOS: HANDLED BY THE SYSTEM VIA UIApplicationDidReceiveMemoryWarningNotification
  *   - OSX: NOT RELEVANT
  *
  *
@@ -35,6 +35,7 @@
  *      - NOT ACCURATE AND USELESS
  *    - UNSOLVED:
  *      - THE RELEASE OF PREVIOUSLY ALLOCATED MEMORY IS NOT PROPERLY DETECTED
+ *        - ACTUALLY: IT STARTS TO WORK-AS-INTENDED ONLY AFTER N TIMES!
  *
  *
  * TODO:
@@ -42,7 +43,9 @@
  * 1) INVESTIGATE task_info.resident_size FURTHER:
  *    - THE PER-THREAD NATURE MAY REQUIRE A SOLUTION INTEGRATED WITH os/TaskManager
  *
- * 2) TRY TO PROPERLY DETECT MEMORY-RELEASE ON OSX:
+ * 2) TRY TO SOLVE THE "MEMORY-RELEASE DETECTION" ISSUE ON OSX:
+ *    - REPRODUCEABLE IN:
+ *      - https://github.com/arielm/chronotext-playground/blob/master/Sketches/TestBed1/src/TestingMemory1.cpp
  *    - THE GOAL IS TO SHOW THE SAME VALUE AS IN XCODE'S INSTRUMENT
  */
 
@@ -51,6 +54,8 @@
  *
  * - http://stackoverflow.com/a/23123849/50335
  * - http://miknight.blogspot.co.il/2005/11/resident-set-size-in-mac-os-x.html
+ * - https://developer.apple.com/library/mac/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html
+ * - https://developer.apple.com/library/mac/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html
  */
 
 /*
