@@ -26,7 +26,7 @@ namespace chr
 {
     namespace utils
     {
-        string toString(const wstring &s)
+        const string toString(const wstring &s)
         {
             vector<char> tmp;
             
@@ -39,7 +39,7 @@ namespace chr
             return string(tmp.data(), tmp.size());
         }
         
-        wstring toWideString(const string &s)
+        const wstring toWideString(const string &s)
         {
             vector<wchar_t> tmp;
             
@@ -55,14 +55,14 @@ namespace chr
         // ---
         
         template <>
-        string readText<string>(InputSource::Ref inputSource)
+        const string readText<string>(InputSource::Ref inputSource)
         {
             Buffer buffer(inputSource->loadDataSource());
             return string(static_cast<const char*>(buffer.getData()), buffer.getDataSize());
         }
         
         template <>
-        wstring readText<wstring>(InputSource::Ref inputSource)
+        const wstring readText<wstring>(InputSource::Ref inputSource)
         {
             return toWideString(readText<string>(inputSource));
         }
@@ -112,7 +112,7 @@ namespace chr
             return instructions;
         }
         
-        string readTextFile(const fs::path &filePath)
+        const string readTextFile(const fs::path &filePath)
         {
             fs::ifstream in(filePath);
             return string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
@@ -149,7 +149,7 @@ namespace chr
             /*
              * REFERENCE: http://stackoverflow.com/a/10096779/50335
              */
-            string bytes(int64_t bytes, int precision, const string &separator)
+            const string bytes(int64_t bytes, int precision, const string &separator)
             {
                 static const vector<string> abbrevs {"TB", "GB", "MB", "KB"};
                 double maximum = pow(1024.0, abbrevs.size());
@@ -175,7 +175,7 @@ namespace chr
                 return ss.str();
             }
             
-            string duration(double seconds, int precision, const string &separator)
+            const string duration(double seconds, int precision, const string &separator)
             {
                 if (fabs(seconds) >= 60)
                 {
@@ -206,7 +206,7 @@ namespace chr
                 return ss.str();
             }
 
-            string time(double seconds, bool rounded)
+            const string time(double seconds, bool rounded)
             {
                 int time = fabs(seconds) + (rounded ? 0.5 : 0); // ROUNDING IS NOT APPROPRIATE FOR CLOCKS, SCORES, ETC.
                 int hour = time / 3600;
@@ -228,7 +228,7 @@ namespace chr
                 return ss.str();
             }
             
-            string percent(double ratio, int precision, const string &separator)
+            const string percent(double ratio, int precision, const string &separator)
             {
                 stringstream ss;
                 ss << fixed << setprecision(precision);

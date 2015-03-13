@@ -32,20 +32,20 @@ namespace chr
 {
     namespace utils
     {
-        std::string toString(const std::wstring &s);
-        std::wstring toWideString(const std::string &s);
+        const std::string toString(const std::wstring &s);
+        const std::wstring toWideString(const std::string &s);
 
         // ---
         
         template<typename T>
-        T readText(InputSource::Ref inputSource);
+        const T readText(InputSource::Ref inputSource);
         
         template<typename T>
         const std::vector<T> readLines(InputSource::Ref inputSource);
         
         const std::vector<std::string> readInstructions(InputSource::Ref inputSource);
         
-        std::string readTextFile(const ci::fs::path &filePath);
+        const std::string readTextFile(const ci::fs::path &filePath);
         void writeTextFile(const ci::fs::path &filePath, const std::string &text);
         
         void writeXmlFile(const ci::fs::path &filePath, const ci::XmlTree &tree);
@@ -93,10 +93,10 @@ namespace chr
         
         namespace format
         {
-            std::string bytes(int64_t bytes, int precision = 1, const std::string &separator = "");
-            std::string time(double seconds, bool rounded = false);
-            std::string duration(double seconds, int precision = 1, const std::string &separator = "");
-            std::string percent(double ratio, int precision = 1, const std::string &separator = "");
+            const std::string bytes(int64_t bytes, int precision = 1, const std::string &separator = "");
+            const std::string time(double seconds, bool rounded = false);
+            const std::string duration(double seconds, int precision = 1, const std::string &separator = "");
+            const std::string percent(double ratio, int precision = 1, const std::string &separator = "");
             
             template<typename T>
             inline const std::string write(const T &t)
