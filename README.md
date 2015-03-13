@@ -6,7 +6,7 @@ The purpose of this toolkit is twofold:
 
 2. Creating 2D games and interactive applications for iOS and Android, with focus on OSX as a developement and simulation platform.  
 
-The toolkit relies on Cinder 0.8.5 for [OSX and iOS](http://libcinder.org/releases/cinder_0.8.5_mac.zip) and [safetydank's fork](https://github.com/safetydank/Cinder/tree/fecb2914adce1b081a1ed0884f1c0289b8923af8/android) for Android (Windows is temporarily not supported...)
+The toolkit relies on Cinder 0.8.5 for [OSX and iOS](https://github.com/arielm/new-chronotext-toolkit/wiki/How-to-(re)build-Cinder-0.8.5-for-XCode-6.1.1-and-the-new-chronotext-toolkit) and [safetydank's fork](https://github.com/arielm/new-chronotext-toolkit/wiki/How-to-build-Cinder-0.8.5-for-Android-and-the-new-chronotext-toolkit) for Android.
 
 More info in the [Wiki](https://github.com/arielm/new-chronotext-toolkit/wiki)...
 
