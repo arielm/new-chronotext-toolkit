@@ -22,7 +22,7 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT 446e1a7
+ * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/v4.0.0
  */
 
 #include "cinder/app/AppNative.h"

@@ -20,11 +20,7 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH
- *
- * OSX: COMMIT 8358df8
- * IOS: COMMIT 8358df8
- * ANDROID: COMMIT 8358df8
+ * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/v4.0.0
  */
 
 #pragma once

@@ -23,7 +23,16 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT 8358df8
+ * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/v4.0.0
+ *
+ *
+ * ADDITIONAL REQUIREMENTS:
+ *
+ * 1) hb-icu BLOCK:
+ *    https://github.com/arielm/hb-icu/tree/toolkit-4.0.0
+ *
+ * 2) Freetype BLOCK:
+ *    https://github.com/arielm/Freetype/tree/toolkit-4.0.0
  */
 
 #pragma once

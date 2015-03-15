@@ -7,10 +7,6 @@
  */
 
 /*
- * IN SYNC WITH develop BRANCH / COMMIT 8358df8
- */
-
-/*
  * FEATURES:
  *
  * 1) DEMONSTRATES HOW TO WORK WITH THE ZFont SYSTEM:
@@ -31,22 +27,14 @@
  *    - FROM THIS POINT: RESOURCES WILL BE RELOADED AND TEXTURES RECREATED ONLY WHEN NECESSARY
  *
  *
- * ADDITIONAL REQUIREMENTS:
- *
- * 1) hb-icu BLOCK
- *    https://github.com/arielm/hb-icu
- *
- * 2) Freetype BLOCK:
- *    https://github.com/arielm/Freetype
- *
- *
  * TODO:
  *
  * 1) ADAPT TO iOS, ANDROID AND WINDOWS:
  *    - REQUIRES PICKING THE RIGHT SET OF FONTS FOR EACH PLATFORM
  *    - FOR WINDOWS: REQUIRES BUILDING HARFBUZZ AND ICU
- *
- *
+ */
+
+/*
  * REFERENCES:
  *
  * 1) https://github.com/arielm/Unicode
@@ -56,6 +44,19 @@
  * WE'RE USING GENESIS 11:1, THE BIBLICAL PASSAGE MENTIONING THE TOWER OF BABEL:
  * - THE TEXT IS OBVIOUSLY ON PURPOSE WHEN DEALING WITH THE MULTIPLICITY OF LANGUAGES
  * - BESIDES, THE BIBLE IS THE ONLY TEXT-SOURCE AVAILABLE IN SUCH A VARIETY OF LANGUAGES
+ */
+
+/*
+ * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/v4.0.0
+ *
+ *
+ * ADDITIONAL REQUIREMENTS:
+ *
+ * 1) hb-icu BLOCK:
+ *    https://github.com/arielm/hb-icu/tree/toolkit-4.0.0
+ *
+ * 2) Freetype BLOCK:
+ *    https://github.com/arielm/Freetype/tree/toolkit-4.0.0
  */
 
 #pragma once
