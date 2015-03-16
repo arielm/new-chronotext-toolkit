@@ -119,16 +119,20 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     glView.drawableStencilFormat = (GLKViewDrawableStencilFormat)[[properties objectForKey:kGLViewControllerPropertyStencilFormat] intValue];
     glView.drawableMultisample = (GLKViewDrawableMultisample)[[properties objectForKey:kGLViewControllerPropertyMultisample] intValue];
     
-    /*
-     * TODO:
-     *
-     * 1) TEST ON IPHONE 6 AND 6+ DEVICES
-     *
-     * 2) HANDLE "DISPLAY ZOOM" MODES:
-     *    https://github.com/brackeen/glfm/blob/c3d7a72872d82eac903285b6f108ea83ac79e66c/src/glfm_platform_ios.m#L366-371
-     */
     if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
     {
+        /*
+         * REFERENCE:
+         * - https://github.com/brackeen/glfm/blob/c3d7a72872d82eac903285b6f108ea83ac79e66c/src/glfm_platform_ios.m#L366-371
+         *
+         * REAL IOS 8+ DEVICES TESTED:
+         * - IPAD AIR 2
+         * - IPHONE 6
+         *
+         * REAL IOS 8+ DEVICES TO TEST:
+         * - IPHONE 6+
+         */
+        
         self.view.contentScaleFactor = UIScreen.mainScreen.nativeScale;
     }
 

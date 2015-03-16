@@ -28,6 +28,18 @@ namespace chr
         {
             if (!intern::setup)
             {
+                /*
+                 * REFERENCE:
+                 * - https://github.com/brackeen/glfm/blob/c3d7a72872d82eac903285b6f108ea83ac79e66c/src/glfm_platform_ios.m#L366-371
+                 *
+                 * REAL IOS 8+ DEVICES TESTED:
+                 * - IPAD AIR 2
+                 * - IPHONE 6
+                 *
+                 * REAL IOS 8+ DEVICES TO TEST:
+                 * - IPHONE 6+
+                 */
+                
                 auto bounds = UIScreen.mainScreen.bounds;
                 auto orientation = UIApplication.sharedApplication.statusBarOrientation;
                 float contentScale;
@@ -39,20 +51,11 @@ namespace chr
                 if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
                 {
                     /*
-                     * TODO:
+                     * WARNING: SIMULATORS DO NOT HANDLE nativeScale LIKE REAL DEVICES
                      *
-                     * 1) TEST ON IPHONE 6 AND 6+ DEVICES
-                     *
-                     * 2) HANDLE "DISPLAY ZOOM" MODES:
-                     *    https://github.com/brackeen/glfm/blob/c3d7a72872d82eac903285b6f108ea83ac79e66c/src/glfm_platform_ios.m#L366-371
-                     */
-                    
-                    /*
-                     * ON IPHONE 6+:
+                     * E.G. ON IPHONE 6+:
                      * - DEVICE: ~2.609 (3 * 1920 / 2208)
                      * - SIMULATOR: 3
-                     *
-                     * OTHERWISE: EQUALS TO UIScreen.mainScreen.scale
                      */
                     contentScale = UIScreen.mainScreen.nativeScale;
 
@@ -91,11 +94,25 @@ namespace chr
                 }
                 else if (magSize == 320 * 568)
                 {
-                    diagonal = 4.00f; // IPHONE 5
+                    if (contentScale == 2)
+                    {
+                        diagonal = 4.00f; // IPHONE 5
+                    }
+                    else
+                    {
+                        diagonal = 4.70f; // IPHONE 6
+                    }
                 }
                 else if (magSize == 375 * 667)
                 {
-                    diagonal = 4.70f; // IPHONE 6
+                    if (contentScale == 2)
+                    {
+                        diagonal = 4.70f; // IPHONE 6
+                    }
+                    else
+                    {
+                        diagonal = 5.50f; // IPHONE 6+
+                    }
                 }
                 else if (magSize == 414 * 736)
                 {
