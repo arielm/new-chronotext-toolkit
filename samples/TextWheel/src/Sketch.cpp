@@ -128,16 +128,17 @@ void Sketch::addVersion(const string &lang)
     }
  
     auto layout = font->createLineLayout(version, lang);
-    layouts[lang] = unique_ptr<LineLayout>(layout);
+    layouts.emplace(lang, unique_ptr<LineLayout>(layout));
     
     // ---
     
-    sequences[lang] = unique_ptr<FontSequence>(new FontSequence);
+    auto sequence = new FontSequence;
+    sequences.emplace(lang, unique_ptr<FontSequence>(sequence));
     
     float offsetX = 3000; // XXX
     float offsetY = font->getOffsetY(*layout, ZFont::ALIGN_MIDDLE);
     
-    font->beginSequence(*sequences[lang]);
+    font->beginSequence(*sequence);
     spiral.drawText(*font, *layout, offsetX, offsetY);
     font->endSequence();
 }
