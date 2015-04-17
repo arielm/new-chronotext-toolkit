@@ -26,7 +26,7 @@ namespace chr
 {
     namespace utils
     {
-        const string toString(const wstring &s)
+        string toString(const wstring &s)
         {
             vector<char> tmp;
             
@@ -39,7 +39,7 @@ namespace chr
             return string(tmp.data(), tmp.size());
         }
         
-        const wstring toWideString(const string &s)
+        wstring toWideString(const string &s)
         {
             vector<wchar_t> tmp;
             
@@ -55,20 +55,24 @@ namespace chr
         // ---
         
         template <>
-        const string readText<string>(InputSource::Ref inputSource)
+        string readText<string>(InputSource::Ref inputSource)
         {
+            /*
+             * SUB-OPTIMAL (IDEALLY: TEXT SHOULD BE LOADED "DIRECTLY" INTO STRING-STORAGE
+             */
+            
             Buffer buffer(inputSource->loadDataSource());
             return string(static_cast<const char*>(buffer.getData()), buffer.getDataSize());
         }
         
         template <>
-        const wstring readText<wstring>(InputSource::Ref inputSource)
+        wstring readText<wstring>(InputSource::Ref inputSource)
         {
-            return toWideString(readText<string>(inputSource));
+            return toWideString(readText<string>(inputSource)); // TODO: CONSIDER USING MOVE-CONSTRUCTION
         }
         
         template <>
-        const vector<std::string> readLines<string>(InputSource::Ref inputSource)
+        vector<std::string> readLines<string>(InputSource::Ref inputSource)
         {
             vector<string> lines;
             IStreamRef in = inputSource->loadDataSource()->createStream();
@@ -82,20 +86,20 @@ namespace chr
         }
         
         template <>
-        const vector<wstring> readLines<wstring>(InputSource::Ref inputSource)
+        vector<wstring> readLines<wstring>(InputSource::Ref inputSource)
         {
             vector<wstring> lines;
             IStreamRef in = inputSource->loadDataSource()->createStream();
             
             while (!in->isEof())
             {
-                lines.emplace_back(toWideString(in->readLine()));
+                lines.emplace_back(toWideString(in->readLine())); // TODO: CONSIDER USING MOVE-CONSTRUCTION
             }
             
             return lines;
         }
         
-        const vector<string> readInstructions(InputSource::Ref inputSource)
+        vector<string> readInstructions(InputSource::Ref inputSource)
         {
             vector<string> instructions;
             
@@ -112,7 +116,7 @@ namespace chr
             return instructions;
         }
         
-        const string readTextFile(const fs::path &filePath)
+        string readTextFile(const fs::path &filePath)
         {
             fs::ifstream in(filePath);
             return string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
@@ -165,21 +169,21 @@ namespace chr
                     {
                         ss << fixed << setprecision(precision);
                         ss << (value / maximum) << separator << abbrev;
-                        return ss.str();
+                        return ss.str(); // TODO: CONSIDER ADAPTING TO RVO [1/2]
                     }
                     
                     maximum /= 1024;
                 }
                 
                 ss << value << separator << "B";
-                return ss.str();
+                return ss.str(); // TODO: CONSIDER ADAPTING TO RVO [2/2]
             }
             
             const string duration(double seconds, int precision, const string &separator)
             {
                 if (fabs(seconds) >= 60)
                 {
-                    return time(seconds, true);
+                    return time(seconds, true); // TODO: CONSIDER ADAPTING TO RVO [1/3]
                 }
                 
                 static const vector<string> abbrevs {"s", "ms", "μs"};
@@ -196,14 +200,14 @@ namespace chr
                     if (value > maximum)
                     {
                         ss << (value / maximum) << separator << abbrev;
-                        return ss.str();
+                        return ss.str(); // TODO: CONSIDER ADAPTING TO RVO [2/3]
                     }
                     
                     maximum /= 1000;
                 }
                 
                 ss << value << separator << "ns";
-                return ss.str();
+                return ss.str(); // TODO: CONSIDER ADAPTING TO RVO [3/3]
             }
 
             const string time(double seconds, bool rounded)
@@ -225,7 +229,7 @@ namespace chr
                 ss << setw(2) << min << ":";
                 ss << setw(2) << sec;
                 
-                return ss.str();
+                return ss.str(); // TODO: CONSIDER ADAPTING TO RVO
             }
             
             const string percent(double ratio, int precision, const string &separator)
@@ -234,7 +238,7 @@ namespace chr
                 ss << fixed << setprecision(precision);
                 ss << (fabs(ratio) * 100) << separator << "%";
                 
-                return ss.str();
+                return ss.str(); // TODO: CONSIDER ADAPTING TO RVO
             }
         }
     }

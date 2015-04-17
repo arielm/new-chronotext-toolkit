@@ -32,20 +32,20 @@ namespace chr
 {
     namespace utils
     {
-        const std::string toString(const std::wstring &s);
-        const std::wstring toWideString(const std::string &s);
+        std::string toString(const std::wstring &s);
+        std::wstring toWideString(const std::string &s);
 
         // ---
         
         template<typename T>
-        const T readText(InputSource::Ref inputSource);
+        T readText(InputSource::Ref inputSource);
         
         template<typename T>
-        const std::vector<T> readLines(InputSource::Ref inputSource);
+        std::vector<T> readLines(InputSource::Ref inputSource);
         
-        const std::vector<std::string> readInstructions(InputSource::Ref inputSource);
+        std::vector<std::string> readInstructions(InputSource::Ref inputSource);
         
-        const std::string readTextFile(const ci::fs::path &filePath);
+        std::string readTextFile(const ci::fs::path &filePath);
         void writeTextFile(const ci::fs::path &filePath, const std::string &text);
         
         void writeXmlFile(const ci::fs::path &filePath, const ci::XmlTree &tree);
