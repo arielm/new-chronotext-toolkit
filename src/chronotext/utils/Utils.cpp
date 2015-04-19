@@ -10,50 +10,21 @@
 
 #include "rapidxml/rapidxml_print.hpp"
 
-#include "utf8.h"
-
 #include "boost/date_time/local_time/local_time.hpp"
 
 using namespace std;
 using namespace ci;
-using namespace utf8;
 
 using namespace boost::gregorian;
 using namespace boost::local_time;
 using namespace boost::posix_time;
 
+
+
 namespace chr
 {
     namespace utils
     {
-        string toString(const wstring &s)
-        {
-            vector<char> tmp;
-            
-#if defined(CINDER_MSW)
-            unchecked::utf16to8(s.data(), s.data() + s.size(), back_inserter(tmp));
-#else
-            unchecked::utf32to8(s.data(), s.data() + s.size(), back_inserter(tmp));
-#endif
-            
-            return string(tmp.data(), tmp.size());
-        }
-        
-        wstring toWideString(const string &s)
-        {
-            vector<wchar_t> tmp;
-            
-#if defined(CINDER_MSW)
-            unchecked::utf8to16(s.data(), s.data() + s.size(), back_inserter(tmp));
-#else
-            unchecked::utf8to32(s.data(), s.data() + s.size(), back_inserter(tmp));
-#endif
-            
-            return wstring(tmp.data(), tmp.size());
-        }
-        
-        // ---
-        
         template <>
         string readText<string>(InputSource::Ref inputSource)
         {
