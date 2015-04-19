@@ -48,6 +48,7 @@ namespace chr
         std::string readTextFile(const ci::fs::path &filePath);
         void writeTextFile(const ci::fs::path &filePath, const std::string &text);
         
+        ci::XmlTree readXmlFile(const ci::fs::path &filePath, ci::XmlTree::ParseOptions parseOptions = ci::XmlTree::ParseOptions());
         void writeXmlFile(const ci::fs::path &filePath, const ci::XmlTree &tree);
         
         // ---

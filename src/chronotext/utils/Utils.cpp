@@ -129,13 +129,18 @@ namespace chr
             return result;
         }
         
-        void writeTextFile(const fs::path &filePath, const string &text) // TODO: (RE)TEST
+        void writeTextFile(const fs::path &filePath, const string &text)
         {
             fs::ofstream out(filePath);
             out << text;
         }
         
-        void writeXmlFile(const fs::path &filePath, const XmlTree &tree) // TODO: (RE)TEST
+        XmlTree readXmlFile(const fs::path &filePath, XmlTree::ParseOptions parseOptions)
+        {
+            return XmlTree(readTextFile(filePath), parseOptions);
+        }
+        
+        void writeXmlFile(const fs::path &filePath, const XmlTree &tree)
         {
             fs::ofstream out(filePath);
             out << *tree.createRapidXmlDoc(true);
