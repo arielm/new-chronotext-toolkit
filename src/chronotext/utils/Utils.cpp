@@ -118,8 +118,15 @@ namespace chr
         
         string readTextFile(const fs::path &filePath)
         {
-            fs::ifstream in(filePath);
-            return string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
+            fs::ifstream in(filePath, ios::in | ios::binary | ios::ate);
+
+            auto fileSize = in.tellg();
+            in.seekg(0, ios::beg);
+            
+            string result(fileSize, 0);
+            in.read(&result[0], fileSize);
+            
+            return result;
         }
         
         void writeTextFile(const fs::path &filePath, const string &text) // TODO: (RE)TEST
