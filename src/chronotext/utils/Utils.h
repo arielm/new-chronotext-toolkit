@@ -42,14 +42,19 @@ namespace chr
 {
     namespace utils
     {
-        inline std::string toString(const std::wstring &in)
+        template<typename TO, typename FROM>
+        TO to(const FROM&);
+        
+        template <>
+        inline std::string to(const std::wstring &in)
         {
             std::string out;
             WSTRING_TO_STRING(in.data(), in.data() + in.size(), back_inserter(out));
             return out;
         }
         
-        inline std::wstring toWideString(const std::string &in)
+        template <>
+        inline std::wstring to(const std::string &in)
         {
             std::wstring out;
             STRING_TO_WSTRING(in.data(), in.data() + in.size(), back_inserter(out));

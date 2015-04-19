@@ -39,7 +39,7 @@ namespace chr
         template <>
         wstring readText<wstring>(InputSource::Ref inputSource)
         {
-            return toWideString(readText<string>(inputSource)); // TODO: CONSIDER USING MOVE-CONSTRUCTION
+            return to<wstring>(readText<string>(inputSource)); // TODO: CONSIDER USING MOVE-CONSTRUCTION
         }
         
         template <>
@@ -64,7 +64,7 @@ namespace chr
             
             while (!in->isEof())
             {
-                lines.emplace_back(toWideString(in->readLine())); // TODO: CONSIDER USING MOVE-CONSTRUCTION
+                lines.emplace_back(to<wstring>(in->readLine())); // TODO: CONSIDER USING MOVE-CONSTRUCTION
             }
             
             return lines;

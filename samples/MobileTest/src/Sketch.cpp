@@ -171,7 +171,7 @@ void Sketch::drawText(const string &text, const Vec2f &position, XFont::Alignmen
     font->setColor(color);
     font->setSize(fontSize);
     
-    TextHelper::drawAlignedText(*font, utils::toWideString(text), position, alignX, alignY);
+    TextHelper::drawAlignedText(*font, utils::to<wstring>(text), position, alignX, alignY);
 }
 
 // ---
