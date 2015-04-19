@@ -19,52 +19,55 @@ using namespace boost::gregorian;
 using namespace boost::local_time;
 using namespace boost::posix_time;
 
-
-
 namespace chr
 {
     namespace utils
     {
         template <>
-        string readText<string>(InputSource::Ref inputSource)
+        string readText(InputSource::Ref inputSource)
         {
             /*
              * SUB-OPTIMAL (IDEALLY: TEXT SHOULD BE LOADED "DIRECTLY" INTO STRING-STORAGE
              */
-            
             Buffer buffer(inputSource->loadDataSource());
             return string(static_cast<const char*>(buffer.getData()), buffer.getDataSize());
         }
         
         template <>
-        wstring readText<wstring>(InputSource::Ref inputSource)
+        wstring readText(InputSource::Ref inputSource)
         {
-            return to<wstring>(readText<string>(inputSource)); // TODO: CONSIDER USING MOVE-CONSTRUCTION
+            Buffer buffer(inputSource->loadDataSource());
+            const char *begin = static_cast<const char*>(buffer.getData());
+            const char *end = begin + buffer.getDataSize();
+            
+            wstring result;
+            STRING_TO_WSTRING(begin, end, back_inserter(result));
+            return result;
         }
         
         template <>
-        vector<std::string> readLines<string>(InputSource::Ref inputSource)
+        vector<string> readLines(InputSource::Ref inputSource)
         {
             vector<string> lines;
             IStreamRef in = inputSource->loadDataSource()->createStream();
             
             while (!in->isEof())
             {
-                lines.emplace_back(in->readLine());
+                lines.emplace_back(in->readLine()); // TODO: CHECK IF MOVE-CONSTRUCTION IS ACTUALLY TAKING PLACE
             }
             
             return lines;
         }
         
         template <>
-        vector<wstring> readLines<wstring>(InputSource::Ref inputSource)
+        vector<wstring> readLines(InputSource::Ref inputSource)
         {
             vector<wstring> lines;
             IStreamRef in = inputSource->loadDataSource()->createStream();
             
             while (!in->isEof())
             {
-                lines.emplace_back(to<wstring>(in->readLine())); // TODO: CONSIDER USING MOVE-CONSTRUCTION
+                lines.emplace_back(to<wstring>(in->readLine())); // TODO: CHECK IF MOVE-CONSTRUCTION IS ACTUALLY TAKING PLACE
             }
             
             return lines;
