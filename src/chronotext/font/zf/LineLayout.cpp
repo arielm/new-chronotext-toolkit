@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -18,8 +18,7 @@ namespace chr
         Shape::Shape(hb_codepoint_t codepoint, const Vec2f &position)
         :
         codepoint(codepoint),
-        position(position),
-        glyph(nullptr)
+        position(position)
         {}
         
         Cluster::Cluster(ActualFont *font, int tag, hb_codepoint_t codepoint, const Vec2f &offset, float advance)
@@ -46,14 +45,7 @@ namespace chr
         :
         font(font),
         langHint(langHint),
-        overallDirection(overallDirection),
-        advance(0),
-        maxHeight(0),
-        maxAscent(0),
-        maxDescent(0),
-        maxUnderlineOffset(0),
-        maxLineThickness(0),
-        averageStrikethroughOffset(0)
+        overallDirection(overallDirection)
         {}
         
         void LineLayout::addCluster(const Cluster &cluster)

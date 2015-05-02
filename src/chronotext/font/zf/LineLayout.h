@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -21,8 +21,8 @@ namespace chr
             hb_codepoint_t codepoint;
             ci::Vec2f position;
             
-            ActualFont::Glyph *glyph;
-
+            ActualFont::Glyph *glyph = nullptr;
+            
             Shape(hb_codepoint_t codepoint, const ci::Vec2f &position);
         };
         
@@ -36,6 +36,7 @@ namespace chr
             bool isSpace;
             
             Cluster(ActualFont *font, int tag, hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance);
+            
             void addShape(hb_codepoint_t codepoint, const ci::Vec2f &offset, float advance);
         };
         
@@ -47,15 +48,19 @@ namespace chr
             
             std::vector<Cluster> clusters;
             
-            float advance;
-            float maxHeight;
-            float maxAscent;
-            float maxDescent;
-            float maxUnderlineOffset;
-            float maxLineThickness;
-            float averageStrikethroughOffset;
+            float advance = 0;
+            float maxHeight = 0;
+            float maxAscent = 0;
+            float maxDescent = 0;
+            float maxUnderlineOffset = 0;
+            float maxLineThickness = 0;
+            float averageStrikethroughOffset = 0;
             
             LineLayout(VirtualFont *font, const std::string &langHint, hb_direction_t overallDirection);
+            
+            LineLayout(const LineLayout &other) = delete;
+            void operator=(const LineLayout &other) = delete;
+            
             void addCluster(const Cluster &cluster);
         };
     }

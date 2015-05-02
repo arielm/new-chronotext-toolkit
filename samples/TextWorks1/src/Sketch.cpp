@@ -49,7 +49,7 @@ void Sketch::draw()
 
 void Sketch::drawAlignedText(ZFont &font, const string &text, const Vec2f &position, ZFont::Alignment alignX, ZFont::Alignment alignY)
 {
-    auto layout = font.getCachedLineLayout(text);
+    auto layout = font.getLineLayout(text);
     Vec2f p = position + font.getOffset(*layout, alignX, alignY);
     
     font.beginSequence();

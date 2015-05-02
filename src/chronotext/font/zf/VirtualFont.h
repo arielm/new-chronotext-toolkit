@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -26,7 +26,7 @@ namespace chr
     namespace zf
     {
         class FontManager;
-        class LayoutCache;
+        class LayoutStore;
 
         typedef std::vector<ActualFont*> FontSet;
         
@@ -94,7 +94,7 @@ namespace chr
                 return Properties(baseSize, true, true, 1024);
             }
             
-            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<LayoutStore> layoutStore;
             std::shared_ptr<TextItemizer> itemizer;
             
             ActualFont::Metrics getMetrics(const Cluster &cluster) const; // RETURNS THE SIZED METRICS OF THE ActualFont USED BY cluster
@@ -123,7 +123,10 @@ namespace chr
             LineLayout* createLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             LineLayout* createLineLayout(const TextLine &line, boost::iterator_range<std::vector<TextRun>::const_iterator> range);
             
-            std::shared_ptr<LineLayout> getCachedLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
+            /*
+             * THE RETURNED INSTANCES ARE MANAGED BY THE FontManager's LayoutStore
+             */
+            std::shared_ptr<LineLayout> getLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             
             /*
              * - WILL LOAD THE GLYPH TEXTURES IMMEDIATELY (I.E. INSTEAD OF "JUST BEFORE DRAWING")

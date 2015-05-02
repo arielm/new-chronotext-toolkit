@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -22,7 +22,12 @@ namespace chr
             bool useColor;
             
             FontSequence() = default;
-            FontSequence(const FontSequence &other) = delete; // FontSequence CAN'T BE COPIED (I.E. BECAUSE OF THE vector OF unique_ptr)
+            
+            /*
+             * NOT ALLOWING COPY, BECAUSE OF THE vector OF unique_ptr
+             */
+            FontSequence(const FontSequence &other) = delete;
+            void operator=(const FontSequence &other) = delete;
             
         protected:
             std::vector<std::unique_ptr<QuadBatch>> batches;

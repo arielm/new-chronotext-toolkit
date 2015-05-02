@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -9,7 +9,7 @@
 #pragma once
 
 #include "chronotext/font/zf/VirtualFont.h"
-#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/LayoutStore.h"
 #include "chronotext/font/zf/TextItemizer.h"
 #include "chronotext/InputSource.h"
 
@@ -29,7 +29,7 @@ namespace chr
 
             std::shared_ptr<FreetypeHelper> ftHelper; // THE UNDERLYING FT_Library WILL BE DESTROYED AFTER ALL THE ActualFont INSTANCES
             std::shared_ptr<LangHelper> langHelper;
-            std::shared_ptr<LayoutCache> layoutCache;
+            std::shared_ptr<LayoutStore> layoutStore;
             std::shared_ptr<TextItemizer> itemizer;
             
             FontManager();

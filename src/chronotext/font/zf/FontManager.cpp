@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -25,7 +25,7 @@ namespace chr
         :
         ftHelper(make_shared<FreetypeHelper>()),
         langHelper(make_shared<LangHelper>()),
-        layoutCache(make_shared<LayoutCache>()),
+        layoutStore(make_shared<LayoutStore>()),
         itemizer(make_shared<TextItemizer>(langHelper)),
         hasDefaultFont(false)
         {}
@@ -281,7 +281,7 @@ namespace chr
         
         void FontManager::unload()
         {
-            layoutCache->clear();
+            layoutStore->clear();
             
             for (auto &actualFont : actualFonts)
             {

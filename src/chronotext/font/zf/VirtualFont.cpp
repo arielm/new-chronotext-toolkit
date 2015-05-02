@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -8,7 +8,7 @@
 
 #include "chronotext/font/zf/VirtualFont.h"
 #include "chronotext/font/zf/FontManager.h"
-#include "chronotext/font/zf/LayoutCache.h"
+#include "chronotext/font/zf/LayoutStore.h"
 
 #include "cinder/gl/gl.h"
 
@@ -23,7 +23,7 @@ namespace chr
         :
         properties(properties),
         middleLineFactor(0),
-        layoutCache(fontManager.layoutCache),
+        layoutStore(fontManager.layoutStore),
         itemizer(fontManager.itemizer),
         indices(fontManager.getIndices(properties.slotCapacity)),
         began(0),
@@ -304,9 +304,9 @@ namespace chr
             return layout;
         }
         
-        shared_ptr<LineLayout> VirtualFont::getCachedLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
+        shared_ptr<LineLayout> VirtualFont::getLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
         {
-            return layoutCache->getLineLayout(this, text, langHint, overallDirection);
+            return layoutStore->get(this, text, langHint, overallDirection);
         }
         
         void VirtualFont::preload(LineLayout &layout)

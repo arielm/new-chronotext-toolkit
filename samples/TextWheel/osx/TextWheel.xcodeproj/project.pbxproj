@@ -44,6 +44,7 @@
 		A8702B241A5B455E00EF9E9E /* MemoryManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702B1B1A5B455E00EF9E9E /* MemoryManagerBase.cpp */; };
 		A8702B251A5B455E00EF9E9E /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702B201A5B455E00EF9E9E /* SystemManagerBase.cpp */; };
 		A8702B281A5B456C00EF9E9E /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8702B271A5B456C00EF9E9E /* FileHelper.mm */; };
+		A89F40CA1AF444510052917E /* LayoutStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A89F40C81AF444510052917E /* LayoutStore.cpp */; };
 		A8A883F418C6C0D200BC0BDB /* TextSpiral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */; };
 		A8A8840718C8CBBE00BC0BDB /* ja.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840418C8CBBE00BC0BDB /* ja.txt */; };
 		A8A8840818C8CBBE00BC0BDB /* ko.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840518C8CBBE00BC0BDB /* ko.txt */; };
@@ -62,7 +63,6 @@
 		A8F9FC4D18C5683B00C48245 /* FontSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3618C5683B00C48245 /* FontSequence.cpp */; };
 		A8F9FC4E18C5683B00C48245 /* FontTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3818C5683B00C48245 /* FontTexture.cpp */; };
 		A8F9FC4F18C5683B00C48245 /* LangHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3D18C5683B00C48245 /* LangHelper.cpp */; };
-		A8F9FC5018C5683B00C48245 /* LayoutCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3F18C5683B00C48245 /* LayoutCache.cpp */; };
 		A8F9FC5118C5683B00C48245 /* LineLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4118C5683B00C48245 /* LineLayout.cpp */; };
 		A8F9FC5218C5683B00C48245 /* scrptrun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4318C5683B00C48245 /* scrptrun.cpp */; };
 		A8F9FC5318C5683B00C48245 /* TextItemizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC4518C5683B00C48245 /* TextItemizer.cpp */; };
@@ -169,6 +169,8 @@
 		A8702B211A5B455E00EF9E9E /* SystemManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemManagerBase.h; sourceTree = "<group>"; };
 		A8702B261A5B456C00EF9E9E /* FileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileHelper.h; sourceTree = "<group>"; };
 		A8702B271A5B456C00EF9E9E /* FileHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHelper.mm; sourceTree = "<group>"; };
+		A89F40C81AF444510052917E /* LayoutStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutStore.cpp; sourceTree = "<group>"; };
+		A89F40C91AF444510052917E /* LayoutStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutStore.h; sourceTree = "<group>"; };
 		A8A883F218C6C0D200BC0BDB /* TextSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextSpiral.cpp; path = ../src/TextSpiral.cpp; sourceTree = "<group>"; };
 		A8A883F318C6C0D200BC0BDB /* TextSpiral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSpiral.h; path = ../src/TextSpiral.h; sourceTree = "<group>"; };
 		A8A8840418C8CBBE00BC0BDB /* ja.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ja.txt; path = ../resources/ja.txt; sourceTree = "<group>"; };
@@ -199,8 +201,6 @@
 		A8F9FC3C18C5683B00C48245 /* GlyphData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlyphData.h; sourceTree = "<group>"; };
 		A8F9FC3D18C5683B00C48245 /* LangHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LangHelper.cpp; sourceTree = "<group>"; };
 		A8F9FC3E18C5683B00C48245 /* LangHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LangHelper.h; sourceTree = "<group>"; };
-		A8F9FC3F18C5683B00C48245 /* LayoutCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutCache.cpp; sourceTree = "<group>"; };
-		A8F9FC4018C5683B00C48245 /* LayoutCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutCache.h; sourceTree = "<group>"; };
 		A8F9FC4118C5683B00C48245 /* LineLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LineLayout.cpp; sourceTree = "<group>"; };
 		A8F9FC4218C5683B00C48245 /* LineLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineLayout.h; sourceTree = "<group>"; };
 		A8F9FC4318C5683B00C48245 /* scrptrun.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scrptrun.cpp; sourceTree = "<group>"; };
@@ -589,8 +589,8 @@
 				A8F9FC3C18C5683B00C48245 /* GlyphData.h */,
 				A8F9FC3D18C5683B00C48245 /* LangHelper.cpp */,
 				A8F9FC3E18C5683B00C48245 /* LangHelper.h */,
-				A8F9FC3F18C5683B00C48245 /* LayoutCache.cpp */,
-				A8F9FC4018C5683B00C48245 /* LayoutCache.h */,
+				A89F40C81AF444510052917E /* LayoutStore.cpp */,
+				A89F40C91AF444510052917E /* LayoutStore.h */,
 				A8F9FC4118C5683B00C48245 /* LineLayout.cpp */,
 				A8F9FC4218C5683B00C48245 /* LineLayout.h */,
 				A8F9FC4318C5683B00C48245 /* scrptrun.cpp */,
@@ -687,13 +687,13 @@
 				A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */,
 				A8F9FC4D18C5683B00C48245 /* FontSequence.cpp in Sources */,
 				A8702B251A5B455E00EF9E9E /* SystemManagerBase.cpp in Sources */,
-				A8F9FC5018C5683B00C48245 /* LayoutCache.cpp in Sources */,
 				A8F9FC4E18C5683B00C48245 /* FontTexture.cpp in Sources */,
 				A8FBC4AD18E3B1A800F5BBEF /* FrameClock.cpp in Sources */,
 				A826F5031A6C122E002A23A9 /* CinderSketch.cpp in Sources */,
 				A8147E6C1A99675A00885D67 /* ImageSourceFileStbImage.cpp in Sources */,
 				A85977811A2FD6400080C906 /* NSMutableDictionary+Merge.m in Sources */,
 				A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */,
+				A89F40CA1AF444510052917E /* LayoutStore.cpp in Sources */,
 				A8702B281A5B456C00EF9E9E /* FileHelper.mm in Sources */,
 				A826F5021A6C122E002A23A9 /* CinderDelegateBase.cpp in Sources */,
 				A8F9FC5118C5683B00C48245 /* LineLayout.cpp in Sources */,
