@@ -55,16 +55,15 @@ namespace chr
             
             TextLine(const std::string &input, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID)
             :
+            text(input.data()),
             langHint(langHint),
             overallDirection(overallDirection)
-            {
-                text = UnicodeString::fromUTF8(input);
-            }
+            {}
             
             void addChunk(const std::string &input, int tag)
             {
-                int start = text.length();
-                text += UnicodeString::fromUTF8(input);
+                auto start = text.length();
+                text += input.data();
                 tagItems.emplace_back(start, text.length(), tag);
             }
             
