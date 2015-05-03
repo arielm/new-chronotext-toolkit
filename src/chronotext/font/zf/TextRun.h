@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -28,8 +28,7 @@ namespace chr
             hb_direction_t direction;
             int tag;
             
-            TextRun()
-            {}
+            TextRun() = default;
             
             TextRun(int32_t start, int32_t end, hb_script_t script, const std::string &language, hb_direction_t direction, int tag)
             :

@@ -22,13 +22,9 @@ namespace chr
         VirtualFont::VirtualFont(FontManager &fontManager, const Properties &properties)
         :
         properties(properties),
-        middleLineFactor(0),
         layoutStore(fontManager.layoutStore),
         itemizer(fontManager.itemizer),
-        indices(fontManager.getIndices(properties.slotCapacity)),
-        began(0),
-        hasClip(false),
-        sequence(nullptr)
+        indices(fontManager.getIndices(properties.slotCapacity))
         {
             assert(properties.baseSize > 0);
             assert(properties.slotCapacity > 0);

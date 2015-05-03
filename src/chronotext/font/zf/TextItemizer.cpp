@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -52,10 +52,12 @@ namespace chr
             {
                 itemizeScriptAndLanguage(line);
             }
+            
             if (line.directionItems.empty())
             {
                 itemizeDirection(line);
             }
+            
             if (line.tagItems.empty())
             {
                 line.tagItems.emplace_back(0, line.text.length(), 0);
@@ -118,7 +120,7 @@ namespace chr
             {
                 auto count = ubidi_countRuns(bidi, &error);
                 
-                for (int i = 0; i < count; ++i)
+                for (auto i = 0; i < count; ++i)
                 {
                     int32_t start, length;
                     direction = ubidi_getVisualRun(bidi, i, &start, &length);

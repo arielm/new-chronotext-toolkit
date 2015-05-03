@@ -181,10 +181,10 @@ namespace chr
 
             float size;
             float sizeRatio;
-            float middleLineFactor;
+            float middleLineFactor = 0;
             ci::ColorA color;
             
-            bool hasClip;
+            bool hasClip = false;
             ci::Rectf clipRect;
 
             Properties properties;
@@ -193,9 +193,9 @@ namespace chr
             
             float anisotropy;
             
-            int began;
+            int began = 0;
             bool sequenceUseColor;
-            FontSequence *sequence;
+            FontSequence *sequence = nullptr;
             std::unique_ptr<QuadBatchMap<FontTexture>> batchMap;
             
             FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES

@@ -98,7 +98,7 @@ namespace chr
         protected:
             friend class VirtualFont;
 
-            bool hasDefaultFont;
+            bool hasDefaultFont = false;
             std::string defaultFontName;
             VirtualFont::Style defaultFontStyle;
             

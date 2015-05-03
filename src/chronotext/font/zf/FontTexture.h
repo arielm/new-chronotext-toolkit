@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -27,7 +27,7 @@ namespace chr
             bool useMipmap;
             int width;
             int height;
-            uint32_t glId;
+            uint32_t glId = 0;
 
             FontTexture(ActualFont *font, hb_codepoint_t codepoint, const GlyphData &glyphData);
             ~FontTexture();

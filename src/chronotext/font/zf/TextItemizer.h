@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -61,7 +61,8 @@ namespace chr
             void itemizeDirection(TextLine &line) const;
             void mergeItems(TextLine &line) const;
             
-            template<typename T> typename T::const_iterator findItem(const T &items, int32_t position) const;
+            template<typename T>
+            typename T::const_iterator findItem(const T &items, int32_t position) const;
         };
     }
 }

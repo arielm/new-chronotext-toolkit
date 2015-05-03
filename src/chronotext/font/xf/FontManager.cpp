@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -78,7 +78,6 @@ namespace chr
         :
         width(atlas->width),
         height(atlas->height),
-        glId(0),
         inputSource(inputSource)
         {
             upload(atlas);
@@ -401,7 +400,7 @@ namespace chr
             return make_pair(data, atlas);
         }
         
-        const vector<uint16_t>& FontManager::getIndices(int capacity)
+        const vector<uint16_t>& FontManager::getIndices(size_t capacity)
         {
             if (capacity * 6 > indices.size())
             {
@@ -414,9 +413,9 @@ namespace chr
                 indices.clear();
                 indices.reserve(capacity * 6);
                 
-                int offset = 0;
+                size_t offset = 0;
                 
-                for (int i = 0; i < capacity; i++)
+                for (auto i = 0; i < capacity; i++)
                 {
                     indices.push_back(offset);
                     indices.push_back(offset + 1);
@@ -424,6 +423,7 @@ namespace chr
                     indices.push_back(offset + 2);
                     indices.push_back(offset + 3);
                     indices.push_back(offset);
+                    
                     offset += 4;
                 }
             }

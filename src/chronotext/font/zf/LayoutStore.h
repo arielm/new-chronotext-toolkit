@@ -21,8 +21,6 @@ namespace chr
         class LayoutStore
         {
         public:
-            typedef std::tuple<VirtualFont*, hb_direction_t, std::string, std::string> Key;
-
             std::shared_ptr<LineLayout> get(VirtualFont *font, const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             void clear();
             

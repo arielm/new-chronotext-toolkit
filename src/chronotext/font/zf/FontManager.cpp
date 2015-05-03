@@ -26,8 +26,7 @@ namespace chr
         ftHelper(make_shared<FreetypeHelper>()),
         langHelper(make_shared<LangHelper>()),
         layoutStore(make_shared<LayoutStore>()),
-        itemizer(make_shared<TextItemizer>(langHelper)),
-        hasDefaultFont(false)
+        itemizer(make_shared<TextItemizer>(langHelper))
         {}
         
         void FontManager::loadConfig(InputSource::Ref source)
@@ -331,7 +330,7 @@ namespace chr
             try
             {
                 auto font = new ActualFont(ftHelper, descriptor, baseSize, useMipmap);
-                actualFonts[key] = unique_ptr<ActualFont>(font);
+                actualFonts.emplace(key, unique_ptr<ActualFont>(font));
                 
                 return font;
             }

@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -36,9 +36,7 @@ namespace chr
             GlyphData(FT_Face ftFace, FT_UInt codepoint, bool useMipmap, int padding)
             :
             useMipmap(useMipmap),
-            padding(padding),
-            ftGlyph(nullptr),
-            data(nullptr)
+            padding(padding)
             {
                 if (codepoint > 0)
                 {
@@ -91,21 +89,20 @@ namespace chr
                 {
                     return ftSlot->bitmap.buffer;
                 }
-                else if (data)
+                
+                if (data)
                 {
                     return data;
                 }
-                else
-                {
-                    return nullptr;
-                }
+
+                return nullptr;
             }
             
             void copyDataAndReleaseSlot()
             {
                 if (ftGlyph)
                 {
-                    int dataSize = width * height;
+                    size_t dataSize = width * height;
                     data = (unsigned char*)malloc(dataSize);
                     memcpy(data, ftSlot->bitmap.buffer, dataSize);
                     
@@ -116,8 +113,8 @@ namespace chr
             
         protected:
             FT_GlyphSlot ftSlot;
-            FT_Glyph ftGlyph;
-            unsigned char *data;
+            FT_Glyph ftGlyph = nullptr;
+            unsigned char *data = nullptr;
         };
     }
 }

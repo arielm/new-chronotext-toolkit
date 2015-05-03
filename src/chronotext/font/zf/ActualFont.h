@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -30,16 +30,11 @@ namespace chr
             struct Descriptor
             {
                 InputSource::Ref inputSource;
-                int faceIndex;
-                float scale;
-                bool forceMemoryLoad;
+                int faceIndex = 0;
+                float scale = 1;
+                bool forceMemoryLoad = false;
                 
-                Descriptor()
-                :
-                faceIndex(0),
-                scale(1),
-                forceMemoryLoad(false)
-                {}
+                Descriptor() = default;
                 
                 Descriptor(InputSource::Ref inputSource, int faceIndex = 0, float scale = 1, bool forceMemoryLoad = false)
                 :
@@ -139,11 +134,11 @@ namespace chr
             
             ci::Vec2f scale;
             Metrics metrics;
-            bool loaded;
+            bool loaded = false;
             
             ci::Buffer memoryBuffer;
-            FT_Face ftFace;
-            hb_font_t *hbFont;
+            FT_Face ftFace = nullptr;
+            hb_font_t *hbFont = nullptr;
             
             std::map<hb_codepoint_t, std::unique_ptr<Glyph>> glyphs;
             std::vector<std::unique_ptr<FontTexture>> textures;
