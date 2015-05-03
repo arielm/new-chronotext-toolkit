@@ -69,10 +69,10 @@ namespace chr
                 return Properties(true, 4096);
             }
             
-            bool isSpace(wchar_t c) const;
-            bool isValid(wchar_t c) const;
-            int getGlyphIndex(wchar_t c) const;
-            std::wstring getCharacters() const;
+            bool isSpace(char16_t c) const;
+            bool isValid(char16_t c) const;
+            int getGlyphIndex(char16_t c) const;
+            std::u16string getCharacters() const;
             
             void setSize(float size);
             void setMiddleLineFactor(float factor); // DEFAULT-VALUE IS 0, OTHERWISE getOffsetY() FOR "ALIGN_MIDDLE" WILL RETURN middleLineFactor * (getAscent() - getDescent())
@@ -91,9 +91,9 @@ namespace chr
             const ci::Vec2f& getAxis() const;
             
             float getGlyphAdvance(int glyphIndex) const;
-            float getCharAdvance(wchar_t c) const;
-            float getStringAdvance(const std::wstring &s) const;
-            float getSubStringAdvance(const std::wstring &s, int begin, int end) const;
+            float getCharAdvance(char16_t c) const;
+            float getStringAdvance(const std::u16string &s) const;
+            float getSubStringAdvance(const std::u16string &s, int begin, int end) const;
             
             float getHeight() const;
             float getAscent() const;
@@ -102,9 +102,9 @@ namespace chr
             float getUnderlineOffset() const;
             float getStrikethroughOffset() const;
             
-            float getOffsetX(const std::wstring &text, Alignment align) const;
+            float getOffsetX(const std::u16string &text, Alignment align) const;
             float getOffsetY(Alignment align) const; // FOR "ALIGN_MIDDLE": getStrikethroughOffset() WILL BE USED, UNLESS setMiddleLineFactor() HAS BEEN INVOKED
-            inline ci::Vec2f getOffset(const std::wstring &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
+            inline ci::Vec2f getOffset(const std::u16string &text, Alignment alignX, Alignment alignY) const { return ci::Vec2f(getOffsetX(text, alignX), getOffsetY(alignY)); }
             
             inline QuadMatrix& getMatrix()
             {
@@ -136,7 +136,7 @@ namespace chr
             friend class FontManager;
 
             int glyphCount;
-            std::map<wchar_t, int> glyphs;
+            std::map<char16_t, int> glyphs;
             
             float baseSize;
             float height;

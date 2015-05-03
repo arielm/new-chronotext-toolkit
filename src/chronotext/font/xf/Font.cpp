@@ -75,17 +75,17 @@ namespace chr
             setColor(0, 0, 0, 1);
         }
         
-        bool Font::isSpace(wchar_t c) const
+        bool Font::isSpace(char16_t c) const
         {
             return (c == 0x20) || (c == 0xa0);
         }
         
-        bool Font::isValid(wchar_t c) const
+        bool Font::isValid(char16_t c) const
         {
             return glyphs.count(c);
         }
         
-        int Font::getGlyphIndex(wchar_t c) const
+        int Font::getGlyphIndex(char16_t c) const
         {
             if (isSpace(c))
             {
@@ -102,9 +102,9 @@ namespace chr
             return -1; // SHALL WE USE A "MISSING GLYPH" AND RETURN ITS INDEX?
         }
         
-        wstring Font::getCharacters() const
+        u16string Font::getCharacters() const
         {
-            wstring characters;
+            u16string characters;
             characters.reserve(glyphs.size());
             
             for (auto &glyph : glyphs)
@@ -200,17 +200,17 @@ namespace chr
             return advance[glyphIndex] * sizeRatio;
         }
         
-        float Font::getCharAdvance(wchar_t c) const
+        float Font::getCharAdvance(char16_t c) const
         {
             return getGlyphAdvance(getGlyphIndex(c));
         }
         
-        float Font::getStringAdvance(const wstring &s) const
+        float Font::getStringAdvance(const u16string &s) const
         {
             return getSubStringAdvance(s, 0, s.size());
         }
         
-        float Font::getSubStringAdvance(const wstring &s, int begin, int end) const
+        float Font::getSubStringAdvance(const u16string &s, int begin, int end) const
         {
             float advance = 0;
             
@@ -252,7 +252,7 @@ namespace chr
             return strikethroughOffset * sizeRatio;
         }
        
-        float Font::getOffsetX(const wstring &text, Alignment align) const
+        float Font::getOffsetX(const u16string &text, Alignment align) const
         {
             switch (align)
             {

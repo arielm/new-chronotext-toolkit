@@ -20,7 +20,7 @@ namespace chr
         struct FontData
         {
             int glyphCount;
-            std::map<wchar_t, int> glyphs;
+            std::map<char16_t, int> glyphs;
             
             float baseSize;
             float height;

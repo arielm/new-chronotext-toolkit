@@ -23,8 +23,8 @@ const float TEXT_SIZE = 18;
 const float REFERENCE_W = 1024;
 const float REFERENCE_H = 768;
 
-const wstring text1 = L"followable-paths were born for motion";
-const wstring text2 = L"this peanut is a B-spline with 8 points";
+const u16string text1 = u"followable-paths were born for motion";
+const u16string text2 = u"this peanut is a B-spline with 8 points";
 
 void Sketch::setup()
 {

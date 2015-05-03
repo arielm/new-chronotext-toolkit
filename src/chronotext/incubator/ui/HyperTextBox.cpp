@@ -36,9 +36,9 @@ namespace chr
         }
     }
     
-    void HyperTextBox::setText(const wstring &text)
+    void HyperTextBox::setText(const u16string &text)
     {
-        pair<vector<ExtractedLink>, wstring> extracted = LinkExtractor::extract(text);
+        pair<vector<ExtractedLink>, u16string> extracted = LinkExtractor::extract(text);
         
         links.clear();
         links = extracted.first;

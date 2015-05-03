@@ -161,7 +161,7 @@ namespace chr
         }
     }
     
-    void Button::drawStrikethroughInRect(XFont &font, const wstring &text, const Rectf &rect)
+    void Button::drawStrikethroughInRect(XFont &font, const u16string &text, const Rectf &rect)
     {
         float w = font.getStringAdvance(text);
         float x3 = rect.x1 + (rect.getWidth() - w) * 0.5f;

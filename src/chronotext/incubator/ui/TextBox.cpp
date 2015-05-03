@@ -171,7 +171,7 @@ namespace chr
         offsetY = y;
     }
     
-    void TextBox::setText(const wstring &text)
+    void TextBox::setText(const u16string &text)
     {
         this->text = text;
         updateWrapRequest = true;

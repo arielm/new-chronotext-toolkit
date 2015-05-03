@@ -15,7 +15,7 @@ namespace chr
 {
     namespace xf
     {
-        void TextHelper::drawText(Font &font, const wstring &text, float x, float y)
+        void TextHelper::drawText(Font &font, const u16string &text, float x, float y)
         {
             font.beginSequence();
             
@@ -29,17 +29,17 @@ namespace chr
             font.endSequence();
         }
         
-        void TextHelper::drawAlignedText(Font &font, const wstring &text, const Vec2f &position, Font::Alignment alignX, Font::Alignment alignY)
+        void TextHelper::drawAlignedText(Font &font, const u16string &text, const Vec2f &position, Font::Alignment alignX, Font::Alignment alignY)
         {
             drawText(font, text, position + font.getOffset(text, alignX, alignY));
         }
         
-        void TextHelper::drawTextInRect(Font &font, const wstring &text, const Rectf &rect)
+        void TextHelper::drawTextInRect(Font &font, const u16string &text, const Rectf &rect)
         {
             drawAlignedText(font, text, rect.getCenter(), Font::ALIGN_MIDDLE, Font::ALIGN_MIDDLE);
         }
         
-        void TextHelper::drawTransformedText(Font &font, const std::wstring &text, float x, float y)
+        void TextHelper::drawTransformedText(Font &font, const std::u16string &text, float x, float y)
         {
             auto direction = font.getDirection();
             auto &matrix = font.getMatrix();
@@ -61,7 +61,7 @@ namespace chr
             font.endSequence();
         }
         
-        float TextHelper::drawTextOnPath(Font &font, const wstring &text, const FollowablePath &path, float offsetX, float offsetY)
+        float TextHelper::drawTextOnPath(Font &font, const u16string &text, const FollowablePath &path, float offsetX, float offsetY)
         {
             auto sampleSize = 0.5f * font.getSize();
             auto direction = font.getDirection();

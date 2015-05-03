@@ -25,7 +25,7 @@
  */
 
 /*
- * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/v4.0.0
+ * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/develop
  */
 
 #pragma once

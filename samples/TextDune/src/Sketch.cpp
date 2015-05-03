@@ -22,7 +22,7 @@ const float REFERENCE_H = 768;
 const float TEXT_SIZE = 20;
 const float GAP = 7;
 
-const wstring TEXT = L"hell with sinus, text should move under the influence of physical forces!";
+const u16string TEXT = u"hell with sinus, text should move under the influence of physical forces!";
 
 void Sketch::setup()
 {

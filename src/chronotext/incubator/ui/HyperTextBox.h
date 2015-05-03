@@ -74,7 +74,7 @@ namespace chr
         HyperTextBox(std::shared_ptr<Style> style);
 
         void setLocation(float x, float y);
-        void setText(const std::wstring &text);
+        void setText(const std::u16string &text);
         void selectLink(int linkIndex);
         void deselectLink();
         

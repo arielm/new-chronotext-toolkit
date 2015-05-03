@@ -30,14 +30,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-#if defined(CINDER_MSW)
-#   define WSTRING_TO_STRING utf8::unchecked::utf16to8
-#   define STRING_TO_WSTRING utf8::unchecked::utf8to16
-#else
-#   define WSTRING_TO_STRING utf8::unchecked::utf32to8
-#   define STRING_TO_WSTRING utf8::unchecked::utf8to32
-#endif
-
 namespace chr
 {
     namespace utils
@@ -46,18 +38,18 @@ namespace chr
         TO to(const FROM&);
         
         template <>
-        inline std::string to(const std::wstring &in)
+        inline std::string to(const std::u16string &in)
         {
             std::string out;
-            WSTRING_TO_STRING(in.data(), in.data() + in.size(), back_inserter(out));
+            utf8::unchecked::utf16to8(in.data(), in.data() + in.size(), back_inserter(out));
             return out;
         }
         
         template <>
-        inline std::wstring to(const std::string &in)
+        inline std::u16string to(const std::string &in)
         {
-            std::wstring out;
-            STRING_TO_WSTRING(in.data(), in.data() + in.size(), back_inserter(out));
+            std::u16string out;
+            utf8::unchecked::utf8to16(in.data(), in.data() + in.size(), back_inserter(out));
             return out;
         }
 

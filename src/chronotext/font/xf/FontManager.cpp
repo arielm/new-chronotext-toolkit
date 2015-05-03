@@ -368,7 +368,7 @@ namespace chr
                 int glyphAtlasY;
                 
                 in->readLittle(&glyphChar);
-                data->glyphs[(wchar_t)glyphChar] = i;
+                data->glyphs[(char16_t)glyphChar] = i;
                 
                 in->readLittle(&data->advance[i]);
                 in->readLittle(&glyphWidth);

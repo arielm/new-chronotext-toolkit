@@ -34,14 +34,14 @@ namespace chr
         }
         
         template <>
-        wstring readText(InputSource::Ref inputSource)
+        u16string readText(InputSource::Ref inputSource)
         {
             Buffer buffer(inputSource->loadDataSource());
             const char *begin = static_cast<const char*>(buffer.getData());
             const char *end = begin + buffer.getDataSize();
             
-            wstring result;
-            STRING_TO_WSTRING(begin, end, back_inserter(result));
+            u16string result;
+            utf8::unchecked::utf8to16(begin, end, back_inserter(result));
             return result;
         }
         
@@ -60,14 +60,14 @@ namespace chr
         }
         
         template <>
-        vector<wstring> readLines(InputSource::Ref inputSource)
+        vector<u16string> readLines(InputSource::Ref inputSource)
         {
-            vector<wstring> lines;
+            vector<u16string> lines;
             IStreamRef in = inputSource->loadDataSource()->createStream();
             
             while (!in->isEof())
             {
-                lines.emplace_back(to<wstring>(in->readLine())); // TODO: CHECK IF MOVE-CONSTRUCTION IS ACTUALLY TAKING PLACE
+                lines.emplace_back(to<u16string>(in->readLine())); // TODO: CHECK IF MOVE-CONSTRUCTION IS ACTUALLY TAKING PLACE
             }
             
             return lines;

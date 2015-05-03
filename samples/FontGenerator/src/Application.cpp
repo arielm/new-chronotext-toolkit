@@ -22,7 +22,7 @@
  */
 
 /*
- * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/v4.0.0
+ * IN SYNC WITH https://github.com/arielm/new-chronotext-toolkit/tree/develop
  */
 
 #include "cinder/app/AppNative.h"
@@ -39,8 +39,8 @@ using namespace ci::app;
 using namespace chr;
 using namespace chr::xf;
 
-const wstring ISO_8859_15_EXTENDED = ISO_8859_15 + L"\u2013\u2014"; // ADDING "N" AND "M" DASHES
-const wstring HEBREW_BIBLICAL = L":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";
+const u16string ISO_8859_15_EXTENDED = ISO_8859_15 + u"\u2013\u2014"; // ADDING "N" AND "M" DASHES
+const u16string HEBREW_BIBLICAL = u":,;.-\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea";
 
 class Application : public AppNative
 {
@@ -55,7 +55,7 @@ public:
     
     void draw();
     
-    void createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params);
+    void createFontSafely(const FontDescriptor &descriptor, float size, const u16string &characters, const XParams &params);
     void loadFontSafely(const string &fileName, float direction = +1);
     void drawFonts(float size, const ColorA &color);
 };
@@ -117,7 +117,7 @@ void Application::draw()
     drawFonts(32, ColorA::white());
 }
 
-void Application::createFontSafely(const FontDescriptor &descriptor, float size, const wstring &characters, const XParams &params)
+void Application::createFontSafely(const FontDescriptor &descriptor, float size, const u16string &characters, const XParams &params)
 {
     try
     {

@@ -63,7 +63,7 @@ namespace chr
         float offsetX;
         float offsetY;
         
-        std::wstring text;
+        std::u16string text;
         WordWrapper wrapper;
 
         TextBox();
@@ -82,7 +82,7 @@ namespace chr
         void setWrap(bool wrap);
         void setOffsetX(float x);
         void setOffsetY(float y);
-        virtual void setText(const std::wstring &text);
+        virtual void setText(const std::u16string &text);
         
         float getWidth();
         float getHeight();

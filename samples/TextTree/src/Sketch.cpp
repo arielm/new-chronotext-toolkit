@@ -71,52 +71,52 @@ void Sketch::draw()
     matrix.setTranslation(0, REFERENCE_H * 0.5f);
     
     matrix.rotateZ((-90 + r1) * D2R);
-    TextHelper::drawTransformedText(*font, L" 2 dimensions");
+    TextHelper::drawTransformedText(*font, u" 2 dimensions");
     
     matrix.rotateZ(+r4 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" are");
+    TextHelper::drawTransformedText(*font, u" are");
     
     matrix.push();
     matrix.rotateZ(+r2 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" not enough");
+    TextHelper::drawTransformedText(*font, u" not enough");
     
     matrix.rotateZ(+r3 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" for");
+    TextHelper::drawTransformedText(*font, u" for");
     
     matrix.push();
     matrix.rotateZ(+r2 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees  ");
+    TextHelper::drawTransformedText(*font, u" text trees  ");
     matrixValues.push_back(matrix.values);
 
     matrix.pop();
     matrix.rotateZ(-r5 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" interaction  ");
+    TextHelper::drawTransformedText(*font, u" interaction  ");
     matrixValues.push_back(matrix.values);
 
     matrix.pop();
     matrix.rotateZ(-r5 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" fine");
+    TextHelper::drawTransformedText(*font, u" fine");
     
     matrix.rotateZ(+r4 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" for");
+    TextHelper::drawTransformedText(*font, u" for");
     
     matrix.push();
     matrix.rotateZ(-r3 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" text trees  ");
+    TextHelper::drawTransformedText(*font, u" text trees  ");
     matrixValues.push_back(matrix.values);
     
     matrix.pop();
     matrix.rotateZ(+r3 * D2R);
     matrix.scale(GROW_FACTOR);
-    TextHelper::drawTransformedText(*font, L" fiction  ");
+    TextHelper::drawTransformedText(*font, u" fiction  ");
     matrixValues.push_back(matrix.values);
     
     font->endSequence();

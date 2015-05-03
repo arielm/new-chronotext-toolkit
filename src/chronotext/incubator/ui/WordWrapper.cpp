@@ -14,7 +14,7 @@ using namespace chr::xf;
 
 namespace chr
 {
-    float WordWrapper::wrap(const XFont &font, const wstring &text)
+    float WordWrapper::wrap(const XFont &font, const u16string &text)
     {
         offsets.clear();
         lengths.clear();
@@ -24,13 +24,13 @@ namespace chr
         
         int lineIndex = 0;
         int lineLength = 0;
-        wchar_t c = 0;
+        char16_t c = 0;
         float x = 0;
         float max = 0;
         
         for (int i = 0; i < length; i++)
         {
-            wchar_t lastC = c;
+            char16_t lastC = c;
             c = text[i];
             
             if (c == '\r' || c == '\n') // WIN, UNIX, OSX
@@ -64,7 +64,7 @@ namespace chr
         return max;
     }
     
-    void WordWrapper::wrap(const XFont &font, const wstring &text, float width)
+    void WordWrapper::wrap(const XFont &font, const u16string &text, float width)
     {
         offsets.clear();
         lengths.clear();
@@ -80,14 +80,14 @@ namespace chr
         bool newLine = true;
         int lineIndex = 0;
         int lineLength = 0;
-        wchar_t c = 0;
+        char16_t c = 0;
         float x = 0;
         
         for (int i = 0; i < length; i++)
         {
-            wchar_t lastC = c;
+            char16_t lastC = c;
             c = text[i];
-            wchar_t nextC = (i + 1) < length ? text[i + 1] : 0;
+            char16_t nextC = (i + 1) < length ? text[i + 1] : 0;
             
             if (c == '\r' || c == '\n') // WIN, UNIX, OSX
             {
@@ -187,7 +187,7 @@ namespace chr
         }
     }
     
-    void WordWrapper::addLine(const wstring &text, int offset, int length)
+    void WordWrapper::addLine(const u16string &text, int offset, int length)
     {
         /*
          * TRIMMING TRAILING SPACES FROM DISPLAY

@@ -16,15 +16,15 @@ namespace chr
 {
     class WordWrapper
     {
-        void addLine(const std::wstring &text, int offset, int length);
+        void addLine(const std::u16string &text, int offset, int length);
         
     public:
         int size;
         std::vector<int> offsets;
         std::vector<int> lengths;
         
-        float wrap(const XFont &font, const std::wstring &text);
-        void wrap(const XFont &font, const std::wstring &text, float width);
+        float wrap(const XFont &font, const std::u16string &text);
+        void wrap(const XFont &font, const std::u16string &text, float width);
         
         int getLine(int offset);
     };

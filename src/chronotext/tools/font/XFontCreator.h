@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -86,10 +86,10 @@ class XFontCreator
     std::shared_ptr<FreetypeHelper> ftHelper;
     FT_Face ftFace;
     
-    XGlyph* createGlyph(wchar_t c);
+    XGlyph* createGlyph(char16_t c);
     
-    bool canDisplay(wchar_t c);
-    bool isSpace(wchar_t c);
+    bool canDisplay(char16_t c);
+    bool isSpace(char16_t c);
     
     bool bestFit();
     bool pack(int targetWidth, int targetHeight);
@@ -109,10 +109,10 @@ public:
     int atlasWidth;
     int atlasHeight;
     
-    std::map<wchar_t, XGlyph*> glyphs; // SORTED BY UNICODE CHARACTER (SMALLER FIRST)
+    std::map<char16_t, XGlyph*> glyphs; // SORTED BY UNICODE CHARACTER (SMALLER FIRST)
     std::list<XGlyph*> ordered; // SORTED BY SIZE (LARGEST FIRST)
     
-    XFontCreator(std::shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float baseSize, const std::wstring &characters, const XParams &params);
+    XFontCreator(std::shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float baseSize, const std::u16string &characters, const XParams &params);
     ~XFontCreator();
     
     void writeToFolder(const ci::fs::path &folderPath);

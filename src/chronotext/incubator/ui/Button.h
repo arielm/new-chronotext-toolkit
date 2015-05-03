@@ -57,7 +57,7 @@ namespace chr
         Delegate *delegate;
         std::shared_ptr<Style> style;
         
-        std::wstring text;
+        std::u16string text;
         IconRef icon;
         
         Button(std::shared_ptr<Style> style);
@@ -77,6 +77,6 @@ namespace chr
         float getContentWidth();
         float getContentHeight();
         
-        static void drawStrikethroughInRect(XFont &font, const std::wstring &text, const ci::Rectf &rect);
+        static void drawStrikethroughInRect(XFont &font, const std::u16string &text, const ci::Rectf &rect);
     };
 }

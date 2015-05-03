@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -15,7 +15,7 @@ using namespace std;
 using namespace ci;
 using namespace chr;
 
-XFontCreator::XFontCreator(shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float baseSize, const wstring &characters, const XParams &params)
+XFontCreator::XFontCreator(shared_ptr<FreetypeHelper> ftHelper, const FontDescriptor &descriptor, float baseSize, const u16string &characters, const XParams &params)
 :
 baseSize(baseSize),
 params(params)
@@ -76,7 +76,7 @@ params(params)
     
     // ---
     
-    FT_UInt spaceGlyphIndex = FT_Get_Char_Index(ftFace, L' ');
+    FT_UInt spaceGlyphIndex = FT_Get_Char_Index(ftFace, u' ');
     FT_Load_Glyph(ftFace, spaceGlyphIndex, FT_LOAD_DEFAULT | FT_LOAD_FORCE_AUTOHINT);
     spaceWidth = ftFace->glyph->advance.x / 64.0f;
     
@@ -166,7 +166,7 @@ void XFontCreator::write(DataTargetRef target)
     }
 }
 
-XGlyph* XFontCreator::createGlyph(wchar_t c)
+XGlyph* XFontCreator::createGlyph(char16_t c)
 {
     auto glyphIndex = FT_Get_Char_Index(ftFace, c);
     
@@ -206,12 +206,12 @@ XGlyph* XFontCreator::createGlyph(wchar_t c)
     return NULL;
 }
 
-bool XFontCreator::canDisplay(wchar_t c)
+bool XFontCreator::canDisplay(char16_t c)
 {
     return (c > 0) && FT_Get_Char_Index(ftFace, c);
 }
 
-bool XFontCreator::isSpace(wchar_t c)
+bool XFontCreator::isSpace(char16_t c)
 {
     return (c == 0x20 || c == 0xa0);
 }
