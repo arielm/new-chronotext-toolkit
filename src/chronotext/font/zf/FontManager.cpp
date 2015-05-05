@@ -53,7 +53,7 @@ namespace chr
                         
                         auto &defaultFontElement = doc.getChild("FontConfig/DefaultFont");
                         defaultFontName = defaultFontElement.getAttributeValue<string>("name", "");
-                        defaultFontStyle = VirtualFont::styleStringToEnum(defaultFontElement.getAttributeValue<string>("style", "regular"));
+                        defaultFontStyle = VirtualFont::stringToStyle(defaultFontElement.getAttributeValue<string>("style", "regular"));
                     }
                     
                     for (auto aliasElement = doc.begin("FontConfig/Aliases/Alias"); aliasElement != doc.end(); ++aliasElement)
@@ -73,7 +73,7 @@ namespace chr
                         
                         if (!name.empty())
                         {
-                            auto style = VirtualFont::styleStringToEnum(fontElement->getAttributeValue<string>("style", "regular"));
+                            auto style = VirtualFont::stringToStyle(fontElement->getAttributeValue<string>("style", "regular"));
                             auto baseSize = fontElement->getAttributeValue<float>("base-size", 0);
                             
                             for (auto &refElement : fontElement->getChildren())
@@ -169,7 +169,7 @@ namespace chr
             /*
              * SHOULD NOT OCCUR, UNLESS NO "DEFAULT FONT" IS DEFINED
              */
-            throw EXCEPTION(FontManager, string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleEnumToString(style));
+            throw EXCEPTION(FontManager, string("UNDEFINED FONT: ") + name + " " + VirtualFont::styleToString(style));
         }
         
         shared_ptr<VirtualFont> FontManager::getFont(InputSource::Ref source, const VirtualFont::Properties &properties)

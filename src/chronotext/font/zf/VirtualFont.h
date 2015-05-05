@@ -171,10 +171,14 @@ namespace chr
             inline void addCluster(const Cluster &cluster, float x, float y, float z = 0) { addCluster(cluster, ci::Vec3f(x, y, z)); }
             void addTransformedCluster(const Cluster &cluster, const ci::Vec2f &position);
             inline void addTransformedCluster(const Cluster &cluster, float x, float y) { addTransformedCluster(cluster, ci::Vec2f(x, y)); }
-            
-            static Style styleStringToEnum(const std::string &style);
-            static std::string styleEnumToString(Style style);
+
             static float snap(float value);
+
+            static Style stringToStyle(const std::string &style);
+            static std::string styleToString(Style style);
+            
+            static hb_direction_t stringToDirection(const std::string &direction);
+            static std::string directionToString(hb_direction_t direction);
             
         protected:
             friend class FontManager;

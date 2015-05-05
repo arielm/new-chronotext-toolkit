@@ -530,7 +530,19 @@ namespace chr
             }
         }
         
-        VirtualFont::Style VirtualFont::styleStringToEnum(const string &style)
+        float VirtualFont::snap(float value)
+        {
+            if (value < 0)
+            {
+                return math<float>::ceil(value - 0.5f);
+            }
+            else
+            {
+                return math<float>::floor(value + 0.5f);
+            }
+        }
+        
+        VirtualFont::Style VirtualFont::stringToStyle(const string &style)
         {
             if (style == "bold") return VirtualFont::STYLE_BOLD;
             if (style == "italic") return VirtualFont::STYLE_ITALIC;
@@ -539,7 +551,7 @@ namespace chr
             return VirtualFont::STYLE_REGULAR; // DEFAULT
         }
         
-        string VirtualFont::styleEnumToString(VirtualFont::Style style)
+        string VirtualFont::styleToString(VirtualFont::Style style)
         {
             switch (style)
             {
@@ -558,15 +570,26 @@ namespace chr
             }
         }
         
-        float VirtualFont::snap(float value)
+        hb_direction_t VirtualFont::stringToDirection(const string &direction)
         {
-            if (value < 0)
+            if (direction == "ltr") return HB_DIRECTION_LTR;
+            if (direction == "rtl") return HB_DIRECTION_RTL;
+            
+            return HB_DIRECTION_INVALID;
+        }
+        
+        string VirtualFont::directionToString(hb_direction_t direction)
+        {
+            switch (direction)
             {
-                return math<float>::ceil(value - 0.5f);
-            }
-            else
-            {
-                return math<float>::floor(value + 0.5f);
+                case HB_DIRECTION_LTR:
+                    return "ltr";
+                    
+                case HB_DIRECTION_RTL:
+                    return "rtl";
+                    
+                default:
+                    return "";
             }
         }
     }
