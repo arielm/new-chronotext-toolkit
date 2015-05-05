@@ -48,9 +48,9 @@ namespace chr
         overallDirection(overallDirection)
         {}
         
-        void LineLayout::addCluster(const Cluster &cluster)
+        void LineLayout::addCluster(Cluster &&cluster)
         {
-            clusters.emplace_back(cluster);
+            clusters.emplace_back(forward<Cluster>(cluster));
             advance += cluster.combinedAdvance;
         }
     }

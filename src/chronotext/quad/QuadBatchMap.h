@@ -56,7 +56,8 @@ namespace chr
                 if (it == map.end())
                 {
                     auto batch = new QuadBatch;
-                    map[texture] = std::unique_ptr<QuadBatch>(batch);
+                    map.emplace(texture, std::unique_ptr<QuadBatch>(batch));
+                    
                     return batch;
                 }
                 else

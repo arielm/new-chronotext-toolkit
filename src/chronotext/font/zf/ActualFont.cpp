@@ -90,7 +90,7 @@ namespace chr
         {
             if (ftFace)
             {
-                return (hb_codepoint_t)FT_Get_Char_Index(ftFace, charCode);
+                return FT_Get_Char_Index(ftFace, charCode);
             }
             else
             {
@@ -201,7 +201,7 @@ namespace chr
                 {
                     for (int i = 0; i < SPACE_SEPARATORS_COUNT; i++)
                     {
-                        hb_codepoint_t codepoint = (hb_codepoint_t)FT_Get_Char_Index(ftFace, SPACE_SEPARATORS[i]);
+                        hb_codepoint_t codepoint(FT_Get_Char_Index(ftFace, SPACE_SEPARATORS[i]));
                         
                         if (codepoint)
                         {
@@ -317,7 +317,7 @@ namespace chr
                     
                     if (glyph)
                     {
-                        glyphs[codepoint] = unique_ptr<Glyph>(glyph);
+                        glyphs.emplace(codepoint, unique_ptr<Glyph>(glyph));
                     }
                     else
                     {
@@ -326,7 +326,7 @@ namespace chr
                          * IS NECESSARY, OTHERWISE createGlyph() WOULD BE INVOKED
                          * INDEFINITELY FOR THE SAME CODEPOINT
                          */
-                        glyphs[codepoint] = unique_ptr<Glyph>(new Glyph());
+                        glyphs.emplace(codepoint, unique_ptr<Glyph>(new Glyph()));
                     }
                 }
                 else

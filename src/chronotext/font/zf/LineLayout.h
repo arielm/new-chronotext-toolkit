@@ -61,7 +61,7 @@ namespace chr
             LineLayout(const LineLayout &other) = delete;
             void operator=(const LineLayout &other) = delete;
             
-            void addCluster(const Cluster &cluster);
+            void addCluster(Cluster &&cluster);
         };
     }
 }

@@ -260,7 +260,7 @@ namespace chr
                                     }
                                     else
                                     {
-                                        clusterMap.insert(make_pair(cluster, Cluster(font, run.tag, codepoint, offset, advance)));
+                                        clusterMap.emplace(piecewise_construct, forward_as_tuple(cluster), forward_as_tuple(font, run.tag, codepoint, offset, advance));
                                     }
                                 }
                             }
@@ -281,14 +281,14 @@ namespace chr
                 {
                     for (auto it = clusterMap.rbegin(); it != clusterMap.rend(); ++it)
                     {
-                        layout->addCluster(it->second);
+                        layout->addCluster(move(it->second));
                     }
                 }
                 else
                 {
                     for (auto it = clusterMap.begin(); it != clusterMap.end(); ++it)
                     {
-                        layout->addCluster(it->second);
+                        layout->addCluster(move(it->second));
                     }
                 }
             }

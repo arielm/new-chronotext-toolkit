@@ -387,6 +387,7 @@ namespace chr
                     indices.push_back(offset + 2);
                     indices.push_back(offset + 3);
                     indices.push_back(offset);
+                    
                     offset += 4;
                 }
             }
