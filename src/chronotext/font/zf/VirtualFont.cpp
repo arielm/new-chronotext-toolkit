@@ -194,7 +194,7 @@ namespace chr
             return createLineLayout(line, boost::make_iterator_range(line.runs));
         }
         
-        LineLayout* VirtualFont::createLineLayout(const TextLine &line, boost::iterator_range<vector<TextRun>::const_iterator> range)
+        LineLayout* VirtualFont::createLineLayout(const TextLine &line, boost::iterator_range<list<TextRun>::const_iterator> range)
         {
             auto layout = new LineLayout(this, line.langHint, line.overallDirection);
             int averageCount = 0;

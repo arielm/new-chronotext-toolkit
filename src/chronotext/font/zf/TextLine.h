@@ -10,7 +10,7 @@
 
 #include "chronotext/font/zf/TextRun.h"
 
-#include <vector>
+#include <list>
 
 namespace chr
 {
@@ -45,7 +45,7 @@ namespace chr
             std::vector<DirectionItem> directionItems;
             std::vector<TagItem> tagItems;
             
-            std::vector<TextRun> runs;
+            std::list<TextRun> runs;
 
             TextLine(const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID)
             :

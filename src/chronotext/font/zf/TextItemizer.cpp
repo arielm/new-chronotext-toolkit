@@ -152,13 +152,13 @@ namespace chr
                     run.tag = tagIterator->data;
                     run.direction = directionItem.data;
                     
-                    if (directionItem.data == HB_DIRECTION_LTR)
+                    if (directionItem.data == HB_DIRECTION_RTL)
                     {
-                        line.runs.push_back(run);
+                        rtlInsertionPoint = line.runs.insert(rtlInsertionPoint, run);
                     }
                     else
                     {
-                        rtlInsertionPoint = line.runs.insert(rtlInsertionPoint, run);
+                        line.runs.push_back(run);
                     }
                     
                     position = run.end;
@@ -167,6 +167,7 @@ namespace chr
                     {
                         ++scriptAndLanguageIterator;
                     }
+                    
                     if (tagIterator->end == position)
                     {
                         ++tagIterator;

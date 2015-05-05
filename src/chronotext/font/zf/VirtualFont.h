@@ -121,7 +121,7 @@ namespace chr
              * THE RETURNED INSTANCES ARE NOT MANAGED AND SHOULD BE DELETED BY THE CALLER
              */
             LineLayout* createLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
-            LineLayout* createLineLayout(const TextLine &line, boost::iterator_range<std::vector<TextRun>::const_iterator> range);
+            LineLayout* createLineLayout(const TextLine &line, boost::iterator_range<std::list<TextRun>::const_iterator> range);
             
             /*
              * THE RETURNED INSTANCES ARE MANAGED BY THE FontManager's LayoutStore
