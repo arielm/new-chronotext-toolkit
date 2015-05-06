@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2014-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -12,8 +12,7 @@
  */
 
 #include "chronotext/font/zf/LangHelper.h"
-
-#include "cinder/Utilities.h"
+#include "chronotext/utils/Utils.h"
 
 using namespace std;
 
@@ -21,18 +20,20 @@ namespace chr
 {
     namespace zf
     {
-        const std::string DEFAULT_LANGUAGES = "en:zh-cn"; // GIVING PRIORITY (BY DEFAULT) TO CHINESE OVER JAPANESE
+        const string DEFAULT_LANGUAGES = "en:zh-cn"; // GIVING PRIORITY (BY DEFAULT) TO CHINESE OVER JAPANESE
         
-        struct HBScriptForLang
+        // ---
+        
+        struct ScriptsForLang
         {
-            const char lang[7];
-            hb_script_t scripts[3];
+            string lang;
+            vector<hb_script_t> scripts;
         };
         
         /*
          * DATA FROM pango-script-lang-table.h
          */
-        static const HBScriptForLang HB_SCRIPT_FOR_LANG[] =
+        static vector<ScriptsForLang> SCRIPTS_FOR_LANG
         {
             { "aa",     { HB_SCRIPT_LATIN/*62*/ } },
             { "ab",     { HB_SCRIPT_CYRILLIC/*90*/ } },
@@ -273,45 +274,23 @@ namespace chr
             { "zu",     { HB_SCRIPT_LATIN/*52*/ } }
         };
         
-        static void initScriptMap(std::map<std::string, std::vector<hb_script_t>> &scriptMap)
+        static void initScriptMap(map<string, vector<hb_script_t>> &scriptMap)
         {
-            size_t entryCount = sizeof(HB_SCRIPT_FOR_LANG) / sizeof(HBScriptForLang);
-            
-            for (int i = 0; i < entryCount; i++)
+            for (auto &entry : SCRIPTS_FOR_LANG)
             {
-                auto entry = HB_SCRIPT_FOR_LANG[i];
-                
-                size_t scriptCount = sizeof(entry.scripts) / sizeof(hb_script_t);
-                std::vector<hb_script_t> scripts;
-                
-                for (int j = 0; j < scriptCount; j++)
-                {
-                    if (entry.scripts[j])
-                    {
-                        scripts.push_back(entry.scripts[j]);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                
-                assert(scripts.size() > 0);
-                scriptMap[entry.lang] = scripts;
+                scriptMap[entry.lang] = entry.scripts;
             }
-            
+
             /*
              * DEFAULT-VALUE
              */
-            std::vector<hb_script_t> invalid;
-            invalid.push_back(HB_SCRIPT_INVALID);
-            scriptMap[""] = invalid;
+            scriptMap[""] = { HB_SCRIPT_INVALID };
         }
         
         /*
          * DATA FROM pango-language.c
          */
-        static void initSampleLanguageMap(std::map<hb_script_t, std::string> &sampleLanguageMap)
+        static void initSampleLanguageMap(map<hb_script_t, string> &sampleLanguageMap)
         {
             sampleLanguageMap[HB_SCRIPT_ARABIC] = "ar";
             sampleLanguageMap[HB_SCRIPT_ARMENIAN] = "hy";
@@ -368,7 +347,7 @@ namespace chr
             setDefaultLanguages(DEFAULT_LANGUAGES);
         }
         
-        void LangHelper::setDefaultLanguages(const std::string &languages)
+        void LangHelper::setDefaultLanguages(const string &languages)
         {
             defaultLanguageSet.clear();
             
@@ -378,7 +357,7 @@ namespace chr
             }
         }
         
-        const std::vector<hb_script_t>& LangHelper::getScriptsForLang(const std::string &lang) const
+        const vector<hb_script_t>& LangHelper::getScriptsForLang(const string &lang) const
         {
             auto it = scriptMap.find(lang);
             
@@ -390,7 +369,7 @@ namespace chr
             return it->second;
         }
         
-        bool LangHelper::includesScript(const std::string &lang, hb_script_t script) const
+        bool LangHelper::includesScript(const string &lang, hb_script_t script) const
         {
             for (auto &value : getScriptsForLang(lang))
             {
@@ -403,7 +382,7 @@ namespace chr
             return false;
         }
         
-        std::string LangHelper::getDefaultLanguage(hb_script_t script) const
+        string LangHelper::getDefaultLanguage(hb_script_t script) const
         {
             for (auto &lang : defaultLanguageSet)
             {
@@ -419,7 +398,7 @@ namespace chr
             return "";
         }
         
-        std::string LangHelper::getSampleLanguage(hb_script_t script) const
+        string LangHelper::getSampleLanguage(hb_script_t script) const
         {
             auto it = sampleLanguageMap.find(script);
             
@@ -431,7 +410,7 @@ namespace chr
             return it->second;
         }
         
-        std::string LangHelper::detectLanguage(hb_script_t script, const std::string &langHint) const
+        string LangHelper::detectLanguage(hb_script_t script, const string &langHint) const
         {
             /*
              * 1. CAN @script BE USED TO WRITE @langHint?
