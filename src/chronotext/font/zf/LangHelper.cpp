@@ -20,21 +20,17 @@ namespace chr
 {
     namespace zf
     {
-        const string DEFAULT_LANGUAGES = "en:zh-cn"; // GIVING PRIORITY (BY DEFAULT) TO CHINESE OVER JAPANESE
-        
-        // ---
-        
-        struct ScriptsForLang
-        {
-            string lang;
-            vector<hb_script_t> scripts;
-        };
+        /*
+         * GIVING PRIORITY (BY DEFAULT) TO CHINESE OVER JAPANESE
+         */
+        static string DEFAULT_LANGUAGES { "en:zh-cn" };
         
         /*
          * DATA FROM pango-script-lang-table.h
          */
-        static vector<ScriptsForLang> SCRIPTS_FOR_LANG
+        map<string, vector<hb_script_t>> LangHelper::scriptMap
         {
+            { "",       { HB_SCRIPT_INVALID } },
             { "aa",     { HB_SCRIPT_LATIN/*62*/ } },
             { "ab",     { HB_SCRIPT_CYRILLIC/*90*/ } },
             { "af",     { HB_SCRIPT_LATIN/*69*/ } },
@@ -274,76 +270,57 @@ namespace chr
             { "zu",     { HB_SCRIPT_LATIN/*52*/ } }
         };
         
-        static void initScriptMap(map<string, vector<hb_script_t>> &scriptMap)
-        {
-            for (auto &entry : SCRIPTS_FOR_LANG)
-            {
-                scriptMap[entry.lang] = entry.scripts;
-            }
-
-            /*
-             * DEFAULT-VALUE
-             */
-            scriptMap[""] = { HB_SCRIPT_INVALID };
-        }
-        
         /*
          * DATA FROM pango-language.c
          */
-        static void initSampleLanguageMap(map<hb_script_t, string> &sampleLanguageMap)
+        map<hb_script_t, string> LangHelper::sampleLanguageMap
         {
-            sampleLanguageMap[HB_SCRIPT_ARABIC] = "ar";
-            sampleLanguageMap[HB_SCRIPT_ARMENIAN] = "hy";
-            sampleLanguageMap[HB_SCRIPT_BENGALI] = "bn";
-            sampleLanguageMap[HB_SCRIPT_CHEROKEE] = "chr";
-            sampleLanguageMap[HB_SCRIPT_COPTIC] = "cop";
-            sampleLanguageMap[HB_SCRIPT_CYRILLIC] = "ru";
-            sampleLanguageMap[HB_SCRIPT_DEVANAGARI] = "hi";
-            sampleLanguageMap[HB_SCRIPT_ETHIOPIC] = "am";
-            sampleLanguageMap[HB_SCRIPT_GEORGIAN] = "ka";
-            sampleLanguageMap[HB_SCRIPT_GREEK] = "el";
-            sampleLanguageMap[HB_SCRIPT_GUJARATI] = "gu";
-            sampleLanguageMap[HB_SCRIPT_GURMUKHI] = "pa";
-            sampleLanguageMap[HB_SCRIPT_HANGUL] = "ko";
-            sampleLanguageMap[HB_SCRIPT_HEBREW] = "he";
-            sampleLanguageMap[HB_SCRIPT_HIRAGANA] = "ja";
-            sampleLanguageMap[HB_SCRIPT_KANNADA] = "kn";
-            sampleLanguageMap[HB_SCRIPT_KATAKANA] = "ja";
-            sampleLanguageMap[HB_SCRIPT_KHMER] = "km";
-            sampleLanguageMap[HB_SCRIPT_LAO] = "lo";
-            sampleLanguageMap[HB_SCRIPT_LATIN] = "en";
-            sampleLanguageMap[HB_SCRIPT_MALAYALAM] = "ml";
-            sampleLanguageMap[HB_SCRIPT_MONGOLIAN] = "mn";
-            sampleLanguageMap[HB_SCRIPT_MYANMAR] = "my";
-            sampleLanguageMap[HB_SCRIPT_ORIYA] = "or";
-            sampleLanguageMap[HB_SCRIPT_SINHALA] = "si";
-            sampleLanguageMap[HB_SCRIPT_SYRIAC] = "syr";
-            sampleLanguageMap[HB_SCRIPT_TAMIL] = "ta";
-            sampleLanguageMap[HB_SCRIPT_TELUGU] = "te";
-            sampleLanguageMap[HB_SCRIPT_THAANA] = "dv";
-            sampleLanguageMap[HB_SCRIPT_THAI] = "th";
-            sampleLanguageMap[HB_SCRIPT_TIBETAN] = "bo";
-            sampleLanguageMap[HB_SCRIPT_CANADIAN_ABORIGINAL] = "iu";
-            sampleLanguageMap[HB_SCRIPT_TAGALOG] = "tl";
-            sampleLanguageMap[HB_SCRIPT_HANUNOO] = "hnn";
-            sampleLanguageMap[HB_SCRIPT_BUHID] = "bku";
-            sampleLanguageMap[HB_SCRIPT_TAGBANWA] = "tbw";
-            sampleLanguageMap[HB_SCRIPT_UGARITIC] = "uga";
-            sampleLanguageMap[HB_SCRIPT_BUGINESE] = "bug";
-            sampleLanguageMap[HB_SCRIPT_SYLOTI_NAGRI] = "syl";
-            sampleLanguageMap[HB_SCRIPT_OLD_PERSIAN] = "peo";
-            sampleLanguageMap[HB_SCRIPT_NKO] = "nqo";
-            
-            /*
-             * DEFAULT-VALUE
-             */
-            sampleLanguageMap[HB_SCRIPT_INVALID] = "";
+            { HB_SCRIPT_INVALID, "" },
+            { HB_SCRIPT_ARABIC, "ar" },
+            { HB_SCRIPT_ARMENIAN, "hy" },
+            { HB_SCRIPT_BENGALI, "bn" },
+            { HB_SCRIPT_CHEROKEE, "chr" },
+            { HB_SCRIPT_COPTIC, "cop" },
+            { HB_SCRIPT_CYRILLIC, "ru" },
+            { HB_SCRIPT_DEVANAGARI, "hi" },
+            { HB_SCRIPT_ETHIOPIC, "am" },
+            { HB_SCRIPT_GEORGIAN, "ka" },
+            { HB_SCRIPT_GREEK, "el" },
+            { HB_SCRIPT_GUJARATI, "gu" },
+            { HB_SCRIPT_GURMUKHI, "pa" },
+            { HB_SCRIPT_HANGUL, "ko" },
+            { HB_SCRIPT_HEBREW, "he" },
+            { HB_SCRIPT_HIRAGANA, "ja" },
+            { HB_SCRIPT_KANNADA, "kn" },
+            { HB_SCRIPT_KATAKANA, "ja" },
+            { HB_SCRIPT_KHMER, "km" },
+            { HB_SCRIPT_LAO, "lo" },
+            { HB_SCRIPT_LATIN, "en" },
+            { HB_SCRIPT_MALAYALAM, "ml" },
+            { HB_SCRIPT_MONGOLIAN, "mn" },
+            { HB_SCRIPT_MYANMAR, "my" },
+            { HB_SCRIPT_ORIYA, "or" },
+            { HB_SCRIPT_SINHALA, "si" },
+            { HB_SCRIPT_SYRIAC, "syr" },
+            { HB_SCRIPT_TAMIL, "ta" },
+            { HB_SCRIPT_TELUGU, "te" },
+            { HB_SCRIPT_THAANA, "dv" },
+            { HB_SCRIPT_THAI, "th" },
+            { HB_SCRIPT_TIBETAN, "bo" },
+            { HB_SCRIPT_CANADIAN_ABORIGINAL, "iu" },
+            { HB_SCRIPT_TAGALOG, "tl" },
+            { HB_SCRIPT_HANUNOO, "hnn" },
+            { HB_SCRIPT_BUHID, "bku" },
+            { HB_SCRIPT_TAGBANWA, "tbw" },
+            { HB_SCRIPT_UGARITIC, "uga" },
+            { HB_SCRIPT_BUGINESE, "bug" },
+            { HB_SCRIPT_SYLOTI_NAGRI, "syl" },
+            { HB_SCRIPT_OLD_PERSIAN, "peo" },
+            { HB_SCRIPT_NKO, "nqo" }
         };
         
         LangHelper::LangHelper()
         {
-            initScriptMap(scriptMap);
-            initSampleLanguageMap(sampleLanguageMap);
             setDefaultLanguages(DEFAULT_LANGUAGES);
         }
         

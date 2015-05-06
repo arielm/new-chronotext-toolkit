@@ -30,7 +30,7 @@ namespace chr
             LangHelper();
             
             /*
-             * EXPECTS A LIST LANGUAGES SEPARATED BY COLONS
+             * EXPECTS A LIST OF LANGUAGES SEPARATED BY COLONS
              */
             void setDefaultLanguages(const std::string &languages);
             
@@ -38,6 +38,7 @@ namespace chr
              * DETERMINES THE SCRIPTS USED TO WRITE @lang
              *
              * QUOTING PANGO:
+             *
              * Most languages use only one script for writing, but there are
              * some that use two (Latin and Cyrillic for example), and a few
              * use three (Japanese for example).
@@ -85,8 +86,9 @@ namespace chr
             std::string detectLanguage(hb_script_t script, const std::string &langHint = "") const;
             
         protected:
-            std::map<std::string, std::vector<hb_script_t>> scriptMap;
-            std::map<hb_script_t, std::string> sampleLanguageMap;
+            static std::map<std::string, std::vector<hb_script_t>> scriptMap;
+            static std::map<hb_script_t, std::string> sampleLanguageMap;
+            
             std::set<std::string> defaultLanguageSet;
         };
     }
