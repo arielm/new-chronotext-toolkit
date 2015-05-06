@@ -63,15 +63,19 @@ namespace chr
 #if defined(DISCARD_LOGI)
 #   define LOGI false && chr::Log()
 #   define LOGI_IF(COND) false && chr::Log()
+#   define LOGI_FN(FN, ...) {}
 #else
 #   define LOGI chr::Log()
 #   define LOGI_IF(COND) (COND) && chr::Log()
+#   define LOGI_FN(FN, ...) { chr::Log __LOG__; FN(__LOG__, ##__VA_ARGS__); }
 #endif
 
 #if defined(DEBUG) || defined(FORCE_LOGD)
 #   define LOGD chr::Log()
 #   define LOGD_IF(COND) (COND) && chr::Log()
+#   define LOGD_FN(FN, ...) {}
 #else
 #   define LOGD false && chr::Log()
 #   define LOGD_IF(COND) false && chr::Log()
+#   define LOGD_FN(FN, ...) { chr::Log __LOG__; FN(__LOG__, ##__VA_ARGS__); }
 #endif
