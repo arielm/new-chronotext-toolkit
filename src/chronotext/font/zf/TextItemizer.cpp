@@ -67,7 +67,7 @@ namespace chr
             
             if (!line.runs.empty())
             {
-                if (line.langHint.empty())
+                if (line.langHint == HB_LANGUAGE_INVALID)
                 {
                     line.langHint = line.runs.front().language;
                 }

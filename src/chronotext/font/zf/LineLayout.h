@@ -43,7 +43,7 @@ namespace chr
         struct LineLayout
         {
             VirtualFont *font;
-            std::string langHint;
+            hb_language_t langHint;
             hb_direction_t overallDirection;
             
             std::vector<Cluster> clusters;
@@ -56,7 +56,7 @@ namespace chr
             float maxLineThickness = 0;
             float averageStrikethroughOffset = 0;
             
-            LineLayout(VirtualFont *font, const std::string &langHint, hb_direction_t overallDirection);
+            LineLayout(VirtualFont *font, hb_language_t langHint, hb_direction_t overallDirection);
             
             LineLayout(const LineLayout &other) = delete;
             void operator=(const LineLayout &other) = delete;

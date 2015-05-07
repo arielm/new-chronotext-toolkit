@@ -35,7 +35,7 @@ namespace chr
             void setDefaultLanguages(const std::string &languages);
             
             /*
-             * DETERMINES THE SCRIPTS USED TO WRITE @lang
+             * DETERMINES THE SCRIPTS USED TO WRITE lang
              *
              * QUOTING PANGO:
              *
@@ -43,17 +43,17 @@ namespace chr
              * some that use two (Latin and Cyrillic for example), and a few
              * use three (Japanese for example).
              */
-            const std::vector<hb_script_t>& getScriptsForLang(const std::string &lang) const;
+            const std::vector<hb_script_t>& getScriptsForLang(hb_language_t lang) const;
             
             /*
-             * DETERMINES IF @script MAY BE USED TO WRITE @lang
+             * DETERMINES IF script MAY BE USED TO WRITE lang
              */
-            bool includesScript(const std::string &lang, hb_script_t script) const;
+            bool includesScript(hb_language_t lang, hb_script_t script) const;
             
             /*
-             * RETURNS THE RESOLVED LANGUAGE IF @script MAY BE USED TO WRITE ONE OF THE "DEFAULT LANGUAGES"
+             * RETURNS THE RESOLVED LANGUAGE IF script MAY BE USED TO WRITE ONE OF THE "DEFAULT LANGUAGES"
              */
-            std::string getDefaultLanguage(hb_script_t script) const;
+            hb_language_t getDefaultLanguage(hb_script_t script) const;
             
             /*
              * QUOTING PANGO:
@@ -74,22 +74,36 @@ namespace chr
              * of shared characters. No sample language can be provided
              * for many historical scripts as well.
              */
-            std::string getSampleLanguage(hb_script_t script) const;
+            hb_language_t getSampleLanguage(hb_script_t script) const;
             
             /*
-             * TRYING TO DETECT A LANGUAGE FOR @script BY ASKING 3 QUESTIONS:
+             * TRYING TO DETECT A LANGUAGE FOR script BY ASKING 3 QUESTIONS:
              *
-             * 1. CAN @script BE USED TO WRITE @langHint?
-             * 2. CAN @script BE USED TO WRITE ONE OF THE "DEFAULT LANGUAGES"?
-             * 3. IS THERE A PREDOMINANT LANGUAGE THAT IS LIKELY FOR @script?
+             * 1. CAN script BE USED TO WRITE langHint?
+             * 2. CAN script BE USED TO WRITE ONE OF THE "DEFAULT LANGUAGES"?
+             * 3. IS THERE A PREDOMINANT LANGUAGE THAT IS LIKELY FOR script?
              */
-            std::string detectLanguage(hb_script_t script, const std::string &langHint = "") const;
+            hb_language_t detectLanguage(hb_script_t script, hb_language_t langHint = HB_LANGUAGE_INVALID) const;
+            
+            static hb_language_t toHBLang(const std::string &s);
+            static hb_language_t toHBLang(const char *c);
             
         protected:
-            static std::map<std::string, std::vector<hb_script_t>> scriptMap;
-            static std::map<hb_script_t, std::string> sampleLanguageMap;
-            
-            std::set<std::string> defaultLanguageSet;
+            std::map<hb_language_t, std::vector<hb_script_t>> scriptMap;
+            std::map<hb_script_t, hb_language_t> sampleLanguageMap;
+            std::set<hb_language_t> defaultLanguageSet;
         };
+        
+        // ---
+        
+        inline hb_language_t LangHelper::toHBLang(const std::string &s)
+        {
+            return hb_language_from_string(s.data(), s.size());
+        }
+        
+        inline hb_language_t LangHelper::toHBLang(const char *c)
+        {
+            return hb_language_from_string(c, -1);
+        }
     }
 }

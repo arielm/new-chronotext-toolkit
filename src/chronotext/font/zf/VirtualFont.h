@@ -98,7 +98,6 @@ namespace chr
             std::shared_ptr<TextItemizer> itemizer;
             
             ActualFont::Metrics getMetrics(const Cluster &cluster) const; // RETURNS THE SIZED METRICS OF THE ActualFont USED BY cluster
-            ActualFont::Metrics getMetrics(const std::string &lang = "") const; // RETURNS THE SIZED METRICS OF THE FIRST ActualFont IN THE SET USED FOR lang
             
             /*
              * METRICS TAKE IN COUNT EVERY ActualFont INCLUDED IN THE "COMPOSITE LINE"
@@ -120,13 +119,13 @@ namespace chr
             /*
              * THE RETURNED INSTANCES ARE NOT MANAGED AND SHOULD BE DELETED BY THE CALLER
              */
-            LineLayout* createLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
+            LineLayout* createLineLayout(const std::string &text, hb_language_t = HB_LANGUAGE_INVALID, hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             LineLayout* createLineLayout(const TextLine &line, boost::iterator_range<std::list<TextRun>::const_iterator> range);
             
             /*
              * THE RETURNED INSTANCES ARE MANAGED BY THE FontManager's LayoutStore
              */
-            std::shared_ptr<LineLayout> getLineLayout(const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
+            std::shared_ptr<LineLayout> getLineLayout(const std::string &text, hb_language_t = HB_LANGUAGE_INVALID, hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             
             /*
              * - WILL LOAD THE GLYPH TEXTURES IMMEDIATELY (I.E. INSTEAD OF "JUST BEFORE DRAWING")
@@ -202,13 +201,12 @@ namespace chr
             FontSequence *sequence = nullptr;
             std::unique_ptr<QuadBatchMap<FontTexture>> batchMap;
             
-            FontSet defaultFontSet; // ALLOWING getFontSet() TO RETURN CONST VALUES
-            std::map<std::string, FontSet> fontSetMap;
+            std::map<hb_language_t, FontSet> fontSetMap;
             
             VirtualFont(FontManager &fontManager, const Properties &properties);
             
             bool addActualFont(const std::string &lang, ActualFont *font);
-            const FontSet& getFontSet(const std::string &lang) const;
+            const FontSet& getFontSet(hb_language_t lang) const;
             
             void begin(bool useColor = false);
             void end(bool useColor = false);

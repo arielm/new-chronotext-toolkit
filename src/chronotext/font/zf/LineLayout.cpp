@@ -41,7 +41,7 @@ namespace chr
             combinedAdvance += advance;
         }
         
-        LineLayout::LineLayout(VirtualFont *font, const string &langHint, hb_direction_t overallDirection)
+        LineLayout::LineLayout(VirtualFont *font, hb_language_t langHint, hb_direction_t overallDirection)
         :
         font(font),
         langHint(langHint),

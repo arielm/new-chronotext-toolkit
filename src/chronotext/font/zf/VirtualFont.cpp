@@ -59,61 +59,60 @@ namespace chr
             if (font)
             {
                 /*
-                 * WHY USING std::vector INSTEAD OF std::set?
-                 * BECAUSE ORDER OF INSERTION MATTERS
+                 * USING std::vector INSTEAD OF std::set STANDALONE
+                 * BECAUSE ORDER OF INSERTION MATTERS...
                  */
                 
-                for (auto &tmp : fontSetMap[lang])
-                {
-                    if (tmp == font)
-                    {
-                        return false;
-                    }
-                }
+                auto hbLang = LangHelper::toHBLang(lang);
                 
-                fontSetMap[lang].push_back(font);
+                auto found = fontSetMap.find(hbLang);
+                
+                if (found != fontSetMap.end())
+                {
+                    for (auto &tmp : found->second)
+                    {
+                        if (tmp == font)
+                        {
+                            return false;
+                        }
+                    }
+                    
+                    found->second.push_back(font);
+                }
+                else
+                {
+                    fontSetMap[hbLang].push_back(font);
+                }
+
                 return true;
             }
             
             return false;
         }
         
-        const FontSet& VirtualFont::getFontSet(const string &lang) const
+        const FontSet& VirtualFont::getFontSet(hb_language_t lang) const
         {
-            auto it = fontSetMap.find(lang);
+            auto found = fontSetMap.find(lang);
             
-            if (it == fontSetMap.end())
+            if (found == fontSetMap.end())
             {
-                it = fontSetMap.find("");
+                found = fontSetMap.find(HB_LANGUAGE_INVALID); // NECESSARY, E.G. FOR A VirtualFont/Set DECLARED WITHOUT lang ATTRIBUTE
                 
-                if (it == fontSetMap.end())
+                if (found == fontSetMap.end())
                 {
-                    return defaultFontSet;
+                    static FontSet notFound;
+                    return notFound;
                 }
             }
             
-            return it->second;
+            return found->second;
         }
         
         ActualFont::Metrics VirtualFont::getMetrics(const Cluster &cluster) const
         {
             return cluster.font->metrics * sizeRatio;
         }
-        
-        ActualFont::Metrics VirtualFont::getMetrics(const string &lang) const
-        {
-            auto &fontSet = getFontSet(lang);
-            
-            if (fontSet.empty())
-            {
-                return ActualFont::Metrics();
-            }
-            else
-            {
-                return fontSet.front()->metrics * sizeRatio;
-            }
-        }
-        
+
         float VirtualFont::getHeight(const LineLayout &layout) const
         {
             return layout.maxHeight * sizeRatio;
@@ -187,7 +186,7 @@ namespace chr
             return cluster.combinedAdvance * sizeRatio;
         }
         
-        LineLayout* VirtualFont::createLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
+        LineLayout* VirtualFont::createLineLayout(const string &text, hb_language_t langHint, hb_direction_t overallDirection)
         {
             TextLine line(text, langHint, overallDirection);
             itemizer->processLine(line);
@@ -300,7 +299,7 @@ namespace chr
             return layout;
         }
         
-        shared_ptr<LineLayout> VirtualFont::getLineLayout(const string &text, const string &langHint, hb_direction_t overallDirection)
+        shared_ptr<LineLayout> VirtualFont::getLineLayout(const string &text, hb_language_t langHint, hb_direction_t overallDirection)
         {
             return layoutStore->get(this, text, langHint, overallDirection);
         }

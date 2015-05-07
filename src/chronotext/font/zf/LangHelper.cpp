@@ -28,9 +28,8 @@ namespace chr
         /*
          * DATA FROM pango-script-lang-table.h
          */
-        map<string, vector<hb_script_t>> LangHelper::scriptMap
+        static map<string, vector<hb_script_t>> SCRIPTS_FOR_LANGUAGE
         {
-            { "",       { HB_SCRIPT_INVALID } },
             { "aa",     { HB_SCRIPT_LATIN/*62*/ } },
             { "ab",     { HB_SCRIPT_CYRILLIC/*90*/ } },
             { "af",     { HB_SCRIPT_LATIN/*69*/ } },
@@ -273,9 +272,8 @@ namespace chr
         /*
          * DATA FROM pango-language.c
          */
-        map<hb_script_t, string> LangHelper::sampleLanguageMap
+        static map<hb_script_t, string> SAMPLE_LANGUAGES_FOR_SCRIPT
         {
-            { HB_SCRIPT_INVALID, "" },
             { HB_SCRIPT_ARABIC, "ar" },
             { HB_SCRIPT_ARMENIAN, "hy" },
             { HB_SCRIPT_BENGALI, "bn" },
@@ -319,8 +317,20 @@ namespace chr
             { HB_SCRIPT_NKO, "nqo" }
         };
         
+        // ---
+        
         LangHelper::LangHelper()
         {
+            for (auto &it : SCRIPTS_FOR_LANGUAGE)
+            {
+                scriptMap.emplace(toHBLang(it.first), it.second);
+            }
+            
+            for (auto &it : SAMPLE_LANGUAGES_FOR_SCRIPT)
+            {
+                sampleLanguageMap.emplace(it.first, toHBLang(it.second));
+            }
+            
             setDefaultLanguages(DEFAULT_LANGUAGES);
         }
         
@@ -328,25 +338,26 @@ namespace chr
         {
             defaultLanguageSet.clear();
             
-            for (auto &lang : ci::split(languages, ":"))
+            for (const auto &lang : ci::split(languages, ":"))
             {
-                defaultLanguageSet.insert(lang);
+                defaultLanguageSet.insert(toHBLang(lang));
             }
         }
         
-        const vector<hb_script_t>& LangHelper::getScriptsForLang(const string &lang) const
+        const vector<hb_script_t>& LangHelper::getScriptsForLang(hb_language_t lang) const
         {
-            auto it = scriptMap.find(lang);
+            auto found = scriptMap.find(lang);
             
-            if (it == scriptMap.end())
+            if (found != scriptMap.end())
             {
-                it = scriptMap.find("");
+                return found->second;
             }
             
-            return it->second;
+            static vector<hb_script_t> notFound { HB_SCRIPT_INVALID };
+            return notFound;
         }
         
-        bool LangHelper::includesScript(const string &lang, hb_script_t script) const
+        bool LangHelper::includesScript(hb_language_t lang, hb_script_t script) const
         {
             for (auto &value : getScriptsForLang(lang))
             {
@@ -359,7 +370,7 @@ namespace chr
             return false;
         }
         
-        string LangHelper::getDefaultLanguage(hb_script_t script) const
+        hb_language_t LangHelper::getDefaultLanguage(hb_script_t script) const
         {
             for (auto &lang : defaultLanguageSet)
             {
@@ -372,45 +383,47 @@ namespace chr
                 }
             }
             
-            return "";
+            return HB_LANGUAGE_INVALID;
         }
         
-        string LangHelper::getSampleLanguage(hb_script_t script) const
+        hb_language_t LangHelper::getSampleLanguage(hb_script_t script) const
         {
-            auto it = sampleLanguageMap.find(script);
+            auto found = sampleLanguageMap.find(script);
             
-            if (it == sampleLanguageMap.end())
+            if (found != sampleLanguageMap.end())
             {
-                it = sampleLanguageMap.find(HB_SCRIPT_INVALID);
+                return found->second;
             }
             
-            return it->second;
+            return HB_LANGUAGE_INVALID;
         }
         
-        string LangHelper::detectLanguage(hb_script_t script, const string &langHint) const
+        hb_language_t LangHelper::detectLanguage(hb_script_t script, hb_language_t langHint) const
         {
             /*
-             * 1. CAN @script BE USED TO WRITE @langHint?
+             * 1. CAN script BE USED TO WRITE langHint?
              */
-            if (!langHint.empty() && includesScript(langHint, script))
+            
+            if ((langHint != HB_LANGUAGE_INVALID) && includesScript(langHint, script))
             {
                 return langHint;
             }
             
             /*
-             * 2. CAN @script BE USED TO WRITE ONE OF THE "DEFAULT LANGUAGES"?
+             * 2. CAN script BE USED TO WRITE ONE OF THE "DEFAULT LANGUAGES"?
              */
             
             auto defaultLanguage = getDefaultLanguage(script);
             
-            if (!defaultLanguage.empty())
+            if (defaultLanguage != HB_LANGUAGE_INVALID)
             {
                 return defaultLanguage;
             }
             
             /*
-             * 3. IS THERE A PREDOMINANT LANGUAGE THAT IS LIKELY FOR @script?
+             * 3. IS THERE A PREDOMINANT LANGUAGE THAT IS LIKELY FOR script?
              */
+            
             return getSampleLanguage(script);
         }
     }

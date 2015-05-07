@@ -15,13 +15,13 @@ namespace chr
 {
     namespace zf
     {
-        shared_ptr<LineLayout> LayoutStore::get(VirtualFont *font, const string &text, const string &langHint, hb_direction_t overallDirection)
+        shared_ptr<LineLayout> LayoutStore::get(VirtualFont *font, const string &text, hb_language_t langHint, hb_direction_t overallDirection)
         {
             const auto found = layouts.equal_range(text);
             
             for (auto it = found.first; it != found.second; ++it)
             {
-                if ((it->second->font == font) && (it->second->overallDirection == overallDirection) && (it->second->langHint == langHint))
+                if ((it->second->font == font) && (it->second->langHint == langHint) && (it->second->overallDirection == overallDirection))
                 {
                     return it->second;
                 }

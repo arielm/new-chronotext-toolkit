@@ -21,7 +21,7 @@ namespace chr
         class LayoutStore
         {
         public:
-            std::shared_ptr<LineLayout> get(VirtualFont *font, const std::string &text, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID);
+            std::shared_ptr<LineLayout> get(VirtualFont *font, const std::string &text, hb_language_t langHint = HB_LANGUAGE_INVALID, hb_direction_t overallDirection = HB_DIRECTION_INVALID);
             void clear();
             
         protected:

@@ -33,12 +33,12 @@ namespace chr
                 {}
             };
             
-            typedef Item<std::pair<hb_script_t, std::string>> ScriptAndLanguageItem;
+            typedef Item<std::pair<hb_script_t, hb_language_t>> ScriptAndLanguageItem;
             typedef Item<hb_direction_t> DirectionItem;
             typedef Item<int> TagItem;
             
             UnicodeString text;
-            std::string langHint;
+            hb_language_t langHint;
             hb_direction_t overallDirection;
             
             std::vector<ScriptAndLanguageItem> scriptAndLanguageItems;
@@ -46,14 +46,14 @@ namespace chr
             std::vector<TagItem> tagItems;
             
             std::list<TextRun> runs;
-
-            TextLine(const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID)
+            
+            TextLine(hb_language_t langHint = HB_LANGUAGE_INVALID, hb_direction_t overallDirection = HB_DIRECTION_INVALID)
             :
             langHint(langHint),
             overallDirection(overallDirection)
             {}
             
-            TextLine(const std::string &input, const std::string &langHint = "", hb_direction_t overallDirection = HB_DIRECTION_INVALID)
+            TextLine(const std::string &input, hb_language_t langHint = HB_LANGUAGE_INVALID, hb_direction_t overallDirection = HB_DIRECTION_INVALID)
             :
             text(input.data()),
             langHint(langHint),
@@ -64,12 +64,8 @@ namespace chr
             {
                 auto start = text.length();
                 text += input.data();
+                
                 tagItems.emplace_back(start, text.length(), tag);
-            }
-            
-            void addRun(int32_t start, int32_t end, hb_script_t script, const std::string &lang, hb_direction_t direction, int tag)
-            {
-                runs.emplace_back(start, end, script, lang, direction, tag);
             }
         };
     }

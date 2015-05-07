@@ -12,25 +12,23 @@
 
 #include "unicode/unistr.h"
 
-#include <string>
-
 namespace chr
 {
     namespace zf
     {
         struct TextRun
         {
-            int32_t start;
-            int32_t end;
+            int32_t start = 0;
+            int32_t end = 0;
             
-            hb_script_t script;
-            std::string language;
-            hb_direction_t direction;
-            int tag;
+            hb_script_t script = HB_SCRIPT_INVALID;
+            hb_language_t language = HB_LANGUAGE_INVALID;
+            hb_direction_t direction = HB_DIRECTION_INVALID;
+            int tag = -1;
             
             TextRun() = default;
             
-            TextRun(int32_t start, int32_t end, hb_script_t script, const std::string &language, hb_direction_t direction, int tag)
+            TextRun(int32_t start, int32_t end, hb_script_t script, hb_language_t language, hb_direction_t direction, int tag)
             :
             start(start),
             end(end),
@@ -45,12 +43,8 @@ namespace chr
                 hb_buffer_clear_contents(buffer);
                 
                 hb_buffer_set_script(buffer, script);
+                hb_buffer_set_language(buffer, language);
                 hb_buffer_set_direction(buffer, direction);
-                
-                if (!language.empty())
-                {
-                    hb_buffer_set_language(buffer, hb_language_from_string(language.data(), -1));
-                }
                 
                 hb_buffer_add_utf16(buffer, text.getBuffer(), text.length(), start, end - start);
             }
