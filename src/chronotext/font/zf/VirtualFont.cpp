@@ -278,6 +278,11 @@ namespace chr
                 
                 if (run.direction == HB_DIRECTION_RTL)
                 {
+                    /*
+                     * TODO: CHECK IF hb_buffer_reverse CAN BE USED INSTEAD
+                     *
+                     * REFERENCE: mozilla-esr31/gfx/thebes/gfxHarfbuzzShaper
+                     */
                     for (auto it = clusterMap.rbegin(); it != clusterMap.rend(); ++it)
                     {
                         layout->addCluster(move(it->second));

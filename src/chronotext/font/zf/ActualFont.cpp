@@ -15,42 +15,41 @@
 using namespace std;
 using namespace ci;
 
-/*
- See http://www.microsoft.com/typography/otspec/name.htm for a list of some
- possible platform-encoding pairs.  We're interested in 0-3 aka 3-1 - UCS-2.
- Otherwise, fail. If a font has some unicode map, but lacks UCS-2 - it is a
- broken or irrelevant font. What exactly Freetype will select on face load
- (it promises most wide unicode, and if that will be slower that UCS-2 -
- left as an excercise to check.)
- */
-
-static FT_Error force_ucs2_charmap(FT_Face face)
-{
-    for (int i = 0; i < face->num_charmaps; i++)
-    {
-        auto platform_id = face->charmaps[i]->platform_id;
-        auto encoding_id = face->charmaps[i]->encoding_id;
-        
-        if (((platform_id == 0) && (encoding_id == 3)) || ((platform_id == 3) && (encoding_id == 1)))
-        {
-            return FT_Set_Charmap(face, face->charmaps[i]);
-        }
-    }
-    
-    return -1;
-}
-
-static const FT_ULong SPACE_SEPARATORS[] =
-{
-    0x0020, 0x00A0, 0x1680, 0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x202F, 0x205F, 0x3000
-};
-
-static const size_t SPACE_SEPARATORS_COUNT = sizeof(SPACE_SEPARATORS) / sizeof(FT_ULong);
-
 namespace chr
 {
     namespace zf
     {
+        /*
+         See http://www.microsoft.com/typography/otspec/name.htm for a list of some
+         possible platform-encoding pairs.  We're interested in 0-3 aka 3-1 - UCS-2.
+         Otherwise, fail. If a font has some unicode map, but lacks UCS-2 - it is a
+         broken or irrelevant font. What exactly Freetype will select on face load
+         (it promises most wide unicode, and if that will be slower that UCS-2 -
+         left as an excercise to check.)
+         */
+        static FT_Error force_ucs2_charmap(FT_Face face)
+        {
+            for (int i = 0; i < face->num_charmaps; i++)
+            {
+                auto platform_id = face->charmaps[i]->platform_id;
+                auto encoding_id = face->charmaps[i]->encoding_id;
+                
+                if (((platform_id == 0) && (encoding_id == 3)) || ((platform_id == 3) && (encoding_id == 1)))
+                {
+                    return FT_Set_Charmap(face, face->charmaps[i]);
+                }
+            }
+            
+            return -1;
+        }
+        
+        static const vector<FT_ULong> SPACE_SEPARATORS
+        {
+            0x0020, 0x00A0, 0x1680, 0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x202F, 0x205F, 0x3000
+        };
+        
+        // ---
+        
         ActualFont::ActualFont(shared_ptr<FreetypeHelper> ftHelper, const Descriptor &descriptor, float baseSize, bool useMipmap)
         :
         ftHelper(ftHelper),
@@ -109,6 +108,25 @@ namespace chr
                 return "";
             }
         }
+        
+        /*
+         * TODO:
+         *
+         * 1) ENHANCE ActualFont's MEMORY MODEL:
+         *    - STUDY MEMORY-ALLOCATION IN FREETYPE
+         *      - E.G. VIA THE "REPORTING" SYSTEM DESCRIBED IN mozilla-esr31/gfx/thebes/gfxAndroidPlatform.cpp
+         *    - TRY TO FAVOR MEMORY-MAPPING OVER BUFFER LOADING:
+         *      - E.G. ANY NON-COMPRESSED ANDROID "ASSET" CAN BE TURNED INTO A MEMORY-MAP
+         *    - FIND-OUT IF-AND-HOW-MUCH MEMORY IS "WAISTED" WHEN MULTIPLE VERSION OF THE "SAME" FACE ARE USED
+         *      - E.G. WHEN CRISP (I.E. HINTED) TEXT MUST BE RENDERED AT DIFFERENT SIZES
+         *    - ETC.
+         *
+         * 3) STUDY THE FOLLOWING IMPLEMENTATIONS:
+         *    - mozilla-esr31/gfx/skia/trunk/src/ports/SkHarfBuzzFont.cpp
+         *    - mozilla-esr31/gfx/skia/trunk/src/ports/SkFontHost_FreeType.cpp
+         *    - mozilla-esr31/gfx/thebes/gfxHarfbuzzShaper.cpp
+         *    - ETC.
+         */
         
         bool ActualFont::reload()
         {
@@ -199,9 +217,9 @@ namespace chr
                 
                 if (spaceSeparators.empty())
                 {
-                    for (int i = 0; i < SPACE_SEPARATORS_COUNT; i++)
+                    for (auto &separator : SPACE_SEPARATORS)
                     {
-                        hb_codepoint_t codepoint(FT_Get_Char_Index(ftFace, SPACE_SEPARATORS[i]));
+                        hb_codepoint_t codepoint(FT_Get_Char_Index(ftFace, separator));
                         
                         if (codepoint)
                         {

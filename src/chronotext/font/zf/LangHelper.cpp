@@ -23,12 +23,12 @@ namespace chr
         /*
          * GIVING PRIORITY (BY DEFAULT) TO CHINESE OVER JAPANESE
          */
-        static string DEFAULT_LANGUAGES { "en:zh-cn" };
+        static const string DEFAULT_LANGUAGES { "en:zh-cn" };
         
         /*
          * DATA FROM pango-script-lang-table.h
          */
-        static map<string, vector<hb_script_t>> SCRIPTS_FOR_LANGUAGE
+        static const map<string, vector<hb_script_t>> SCRIPTS_FOR_LANGUAGE
         {
             { "aa",     { HB_SCRIPT_LATIN/*62*/ } },
             { "ab",     { HB_SCRIPT_CYRILLIC/*90*/ } },
@@ -272,7 +272,7 @@ namespace chr
         /*
          * DATA FROM pango-language.c
          */
-        static map<hb_script_t, string> SAMPLE_LANGUAGES_FOR_SCRIPT
+        static const map<hb_script_t, string> SAMPLE_LANGUAGES_FOR_SCRIPT
         {
             { HB_SCRIPT_ARABIC, "ar" },
             { HB_SCRIPT_ARMENIAN, "hy" },
