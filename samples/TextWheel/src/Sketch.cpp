@@ -127,7 +127,7 @@ void Sketch::addVersion(const string &lang)
         version += " ";
     }
  
-    auto layout = font->createLineLayout(version, lang);
+    auto layout = font->createLineLayout(version, LangHelper::toHBLang(lang));
     layouts.emplace(lang, unique_ptr<LineLayout>(layout));
     
     // ---
