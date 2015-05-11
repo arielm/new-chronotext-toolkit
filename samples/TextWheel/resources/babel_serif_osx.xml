@@ -7,12 +7,17 @@
     </Set>
     <!-- Arabic -->
     <Set lang="ar">
-        <Ref uri="file:///Library/Fonts/AdobeNaskh-Medium.otf" scale="1.25" />
-        <Ref uri="file:///Library/Fonts/Nadeem.ttf" scale="1.0" /> <!-- FALLBACK FOR OSX 10.7.5 -->
+        <Group>
+            <Ref uri="file:///Library/Fonts/AdobeNaskh-Medium.otf" scale="1.25" />
+            <Ref uri="assets://amiri-regular.ttf" scale="1.0" /> <!-- FOR OSX 10.7 AND OSX 10.10 -->
+        </Group>
     </Set>
     <!-- Chinese (Traditional) -->
     <Set lang="zh-hk:zh-mo:zh-tw">
-        <Ref uri="file:///Library/Fonts/AdobeSongStd-Light.otf" />
+        <Group>
+            <Ref uri="file:///Library/Fonts/AdobeSongStd-Light.otf" />
+            <Ref uri="assets://cwTeXFangSong-zhonly.ttf" scale="1.125" /> <!-- FOR OSX 10.10 -->
+        </Group>
     </Set>
     <!-- Greek (Monotonic) -->
     <Set lang="el">
@@ -20,12 +25,18 @@
     </Set>
     <!-- Hebrew -->
     <Set lang="he">
-        <Ref uri="file:///Library/Fonts/AdobeHebrew-Regular.otf" scale="1.25" />
+        <Group>
+            <Ref uri="file:///Library/Fonts/AdobeHebrew-Regular.otf" scale="1.25" />
+            <Ref uri="assets://FrankRuehlCLM-Medium.ttf" scale="1.17" /> <!-- FOR OSX 10.10 -->
+        </Group>
     </Set>
     <!-- Hindi -->
     <Set lang="hi">
-        <Ref uri="file:///Library/Fonts/AdobeDevanagari-Regular.otf" scale="1.2" />
-        <Ref uri="file:///Library/Fonts/DevanagariMT.ttf" scale="0.85" /> <!-- FALLBACK FOR OSX 10.7.5 -->
+        <Group>
+            <Ref uri="file:///Library/Fonts/AdobeDevanagari-Regular.otf" scale="1.2" />
+            <Ref uri="file:///Library/Fonts/DevanagariMT.ttc" scale="0.85" /> <!-- FOR OSX 10.10 -->
+            <Ref uri="file:///Library/Fonts/DevanagariMT.ttf" scale="0.85" /> <!-- FOR OSX 10.7 -->
+        </Group>
     </Set>
     <!-- Japanese -->
     <Set lang="ja">
@@ -33,7 +44,10 @@
     </Set>
     <!-- Korean -->
     <Set lang="ko">
-        <Ref uri="file:///Library/Fonts/AdobeMyungjoStd-Medium.otf" scale="0.85" />
+        <Group>
+            <Ref uri="file:///Library/Fonts/AdobeMyungjoStd-Medium.otf" scale="0.85" />
+            <Ref uri="assets://JejuMyeongjo-Regular.ttf" scale="1.0" /> <!-- FOR OSX 10.10 -->
+        </Group>
     </Set>
     <!-- Russian -->
     <Set lang="ru">
