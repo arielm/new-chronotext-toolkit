@@ -9,11 +9,6 @@
 #include "chronotext/cocoa/system/MemoryBuffer.h"
 #include "chronotext/Context.h"
 
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-
 using namespace std;
 using namespace ci;
 
@@ -32,21 +27,7 @@ namespace chr
             
             if (inputSource->isFile())
             {
-                auto fd = open(inputSource->getFilePath().c_str(), O_RDONLY);
-                
-                if (fd != -1)
-                {
-                    struct stat stats;
-                    
-                    if ((fstat(fd, &stats) != -1) && (stats.st_size > 0))
-                    {
-                        fileSize = stats.st_size;
-                        fileMap = mmap(0, fileSize, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
-                        locked = (fileMap != MAP_FAILED);
-                    }
-                    
-                    close(fd);
-                }
+                locked = mappedFile.map(inputSource->getFilePath().c_str());
             }
             
             return locked;
@@ -56,19 +37,19 @@ namespace chr
         {
             if (locked)
             {
-                munmap(fileMap, fileSize);
+                mappedFile.unmap();
                 locked = false;
             }
         }
         
         const void* Buffer::data()
         {
-            return locked ? fileMap : nullptr;
+            return mappedFile.data;
         }
         
         size_t Buffer::size()
         {
-            return locked ? fileSize : 0;
+            return mappedFile.size;
         }
     }
 }

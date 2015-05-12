@@ -6,19 +6,6 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-/*
- * TESTED AND DEVELOPED VIA THE TestBed1 PROJECT IN THE chronotext-playgound REPOSITORY:
- *
- * - https://github.com/arielm/chronotext-playground/blob/master/Sketches/TestBed1/src/TestingMemory1.cpp
- * - https://github.com/arielm/chronotext-playground/blob/master/Sketches/TestBed1/src/TestingMemory2.cpp
- *
- *
- * ADDITIONAL PLATFORM-RELATED INFO:
- *
- * - https://github.com/arielm/new-chronotext-toolkit/blob/develop/src/chronotext/cocoa/system/MemoryManager.mm
- * - https://github.com/arielm/new-chronotext-toolkit/blob/develop/src/chronotext/android/system/MemoryManager.cpp
- */
-
 #pragma once
 
 #include "chronotext/system/MemoryInfo.h"
@@ -30,7 +17,7 @@ namespace chr
     namespace memory
     {
         int64_t compare(const Info &before, const Info &after);
-        
+
         class ManagerBase
         {
         public:

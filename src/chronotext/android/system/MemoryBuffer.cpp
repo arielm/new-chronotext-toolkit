@@ -32,7 +32,7 @@ namespace chr
             }
             else
             {
-                // TODO: HANDLE VIA "REGULAR" MEMORY-MAPPING (CF cocoa/system/MemoryBuffer)
+                // TODO: HANDLE VIA posix/system/MappedFile
             }
             
             return locked;

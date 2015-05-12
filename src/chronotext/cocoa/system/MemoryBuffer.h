@@ -17,6 +17,7 @@
 // ---
 
 #include "chronotext/system/MemoryBufferBase.h"
+#include "chronotext/posix/system/MappedFile.h"
 
 namespace chr
 {
@@ -35,8 +36,7 @@ namespace chr
             
         protected:
             bool locked = false;
-            size_t fileSize;
-            void *fileMap;
+            MappedFile mappedFile;
         };
     }
 }

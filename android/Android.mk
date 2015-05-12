@@ -34,6 +34,7 @@ LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Handler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/SuperHandler.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/Task.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/os/TaskManager.cpp
+LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/posix/system/MappedFile.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/quad/QuadMatrix.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/PVRHelper.cpp
 LOCAL_SRC_FILES += $(CHR_SRC)/chronotext/texture/Texture.cpp

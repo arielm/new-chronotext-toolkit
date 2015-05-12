@@ -17,7 +17,6 @@
 // ---
 
 #include "chronotext/system/MemoryBufferBase.h"
-
 #include "chronotext/system/FileHelper.h"
 
 namespace chr
