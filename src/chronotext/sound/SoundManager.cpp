@@ -471,7 +471,7 @@ namespace chr
                 memoryInfo[0] = getMemoryInfo();
             }
 
-            if (request.forceMemoryLoad || !request.inputSource->hasFileName())
+            if (request.forceMemoryLoad || !request.inputSource->isFile())
             {
                 auto buffer = request.inputSource->loadDataSource()->getBuffer();
                 
