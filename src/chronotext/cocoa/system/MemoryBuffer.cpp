@@ -34,14 +34,13 @@ namespace chr
             {
                 auto fd = open(inputSource->getFilePath().c_str(), O_RDONLY);
                 
-                if (fd > -1)
+                if (fd != -1)
                 {
-                    struct stat buf;
-                    fstat(fd, &buf);
+                    struct stat stats;
                     
-                    if (buf.st_size > 0)
+                    if ((fstat(fd, &stats) != -1) && (stats.st_size > 0))
                     {
-                        fileSize = buf.st_size;
+                        fileSize = stats.st_size;
                         fileMap = mmap(0, fileSize, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
                         locked = (fileMap != MAP_FAILED);
                     }
