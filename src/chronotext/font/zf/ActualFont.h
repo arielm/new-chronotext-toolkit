@@ -11,7 +11,7 @@
 #include "chronotext/font/zf/GlyphData.h"
 #include "chronotext/font/zf/FontTexture.h"
 #include "chronotext/quad/QuadMatrix.h"
-#include "chronotext/InputSource.h"
+#include "chronotext/system/MemoryBuffer.h"
 
 #include "hb.h"
 
@@ -118,7 +118,7 @@ namespace chr
 
             bool isSpace(hb_codepoint_t codepoint) const;
             hb_codepoint_t getCodepoint(FT_ULong charCode) const;
-            std::string getFullName() const;
+            const std::string& getFullName() const;
 
         protected:
             friend class FontManager;
@@ -134,11 +134,12 @@ namespace chr
             
             ci::Vec2f scale;
             Metrics metrics;
-            bool loaded = false;
+            std::string fullName;
             
-            ci::Buffer memoryBuffer;
+            MemoryBuffer memoryBuffer;
             FT_Face ftFace = nullptr;
             hb_font_t *hbFont = nullptr;
+            bool loaded = false;
             
             std::map<hb_codepoint_t, std::unique_ptr<Glyph>> glyphs;
             std::vector<std::unique_ptr<FontTexture>> textures;

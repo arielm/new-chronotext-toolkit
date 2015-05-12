@@ -97,16 +97,9 @@ namespace chr
             }
         }
         
-        string ActualFont::getFullName() const
+        const string& ActualFont::getFullName() const
         {
-            if (ftFace)
-            {
-                return string(ftFace->family_name) + " " + ftFace->style_name;
-            }
-            else
-            {
-                return "";
-            }
+            return fullName;
         }
         
         /*
@@ -115,11 +108,8 @@ namespace chr
          * 1) ENHANCE ActualFont's MEMORY MODEL:
          *    - STUDY MEMORY-ALLOCATION IN FREETYPE
          *      - E.G. VIA THE "REPORTING" SYSTEM DESCRIBED IN mozilla-esr31/gfx/thebes/gfxAndroidPlatform.cpp
-         *    - TRY TO FAVOR MEMORY-MAPPING OVER BUFFER LOADING:
-         *      - E.G. ANY NON-COMPRESSED ANDROID "ASSET" CAN BE TURNED INTO A MEMORY-MAP
          *    - FIND-OUT IF-AND-HOW-MUCH MEMORY IS "WAISTED" WHEN MULTIPLE VERSION OF THE "SAME" FACE ARE USED
          *      - E.G. WHEN CRISP (I.E. HINTED) TEXT MUST BE RENDERED AT DIFFERENT SIZES
-         *    - ETC.
          *
          * 3) STUDY THE FOLLOWING IMPLEMENTATIONS:
          *    - mozilla-esr31/gfx/skia/trunk/src/ports/SkHarfBuzzFont.cpp
@@ -132,12 +122,18 @@ namespace chr
         {
             if (!loaded)
             {
-                FT_Error error;
+                FT_Error error = 0;
                 
                 if (descriptor.forceMemoryLoad || !descriptor.inputSource->isFile())
                 {
-                    memoryBuffer = descriptor.inputSource->loadDataSource()->getBuffer();
-                    error = FT_New_Memory_Face(ftHelper->getLib(), (FT_Byte*)memoryBuffer.getData(), memoryBuffer.getDataSize(), descriptor.faceIndex, &ftFace);
+                    if (memoryBuffer.lock(descriptor.inputSource))
+                    {
+                        error = FT_New_Memory_Face(ftHelper->getLib(), (FT_Byte*)memoryBuffer.data(), memoryBuffer.size(), descriptor.faceIndex, &ftFace);
+                    }
+                    else
+                    {
+                        throw EXCEPTION(ActualFont, "UNABLE TO LOAD FONT FROM MEMORY");
+                    }
                 }
                 else
                 {
@@ -154,6 +150,9 @@ namespace chr
                     FT_Done_Face(ftFace); ftFace = nullptr;
                     throw EXCEPTION(ActualFont, "HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
+                
+                loaded = true;
+                fullName = string(ftFace->family_name) + " " + ftFace->style_name;
                 
                 // ---
                 
@@ -214,7 +213,6 @@ namespace chr
                  * FREETYPE FOR SPACE-SEPARATORS ARE SOMEHOW NOT UNICODE VALUES, E.G.
                  * DEPENDING ON THE FONT, THE CODEPOINT FOR A "REGULAR SPACE" CAN BE 2 OR 3 (INSTEAD OF 32)
                  */
-                
                 if (spaceSeparators.empty())
                 {
                     for (auto &separator : SPACE_SEPARATORS)
@@ -230,8 +228,6 @@ namespace chr
                 
                 // ---
                 
-                loaded = true;
-                
                 LOGI_IF(FontManager::LOG_VERBOSE) << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
             }
             
@@ -242,19 +238,22 @@ namespace chr
         {
             if (loaded)
             {
-                loaded = false;
-                
-                LOGI_IF(FontManager::LOG_VERBOSE) << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
-                
                 discardTextures();
-                
-                if (descriptor.forceMemoryLoad)
-                {
-                    memoryBuffer.reset();
-                }
                 
                 hb_font_destroy(hbFont); hbFont = nullptr;
                 FT_Done_Face(ftFace); ftFace = nullptr;
+
+                /*
+                 * NOT MANDATORY, BUT NECESSARY FOR PROPERLY MEASURING MEMORY PAST TO THIS POINT...
+                 */
+                memoryBuffer.unlock();
+
+                // ---
+                
+                LOGI_IF(FontManager::LOG_VERBOSE) << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
+                
+                loaded = false;
+                fullName.clear();
             }
         }
         
