@@ -16,11 +16,6 @@ namespace chr
 {
     namespace memory
     {
-        Buffer::~Buffer()
-        {
-            unlock();
-        }
-        
         bool Buffer::lock(InputSource::Ref inputSource)
         {
             unlock();

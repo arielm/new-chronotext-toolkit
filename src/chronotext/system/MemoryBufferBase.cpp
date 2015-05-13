@@ -6,7 +6,7 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "chronotext/desktop/system/MemoryBuffer.h"
+#include "chronotext/system/MemoryBufferBase.h"
 #include "chronotext/Context.h"
 
 using namespace std;
@@ -16,17 +16,22 @@ namespace chr
 {
     namespace memory
     {
-        bool Buffer::lock(InputSource::Ref inputSource)
+        BufferBase::~BufferBase()
+        {
+            unlock();
+        }
+        
+        bool BufferBase::lock(InputSource::Ref inputSource)
         {
             unlock();
             
             buffer = inputSource->loadDataSource()->getBuffer();
-            locked = buffer.getDataSize() > 0;
+            locked = (buffer.getDataSize() > 0);
             
             return locked;
         }
         
-        void Buffer::unlock()
+        void BufferBase::unlock()
         {
             if (locked)
             {
@@ -35,12 +40,12 @@ namespace chr
             }
         }
         
-        const void* Buffer::data()
+        const void* BufferBase::data()
         {
             return locked ? buffer.getData() : nullptr;
         }
         
-        size_t Buffer::size()
+        size_t BufferBase::size()
         {
             return locked ? buffer.getDataSize() : 0;
         }

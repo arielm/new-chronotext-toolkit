@@ -16,23 +16,32 @@ namespace chr
 {
     namespace memory
     {
-        Buffer::~Buffer()
-        {
-            unlock();
-        }
-        
         bool Buffer::lock(InputSource::Ref inputSource)
         {
             unlock();
             
-            if (!inputSource->isFile())
+            if (inputSource->isFile())
             {
-                asset = AAssetManager_open(FileHelper::getAssetManager(), inputSource->getFilePath().c_str(), AASSET_MODE_STREAMING);
-                locked = asset && !AAsset_isAllocated(asset);
+                // TODO: HANDLE VIA posix/system/MappedFile
             }
             else
             {
-                // TODO: HANDLE VIA posix/system/MappedFile
+                asset = AAssetManager_open(FileHelper::getAssetManager(), inputSource->getFilePath().c_str(), AASSET_MODE_BUFFER);
+                
+                if (asset)
+                {
+                    if (AAsset_isAllocated(asset)) // XXX: NEVER TRUE!
+                    {
+                        AAsset_close(asset);
+                        asset = nullptr;
+                        
+                        locked = BufferBase::lock(inputSource);
+                    }
+                    else
+                    {
+                        locked = true;
+                    }
+                }
             }
             
             return locked;
@@ -40,21 +49,27 @@ namespace chr
         
         void Buffer::unlock()
         {
-            if (locked)
+            if (asset)
             {
                 AAsset_close(asset);
+                asset = nullptr;
+                
                 locked = false;
+            }
+            else
+            {
+                BufferBase::unlock();
             }
         }
         
         const void* Buffer::data()
         {
-            return locked ? AAsset_getBuffer(asset) : nullptr;
+            return asset ? AAsset_getBuffer(asset) : BufferBase::data();
         }
         
         size_t Buffer::size()
         {
-            return locked ? AAsset_getLength(asset) : 0;
+            return asset ? AAsset_getLength(asset) : BufferBase::size();
         }
     }
 }

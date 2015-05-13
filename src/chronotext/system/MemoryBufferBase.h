@@ -10,6 +10,8 @@
 
 #include "chronotext/InputSource.h"
 
+#include "cinder/Buffer.h"
+
 namespace chr
 {
     namespace memory
@@ -17,13 +19,17 @@ namespace chr
         class BufferBase
         {
         public:
-            virtual ~BufferBase() {};
+            virtual ~BufferBase();
             
-            virtual bool lock(InputSource::Ref inputSource) = 0;
-            virtual void unlock() = 0;
+            virtual bool lock(InputSource::Ref inputSource);
+            virtual void unlock();
             
-            virtual const void* data() = 0;
-            virtual size_t size() = 0;
+            virtual const void* data();
+            virtual size_t size();
+            
+        protected:
+            bool locked = false;
+            ci::Buffer buffer;
         };
     }
 }

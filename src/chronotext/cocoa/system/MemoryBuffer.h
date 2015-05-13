@@ -26,8 +26,6 @@ namespace chr
         class Buffer : public BufferBase
         {
         public:
-            ~Buffer() final;
-            
             bool lock(InputSource::Ref inputSource) final;
             void unlock() final;
             
@@ -35,7 +33,6 @@ namespace chr
             size_t size() final;
             
         protected:
-            bool locked = false;
             MappedFile mappedFile;
         };
     }

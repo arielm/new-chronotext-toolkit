@@ -18,7 +18,7 @@
 
 #else
 
-#include "chronotext/desktop/system/MemoryBuffer.h"
+#error UNSUPPORTED PLATFORM
 
 #endif
 
