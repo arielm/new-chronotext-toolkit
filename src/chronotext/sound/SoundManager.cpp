@@ -473,14 +473,18 @@ namespace chr
 
             if (request.forceMemoryLoad || !request.inputSource->isFile())
             {
-                auto buffer = request.inputSource->loadDataSource()->getBuffer();
+                MemoryBuffer buffer;
+                buffer.lock(request.inputSource);
                 
                 FMOD_CREATESOUNDEXINFO exinfo;
                 memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
                 exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
-                exinfo.length = (unsigned int)buffer.getDataSize();
+                exinfo.length = static_cast<unsigned int>(buffer.size());
                 
-                result = system->createSound(static_cast<const char*>(buffer.getData()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
+                /*
+                 * NO NEED TO PRESERVE buffer PAST THIS POINT: DATA WILL BE EITHER COPIED OR DECOMPRESSED BY FMOD
+                 */
+                result = system->createSound(static_cast<const char*>(buffer.data()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
             }
             else
             {

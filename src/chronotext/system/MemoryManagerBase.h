@@ -9,6 +9,7 @@
 #pragma once
 
 #include "chronotext/system/MemoryInfo.h"
+#include "chronotext/system/MemoryBuffer.h"
 
 namespace chr
 {
