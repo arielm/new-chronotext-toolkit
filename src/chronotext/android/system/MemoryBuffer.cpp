@@ -26,21 +26,11 @@ namespace chr
             }
             else
             {
-                asset = AAssetManager_open(FileHelper::getAssetManager(), inputSource->getFilePath().c_str(), AASSET_MODE_BUFFER);
+                asset = FileHelper::openAsset(*inputSource, AASSET_MODE_BUFFER);
                 
                 if (asset)
                 {
-                    if (AAsset_isAllocated(asset)) // XXX: NEVER TRUE!
-                    {
-                        AAsset_close(asset);
-                        asset = nullptr;
-                        
-                        locked = BufferBase::lock(inputSource);
-                    }
-                    else
-                    {
-                        locked = true;
-                    }
+                    locked = true;
                 }
             }
             
@@ -56,20 +46,16 @@ namespace chr
                 
                 locked = false;
             }
-            else
-            {
-                BufferBase::unlock();
-            }
         }
         
         const void* Buffer::data()
         {
-            return asset ? AAsset_getBuffer(asset) : BufferBase::data();
+            return asset ? AAsset_getBuffer(asset) : nullptr;
         }
         
         size_t Buffer::size()
         {
-            return asset ? AAsset_getLength(asset) : BufferBase::size();
+            return asset ? AAsset_getLength(asset) : 0;
         }
     }
 }

@@ -106,5 +106,10 @@ namespace chr
         {
             return intern::apkPath;
         }
+        
+        AAsset* Helper::openAsset(const InputSource &inputSource, int mode)
+        {
+            return AAssetManager_open(intern::assetManager, inputSource.getFilePath().c_str(), mode);
+        }
     }
 }

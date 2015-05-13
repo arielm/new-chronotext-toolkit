@@ -18,6 +18,7 @@
 
 #include "chronotext/system/FileHelperBase.h"
 #include "chronotext/system/SystemInfo.h"
+#include "chronotext/InputSource.h"
 
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
@@ -33,9 +34,12 @@ namespace chr
             static void shutdown();
 
             static AAssetManager* getAssetManager();
+            
             static ci::fs::path getInternalDataPath();
             static ci::fs::path getExternalDataPath();
             static ci::fs::path getApkPath();
+            
+            static AAsset* openAsset(const InputSource &inputSource, int mode = AASSET_MODE_UNKNOWN);
         };
     }
 }

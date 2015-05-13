@@ -197,22 +197,21 @@ namespace chr
                 case TYPE_RESOURCE:
                 {
 #if defined(CINDER_ANDROID)
-                    auto filename = getFilePath().c_str();
-                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), filename, AASSET_MODE_STREAMING);
+                    auto asset = FileHelper::openAsset(*this, AASSET_MODE_RANDOM);
                     
                     if (asset)
                     {
                         AAsset_close(asset);
-                        return DataSourceAsset::create(FileHelper::getAssetManager(), filename);
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), getFilePath().c_str()); // XXX: WON'T THROW IF ASSET CAN'T BE OPENED
                     }
                     else
                     {
                         throw EXCEPTION(InputSource, "RESOURCE NOT FOUND: " + filePathHint);
                     }
 #else
-                    if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                    if (fs::exists(filePath))
                     {
-                        return DataSourcePath::create(filePath);
+                        return DataSourcePath::create(filePath); // XXX: WON'T THROW IF FILE DOESN'T EXIST
                     }
                     else
                     {
@@ -235,9 +234,9 @@ namespace chr
                     
                 case TYPE_FILE:
                 {
-                    if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                    if (fs::exists(filePath))
                     {
-                        return DataSourcePath::create(filePath);
+                        return DataSourcePath::create(filePath); // XXX: WON'T THROW IF FILE DOESN'T EXIST
                     }
                     else
                     {
@@ -248,22 +247,21 @@ namespace chr
                 case TYPE_ASSET:
                 {
 #if defined(CINDER_ANDROID)
-                    auto filename = getFilePath().c_str();
-                    auto asset = AAssetManager_open(FileHelper::getAssetManager(), filename, AASSET_MODE_STREAMING);
+                    auto asset = FileHelper::openAsset(*this, AASSET_MODE_RANDOM);
                     
                     if (asset)
                     {
                         AAsset_close(asset);
-                        return DataSourceAsset::create(FileHelper::getAssetManager(), filename);
+                        return DataSourceAsset::create(FileHelper::getAssetManager(), getFilePath().c_str()); // XXX: WON'T THROW IF ASSET CAN'T BE OPENED
                     }
                     else
                     {
                         throw EXCEPTION(InputSource, "ASSET NOT FOUND: " + filePathHint);
                     }
 #else
-                    if (fs::exists(filePath)) // NECESSARY, BECAUSE THE FOLLOWING WON'T THROW IF FILE DOESN'T EXIST
+                    if (fs::exists(filePath))
                     {
-                        return DataSourcePath::create(filePath);
+                        return DataSourcePath::create(filePath); // XXX: WON'T THROW IF FILE DOESN'T EXIST
                     }
                     else
                     {
