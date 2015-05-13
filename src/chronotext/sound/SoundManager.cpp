@@ -458,38 +458,40 @@ namespace chr
     
     FMOD::Sound* SoundManager::loadSound(FMOD::System *system, const Effect::Request &request)
     {
-        FMOD::Sound *sound = nullptr;
-
         int currentalloced1;
         int maxalloced1;
-        FMOD_RESULT result = FMOD::Memory_GetStats(&currentalloced1, &maxalloced1);
+        FMOD::Memory_GetStats(&currentalloced1, &maxalloced1);
         
-        if (!result)
+        if (SoundManager::PROBE_MEMORY)
         {
-            if (SoundManager::PROBE_MEMORY)
-            {
-                memoryInfo[0] = getMemoryInfo();
-            }
+            memoryInfo[0] = getMemoryInfo();
+        }
 
-            if (request.forceMemoryLoad || !request.inputSource->isFile())
+        // ---
+        
+        FMOD::Sound *sound = nullptr;
+        FMOD_RESULT result = FMOD_ERR_FILE_BAD;
+
+        if (request.forceMemoryLoad || !request.inputSource->isFile())
+        {
+            MemoryBuffer buffer;
+            
+            if (buffer.lock(request.inputSource))
             {
-                MemoryBuffer buffer;
-                buffer.lock(request.inputSource);
-                
                 FMOD_CREATESOUNDEXINFO exinfo;
                 memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
                 exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
                 exinfo.length = static_cast<unsigned int>(buffer.size());
                 
                 /*
-                 * NO NEED TO PRESERVE buffer PAST THIS POINT: DATA WILL BE EITHER COPIED OR DECOMPRESSED BY FMOD
+                 * NO NEED TO PRESERVE buffer PAST THIS POINT (DATA WILL EITHER BE COPIED OR DECOMPRESSED BY FMOD)
                  */
                 result = system->createSound(static_cast<const char*>(buffer.data()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
             }
-            else
-            {
-                result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
-            }
+        }
+        else
+        {
+            result = system->createSound(request.inputSource->getFilePath().c_str(), FMOD_DEFAULT, nullptr, &sound);
         }
         
         if (result)
