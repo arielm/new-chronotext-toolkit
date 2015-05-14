@@ -26,6 +26,7 @@ const float TEXT_SIZE = 20;
 void Sketch::setup()
 {
     FontManager::LOG_VERBOSE = true;
+    FontManager::PROBE_MEMORY = true;
     
     fontManager.loadConfig(InputSource::getResource("font-config.xml"));
     

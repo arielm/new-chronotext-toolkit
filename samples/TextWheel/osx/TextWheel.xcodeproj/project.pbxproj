@@ -55,6 +55,9 @@
 		A8A8841018C8DB8800BC0BDB /* es.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840D18C8DB8800BC0BDB /* es.txt */; };
 		A8A8841118C8DB8800BC0BDB /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = A8A8840E18C8DB8800BC0BDB /* en.txt */; };
 		A8A8841318C9329B00BC0BDB /* font-config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8A8841218C9329B00BC0BDB /* font-config.xml */; };
+		A8C7CA4E1B0422E70057D338 /* MemoryBufferBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8C7CA4C1B0422E70057D338 /* MemoryBufferBase.cpp */; };
+		A8C7CA511B0422FB0057D338 /* MemoryBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8C7CA4F1B0422FB0057D338 /* MemoryBuffer.cpp */; };
+		A8C7CA561B0423500057D338 /* MappedFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8C7CA541B0423500057D338 /* MappedFile.cpp */; };
 		A8D9473A1A88077A007FB546 /* CinderDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8D947311A88077A007FB546 /* CinderDelegate.mm */; };
 		A8D9473D1A88077A007FB546 /* NSView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D947381A88077A007FB546 /* NSView+StringTag.m */; };
 		A8F595641A07784800877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595631A07784800877FB2 /* Log.cpp */; };
@@ -183,6 +186,13 @@
 		A8A8840D18C8DB8800BC0BDB /* es.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = es.txt; path = ../resources/es.txt; sourceTree = "<group>"; };
 		A8A8840E18C8DB8800BC0BDB /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = en.txt; path = ../resources/en.txt; sourceTree = "<group>"; };
 		A8A8841218C9329B00BC0BDB /* font-config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "font-config.xml"; path = "../resources/font-config.xml"; sourceTree = "<group>"; };
+		A8C7CA4B1B0422E70057D338 /* MemoryBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryBuffer.h; sourceTree = "<group>"; };
+		A8C7CA4C1B0422E70057D338 /* MemoryBufferBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryBufferBase.cpp; sourceTree = "<group>"; };
+		A8C7CA4D1B0422E70057D338 /* MemoryBufferBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryBufferBase.h; sourceTree = "<group>"; };
+		A8C7CA4F1B0422FB0057D338 /* MemoryBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryBuffer.cpp; sourceTree = "<group>"; };
+		A8C7CA501B0422FB0057D338 /* MemoryBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryBuffer.h; sourceTree = "<group>"; };
+		A8C7CA541B0423500057D338 /* MappedFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MappedFile.cpp; sourceTree = "<group>"; };
+		A8C7CA551B0423500057D338 /* MappedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MappedFile.h; sourceTree = "<group>"; };
 		A8D947301A88077A007FB546 /* CinderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderDelegate.h; sourceTree = "<group>"; };
 		A8D947311A88077A007FB546 /* CinderDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CinderDelegate.mm; sourceTree = "<group>"; };
 		A8D947371A88077A007FB546 /* NSView+StringTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+StringTag.h"; sourceTree = "<group>"; };
@@ -458,6 +468,8 @@
 				A8702B271A5B456C00EF9E9E /* FileHelper.mm */,
 				A85977761A2FD6400080C906 /* MemoryManager.h */,
 				A85977771A2FD6400080C906 /* MemoryManager.mm */,
+				A8C7CA501B0422FB0057D338 /* MemoryBuffer.h */,
+				A8C7CA4F1B0422FB0057D338 /* MemoryBuffer.cpp */,
 			);
 			path = system;
 			sourceTree = "<group>";
@@ -517,12 +529,30 @@
 				A82986FC18BD00C300934642 /* os */,
 				A8D9472C1A88077A007FB546 /* osx */,
 				A867AB84194B9AEF008EF66E /* quad */,
+				A8C7CA521B0423500057D338 /* posix */,
 				A8F9978419FA961900F08369 /* system */,
 				A822636E18BF54BC00D57C8C /* time */,
 				A82C90F416E00B3B00FF519C /* utils */,
 			);
 			name = chronotext;
 			path = ../../../src/chronotext;
+			sourceTree = "<group>";
+		};
+		A8C7CA521B0423500057D338 /* posix */ = {
+			isa = PBXGroup;
+			children = (
+				A8C7CA531B0423500057D338 /* system */,
+			);
+			path = posix;
+			sourceTree = "<group>";
+		};
+		A8C7CA531B0423500057D338 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A8C7CA541B0423500057D338 /* MappedFile.cpp */,
+				A8C7CA551B0423500057D338 /* MappedFile.h */,
+			);
+			path = system;
 			sourceTree = "<group>";
 		};
 		A8D9472C1A88077A007FB546 /* osx */ = {
@@ -573,6 +603,9 @@
 				A8702B1F1A5B455E00EF9E9E /* SystemManager.h */,
 				A8702B201A5B455E00EF9E9E /* SystemManagerBase.cpp */,
 				A8702B211A5B455E00EF9E9E /* SystemManagerBase.h */,
+				A8C7CA4B1B0422E70057D338 /* MemoryBuffer.h */,
+				A8C7CA4D1B0422E70057D338 /* MemoryBufferBase.h */,
+				A8C7CA4C1B0422E70057D338 /* MemoryBufferBase.cpp */,
 			);
 			path = system;
 			sourceTree = "<group>";
@@ -688,6 +721,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A859777F1A2FD6400080C906 /* MemoryManager.mm in Sources */,
+				A8C7CA511B0422FB0057D338 /* MemoryBuffer.cpp in Sources */,
 				A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */,
 				A8F9FC4D18C5683B00C48245 /* FontSequence.cpp in Sources */,
 				A8702B251A5B455E00EF9E9E /* SystemManagerBase.cpp in Sources */,
@@ -716,8 +750,10 @@
 				A8147D9B1A977B6C00885D67 /* Application.cpp in Sources */,
 				A8702B221A5B455E00EF9E9E /* DisplayHelperBase.cpp in Sources */,
 				A8F9FC5318C5683B00C48245 /* TextItemizer.cpp in Sources */,
+				A8C7CA561B0423500057D338 /* MappedFile.cpp in Sources */,
 				A8F9FC5418C5683B00C48245 /* VirtualFont.cpp in Sources */,
 				A85977441A2FC0E50080C906 /* main.cpp in Sources */,
+				A8C7CA4E1B0422E70057D338 /* MemoryBufferBase.cpp in Sources */,
 				A8F595641A07784800877FB2 /* Log.cpp in Sources */,
 				A8147D9E1A977BC400885D67 /* CinderBridge.mm in Sources */,
 				A859776D1A2FC1D40080C906 /* TaskManager.cpp in Sources */,

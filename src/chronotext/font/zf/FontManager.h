@@ -26,6 +26,9 @@ namespace chr
         public:
             static std::atomic<bool> LOG_VERBOSE;
             static std::atomic<bool> LOG_WARNING;
+            static std::atomic<bool> PROBE_MEMORY;
+            
+            // ---
 
             std::shared_ptr<FreetypeHelper> ftHelper; // THE UNDERLYING FT_Library WILL BE DESTROYED AFTER ALL THE ActualFont INSTANCES
             std::shared_ptr<LangHelper> langHelper;

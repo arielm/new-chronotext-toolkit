@@ -12,6 +12,7 @@
 #include "chronotext/font/zf/FontTexture.h"
 #include "chronotext/quad/QuadMatrix.h"
 #include "chronotext/system/MemoryBuffer.h"
+#include "chronotext/system/MemoryInfo.h"
 
 #include "hb.h"
 

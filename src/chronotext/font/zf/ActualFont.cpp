@@ -8,7 +8,7 @@
 
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/FontManager.h"
-#include "chronotext/utils/Utils.h"
+#include "chronotext/Context.h"
 
 #include "hb-ft.h"
 
@@ -122,13 +122,22 @@ namespace chr
         {
             if (!loaded)
             {
+                MemoryInfo memoryInfo[3];
+
+                if (FontManager::PROBE_MEMORY)
+                {
+                    memoryInfo[0] = getMemoryInfo();
+                }
+                
+                // ---
+                
                 FT_Error error = 0;
                 
                 if (descriptor.forceMemoryLoad || !descriptor.inputSource->isFile())
                 {
                     if (memoryBuffer.lock(descriptor.inputSource))
                     {
-                        error = FT_New_Memory_Face(ftHelper->getLib(), (FT_Byte*)memoryBuffer.data(), memoryBuffer.size(), descriptor.faceIndex, &ftFace);
+                        error = FT_New_Memory_Face(ftHelper->getLib(), static_cast<const FT_Byte*>(memoryBuffer.data()), memoryBuffer.size(), descriptor.faceIndex, &ftFace);
                     }
                     else
                     {
@@ -151,9 +160,14 @@ namespace chr
                     throw EXCEPTION(ActualFont, "HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
                 
+                if (FontManager::PROBE_MEMORY)
+                {
+                    memoryInfo[1] = getMemoryInfo();
+                }
+
                 loaded = true;
                 fullName = string(ftFace->family_name) + " " + ftFace->style_name;
-                
+
                 // ---
                 
                 /*
@@ -183,6 +197,11 @@ namespace chr
                  * THIS MUST TAKE PLACE AFTER ftFace IS PROPERLY SCALED AND TRANSFORMED
                  */
                 hbFont = hb_ft_font_create(ftFace, nullptr);
+                
+                if (FontManager::PROBE_MEMORY)
+                {
+                    memoryInfo[2] = getMemoryInfo();
+                }
                 
                 // ---
                 
@@ -228,7 +247,25 @@ namespace chr
                 
                 // ---
                 
-                LOGI_IF(FontManager::LOG_VERBOSE) << "LOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
+                stringstream memoryStats;
+                
+                if (FontManager::PROBE_MEMORY)
+                {
+                    auto delta1 = memory::compare(memoryInfo[0], memoryInfo[1]);
+                    auto delta2 = memory::compare(memoryInfo[1], memoryInfo[2]);
+                    
+                    memoryStats << " | " <<
+                    utils::format::bytes(delta1) << ", " <<
+                    utils::format::bytes(delta2) << " " <<
+                    memoryInfo[2];
+                }
+                
+                LOGI_IF(FontManager::LOG_VERBOSE) <<
+                "LOADING ActualFont: " <<
+                getFullName() << " " <<
+                baseSize << (useMipmap ? " [M]" : "") <<
+                memoryStats.str() <<
+                endl;
             }
             
             return loaded;
@@ -238,19 +275,72 @@ namespace chr
         {
             if (loaded)
             {
+                MemoryInfo memoryInfo[4];
+
+                if (FontManager::PROBE_MEMORY)
+                {
+                    memoryInfo[0] = getMemoryInfo();
+                }
+                
+                auto memoryUsage = getTextureMemoryUsage();
+                
+                // ---
+                
                 discardTextures();
                 
-                hb_font_destroy(hbFont); hbFont = nullptr;
-                FT_Done_Face(ftFace); ftFace = nullptr;
+                if (FontManager::PROBE_MEMORY)
+                {
+                    memoryInfo[1] = getMemoryInfo();
+                }
+                
+                // ---
+                
+                hb_font_destroy(hbFont);
+                hbFont = nullptr;
 
-                /*
-                 * NOT MANDATORY, BUT NECESSARY FOR PROPERLY MEASURING MEMORY PAST TO THIS POINT...
-                 */
-                memoryBuffer.unlock();
+                if (FontManager::PROBE_MEMORY)
+                {
+                    memoryInfo[2] = getMemoryInfo();
+                }
 
                 // ---
                 
-                LOGI_IF(FontManager::LOG_VERBOSE) << "UNLOADING ActualFont: " << getFullName() << " " << baseSize << (useMipmap ? " [M]" : "") << endl;
+                FT_Done_Face(ftFace);
+                ftFace = nullptr;
+                
+                memoryBuffer.unlock();
+                
+                if (FontManager::PROBE_MEMORY)
+                {
+                    memoryInfo[3] = getMemoryInfo();
+                }
+
+                // ---
+                
+                stringstream memoryStats;
+                
+                if (FontManager::PROBE_MEMORY)
+                {
+                    auto delta1 = memory::compare(memoryInfo[0], memoryInfo[1]);
+                    auto delta2 = memory::compare(memoryInfo[1], memoryInfo[2]);
+                    auto delta3 = memory::compare(memoryInfo[2], memoryInfo[3]);
+                    
+                    memoryStats << " | " <<
+                    utils::format::bytes(memoryUsage) << ", " <<
+                    utils::format::bytes(delta1) << ", " <<
+                    utils::format::bytes(delta2) << ", " <<
+                    utils::format::bytes(delta3) << " " <<
+                    memoryInfo[3];
+                }
+                
+                LOGI_IF(FontManager::LOG_VERBOSE) <<
+                "UNLOADING ActualFont: " <<
+                getFullName() << " " <<
+                baseSize << (useMipmap ? " [M]" : "") <<
+                memoryStats.str() <<
+                endl;
+                
+                // ---
                 
                 loaded = false;
                 fullName.clear();

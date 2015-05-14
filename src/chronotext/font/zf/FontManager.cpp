@@ -20,7 +20,10 @@ namespace chr
     {
         atomic<bool> FontManager::LOG_VERBOSE (false);
         atomic<bool> FontManager::LOG_WARNING (true);
-
+        atomic<bool> FontManager::PROBE_MEMORY (false);
+        
+        // ---
+        
         FontManager::FontManager()
         :
         ftHelper(make_shared<FreetypeHelper>()),

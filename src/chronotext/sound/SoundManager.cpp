@@ -470,7 +470,7 @@ namespace chr
         // ---
         
         FMOD::Sound *sound = nullptr;
-        FMOD_RESULT result = FMOD_ERR_FILE_BAD;
+        FMOD_RESULT result = FMOD_OK;
 
         if (request.forceMemoryLoad || !request.inputSource->isFile())
         {
@@ -487,6 +487,10 @@ namespace chr
                  * NO NEED TO PRESERVE buffer PAST THIS POINT (DATA WILL EITHER BE COPIED OR DECOMPRESSED BY FMOD)
                  */
                 result = system->createSound(static_cast<const char*>(buffer.data()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
+            }
+            else
+            {
+                throw EXCEPTION(SoundManager, "UNABLE TO LOAD SOUND FROM MEMORY");
             }
         }
         else

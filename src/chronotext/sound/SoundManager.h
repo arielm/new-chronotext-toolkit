@@ -209,6 +209,10 @@ namespace chr
 
         // ---
         
+        /*
+         * TODO: CONSIDER MOVING THE FOLLOWING TO A SEPARATE STATIC-HELPER (SIMILAR TO texture/TextureHelper)
+         */
+        
         struct Record
         {
             int64_t memoryUsage;

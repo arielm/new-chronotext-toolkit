@@ -121,7 +121,6 @@ namespace chr
             "EFFECT DISCARDED: " <<
             uniqueId <<
             memoryStats.str() <<
-            
             endl;
         }
     }
