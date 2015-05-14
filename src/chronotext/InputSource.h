@@ -76,8 +76,8 @@ namespace chr
         
         // ---
         
-        ci::DataSourceRef loadDataSource(); // CAN THROW
-        InputSource::Ref getSubSource(const ci::fs::path &subPath); // CAN THROW
+        ci::DataSourceRef loadDataSource() const; // CAN THROW
+        InputSource::Ref getSubSource(const ci::fs::path &subPath) const; // CAN THROW
 
         /*
          * WILL RETURN true:

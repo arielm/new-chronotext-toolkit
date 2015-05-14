@@ -16,13 +16,13 @@ namespace chr
 {
     namespace memory
     {
-        bool Buffer::lock(InputSource::Ref inputSource)
+        bool Buffer::lock(const InputSource &inputSource)
         {
             unlock();
             
-            if (inputSource->isFile())
+            if (inputSource.isFile())
             {
-                locked = mappedFile.map(inputSource->getFilePath().c_str());
+                locked = mappedFile.map(inputSource.getFilePath().c_str());
             }
             
             return locked;

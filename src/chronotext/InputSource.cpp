@@ -188,7 +188,7 @@ namespace chr
         return InputSource::getFileInDocuments(relativePath)->loadDataSource();
     }
     
-    DataSourceRef InputSource::loadDataSource()
+    DataSourceRef InputSource::loadDataSource() const
     {
         if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
         {
@@ -275,7 +275,7 @@ namespace chr
         throw EXCEPTION(InputSource, "INVALID INPUT-SOURCE");
     }
     
-    InputSource::Ref InputSource::getSubSource(const fs::path &subPath)
+    InputSource::Ref InputSource::getSubSource(const fs::path &subPath) const
     {
         if (this) // EXTRA-PROTECTION AGAINST NON-INITIALIZED InputSource::Refs
         {

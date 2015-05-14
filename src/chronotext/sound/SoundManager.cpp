@@ -476,7 +476,7 @@ namespace chr
         {
             MemoryBuffer buffer;
             
-            if (buffer.lock(request.inputSource))
+            if (buffer.lock(*request.inputSource))
             {
                 FMOD_CREATESOUNDEXINFO exinfo;
                 memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));

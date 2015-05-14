@@ -21,11 +21,11 @@ namespace chr
             unlock();
         }
         
-        bool BufferBase::lock(InputSource::Ref inputSource)
+        bool BufferBase::lock(const InputSource &inputSource)
         {
             unlock();
             
-            buffer = inputSource->loadDataSource()->getBuffer();
+            buffer = inputSource.loadDataSource()->getBuffer();
             locked = (buffer.getDataSize() > 0);
             
             return locked;

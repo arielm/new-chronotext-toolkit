@@ -26,7 +26,7 @@ namespace chr
         class Buffer : public BufferBase
         {
         public:
-            bool lock(InputSource::Ref inputSource) final;
+            bool lock(const InputSource &inputSource) final;
             void unlock() final;
             
             const void* data() final;

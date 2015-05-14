@@ -21,7 +21,7 @@ namespace chr
         public:
             virtual ~BufferBase();
             
-            virtual bool lock(InputSource::Ref inputSource);
+            virtual bool lock(const InputSource &inputSource);
             virtual void unlock();
             
             virtual const void* data();

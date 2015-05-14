@@ -16,17 +16,17 @@ namespace chr
 {
     namespace memory
     {
-        bool Buffer::lock(InputSource::Ref inputSource)
+        bool Buffer::lock(const InputSource &inputSource)
         {
             unlock();
             
-            if (inputSource->isFile())
+            if (inputSource.isFile())
             {
                 // TODO: HANDLE VIA posix/system/MappedFile
             }
             else
             {
-                asset = FileHelper::openAsset(*inputSource, AASSET_MODE_BUFFER);
+                asset = FileHelper::openAsset(inputSource, AASSET_MODE_BUFFER);
                 
                 if (asset)
                 {

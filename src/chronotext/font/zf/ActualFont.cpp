@@ -108,7 +108,7 @@ namespace chr
          * 1) ENHANCE ActualFont's MEMORY MODEL:
          *    - STUDY MEMORY-ALLOCATION IN FREETYPE
          *      - E.G. VIA THE "REPORTING" SYSTEM DESCRIBED IN mozilla-esr31/gfx/thebes/gfxAndroidPlatform.cpp
-         *    - FIND-OUT IF-AND-HOW-MUCH MEMORY IS "WAISTED" WHEN MULTIPLE VERSION OF THE "SAME" FACE ARE USED
+         *    - FIND-OUT IF-AND-HOW-MUCH MEMORY IS "WAISTED" WHEN MULTIPLE VERSIONS OF THE "SAME" FACE ARE USED
          *      - E.G. WHEN CRISP (I.E. HINTED) TEXT MUST BE RENDERED AT DIFFERENT SIZES
          *
          * 3) STUDY THE FOLLOWING IMPLEMENTATIONS:
@@ -135,7 +135,7 @@ namespace chr
                 
                 if (descriptor.forceMemoryLoad || !descriptor.inputSource->isFile())
                 {
-                    if (memoryBuffer.lock(descriptor.inputSource))
+                    if (memoryBuffer.lock(*descriptor.inputSource))
                     {
                         error = FT_New_Memory_Face(ftHelper->getLib(), static_cast<const FT_Byte*>(memoryBuffer.data()), memoryBuffer.size(), descriptor.faceIndex, &ftFace);
                     }
@@ -156,7 +156,11 @@ namespace chr
                 
                 if (force_ucs2_charmap(ftFace))
                 {
-                    FT_Done_Face(ftFace); ftFace = nullptr;
+                    FT_Done_Face(ftFace);
+                    ftFace = nullptr;
+                    
+                    memoryBuffer.unlock();
+                    
                     throw EXCEPTION(ActualFont, "HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
                 
@@ -214,7 +218,7 @@ namespace chr
                 
                 //
                 
-                auto os2 = (TT_OS2*)FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2);
+                auto os2 = static_cast<TT_OS2*>(FT_Get_Sfnt_Table(ftFace, ft_sfnt_os2));
                 
                 if (os2 && (os2->version != 0xFFFF) && (os2->yStrikeoutPosition != 0))
                 {
