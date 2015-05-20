@@ -10,14 +10,14 @@
 
 #include "rapidxml/rapidxml_print.hpp"
 
-#include "boost/date_time/local_time/local_time.hpp"
+#if defined(CINDER_ANDROID)
+#   include "boost/date_time/local_time/local_time.hpp" // TODO IN FUTURE ANDROID REWORK: REMOVE DEPENDENCY ON boost/date_time
+#else
+#   include <chrono>
+#endif
 
 using namespace std;
 using namespace ci;
-
-using namespace boost::gregorian;
-using namespace boost::local_time;
-using namespace boost::posix_time;
 
 namespace chr
 {
@@ -126,11 +126,21 @@ namespace chr
         {
             uint64_t millisSinceEpoch()
             {
-                ptime time_t_epoch(date(1970, 1, 1));
-                ptime now = microsec_clock::local_time();
-                time_duration diff = now - time_t_epoch;
+#if defined(CINDER_ANDROID)
+                using namespace boost::gregorian;
+                using namespace boost::local_time;
+                using namespace boost::posix_time;
                 
+                auto now = microsec_clock::local_time();
+                auto diff = now - ptime(date(1970, 1, 1));
                 return diff.total_milliseconds();
+#else
+                using namespace chrono;
+                
+                auto now = system_clock::now();
+                auto diff = now.time_since_epoch();
+                return duration_cast<milliseconds>(diff).count();
+#endif
             }
         }
         
