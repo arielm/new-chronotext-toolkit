@@ -19,11 +19,7 @@ namespace chr
 {
     void Task::sleep(double seconds)
     {
-#if defined(CINDER_ANDROID)
-        boost::this_thread::sleep_for(boost::chrono::duration<double, boost::chrono::seconds::period>(seconds)); // XXX: A CURRENT LIMITATION OF SAFETY-DANK'S ANDROID PORT
-#else
         this_thread::sleep_for(chrono::duration<double, chrono::seconds::period>(seconds));
-#endif
     }
     
     Task::~Task()
