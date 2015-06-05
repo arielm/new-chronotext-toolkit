@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -10,19 +10,19 @@
 #import "chronotext/ios/cinder/CinderBridge.h"
 #import "chronotext/cocoa/utils/Utils.h"
 
-NSString* kGLViewControllerPropertyRenderingAPI = @"kGLViewControllerPropertyRenderingAPI";
-NSString* kGLViewControllerPropertyPreferredFramesPerSecond = @"kGLViewControllerPropertyPreferredFramesPerSecond";
-NSString* kGLViewControllerPropertyMultipleTouchEnabled = @"kGLViewControllerPropertyMultipleTouchEnabled";
-NSString* kGLViewControllerPropertyInterfaceOrientationMask = @"kGLViewControllerPropertyInterfaceOrientationMask";
-NSString* kGLViewControllerPropertyColorFormat = @"kGLViewControllerPropertyColorFormat";
-NSString* kGLViewControllerPropertyDepthFormat = @"kGLViewControllerPropertyDepthFormat";
-NSString* kGLViewControllerPropertyStencilFormat = @"kGLViewControllerPropertyStencilFormat";
-NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMultisample";
+NSString* GLViewControllerRenderingAPIKey = @"GLViewControllerRenderingAPIKey";
+NSString* GLViewControllerPreferredFramesPerSecondKey = @"GLViewControllerPreferredFramesPerSecondKey";
+NSString* GLViewControllerMultipleTouchEnabledKey = @"GLViewControllerMultipleTouchEnabledKey";
+NSString* GLViewControllerInterfaceOrientationMaskKey = @"GLViewControllerInterfaceOrientationMaskKey";
+NSString* GLViewControllerColorFormatKey = @"GLViewControllerColorFormatKey";
+NSString* GLViewControllerDepthFormatKey = @"GLViewControllerDepthFormatKey";
+NSString* GLViewControllerStencilFormatKey = @"GLViewControllerStencilFormatKey";
+NSString* GLViewControllerMultisampleKey = @"GLViewControllerMultisampleKey";
 
 @interface GLViewController ()
 {
     NSMutableDictionary *properties;
-    int interfaceOrientationMask;
+    NSUInteger interfaceOrientationMask;
 
     BOOL started;
     BOOL appeared;
@@ -58,16 +58,17 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
 
         // ---
         
-        NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
-            [NSNumber numberWithInt:60], kGLViewControllerPropertyPreferredFramesPerSecond,
-            [NSNumber numberWithBool:YES], kGLViewControllerPropertyMultipleTouchEnabled,
-            [NSNumber numberWithInt:UIInterfaceOrientationMaskPortrait], kGLViewControllerPropertyInterfaceOrientationMask,
-            [NSNumber numberWithInt:GLKViewDrawableColorFormatRGBA8888], kGLViewControllerPropertyColorFormat,
-            [NSNumber numberWithInt:GLKViewDrawableDepthFormat24], kGLViewControllerPropertyDepthFormat,
-            [NSNumber numberWithInt:GLKViewDrawableStencilFormatNone], kGLViewControllerPropertyStencilFormat,
-            [NSNumber numberWithInt:GLKViewDrawableMultisampleNone], kGLViewControllerPropertyMultisample,
-            nil];
+        NSDictionary *defaults =
+        @{
+          GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES1),
+          GLViewControllerPreferredFramesPerSecondKey: @60,
+          GLViewControllerMultipleTouchEnabledKey: @YES,
+          GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskPortrait),
+          GLViewControllerColorFormatKey: @(GLKViewDrawableColorFormatRGBA8888),
+          GLViewControllerDepthFormatKey: @(GLKViewDrawableDepthFormat24),
+          GLViewControllerStencilFormatKey: @(GLKViewDrawableStencilFormatNone),
+          GLViewControllerMultisampleKey: @(GLKViewDrawableMultisampleNone),
+          };
         
         if (_properties)
         {
@@ -86,7 +87,7 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
             }
         }
 
-        interfaceOrientationMask = [[properties objectForKey:kGLViewControllerPropertyInterfaceOrientationMask] intValue];
+        interfaceOrientationMask = [properties[GLViewControllerInterfaceOrientationMaskKey] intValue];
     }
     
     return self;
@@ -109,15 +110,15 @@ NSString* kGLViewControllerPropertyMultisample = @"kGLViewControllerPropertyMult
     [super loadView];
 
     glView = (GLKView*)self.view;
-    glView.context = [[[EAGLContext alloc] initWithAPI:(EAGLRenderingAPI)[[properties objectForKey:kGLViewControllerPropertyRenderingAPI] intValue]] autorelease];
+    glView.context = [[[EAGLContext alloc] initWithAPI:(EAGLRenderingAPI)[properties[GLViewControllerRenderingAPIKey] intValue]] autorelease];
 
-    self.preferredFramesPerSecond = [[properties objectForKey:kGLViewControllerPropertyPreferredFramesPerSecond] intValue];
-    self.view.multipleTouchEnabled = [[properties objectForKey:kGLViewControllerPropertyMultipleTouchEnabled] boolValue];
+    self.preferredFramesPerSecond = [properties[GLViewControllerPreferredFramesPerSecondKey] intValue];
+    self.view.multipleTouchEnabled = [properties[GLViewControllerMultipleTouchEnabledKey] boolValue];
 
-    glView.drawableColorFormat = (GLKViewDrawableColorFormat)[[properties objectForKey:kGLViewControllerPropertyColorFormat] intValue];
-    glView.drawableDepthFormat = (GLKViewDrawableDepthFormat)[[properties objectForKey:kGLViewControllerPropertyDepthFormat] intValue];
-    glView.drawableStencilFormat = (GLKViewDrawableStencilFormat)[[properties objectForKey:kGLViewControllerPropertyStencilFormat] intValue];
-    glView.drawableMultisample = (GLKViewDrawableMultisample)[[properties objectForKey:kGLViewControllerPropertyMultisample] intValue];
+    glView.drawableColorFormat = (GLKViewDrawableColorFormat)[properties[GLViewControllerColorFormatKey] intValue];
+    glView.drawableDepthFormat = (GLKViewDrawableDepthFormat)[properties[GLViewControllerDepthFormatKey] intValue];
+    glView.drawableStencilFormat = (GLKViewDrawableStencilFormat)[properties[GLViewControllerStencilFormatKey] intValue];
+    glView.drawableMultisample = (GLKViewDrawableMultisample)[properties[GLViewControllerMultisampleKey] intValue];
     
     if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
     {

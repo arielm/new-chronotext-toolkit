@@ -1,6 +1,6 @@
 /*
  * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2014, ARIEL MALKA ALL RIGHTS RESERVED.
+ * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
  *
  * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
@@ -72,9 +72,9 @@ namespace chr
         {
             NSArray *components = [UIDevice.currentDevice.systemVersion componentsSeparatedByString:@"."];
             
-            int major = (components.count > 0) ? [[components objectAtIndex:0] intValue] : 0;
-            int minor = (components.count > 1) ? [[components objectAtIndex:1] intValue] : 0;
-            int patch = (components.count > 2) ? [[components objectAtIndex:2] intValue] : 0;
+            int major = (components.count > 0) ? [components[0] intValue] : 0;
+            int minor = (components.count > 1) ? [components[1] intValue] : 0;
+            int patch = (components.count > 2) ? [components[2] intValue] : 0;
             
             return {major, minor, patch};
         }
