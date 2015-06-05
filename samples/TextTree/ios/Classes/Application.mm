@@ -14,11 +14,12 @@
 {
     bridge = [[CinderBridge alloc] init];
     
-    bridge.viewControllerProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
-        [NSNumber numberWithInt:(UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown)], kGLViewControllerPropertyInterfaceOrientationMask,
-        [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
-        nil];
+    bridge.viewControllerProperties =
+    @{
+      GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES1),
+      GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown),
+      GLViewControllerDepthFormatKey: @(GLKViewDrawableDepthFormatNone),
+      };
     
     window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     window.backgroundColor = [UIColor blackColor];

@@ -584,7 +584,7 @@
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0630;
 			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "GrapeFrukt" */;
 			compatibilityVersion = "Xcode 3.2";

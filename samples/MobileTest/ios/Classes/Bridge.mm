@@ -14,11 +14,12 @@
 {
     if (self = [super init])
     {
-        self.viewControllerProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInt:kEAGLRenderingAPIOpenGLES1], kGLViewControllerPropertyRenderingAPI,
-            [NSNumber numberWithInt:UIInterfaceOrientationMaskAll], kGLViewControllerPropertyInterfaceOrientationMask,
-            [NSNumber numberWithInt:GLKViewDrawableDepthFormatNone], kGLViewControllerPropertyDepthFormat,
-            nil];
+        self.viewControllerProperties =
+        @{
+          GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES1),
+          GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskAll),
+          GLViewControllerDepthFormatKey: @(GLKViewDrawableDepthFormatNone),
+          };
 
         window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
         window.backgroundColor = [UIColor blackColor];
