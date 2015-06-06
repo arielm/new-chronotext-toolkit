@@ -9,17 +9,13 @@
 /*
  * TODO:
  *
- * 1) THERE SHOULD BE A UNIQUE SET OF BufferBases PER InputSource
- *    - NECESSARY ON OSX, iOS AND ANDROID
- *    - EVERYTHING COULD BE HANDLED VIA MemoryManager
- *
- * 2) THERE COULD BE SOME "TYPE" INFO, E.G.
+ * 1) THERE COULD BE SOME "TYPE" INFO, E.G.
  *    - ANDROID_ASSET_MEMORY_MAPPED
- *    - ANDROID_ASSET_COMPRESSED
- *    - MSW_RESOURCE
+ *    - ANDROID_ASSET_ALLOCATED
+ *    - MSW_RESOURCE_MEMORY_MAPPED
  *    - POSIX_FILE_MEMORY_MAPPED
  *
- * 3) THERE COULD BE SOME "ATTRIBUTES" INFO, EG.
+ * 2) THERE COULD BE SOME "ATTRIBUTES" INFO, EG.
  *    - READ_ONLY
  *    - SHARED
  *    - PRIVATE (?)
@@ -41,7 +37,7 @@ namespace chr
         public:
             virtual ~BufferBase();
             
-            virtual bool lock(const InputSource &inputSource);
+            virtual bool lock(InputSource &inputSource);
             virtual void unlock();
             
             virtual const void* data();

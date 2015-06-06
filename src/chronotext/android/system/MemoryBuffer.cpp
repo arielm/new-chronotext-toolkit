@@ -16,7 +16,7 @@ namespace chr
 {
     namespace memory
     {
-        bool Buffer::lock(const InputSource &inputSource)
+        bool Buffer::lock(InputSource &inputSource)
         {
             unlock();
             

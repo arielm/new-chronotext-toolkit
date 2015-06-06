@@ -18,7 +18,15 @@
 
 #else
 
-#error UNSUPPORTED PLATFORM
+#include "chronotext/system/MemoryBufferBase.h"
+
+namespace chr
+{
+    namespace memory
+    {
+        typedef BufferBase Buffer;
+    }
+}
 
 #endif
 

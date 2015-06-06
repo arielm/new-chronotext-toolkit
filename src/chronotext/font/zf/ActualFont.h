@@ -137,7 +137,7 @@ namespace chr
             Metrics metrics;
             std::string fullName;
             
-            MemoryBuffer memoryBuffer;
+            std::shared_ptr<MemoryBuffer> memoryBuffer;
             FT_Face ftFace = nullptr;
             hb_font_t *hbFont = nullptr;
             bool loaded = false;

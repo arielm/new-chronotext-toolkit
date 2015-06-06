@@ -22,6 +22,26 @@ namespace chr
         {
             return memoryManager().compare(before, after);
         }
+        
+        shared_ptr<Buffer> ManagerBase::getBuffer(InputSource &inputSource)
+        {
+            auto found = buffers.find(inputSource.getURI());
+            
+            if (found != buffers.end())
+            {
+                return found->second;
+            }
+            
+            auto buffer = make_shared<Buffer>();
+
+            if (buffer->lock(inputSource))
+            {
+                buffers[inputSource.getURI()] = buffer;
+                return buffer;
+            }
+            
+            return nullptr;
+        }
     }
     
     MemoryInfo getMemoryInfo()

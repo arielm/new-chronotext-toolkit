@@ -21,7 +21,7 @@ namespace chr
             unlock();
         }
         
-        bool BufferBase::lock(const InputSource &inputSource)
+        bool BufferBase::lock(InputSource &inputSource)
         {
             unlock();
             

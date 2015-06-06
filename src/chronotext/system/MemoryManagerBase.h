@@ -11,6 +11,8 @@
 #include "chronotext/system/MemoryInfo.h"
 #include "chronotext/system/MemoryBuffer.h"
 
+#include <map>
+
 namespace chr
 {
     MemoryInfo getMemoryInfo();
@@ -28,12 +30,23 @@ namespace chr
             virtual void setup() {}
             virtual void shutdown() {}
             
-            virtual Info getInfo() { return Info(); }
+            virtual Info getInfo()
+            {
+                return Info();
+            }
             
             /*
              * RETURNS HOW MUCH MEMORY WAS USED BETWEEN "BEFORE" AND "AFTER"
              */
-            virtual int64_t compare(const Info &before, const Info &after) { return 0; }
+            virtual int64_t compare(const Info &before, const Info &after)
+            {
+                return 0;
+            }
+            
+            std::shared_ptr<Buffer> getBuffer(InputSource &inputSource);
+            
+        protected:
+            std::map<std::string, std::shared_ptr<Buffer>> buffers;
         };
     }
 }

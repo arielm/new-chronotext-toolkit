@@ -6,6 +6,22 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * TODO:
+ *
+ * 1) VERIFY THAT USING A SINGLE MEMORY-MAPPED PER FREETYPE FONT-FACE IS NOT CAUSING PROBLEMS
+ *    - E.G. WHEN CRISP TEXT (I.E. NO MIPMAPPING) MUST BE RENDERED AT DIFFERENT SIZES
+ *
+ * 2) STUDY MEMORY-ALLOCATION IN FREETYPE
+ *    - E.G. VIA THE "REPORTING" SYSTEM DESCRIBED IN mozilla-esr31/gfx/thebes/gfxAndroidPlatform.cpp
+ *
+ * 3) STUDY THE FOLLOWING IMPLEMENTATIONS:
+ *    - mozilla-esr31/gfx/skia/trunk/src/ports/SkHarfBuzzFont.cpp
+ *    - mozilla-esr31/gfx/skia/trunk/src/ports/SkFontHost_FreeType.cpp
+ *    - mozilla-esr31/gfx/thebes/gfxHarfbuzzShaper.cpp
+ *    - ETC.
+ */
+
 #include "chronotext/font/zf/ActualFont.h"
 #include "chronotext/font/zf/FontManager.h"
 #include "chronotext/Context.h"
@@ -102,22 +118,6 @@ namespace chr
             return fullName;
         }
         
-        /*
-         * TODO:
-         *
-         * 1) ENHANCE ActualFont's MEMORY MODEL:
-         *    - STUDY MEMORY-ALLOCATION IN FREETYPE
-         *      - E.G. VIA THE "REPORTING" SYSTEM DESCRIBED IN mozilla-esr31/gfx/thebes/gfxAndroidPlatform.cpp
-         *    - FIND-OUT IF-AND-HOW-MUCH MEMORY IS "WAISTED" WHEN MULTIPLE VERSIONS OF THE "SAME" FACE ARE USED
-         *      - E.G. WHEN CRISP (I.E. HINTED) TEXT MUST BE RENDERED AT DIFFERENT SIZES
-         *
-         * 3) STUDY THE FOLLOWING IMPLEMENTATIONS:
-         *    - mozilla-esr31/gfx/skia/trunk/src/ports/SkHarfBuzzFont.cpp
-         *    - mozilla-esr31/gfx/skia/trunk/src/ports/SkFontHost_FreeType.cpp
-         *    - mozilla-esr31/gfx/thebes/gfxHarfbuzzShaper.cpp
-         *    - ETC.
-         */
-        
         bool ActualFont::reload()
         {
             if (!loaded)
@@ -135,9 +135,11 @@ namespace chr
                 
                 if (descriptor.forceMemoryLoad || !descriptor.inputSource->isFile())
                 {
-                    if (memoryBuffer.lock(*descriptor.inputSource))
+                    memoryBuffer = memoryManager().getBuffer(*descriptor.inputSource);
+                    
+                    if (memoryBuffer)
                     {
-                        error = FT_New_Memory_Face(ftHelper->getLib(), static_cast<const FT_Byte*>(memoryBuffer.data()), memoryBuffer.size(), descriptor.faceIndex, &ftFace);
+                        error = FT_New_Memory_Face(ftHelper->getLib(), static_cast<const FT_Byte*>(memoryBuffer->data()), memoryBuffer->size(), descriptor.faceIndex, &ftFace);
                     }
                     else
                     {
@@ -159,7 +161,7 @@ namespace chr
                     FT_Done_Face(ftFace);
                     ftFace = nullptr;
                     
-                    memoryBuffer.unlock();
+                    memoryBuffer.reset();
                     
                     throw EXCEPTION(ActualFont, "HARFBUZZ: FONT IS BROKEN OR IRRELEVANT");
                 }
@@ -268,7 +270,7 @@ namespace chr
                 "LOADING ActualFont: " <<
                 getFullName() << " " <<
                 baseSize << (useMipmap ? " [M]" : "") <<
-                " | " << memoryBuffer.data() <<
+                " | " << memoryBuffer->data() <<
                 memoryStats.str() <<
                 endl;
             }
@@ -313,7 +315,7 @@ namespace chr
                 FT_Done_Face(ftFace);
                 ftFace = nullptr;
                 
-                memoryBuffer.unlock();
+                memoryBuffer.reset();
                 
                 if (FontManager::PROBE_MEMORY)
                 {

@@ -474,19 +474,19 @@ namespace chr
 
         if (request.forceMemoryLoad || !request.inputSource->isFile())
         {
-            MemoryBuffer buffer;
+            auto buffer = memoryManager().getBuffer(*request.inputSource);
             
-            if (buffer.lock(*request.inputSource))
+            if (buffer)
             {
                 FMOD_CREATESOUNDEXINFO exinfo;
                 memset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
                 exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
-                exinfo.length = static_cast<unsigned int>(buffer.size());
+                exinfo.length = static_cast<unsigned int>(buffer->size());
                 
                 /*
                  * NO NEED TO PRESERVE buffer PAST THIS POINT (DATA WILL EITHER BE COPIED OR DECOMPRESSED BY FMOD)
                  */
-                result = system->createSound(static_cast<const char*>(buffer.data()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
+                result = system->createSound(static_cast<const char*>(buffer->data()), FMOD_DEFAULT | FMOD_OPENMEMORY, &exinfo, &sound);
             }
             else
             {
