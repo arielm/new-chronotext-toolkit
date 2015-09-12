@@ -270,7 +270,7 @@ namespace chr
                 "LOADING ActualFont: " <<
                 getFullName() << " " <<
                 baseSize << (useMipmap ? " [M]" : "") <<
-                " | " << memoryBuffer->data() <<
+                " | " << (memoryBuffer ? memoryBuffer->data() : "") <<
                 memoryStats.str() <<
                 endl;
             }
