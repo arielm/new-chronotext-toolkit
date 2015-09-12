@@ -52,6 +52,9 @@
 		A8702AEF1A5B444500EF9E9E /* SystemManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8702AEA1A5B444500EF9E9E /* SystemManagerBase.cpp */; };
 		A8702AF21A5B445700EF9E9E /* FileHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A8702AF11A5B445700EF9E9E /* FileHelper.mm */; };
 		A89F40C71AF443F90052917E /* LayoutStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A89F40C51AF443F90052917E /* LayoutStore.cpp */; };
+		A8A6BBAF1BA41F4800FF7FA9 /* MemoryBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A6BBAE1BA41F4800FF7FA9 /* MemoryBuffer.cpp */; };
+		A8A6BBB41BA41F9300FF7FA9 /* MappedFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A6BBB21BA41F9300FF7FA9 /* MappedFile.cpp */; };
+		A8A6BBB81BA41FB200FF7FA9 /* MemoryBufferBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A6BBB61BA41FB200FF7FA9 /* MemoryBufferBase.cpp */; };
 		A8F595641A07784800877FB2 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F595631A07784800877FB2 /* Log.cpp */; };
 		A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3218C5683B00C48245 /* ActualFont.cpp */; };
 		A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F9FC3418C5683B00C48245 /* FontManager.cpp */; };
@@ -172,6 +175,13 @@
 		A8702AF11A5B445700EF9E9E /* FileHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHelper.mm; sourceTree = "<group>"; };
 		A89F40C51AF443F90052917E /* LayoutStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutStore.cpp; sourceTree = "<group>"; };
 		A89F40C61AF443F90052917E /* LayoutStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutStore.h; sourceTree = "<group>"; };
+		A8A6BBAD1BA41F4800FF7FA9 /* MemoryBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryBuffer.h; sourceTree = "<group>"; };
+		A8A6BBAE1BA41F4800FF7FA9 /* MemoryBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryBuffer.cpp; sourceTree = "<group>"; };
+		A8A6BBB21BA41F9300FF7FA9 /* MappedFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MappedFile.cpp; sourceTree = "<group>"; };
+		A8A6BBB31BA41F9300FF7FA9 /* MappedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MappedFile.h; sourceTree = "<group>"; };
+		A8A6BBB51BA41FB200FF7FA9 /* MemoryBufferBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryBufferBase.h; sourceTree = "<group>"; };
+		A8A6BBB61BA41FB200FF7FA9 /* MemoryBufferBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryBufferBase.cpp; sourceTree = "<group>"; };
+		A8A6BBB71BA41FB200FF7FA9 /* MemoryBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryBuffer.h; sourceTree = "<group>"; };
 		A8F595631A07784800877FB2 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		A8F9979119FA9BE000F08369 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		A8F9FC3218C5683B00C48245 /* ActualFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActualFont.cpp; sourceTree = "<group>"; };
@@ -450,6 +460,8 @@
 		A85977751A2FD6400080C906 /* system */ = {
 			isa = PBXGroup;
 			children = (
+				A8A6BBAD1BA41F4800FF7FA9 /* MemoryBuffer.h */,
+				A8A6BBAE1BA41F4800FF7FA9 /* MemoryBuffer.cpp */,
 				A8702AF01A5B445700EF9E9E /* FileHelper.h */,
 				A8702AF11A5B445700EF9E9E /* FileHelper.mm */,
 				A85977761A2FD6400080C906 /* MemoryManager.h */,
@@ -512,6 +524,7 @@
 				A829870718BD02D500934642 /* font */,
 				A82986FC18BD00C300934642 /* os */,
 				A8147E7F1A99696300885D67 /* osx */,
+				A8A6BBB01BA41F9300FF7FA9 /* posix */,
 				A867AB84194B9AEF008EF66E /* quad */,
 				A8F9978419FA961900F08369 /* system */,
 				A822636E18BF54BC00D57C8C /* time */,
@@ -521,9 +534,29 @@
 			path = ../../../src/chronotext;
 			sourceTree = "<group>";
 		};
+		A8A6BBB01BA41F9300FF7FA9 /* posix */ = {
+			isa = PBXGroup;
+			children = (
+				A8A6BBB11BA41F9300FF7FA9 /* system */,
+			);
+			path = posix;
+			sourceTree = "<group>";
+		};
+		A8A6BBB11BA41F9300FF7FA9 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				A8A6BBB21BA41F9300FF7FA9 /* MappedFile.cpp */,
+				A8A6BBB31BA41F9300FF7FA9 /* MappedFile.h */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
 		A8F9978419FA961900F08369 /* system */ = {
 			isa = PBXGroup;
 			children = (
+				A8A6BBB51BA41FB200FF7FA9 /* MemoryBufferBase.h */,
+				A8A6BBB61BA41FB200FF7FA9 /* MemoryBufferBase.cpp */,
+				A8A6BBB71BA41FB200FF7FA9 /* MemoryBuffer.h */,
 				A8702ADC1A5B444500EF9E9E /* DisplayHelper.h */,
 				A8702ADD1A5B444500EF9E9E /* DisplayHelperBase.cpp */,
 				A8702ADE1A5B444500EF9E9E /* DisplayHelperBase.h */,
@@ -643,6 +676,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8A6BBAF1BA41F4800FF7FA9 /* MemoryBuffer.cpp in Sources */,
 				A859777F1A2FD6400080C906 /* MemoryManager.mm in Sources */,
 				A8F9FC4B18C5683B00C48245 /* ActualFont.cpp in Sources */,
 				A8F9FC4D18C5683B00C48245 /* FontSequence.cpp in Sources */,
@@ -655,8 +689,10 @@
 				A8147E8C1A99696300885D67 /* CinderBridge.mm in Sources */,
 				A89F40C71AF443F90052917E /* LayoutStore.cpp in Sources */,
 				A8F9FC4C18C5683B00C48245 /* FontManager.cpp in Sources */,
+				A8A6BBB81BA41FB200FF7FA9 /* MemoryBufferBase.cpp in Sources */,
 				A8147E8D1A99696300885D67 /* CinderDelegate.mm in Sources */,
 				A8702AF21A5B445700EF9E9E /* FileHelper.mm in Sources */,
+				A8A6BBB41BA41F9300FF7FA9 /* MappedFile.cpp in Sources */,
 				A8F9FC5118C5683B00C48245 /* LineLayout.cpp in Sources */,
 				A82C909916DFA58900FF519C /* InputSource.cpp in Sources */,
 				A85977821A2FD6400080C906 /* NSString+JSON.m in Sources */,
