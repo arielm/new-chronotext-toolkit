@@ -1,5 +1,9 @@
 ## The new chronotext toolkit, for Cinder 0.8.5 & C++11
 
+**Post mortem:** this project is no longer maintained, superceded by the [chronotext-cross](https://github.com/arielm/chronotext-cross) project.
+
+---
+
 The purpose of this toolkit is twofold:  
 
 1. Creating *dimensional text* experiments for OSX, Windows, iOS and Android (see [chronotext.org](http://chronotext.org).)  
